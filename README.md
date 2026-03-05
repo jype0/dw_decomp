@@ -44,3 +44,9 @@ make -j$(nproc)
 # Compare original vs new binaries
 tools/cmp_bins.sh
 ```
+
+## Links
+
+Symbols and reverse engineering is based on work by SydMontague:  
+https://github.com/SydMontague/DW1-SydPatches  
+https://github.com/SydMontague/DW1-Code
