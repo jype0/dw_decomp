@@ -4,6 +4,10 @@
 
 -include local.mk
 
+ifeq ($(MWCCWRAP),)
+	$(error MWCCWRAP path not set)
+endif
+
 TOOLCHAIN ?= mipsel-linux-gnu-
 
 BUILDDIR := build
@@ -15,7 +19,7 @@ CC := $(TOOLCHAIN)gcc
 LD := $(TOOLCHAIN)ld
 OBJCOPY := $(TOOLCHAIN)objcopy
 
-MKPSXISO ?= mkpsxiso
+MWCCWRAP_FLAGS += -gccincludes -lang c -Cpp_exceptions off -RTTI off
 
 INC := -Iinclude
 
@@ -262,7 +266,9 @@ $(EXE): $(ELF) $(OVERLAY:%=$(BUILDDIR)/%_REL.BIN)
 
 $(BUILDDIR)/%.c.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) -o $@ $<
+	$(MWCCWRAP) $(MWCCWRAP_FLAGS) $(CPPFLAGS) $(DEPFLAGS) -c -o $@ $<
+	# Fix ELF header flags
+	@printf '01100000' | xxd -r -p | dd of=$@ bs=1 seek=36 count=4 conv=notrunc
 
 $(BUILDDIR)/%.s.o: %.s
 	@mkdir -p $(dir $@)
