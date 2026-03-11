@@ -39,7 +39,7 @@ SECTIONS
         build/asm/main/map_impl.s.o(.text);
         build/asm/main/game_menu.s.o(.text);
         build/asm/main/map_collision.s.o(.text);
-        build/asm/main/particle.s.o(.text);
+        build/src/main/particle.c.o(.text);
         build/asm/main/anim.s.o(.text);
         build/asm/main/ui.s.o(.text);
         build/asm/main/item.s.o(.text);
@@ -95,7 +95,7 @@ SECTIONS
         build/asm/main/fade.s.o(.rodata);
         build/src/main/aabb.c.o(.rodata);
         build/asm/main/efe.s.o(.rodata);
-        build/asm/main/data/particle.rodata.s.o(.rodata);
+        build/asm/main/data/particle2.rodata.s.o(.rodata);
         build/asm/main/anim.s.o(.rodata);
         build/asm/main/ui.s.o(.rodata);
         build/asm/main/data/psyq/libcd.rodata.s.o(.rodata);
@@ -166,7 +166,7 @@ SECTIONS
         build/asm/main/data/map_impl.data.s.o(.data);
         build/asm/main/game_menu.s.o(.data);
         build/asm/main/map_collision.s.o(.data);
-        build/asm/main/particle.s.o(.data);
+        build/src/main/particle.c.o(.data);
         build/asm/main/anim.s.o(.data);
         build/asm/main/ui.s.o(.data);
         build/asm/main/item.s.o(.data);

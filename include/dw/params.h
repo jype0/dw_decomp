@@ -17,6 +17,6 @@ typedef struct {
 	uint8_t padding;
 } DigimonPara;
 
-extern DigimonPara DIGIMON_DATA[];
+extern DigimonPara DIGIMON_DATA[180];
 
 #endif
