@@ -249,6 +249,9 @@ OVERLAY += VS
 
 all: $(EXE)
 
+compare:
+	@tools/cmp_bins.sh
+
 $(BUILDDIR)/%.ld: %.ld
 	@mkdir -p $(dir $@)
 	$(CPP) -P -x c $(INC) -o $@ $<

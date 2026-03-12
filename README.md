@@ -49,7 +49,7 @@ MCCWRAP_FLAGS := -dll "/path/to/cc_mips.dll"
 make -j$(nproc)
 
 # Compare original vs new binaries
-tools/cmp_bins.sh
+make compare
 ```
 
 ## Links

@@ -29,4 +29,8 @@ for BIN in $BINS; do
 	cmp "$TOP/$BIN" "$TOP/build/$(basename "$BIN")" || STATUS=1
 done
 
+if [ "$STATUS" -eq 0 ]; then
+	printf 'Compiled binaries match with target binaries\n'
+fi
+
 exit "$STATUS"
