@@ -63,7 +63,7 @@ segments:
       - [0xA618, asm, psyq/libgte]
       - [0x10A50, asm, model]
       - [0x12EF8, asm, world_object]
-      - [0x131F0, asm, file]
+      - [0x131F0, c, file]
       - [0x136D4, asm, math]
       - [0x13924, asm, graphics]
       - [0x14238, asm, entrypoint]

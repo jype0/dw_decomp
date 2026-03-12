@@ -26,7 +26,7 @@ SECTIONS
         build/asm/main/psyq/libgte.s.o(.text);
         build/asm/main/model.s.o(.text);
         build/asm/main/world_object.s.o(.text);
-        build/asm/main/file.s.o(.text);
+        build/src/main/file.c.o(.text);
         build/asm/main/math.s.o(.text);
         build/asm/main/graphics.s.o(.text);
         build/asm/main/entrypoint.s.o(.text);
@@ -88,7 +88,7 @@ SECTIONS
         build/asm/main/psyq/libgte.s.o(.rodata);
         build/asm/main/model.s.o(.rodata);
         build/asm/main/world_object.s.o(.rodata);
-        build/asm/main/file.s.o(.rodata);
+        build/src/main/file.c.o(.rodata);
         build/asm/main/math.s.o(.rodata);
         build/asm/main/graphics.s.o(.rodata);
         build/asm/main/data/tamer.rodata.s.o(.rodata);
