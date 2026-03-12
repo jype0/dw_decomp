@@ -61,7 +61,7 @@ SECTIONS
         build/asm/main/tournament.s.o(.text);
         build/asm/main/evl.s.o(.text);
         build/asm/main/btl.s.o(.text);
-        build/asm/main/kar.s.o(.text);
+        build/src/main/kar.c.o(.text);
         build/asm/main/efe_table.s.o(.text);
         build/asm/main/sound_async.s.o(.text);
         build/asm/main/psyq/libpress.s.o(.text);
@@ -121,7 +121,7 @@ SECTIONS
         build/asm/main/tournament.s.o(.rodata);
         build/asm/main/evl.s.o(.rodata);
         build/asm/main/btl.s.o(.rodata);
-        build/asm/main/kar.s.o(.rodata);
+        build/src/main/kar.c.o(.rodata);
         build/asm/main/efe_table.s.o(.rodata);
         build/asm/main/sound_async.s.o(.rodata);
         build/asm/main/data/psyq/libpress.rodata.s.o(.rodata);
@@ -188,7 +188,7 @@ SECTIONS
         build/asm/main/tournament.s.o(.data);
         build/asm/main/evl.s.o(.data);
         build/asm/main/btl.s.o(.data);
-        build/asm/main/kar.s.o(.data);
+        build/src/main/kar.c.o(.data);
         build/asm/main/efe_table.s.o(.data);
         build/asm/main/sound_async.s.o(.data);
         build/asm/main/data/psyq/libpress.data.s.o(.data);

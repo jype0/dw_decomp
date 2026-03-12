@@ -42,8 +42,8 @@ dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
 tools/splat.sh
 
 # Create file local.mk with below content
-MCCWRAP := <Command to launch mccwrap.exe>
-MCCWRAP_FLAGS := -dll "/path/to/cc_mips.dll"
+MWCCWRAP := <Command to launch mccwrap.exe>
+MWCCWRAP_FLAGS := -dll "/path/to/cc_mips.dll"
 
 # Build new binaries
 make -j$(nproc)

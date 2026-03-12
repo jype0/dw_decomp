@@ -98,7 +98,7 @@ segments:
       - [0x56D10, asm, tournament]
       - [0x57220, asm, evl]
       - [0x57484, asm, btl]
-      - [0x589C8, asm, kar]
+      - [0x589C8, c, kar]
       - [0x58A00, asm, efe_table]
       - [0x58B00, asm, sound_async]
       - [0x59294, asm, psyq/libpress]
