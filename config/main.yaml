@@ -20,7 +20,7 @@ options:
   gp_value: 0x8013BB2C
   ld_gp_expression: main_SDATA_START + 0x8000
 
-  generate_asm_macros_files: True
+  generate_asm_macros_files: False
 
   section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
 

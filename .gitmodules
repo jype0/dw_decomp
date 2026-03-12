@@ -1,3 +1,6 @@
 [submodule "external/psyq_headers"]
 	path = external/psyq_headers
 	url = https://github.com/jype0/psyq_headers.git
+[submodule "external/mwccgap"]
+	path = external/mwccgap
+	url = https://github.com/ThirstyWraith/mwccgap.git

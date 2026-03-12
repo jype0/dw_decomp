@@ -19,6 +19,10 @@ CC := $(TOOLCHAIN)gcc
 LD := $(TOOLCHAIN)ld
 OBJCOPY := $(TOOLCHAIN)objcopy
 
+MWCCGAP := python3 external/mwccgap/mwccgap.py
+MWCCGAP_FLAGS += --mwcc-path $(MWCCWRAP) \
+		 --as-march r3000 \
+		 --macro-inc-path include/macro.inc
 MWCCWRAP_FLAGS += -gccincludes -lang c -Cpp_exceptions off -RTTI off
 
 INC := -Iexternal/psyq_headers/include -Iinclude
@@ -273,8 +277,7 @@ $(EXE): $(ELF) $(OVERLAY:%=$(BUILDDIR)/%_REL.BIN)
 
 $(BUILDDIR)/%.c.o: %.c
 	@mkdir -p $(dir $@)
-	$(MWCCWRAP) $(MWCCWRAP_FLAGS) $(CPPFLAGS) $(DEPFLAGS) -c -o $@ $<
-	# Fix ELF header flags
+	$(MWCCGAP) $(MWCCGAP_FLAGS) $< $@ $(MWCCWRAP_FLAGS) $(CPPFLAGS) $(DEPFLAGS)
 	@printf '01100000' | xxd -r -p | dd of=$@ bs=1 seek=36 count=4 conv=notrunc
 
 $(BUILDDIR)/%.s.o: %.s

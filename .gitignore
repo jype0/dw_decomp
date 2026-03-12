@@ -2,8 +2,4 @@
 asm/
 build/
 disks/
-include/gte_macros.inc
-include/include_asm.h
-include/labels.inc
-include/macro.inc
 local.mk
