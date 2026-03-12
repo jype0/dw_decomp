@@ -27,6 +27,6 @@ typedef enum Overlay
 
 typedef void (*FileCallback)();
 
-void loadDynamicLibrary(Overlay id, void* lib, dw_bool isAsync, FileCallback callback, void* param); 
+void loadDynamicLibrary(Overlay lib, uint8_t* isComplete, dw_bool isAsync, FileCallback callback, void* param); 
 
 #endif

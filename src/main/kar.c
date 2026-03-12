@@ -9,5 +9,5 @@ extern void* MAIN_D_80134E88;
 
 void checkCurlingMap(int32_t mapId)
 {
-    if (mapId == 136) loadDynamicLibrary(KAR_REL, &MAIN_D_80134E88, DW_FALSE, NULL, NULL);
+    if (mapId == 136) loadDynamicLibrary(KAR_REL, (uint8_t*)&MAIN_D_80134E88, DW_FALSE, NULL, NULL);
 }
