@@ -1,12 +1,14 @@
 #ifndef DW_TYPES_H
 #define DW_TYPES_H
 
+#ifndef NULL
 #define NULL 0
+#endif
 
-#define bool char
+typedef char dw_bool;
 
-#define false 0
-#define true 1
+#define DW_FALSE (0 == 1)
+#define DW_TRUE (!DW_FALSE)
 
 typedef char int8_t;
 typedef short int16_t;
