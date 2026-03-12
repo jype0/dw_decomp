@@ -58,7 +58,7 @@ void tickHealingParticles(int32_t instance) {
         ApplyMatrixSV(&rotMat, &radiusVec, &entry1->pos);
 
         entry1->pos.vx += particle->off.vx;
-        entry1->pos.vy = particle->off.vy - lerp(0, particle->off.vy, 0, NUM_HEALING_PARTICLES, particle->frameId);
+        entry1->pos.vy = particle->off.vy - lerp(0, particle->off.vy, 0, 20, particle->frameId);
         entry1->pos.vz += particle->off.vz;
     }
 
