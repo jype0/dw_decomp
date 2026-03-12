@@ -26,7 +26,7 @@ SECTIONS
         build/asm/main/psyq/libgte.s.o(.text);
         build/asm/main/model.s.o(.text);
         build/asm/main/world_object.s.o(.text);
-        build/asm/main/file.s.o(.text);
+        build/src/main/file.c.o(.text);
         build/src/main/math.c.o(.text);
         build/asm/main/graphics.s.o(.text);
         build/asm/main/entrypoint.s.o(.text);
@@ -88,7 +88,7 @@ SECTIONS
         build/asm/main/psyq/libgte.s.o(.rodata);
         build/asm/main/model.s.o(.rodata);
         build/asm/main/world_object.s.o(.rodata);
-        build/asm/main/file.s.o(.rodata);
+        build/src/main/file.c.o(.rodata);
         build/src/main/math.c.o(.rodata);
         build/asm/main/graphics.s.o(.rodata);
         build/asm/main/data/tamer.rodata.s.o(.rodata);
@@ -150,8 +150,8 @@ SECTIONS
         build/asm/main/data/psyq/libgte2.data.s.o(.data);
         build/asm/main/data/model.data.s.o(.data);
         build/asm/main/world_object.s.o(.data);
-        build/asm/main/data/file.data.s.o(.data);
         build/src/main/math.c.o(.data);
+        build/src/main/file_table.c.o(.rodata);
         build/src/main/atan_table.c.o(.data);
         build/src/main/file_table.c.o(.data);
         build/src/main/sine_table.c.o(.data);
@@ -207,6 +207,8 @@ SECTIONS
 
         main_SDATA_START = .;
         build/asm/main/data/A3B2C.sdata.s.o(.sdata);
+        build/asm/main/data/file_table.sdata.s.o(.sdata);
+        build/asm/main/data/A41EC.sdata.s.o(.sdata);
         . = ALIGN(., 4);
         main_SDATA_END = .;
         main_SDATA_SIZE = ABSOLUTE(main_SDATA_END - main_SDATA_START);

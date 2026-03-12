@@ -51,6 +51,7 @@ MAIN_SRC := \
 	src/main/aabb.c \
 	src/main/butterfly.c \
 	src/main/fade.c \
+	src/main/file.c \
 	src/main/evl.c \
 	src/main/kar.c \
 	src/main/math.c \

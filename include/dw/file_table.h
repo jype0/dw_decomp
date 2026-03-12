@@ -3,13 +3,12 @@
 
 #include <dw/types.h>
 
-typedef struct FILE 
-{
+typedef struct {
     int32_t sector;
     int32_t size;
-    int8_t* name;
-} FILE;
+    char *filename;
+} FileEntry;
 
-extern FILE FILE_TABLE[];
+extern FileEntry FILE_TABLE[];
 
 #endif
