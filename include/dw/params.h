@@ -3,6 +3,8 @@
 
 #include <dw/types.h>
 
+#define NUM_DIGIMON 180
+
 typedef struct {
 	char name[20];
 	int32_t boneCount;
@@ -17,6 +19,6 @@ typedef struct {
 	uint8_t padding;
 } DigimonPara;
 
-extern DigimonPara DIGIMON_DATA[180];
+extern DigimonPara DIGIMON_DATA[NUM_DIGIMON];
 
 #endif
