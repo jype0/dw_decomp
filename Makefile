@@ -11,6 +11,7 @@ endif
 TOOLCHAIN ?= mipsel-linux-gnu-
 
 BUILDDIR := build
+EXPECTEDDIR := expected
 
 ELF := $(BUILDDIR)/SLUS_010.32.elf
 EXE := $(BUILDDIR)/SLUS_010.32
@@ -257,6 +258,11 @@ all: $(EXE)
 
 compare:
 	@tools/cmp_bins.sh
+
+expected: all
+	@mkdir -p $(EXPECTEDDIR)
+	mv $(BUILDDIR)/asm $(EXPECTEDDIR)/asm
+	mv $(BUILDDIR)/src $(EXPECTEDDIR)/src
 
 $(BUILDDIR)/%.ld: %.ld
 	@mkdir -p $(dir $@)
