@@ -54,7 +54,7 @@ void initializeButterfly(void)
 	}
 }
 
-INCLUDE_ASM("/home/jype/projects/gitlab/dw_decomp/asm/main/nonmatchings/butterfly", setButterfly);
+INCLUDE_ASM("asm/main/nonmatchings/butterfly", setButterfly);
 
 static void tickButterfly(int32_t instanceId)
 {
@@ -64,7 +64,7 @@ static void tickButterfly(int32_t instanceId)
 	}
 }
 
-INCLUDE_ASM("/home/jype/projects/gitlab/dw_decomp/asm/main/nonmatchings/butterfly", renderButterfly);
+INCLUDE_ASM("asm/main/nonmatchings/butterfly", renderButterfly);
 
 void unsetButterfly(int32_t instanceId)
 {
