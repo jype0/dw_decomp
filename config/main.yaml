@@ -21,6 +21,7 @@ options:
   ld_gp_expression: main_SDATA_START + 0x8000
 
   generate_asm_macros_files: False
+  make_full_disasm_for_code: True
 
   section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
 

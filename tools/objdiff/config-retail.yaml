@@ -1,0 +1,12 @@
+categories:
+  - id: main
+    name: Main Executable
+    paths:
+      - ""
+
+expected_paths:
+  ALL:  expected/
+
+ignored_files: []
+
+output: ./objdiff.json

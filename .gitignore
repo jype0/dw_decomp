@@ -4,3 +4,4 @@ build/
 disks/
 expected/
 local.mk
+objdiff.json
