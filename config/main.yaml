@@ -153,7 +153,7 @@ segments:
       - [0x9880C, data, psyq/libsnd]
       - [0x989F4, data, map]
       - [0x9BBD0, data, psyq/libpress]
-      - [0x9CB40, c, butterfly]
+      - [0x9CB40, .data, butterfly]
       - [0x9CB64, data, psyq/libmcrd]
       - [0x9CE18, data, bubble]
       - [0x9CE64, data, main]
