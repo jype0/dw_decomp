@@ -4,10 +4,10 @@
 #pragma optimization_level 4
 
 #pragma section sbss begin
-extern void* MAIN_D_80134E88;
+extern uint8_t KAR_LOADING_COMPLETE;
 #pragma section sbss end
 
 void checkCurlingMap(int32_t mapId)
 {
-    if (mapId == 136) loadDynamicLibrary(KAR_REL, (uint8_t*)&MAIN_D_80134E88, DW_FALSE, NULL, NULL);
+    if (mapId == 136) loadDynamicLibrary(KAR_REL, &KAR_LOADING_COMPLETE, DW_FALSE, NULL, NULL);
 }
