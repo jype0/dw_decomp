@@ -152,6 +152,9 @@ SECTIONS
         build/asm/main/world_object.s.o(.data);
         build/asm/main/data/file.data.s.o(.data);
         build/src/main/math.c.o(.data);
+        build/src/main/atan_table.c.o(.data);
+        build/src/main/file_table.c.o(.data);
+        build/src/main/sine_table.c.o(.data);
         build/asm/main/data/graphics.data.s.o(.data);
         build/asm/main/entrypoint.s.o(.data);
         build/asm/main/data/partner_impl.data.s.o(.data);

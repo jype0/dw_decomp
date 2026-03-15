@@ -52,6 +52,9 @@ MAIN_SRC := \
 	src/main/butterfly.c \
 	src/main/kar.c \
 	src/main/math.c \
+	src/main/atan_table.c \
+	src/main/file_table.c \
+	src/main/sine_table.c \
 	src/main/particle.c \
 	src/main/swap.c
 

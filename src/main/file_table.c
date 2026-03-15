@@ -1,0 +1,1648 @@
+#include "dw/file_table.h"
+
+#pragma optimization_level 4
+
+extern int8_t MAIN_D_8011D490;
+extern int8_t MAIN_D_8011D49C;
+extern int8_t MAIN_D_8011D4A8;
+extern int8_t MAIN_D_8011D4B4;
+extern int8_t MAIN_D_8011D4C0;
+extern int8_t MAIN_D_8011D4CC;
+extern int8_t MAIN_D_8011D4D8;
+extern int8_t MAIN_D_8011D4E4;
+extern int8_t MAIN_D_8011D4F0;
+extern int8_t MAIN_D_8011D4FC;
+extern int8_t MAIN_D_8011D508;
+extern int8_t MAIN_D_8011D514;
+extern int8_t MAIN_D_8011D520;
+extern int8_t MAIN_D_8011D52C;
+extern int8_t MAIN_D_8011D538;
+extern int8_t MAIN_D_8011D544;
+extern int8_t MAIN_D_8011D550;
+extern int8_t MAIN_D_8011D55C;
+extern int8_t MAIN_D_8011D568;
+extern int8_t MAIN_D_8011D574;
+extern int8_t MAIN_D_8011D580;
+extern int8_t MAIN_D_8011D58C;
+extern int8_t MAIN_D_8011D598;
+extern int8_t MAIN_D_8011D5A4;
+extern int8_t MAIN_D_8011D5B0;
+extern int8_t MAIN_D_8011D5BC;
+extern int8_t MAIN_D_8011D5C8;
+extern int8_t MAIN_D_8011D5D4;
+extern int8_t MAIN_D_8011D5E0;
+extern int8_t MAIN_D_8011D5EC;
+extern int8_t MAIN_D_8011D5F8;
+extern int8_t MAIN_D_8011D604;
+extern int8_t MAIN_D_8011D610;
+extern int8_t MAIN_D_8011D61C;
+extern int8_t MAIN_D_8011D628;
+extern int8_t MAIN_D_8011D634;
+extern int8_t MAIN_D_8011D640;
+extern int8_t MAIN_D_8011D64C;
+extern int8_t MAIN_D_8011D658;
+extern int8_t MAIN_D_8011D664;
+extern int8_t MAIN_D_8011D670;
+extern int8_t MAIN_D_8011D67C;
+extern int8_t MAIN_D_8011D688;
+extern int8_t MAIN_D_8011D694;
+extern int8_t MAIN_D_8011D6A0;
+extern int8_t MAIN_D_8011D6AC;
+extern int8_t MAIN_D_8011D6B8;
+extern int8_t MAIN_D_8011D6C4;
+extern int8_t MAIN_D_8011D6D0;
+extern int8_t MAIN_D_8011D6DC;
+extern int8_t MAIN_D_8011D6E8;
+extern int8_t MAIN_D_8011D6F4;
+extern int8_t MAIN_D_8011D700;
+extern int8_t MAIN_D_8011D70C;
+extern int8_t MAIN_D_8011D718;
+extern int8_t MAIN_D_8011D724;
+extern int8_t MAIN_D_8011D730;
+extern int8_t MAIN_D_8011D73C;
+extern int8_t MAIN_D_8011D748;
+extern int8_t MAIN_D_8011D754;
+extern int8_t MAIN_D_8011D760;
+extern int8_t MAIN_D_8011D76C;
+extern int8_t MAIN_D_8011D778;
+extern int8_t MAIN_D_8011D784;
+extern int8_t MAIN_D_8011D790;
+extern int8_t MAIN_D_8011D79C;
+extern int8_t MAIN_D_8011D7A8;
+extern int8_t MAIN_D_8011D7B4;
+extern int8_t MAIN_D_8011D7C0;
+extern int8_t MAIN_D_8011D7CC;
+extern int8_t MAIN_D_8011D7D8;
+extern int8_t MAIN_D_8011D7E4;
+extern int8_t MAIN_D_8011D7F0;
+extern int8_t MAIN_D_8011D7FC;
+extern int8_t MAIN_D_8011D808;
+extern int8_t MAIN_D_8011D814;
+extern int8_t MAIN_D_8011D820;
+extern int8_t MAIN_D_8011D82C;
+extern int8_t MAIN_D_8011D838;
+extern int8_t MAIN_D_8011D844;
+extern int8_t MAIN_D_8011D850;
+extern int8_t MAIN_D_8011D85C;
+extern int8_t MAIN_D_8011D868;
+extern int8_t MAIN_D_8011D874;
+extern int8_t MAIN_D_8011D880;
+extern int8_t MAIN_D_8011D88C;
+extern int8_t MAIN_D_8011D898;
+extern int8_t MAIN_D_8011D8A4;
+extern int8_t MAIN_D_8011D8B0;
+extern int8_t MAIN_D_8011D8BC;
+extern int8_t MAIN_D_8011D8C8;
+extern int8_t MAIN_D_8011D8D4;
+extern int8_t MAIN_D_8011D8E0;
+extern int8_t MAIN_D_8011D8EC;
+extern int8_t MAIN_D_8011D8F8;
+extern int8_t MAIN_D_8011D904;
+extern int8_t MAIN_D_8011D910;
+extern int8_t MAIN_D_8011D91C;
+extern int8_t MAIN_D_8011D928;
+extern int8_t MAIN_D_8011D934;
+extern int8_t MAIN_D_8011D940;
+extern int8_t MAIN_D_8011D94C;
+extern int8_t MAIN_D_8011D958;
+extern int8_t MAIN_D_8011D964;
+extern int8_t MAIN_D_8011D970;
+extern int8_t MAIN_D_8011D97C;
+extern int8_t MAIN_D_8011D988;
+extern int8_t MAIN_D_8011D994;
+extern int8_t MAIN_D_8011D9A0;
+extern int8_t MAIN_D_8011D9AC;
+extern int8_t MAIN_D_8011D9B8;
+extern int8_t MAIN_D_8011D9C4;
+extern int8_t MAIN_D_8011D9D0;
+extern int8_t MAIN_D_8011D9DC;
+extern int8_t MAIN_D_8011D9E8;
+extern int8_t MAIN_D_8011D9F4;
+extern int8_t MAIN_D_8011DA00;
+extern int8_t MAIN_D_8011DA0C;
+extern int8_t MAIN_D_8011DA18;
+extern int8_t MAIN_D_8011DA24;
+extern int8_t MAIN_D_8011DA30;
+extern int8_t MAIN_D_8011DA3C;
+extern int8_t MAIN_D_8011DA48;
+extern int8_t MAIN_D_8011DA54;
+extern int8_t MAIN_D_8011DA60;
+extern int8_t MAIN_D_8011DA6C;
+extern int8_t MAIN_D_8011DA78;
+extern int8_t MAIN_D_8011DA84;
+extern int8_t MAIN_D_8011DA90;
+extern int8_t MAIN_D_8011DA9C;
+extern int8_t MAIN_D_8011DAA8;
+extern int8_t MAIN_D_8011DAB4;
+extern int8_t MAIN_D_8011DAC0;
+extern int8_t MAIN_D_8011DACC;
+extern int8_t MAIN_D_8011DAD8;
+extern int8_t MAIN_D_8011DAE4;
+extern int8_t MAIN_D_8011DAF0;
+extern int8_t MAIN_D_8011DAFC;
+extern int8_t MAIN_D_8011DB08;
+extern int8_t MAIN_D_8011DB14;
+extern int8_t MAIN_D_8011DB20;
+extern int8_t MAIN_D_8011DB2C;
+extern int8_t MAIN_D_8011DB38;
+extern int8_t MAIN_D_8011DB44;
+extern int8_t MAIN_D_8011DB50;
+extern int8_t MAIN_D_8011DB5C;
+extern int8_t MAIN_D_8011DB68;
+extern int8_t MAIN_D_8011DB74;
+extern int8_t MAIN_D_8011DB80;
+extern int8_t MAIN_D_8011DB8C;
+extern int8_t MAIN_D_8011DB98;
+extern int8_t MAIN_D_8011DBA4;
+extern int8_t MAIN_D_8011DBB0;
+extern int8_t MAIN_D_8011DBBC;
+extern int8_t MAIN_D_8011DBC8;
+extern int8_t MAIN_D_8011DBD4;
+extern int8_t MAIN_D_8011DBE0;
+extern int8_t MAIN_D_8011DBEC;
+extern int8_t MAIN_D_8011DBF8;
+extern int8_t MAIN_D_8011DC04;
+extern int8_t MAIN_D_8011DC10;
+extern int8_t MAIN_D_8011DC1C;
+extern int8_t MAIN_D_8011DC28;
+extern int8_t MAIN_D_8011DC34;
+extern int8_t MAIN_D_8011DC40;
+extern int8_t MAIN_D_8011DC4C;
+extern int8_t MAIN_D_8011DC58;
+extern int8_t MAIN_D_8011DC64;
+extern int8_t MAIN_D_8011DC70;
+extern int8_t MAIN_D_8011DC7C;
+extern int8_t MAIN_D_8011DC88;
+extern int8_t MAIN_D_8011DC94;
+extern int8_t MAIN_D_8011DCA0;
+extern int8_t MAIN_D_8011DCAC;
+extern int8_t MAIN_D_8011DCB8;
+extern int8_t MAIN_D_8011DCC4;
+extern int8_t MAIN_D_8011DCD0;
+extern int8_t MAIN_D_8011DCDC;
+extern int8_t MAIN_D_8011DCE8;
+extern int8_t MAIN_D_8011DCF4;
+extern int8_t MAIN_D_8011DD00;
+extern int8_t MAIN_D_8011DD0C;
+extern int8_t MAIN_D_8011DD18;
+extern int8_t MAIN_D_8011DD24;
+extern int8_t MAIN_D_8011DD30;
+extern int8_t MAIN_D_8011DD3C;
+extern int8_t MAIN_D_8011DD48;
+extern int8_t MAIN_D_8011DD54;
+extern int8_t MAIN_D_8011DD60;
+extern int8_t MAIN_D_8011DD6C;
+extern int8_t MAIN_D_8011DD78;
+extern int8_t MAIN_D_8011DD84;
+extern int8_t MAIN_D_8011DD90;
+extern int8_t MAIN_D_8011DD9C;
+extern int8_t MAIN_D_8011DDA8;
+extern int8_t MAIN_D_8011DDB4;
+extern int8_t MAIN_D_8011DDC0;
+extern int8_t MAIN_D_8011DDCC;
+extern int8_t MAIN_D_8011DDD8;
+extern int8_t MAIN_D_8011DDE4;
+extern int8_t MAIN_D_8011DDF0;
+extern int8_t MAIN_D_8011DDFC;
+extern int8_t MAIN_D_8011DE08;
+extern int8_t MAIN_D_8011DE14;
+extern int8_t MAIN_D_8011DE20;
+extern int8_t MAIN_D_8011DE2C;
+extern int8_t MAIN_D_8011DE38;
+extern int8_t MAIN_D_8011DE44;
+extern int8_t MAIN_D_8011DE50;
+extern int8_t MAIN_D_8011DE5C;
+extern int8_t MAIN_D_8011DE68;
+extern int8_t MAIN_D_8011DE74;
+extern int8_t MAIN_D_8011DE80;
+extern int8_t MAIN_D_8011DE8C;
+extern int8_t MAIN_D_8011DE98;
+extern int8_t MAIN_D_8011DEA4;
+extern int8_t MAIN_D_8011DEB4;
+extern int8_t MAIN_D_8011DEC0;
+extern int8_t MAIN_D_8011DECC;
+extern int8_t MAIN_D_8011DED8;
+extern int8_t MAIN_D_8011DEE4;
+extern int8_t MAIN_D_8011DEF0;
+extern int8_t MAIN_D_8011DEFC;
+extern int8_t MAIN_D_8011DF0C;
+extern int8_t MAIN_D_8011DF18;
+extern int8_t MAIN_D_8011DF24;
+extern int8_t MAIN_D_8011DF30;
+extern int8_t MAIN_D_8011DF3C;
+extern int8_t MAIN_D_8011DF48;
+extern int8_t MAIN_D_8011DF54;
+extern int8_t MAIN_D_8011DF64;
+extern int8_t MAIN_D_8011DF70;
+extern int8_t MAIN_D_8011DF7C;
+extern int8_t MAIN_D_8011DF8C;
+extern int8_t MAIN_D_8011DF98;
+extern int8_t MAIN_D_8011DFA4;
+extern int8_t MAIN_D_8011DFB0;
+extern int8_t MAIN_D_8011DFBC;
+extern int8_t MAIN_D_8011DFC8;
+extern int8_t MAIN_D_8011DFD4;
+extern int8_t MAIN_D_8011DFE0;
+extern int8_t MAIN_D_8011DFEC;
+extern int8_t MAIN_D_8011DFF8;
+extern int8_t MAIN_D_8011E004;
+extern int8_t MAIN_D_8011E010;
+extern int8_t MAIN_D_8011E01C;
+extern int8_t MAIN_D_8011E028;
+extern int8_t MAIN_D_8011E034;
+extern int8_t MAIN_D_8011E040;
+extern int8_t MAIN_D_8011E050;
+extern int8_t MAIN_D_8011E05C;
+extern int8_t MAIN_D_8011E068;
+extern int8_t MAIN_D_8011E074;
+extern int8_t MAIN_D_8011E080;
+extern int8_t MAIN_D_8011E08C;
+extern int8_t MAIN_D_8011E098;
+extern int8_t MAIN_D_8011E0A4;
+extern int8_t MAIN_D_8011E0B0;
+extern int8_t MAIN_D_8011E0BC;
+extern int8_t MAIN_D_8011E0C8;
+extern int8_t MAIN_D_8011E0D4;
+extern int8_t MAIN_D_8011E0E0;
+extern int8_t MAIN_D_8011E0EC;
+extern int8_t MAIN_D_8011E0F8;
+extern int8_t MAIN_D_8011E104;
+extern int8_t MAIN_D_8011E110;
+extern int8_t MAIN_D_8011E11C;
+extern int8_t MAIN_D_8011E128;
+extern int8_t MAIN_D_8011E134;
+extern int8_t MAIN_D_8011E140;
+extern int8_t MAIN_D_8011E14C;
+extern int8_t MAIN_D_8011E158;
+extern int8_t MAIN_D_8011E164;
+extern int8_t MAIN_D_8011E170;
+extern int8_t MAIN_D_8011E17C;
+extern int8_t MAIN_D_8011E188;
+extern int8_t MAIN_D_8011E194;
+extern int8_t MAIN_D_8011E1A0;
+extern int8_t MAIN_D_8011E1AC;
+extern int8_t MAIN_D_8011E1B8;
+extern int8_t MAIN_D_8011E1C4;
+extern int8_t MAIN_D_8011E1D0;
+extern int8_t MAIN_D_8011E1DC;
+extern int8_t MAIN_D_8011E1E8;
+extern int8_t MAIN_D_8011E1F4;
+extern int8_t MAIN_D_8011E200;
+extern int8_t MAIN_D_8011E20C;
+extern int8_t MAIN_D_8011E218;
+extern int8_t MAIN_D_8011E224;
+extern int8_t MAIN_D_8011E230;
+extern int8_t MAIN_D_8011E23C;
+extern int8_t MAIN_D_8011E248;
+extern int8_t MAIN_D_8011E254;
+extern int8_t MAIN_D_8011E260;
+extern int8_t MAIN_D_8011E26C;
+extern int8_t MAIN_D_8011E278;
+extern int8_t MAIN_D_8011E284;
+extern int8_t MAIN_D_8011E290;
+extern int8_t MAIN_D_8011E29C;
+extern int8_t MAIN_D_8011E2A8;
+extern int8_t MAIN_D_8011E2B4;
+extern int8_t MAIN_D_8011E2C0;
+extern int8_t MAIN_D_8011E2CC;
+extern int8_t MAIN_D_8011E2D8;
+extern int8_t MAIN_D_8011E2E4;
+extern int8_t MAIN_D_8011E2F0;
+extern int8_t MAIN_D_8011E2FC;
+extern int8_t MAIN_D_8011E308;
+extern int8_t MAIN_D_8011E314;
+extern int8_t MAIN_D_8011E320;
+extern int8_t MAIN_D_8011E32C;
+extern int8_t MAIN_D_8011E338;
+extern int8_t MAIN_D_8011E344;
+extern int8_t MAIN_D_8011E350;
+extern int8_t MAIN_D_8011E35C;
+extern int8_t MAIN_D_8011E368;
+extern int8_t MAIN_D_8011E374;
+extern int8_t MAIN_D_8011E380;
+extern int8_t MAIN_D_8011E38C;
+extern int8_t MAIN_D_8011E398;
+extern int8_t MAIN_D_8011E3A4;
+extern int8_t MAIN_D_8011E3B0;
+extern int8_t MAIN_D_8011E3BC;
+extern int8_t MAIN_D_8011E3C8;
+extern int8_t MAIN_D_8011E3D4;
+extern int8_t MAIN_D_8011E3E0;
+extern int8_t MAIN_D_8011E3EC;
+extern int8_t MAIN_D_8011E3F8;
+extern int8_t MAIN_D_8011E404;
+extern int8_t MAIN_D_8011E410;
+extern int8_t MAIN_D_8011E41C;
+extern int8_t MAIN_D_8011E428;
+extern int8_t MAIN_D_8011E434;
+extern int8_t MAIN_D_8011E440;
+extern int8_t MAIN_D_8011E44C;
+extern int8_t MAIN_D_8011E458;
+extern int8_t MAIN_D_8011E464;
+extern int8_t MAIN_D_8011E470;
+extern int8_t MAIN_D_8011E47C;
+extern int8_t MAIN_D_8011E488;
+extern int8_t MAIN_D_8011E494;
+extern int8_t MAIN_D_8011E4A0;
+extern int8_t MAIN_D_8011E4AC;
+extern int8_t MAIN_D_8011E4B8;
+extern int8_t MAIN_D_8011E4C4;
+extern int8_t MAIN_D_8011E4D0;
+extern int8_t MAIN_D_8011E4DC;
+extern int8_t MAIN_D_8011E4E8;
+extern int8_t MAIN_D_8011E4F4;
+extern int8_t MAIN_D_8011E500;
+extern int8_t MAIN_D_8011E50C;
+extern int8_t MAIN_D_8011E518;
+extern int8_t MAIN_D_8011E524;
+extern int8_t MAIN_D_8011E530;
+extern int8_t MAIN_D_8011E53C;
+extern int8_t MAIN_D_8011E548;
+extern int8_t MAIN_D_8011E554;
+extern int8_t MAIN_D_8011E560;
+extern int8_t MAIN_D_8011E56C;
+extern int8_t MAIN_D_8011E578;
+extern int8_t MAIN_D_8011E584;
+extern int8_t MAIN_D_8011E590;
+extern int8_t MAIN_D_8011E59C;
+extern int8_t MAIN_D_8011E5A8;
+extern int8_t MAIN_D_8011E5B4;
+extern int8_t MAIN_D_8011E5C0;
+extern int8_t MAIN_D_8011E5CC;
+extern int8_t MAIN_D_8011E5D8;
+extern int8_t MAIN_D_8011E5E4;
+extern int8_t MAIN_D_8011E5F0;
+extern int8_t MAIN_D_8011E5FC;
+extern int8_t MAIN_D_8011E608;
+extern int8_t MAIN_D_8011E614;
+extern int8_t MAIN_D_8011E620;
+extern int8_t MAIN_D_8011E62C;
+extern int8_t MAIN_D_8011E638;
+extern int8_t MAIN_D_8011E644;
+extern int8_t MAIN_D_8011E650;
+extern int8_t MAIN_D_8011E65C;
+extern int8_t MAIN_D_8011E668;
+extern int8_t MAIN_D_8011E674;
+extern int8_t MAIN_D_8011E680;
+extern int8_t MAIN_D_8011E68C;
+extern int8_t MAIN_D_8011E698;
+extern int8_t MAIN_D_8011E6A4;
+extern int8_t MAIN_D_8011E6B0;
+extern int8_t MAIN_D_8011E6BC;
+extern int8_t MAIN_D_8011E6C8;
+extern int8_t MAIN_D_8011E6D4;
+extern int8_t MAIN_D_8011E6E0;
+extern int8_t MAIN_D_8011E6EC;
+extern int8_t MAIN_D_8011E6F8;
+extern int8_t MAIN_D_8011E704;
+extern int8_t MAIN_D_8011E710;
+extern int8_t MAIN_D_8011E71C;
+extern int8_t MAIN_D_8011E728;
+extern int8_t MAIN_D_8011E734;
+extern int8_t MAIN_D_8011E740;
+extern int8_t MAIN_D_8011E74C;
+extern int8_t MAIN_D_8011E758;
+extern int8_t MAIN_D_8011E764;
+extern int8_t MAIN_D_8011E770;
+extern int8_t MAIN_D_8011E77C;
+extern int8_t MAIN_D_8011E788;
+extern int8_t MAIN_D_8011E794;
+extern int8_t MAIN_D_8011E7A0;
+extern int8_t MAIN_D_8011E7AC;
+extern int8_t MAIN_D_8011E7B8;
+extern int8_t MAIN_D_8011E7C4;
+extern int8_t MAIN_D_8011E7D0;
+extern int8_t MAIN_D_8011E7DC;
+extern int8_t MAIN_D_8011E7E8;
+extern int8_t MAIN_D_8011E7F4;
+extern int8_t MAIN_D_8011E800;
+extern int8_t MAIN_D_8011E80C;
+extern int8_t MAIN_D_8011E818;
+extern int8_t MAIN_D_8011E824;
+extern int8_t MAIN_D_8011E830;
+extern int8_t MAIN_D_8011E83C;
+extern int8_t MAIN_D_8011E848;
+extern int8_t MAIN_D_8011E854;
+extern int8_t MAIN_D_8011E860;
+extern int8_t MAIN_D_8011E86C;
+extern int8_t MAIN_D_8011E878;
+extern int8_t MAIN_D_8011E884;
+extern int8_t MAIN_D_8011E890;
+extern int8_t MAIN_D_8011E89C;
+extern int8_t MAIN_D_8011E8A8;
+extern int8_t MAIN_D_8011E8B4;
+extern int8_t MAIN_D_8011E8C0;
+extern int8_t MAIN_D_8011E8CC;
+extern int8_t MAIN_D_8011E8D8;
+extern int8_t MAIN_D_8011E8E4;
+extern int8_t MAIN_D_8011E8F0;
+extern int8_t MAIN_D_8011E8FC;
+extern int8_t MAIN_D_8011E908;
+extern int8_t MAIN_D_8011E914;
+extern int8_t MAIN_D_8011E920;
+extern int8_t MAIN_D_8011E92C;
+extern int8_t MAIN_D_8011E938;
+extern int8_t MAIN_D_8011E944;
+extern int8_t MAIN_D_8011E950;
+extern int8_t MAIN_D_8011E95C;
+extern int8_t MAIN_D_8011E968;
+extern int8_t MAIN_D_8011E974;
+extern int8_t MAIN_D_8011E980;
+extern int8_t MAIN_D_8011E98C;
+extern int8_t MAIN_D_8011E998;
+extern int8_t MAIN_D_8011E9A4;
+extern int8_t MAIN_D_8011E9B0;
+extern int8_t MAIN_D_8011E9BC;
+extern int8_t MAIN_D_8011E9C8;
+extern int8_t MAIN_D_8011E9D4;
+extern int8_t MAIN_D_8011E9E0;
+extern int8_t MAIN_D_8011E9EC;
+extern int8_t MAIN_D_8011E9F8;
+extern int8_t MAIN_D_8011EA04;
+extern int8_t MAIN_D_8011EA10;
+extern int8_t MAIN_D_8011EA1C;
+extern int8_t MAIN_D_8011EA28;
+extern int8_t MAIN_D_8011EA34;
+extern int8_t MAIN_D_8011EA40;
+extern int8_t MAIN_D_8011EA4C;
+extern int8_t MAIN_D_8011EA58;
+extern int8_t MAIN_D_8011EA64;
+extern int8_t MAIN_D_8011EA70;
+extern int8_t MAIN_D_8011EA7C;
+extern int8_t MAIN_D_8011EA88;
+extern int8_t MAIN_D_8011EA94;
+extern int8_t MAIN_D_8011EAA0;
+extern int8_t MAIN_D_8011EAAC;
+extern int8_t MAIN_D_8011EAB8;
+extern int8_t MAIN_D_8011EAC4;
+extern int8_t MAIN_D_8011EAD0;
+extern int8_t MAIN_D_8011EADC;
+extern int8_t MAIN_D_8011EAE8;
+extern int8_t MAIN_D_8011EAF4;
+extern int8_t MAIN_D_8011EB00;
+extern int8_t MAIN_D_8011EB0C;
+extern int8_t MAIN_D_8011EB18;
+extern int8_t MAIN_D_8011EB24;
+extern int8_t MAIN_D_8011EB30;
+extern int8_t MAIN_D_8011EB3C;
+extern int8_t MAIN_D_8011EB48;
+extern int8_t MAIN_D_8011EB54;
+extern int8_t MAIN_D_8011EB60;
+extern int8_t MAIN_D_8011EB6C;
+extern int8_t MAIN_D_8011EB78;
+extern int8_t MAIN_D_8011EB84;
+extern int8_t MAIN_D_8011EB90;
+extern int8_t MAIN_D_8011EB9C;
+extern int8_t MAIN_D_8011EBA8;
+extern int8_t MAIN_D_8011EBB4;
+extern int8_t MAIN_D_8011EBC0;
+extern int8_t MAIN_D_8011EBCC;
+extern int8_t MAIN_D_8011EBD8;
+extern int8_t MAIN_D_8011EBE4;
+extern int8_t MAIN_D_8011EBF0;
+extern int8_t MAIN_D_8011EBFC;
+extern int8_t MAIN_D_8011EC08;
+extern int8_t MAIN_D_8011EC14;
+extern int8_t MAIN_D_8011EC20;
+extern int8_t MAIN_D_8011EC2C;
+extern int8_t MAIN_D_8011EC38;
+extern int8_t MAIN_D_8011EC44;
+extern int8_t MAIN_D_8011EC50;
+extern int8_t MAIN_D_8011EC5C;
+extern int8_t MAIN_D_8011EC68;
+extern int8_t MAIN_D_8011EC74;
+extern int8_t MAIN_D_8011EC80;
+extern int8_t MAIN_D_8011EC8C;
+extern int8_t MAIN_D_8011EC98;
+extern int8_t MAIN_D_8011ECA4;
+extern int8_t MAIN_D_8011ECB0;
+extern int8_t MAIN_D_8011ECBC;
+extern int8_t MAIN_D_8011ECC8;
+extern int8_t MAIN_D_8011ECD4;
+extern int8_t MAIN_D_8011ECE0;
+extern int8_t MAIN_D_8011ECEC;
+extern int8_t MAIN_D_8011ECF8;
+extern int8_t MAIN_D_8011ED04;
+extern int8_t MAIN_D_8011ED10;
+extern int8_t MAIN_D_8011ED1C;
+extern int8_t MAIN_D_8011ED28;
+extern int8_t MAIN_D_8011ED34;
+extern int8_t MAIN_D_8011ED40;
+extern int8_t MAIN_D_8011ED4C;
+extern int8_t MAIN_D_8011ED58;
+extern int8_t MAIN_D_8011ED64;
+extern int8_t MAIN_D_8011ED70;
+extern int8_t MAIN_D_8011ED7C;
+extern int8_t MAIN_D_8011ED88;
+extern int8_t MAIN_D_8011ED94;
+extern int8_t MAIN_D_8011EDA0;
+extern int8_t MAIN_D_8011EDAC;
+extern int8_t MAIN_D_8011EDB8;
+extern int8_t MAIN_D_8011EDC4;
+extern int8_t MAIN_D_8011EDD0;
+extern int8_t MAIN_D_8011EDDC;
+extern int8_t MAIN_D_8011EDE8;
+extern int8_t MAIN_D_8011EDF4;
+extern int8_t MAIN_D_8011EE00;
+extern int8_t MAIN_D_8011EE0C;
+extern int8_t MAIN_D_8011EE18;
+extern int8_t MAIN_D_8011EE24;
+extern int8_t MAIN_D_8011EE30;
+extern int8_t MAIN_D_8011EE3C;
+extern int8_t MAIN_D_8011EE48;
+extern int8_t MAIN_D_8011EE54;
+extern int8_t MAIN_D_8011EE60;
+extern int8_t MAIN_D_8011EE6C;
+extern int8_t MAIN_D_8011EE7C;
+extern int8_t MAIN_D_8011EE8C;
+extern int8_t MAIN_D_8011EE98;
+extern int8_t MAIN_D_8011EEA4;
+extern int8_t MAIN_D_8011EEB0;
+extern int8_t MAIN_D_8011EEBC;
+extern int8_t MAIN_D_8011EEC8;
+extern int8_t MAIN_D_8011EED4;
+extern int8_t MAIN_D_8011EEE0;
+extern int8_t MAIN_D_8011EEEC;
+extern int8_t MAIN_D_8011EEF8;
+extern int8_t MAIN_D_8011EF04;
+extern int8_t MAIN_D_8011EF10;
+extern int8_t MAIN_D_8011EF1C;
+extern int8_t MAIN_D_8011EF28;
+extern int8_t MAIN_D_8011EF34;
+extern int8_t MAIN_D_8011EF40;
+extern int8_t MAIN_D_8011EF4C;
+extern int8_t MAIN_D_8011EF58;
+extern int8_t MAIN_D_8011EF64;
+extern int8_t MAIN_D_8011EF70;
+extern int8_t MAIN_D_8011EF7C;
+extern int8_t MAIN_D_8011EF88;
+extern int8_t MAIN_D_8011EF94;
+extern int8_t MAIN_D_8011EFA0;
+extern int8_t MAIN_D_8011EFAC;
+extern int8_t MAIN_D_8011EFB8;
+extern int8_t MAIN_D_8011EFC4;
+extern int8_t MAIN_D_8011EFD0;
+extern int8_t MAIN_D_8011EFDC;
+extern int8_t MAIN_D_8011EFE8;
+extern int8_t MAIN_D_8011EFF4;
+extern int8_t MAIN_D_8011F000;
+extern int8_t MAIN_D_8011F00C;
+extern int8_t MAIN_D_8011F018;
+extern int8_t MAIN_D_8011F024;
+extern int8_t MAIN_D_8011F030;
+extern int8_t MAIN_D_8011F03C;
+extern int8_t MAIN_D_8011F048;
+extern int8_t MAIN_D_8011F054;
+extern int8_t MAIN_D_8011F060;
+extern int8_t MAIN_D_8011F06C;
+extern int8_t MAIN_D_8011F078;
+extern int8_t MAIN_D_8011F084;
+extern int8_t MAIN_D_8011F090;
+extern int8_t MAIN_D_8011F09C;
+extern int8_t MAIN_D_8011F0A8;
+extern int8_t MAIN_D_8011F0B4;
+extern int8_t MAIN_D_8011F0C0;
+extern int8_t MAIN_D_8011F0CC;
+extern int8_t MAIN_D_8011F0D8;
+extern int8_t MAIN_D_8011F0E4;
+extern int8_t MAIN_D_8011F0F0;
+extern int8_t MAIN_D_8011F0FC;
+extern int8_t MAIN_D_8011F108;
+extern int8_t MAIN_D_8011F114;
+extern int8_t MAIN_D_8011F120;
+extern int8_t MAIN_D_8011F12C;
+extern int8_t MAIN_D_8011F138;
+extern int8_t MAIN_D_8011F144;
+extern int8_t MAIN_D_8011F150;
+extern int8_t MAIN_D_8011F15C;
+extern int8_t MAIN_D_8011F168;
+extern int8_t MAIN_D_8011F174;
+extern int8_t MAIN_D_8011F180;
+extern int8_t MAIN_D_8011F18C;
+extern int8_t MAIN_D_8011F198;
+extern int8_t MAIN_D_8011F1A4;
+extern int8_t MAIN_D_8011F1B0;
+extern int8_t MAIN_D_8011F1BC;
+extern int8_t MAIN_D_8011F1C8;
+extern int8_t MAIN_D_8011F1D4;
+extern int8_t MAIN_D_8011F1E0;
+extern int8_t MAIN_D_8011F1EC;
+extern int8_t MAIN_D_8011F1F8;
+extern int8_t MAIN_D_8011F204;
+extern int8_t MAIN_D_8011F210;
+extern int8_t MAIN_D_8011F21C;
+extern int8_t MAIN_D_8011F228;
+extern int8_t MAIN_D_8011F234;
+extern int8_t MAIN_D_8011F240;
+extern int8_t MAIN_D_8011F24C;
+extern int8_t MAIN_D_8011F258;
+extern int8_t MAIN_D_8011F264;
+extern int8_t MAIN_D_8011F270;
+extern int8_t MAIN_D_8011F27C;
+extern int8_t MAIN_D_8011F288;
+extern int8_t MAIN_D_8011F294;
+extern int8_t MAIN_D_8011F2A0;
+extern int8_t MAIN_D_8011F2AC;
+extern int8_t MAIN_D_8011F2B8;
+extern int8_t MAIN_D_8011F2C4;
+extern int8_t MAIN_D_8011F2D0;
+extern int8_t MAIN_D_8011F2DC;
+extern int8_t MAIN_D_8011F2E8;
+extern int8_t MAIN_D_8011F2F4;
+extern int8_t MAIN_D_8011F300;
+extern int8_t MAIN_D_8011F30C;
+extern int8_t MAIN_D_8011F318;
+extern int8_t MAIN_D_8011F324;
+extern int8_t MAIN_D_8011F330;
+extern int8_t MAIN_D_8011F33C;
+extern int8_t MAIN_D_8011F348;
+extern int8_t MAIN_D_8011F354;
+extern int8_t MAIN_D_8011F360;
+extern int8_t MAIN_D_8011F36C;
+extern int8_t MAIN_D_8011F378;
+extern int8_t MAIN_D_8011F384;
+extern int8_t MAIN_D_8011F390;
+extern int8_t MAIN_D_8011F39C;
+extern int8_t MAIN_D_8011F3A8;
+extern int8_t MAIN_D_8011F3B4;
+extern int8_t MAIN_D_8011F3C0;
+extern int8_t MAIN_D_8011F3CC;
+extern int8_t MAIN_D_8011F3D8;
+extern int8_t MAIN_D_8011F3E4;
+extern int8_t MAIN_D_8011F3F0;
+extern int8_t MAIN_D_8011F3FC;
+extern int8_t MAIN_D_8011F408;
+extern int8_t MAIN_D_8011F414;
+extern int8_t MAIN_D_8011F420;
+extern int8_t MAIN_D_8011F42C;
+extern int8_t MAIN_D_8011F438;
+extern int8_t MAIN_D_8011F444;
+extern int8_t MAIN_D_8011F450;
+extern int8_t MAIN_D_8011F45C;
+extern int8_t MAIN_D_8011F468;
+extern int8_t MAIN_D_8011F474;
+extern int8_t MAIN_D_8011F480;
+extern int8_t MAIN_D_8011F48C;
+extern int8_t MAIN_D_8011F498;
+extern int8_t MAIN_D_8011F4A4;
+extern int8_t MAIN_D_8011F4B0;
+extern int8_t MAIN_D_8011F4BC;
+extern int8_t MAIN_D_8011F4C8;
+extern int8_t MAIN_D_8011F4D4;
+extern int8_t MAIN_D_8011F4E0;
+extern int8_t MAIN_D_8011F4EC;
+extern int8_t MAIN_D_8011F4F8;
+extern int8_t MAIN_D_8011F504;
+extern int8_t MAIN_D_8011F514;
+extern int8_t MAIN_D_8011F524;
+extern int8_t MAIN_D_8011F534;
+extern int8_t MAIN_D_8011F544;
+extern int8_t MAIN_D_8011F550;
+extern int8_t MAIN_D_8011F55C;
+extern int8_t MAIN_D_8011F568;
+extern int8_t MAIN_D_8011F574;
+extern int8_t MAIN_D_8011F580;
+extern int8_t MAIN_D_8011F58C;
+extern int8_t MAIN_D_8011F598;
+extern int8_t MAIN_D_8011F5A4;
+extern int8_t MAIN_D_8011F5B0;
+extern int8_t MAIN_D_8011F5BC;
+extern int8_t MAIN_D_8011F5C8;
+extern int8_t MAIN_D_8011F5D4;
+extern int8_t MAIN_D_8011F5E0;
+extern int8_t MAIN_D_8011F5EC;
+extern int8_t MAIN_D_8011F5F8;
+extern int8_t MAIN_D_8011F604;
+extern int8_t MAIN_D_8011F610;
+extern int8_t MAIN_D_8011F61C;
+extern int8_t MAIN_D_8011F62C;
+extern int8_t MAIN_D_8011F63C;
+extern int8_t MAIN_D_8011F64C;
+extern int8_t MAIN_D_8011F65C;
+extern int8_t MAIN_D_8011F668;
+extern int8_t MAIN_D_8011F674;
+extern int8_t MAIN_D_8011F680;
+extern int8_t MAIN_D_8011F68C;
+extern int8_t MAIN_D_8011F698;
+extern int8_t MAIN_D_8011F6A4;
+extern int8_t MAIN_D_8011F6B0;
+extern int8_t MAIN_D_8011F6BC;
+extern int8_t MAIN_D_8011F6C8;
+extern int8_t MAIN_D_8011F6D4;
+extern int8_t MAIN_D_8011F6E4;
+extern int8_t MAIN_D_8011F6F4;
+extern int8_t MAIN_D_8011F704;
+extern int8_t MAIN_D_8011F714;
+extern int8_t MAIN_D_8011F724;
+extern int8_t MAIN_D_8011F734;
+extern int8_t MAIN_D_8011F744;
+extern int8_t MAIN_D_8011F754;
+extern int8_t MAIN_D_8011F764;
+extern int8_t MAIN_D_8011F774;
+extern int8_t MAIN_D_8011F780;
+extern int8_t MAIN_D_8011F78C;
+extern int8_t MAIN_D_8011F798;
+extern int8_t MAIN_D_8011F7A4;
+extern int8_t MAIN_D_8011F7B0;
+extern int8_t MAIN_D_8011F7C0;
+extern int8_t MAIN_D_8011F7CC;
+extern int8_t MAIN_D_8011F7D8;
+extern int8_t MAIN_D_8011F7E4;
+extern int8_t MAIN_D_8011F7F0;
+extern int8_t MAIN_D_8011F7FC;
+extern int8_t MAIN_D_8011F808;
+extern int8_t MAIN_D_8011F814;
+extern int8_t MAIN_D_8011F820;
+extern int8_t MAIN_D_8011F82C;
+extern int8_t MAIN_D_8011F838;
+extern int8_t MAIN_D_8011F844;
+extern int8_t MAIN_D_8011F850;
+extern int8_t MAIN_D_8011F85C;
+extern int8_t MAIN_D_8011F868;
+extern int8_t MAIN_D_8011F878;
+extern int8_t MAIN_D_8011F884;
+extern int8_t MAIN_D_8011F890;
+extern int8_t MAIN_D_8011F89C;
+extern int8_t MAIN_D_8011F8A8;
+extern int8_t MAIN_D_8011F8B8;
+extern int8_t MAIN_D_8011F8C4;
+extern int8_t MAIN_D_8011F8D0;
+extern int8_t MAIN_D_8011F8DC;
+extern int8_t MAIN_D_8011F8E8;
+extern int8_t MAIN_D_8011F8F4;
+extern int8_t MAIN_D_8011F900;
+extern int8_t MAIN_D_8011F90C;
+extern int8_t MAIN_D_8011F918;
+extern int8_t MAIN_D_8011F924;
+extern int8_t MAIN_D_8011F930;
+extern int8_t MAIN_D_8011F93C;
+extern int8_t MAIN_D_8011F948;
+extern int8_t MAIN_D_8011F958;
+extern int8_t MAIN_D_8011F968;
+extern int8_t MAIN_D_8011F978;
+extern int8_t MAIN_D_8011F984;
+extern int8_t MAIN_D_8011F994;
+extern int8_t MAIN_D_8011F9A0;
+extern int8_t MAIN_D_8011F9B0;
+extern int8_t MAIN_D_8011F9BC;
+extern int8_t MAIN_D_8011F9C8;
+extern int8_t MAIN_D_8011F9D8;
+extern int8_t MAIN_D_8011F9E8;
+extern int8_t MAIN_D_8011F9F4;
+extern int8_t MAIN_D_8011FA00;
+extern int8_t MAIN_D_8011FA10;
+extern int8_t MAIN_D_801340FC;
+extern int8_t MAIN_D_80134104;
+extern int8_t MAIN_D_8013410C;
+extern int8_t MAIN_D_80134114;
+extern int8_t MAIN_D_8013411C;
+extern int8_t MAIN_D_80134124;
+extern int8_t MAIN_D_8013412C;
+extern int8_t MAIN_D_80134134;
+extern int8_t MAIN_D_8013413C;
+extern int8_t MAIN_D_80134144;
+extern int8_t MAIN_D_8013414C;
+extern int8_t MAIN_D_80134154;
+extern int8_t MAIN_D_8013415C;
+extern int8_t MAIN_D_80134164;
+extern int8_t MAIN_D_8013416C;
+extern int8_t MAIN_D_80134174;
+extern int8_t MAIN_D_8013417C;
+extern int8_t MAIN_D_80134184;
+extern int8_t MAIN_D_8013418C;
+extern int8_t MAIN_D_80134194;
+extern int8_t MAIN_D_8013419C;
+extern int8_t MAIN_D_801341A4;
+extern int8_t MAIN_D_801341AC;
+extern int8_t MAIN_D_801341B4;
+extern int8_t MAIN_D_801341BC;
+extern int8_t MAIN_D_801341C4;
+extern int8_t MAIN_D_801341CC;
+extern int8_t MAIN_D_801341D4;
+extern int8_t MAIN_D_801341DC;
+extern int8_t MAIN_D_801341E4;
+
+// TODO: find a way to compile this using the raw strings on each name field assignment
+
+FILE FILE_TABLE[] =
+{
+    { 0x00000017, 0x00000044, &MAIN_D_8011D490 },
+    { 0x00000019, 0x001CE000, &MAIN_D_8011D49C },
+    { 0x000003B6, 0x0032A000, &MAIN_D_8011D4A8 },
+    { 0x00000A0B, 0x0001194C, &MAIN_D_8011D4B4 },
+    { 0x00000A2F, 0x000116F0, &MAIN_D_8011D4C0 },
+    { 0x00000A52, 0x000164C0, &MAIN_D_8011D4CC },
+    { 0x00000A7F, 0x0001019C, &MAIN_D_8011D4D8 },
+    { 0x00000AA0, 0x00014AA4, &MAIN_D_8011D4E4 },
+    { 0x00000ACA, 0x0000564C, &MAIN_D_8011D4F0 },
+    { 0x00000AD5, 0x0000DECC, &MAIN_D_8011D4FC },
+    { 0x00000AF1, 0x00015980, &MAIN_D_8011D508 },
+    { 0x00000B1D, 0x00013BE4, &MAIN_D_8011D514 },
+    { 0x00000B45, 0x00011B08, &MAIN_D_8011D520 },
+    { 0x00000B69, 0x00017644, &MAIN_D_8011D52C },
+    { 0x00000B98, 0x00016CE0, &MAIN_D_8011D538 },
+    { 0x00000BC6, 0x00009B24, &MAIN_D_8011D544 },
+    { 0x00000BDA, 0x0001781C, &MAIN_D_8011D550 },
+    { 0x00000C0A, 0x00005978, &MAIN_D_8011D55C },
+    { 0x00000C16, 0x00014268, &MAIN_D_8011D568 },
+    { 0x00000C3F, 0x00015710, &MAIN_D_8011D574 },
+    { 0x00000C6A, 0x0000CBF8, &MAIN_D_8011D580 },
+    { 0x00000C84, 0x00015EE0, &MAIN_D_8011D58C },
+    { 0x00000CB0, 0x0001661C, &MAIN_D_8011D598 },
+    { 0x00000CDD, 0x00014BC0, &MAIN_D_8011D5A4 },
+    { 0x00000D07, 0x00004F08, &MAIN_D_8011D5B0 },
+    { 0x00000D11, 0x000055AC, &MAIN_D_8011D5BC },
+    { 0x00000D1C, 0x0000F450, &MAIN_D_8011D5C8 },
+    { 0x00000D3B, 0x00014D88, &MAIN_D_8011D5D4 },
+    { 0x00000D65, 0x00003A88, &MAIN_D_8011D5E0 },
+    { 0x00000D6D, 0x00015D54, &MAIN_D_8011D5EC },
+    { 0x00000D99, 0x0000D420, &MAIN_D_8011D5F8 },
+    { 0x00000DB4, 0x0000F25C, &MAIN_D_8011D604 },
+    { 0x00000DD3, 0x0000F420, &MAIN_D_8011D610 },
+    { 0x00000DF3, 0x00015F60, &MAIN_D_8011D61C },
+    { 0x00000E1F, 0x00014A84, &MAIN_D_8011D628 },
+    { 0x00000E49, 0x00017798, &MAIN_D_8011D634 },
+    { 0x00000E78, 0x000174AC, &MAIN_D_8011D640 },
+    { 0x00000EA7, 0x00014E94, &MAIN_D_8011D64C },
+    { 0x00000ED1, 0x000159BC, &MAIN_D_8011D658 },
+    { 0x00000EFD, 0x00017E14, &MAIN_D_8011D664 },
+    { 0x00000F2D, 0x0000C42C, &MAIN_D_8011D670 },
+    { 0x00000F46, 0x00017CD8, &MAIN_D_8011D67C },
+    { 0x00000F76, 0x00013DA4, &MAIN_D_8011D688 },
+    { 0x00000F9E, 0x000130F0, &MAIN_D_8011D694 },
+    { 0x00000FC5, 0x00017858, &MAIN_D_8011D6A0 },
+    { 0x00000FF5, 0x00014F94, &MAIN_D_8011D6AC },
+    { 0x0000101F, 0x000126AC, &MAIN_D_8011D6B8 },
+    { 0x00001044, 0x000156A8, &MAIN_D_8011D6C4 },
+    { 0x0000106F, 0x000177DC, &MAIN_D_8011D6D0 },
+    { 0x0000109E, 0x00012640, &MAIN_D_8011D6DC },
+    { 0x000010C3, 0x0001276C, &MAIN_D_8011D6E8 },
+    { 0x000010E8, 0x000112D4, &MAIN_D_8011D6F4 },
+    { 0x0000110B, 0x00014948, &MAIN_D_8011D700 },
+    { 0x00001135, 0x000150E8, &MAIN_D_8011D70C },
+    { 0x00001160, 0x00012C90, &MAIN_D_8011D718 },
+    { 0x00001186, 0x000137E0, &MAIN_D_8011D724 },
+    { 0x000011AD, 0x000111C0, &MAIN_D_8011D730 },
+    { 0x000011D0, 0x0000FDC8, &MAIN_D_8011D73C },
+    { 0x000011F0, 0x00014C90, &MAIN_D_8011D748 },
+    { 0x0000121A, 0x0000A59C, &MAIN_D_8011D754 },
+    { 0x0000122F, 0x00008590, &MAIN_D_8011D760 },
+    { 0x00001240, 0x0001626C, &MAIN_D_8011D76C },
+    { 0x0000126D, 0x00005E28, &MAIN_D_8011D778 },
+    { 0x0000127A, 0x0000AEA8, &MAIN_D_8011D784 },
+    { 0x00001290, 0x0000AD70, &MAIN_D_8011D790 },
+    { 0x000012A6, 0x0000BB10, &MAIN_D_8011D79C },
+    { 0x000012BE, 0x0000B138, &MAIN_D_8011D7A8 },
+    { 0x000012D5, 0x0000CAC8, &MAIN_D_8011D7B4 },
+    { 0x000012EF, 0x0001242C, &MAIN_D_8011D7C0 },
+    { 0x00001314, 0x0000D944, &MAIN_D_8011D7CC },
+    { 0x00001330, 0x0000A010, &MAIN_D_8011D7D8 },
+    { 0x00001345, 0x000176D8, &MAIN_D_8011D7E4 },
+    { 0x00001374, 0x0000B8F8, &MAIN_D_8011D7F0 },
+    { 0x0000138C, 0x0000AD1C, &MAIN_D_8011D7FC },
+    { 0x000013A2, 0x0001008C, &MAIN_D_8011D808 },
+    { 0x000013C3, 0x00009F18, &MAIN_D_8011D814 },
+    { 0x000013D7, 0x0001795C, &MAIN_D_8011D820 },
+    { 0x00001407, 0x0000C308, &MAIN_D_8011D82C },
+    { 0x00001420, 0x00013EB4, &MAIN_D_8011D838 },
+    { 0x00001448, 0x0000A550, &MAIN_D_8011D844 },
+    { 0x0000145D, 0x0000DC6C, &MAIN_D_8011D850 },
+    { 0x00001479, 0x0000A4F4, &MAIN_D_8011D85C },
+    { 0x0000148E, 0x00009B48, &MAIN_D_8011D868 },
+    { 0x000014A2, 0x0000CEBC, &MAIN_D_8011D874 },
+    { 0x000014BC, 0x00009C94, &MAIN_D_8011D880 },
+    { 0x000014D0, 0x0000AF90, &MAIN_D_8011D88C },
+    { 0x000014E6, 0x000092A8, &MAIN_D_8011D898 },
+    { 0x000014F9, 0x000100EC, &MAIN_D_8011D8A4 },
+    { 0x0000151A, 0x0000D580, &MAIN_D_8011D8B0 },
+    { 0x00001535, 0x00009FC0, &MAIN_D_8011D8BC },
+    { 0x00001549, 0x00010310, &MAIN_D_8011D8C8 },
+    { 0x0000156A, 0x0000A8A8, &MAIN_D_8011D8D4 },
+    { 0x00001581, 0x0000D420, &MAIN_D_8011D8E0 },
+    { 0x0000159C, 0x00005650, &MAIN_D_8011D8EC },
+    { 0x000015A7, 0x0000B15C, &MAIN_D_8011D8F8 },
+    { 0x000015BE, 0x0000AF90, &MAIN_D_8011D904 },
+    { 0x000015D4, 0x0000B374, &MAIN_D_8011D910 },
+    { 0x000015EB, 0x0000D9F8, &MAIN_D_8011D91C },
+    { 0x00001607, 0x0000D0A0, &MAIN_D_8011D928 },
+    { 0x00001622, 0x0000ADB8, &MAIN_D_8011D934 },
+    { 0x00001638, 0x0000DD90, &MAIN_D_8011D940 },
+    { 0x00001654, 0x0000BEE0, &MAIN_D_8011D94C },
+    { 0x0000166C, 0x0000983C, &MAIN_D_8011D958 },
+    { 0x00001680, 0x0000C1A4, &MAIN_D_8011D964 },
+    { 0x00001699, 0x00008198, &MAIN_D_8011D970 },
+    { 0x000016AA, 0x0000AED0, &MAIN_D_8011D97C },
+    { 0x000016C0, 0x00009C8C, &MAIN_D_8011D988 },
+    { 0x000016D4, 0x000132FC, &MAIN_D_8011D994 },
+    { 0x000016FB, 0x000093E0, &MAIN_D_8011D9A0 },
+    { 0x0000170E, 0x0000AE80, &MAIN_D_8011D9AC },
+    { 0x00001724, 0x0000B204, &MAIN_D_8011D9B8 },
+    { 0x0000173B, 0x0000F010, &MAIN_D_8011D9C4 },
+    { 0x0000175A, 0x0000BCCC, &MAIN_D_8011D9D0 },
+    { 0x00001772, 0x0000C0BC, &MAIN_D_8011D9DC },
+    { 0x0000178B, 0x00006C74, &MAIN_D_8011D9E8 },
+    { 0x00001799, 0x0000DD94, &MAIN_D_8011D9F4 },
+    { 0x000017B5, 0x00005580, &MAIN_D_8011DA00 },
+    { 0x000017C0, 0x0000CF84, &MAIN_D_8011DA0C },
+    { 0x000017DA, 0x0000C2A8, &MAIN_D_8011DA18 },
+    { 0x000017F3, 0x00009754, &MAIN_D_8011DA24 },
+    { 0x00001806, 0x00009B48, &MAIN_D_8011DA30 },
+    { 0x0000181B, 0x00006D88, &MAIN_D_8011DA3C },
+    { 0x00001829, 0x00004508, &MAIN_D_8011DA48 },
+    { 0x00001832, 0x0000A25C, &MAIN_D_8011DA54 },
+    { 0x00001847, 0x00009A34, &MAIN_D_8011DA60 },
+    { 0x0000185B, 0x0000B6D0, &MAIN_D_8011DA6C },
+    { 0x00001872, 0x0000C50C, &MAIN_D_8011DA78 },
+    { 0x0000188B, 0x0000D648, &MAIN_D_8011DA84 },
+    { 0x000018A6, 0x00008328, &MAIN_D_8011DA90 },
+    { 0x000018B7, 0x0000A518, &MAIN_D_8011DA9C },
+    { 0x000018CC, 0x0000D7E0, &MAIN_D_8011DAA8 },
+    { 0x000018E7, 0x00007C54, &MAIN_D_8011DAB4 },
+    { 0x000018F7, 0x0000CAEC, &MAIN_D_8011DAC0 },
+    { 0x00001911, 0x000041E4, &MAIN_D_8011DACC },
+    { 0x0000191A, 0x000100E0, &MAIN_D_8011DAD8 },
+    { 0x0000193B, 0x0000BB38, &MAIN_D_8011DAE4 },
+    { 0x00001953, 0x0000C54C, &MAIN_D_8011DAF0 },
+    { 0x0000196C, 0x00004410, &MAIN_D_8011DAFC },
+    { 0x00001975, 0x0000E6A0, &MAIN_D_8011DB08 },
+    { 0x00001992, 0x0000D3CC, &MAIN_D_8011DB14 },
+    { 0x000019AD, 0x0000DC38, &MAIN_D_8011DB20 },
+    { 0x000019C9, 0x000055C4, &MAIN_D_8011DB2C },
+    { 0x000019D4, 0x0000C640, &MAIN_D_8011DB38 },
+    { 0x000019ED, 0x0000D748, &MAIN_D_8011DB44 },
+    { 0x00001A08, 0x00005E98, &MAIN_D_8011DB50 },
+    { 0x00001A14, 0x000061D0, &MAIN_D_8011DB5C },
+    { 0x00001A21, 0x00003FA4, &MAIN_D_8011DB68 },
+    { 0x00001A29, 0x0000755C, &MAIN_D_8011DB74 },
+    { 0x00001A38, 0x00001FD4, &MAIN_D_8011DB80 },
+    { 0x00001A3C, 0x00007480, &MAIN_D_8011DB8C },
+    { 0x00001A4B, 0x000063C8, &MAIN_D_8011DB98 },
+    { 0x00001A59, 0x000060A4, &MAIN_D_8011DBA4 },
+    { 0x00001A66, 0x00007098, &MAIN_D_8011DBB0 },
+    { 0x00001A75, 0x00007C14, &MAIN_D_8011DBBC },
+    { 0x00001A85, 0x0000664C, &MAIN_D_8011DBC8 },
+    { 0x00001A92, 0x0000658C, &MAIN_D_8011DBD4 },
+    { 0x00001A9F, 0x0000E928, &MAIN_D_8011DBE0 },
+    { 0x00001ABD, 0x0000B0CC, &MAIN_D_8011DBEC },
+    { 0x00001AD4, 0x0000F794, &MAIN_D_8011DBF8 },
+    { 0x00001AF3, 0x0000ECF0, &MAIN_D_8011DC04 },
+    { 0x00001B11, 0x00007724, &MAIN_D_8011DC10 },
+    { 0x00001B20, 0x0000BF74, &MAIN_D_8011DC1C },
+    { 0x00001B38, 0x0000D9BC, &MAIN_D_8011DC28 },
+    { 0x00001B54, 0x000090F0, &MAIN_D_8011DC34 },
+    { 0x00001B67, 0x0000A164, &MAIN_D_8011DC40 },
+    { 0x00001B7C, 0x0000B180, &MAIN_D_8011DC4C },
+    { 0x00001B93, 0x00007F54, &MAIN_D_8011DC58 },
+    { 0x00001BA3, 0x00007F3C, &MAIN_D_8011DC64 },
+    { 0x00001BB3, 0x00005F58, &MAIN_D_8011DC70 },
+    { 0x00001BBF, 0x0000E754, &MAIN_D_8011DC7C },
+    { 0x00001BDC, 0x0000BC30, &MAIN_D_8011DC88 },
+    { 0x00001BF4, 0x0000D314, &MAIN_D_8011DC94 },
+    { 0x00001C0F, 0x000075D4, &MAIN_D_8011DCA0 },
+    { 0x00001C1E, 0x0000A748, &MAIN_D_8011DCAC },
+    { 0x00001C33, 0x000060D4, &MAIN_D_8011DCB8 },
+    { 0x00001C40, 0x00006D6C, &MAIN_D_8011DCC4 },
+    { 0x00001C4E, 0x00007568, &MAIN_D_8011DCD0 },
+    { 0x00001C5D, 0x000080E4, &MAIN_D_8011DCDC },
+    { 0x00001C6E, 0x00006A8C, &MAIN_D_8011DCE8 },
+    { 0x00001C7C, 0x0000894C, &MAIN_D_8011DCF4 },
+    { 0x00001C8E, 0x0000552C, &MAIN_D_8011DD00 },
+    { 0x00001C9B, 0x00000158, &MAIN_D_8011DD0C },
+    { 0x00001C9C, 0x00000158, &MAIN_D_8011DD18 },
+    { 0x00001C9D, 0x00000158, &MAIN_D_8011DD24 },
+    { 0x00001C9E, 0x00000158, &MAIN_D_8011DD30 },
+    { 0x00001C9F, 0x000002D8, &MAIN_D_8011DD3C },
+    { 0x00001CA0, 0x00000158, &MAIN_D_8011DD48 },
+    { 0x00001CA1, 0x000002D8, &MAIN_D_8011DD54 },
+    { 0x00001CA2, 0x00000158, &MAIN_D_8011DD60 },
+    { 0x00001CA3, 0x00000158, &MAIN_D_8011DD6C },
+    { 0x00001CA4, 0x00000158, &MAIN_D_8011DD78 },
+    { 0x00001CA5, 0x00000158, &MAIN_D_8011DD84 },
+    { 0x00001CA6, 0x00000158, &MAIN_D_8011DD90 },
+    { 0x00001CA7, 0x00000158, &MAIN_D_8011DD9C },
+    { 0x00001CA8, 0x00000158, &MAIN_D_8011DDA8 },
+    { 0x00001CA9, 0x00000158, &MAIN_D_8011DDB4 },
+    { 0x00001CAA, 0x00000158, &MAIN_D_8011DDC0 },
+    { 0x00001CAB, 0x00000158, &MAIN_D_8011DDCC },
+    { 0x00001CAC, 0x00000158, &MAIN_D_8011DDD8 },
+    { 0x00001CAD, 0x00000158, &MAIN_D_8011DDE4 },
+    { 0x00001CAE, 0x00000158, &MAIN_D_8011DDF0 },
+    { 0x00001CAF, 0x00000158, &MAIN_D_8011DDFC },
+    { 0x00001CB0, 0x00000158, &MAIN_D_8011DE08 },
+    { 0x00001CB1, 0x00000158, &MAIN_D_8011DE14 },
+    { 0x00001CB2, 0x00000158, &MAIN_D_8011DE20 },
+    { 0x00001CB3, 0x00000158, &MAIN_D_8011DE2C },
+    { 0x00001CB4, 0x00000158, &MAIN_D_8011DE38 },
+    { 0x00001CB5, 0x00000D90, &MAIN_D_8011DE44 },
+    { 0x00001CB7, 0x000006DC, &MAIN_D_8011DE50 },
+    { 0x00001CB8, 0x000006DC, &MAIN_D_8011DE5C },
+    { 0x00001CB9, 0x00000158, &MAIN_D_8011DE68 },
+    { 0x00001CBA, 0x00000158, &MAIN_D_8011DE74 },
+    { 0x00001CBB, 0x00000158, &MAIN_D_8011DE80 },
+    { 0x00001CBC, 0x00000158, &MAIN_D_8011DE8C },
+    { 0x00001CBE, 0x00002220, &MAIN_D_8011DE98 },
+    { 0x00001CC3, 0x00002220, &MAIN_D_8011DEA4 },
+    { 0x00001CC8, 0x000018C0, &MAIN_D_8011DEB4 },
+    { 0x00001CCC, 0x00001940, &MAIN_D_8011DEC0 },
+    { 0x00001CD0, 0x0001EAC0, &MAIN_D_8011DECC },
+    { 0x00001D0E, 0x00000D20, &MAIN_D_801340FC },
+    { 0x00001D10, 0x00001038, &MAIN_D_80134104 },
+    { 0x00001D13, 0x00002220, &MAIN_D_8011DED8 },
+    { 0x00001D18, 0x000004C8, &MAIN_D_8011DEE4 },
+    { 0x00001D19, 0x00003BA0, &MAIN_D_8011DEF0 },
+    { 0x00001D21, 0x00003BA0, &MAIN_D_8011DEFC },
+    { 0x00001D29, 0x00002220, &MAIN_D_8011DF0C },
+    { 0x00001D2E, 0x00004320, &MAIN_D_8011DF18 },
+    { 0x00001D37, 0x00006CB4, &MAIN_D_8011DF24 },
+    { 0x00001D45, 0x0000067C, &MAIN_D_8013410C },
+    { 0x00001D46, 0x00008220, &MAIN_D_8011DF30 },
+    { 0x00001D57, 0x000006B8, &MAIN_D_80134114 },
+    { 0x00001D58, 0x00001060, &MAIN_D_8011DF3C },
+    { 0x00001D5B, 0x00004220, &MAIN_D_8011DF48 },
+    { 0x00001D64, 0x00004220, &MAIN_D_8011DF54 },
+    { 0x00001D6D, 0x00002A20, &MAIN_D_8011DF64 },
+    { 0x00001D73, 0x000097EC, &MAIN_D_8011DF70 },
+    { 0x00001D87, 0x00000268, &MAIN_D_8011DF7C },
+    { 0x00001D88, 0x00262000, &MAIN_D_8011DF8C },
+    { 0x0000224C, 0x00000580, &MAIN_D_8011DF98 },
+    { 0x0000224D, 0x00000628, &MAIN_D_8011DFA4 },
+    { 0x0000224E, 0x00003500, &MAIN_D_8013411C },
+    { 0x00002256, 0x00000130, &MAIN_D_8011DFB0 },
+    { 0x00002257, 0x00000254, &MAIN_D_8011DFBC },
+    { 0x00002258, 0x00000158, &MAIN_D_8011DFC8 },
+    { 0x00002259, 0x00000390, &MAIN_D_8011DFD4 },
+    { 0x0000225A, 0x000011A4, &MAIN_D_8011DFE0 },
+    { 0x0000225D, 0x000002D8, &MAIN_D_8011DFEC },
+    { 0x0000225E, 0x00000C08, &MAIN_D_80134124 },
+    { 0x00002260, 0x00000240, &MAIN_D_8011DFF8 },
+    { 0x00002261, 0x00000580, &MAIN_D_8011E004 },
+    { 0x00002262, 0x00000254, &MAIN_D_8011E010 },
+    { 0x00002263, 0x00000DC0, &MAIN_D_8011E01C },
+    { 0x00002265, 0x000002D0, &MAIN_D_8011E028 },
+    { 0x00002266, 0x00012E20, &MAIN_D_8011E034 },
+    { 0x0000228C, 0x00014220, &MAIN_D_8011E040 },
+    { 0x000022B5, 0x00000B48, &MAIN_D_8013412C },
+    { 0x000022B7, 0x00000480, &MAIN_D_8011E050 },
+    { 0x000022B8, 0x000001FC, &MAIN_D_8011E05C },
+    { 0x000022B9, 0x00000374, &MAIN_D_8011E068 },
+    { 0x000022BC, 0x0002B72C, &MAIN_D_8011E074 },
+    { 0x00002313, 0x00078680, &MAIN_D_8011E080 },
+    { 0x00002404, 0x000230E0, &MAIN_D_8011E08C },
+    { 0x0000244B, 0x00070678, &MAIN_D_8011E098 },
+    { 0x0000252C, 0x000234B2, &MAIN_D_8011E0A4 },
+    { 0x00002573, 0x00078680, &MAIN_D_8011E0B0 },
+    { 0x00002664, 0x00033270, &MAIN_D_8011E0BC },
+    { 0x000026CB, 0x00078680, &MAIN_D_8011E0C8 },
+    { 0x000027BC, 0x0003368A, &MAIN_D_8011E0D4 },
+    { 0x00002823, 0x00078680, &MAIN_D_8011E0E0 },
+    { 0x00002914, 0x0002BF84, &MAIN_D_8011E0EC },
+    { 0x0000296C, 0x0003C644, &MAIN_D_8011E0F8 },
+    { 0x000029E5, 0x0002BA82, &MAIN_D_8011E104 },
+    { 0x00002A3D, 0x00050658, &MAIN_D_8011E110 },
+    { 0x00002ADE, 0x0003417A, &MAIN_D_8011E11C },
+    { 0x00002B47, 0x00078680, &MAIN_D_8011E128 },
+    { 0x00002C38, 0x00034246, &MAIN_D_8011E134 },
+    { 0x00002CA1, 0x00078680, &MAIN_D_8011E140 },
+    { 0x00002D92, 0x000392C2, &MAIN_D_8011E14C },
+    { 0x00002E05, 0x0005C664, &MAIN_D_8011E158 },
+    { 0x00002EBE, 0x0002B134, &MAIN_D_8011E164 },
+    { 0x00002F15, 0x00078680, &MAIN_D_8011E170 },
+    { 0x00003006, 0x00012D9E, &MAIN_D_8011E17C },
+    { 0x0000302C, 0x0003C644, &MAIN_D_8011E188 },
+    { 0x000030A5, 0x00012F46, &MAIN_D_8011E194 },
+    { 0x000030CB, 0x00060668, &MAIN_D_8011E1A0 },
+    { 0x0000318C, 0x000337E2, &MAIN_D_8011E1AC },
+    { 0x000031F3, 0x00078680, &MAIN_D_8011E1B8 },
+    { 0x000032E4, 0x0002C1BE, &MAIN_D_8011E1C4 },
+    { 0x0000333D, 0x00070678, &MAIN_D_8011E1D0 },
+    { 0x0000341F, 0x0001B3CA, &MAIN_D_8011E1DC },
+    { 0x00003456, 0x00078680, &MAIN_D_8011E1E8 },
+    { 0x00003547, 0x00025F1E, &MAIN_D_8011E1F4 },
+    { 0x00003593, 0x0003C244, &MAIN_D_8011E200 },
+    { 0x0000360C, 0x00032BE4, &MAIN_D_8011E20C },
+    { 0x00003672, 0x00018220, &MAIN_D_8011E218 },
+    { 0x000036A3, 0x0003348A, &MAIN_D_8011E224 },
+    { 0x0000370A, 0x00070678, &MAIN_D_8011E230 },
+    { 0x000037EB, 0x00012CBA, &MAIN_D_8011E23C },
+    { 0x00003811, 0x00050258, &MAIN_D_8011E248 },
+    { 0x000038B2, 0x00034130, &MAIN_D_8011E254 },
+    { 0x0000391B, 0x0003C244, &MAIN_D_8011E260 },
+    { 0x00003994, 0x00021ECA, &MAIN_D_8011E26C },
+    { 0x000039D8, 0x0003C244, &MAIN_D_8011E278 },
+    { 0x00003A51, 0x0003399C, &MAIN_D_8011E284 },
+    { 0x00003AB9, 0x00078680, &MAIN_D_8011E290 },
+    { 0x00003BAA, 0x00022F90, &MAIN_D_8011E29C },
+    { 0x00003BF0, 0x00050258, &MAIN_D_8011E2A8 },
+    { 0x00003C91, 0x0002E026, &MAIN_D_8011E2B4 },
+    { 0x00003CEE, 0x00078280, &MAIN_D_8011E2C0 },
+    { 0x00003DDF, 0x0001AD8E, &MAIN_D_8011E2CC },
+    { 0x00003E15, 0x00030238, &MAIN_D_8011E2D8 },
+    { 0x00003E76, 0x0001B92A, &MAIN_D_8011E2E4 },
+    { 0x00003EAE, 0x00018220, &MAIN_D_8011E2F0 },
+    { 0x00003EDF, 0x0002BAFC, &MAIN_D_8011E2FC },
+    { 0x00003F37, 0x00020228, &MAIN_D_8011E308 },
+    { 0x00003F78, 0x000233DA, &MAIN_D_8011E314 },
+    { 0x00003FBF, 0x00078680, &MAIN_D_8011E320 },
+    { 0x000040B0, 0x0002360A, &MAIN_D_8011E32C },
+    { 0x000040F7, 0x00078680, &MAIN_D_8011E338 },
+    { 0x000041E9, 0x0003AFEC, &MAIN_D_8011E344 },
+    { 0x0000425F, 0x00070678, &MAIN_D_8011E350 },
+    { 0x00004340, 0x00033294, &MAIN_D_8011E35C },
+    { 0x000043A7, 0x00078680, &MAIN_D_8011E368 },
+    { 0x00004498, 0x00033512, &MAIN_D_8011E374 },
+    { 0x000044FF, 0x00078680, &MAIN_D_8011E380 },
+    { 0x000045F0, 0x00032E38, &MAIN_D_8011E38C },
+    { 0x00004656, 0x0003C644, &MAIN_D_8011E398 },
+    { 0x000046CF, 0x00032C06, &MAIN_D_8011E3A4 },
+    { 0x00004735, 0x0002462C, &MAIN_D_8011E3B0 },
+    { 0x0000477E, 0x0001AB06, &MAIN_D_8011E3BC },
+    { 0x000047B4, 0x00040248, &MAIN_D_8011E3C8 },
+    { 0x00004835, 0x0001AE2A, &MAIN_D_8011E3D4 },
+    { 0x0000486B, 0x00078280, &MAIN_D_8011E3E0 },
+    { 0x0000495C, 0x00012C7C, &MAIN_D_8011E3EC },
+    { 0x00004982, 0x00078280, &MAIN_D_8011E3F8 },
+    { 0x00004A73, 0x0002D4EE, &MAIN_D_8011E404 },
+    { 0x00004ACE, 0x00078280, &MAIN_D_8011E410 },
+    { 0x00004BBF, 0x00002AE4, &MAIN_D_8011E41C },
+    { 0x00004BC5, 0x00070278, &MAIN_D_8011E428 },
+    { 0x00004CA6, 0x00012C28, &MAIN_D_8011E434 },
+    { 0x00004CCC, 0x00050258, &MAIN_D_8011E440 },
+    { 0x00004D6D, 0x00029370, &MAIN_D_8011E44C },
+    { 0x00004DC0, 0x00070278, &MAIN_D_8011E458 },
+    { 0x00004EA1, 0x00023414, &MAIN_D_8011E464 },
+    { 0x00004EE8, 0x00078680, &MAIN_D_8011E470 },
+    { 0x00004FD9, 0x0001B99A, &MAIN_D_8011E47C },
+    { 0x00005011, 0x00018220, &MAIN_D_8011E488 },
+    { 0x00005042, 0x00023BB8, &MAIN_D_8011E494 },
+    { 0x0000508A, 0x0002422C, &MAIN_D_8011E4A0 },
+    { 0x000050D4, 0x00034520, &MAIN_D_8011E4AC },
+    { 0x0000513D, 0x00078280, &MAIN_D_8011E4B8 },
+    { 0x0000522E, 0x00002A68, &MAIN_D_8011E4C4 },
+    { 0x00005234, 0x00078280, &MAIN_D_8011E4D0 },
+    { 0x00005325, 0x00002A86, &MAIN_D_8011E4DC },
+    { 0x0000532B, 0x00078280, &MAIN_D_8011E4E8 },
+    { 0x0000541C, 0x00034C62, &MAIN_D_8011E4F4 },
+    { 0x00005486, 0x00078A80, &MAIN_D_8011E500 },
+    { 0x00005578, 0x00034C9A, &MAIN_D_8011E50C },
+    { 0x000055E2, 0x00078680, &MAIN_D_8011E518 },
+    { 0x000056D3, 0x00034ECA, &MAIN_D_8011E524 },
+    { 0x0000573D, 0x00078680, &MAIN_D_8011E530 },
+    { 0x0000582E, 0x00034E92, &MAIN_D_8011E53C },
+    { 0x00005898, 0x00078680, &MAIN_D_8011E548 },
+    { 0x00005989, 0x00034ECA, &MAIN_D_8011E554 },
+    { 0x000059F3, 0x00078680, &MAIN_D_8011E560 },
+    { 0x00005AE4, 0x000350FA, &MAIN_D_8011E56C },
+    { 0x00005B4F, 0x00078680, &MAIN_D_8011E578 },
+    { 0x00005C40, 0x00034E5A, &MAIN_D_8011E584 },
+    { 0x00005CAA, 0x00078680, &MAIN_D_8011E590 },
+    { 0x00005D9B, 0x00034E92, &MAIN_D_8011E59C },
+    { 0x00005E05, 0x00078680, &MAIN_D_8011E5A8 },
+    { 0x00005EF6, 0x000350C2, &MAIN_D_8011E5B4 },
+    { 0x00005F61, 0x00078680, &MAIN_D_8011E5C0 },
+    { 0x00006052, 0x00035052, &MAIN_D_8011E5CC },
+    { 0x000060BD, 0x00078680, &MAIN_D_8011E5D8 },
+    { 0x000061AE, 0x0003508A, &MAIN_D_8011E5E4 },
+    { 0x00006219, 0x00078680, &MAIN_D_8011E5F0 },
+    { 0x0000630A, 0x000352BA, &MAIN_D_8011E5FC },
+    { 0x00006375, 0x00078680, &MAIN_D_8011E608 },
+    { 0x00006467, 0x00034C8E, &MAIN_D_8011E614 },
+    { 0x000064D1, 0x00078680, &MAIN_D_8011E620 },
+    { 0x000065C2, 0x00034CFA, &MAIN_D_8011E62C },
+    { 0x0000662C, 0x00078680, &MAIN_D_8011E638 },
+    { 0x0000671D, 0x00034D56, &MAIN_D_8011E644 },
+    { 0x00006787, 0x00078680, &MAIN_D_8011E650 },
+    { 0x00006878, 0x00034E12, &MAIN_D_8011E65C },
+    { 0x000068E2, 0x00078680, &MAIN_D_8011E668 },
+    { 0x000069D3, 0x00035512, &MAIN_D_8011E674 },
+    { 0x00006A3E, 0x00078680, &MAIN_D_8011E680 },
+    { 0x00006B2F, 0x00035456, &MAIN_D_8011E68C },
+    { 0x00006B9A, 0x00078680, &MAIN_D_8011E698 },
+    { 0x00006C8B, 0x00034D6A, &MAIN_D_8011E6A4 },
+    { 0x00006CF5, 0x00078680, &MAIN_D_8011E6B0 },
+    { 0x00006DE6, 0x0003546A, &MAIN_D_8011E6BC },
+    { 0x00006E51, 0x00078680, &MAIN_D_8011E6C8 },
+    { 0x00006F42, 0x000353AE, &MAIN_D_8011E6D4 },
+    { 0x00006FAD, 0x00078680, &MAIN_D_8011E6E0 },
+    { 0x0000709E, 0x00034BAA, &MAIN_D_8011E6EC },
+    { 0x00007108, 0x00078680, &MAIN_D_8011E6F8 },
+    { 0x000071F9, 0x00034C52, &MAIN_D_8011E704 },
+    { 0x00007263, 0x00078680, &MAIN_D_8011E710 },
+    { 0x00007354, 0x00034CC2, &MAIN_D_8011E71C },
+    { 0x000073BE, 0x00078680, &MAIN_D_8011E728 },
+    { 0x000074AF, 0x000353C2, &MAIN_D_8011E734 },
+    { 0x0000751A, 0x00078680, &MAIN_D_8011E740 },
+    { 0x0000760B, 0x00035352, &MAIN_D_8011E74C },
+    { 0x00007676, 0x00078680, &MAIN_D_8011E758 },
+    { 0x00007767, 0x00034C1A, &MAIN_D_8011E764 },
+    { 0x000077D1, 0x00078680, &MAIN_D_8011E770 },
+    { 0x000078C3, 0x0002B01E, &MAIN_D_8011E77C },
+    { 0x0000791A, 0x00030238, &MAIN_D_8011E788 },
+    { 0x0000797B, 0x00012C82, &MAIN_D_8011E794 },
+    { 0x000079A1, 0x00018220, &MAIN_D_8011E7A0 },
+    { 0x000079D2, 0x0001AE62, &MAIN_D_8011E7AC },
+    { 0x00007A08, 0x00018620, &MAIN_D_8011E7B8 },
+    { 0x00007A39, 0x00033444, &MAIN_D_8011E7C4 },
+    { 0x00007AA0, 0x00070278, &MAIN_D_8011E7D0 },
+    { 0x00007B81, 0x00022E7A, &MAIN_D_8011E7DC },
+    { 0x00007BC7, 0x00030238, &MAIN_D_8011E7E8 },
+    { 0x00007C28, 0x00034C08, &MAIN_D_8011E7F4 },
+    { 0x00007C92, 0x00078680, &MAIN_D_8011E800 },
+    { 0x00007D83, 0x0003531A, &MAIN_D_8011E80C },
+    { 0x00007DEE, 0x00078680, &MAIN_D_8011E818 },
+    { 0x00007EDF, 0x000352AA, &MAIN_D_8011E824 },
+    { 0x00007F4A, 0x00078680, &MAIN_D_8011E830 },
+    { 0x0000803B, 0x00034C52, &MAIN_D_8011E83C },
+    { 0x000080A5, 0x00078680, &MAIN_D_8011E848 },
+    { 0x00008196, 0x00034CC2, &MAIN_D_8011E854 },
+    { 0x00008200, 0x00078680, &MAIN_D_8011E860 },
+    { 0x000082F1, 0x000353C2, &MAIN_D_8011E86C },
+    { 0x0000835C, 0x00078680, &MAIN_D_8011E878 },
+    { 0x0000844D, 0x00035352, &MAIN_D_8011E884 },
+    { 0x000084B8, 0x00078680, &MAIN_D_8011E890 },
+    { 0x000085A9, 0x00034C1A, &MAIN_D_8011E89C },
+    { 0x00008613, 0x00078680, &MAIN_D_8011E8A8 },
+    { 0x00008704, 0x0003531A, &MAIN_D_8011E8B4 },
+    { 0x0000876F, 0x00078680, &MAIN_D_8011E8C0 },
+    { 0x00008860, 0x000352AA, &MAIN_D_8011E8CC },
+    { 0x000088CB, 0x00078680, &MAIN_D_8011E8D8 },
+    { 0x000089BD, 0x000319B0, &MAIN_D_8011E8E4 },
+    { 0x00008A21, 0x00070278, &MAIN_D_8011E8F0 },
+    { 0x00008B02, 0x00002A6E, &MAIN_D_8011E8FC },
+    { 0x00008B08, 0x00078280, &MAIN_D_8011E908 },
+    { 0x00008BF9, 0x00002A68, &MAIN_D_8011E914 },
+    { 0x00008BFF, 0x00078280, &MAIN_D_8011E920 },
+    { 0x00008CF0, 0x000029BA, &MAIN_D_8011E92C },
+    { 0x00008CF6, 0x00078280, &MAIN_D_8011E938 },
+    { 0x00008DE7, 0x000028F8, &MAIN_D_8011E944 },
+    { 0x00008DED, 0x00070278, &MAIN_D_8011E950 },
+    { 0x00008ECE, 0x00022F44, &MAIN_D_8011E95C },
+    { 0x00008F14, 0x00030238, &MAIN_D_8011E968 },
+    { 0x00008F75, 0x0002312A, &MAIN_D_8011E974 },
+    { 0x00008FBC, 0x00040248, &MAIN_D_8011E980 },
+    { 0x0000903D, 0x000231A2, &MAIN_D_8011E98C },
+    { 0x00009084, 0x00030238, &MAIN_D_8011E998 },
+    { 0x000090E5, 0x00033490, &MAIN_D_8011E9A4 },
+    { 0x0000914C, 0x00030238, &MAIN_D_8011E9B0 },
+    { 0x000091AD, 0x000335B6, &MAIN_D_8011E9BC },
+    { 0x00009214, 0x00028230, &MAIN_D_8011E9C8 },
+    { 0x00009265, 0x00012CE4, &MAIN_D_8011E9D4 },
+    { 0x0000928B, 0x00020228, &MAIN_D_8011E9E0 },
+    { 0x000092CC, 0x00033306, &MAIN_D_8011E9EC },
+    { 0x00009333, 0x0003C244, &MAIN_D_8011E9F8 },
+    { 0x000093AC, 0x000336B8, &MAIN_D_8011EA04 },
+    { 0x00009413, 0x00070278, &MAIN_D_8011EA10 },
+    { 0x000094F4, 0x000028DC, &MAIN_D_8011EA1C },
+    { 0x000094FA, 0x0005425C, &MAIN_D_8011EA28 },
+    { 0x000095A3, 0x0003302C, &MAIN_D_8011EA34 },
+    { 0x0000960A, 0x00018220, &MAIN_D_8011EA40 },
+    { 0x0000963C, 0x00002A0E, &MAIN_D_8011EA4C },
+    { 0x00009642, 0x00078280, &MAIN_D_8011EA58 },
+    { 0x00009733, 0x00002A0E, &MAIN_D_8011EA64 },
+    { 0x00009739, 0x00078280, &MAIN_D_8011EA70 },
+    { 0x0000982A, 0x00002A0E, &MAIN_D_8011EA7C },
+    { 0x00009830, 0x00078280, &MAIN_D_8011EA88 },
+    { 0x00009921, 0x0000288E, &MAIN_D_8011EA94 },
+    { 0x00009927, 0x00060268, &MAIN_D_8011EAA0 },
+    { 0x000099E8, 0x0000288E, &MAIN_D_8011EAAC },
+    { 0x000099EE, 0x00060268, &MAIN_D_8011EAB8 },
+    { 0x00009AAF, 0x0000286E, &MAIN_D_8011EAC4 },
+    { 0x00009AB5, 0x00040248, &MAIN_D_8011EAD0 },
+    { 0x00009B36, 0x000028A6, &MAIN_D_8011EADC },
+    { 0x00009B3C, 0x00078280, &MAIN_D_8011EAE8 },
+    { 0x00009C2D, 0x0003321C, &MAIN_D_8011EAF4 },
+    { 0x00009C94, 0x00060268, &MAIN_D_8011EB00 },
+    { 0x00009D55, 0x00033164, &MAIN_D_8011EB0C },
+    { 0x00009DBC, 0x00070678, &MAIN_D_8011EB18 },
+    { 0x00009E9D, 0x00023178, &MAIN_D_8011EB24 },
+    { 0x00009EE4, 0x00078680, &MAIN_D_8011EB30 },
+    { 0x00009FD5, 0x000028FA, &MAIN_D_8011EB3C },
+    { 0x00009FDB, 0x00018220, &MAIN_D_8011EB48 },
+    { 0x0000A00C, 0x00033D94, &MAIN_D_8011EB54 },
+    { 0x0000A074, 0x00078280, &MAIN_D_8011EB60 },
+    { 0x0000A165, 0x00033D94, &MAIN_D_8011EB6C },
+    { 0x0000A1CD, 0x00078280, &MAIN_D_8011EB78 },
+    { 0x0000A2BE, 0x00033AE0, &MAIN_D_8011EB84 },
+    { 0x0000A326, 0x00078280, &MAIN_D_8011EB90 },
+    { 0x0000A417, 0x00022D06, &MAIN_D_8011EB9C },
+    { 0x0000A45D, 0x00050258, &MAIN_D_8011EBA8 },
+    { 0x0000A4FF, 0x00002A82, &MAIN_D_8011EBB4 },
+    { 0x0000A505, 0x00038240, &MAIN_D_8011EBC0 },
+    { 0x0000A576, 0x000029B4, &MAIN_D_8011EBCC },
+    { 0x0000A57C, 0x00078280, &MAIN_D_8011EBD8 },
+    { 0x0000A66D, 0x00002A0E, &MAIN_D_8011EBE4 },
+    { 0x0000A673, 0x00078280, &MAIN_D_8011EBF0 },
+    { 0x0000A764, 0x000029BA, &MAIN_D_8011EBFC },
+    { 0x0000A76A, 0x00078280, &MAIN_D_8011EC08 },
+    { 0x0000A85B, 0x00002B40, &MAIN_D_8011EC14 },
+    { 0x0000A861, 0x00078280, &MAIN_D_8011EC20 },
+    { 0x0000A953, 0x0002316E, &MAIN_D_8011EC2C },
+    { 0x0000A99A, 0x00048650, &MAIN_D_8011EC38 },
+    { 0x0000AA2B, 0x000339DC, &MAIN_D_8011EC44 },
+    { 0x0000AA93, 0x00078680, &MAIN_D_8011EC50 },
+    { 0x0000AB84, 0x000230D0, &MAIN_D_8011EC5C },
+    { 0x0000ABCB, 0x00078680, &MAIN_D_8011EC68 },
+    { 0x0000ACBC, 0x00012C66, &MAIN_D_8011EC74 },
+    { 0x0000ACE2, 0x00078280, &MAIN_D_8011EC80 },
+    { 0x0000ADD3, 0x0003339E, &MAIN_D_8011EC8C },
+    { 0x0000AE3A, 0x00078680, &MAIN_D_8011EC98 },
+    { 0x0000AF2B, 0x0002310A, &MAIN_D_8011ECA4 },
+    { 0x0000AF72, 0x00078680, &MAIN_D_8011ECB0 },
+    { 0x0000B063, 0x000334FA, &MAIN_D_8011ECBC },
+    { 0x0000B0CA, 0x00078680, &MAIN_D_8011ECC8 },
+    { 0x0000B1BB, 0x000231CE, &MAIN_D_8011ECD4 },
+    { 0x0000B202, 0x00078680, &MAIN_D_8011ECE0 },
+    { 0x0000B2F3, 0x00033AE0, &MAIN_D_8011ECEC },
+    { 0x0000B35B, 0x00078680, &MAIN_D_8011ECF8 },
+    { 0x0000B44C, 0x00022AAC, &MAIN_D_8011ED04 },
+    { 0x0000B492, 0x00050258, &MAIN_D_8011ED10 },
+    { 0x0000B533, 0x0003312A, &MAIN_D_8011ED1C },
+    { 0x0000B59A, 0x00078280, &MAIN_D_8011ED28 },
+    { 0x0000B68B, 0x00033490, &MAIN_D_8011ED34 },
+    { 0x0000B6F2, 0x00078280, &MAIN_D_8011ED40 },
+    { 0x0000B7E3, 0x00032C8C, &MAIN_D_8011ED4C },
+    { 0x0000B849, 0x00050258, &MAIN_D_8011ED58 },
+    { 0x0000B8EA, 0x00032FDE, &MAIN_D_8011ED64 },
+    { 0x0000B950, 0x00070278, &MAIN_D_8011ED70 },
+    { 0x0000BA31, 0x00012B04, &MAIN_D_8011ED7C },
+    { 0x0000BA57, 0x00018220, &MAIN_D_8011ED88 },
+    { 0x0000BA89, 0x00023926, &MAIN_D_8011ED94 },
+    { 0x0000BAD1, 0x00078680, &MAIN_D_8011EDA0 },
+    { 0x0000BBC2, 0x00033E56, &MAIN_D_8011EDAC },
+    { 0x0000BC2A, 0x00078280, &MAIN_D_8011EDB8 },
+    { 0x0000BD1B, 0x000332D6, &MAIN_D_8011EDC4 },
+    { 0x0000BD82, 0x00078680, &MAIN_D_8011EDD0 },
+    { 0x0000BE73, 0x0003AE3E, &MAIN_D_8011EDDC },
+    { 0x0000BEE9, 0x00028630, &MAIN_D_8011EDE8 },
+    { 0x0000BF3A, 0x0003AE5E, &MAIN_D_8011EDF4 },
+    { 0x0000BFB0, 0x00078680, &MAIN_D_8011EE00 },
+    { 0x0000C0A1, 0x00032BBE, &MAIN_D_8011EE0C },
+    { 0x0000C107, 0x00078680, &MAIN_D_8011EE18 },
+    { 0x0000C1F8, 0x0003B0BE, &MAIN_D_8011EE24 },
+    { 0x0000C26F, 0x00078680, &MAIN_D_8011EE30 },
+    { 0x0000C360, 0x0003ADFE, &MAIN_D_8011EE3C },
+    { 0x0000C3D6, 0x00078680, &MAIN_D_8011EE48 },
+    { 0x0000C4C7, 0x00002AB2, &MAIN_D_8011EE54 },
+    { 0x0000C4CD, 0x00050658, &MAIN_D_8011EE60 },
+    { 0x0000C56E, 0x00032E96, &MAIN_D_8011EE6C },
+    { 0x0000C5D4, 0x00060668, &MAIN_D_8011EE7C },
+    { 0x0000C695, 0x000332C6, &MAIN_D_8011EE8C },
+    { 0x0000C6FC, 0x00038640, &MAIN_D_8011EE98 },
+    { 0x0000C76D, 0x00032FDC, &MAIN_D_8011EEA4 },
+    { 0x0000C7D3, 0x00070278, &MAIN_D_8011EEB0 },
+    { 0x0000C8B4, 0x00012B5C, &MAIN_D_8011EEBC },
+    { 0x0000C8DA, 0x00070278, &MAIN_D_8011EEC8 },
+    { 0x0000C9BB, 0x00032E62, &MAIN_D_8011EED4 },
+    { 0x0000CA21, 0x00018620, &MAIN_D_8011EEE0 },
+    { 0x0000CA52, 0x00032BEA, &MAIN_D_8011EEEC },
+    { 0x0000CAB8, 0x00060268, &MAIN_D_8011EEF8 },
+    { 0x0000CB7A, 0x00033E62, &MAIN_D_8011EF04 },
+    { 0x0000CBE2, 0x00018220, &MAIN_D_8011EF10 },
+    { 0x0000CC13, 0x00012C0E, &MAIN_D_8011EF1C },
+    { 0x0000CC39, 0x0002422C, &MAIN_D_8011EF28 },
+    { 0x0000CC82, 0x00032DF6, &MAIN_D_8011EF34 },
+    { 0x0000CCE8, 0x0003C244, &MAIN_D_8011EF40 },
+    { 0x0000CD61, 0x00033362, &MAIN_D_8011EF4C },
+    { 0x0000CDC8, 0x0003C244, &MAIN_D_8011EF58 },
+    { 0x0000CE41, 0x0003BC58, &MAIN_D_8011EF64 },
+    { 0x0000CEB9, 0x00050258, &MAIN_D_8011EF70 },
+    { 0x0000CF5A, 0x0003334E, &MAIN_D_8011EF7C },
+    { 0x0000CFC1, 0x00078280, &MAIN_D_8011EF88 },
+    { 0x0000D0B2, 0x00033594, &MAIN_D_8011EF94 },
+    { 0x0000D119, 0x00078280, &MAIN_D_8011EFA0 },
+    { 0x0000D20A, 0x00033422, &MAIN_D_8011EFAC },
+    { 0x0000D271, 0x00078280, &MAIN_D_8011EFB8 },
+    { 0x0000D362, 0x00022D52, &MAIN_D_8011EFC4 },
+    { 0x0000D3A8, 0x0006426C, &MAIN_D_8011EFD0 },
+    { 0x0000D471, 0x000332E0, &MAIN_D_8011EFDC },
+    { 0x0000D4D8, 0x00078280, &MAIN_D_8011EFE8 },
+    { 0x0000D5C9, 0x000331E8, &MAIN_D_8011EFF4 },
+    { 0x0000D630, 0x00078280, &MAIN_D_8011F000 },
+    { 0x0000D721, 0x000330FE, &MAIN_D_8011F00C },
+    { 0x0000D788, 0x0006426C, &MAIN_D_8011F018 },
+    { 0x0000D851, 0x00033040, &MAIN_D_8011F024 },
+    { 0x0000D8B8, 0x0006426C, &MAIN_D_8011F030 },
+    { 0x0000D981, 0x00022DD6, &MAIN_D_8011F03C },
+    { 0x0000D9C7, 0x00050258, &MAIN_D_8011F048 },
+    { 0x0000DA69, 0x000029E6, &MAIN_D_8011F054 },
+    { 0x0000DA6F, 0x00050258, &MAIN_D_8011F060 },
+    { 0x0000DB10, 0x00023A42, &MAIN_D_8011F06C },
+    { 0x0000DB58, 0x0006C674, &MAIN_D_8011F078 },
+    { 0x0000DC31, 0x00033376, &MAIN_D_8011F084 },
+    { 0x0000DC98, 0x00078680, &MAIN_D_8011F090 },
+    { 0x0000DD89, 0x00033DCA, &MAIN_D_8011F09C },
+    { 0x0000DDF1, 0x00078680, &MAIN_D_8011F0A8 },
+    { 0x0000DEE2, 0x00012E8A, &MAIN_D_8011F0B4 },
+    { 0x0000DF08, 0x00078680, &MAIN_D_8011F0C0 },
+    { 0x0000DFF9, 0x00034134, &MAIN_D_8011F0CC },
+    { 0x0000E062, 0x00078680, &MAIN_D_8011F0D8 },
+    { 0x0000E153, 0x0003370A, &MAIN_D_8011F0E4 },
+    { 0x0000E1BA, 0x00078680, &MAIN_D_8011F0F0 },
+    { 0x0000E2AB, 0x00032F3E, &MAIN_D_8011F0FC },
+    { 0x0000E311, 0x00078280, &MAIN_D_8011F108 },
+    { 0x0000E402, 0x0002329E, &MAIN_D_8011F114 },
+    { 0x0000E449, 0x00078280, &MAIN_D_8011F120 },
+    { 0x0000E53A, 0x0003308E, &MAIN_D_8011F12C },
+    { 0x0000E5A1, 0x0006426C, &MAIN_D_8011F138 },
+    { 0x0000E66A, 0x00033BF2, &MAIN_D_8011F144 },
+    { 0x0000E6D2, 0x00078280, &MAIN_D_8011F150 },
+    { 0x0000E7C3, 0x00033182, &MAIN_D_8011F15C },
+    { 0x0000E82A, 0x00078280, &MAIN_D_8011F168 },
+    { 0x0000E91B, 0x0003301A, &MAIN_D_8011F174 },
+    { 0x0000E982, 0x00060268, &MAIN_D_8011F180 },
+    { 0x0000EA44, 0x000333FA, &MAIN_D_8011F18C },
+    { 0x0000EAAB, 0x00078680, &MAIN_D_8011F198 },
+    { 0x0000EB9C, 0x000232EE, &MAIN_D_8011F1A4 },
+    { 0x0000EBE3, 0x00078680, &MAIN_D_8011F1B0 },
+    { 0x0000ECD4, 0x00033ECE, &MAIN_D_8011F1BC },
+    { 0x0000ED3C, 0x00078680, &MAIN_D_8011F1C8 },
+    { 0x0000EE2D, 0x000232C6, &MAIN_D_8011F1D4 },
+    { 0x0000EE74, 0x00078680, &MAIN_D_8011F1E0 },
+    { 0x0000EF65, 0x00023772, &MAIN_D_8011F1EC },
+    { 0x0000EFAC, 0x00078680, &MAIN_D_8011F1F8 },
+    { 0x0000F09D, 0x00034260, &MAIN_D_8011F204 },
+    { 0x0000F106, 0x00078680, &MAIN_D_8011F210 },
+    { 0x0000F1F7, 0x00023108, &MAIN_D_8011F21C },
+    { 0x0000F23E, 0x0003C644, &MAIN_D_8011F228 },
+    { 0x0000F2B7, 0x00023196, &MAIN_D_8011F234 },
+    { 0x0000F2FE, 0x0006466C, &MAIN_D_8011F240 },
+    { 0x0000F3C7, 0x00033392, &MAIN_D_8011F24C },
+    { 0x0000F42E, 0x00078680, &MAIN_D_8011F258 },
+    { 0x0000F51F, 0x000029D6, &MAIN_D_8011F264 },
+    { 0x0000F525, 0x00040648, &MAIN_D_8011F270 },
+    { 0x0000F5A6, 0x000335BA, &MAIN_D_8011F27C },
+    { 0x0000F60D, 0x00078680, &MAIN_D_8011F288 },
+    { 0x0000F6FE, 0x00022DE6, &MAIN_D_8011F294 },
+    { 0x0000F744, 0x00018620, &MAIN_D_8011F2A0 },
+    { 0x0000F775, 0x00033548, &MAIN_D_8011F2AC },
+    { 0x0000F7DC, 0x0006466C, &MAIN_D_8011F2B8 },
+    { 0x0000F8A5, 0x00022E36, &MAIN_D_8011F2C4 },
+    { 0x0000F8EB, 0x0002462C, &MAIN_D_8011F2D0 },
+    { 0x0000F934, 0x0002302E, &MAIN_D_8011F2DC },
+    { 0x0000F97B, 0x00078680, &MAIN_D_8011F2E8 },
+    { 0x0000FA6D, 0x000338EE, &MAIN_D_8011F2F4 },
+    { 0x0000FAD5, 0x00078680, &MAIN_D_8011F300 },
+    { 0x0000FBC6, 0x00023366, &MAIN_D_8011F30C },
+    { 0x0000FC0D, 0x00070678, &MAIN_D_8011F318 },
+    { 0x0000FCEE, 0x00012E42, &MAIN_D_8011F324 },
+    { 0x0000FD14, 0x00018620, &MAIN_D_8011F330 },
+    { 0x0000FD45, 0x0002B656, &MAIN_D_8011F33C },
+    { 0x0000FD9C, 0x00060668, &MAIN_D_8011F348 },
+    { 0x0000FE5D, 0x000334B2, &MAIN_D_8011F354 },
+    { 0x0000FEC4, 0x00070678, &MAIN_D_8011F360 },
+    { 0x0000FFA5, 0x00033726, &MAIN_D_8011F36C },
+    { 0x0001000C, 0x00070678, &MAIN_D_8011F378 },
+    { 0x000100ED, 0x000333DA, &MAIN_D_8011F384 },
+    { 0x00010154, 0x00078680, &MAIN_D_8011F390 },
+    { 0x00010245, 0x00032D58, &MAIN_D_8011F39C },
+    { 0x000102AB, 0x0003C244, &MAIN_D_8011F3A8 },
+    { 0x00010324, 0x00022FAC, &MAIN_D_8011F3B4 },
+    { 0x0001036A, 0x00070278, &MAIN_D_8011F3C0 },
+    { 0x0001044B, 0x0002B23C, &MAIN_D_8011F3CC },
+    { 0x000104A2, 0x00078280, &MAIN_D_8011F3D8 },
+    { 0x00010593, 0x000029B4, &MAIN_D_8011F3E4 },
+    { 0x00010599, 0x00078280, &MAIN_D_8011F3F0 },
+    { 0x0001068A, 0x0000AB76, &MAIN_D_8011F3FC },
+    { 0x000106A0, 0x00078280, &MAIN_D_8011F408 },
+    { 0x00010791, 0x0001AB2A, &MAIN_D_8011F414 },
+    { 0x000107C7, 0x00030238, &MAIN_D_8011F420 },
+    { 0x00010828, 0x00012B68, &MAIN_D_8011F42C },
+    { 0x0001084E, 0x00078280, &MAIN_D_8011F438 },
+    { 0x0001093F, 0x0000AA58, &MAIN_D_8011F444 },
+    { 0x00010955, 0x00078280, &MAIN_D_8011F450 },
+    { 0x00010A47, 0x00033996, &MAIN_D_8011F45C },
+    { 0x00010AAF, 0x00078680, &MAIN_D_8011F468 },
+    { 0x00010BA0, 0x0003335C, &MAIN_D_8011F474 },
+    { 0x00010C07, 0x00070678, &MAIN_D_8011F480 },
+    { 0x00010CE8, 0x00033680, &MAIN_D_8011F48C },
+    { 0x00010D4F, 0x00050258, &MAIN_D_8011F498 },
+    { 0x00010DF0, 0x00034F0C, &MAIN_D_8011F4A4 },
+    { 0x00010E5A, 0x00050258, &MAIN_D_8011F4B0 },
+    { 0x00010EFB, 0x00022E40, &MAIN_D_8011F4BC },
+    { 0x00010F41, 0x00050258, &MAIN_D_8011F4C8 },
+    { 0x00010FE2, 0x00012B14, &MAIN_D_8011F4D4 },
+    { 0x00011008, 0x00028230, &MAIN_D_8011F4E0 },
+    { 0x00011059, 0x00033846, &MAIN_D_8011F4EC },
+    { 0x000110C1, 0x00078680, &MAIN_D_8011F4F8 },
+    { 0x000111B2, 0x000339AE, &MAIN_D_8011F504 },
+    { 0x0001121A, 0x00078A80, &MAIN_D_8011F514 },
+    { 0x0001130C, 0x00033BF2, &MAIN_D_8011F524 },
+    { 0x00011374, 0x00078680, &MAIN_D_8011F534 },
+    { 0x00011465, 0x000316E2, &MAIN_D_8011F544 },
+    { 0x000114C8, 0x00078680, &MAIN_D_8011F550 },
+    { 0x000115B9, 0x00031FBC, &MAIN_D_8011F55C },
+    { 0x0001161D, 0x00078880, &MAIN_D_8011F568 },
+    { 0x0001170F, 0x00031966, &MAIN_D_8011F574 },
+    { 0x00011773, 0x00078680, &MAIN_D_8011F580 },
+    { 0x00011864, 0x0003192A, &MAIN_D_8011F58C },
+    { 0x000118C8, 0x0003C644, &MAIN_D_8011F598 },
+    { 0x00011941, 0x00032994, &MAIN_D_8011F5A4 },
+    { 0x000119A7, 0x00078680, &MAIN_D_8011F5B0 },
+    { 0x00011A98, 0x00035878, &MAIN_D_8011F5BC },
+    { 0x00011B04, 0x00078680, &MAIN_D_8011F5C8 },
+    { 0x00011BF6, 0x0003327E, &MAIN_D_8011F5D4 },
+    { 0x00011C5D, 0x00078680, &MAIN_D_8011F5E0 },
+    { 0x00011D4E, 0x000331E2, &MAIN_D_8011F5EC },
+    { 0x00011DB5, 0x00070678, &MAIN_D_8011F5F8 },
+    { 0x00011E96, 0x000231DA, &MAIN_D_8011F604 },
+    { 0x00011EDD, 0x00030638, &MAIN_D_8011F610 },
+    { 0x00011F3E, 0x0000295A, &MAIN_D_8011F61C },
+    { 0x00011F44, 0x00078680, &MAIN_D_8011F62C },
+    { 0x00012035, 0x00032E5E, &MAIN_D_8011F63C },
+    { 0x0001209B, 0x00060668, &MAIN_D_8011F64C },
+    { 0x0001215C, 0x0003B158, &MAIN_D_8011F65C },
+    { 0x000121D3, 0x00078680, &MAIN_D_8011F668 },
+    { 0x000122C4, 0x0003408A, &MAIN_D_8011F674 },
+    { 0x0001232D, 0x0006466C, &MAIN_D_8011F680 },
+    { 0x000123F6, 0x00041994, &MAIN_D_8011F68C },
+    { 0x0001247A, 0x0003C644, &MAIN_D_8011F698 },
+    { 0x000124F3, 0x000318C6, &MAIN_D_8011F6A4 },
+    { 0x00012557, 0x00070678, &MAIN_D_8011F6B0 },
+    { 0x00012638, 0x00032DCA, &MAIN_D_8011F6BC },
+    { 0x0001269E, 0x00078280, &MAIN_D_8011F6C8 },
+    { 0x0001278F, 0x00033276, &MAIN_D_8011F6D4 },
+    { 0x000127F6, 0x00078280, &MAIN_D_8011F6E4 },
+    { 0x000128E7, 0x00032B3A, &MAIN_D_8011F6F4 },
+    { 0x0001294D, 0x00070278, &MAIN_D_8011F704 },
+    { 0x00012A2E, 0x00032B9A, &MAIN_D_8011F714 },
+    { 0x00012A94, 0x00070278, &MAIN_D_8011F724 },
+    { 0x00012B75, 0x0000289E, &MAIN_D_8011F734 },
+    { 0x00012B7B, 0x00070278, &MAIN_D_8011F744 },
+    { 0x00012C5C, 0x000028FE, &MAIN_D_8011F754 },
+    { 0x00012C62, 0x00070278, &MAIN_D_8011F764 },
+    { 0x00012D44, 0x01D8CA00, &MAIN_D_80134134 },
+    { 0x00016114, 0x02675E00, &MAIN_D_8013413C },
+    { 0x0001A484, 0x0296FD00, &MAIN_D_80134144 },
+    { 0x0001ED2C, 0x02464A00, &MAIN_D_8013414C },
+    { 0x00022CFD, 0x000C4800, &MAIN_D_80134154 },
+    { 0x00022E86, 0x0000606E, &MAIN_D_8011F774 },
+    { 0x00022E95, 0x00387000, &MAIN_D_8011F780 },
+    { 0x000235A3, 0x00283800, &MAIN_D_8011F78C },
+    { 0x00023AAA, 0x0003CACC, &MAIN_D_8013415C },
+    { 0x00023B24, 0x0000D90C, &MAIN_D_80134164 },
+    { 0x00023B40, 0x0000DF5C, &MAIN_D_8013416C },
+    { 0x00023B5C, 0x000F8800, &MAIN_D_8011F798 },
+    { 0x00023D4D, 0x00078000, &MAIN_D_8011F7A4 },
+    { 0x00023E3E, 0x000080C0, &MAIN_D_8011F7B0 },
+    { 0x00023E4F, 0x00001CB8, &MAIN_D_8011F7C0 },
+    { 0x00023E53, 0x00001178, &MAIN_D_8011F7CC },
+    { 0x00023E56, 0x00002710, &MAIN_D_8011F7D8 },
+    { 0x00023E5B, 0x000168C0, &MAIN_D_8011F7E4 },
+    { 0x00023E89, 0x000067FC, &MAIN_D_8011F7F0 },
+    { 0x00023E96, 0x00002548, &MAIN_D_8011F7FC },
+    { 0x00023E9B, 0x0000140C, &MAIN_D_8011F808 },
+    { 0x00023E9E, 0x00000098, &MAIN_D_8011F814 },
+    { 0x00023E9F, 0x00002710, &MAIN_D_8011F820 },
+    { 0x00023EA4, 0x00006D20, &MAIN_D_8011F82C },
+    { 0x00023EB2, 0x0000407C, &MAIN_D_8011F838 },
+    { 0x00023EBB, 0x00020D80, &MAIN_D_8011F844 },
+    { 0x00023EFD, 0x00008220, &MAIN_D_8011F850 },
+    { 0x00023F0E, 0x00002460, &MAIN_D_8011F85C },
+    { 0x00023F13, 0x00008220, &MAIN_D_8011F868 },
+    { 0x00023F24, 0x0000099A, &MAIN_D_8011F878 },
+    { 0x00023F26, 0x00001178, &MAIN_D_8011F884 },
+    { 0x00023F29, 0x0001AB40, &MAIN_D_8011F890 },
+    { 0x00023F5F, 0x00006698, &MAIN_D_8011F89C },
+    { 0x00023F6C, 0x00001B64, &MAIN_D_8011F8A8 },
+    { 0x00023F71, 0x00008220, &MAIN_D_80134174 },
+    { 0x00023F82, 0x00007F20, &MAIN_D_8013417C },
+    { 0x00023F92, 0x00008220, &MAIN_D_8011F8B8 },
+    { 0x00023FA3, 0x00008220, &MAIN_D_8011F8C4 },
+    { 0x00023FB4, 0x00008220, &MAIN_D_8011F8D0 },
+    { 0x00023FC5, 0x00008220, &MAIN_D_8011F8DC },
+    { 0x00023FD6, 0x00008220, &MAIN_D_8011F8E8 },
+    { 0x00023FE7, 0x00008220, &MAIN_D_80134184 },
+    { 0x00023FF8, 0x00008220, &MAIN_D_8013418C },
+    { 0x00024009, 0x00008220, &MAIN_D_80134194 },
+    { 0x0002401A, 0x00008220, &MAIN_D_8013419C },
+    { 0x0002402B, 0x00008220, &MAIN_D_801341A4 },
+    { 0x0002403C, 0x00008220, &MAIN_D_8011F8F4 },
+    { 0x0002404D, 0x00008220, &MAIN_D_8011F900 },
+    { 0x0002405E, 0x00008220, &MAIN_D_8011F90C },
+    { 0x0002406F, 0x00008220, &MAIN_D_8011F918 },
+    { 0x00024080, 0x00008220, &MAIN_D_8011F924 },
+    { 0x00024091, 0x00008220, &MAIN_D_8011F930 },
+    { 0x000240A2, 0x00008220, &MAIN_D_801341AC },
+    { 0x000240B3, 0x00008220, &MAIN_D_801341B4 },
+    { 0x000240C4, 0x00008220, &MAIN_D_801341BC },
+    { 0x000240D5, 0x00008220, &MAIN_D_801341C4 },
+    { 0x000240E6, 0x00008220, &MAIN_D_801341CC },
+    { 0x000240F7, 0x0002349C, &MAIN_D_8011F93C },
+    { 0x0002413E, 0x000014F8, &MAIN_D_8011F948 },
+    { 0x00024141, 0x0000B6EC, &MAIN_D_8011F958 },
+    { 0x00024158, 0x000078AC, &MAIN_D_8011F968 },
+    { 0x00024168, 0x00002054, &MAIN_D_8011F978 },
+    { 0x0002416D, 0x00001534, &MAIN_D_8011F984 },
+    { 0x00024170, 0x00009008, &MAIN_D_8011F994 },
+    { 0x00024183, 0x0000D96C, &MAIN_D_8011F9A0 },
+    { 0x0002419F, 0x000101EC, &MAIN_D_8011F9B0 },
+    { 0x000241C0, 0x00073428, &MAIN_D_8011F9BC },
+    { 0x000242A7, 0x00002960, &MAIN_D_8011F9C8 },
+    { 0x000242AD, 0x00007E10, &MAIN_D_8011F9D8 },
+    { 0x000242BD, 0x0002D3E8, &MAIN_D_8011F9E8 },
+    { 0x00024318, 0x00006BD4, &MAIN_D_8011F9F4 },
+    { 0x00024326, 0x000054C0, &MAIN_D_8011FA00 },
+    { 0x00024331, 0x00020788, &MAIN_D_8011FA10 },
+    { 0x00024372, 0x000A5000, &MAIN_D_801341D4 },
+    { 0x000244BC, 0x01A5E000, &MAIN_D_801341DC },
+    { 0x00000000, 0x00000000, &MAIN_D_801341E4 },
+};
