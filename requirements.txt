@@ -2,6 +2,7 @@ colorama
 crunch64
 intervaltree
 n64img
+pyelftools
 pygfxd
 pylibyaml
 PyYAML
