@@ -5,7 +5,7 @@ categories:
       - main
 
 expected_paths:
-  ALL:  expected/
+  asm: expected/asm
 
 ignored_files: 
   - main/psyq
