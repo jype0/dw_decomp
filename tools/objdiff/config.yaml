@@ -2,11 +2,12 @@ categories:
   - id: main
     name: Main Executable
     paths:
-      - ""
+      - main
 
 expected_paths:
-  ALL:  expected/
+  asm: expected/asm
 
-ignored_files: []
+ignored_files: 
+  - main/psyq
 
 output: ./objdiff.json

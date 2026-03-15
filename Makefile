@@ -260,9 +260,13 @@ compare:
 	@tools/cmp_bins.sh
 
 expected: $(OBJ)
+	rm -rf $(EXPECTEDDIR)
 	@mkdir -p $(EXPECTEDDIR)
-	mv $(BUILDDIR)/asm $(EXPECTEDDIR)/asm
-	mv $(BUILDDIR)/src $(EXPECTEDDIR)/src
+	cp -r $(BUILDDIR)/asm $(EXPECTEDDIR)/asm
+	cp -r $(BUILDDIR)/src $(EXPECTEDDIR)/src
+
+objdiff: expected
+	python3 tools/objdiff/objdiff_generate.py tools/objdiff/config.yaml
 
 $(BUILDDIR)/%.ld: %.ld
 	@mkdir -p $(dir $@)

@@ -51,6 +51,9 @@ make -j$(nproc)
 
 # Compare original vs new binaries
 make compare
+
+# Generate objdiff config
+make objdiff
 ```
 
 ## Links
