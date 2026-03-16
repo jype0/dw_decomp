@@ -88,5 +88,6 @@ typedef struct {
 } PartnerPara;
 
 extern DigimonPara DIGIMON_DATA[NUM_DIGIMON];
+extern PartnerPara PARTNER_PARA;
 
 #endif
