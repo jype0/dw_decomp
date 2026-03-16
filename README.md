@@ -45,6 +45,8 @@ tools/splat.sh
 MWCCWRAP := /path/to/mwccwrap.exe
 MWCCWRAP_FLAGS := -dll "/path/to/cc_mips.dll"
 MWCCGAP_FLAGS := --use-wibo --wibo-path /path/to/wibo
+# Optionally set path to toolchain
+TOOLCHAIN := /path/to/mipsel-linux-gnu-
 
 # Build new binaries
 make -j$(nproc)
