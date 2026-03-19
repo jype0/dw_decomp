@@ -50,6 +50,7 @@ MAIN_SRC := \
 	$(BUILDDIR)/generated/sbss.s \
 	src/main/aabb.c \
 	src/main/butterfly.c \
+	src/main/clock.c \
 	src/main/fade.c \
 	src/main/file.c \
 	src/main/evl.c \

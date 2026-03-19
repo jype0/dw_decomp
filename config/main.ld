@@ -48,7 +48,7 @@ SECTIONS
         build/asm/main/psyq/libsnd.s.o(.text);
         build/asm/main/map.s.o(.text);
         build/asm/main/inventory.s.o(.text);
-        build/asm/main/clock.s.o(.text);
+        build/src/main/clock.c.o(.text);
         build/src/main/partner.c.o(.text);
         build/asm/main/entity_text.s.o(.text);
         build/asm/main/tmd_object.s.o(.text);
@@ -108,7 +108,7 @@ SECTIONS
         build/asm/main/data/psyq/libsnd.rodata.s.o(.rodata);
         build/asm/main/data/map.rodata.s.o(.rodata);
         build/asm/main/inventory.s.o(.rodata);
-        build/asm/main/clock.s.o(.rodata);
+        build/src/main/clock.c.o(.rodata);
         build/src/main/partner.c.o(.rodata);
         build/asm/main/entity_text.s.o(.rodata);
         build/asm/main/data/tmd_object.rodata.s.o(.rodata);
@@ -176,7 +176,7 @@ SECTIONS
         build/asm/main/data/psyq/libsnd.data.s.o(.data);
         build/asm/main/data/map.data.s.o(.data);
         build/asm/main/inventory.s.o(.data);
-        build/asm/main/clock.s.o(.data);
+        build/src/main/clock.c.o(.data);
         build/src/main/partner.c.o(.data);
         build/asm/main/entity_text.s.o(.data);
         build/asm/main/tmd_object.s.o(.data);

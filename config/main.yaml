@@ -85,7 +85,7 @@ segments:
       - [0x39C1C, asm, psyq/libsnd]
       - [0x43078, asm, map]
       - [0x4AAF8, asm, inventory]
-      - [0x4CE04, asm, clock]
+      - [0x4CE04, c, clock]
       - [0x4D7AC, c, partner]
       - [0x4F804, asm, entity_text]
       - [0x4FE48, asm, tmd_object]
