@@ -32,7 +32,7 @@ SECTIONS
         build/asm/main/entrypoint.s.o(.text);
         build/asm/main/partner_impl.s.o(.text);
         build/asm/main/tamer.s.o(.text);
-        build/asm/main/fade.s.o(.text);
+        build/src/main/fade.c.o(.text);
         build/src/main/aabb.c.o(.text);
         build/asm/main/efe.s.o(.text);
         build/asm/main/psyq/libcd.s.o(.text);
@@ -92,7 +92,7 @@ SECTIONS
         build/src/main/math.c.o(.rodata);
         build/asm/main/graphics.s.o(.rodata);
         build/asm/main/data/tamer.rodata.s.o(.rodata);
-        build/asm/main/fade.s.o(.rodata);
+        build/src/main/fade.c.o(.rodata);
         build/src/main/aabb.c.o(.rodata);
         build/asm/main/data/efe.rodata.s.o(.rodata);
         build/asm/main/data/psyq/libcd.rodata.s.o(.rodata);
@@ -159,7 +159,7 @@ SECTIONS
         build/asm/main/entrypoint.s.o(.data);
         build/asm/main/data/partner_impl.data.s.o(.data);
         build/asm/main/data/tamer.data.s.o(.data);
-        build/asm/main/fade.s.o(.data);
+        build/src/main/fade.c.o(.data);
         build/src/main/aabb.c.o(.data);
         build/asm/main/efe.s.o(.data);
         build/asm/main/data/psyq/libcd.data.s.o(.data);

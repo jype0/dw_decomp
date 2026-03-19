@@ -69,7 +69,7 @@ segments:
       - [0x14238, asm, entrypoint]
       - [0x1435C, asm, partner_impl]
       - [0x197F4, asm, tamer]
-      - [0x1CD64, asm, fade]
+      - [0x1CD64, c, fade]
       - [0x1D140, c, aabb]
       - [0x1D3F8, asm, efe]
       - [0x1FD78, asm, psyq/libcd]
