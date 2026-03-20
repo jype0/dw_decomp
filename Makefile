@@ -59,6 +59,7 @@ MAIN_SRC := \
 	src/main/file_table.c \
 	src/main/sine_table.c \
 	src/main/particle.c \
+	src/main/world_object.c \
 	src/main/swap.c
 
 MAIN_OBJ := $(MAIN_SRC:%=$(BUILDDIR)/%.o)
