@@ -25,7 +25,7 @@ SECTIONS
         build/asm/main/psyq/libgs.s.o(.text);
         build/asm/main/psyq/libgte.s.o(.text);
         build/asm/main/model.s.o(.text);
-        build/asm/main/world_object.s.o(.text);
+        build/src/main/world_object.c.o(.text);
         build/src/main/file.c.o(.text);
         build/src/main/math.c.o(.text);
         build/asm/main/graphics.s.o(.text);
@@ -49,7 +49,7 @@ SECTIONS
         build/asm/main/map.s.o(.text);
         build/asm/main/inventory.s.o(.text);
         build/asm/main/clock.s.o(.text);
-        build/asm/main/partner.s.o(.text);
+        build/src/main/partner.c.o(.text);
         build/asm/main/entity_text.s.o(.text);
         build/asm/main/tmd_object.s.o(.text);
         build/asm/main/evolution.s.o(.text);
@@ -87,7 +87,7 @@ SECTIONS
         build/asm/main/data/psyq/libgs.rodata.s.o(.rodata);
         build/asm/main/psyq/libgte.s.o(.rodata);
         build/asm/main/model.s.o(.rodata);
-        build/asm/main/world_object.s.o(.rodata);
+        build/src/main/world_object.c.o(.rodata);
         build/src/main/file.c.o(.rodata);
         build/src/main/math.c.o(.rodata);
         build/asm/main/graphics.s.o(.rodata);
@@ -109,12 +109,12 @@ SECTIONS
         build/asm/main/data/map.rodata.s.o(.rodata);
         build/asm/main/inventory.s.o(.rodata);
         build/asm/main/clock.s.o(.rodata);
-        build/asm/main/partner.s.o(.rodata);
+        build/src/main/partner.c.o(.rodata);
         build/asm/main/entity_text.s.o(.rodata);
-        build/asm/main/tmd_object.s.o(.rodata);
+        build/asm/main/data/tmd_object.rodata.s.o(.rodata);
         build/asm/main/evolution.s.o(.rodata);
         build/asm/main/file_queue.s.o(.rodata);
-        build/asm/main/graphics2.s.o(.rodata);
+        build/asm/main/data/graphics2.rodata.s.o(.rodata);
         build/asm/main/fish.s.o(.rodata);
         build/src/main/swap.c.o(.rodata);
         build/asm/main/utils.s.o(.rodata);
@@ -149,7 +149,8 @@ SECTIONS
         build/asm/main/psyq/libgs.s.o(.data);
         build/asm/main/data/psyq/libgte2.data.s.o(.data);
         build/asm/main/data/model.data.s.o(.data);
-        build/asm/main/world_object.s.o(.data);
+        build/src/main/world_object.c.o(.data);
+        build/src/main/file.c.o(.data);
         build/src/main/math.c.o(.data);
         build/src/main/file_table.c.o(.rodata);
         build/src/main/atan_table.c.o(.data);
@@ -176,7 +177,7 @@ SECTIONS
         build/asm/main/data/map.data.s.o(.data);
         build/asm/main/inventory.s.o(.data);
         build/asm/main/clock.s.o(.data);
-        build/asm/main/partner.s.o(.data);
+        build/src/main/partner.c.o(.data);
         build/asm/main/entity_text.s.o(.data);
         build/asm/main/tmd_object.s.o(.data);
         build/asm/main/evolution.s.o(.data);

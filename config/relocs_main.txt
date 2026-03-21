@@ -46,7 +46,7 @@ rom:0x0004EC30 reloc:MIPS_26 symbol:DOOA_func_80084810
 rom:0x0004EC48 reloc:MIPS_26 symbol:DOOA_func_80084810
 rom:0x0004F5E8 reloc:MIPS_HI16 symbol:PARTNER_ENTITY
 rom:0x0004F5F0 reloc:MIPS_LO16 symbol:PARTNER_ENTITY
-rom:0x0004F634 reloc:MIPS_26 symbol:KAR_func_80053C30
+rom:0x0004F634 reloc:MIPS_26 symbol:KAR_start
 rom:0x0005113C reloc:MIPS_HI16 symbol:MEDAL_COORDINATES
 rom:0x00051150 reloc:MIPS_LO16 symbol:MEDAL_COORDINATES
 rom:0x00054E10 reloc:MIPS_26 symbol:FISH_func_80079A38
@@ -289,8 +289,8 @@ rom:0x0006A550 reloc:MIPS_26 symbol:VS_func_8005D6DC
 rom:0x0006A578 reloc:MIPS_26 symbol:VS_func_8005D6DC
 rom:0x0006A594 reloc:MIPS_HI16 symbol:VS_D_800716B2
 rom:0x0006A598 reloc:MIPS_LO16 symbol:VS_D_800716B2
-rom:0x0006BC74 reloc:MIPS_HI16 symbol:MAIN_D_8013D3E0
-rom:0x0006BC78 reloc:MIPS_LO16 symbol:MAIN_D_8013D3E0
+rom:0x0006BC74 reloc:MIPS_HI16 symbol:UI_BOX_DATA addend:0x50
+rom:0x0006BC78 reloc:MIPS_LO16 symbol:UI_BOX_DATA addend:0x50
 rom:0x00073F60 reloc:MIPS_26 symbol:TRN2_func_80089134
 rom:0x00073F70 reloc:MIPS_26 symbol:TRN2_func_80089A6C
 rom:0x00073F80 reloc:MIPS_26 symbol:TRN2_func_8008A654

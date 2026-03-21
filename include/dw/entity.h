@@ -29,29 +29,33 @@ typedef struct
 } MomentumData;
 
 typedef struct {
-    int32_t type;
-    PositionData *posData;
-    int32_t *animPtr;
-    MomentumData *momentum;
-    int32_t locX;
-    int32_t locY;
-    int32_t locZ;
-    int16_t animFrame;
-    int16_t frameCount;
-    int16_t *animInstrPtr;
-    void *loopStart;
-    int16_t loopEndFrame;
-    int16_t textureX;
-    int16_t textureY;
-    uint8_t animId;
-    uint8_t loopCount;
-    uint8_t animFlag;
-    uint8_t field17_0x31;
-    int16_t field18_0x32;
-    uint8_t isOnMap;
-    uint8_t isOnScreen;
-    uint8_t flatSprite;
-    uint8_t flatTimer;
+	MomentumData *momentum;
+	int32_t locX;
+	int32_t locY;
+	int32_t locZ;
+	int16_t animFrame;
+	int16_t frameCount;
+	int16_t *animInstrPtr;
+	void *loopStart;
+	int16_t loopEndFrame;
+	int16_t textureX;
+	int16_t textureY;
+	uint8_t animId;
+	uint8_t loopCount;
+	uint8_t animFlag;
+	uint8_t field17_0x31;
+	int16_t field18_0x32;
+} EntityAnim;
+
+typedef struct {
+	int32_t type;
+	PositionData *posData;
+	int32_t *animPtr;
+	EntityAnim anim;
+	uint8_t isOnMap;
+	uint8_t isOnScreen;
+	uint8_t flatSprite;
+	uint8_t flatTimer;
 } Entity;
 
 typedef struct {
@@ -74,7 +78,15 @@ typedef struct {
 	int32_t lives;
 } PartnerEntity;
 
+typedef struct {
+	Entity entity;
+	uint8_t tamerLevel;
+	uint8_t raisedCount;
+	uint16_t padding;
+} TamerEntity;
+
 extern Entity *ENTITY_TABLE[ENTITY_MAX];
 extern PartnerEntity PARTNER_ENTITY;
+extern TamerEntity TAMER_ENTITY;
 
 #endif
