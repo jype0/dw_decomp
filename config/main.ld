@@ -68,7 +68,7 @@ SECTIONS
         build/asm/main/psyq/libds.s.o(.text);
         build/src/main/butterfly.c.o(.text);
         build/asm/main/psyq/libmcrd.s.o(.text);
-        build/asm/main/bubble.s.o(.text);
+        build/src/main/bubble.c.o(.text);
         build/asm/main/battle_ui.s.o(.text);
         build/asm/main/main.s.o(.text);
         build/asm/main/vs.s.o(.text);
@@ -128,7 +128,7 @@ SECTIONS
         build/asm/main/psyq/libds.s.o(.rodata);
         build/src/main/butterfly.c.o(.rodata);
         build/asm/main/data/psyq/libmcrd.rodata.s.o(.rodata);
-        build/asm/main/bubble.s.o(.rodata);
+        build/src/main/bubble.c.o(.rodata);
         build/asm/main/data/battle_ui.rodata.s.o(.rodata);
         build/asm/main/data/main.rodata.s.o(.rodata);
         build/asm/main/data/vs.rodata.s.o(.rodata);

@@ -53,7 +53,7 @@ typedef struct {
 	int32_t *animPtr;
 	EntityAnim anim;
 	uint8_t isOnMap;
-	uint8_t isOnScreen;
+	int8_t isOnScreen;
 	uint8_t flatSprite;
 	uint8_t flatTimer;
 } Entity;
