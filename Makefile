@@ -3,7 +3,7 @@
 -include local.mk
 
 ifeq ($(MWCCWRAP),)
-	$(error MWCCWRAP path not set)
+$(error MWCCWRAP path not set)
 endif
 
 TOOLCHAIN ?= mipsel-linux-gnu-
@@ -19,7 +19,10 @@ CC := $(TOOLCHAIN)gcc
 LD := $(TOOLCHAIN)ld
 OBJCOPY := $(TOOLCHAIN)objcopy
 
-MWCCGAP := python3 external/mwccgap/mwccgap.py
+PYTHON := python3
+SPLAT := $(PYTHON) -m splat split
+
+MWCCGAP := $(PYTHON) external/mwccgap/mwccgap.py
 MWCCGAP_FLAGS += --mwcc-path $(MWCCWRAP) \
 		 --as-march r3000 \
 		 --macro-inc-path include/macro.inc
@@ -266,7 +269,16 @@ DEP += $(VS_DEP)
 
 OVERLAY += VS
 
+LINKER_SCRIPTS := $(addprefix $(BUILDDIR)/generated/,\
+		  $(addsuffix .ld, main \
+		  $(shell echo $(OVERLAY) | tr A-Z a-z)))
+
 all: $(EXE)
+
+generate: $(LINKER_SCRIPTS)
+
+regenerate: reset
+	$(MAKE) generate
 
 compare:
 	@tools/cmp_bins.sh
@@ -278,7 +290,7 @@ expected: $(OBJ)
 	cp -r $(BUILDDIR)/src $(EXPECTEDDIR)/src
 
 objdiff: expected
-	python3 tools/objdiff/objdiff_generate.py tools/objdiff/config.yaml
+	$(PYTHON) tools/objdiff/objdiff_generate.py tools/objdiff/config.yaml
 
 $(BUILDDIR)/%.ld: %.ld
 	@mkdir -p $(dir $@)
@@ -317,7 +329,14 @@ $(BUILDDIR)/generated/sbss.s: config/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_sbss.py $< $@
 
+$(BUILDDIR)/generated/%.ld: config/%.yaml
+	@mkdir -p $(dir $@)
+	$(SPLAT) $< --disassemble-all --make-full-disasm-for-code
+
 clean:
 	rm -rf $(BUILDDIR)
+
+reset: clean
+	rm -rf $(ASM_DIR)
 
 .PHONY: all clean

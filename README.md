@@ -39,7 +39,7 @@ git submodule update --init --recursive
 dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
 
 # Disassemble original binaries
-tools/splat.sh
+make regenerate
 
 # Create file local.mk with below content
 MWCCWRAP := /path/to/mwccwrap.exe
