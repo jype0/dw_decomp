@@ -9,6 +9,7 @@ endif
 TOOLCHAIN ?= mipsel-linux-gnu-
 
 BUILDDIR := build
+ASM_DIR := asm
 EXPECTEDDIR := expected
 
 ELF := $(BUILDDIR)/SLUS_010.32.elf
@@ -42,7 +43,8 @@ DEPFLAGS = -MM -MF $(@:.o=.d) -MT $@
 LDFLAGS := -g $(addprefix -T ,$(CPPLDSCRIPT)) -static \
 	   -Wl,--no-check-sections -Wl,-Map=% -Wl,--build-id=none
 
-MAIN_ASM_SRC := $(shell find asm/main -path '*.s' -not -path 'asm/main/*matchings*')
+MAIN_ASM_SRC := $(shell find $(ASM_DIR)/main -path '*.s' \
+		-not -path '$(ASM_DIR)/main/*matchings*' 2> /dev/null)
 
 MAIN_SRC := \
 	$(MAIN_ASM_SRC) \
@@ -73,8 +75,8 @@ DEP += $(MAIN_DEP)
 OVERLAY :=
 
 BTL_SRC := \
-	$(wildcard asm/btl/*.s) \
-	$(wildcard asm/btl/data/*.s)
+	$(wildcard $(ASM_DIR)/btl/*.s) \
+	$(wildcard $(ASM_DIR)/btl/data/*.s)
 
 BTL_OBJ := $(BTL_SRC:%=$(BUILDDIR)/%.o)
 BTL_DEP := $(BTL_OBJ:%.o=%.d)
@@ -85,8 +87,8 @@ DEP += $(BTL_DEP)
 OVERLAY += BTL
 
 DGET_SRC := \
-	$(wildcard asm/dget/*.s) \
-	$(wildcard asm/dget/data/*.s)
+	$(wildcard $(ASM_DIR)/dget/*.s) \
+	$(wildcard $(ASM_DIR)/dget/data/*.s)
 
 DGET_OBJ := $(DGET_SRC:%=$(BUILDDIR)/%.o)
 DGET_DEP := $(DGET_OBJ:%.o=%.d)
@@ -97,8 +99,8 @@ DEP += $(DGET_DEP)
 OVERLAY += DGET
 
 DOO2_SRC := \
-	$(wildcard asm/doo2/*.s) \
-	$(wildcard asm/doo2/data/*.s)
+	$(wildcard $(ASM_DIR)/doo2/*.s) \
+	$(wildcard $(ASM_DIR)/doo2/data/*.s)
 
 DOO2_OBJ := $(DOO2_SRC:%=$(BUILDDIR)/%.o)
 DOO2_DEP := $(DOO2_OBJ:%.o=%.d)
@@ -109,8 +111,8 @@ DEP += $(DOO2_DEP)
 OVERLAY += DOO2
 
 DOOA_SRC := \
-	$(wildcard asm/dooa/*.s) \
-	$(wildcard asm/dooa/data/*.s)
+	$(wildcard $(ASM_DIR)/dooa/*.s) \
+	$(wildcard $(ASM_DIR)/dooa/data/*.s)
 
 DOOA_OBJ := $(DOOA_SRC:%=$(BUILDDIR)/%.o)
 DOOA_DEP := $(DOOA_OBJ:%.o=%.d)
@@ -121,8 +123,8 @@ DEP += $(DOOA_DEP)
 OVERLAY += DOOA
 
 EAB_SRC := \
-	$(wildcard asm/eab/*.s) \
-	$(wildcard asm/eab/data/*.s)
+	$(wildcard $(ASM_DIR)/eab/*.s) \
+	$(wildcard $(ASM_DIR)/eab/data/*.s)
 
 EAB_OBJ := $(EAB_SRC:%=$(BUILDDIR)/%.o)
 EAB_DEP := $(EAB_OBJ:%.o=%.d)
@@ -133,8 +135,8 @@ DEP += $(EAB_DEP)
 OVERLAY += EAB
 
 ENDI_SRC := \
-	$(wildcard asm/endi/*.s) \
-	$(wildcard asm/endi/data/*.s)
+	$(wildcard $(ASM_DIR)/endi/*.s) \
+	$(wildcard $(ASM_DIR)/endi/data/*.s)
 
 ENDI_OBJ := $(ENDI_SRC:%=$(BUILDDIR)/%.o)
 ENDI_DEP := $(ENDI_OBJ:%.o=%.d)
@@ -145,8 +147,8 @@ DEP += $(ENDI_DEP)
 OVERLAY += ENDI
 
 EVL_SRC := \
-	$(wildcard asm/evl/*.s) \
-	$(wildcard asm/evl/data/*.s)
+	$(wildcard $(ASM_DIR)/evl/*.s) \
+	$(wildcard $(ASM_DIR)/evl/data/*.s)
 
 EVL_OBJ := $(EVL_SRC:%=$(BUILDDIR)/%.o)
 EVL_DEP := $(EVL_OBJ:%.o=%.d)
@@ -157,8 +159,8 @@ DEP += $(EVL_DEP)
 OVERLAY += EVL
 
 FISH_SRC := \
-	$(wildcard asm/fish/*.s) \
-	$(wildcard asm/fish/data/*.s)
+	$(wildcard $(ASM_DIR)/fish/*.s) \
+	$(wildcard $(ASM_DIR)/fish/data/*.s)
 
 FISH_OBJ := $(FISH_SRC:%=$(BUILDDIR)/%.o)
 FISH_DEP := $(FISH_OBJ:%.o=%.d)
@@ -169,8 +171,8 @@ DEP += $(FISH_DEP)
 OVERLAY += FISH
 
 KAR_SRC := \
-	$(wildcard asm/kar/*.s) \
-	$(wildcard asm/kar/data/*.s)
+	$(wildcard $(ASM_DIR)/kar/*.s) \
+	$(wildcard $(ASM_DIR)/kar/data/*.s)
 
 KAR_OBJ := $(KAR_SRC:%=$(BUILDDIR)/%.o)
 KAR_DEP := $(KAR_OBJ:%.o=%.d)
@@ -181,8 +183,8 @@ DEP += $(KAR_DEP)
 OVERLAY += KAR
 
 MOV_SRC := \
-	$(wildcard asm/mov/*.s) \
-	$(wildcard asm/mov/data/*.s)
+	$(wildcard $(ASM_DIR)/mov/*.s) \
+	$(wildcard $(ASM_DIR)/mov/data/*.s)
 
 MOV_OBJ := $(MOV_SRC:%=$(BUILDDIR)/%.o)
 MOV_DEP := $(MOV_OBJ:%.o=%.d)
@@ -193,8 +195,8 @@ DEP += $(MOV_DEP)
 OVERLAY += MOV
 
 MURD_SRC := \
-	$(wildcard asm/murd/*.s) \
-	$(wildcard asm/murd/data/*.s)
+	$(wildcard $(ASM_DIR)/murd/*.s) \
+	$(wildcard $(ASM_DIR)/murd/data/*.s)
 
 MURD_OBJ := $(MURD_SRC:%=$(BUILDDIR)/%.o)
 MURD_DEP := $(MURD_OBJ:%.o=%.d)
@@ -205,8 +207,8 @@ DEP += $(MURD_DEP)
 OVERLAY += MURD
 
 SHOP_SRC := \
-	$(wildcard asm/shop/*.s) \
-	$(wildcard asm/shop/data/*.s)
+	$(wildcard $(ASM_DIR)/shop/*.s) \
+	$(wildcard $(ASM_DIR)/shop/data/*.s)
 
 SHOP_OBJ := $(SHOP_SRC:%=$(BUILDDIR)/%.o)
 SHOP_DEP := $(SHOP_OBJ:%.o=%.d)
@@ -217,8 +219,8 @@ DEP += $(SHOP_DEP)
 OVERLAY += SHOP
 
 STD_SRC := \
-	$(wildcard asm/std/*.s) \
-	$(wildcard asm/std/data/*.s)
+	$(wildcard $(ASM_DIR)/std/*.s) \
+	$(wildcard $(ASM_DIR)/std/data/*.s)
 
 STD_OBJ := $(STD_SRC:%=$(BUILDDIR)/%.o)
 STD_DEP := $(STD_OBJ:%.o=%.d)
@@ -229,8 +231,8 @@ DEP += $(STD_DEP)
 OVERLAY += STD
 
 TRN2_SRC := \
-	$(wildcard asm/trn2/*.s) \
-	$(wildcard asm/trn2/data/*.s)
+	$(wildcard $(ASM_DIR)/trn2/*.s) \
+	$(wildcard $(ASM_DIR)/trn2/data/*.s)
 
 TRN2_OBJ := $(TRN2_SRC:%=$(BUILDDIR)/%.o)
 TRN2_DEP := $(TRN2_OBJ:%.o=%.d)
@@ -241,8 +243,8 @@ DEP += $(TRN2_DEP)
 OVERLAY += TRN2
 
 TRN_SRC := \
-	$(wildcard asm/trn/*.s) \
-	$(wildcard asm/trn/data/*.s)
+	$(wildcard $(ASM_DIR)/trn/*.s) \
+	$(wildcard $(ASM_DIR)/trn/data/*.s)
 
 TRN_OBJ := $(TRN_SRC:%=$(BUILDDIR)/%.o)
 TRN_DEP := $(TRN_OBJ:%.o=%.d)
@@ -253,8 +255,8 @@ DEP += $(TRN_DEP)
 OVERLAY += TRN
 
 VS_SRC := \
-	$(wildcard asm/vs/*.s) \
-	$(wildcard asm/vs/data/*.s)
+	$(wildcard $(ASM_DIR)/vs/*.s) \
+	$(wildcard $(ASM_DIR)/vs/data/*.s)
 
 VS_OBJ := $(VS_SRC:%=$(BUILDDIR)/%.o)
 VS_DEP := $(VS_OBJ:%.o=%.d)
@@ -272,7 +274,7 @@ compare:
 expected: $(OBJ)
 	rm -rf $(EXPECTEDDIR)
 	@mkdir -p $(EXPECTEDDIR)
-	cp -r $(BUILDDIR)/asm $(EXPECTEDDIR)/asm
+	cp -r $(BUILDDIR)/$(ASM_DIR) $(EXPECTEDDIR)/$(ASM_DIR)
 	cp -r $(BUILDDIR)/src $(EXPECTEDDIR)/src
 
 objdiff: expected
