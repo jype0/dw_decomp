@@ -311,11 +311,13 @@ $(EXE): $(ELF) $(OVERLAY:%=$(BUILDDIR)/%_REL.BIN)
 
 -include $(DEP)
 
-$(BUILDDIR)/%.c.o: %.c
+$(BUILDDIR)/%.c.tmp.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
 	$(MWCCGAP) $(MWCCGAP_FLAGS) $< $@ $(MWCCWRAP_FLAGS) $(CPPFLAGS)
-	@printf '01100000' | xxd -r -p | dd of=$@ bs=1 seek=36 count=4 conv=notrunc
+
+$(BUILDDIR)/%.c.o: $(BUILDDIR)/%.c.tmp.o
+	@tools/fix_elf_flags.py $< $@
 
 $(BUILDDIR)/%.s.o: %.s
 	@mkdir -p $(dir $@)
