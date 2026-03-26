@@ -1,5 +1,4 @@
 #!/bin/sh
-# See LICENSE file for copyright and license details.
 
 TOP="$(dirname "$(dirname "$(readlink -f -- "$0")")")"
 

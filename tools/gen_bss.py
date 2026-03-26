@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-# See LICENSE file for copyright and license details.
 
 import argparse
+
 
 def __print_sym(prev_sym, cur_addr, prev_addr, outfile):
     print('.global', prev_sym, file=outfile)
     print('{}:'.format(prev_sym), '.zero',
           '0x{:X}'.format(cur_addr - prev_addr), file=outfile)
+
 
 def __parse_args():
     parser = argparse.ArgumentParser()
@@ -14,6 +15,7 @@ def __parse_args():
     parser.add_argument('outfile')
 
     return parser.parse_args()
+
 
 def __main():
     args = __parse_args()
@@ -39,6 +41,7 @@ def __main():
                 __print_sym(prev_sym, cur_addr, prev_addr, outfile)
 
             prev_sym, prev_addr = cur_sym, cur_addr
+
 
 if __name__ == '__main__':
     __main()
