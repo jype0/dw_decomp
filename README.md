@@ -6,28 +6,18 @@ A work in progress decompilation of Digimon World for PS1.
 
 Install the following packages:
 ```
-gcc g++ gcc-mipsel-linux-gnu make cmake
+binutils-mipsel-linux-gnu gcc-mipsel-linux-gnu make python3 python3-venv
 ```
 
-### Build mkpsxiso
-
-```
-git clone https://github.com/Lameguy64/mkpsxiso.git
-cd mkpsxiso
-git submodule update --init --recursive
-cmake .
-make -j$(nproc)
-# May require root privileges
-make install
-```
-
-### Install splat
-
+Install Python dependencies:
 ```
 python3 -m venv .venv
 . .venv/bin/activate
 pip3 install -r requirements.txt
 ```
+
+Download dumpsxiso:  
+https://github.com/Lameguy64/mkpsxiso
 
 ## Build
 
@@ -36,7 +26,7 @@ pip3 install -r requirements.txt
 git submodule update --init --recursive
 
 # Dump original PSX Digimon World (USA) ISO
-dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
+/path/to/dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
 
 # Disassemble original binaries
 make regenerate
