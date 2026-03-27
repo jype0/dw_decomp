@@ -41,11 +41,7 @@ jobs:
         cat tmp/cc_mips* > tmp/cc_mips.tar.gz
         tar -xf tmp/cc_mips.tar.gz -C bin/cc_mips/
     - run: |
-        echo 'MWCCWRAP := bin/mwccwrap/mwccwrap.exe' > local.mk
-        echo 'MWCCWRAP_FLAGS := -dll "bin/cc_mips/cc_mips_41.dll"' >> local.mk
-        echo 'MWCCGAP_FLAGS += --use-wibo --wibo-path bin/wibo-x86_64' >> local.mk
-    - run: |
         . /dw/.venv/bin/activate
-        make generate
+        make -j$(nproc) generate
         make -j$(nproc)
         make compare

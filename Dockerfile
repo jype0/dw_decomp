@@ -16,12 +16,17 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+RUN mkdir /dw && \
+    chown ubuntu:ubuntu /dw
+
 USER ubuntu
 WORKDIR /dw
+
 COPY requirements.txt requirements.txt
-RUN chown ubuntu:ubuntu /dw && \
-    mkdir -p /dw/.venv && \
+
+RUN mkdir -p /dw/.venv && \
     git config --global --add safe.directory /dw && \
     python3 -m venv .venv && \
     . .venv/bin/activate && \
-    pip3 install -r requirements.txt
+    pip3 install -r requirements.txt && \
+    echo '. /dw/.venv/bin/activate' >> "$HOME/.bash_aliases"

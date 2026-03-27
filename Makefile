@@ -2,10 +2,6 @@
 
 -include local.mk
 
-ifeq ($(MWCCWRAP),)
-$(error MWCCWRAP path not set)
-endif
-
 TOOLCHAIN ?= mipsel-linux-gnu-
 
 BUILDDIR := build
@@ -22,11 +18,17 @@ OBJCOPY := $(TOOLCHAIN)objcopy
 PYTHON := python3
 SPLAT := $(PYTHON) -m splat split
 
+MWCCWRAP ?= bin/mwccwrap/mwccwrap.exe
+MWCCWRAP_FLAGS ?= -dll "bin/cc_mips/cc_mips_40.dll"
+MWCCWRAP_FLAGS += -gccincludes -lang c -Cpp_exceptions off -RTTI off
+
+WIBO ?= bin/wibo-x86_64
+
 MWCCGAP := $(PYTHON) external/mwccgap/mwccgap.py
+MWCCGAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
 MWCCGAP_FLAGS += --mwcc-path $(MWCCWRAP) \
 		 --as-march r3000 \
 		 --macro-inc-path include/macro.inc
-MWCCWRAP_FLAGS += -gccincludes -lang c -Cpp_exceptions off -RTTI off
 
 INC := -Iexternal/psyq_headers/include -Iinclude
 

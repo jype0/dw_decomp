@@ -16,8 +16,15 @@ python3 -m venv .venv
 pip3 install -r requirements.txt
 ```
 
+Download build tools:
+```
+tools/dl_deps.sh
+```
+
 Download dumpsxiso:  
 https://github.com/Lameguy64/mkpsxiso
+
+Download CodeWarrior for PlayStation Release 4 and copy cc_mips.dll to bin/cc_mips/cc_mips_40.dll.
 
 ## Build
 
@@ -29,13 +36,12 @@ git submodule update --init --recursive
 /path/to/dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
 
 # Disassemble original binaries
-make regenerate
+make -j$(nproc) regenerate
 
-# Create file local.mk with below content
+# (Optional) Create file local.mk to override defaults
 MWCCWRAP := /path/to/mwccwrap.exe
 MWCCWRAP_FLAGS := -dll "/path/to/cc_mips.dll"
 MWCCGAP_FLAGS := --use-wibo --wibo-path /path/to/wibo
-# Optionally set path to toolchain
 TOOLCHAIN := /path/to/mipsel-linux-gnu-
 
 # Build new binaries
