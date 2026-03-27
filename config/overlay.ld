@@ -40,22 +40,17 @@ SECTIONS
 		.DGET {
 			dget_TEXT_START = .;
 
-			KEEP(build/asm/dget/data/header.rodata.s.o(.rodata.*));
+			build/asm/dget/data/header.rodata.s.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dget/40.s.o(.text.*));
+			build/src/dget/dget.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dget/40.s.o(.rodata.*));
+			build/src/dget/dget.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dget/40.s.o(.data.*));
-			. = ALIGN(., 4);
-			KEEP(build/asm/dget/data/14CC.data.s.o(.data.*));
-			. = ALIGN(., 4);
-
-			KEEP(build/asm/dget/40.s.o(.bss.*));
-			. = ALIGN(., 4);
+			build/src/dget/dget.c.o(.data.*);
+			. = ALIGN(., 8);
 		}
 	}
 

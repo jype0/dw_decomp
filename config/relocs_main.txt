@@ -306,7 +306,7 @@ rom:0x00074158 reloc:MIPS_26 symbol:DOO2_func_8007189C
 rom:0x00074370 reloc:MIPS_HI16 symbol:MAIN_D_80058000 addend:-0x10000
 rom:0x0007437C reloc:MIPS_LO16 symbol:MAIN_D_80058000
 rom:0x00074424 reloc:MIPS_26 symbol:EAB_func_8006148C
-rom:0x00075DDC reloc:MIPS_26 symbol:DGET_func_80081A80
+rom:0x00075DDC reloc:MIPS_26 symbol:initTournamentSchedule
 rom:0x00075E4C reloc:MIPS_26 symbol:DOO2_func_80071934
 rom:0x00083A64 reloc:MIPS_32 symbol:_gp
 rom:0x00083A68 reloc:MIPS_32 symbol:main_SBSS_SIZE

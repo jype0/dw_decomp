@@ -54,7 +54,7 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm]
-      - [0x14CC, data]
+      - [0x40, c, dget]
+      - [0x14CC, data, dget]
 
   - [0x14F8]

@@ -116,9 +116,12 @@ DEP += $(BTL_DEP)
 
 OVERLAY += BTL
 
+DGET_ASM_SRC := $(shell find $(ASM_DIR)/dget -path '*.s' \
+		-not -path '$(ASM_DIR)/dget/*matchings*' 2> /dev/null)
+
 DGET_SRC := \
-	$(wildcard $(ASM_DIR)/dget/*.s) \
-	$(wildcard $(ASM_DIR)/dget/data/*.s)
+	$(DGET_ASM_SRC) \
+	src/dget/dget.c
 
 DGET_OBJ := $(DGET_SRC:%=$(BUILDDIR)/%.o)
 DGET_DEP := $(DGET_OBJ:%.o=%.d)
