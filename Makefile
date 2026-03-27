@@ -51,6 +51,9 @@ LDFLAGS := -g $(addprefix -T ,$(CPPLDSCRIPT)) -static \
 MAIN_ASM_SRC := $(shell find $(ASM_DIR)/main -path '*.s' \
 		-not -path '$(ASM_DIR)/main/*matchings*' 2> /dev/null)
 
+# evolution.c is not yet added by default due to it needing a garbage function to 
+# reach 100% and the toolchain for that is not yet set up.
+
 MAIN_SRC := \
 	$(MAIN_ASM_SRC) \
 	$(BUILDDIR)/generated/bss.s \
