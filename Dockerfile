@@ -6,9 +6,12 @@ RUN apt-get update && \
     apt-get install -y \
     binutils-mipsel-linux-gnu \
     gcc-mipsel-linux-gnu \
+    git \
     make \
     python3 \
     python3-venv \
+    unzip \
+    wget \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -17,7 +20,8 @@ USER ubuntu
 WORKDIR /dw
 COPY requirements.txt requirements.txt
 RUN chown ubuntu:ubuntu /dw && \
-    mkdir -p /dw/.venv /dw/build && \
+    mkdir -p /dw/.venv && \
+    git config --global --add safe.directory /dw && \
     python3 -m venv .venv && \
     . .venv/bin/activate && \
     pip3 install -r requirements.txt

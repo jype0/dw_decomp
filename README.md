@@ -6,7 +6,7 @@ A work in progress decompilation of Digimon World for PS1.
 
 Install the following packages:
 ```
-binutils-mipsel-linux-gnu gcc-mipsel-linux-gnu make python3 python3-venv
+binutils-mipsel-linux-gnu gcc-mipsel-linux-gnu git make python3 python3-venv unzip wget
 ```
 
 Install Python dependencies:

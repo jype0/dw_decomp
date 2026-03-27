@@ -1,0 +1,51 @@
+name: build
+on:
+  push:
+  pull_request_target:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: read
+jobs:
+  build:
+    if: github.repository == 'jype0/dw_decomp'
+    container:
+      image: ghcr.io/jype0/dw-build:latest
+      options: --user root
+      volumes:
+        - dw_venv:/dw/.venv
+    runs-on: ubuntu-latest
+    steps:
+    - if: github.event_name != 'pull_request_target'
+      uses: actions/checkout@v5
+      with:
+        ref: ${{ github.ref }}
+        submodules: recursive
+    - if: github.event_name == 'pull_request_target'
+      uses: actions/checkout@v5
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+        submodules: recursive
+    - uses: actions/checkout@v5
+      with:
+        repository: jype0/dw_decomp_dependencies
+        token: ${{ secrets.DW_DECOMP_DEPENDENCIES_TOKEN }}
+        path: tmp
+    - run: |
+        tools/dl_deps.sh
+    - run: |
+        mkdir -p disks
+        cat tmp/dw* > tmp/dw.tar.gz
+        tar -xf tmp/dw.tar.gz -C disks/
+        mkdir -p bin/cc_mips
+        cat tmp/cc_mips* > tmp/cc_mips.tar.gz
+        tar -xf tmp/cc_mips.tar.gz -C bin/cc_mips/
+    - run: |
+        echo 'MWCCWRAP := bin/mwccwrap/mwccwrap.exe' > local.mk
+        echo 'MWCCWRAP_FLAGS := -dll "bin/cc_mips/cc_mips_41.dll"' >> local.mk
+        echo 'MWCCGAP_FLAGS += --use-wibo --wibo-path bin/wibo-x86_64' >> local.mk
+    - run: |
+        . /dw/.venv/bin/activate
+        make generate
+        make -j$(nproc)
+        make compare
