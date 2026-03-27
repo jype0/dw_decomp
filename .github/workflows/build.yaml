@@ -45,3 +45,12 @@ jobs:
         make -j$(nproc) generate
         make -j$(nproc)
         make compare
+    - if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        . /dw/.venv/bin/activate
+        make report
+    - if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-artifact@v4
+      with:
+        name: SLUS_010.32_report
+        path: build/report.json

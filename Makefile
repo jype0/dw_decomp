@@ -30,6 +30,8 @@ MWCCGAP_FLAGS += --mwcc-path $(MWCCWRAP) \
 		 --as-march r3000 \
 		 --macro-inc-path include/macro.inc
 
+OBJDIFF ?= bin/objdiff-cli-linux-x86_64
+
 INC := -Iexternal/psyq_headers/include -Iinclude
 
 LDSCRIPT := \
@@ -297,6 +299,9 @@ expected: $(OBJ)
 
 objdiff: expected
 	$(PYTHON) tools/objdiff/objdiff_generate.py tools/objdiff/config.yaml
+
+report: objdiff
+	$(OBJDIFF) report generate > $(BUILDDIR)/report.json
 
 $(BUILDDIR)/%.ld: %.ld
 	@mkdir -p $(dir $@)

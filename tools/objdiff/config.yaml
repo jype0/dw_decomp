@@ -3,11 +3,75 @@ categories:
     name: Main Executable
     paths:
       - main
+  - id: btl
+    name: BTL Overlay
+    paths:
+      - btl
+  - id: dget
+    name: DGET Overlay
+    paths:
+      - dget
+  - id: doo2
+    name: DOO2 Overlay
+    paths:
+      - doo2
+  - id: dooa
+    name: DOOA Overlay
+    paths:
+      - dooa
+  - id: eab
+    name: EAB Overlay
+    paths:
+      - eab
+  - id: endi
+    name: ENDI Overlay
+    paths:
+      - endi
+  - id: evl
+    name: EVL Overlay
+    paths:
+      - evl
+  - id: fish
+    name: FISH Overlay
+    paths:
+      - fish
+  - id: kar
+    name: KAR Overlay
+    paths:
+      - kar
+  - id: mov
+    name: MOV Overlay
+    paths:
+      - mov
+  - id: murd
+    name: MURD Overlay
+    paths:
+      - murd
+  - id: shop
+    name: SHOP Overlay
+    paths:
+      - shop
+  - id: std
+    name: STD Overlay
+    paths:
+      - std
+  - id: trn
+    name: TRN Overlay
+    paths:
+      - trn
+  - id: trn2
+    name: TRN2 Overlay
+    paths:
+      - trn2
+  - id: vs
+    name: VS Overlay
+    paths:
+      - vs
 
 expected_paths:
   asm: expected/asm
 
-ignored_files: 
+ignored_files:
   - main/psyq
 
 output: ./objdiff.json
