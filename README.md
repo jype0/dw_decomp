@@ -16,13 +16,10 @@ python3 -m venv .venv
 pip3 install -r requirements.txt
 ```
 
-Download build tools:
+Download tools:
 ```
 tools/dl_deps.sh
 ```
-
-Download dumpsxiso:  
-https://github.com/Lameguy64/mkpsxiso
 
 Download CodeWarrior for PlayStation Release 4 and copy cc_mips.dll to bin/cc_mips/cc_mips_40.dll.
 
@@ -33,7 +30,7 @@ Download CodeWarrior for PlayStation Release 4 and copy cc_mips.dll to bin/cc_mi
 git submodule update --init --recursive
 
 # Dump original PSX Digimon World (USA) ISO
-/path/to/dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
+bin/mkpsxiso-2.20-Linux/bin/dumpsxiso -x disks/us -s disks/us/us.xml "/path/to/Digimon World (USA).bin"
 
 # Disassemble original binaries
 make -j$(nproc) regenerate
