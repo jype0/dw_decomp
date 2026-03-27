@@ -11,10 +11,10 @@ rom:0x00000B88 reloc:MIPS_HI16 symbol:MAIN_jtbl_801353FC
 rom:0x00000B8C reloc:MIPS_LO16 symbol:MAIN_jtbl_801353FC
 rom:0x00000B94 reloc:MIPS_HI16 symbol:MAIN_jtbl_80135400
 rom:0x00000B98 reloc:MIPS_LO16 symbol:MAIN_jtbl_80135400
-rom:0x00013318 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10000
-rom:0x00013324 reloc:MIPS_LO16 symbol:TEXTURE_BUFFER
-rom:0x00013328 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10004
-rom:0x0001332C reloc:MIPS_LO16 symbol:TEXTURE_BUFFER addend:0x4
+//rom:0x00013318 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10000
+//rom:0x00013324 reloc:MIPS_LO16 symbol:TEXTURE_BUFFER
+//rom:0x00013328 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10004
+//rom:0x0001332C reloc:MIPS_LO16 symbol:TEXTURE_BUFFER addend:0x4
 rom:0x000151E8 reloc:MIPS_HI16 symbol:REINCARNATION_MODEL_DATA
 rom:0x000151F8 reloc:MIPS_LO16 symbol:REINCARNATION_MODEL_DATA
 rom:0x00019A50 reloc:MIPS_26 symbol:STD_tickTamerTournament
@@ -30,8 +30,8 @@ rom:0x0001AE80 reloc:MIPS_26 symbol:MURD_tick
 rom:0x0001AE9C reloc:MIPS_26 symbol:MURD_tick
 rom:0x0001BAC4 reloc:MIPS_26 symbol:BTL_battleMain
 rom:0x000263AC reloc:MIPS_26 symbol:STD_tickNPCTournament
-rom:0x0002B510 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10000
-rom:0x0002B518 reloc:MIPS_LO16 symbol:TEXTURE_BUFFER
+//rom:0x0002B510 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10000
+//rom:0x0002B518 reloc:MIPS_LO16 symbol:TEXTURE_BUFFER
 rom:0x00034778 reloc:MIPS_26 symbol:BTL_healStatusEffect
 rom:0x00034798 reloc:MIPS_26 symbol:BTL_healStatusEffect
 rom:0x00034854 reloc:MIPS_26 symbol:BTL_removeDeathCountdown
