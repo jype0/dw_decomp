@@ -1,4 +1,5 @@
 #include <dw/math.h>
+#include <rand.h>
 
 #pragma optimization_level 4
 
@@ -19,7 +20,7 @@ int32_t _sin(int32_t input)
         return -SIN_LOOKUP_TABLE[input - 256];
     else if ((input >= 384) && (input < 512))
         return -SIN_LOOKUP_TABLE[512 - input];
-}
+} // NOLINT undefined behavior intentional
 
 int32_t _cos(int32_t input)
 {

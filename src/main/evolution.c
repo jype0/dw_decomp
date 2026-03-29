@@ -10,8 +10,10 @@
 int32_t calculateRequirementScore(int32_t current, int16_t target,
                                   int8_t isMaxCM, int8_t isMaxBattles,
                                   int8_t currentBest);
+int32_t getNumMasteredMoves(void);
+int32_t hasDigimonRaised(int32_t digimonId);
 
-static void __garbage__() {
+static void __garbage__() { // NOLINT
   Stats partnerEntity;
   int16_t statsArray[6];
   int16_t statsArray2[6];
@@ -59,7 +61,7 @@ int16_t getInTrainingEvolutionTarget(int32_t currentDigimon) {
       continue;
     }
 
-    flag = EVO_REQ_DATA[*targetPtr].flags;
+    flag = EVO_REQ_DATA[(int32_t)*targetPtr].flags;
     requirementScore = calculateRequirementScore(currentDigimon, *targetPtr,
                                                  ((flag & 0x10) >> 4),
                                                  (flag & 1), currentBest);
@@ -76,16 +78,16 @@ int16_t getInTrainingEvolutionTarget(int32_t currentDigimon) {
 
 int32_t calculateRequirementScore(int32_t current, int16_t target,
                                   int8_t isMaxCM, int8_t isMaxBattles,
-                                  int8_t currentBest) {
+                                  int8_t currentBest_) {
   EvoRequirements *reqs;
   Stats *partnerEntity;
   PartnerPara *partner;
   int8_t reqPoints;
   int8_t isBonusFulfilled;
-  int8_t finalScore;
   int16_t statsArray[6];
   int16_t statsArray2[6];
   int16_t reqArray[6];
+  int32_t currentBest = currentBest_;
 
   reqs = &EVO_REQ_DATA[target];
   partnerEntity = &PARTNER_ENTITY.digimonEntity.stats;
@@ -193,7 +195,6 @@ int16_t getRookieEvolutionTarget(int32_t currentDigimon) {
   int16_t bestScore;
   int16_t statCount;
   int16_t statTotal;
-  int32_t digimon;
 
   targetPtr = EVO_PATHS_DATA[currentDigimon - 1].to;
   currentBestDigimon = -1;
@@ -208,7 +209,7 @@ int16_t getRookieEvolutionTarget(int32_t currentDigimon) {
       continue;
     }
 
-    flag = EVO_REQ_DATA[*targetPtr].flags;
+    flag = EVO_REQ_DATA[(int32_t)*targetPtr].flags;
     requirementScore = calculateRequirementScore(
         currentDigimon, *targetPtr, ((flag & 0x10) >> 4), (flag & 1),
         currentBestDigimon);
@@ -278,7 +279,7 @@ int16_t getChampionEvolutionTarget(int32_t currentDigimon) {
       continue;
     }
 
-    flag = EVO_REQ_DATA[*targetPtr].flags;
+    flag = EVO_REQ_DATA[(int32_t)*targetPtr].flags;
     requirementScore = calculateRequirementScore(
         currentDigimon, *targetPtr, ((flag & 0x10) >> 4), (flag & 1),
         currentBestDigimon);
@@ -326,7 +327,6 @@ int16_t getChampionEvolutionTarget(int32_t currentDigimon) {
 
 int32_t getNumMasteredMoves(void) {
   int8_t moveCount = 0;
-  int32_t offset = 0;
   int32_t i;
   int32_t j;
 

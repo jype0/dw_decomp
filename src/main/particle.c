@@ -133,8 +133,7 @@ int32_t addHealingParticleEffect(Entity *entity, int16_t hasParticle2) {
     int32_t i;
     PositionData *posData;
     HealingParticle *particle;
-    ParticleObjEntry *entry1;
-    ParticleObjEntry *entry2;
+    ParticleObjEntry *entry;
     MATRIX *mat;
 
     for (instance = 0; instance < NUM_HEALING_INSTANCES; instance++) {
@@ -163,10 +162,10 @@ int32_t addHealingParticleEffect(Entity *entity, int16_t hasParticle2) {
         particle->entries1[i].counter = -1;
     }
 
-    entry2 = particle->entries2;
+    entry = particle->entries2;
     for (i = 0; i < NUM_HEALING_PARTICLES; i++) {
-        entry2->counter = -1;
-        entry2++;
+        entry->counter = -1;
+        entry++;
     }
 
     return addObject(0x817, instance, tickHealingParticles, renderHealingParticles);

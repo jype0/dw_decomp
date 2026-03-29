@@ -4,4 +4,6 @@
 -std=c99
 -Wall
 -Wextra
+# Disable errors/warnings that don't work like that with mwcc
 -Wno-unknown-pragmas
+-Wno-unused-parameter

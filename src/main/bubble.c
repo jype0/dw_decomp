@@ -1,6 +1,7 @@
 #include <dw/bubble.h>
 #include <dw/params.h>
 #include <dw/world_object.h>
+#include <dw/math.h>
 
 #include "common.h"
 
