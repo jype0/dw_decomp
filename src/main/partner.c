@@ -1,6 +1,7 @@
 #include <libgte.h>
 #include <dw/butterfly.h>
 #include <dw/entity.h>
+#include <dw/evl.h>
 #include <dw/fade.h>
 #include <dw/map.h>
 #include <dw/params.h>
@@ -132,9 +133,6 @@ void isSoundLoaded(int32_t isAsync, int32_t soundId);
 void setFishingEnabled();
 void setFishingDisabled();
 void handleEatingPoop();
-int32_t getEvoSequenceState(PartnerEntity *partner, void *buffer,
-                            PartnerPara *para, int32_t target,
-                            int16_t isInitialized);
 void writePStat(int32_t id, int32_t value);
 int32_t readPStat(int32_t id);
 void addTamerLevel(int32_t chance, int32_t amount);

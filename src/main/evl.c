@@ -14,7 +14,6 @@ void stopSound(void);
 void loadMapSounds2();
 void isSoundLoaded();
 void loadVLALL();
-int32_t evoSequenceAlwaysTrue(int32_t unused);
 
 #pragma section sdata begin
 extern void *MAIN_D_801344F4;

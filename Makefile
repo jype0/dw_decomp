@@ -20,7 +20,8 @@ SPLAT := $(PYTHON) -m splat split
 
 MWCCWRAP ?= bin/mwccwrap/mwccwrap.exe
 MWCCWRAP_FLAGS ?= -dll "bin/cc_mips/cc_mips_40.dll"
-MWCCWRAP_FLAGS += -gccincludes -lang c -Cpp_exceptions off -RTTI off
+MWCCWRAP_FLAGS += -Werror -requireprotos -gccincludes \
+		  -lang c -Cpp_exceptions off -RTTI off
 
 export MWCIncludes =
 
