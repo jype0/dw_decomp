@@ -1,0 +1,7 @@
+{
+  "name": "DW1 Decomp",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "postCreateCommand": "./tools/dl_deps.sh"
+}
