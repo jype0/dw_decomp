@@ -10,6 +10,8 @@ RUN apt-get update && \
     python3-venv \
     unzip \
     wget \
+    clang \
+    clangd \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

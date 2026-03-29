@@ -3,5 +3,12 @@
   "build": {
     "dockerfile": "../Dockerfile"
   },
-  "postCreateCommand": "./tools/dl_deps.sh"
+  "postCreateCommand": "./tools/dl_deps.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "llvm-vs-code-extensions.vscode-clangd"
+      ]
+    }
+  }
 }
