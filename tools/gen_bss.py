@@ -5,7 +5,8 @@ import yaml
 from pathlib import Path
 
 
-def __print_sym(prev_sym, cur_addr, prev_addr, outfile):
+def __print_sym(section_name, prev_sym, cur_addr, prev_addr, outfile):
+    print('.section', '.{}.{}'.format(section_name, prev_sym), file=outfile)
     print('.global', prev_sym, file=outfile)
     print('{}:'.format(prev_sym), '.zero',
           '0x{:X}'.format(cur_addr - prev_addr), file=outfile)
@@ -67,9 +68,6 @@ def __main():
 
         path = outdir / '{}.{}.s'.format(subsegment_name, section_name)
         with open(path, 'w') as outfile:
-            print('.section .{}'.format(section_name), file=outfile)
-            print(file=outfile)
-
             cur_sym, cur_addr = None, None
             prev_sym, prev_addr = None, None
 
@@ -85,11 +83,13 @@ def __main():
 
                 if cur_addr >= subsegment_end:
                     if prev_sym is not None:
-                        __print_sym(prev_sym, cur_addr, prev_addr, outfile)
+                        __print_sym(section_name, prev_sym, cur_addr,
+                                    prev_addr, outfile)
                     break
 
                 if prev_sym is not None:
-                    __print_sym(prev_sym, cur_addr, prev_addr, outfile)
+                    __print_sym(section_name, prev_sym, cur_addr, prev_addr,
+                                outfile)
 
                 prev_sym, prev_addr = cur_sym, cur_addr
 

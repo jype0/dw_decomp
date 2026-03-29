@@ -8,6 +8,7 @@
 
 # A function symbol.
 .macro glabel label, visibility=global
+    .section .text.\label
     .\visibility \label
     .type \label, @function
     \label:
@@ -44,6 +45,19 @@
 
 # A data symbol.
 .macro dlabel label, visibility=global
+.ifdef _RODATA
+    .section .rodata.\label
+.else
+.ifdef _SDATA
+    .section .sdata.\label
+.else
+.ifdef _DATA
+    .section .data.\label
+.else
+    .section .text.\label
+.endif
+.endif
+.endif
     .\visibility \label
     .type \label, @object
     \label:

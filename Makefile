@@ -354,6 +354,21 @@ $(BUILDDIR)/%.s.o: %.s
 				--set-section-alignment .sbss=4 \
 				--set-section-alignment .sdata=4 $@
 
+$(BUILDDIR)/%.rodata.s.o: %.rodata.s
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_RODATA=1 -o $@ $<
+
+$(BUILDDIR)/%.data.s.o: %.data.s
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_DATA=1 -o $@ $<
+
+$(BUILDDIR)/%.sdata.s.o: %.sdata.s
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_SDATA=1 -o $@ $<
+
 $(MAIN_SBSS): config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_bss.py $^ $(BUILDDIR)/generated/
