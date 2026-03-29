@@ -29,6 +29,11 @@ void renderRectPolyFT4(int32_t posX, int32_t posY,
 
 void dailyPStatTrigger(void);
 void updateTimeOfDay(void);
+int32_t isFishing();
+int32_t readPStat(int32_t id);
+void writePStat(int32_t id, int32_t value);
+void addTamerLevel(int32_t chance, int32_t amount);
+void updateBGM();
 
 INCLUDE_ASM("asm/main/nonmatchings/clock", initializeClockData);
 

@@ -24,7 +24,7 @@ typedef struct {
 
 extern Butterfly BUTTERFLIES[NUM_BUTTERFLIES];
 
-static GsSPRITE BUTTERFLY_SPRITE = {
+static GsSPRITE BUTTERFLY_SPRITE = { // NOLINT used in not-implemented function
 	0x50000000,	/* attribute */
 	0x0,		/* x */
 	0x0,		/* y */
@@ -56,7 +56,7 @@ void initializeButterfly(void)
 
 INCLUDE_ASM("asm/main/nonmatchings/butterfly", setButterfly);
 
-static void tickButterfly(int32_t instanceId)
+void tickButterfly(int32_t instanceId)
 {
 	Butterfly *butterfly = &BUTTERFLIES[instanceId];
 	if (IS_IN_MENU != 1) {

@@ -6,6 +6,7 @@
 #include <dw/params.h>
 #include <dw/partner.h>
 #include <dw/ui.h>
+#include <dw/utils.h>
 
 #include "common.h"
 
@@ -86,6 +87,69 @@ int32_t getPartnerTamerCloseness(void);
 void updateConditionAnimation(void);
 int32_t checkEatDistance(int32_t distance);
 void setPartnerState(int8_t state);
+void tickPartnerBattle(int32_t instanceId);
+void tickAnimation(Entity *entity);
+void handleConditionBubble();
+int32_t entityIsOffScreen(Entity *entity, int32_t width, int32_t height);
+void tickConditionBoundaries();
+void stopGameTime();
+void unsetCameraFollowPlayer();
+void setTamerState(int32_t state);
+void tickPartnerWaypoints();
+void entityLookAtLocation(Entity *entity, VECTOR *pos);
+void playSound(int32_t vabId, uint32_t note);
+void tickPartnerCollision();
+void tickPartnerNormal();
+void tickPartnerPoopingMechanic();
+void detectEdiblePoop();
+void fadeToBlack(int32_t frames);
+void fadeFromBlack(int32_t frames);
+void sleepRegen();
+void handleSleeping();
+void setCameraFollowPlayer();
+void handleSpecialEvolutions(int32_t mode, Entity* partner);
+void startGameTime();
+void updateTimeOfDay();
+void handlePraiseScold();
+void startAnimationTamer(int32_t animId);
+int32_t partnerWillRefuseItem();
+void removeOneSelectedItem();
+void removeTamerItem();
+void partnerHandleFoodFeed(int32_t type);
+void createCameraMovement(VECTOR* pos, int32_t instanceId);
+int32_t tickEntityWalkTo(uint32_t scriptId1, uint32_t scriptId2,
+                         int32_t targetX, int32_t targetZ, int32_t withCamera);
+void handleToilet();
+void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
+int32_t createPoopPile(int32_t tileX, int32_t tileY);
+void handleWildPoop();
+void deinitializeFishing();
+void removeTriangleMenu();
+void closeInventoryBoxes();
+void removeUIBox1();
+void loadMapSounds2(int32_t mapSound);
+void isSoundLoaded(int32_t isAsync, int32_t soundId);
+void setFishingEnabled();
+void setFishingDisabled();
+void handleEatingPoop();
+int32_t getEvoSequenceState(PartnerEntity *partner, void *buffer,
+                            PartnerPara *para, int32_t target,
+                            int16_t isInitialized);
+void writePStat(int32_t id, int32_t value);
+int32_t readPStat(int32_t id);
+void addTamerLevel(int32_t chance, int32_t amount);
+int32_t getMapSoundId(int32_t mapId);
+void loadMapSounds(int32_t soundId);
+void checkShopMap(int32_t mapId);
+void checkArenaMap(int32_t mapId);
+void readMapTFS(int32_t mapId);
+
+int32_t DOOA_tick(PartnerEntity* partner, void* data, int32_t isInitialized);
+int32_t DOOA_getSequenceState(int32_t unused, int32_t isInitialized);
+
+void STD_tickPartnerTournament(int32_t instanceId);
+
+void KAR_start();
 
 void tickPartner(int32_t instanceId)
 {
@@ -105,7 +169,7 @@ void tickPartner(int32_t instanceId)
 		break;
 	case 4:
 	case 5:
-		STD_func_800696E4(instanceId);
+		STD_tickPartnerTournament(instanceId);
 	default:
 		break;
 	}
@@ -116,7 +180,7 @@ void tickPartnerOverworld(int32_t instanceId)
 	int32_t isOffScreen;
 
 	if (IS_IN_MENU == 1) {
-		tickAnimation(&PARTNER_ENTITY);
+		tickAnimation(&PARTNER_ENTITY.digimonEntity.entity);
 	} else {
 		switch (PARTNER_STATE) {
 		case 1:
@@ -159,18 +223,18 @@ void tickPartnerOverworld(int32_t instanceId)
 			break;
 		}
 
-		isOffScreen = entityIsOffScreen(&PARTNER_ENTITY, 320, 240);
+		isOffScreen = entityIsOffScreen(&PARTNER_ENTITY.digimonEntity.entity, 320, 240);
 		PARTNER_ENTITY.digimonEntity.entity.isOnScreen =
 			isOffScreen ^ 1;
 
 		tickConditionBoundaries();
-		tickAnimation(&PARTNER_ENTITY);
+		tickAnimation(&PARTNER_ENTITY.digimonEntity.entity);
 	}
 }
 
 void tickNormal(void)
 {
-	MAIN_func_800D4034();
+	tickPartnerCollision();
 	tickPartnerWalking();
 	tickPartnerNormal();
 	tickPartnerPoopingMechanic();
@@ -195,9 +259,9 @@ void partnerSleep(void)
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
-		entityLookAtLocation(&PARTNER_ENTITY,
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
                                      &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness == 2) {
@@ -263,7 +327,7 @@ void partnerSleep(void)
 			PARTNER_STATE = 1;
 			setTamerState(0);
 			setCameraFollowPlayer();
-			handleSpecialEvolutions(2, &PARTNER_ENTITY);
+			handleSpecialEvolutions(2, &PARTNER_ENTITY.digimonEntity.entity);
 			startGameTime();
 		}
 		break;
@@ -289,9 +353,9 @@ void partnerPraiseScold(int32_t partnerState)
 		break;
 	case 1:
 		++MAIN_D_80134E28;
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
-		entityLookAtLocation(&PARTNER_ENTITY,
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
                                      &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness == 2) {
@@ -348,7 +412,7 @@ void partnerFeedItem(void)
 		tickPartnerWaypoints();
 		break;
 	case 1:
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
 		isClose = checkEatDistance(ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity.type - 1]);
 		if (isClose == 0) {
@@ -356,9 +420,9 @@ void partnerFeedItem(void)
 		}
 		break;
 	case 2:
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
-		entityLookAtLocation(&PARTNER_ENTITY,
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
                                      &TAMER_ENTITY.entity.posData->location);
 		isClose = checkEatDistance(ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity.type - 1]);
 		if (isClose == 1) {
@@ -366,7 +430,7 @@ void partnerFeedItem(void)
 		}
 		break;
 	case 3:
-		entityLookAtLocation(&PARTNER_ENTITY,
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
                                      &TAMER_ENTITY.entity.posData->location);
 		startAnimationTamer(5);
 		playSound(0, 12);
@@ -465,7 +529,7 @@ void tickPartnerToilet(void)
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		entityLookAtLocation(&TAMER_ENTITY, location);
+		entityLookAtLocation(&TAMER_ENTITY.entity, location);
 		finished = tickEntityWalkTo(0xfc, 0xff, TOILET_POS1.vx,
                                             TOILET_POS1.vz, 0);
 		if (finished == 1) {
@@ -473,7 +537,7 @@ void tickPartnerToilet(void)
 		}
 		break;
 	case 2:
-		entityLookAtLocation(&TAMER_ENTITY, location);
+		entityLookAtLocation(&TAMER_ENTITY.entity, location);
 		finished = tickEntityWalkTo(0xfc, 0xff, TOILET_POS2.vx,
                                             TOILET_POS2.vz, 0);
 		if (finished == 1) {
@@ -491,7 +555,7 @@ void tickPartnerToilet(void)
 		}
 		break;
 	case 4:
-		entityLookAtLocation(&TAMER_ENTITY, &location);
+		entityLookAtLocation(&TAMER_ENTITY.entity, (VECTOR*)&location); // BUG: this shouldn't be a pointer?
 		finished = tickEntityWalkTo(0xfc, 0xff, TOILET_POS1.vx,
                                             TOILET_POS1.vz, 0);
 		if (finished == 1) {
@@ -512,13 +576,13 @@ void partnerWildPoop(void)
 	case 0:
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		setTamerState(6);
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
 		unsetCameraFollowPlayer();
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		entityLookAtLocation(&PARTNER_ENTITY,
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
                                      &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness > 0) {
@@ -558,12 +622,12 @@ void tickPartnerDying(void)
 
 	switch (PARTNER_SUB_STATE) {
 	case 0:
-		MAIN_func_800E4EB4();
+		deinitializeFishing();
 		removeTriangleMenu();
 		closeInventoryBoxes();
 		removeUIBox1();
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
 		unsetCameraFollowPlayer();
 		loadDynamicLibrary(9, 0, 0, 0, 0);
@@ -572,11 +636,11 @@ void tickPartnerDying(void)
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		entityLookAtLocation(&PARTNER_ENTITY, &(TAMER_ENTITY.entity.posData)->location);
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity, &(TAMER_ENTITY.entity.posData)->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness > 0) {
 			isSoundLoaded(0, 8);
-			DOOA_tick(ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 0);
+			DOOA_tick((PartnerEntity*)ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 0);
 			setFishingDisabled();
 			setTamerState(6);
 			unsetCameraFollowPlayer();
@@ -584,7 +648,7 @@ void tickPartnerDying(void)
 		}
 		break;
 	case 2:
-		value = DOOA_tick(ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 1);
+		value = DOOA_tick((PartnerEntity*)ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 1);
 		if (value == -1) {
 			setFishingEnabled();
 			PARTNER_PARA.remainingLifetime = 360;
@@ -664,17 +728,17 @@ void tickPartnerEvolving(void)
 		removeUIBox1();
 		setFishingDisabled();
 		unsetCameraFollowPlayer();
-		entityLookAtLocation(&TAMER_ENTITY,
+		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		entityLookAtLocation(&PARTNER_ENTITY,
+		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
                                      &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness > 0) {
-			getEvoSequenceState(ENTITY_TABLE[1],
+			getEvoSequenceState((PartnerEntity*)ENTITY_TABLE[1],
                                             GENERAL_BUFFER_PTR, &PARTNER_PARA,
                                             EVOLUTION_TARGET, 0);
 			MAIN_D_80134E34 = 0;
@@ -682,7 +746,7 @@ void tickPartnerEvolving(void)
 		}
 		break;
 	case 2:
-		value = getEvoSequenceState(ENTITY_TABLE[1],
+		value = getEvoSequenceState((PartnerEntity*)ENTITY_TABLE[1],
                                             GENERAL_BUFFER_PTR, &PARTNER_PARA,
                                             EVOLUTION_TARGET, 1);
 		if (value == -1) {
@@ -716,11 +780,11 @@ void tickPartnerDying2(void)
 
 	switch (PARTNER_SUB_STATE) {
 	case 0:
-		DOOA_func_80084810(0, 0);
+		DOOA_getSequenceState(0, 0);
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		value = DOOA_func_80084810(0, 1);
+		value = DOOA_getSequenceState(0, 1);
 		if (value == -1) {
 			soundId = getMapSoundId(CURRENT_SCREEN);
 			loadMapSounds(soundId);

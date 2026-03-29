@@ -2,17 +2,19 @@
 #include <dw/world_object.h>
 
 #include "common.h"
+#include "dw/entity.h"
 
 #pragma optimization_level 4
 
 void stopBGM(void);
 void EVL_initEvoSequence();
-void startAnimation();
-void addConditionBubble();
+void startAnimation(Entity* entity, int32_t animId);
+void addConditionBubble(int32_t bubbleType, Entity* entity);
 void stopSound(void);
 void loadMapSounds2();
 void isSoundLoaded();
 void loadVLALL();
+int32_t evoSequenceAlwaysTrue(int32_t unused);
 
 #pragma section sdata begin
 extern void *MAIN_D_801344F4;
@@ -28,12 +30,12 @@ void tickEvoSequenceLoading(int32_t instanceId)
 
 	switch (data->state) {
 	case 0:
-		iVar1 = MAIN_func_800E747C(500);
+		iVar1 = evoSequenceAlwaysTrue(500);
 		if ((iVar1 == 1) && (data->timer > 55)) {
 			data->state = 1;
 			data->timer = 0;
-			startAnimation(&PARTNER_ENTITY, 1);
-			addConditionBubble(7, data->partner);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 1);
+			addConditionBubble(7, &data->partner->digimonEntity.entity);
 		}
 		break;
 	case 1:
@@ -60,7 +62,7 @@ void renderEvoSequenceLoading(int32_t instanceId)
 
 INCLUDE_ASM("asm/main/nonmatchings/evl", getEvoSequenceState);
 
-int MAIN_func_800E747C(void)
+int evoSequenceAlwaysTrue(int32_t unused)
 {
 	return 1;
 }

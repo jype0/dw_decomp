@@ -39,11 +39,11 @@ rom:0x000348D0 reloc:MIPS_26 symbol:BTL_healStatusEffect
 rom:0x00035F2C reloc:MIPS_HI16 symbol:GENERAL_BUFFER addend:0x8
 rom:0x00035F30 reloc:MIPS_LO16 symbol:GENERAL_BUFFER addend:0x8
 rom:0x00035F34 reloc:MIPS_LO16 symbol:GENERAL_BUFFER addend:0xC
-rom:0x0004D850 reloc:MIPS_26 symbol:STD_func_800696E4
+rom:0x0004D850 reloc:MIPS_26 symbol:STD_tickPartnerTournament
 rom:0x0004E7BC reloc:MIPS_26 symbol:DOOA_tick
 rom:0x0004E800 reloc:MIPS_26 symbol:DOOA_tick
-rom:0x0004EC30 reloc:MIPS_26 symbol:DOOA_func_80084810
-rom:0x0004EC48 reloc:MIPS_26 symbol:DOOA_func_80084810
+rom:0x0004EC30 reloc:MIPS_26 symbol:DOOA_getSequenceState
+rom:0x0004EC48 reloc:MIPS_26 symbol:DOOA_getSequenceState
 rom:0x0004F5E8 reloc:MIPS_HI16 symbol:PARTNER_ENTITY
 rom:0x0004F5F0 reloc:MIPS_LO16 symbol:PARTNER_ENTITY
 rom:0x0004F634 reloc:MIPS_26 symbol:KAR_start

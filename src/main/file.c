@@ -116,7 +116,7 @@ int32_t readFile(const char *path, void *buffer)
 
 		return result;
 	}
-}
+} // NOLINT undefined behavior intentional
 
 int32_t loadTIMFile(char *path, void *buffer)
 {
@@ -195,4 +195,4 @@ int32_t readFileSectors(const char *path, void *buffer, int32_t offset,
 
 		return result;
 	}
-}
+} // NOLINT undefined behavior intentional
