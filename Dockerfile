@@ -1,7 +1,5 @@
 FROM ubuntu:noble
 
-COPY requirements.txt requirements.txt
-
 RUN apt-get update && \
     apt-get install -y \
     binutils-mipsel-linux-gnu \
@@ -12,6 +10,8 @@ RUN apt-get update && \
     python3-venv \
     unzip \
     wget \
+    clang \
+    clangd \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
