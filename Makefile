@@ -22,6 +22,8 @@ MWCCWRAP ?= bin/mwccwrap/mwccwrap.exe
 MWCCWRAP_FLAGS ?= -dll "bin/cc_mips/cc_mips_40.dll"
 MWCCWRAP_FLAGS += -gccincludes -lang c -Cpp_exceptions off -RTTI off
 
+export MWCIncludes =
+
 WIBO ?= bin/wibo-x86_64
 
 MWCCGAP := $(PYTHON) external/mwccgap/mwccgap.py
