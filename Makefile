@@ -335,6 +335,16 @@ $(BUILDDIR)/%.s.o: %.s
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
+$(BUILDDIR)/%.rodata.s.o: %.rodata.s
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_RODATA=1 -o $@ $<
+
+$(BUILDDIR)/%.sdata.s.o: %.sdata.s
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_SDATA=1 -o $@ $<
+
 $(BUILDDIR)/generated/bss.s: config/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_bss.py $< $@

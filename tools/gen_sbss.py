@@ -4,6 +4,7 @@ import argparse
 
 
 def __print_sym(prev_sym, cur_addr, prev_addr, outfile):
+    print('.section', '.sbss.{}'.format(prev_sym), file=outfile)
     print('.global', prev_sym, file=outfile)
     print('{}:'.format(prev_sym), '.zero',
           '0x{:X}'.format(cur_addr - prev_addr), file=outfile)
@@ -24,9 +25,6 @@ def __main():
     sbss_end = 0x801353f8
 
     with open(args.infile, 'r') as infile, open(args.outfile, 'w') as outfile:
-        print('.section .sbss', file=outfile)
-        print(file=outfile)
-
         cur_sym, cur_addr = None, None
         prev_sym, prev_addr = None, None
 
