@@ -45,6 +45,8 @@ while [ "$#" -gt 0 ]; do
 	esac
 done
 
+[ "$#" -lt 3 ] && usage
+
 # Get the parameters
 ASM_FILE="$1"
 C_FILE="$2"
