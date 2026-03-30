@@ -4,7 +4,6 @@
 #include <libgte.h>
 #include <libgs.h>
 
-#include <dw/stats.h>
 #include <dw/types.h>
 
 #define ENTITY_MAX		10
@@ -59,14 +58,27 @@ typedef struct {
 } Entity;
 
 typedef struct {
-	Entity entity;
-	Stats stats;
+	int16_t off;
+	int16_t def;
+	int16_t speed;
+	int16_t brain;
+	uint8_t movesPrio[4];
+	uint8_t moves[4];
+	int16_t hp;
+	int16_t mp;
+	int16_t currentHP;
+	int16_t currentMP;
 	int16_t unk1;
 	uint8_t unk2_1;
 	uint8_t unk2_2;
 	int16_t vabId;
 	uint8_t chargeMode;
 	uint8_t field7_0x57;
+} Stats;
+
+typedef struct {
+	Entity entity;
+	Stats stats;
 } DigimonEntity;
 
 typedef struct {
@@ -75,7 +87,8 @@ typedef struct {
 	uint32_t unk1;
 	uint32_t unk2;
 	uint8_t name[20];
-	int32_t lives;
+	int8_t lives;
+	int8_t pad[3];
 } PartnerEntity;
 
 typedef struct {

@@ -1,29 +1,47 @@
+#include "dw/partner.h"
 #include <dw/evolution.h>
 
 #include <dw/entity.h>
 #include <dw/evl.h>
+#include <dw/math.h>
 #include <dw/params.h>
 #include <dw/types.h>
 
 #pragma optimization_level 4
 
+int32_t getTamerState(void);
+void setTamerState(int32_t state);
+void removeEntity(int32_t type, int32_t entityId);
+void thunkUnloadModel(int32_t id, int32_t modelType);
+void unloadModel(int32_t id, int32_t modelType);
+void initializeReincarnatedPartner(int32_t type, int32_t posX, int32_t posY,
+                                   int32_t posZ, int32_t rotX, int32_t rotY,
+                                   int32_t rotZ);
+int32_t hasDigimonRaised(int32_t digimonId);
+void setDigimonRaised(int32_t type);
+
+#pragma section sbss begin
+extern uint8_t CURRENT_SCREEN;
+extern int32_t NANIMON_TRIGGER;
+extern int16_t EVOLUTION_TARGET;
+#pragma section sbss end
+
+extern Stats DEATH_STATS;
+
 int32_t calculateRequirementScore(int32_t current, int16_t target,
                                   int8_t isMaxCM, int8_t isMaxBattles,
                                   int8_t currentBest);
 int32_t getNumMasteredMoves(void);
-int32_t hasDigimonRaised(int32_t digimonId);
 
-static void __garbage__() { // NOLINT
-  Stats partnerEntity;
+static void __garbage__(Stats* stats) { // NOLINT
   int16_t statsArray[6];
   int16_t statsArray2[6];
-
-  statsArray[0] = statsArray2[0] = partnerEntity.hp / 10;
-  statsArray[1] = statsArray2[1] = partnerEntity.mp / 10;
-  statsArray[2] = statsArray2[2] = partnerEntity.off;
-  statsArray[3] = statsArray2[3] = partnerEntity.def;
-  statsArray[4] = statsArray2[4] = partnerEntity.speed;
-  statsArray[5] = statsArray2[5] = partnerEntity.brain;
+  statsArray[0] = statsArray2[0] = stats->hp / 10;
+  statsArray[1] = statsArray2[1] = stats->mp / 10;
+  statsArray[2] = statsArray2[2] = stats->off;
+  statsArray[3] = statsArray2[3] = stats->def;
+  statsArray[4] = statsArray2[4] = stats->speed;
+  statsArray[5] = statsArray2[5] = stats->brain;
 }
 
 int16_t getFreshEvolutionTarget(int32_t currentDigimon) {
@@ -325,6 +343,78 @@ int16_t getChampionEvolutionTarget(int32_t currentDigimon) {
   return currentBestDigimon;
 }
 
+int32_t handleSpecialEvolutions(int32_t mode, Entity *entity) {
+  int32_t type;
+  int16_t level;
+  int16_t def;
+  int16_t happiness;
+  int16_t discipline;
+  int16_t evotimer;
+  int16_t battles;
+  int16_t tiredness;
+  int16_t rand;
+  int16_t evoTarget;
+
+  if (getTamerState() != 0)
+    return -1;
+
+  type = entity->type;
+  level = DIGIMON_DATA[type].level;
+  def = PARTNER_ENTITY.digimonEntity.stats.def;
+  discipline = PARTNER_PARA.discipline;
+  happiness = PARTNER_PARA.happiness;
+  evotimer = PARTNER_PARA.evoTimer;
+  battles = PARTNER_PARA.battles;
+  tiredness = PARTNER_PARA.tiredness;
+  rand = random(100);
+  evoTarget = -1;
+
+  switch (mode) {
+  case 2: {
+    if (rand < 30) {
+      if ((type == 0x15 || type == 0x0a) && discipline == 100 &&
+          happiness == 100 && tiredness == 0) {
+        evoTarget = 7;
+      }
+      if (type == 0x19 && battles >= 50 && discipline == 100) {
+        evoTarget = 58;
+      }
+      if (type == 0x26 && def >= 500 && discipline == 100) {
+        evoTarget = 47;
+      }
+    }
+    if (rand < 50 &&
+        (type == 0x02 || type == 0x1E || type == 0x10 || type == 0x2c) &&
+        CURRENT_SCREEN == 1) {
+      evoTarget = 32;
+    }
+    break;
+  }
+  case 3: {
+    if ((type == 0x18 || type == 0x23) && level == 4 && evotimer == 200 &&
+        rand < 30) {
+      evoTarget = 49;
+    }
+    if (NANIMON_TRIGGER == 1) {
+      evoTarget = 53;
+      NANIMON_TRIGGER = 0;
+    }
+    if (level == 4 && evotimer >= 240 && rand < 50) {
+      evoTarget = 28;
+    }
+    break;
+  }
+  }
+
+  if (evoTarget != -1) {
+    EVOLUTION_TARGET = evoTarget;
+    setTamerState(6);
+    setPartnerState(0xd);
+  }
+
+  return evoTarget;
+}
+
 int32_t getNumMasteredMoves(void) {
   int8_t moveCount = 0;
   int32_t i;
@@ -338,4 +428,27 @@ int32_t getNumMasteredMoves(void) {
   }
 
   return moveCount;
+}
+
+void reincarnatePartner(int32_t unused, Stats *stats, PartnerPara *partner,
+                        int32_t digimonId) {
+  int32_t id;
+  EvoStatsGains *ptr;
+  int32_t previousId;
+
+  DEATH_STATS = *stats;
+  ptr = &EVO_GAINS_DATA[digimonId];
+  id = ptr->targetDigimon;
+
+  PARTNER_ENTITY.digimonEntity.stats.moves[0] = 0x2e;
+  PARTNER_ENTITY.digimonEntity.stats.moves[1] = 0xff;
+  PARTNER_ENTITY.digimonEntity.stats.moves[2] = 0xff;
+  PARTNER_ENTITY.digimonEntity.stats.moves[3] = 0xff;
+  previousId = PARTNER_ENTITY.digimonEntity.entity.type;
+  removeEntity(previousId, 1);
+  ENTITY_TABLE[1] = NULL;
+  thunkUnloadModel(previousId, 3);
+  initializeReincarnatedPartner(id, 0, 0, 0, 0, 0, 0);
+  PARTNER_ENTITY.lives = 3;
+  setDigimonRaised(id);
 }
