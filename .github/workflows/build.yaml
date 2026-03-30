@@ -31,8 +31,7 @@ jobs:
         repository: jype0/dw_decomp_dependencies
         token: ${{ secrets.DW_DECOMP_DEPENDENCIES_TOKEN }}
         path: tmp
-    - run: |
-        tools/dl_deps.sh
+    - run: tools/dl_deps.sh
     - run: |
         mkdir -p disks
         cat tmp/dw* > tmp/dw.tar.gz
@@ -41,14 +40,11 @@ jobs:
         cat tmp/cc_mips* > tmp/cc_mips.tar.gz
         tar -xf tmp/cc_mips.tar.gz -C bin/cc_mips/
     - run: |
-        . /dw/.venv/bin/activate
         make -j$(nproc) generate
         make -j$(nproc)
         make compare
     - if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: |
-        . /dw/.venv/bin/activate
-        make report
+      run: make report
     - if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-artifact@v4
       with:

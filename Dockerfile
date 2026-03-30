@@ -26,7 +26,8 @@ COPY requirements.txt requirements.txt
 
 RUN mkdir -p /dw/.venv && \
     git config --global --add safe.directory /dw && \
-    python3 -m venv .venv && \
-    . .venv/bin/activate && \
-    pip3 install -r requirements.txt && \
-    echo '. /dw/.venv/bin/activate' >> "$HOME/.bash_aliases"
+    python3 -m venv .venv
+
+ENV PATH="/dw/.venv/bin:$PATH"
+
+RUN pip3 install -r requirements.txt
