@@ -5,11 +5,11 @@ set -e
 
 # Function to display usage
 usage() {
-	echo "usage: $0 [-c|--clean] [-r|--run] <asm-file> <c-file> <function-name> [<decomp-permuter-args>]"
+	echo "usage: $0 [-c|--clean] [-r|--run] <c-file> <asm-file> <function-name> [<decomp-permuter-args>]"
 	echo "  --clean         : Clean the output directory before processing"
 	echo "  --run           : Run the permuter after setup"
-	echo "  <asm-file>      : Path to assembly source file in asm/*/*matchings"
 	echo "  <c-file>        : Path to C source file"
+	echo "  <asm-file>      : Path to assembly source file in asm/*/*matchings"
 	echo "  <function-name> : Function name to permute"
 	exit 1
 }
@@ -48,8 +48,8 @@ done
 [ "$#" -lt 3 ] && usage
 
 # Get the parameters
-ASM_FILE="$1"
-C_FILE="$2"
+C_FILE="$1"
+ASM_FILE="$2"
 FUNCTION_NAME="$3"
 
 shift 3
