@@ -22,7 +22,7 @@ typedef struct {
 	Entity *entity;
 } Butterfly;
 
-extern Butterfly BUTTERFLIES[NUM_BUTTERFLIES];
+static Butterfly BUTTERFLIES[NUM_BUTTERFLIES];
 
 static GsSPRITE BUTTERFLY_SPRITE = { // NOLINT used in not-implemented function
 	0x50000000,	/* attribute */

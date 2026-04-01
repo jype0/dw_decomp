@@ -56,13 +56,31 @@ LDFLAGS := -g $(addprefix -T ,$(CPPLDSCRIPT)) -static \
 MAIN_ASM_SRC := $(shell find $(ASM_DIR)/main -path '*.s' \
 		-not -path '$(ASM_DIR)/main/*matchings*' 2> /dev/null)
 
+MAIN_SBSS := \
+	$(BUILDDIR)/generated/unk_0x80134C4C.sbss.s \
+	$(BUILDDIR)/generated/fade.sbss.s \
+	$(BUILDDIR)/generated/unk_0x80134CC0.sbss.s
+
+MAIN_BSS := \
+	$(BUILDDIR)/generated/unk_0x801353F8.bss.s \
+	$(BUILDDIR)/generated/libgs.bss.s \
+	$(BUILDDIR)/generated/libgte.bss.s \
+	$(BUILDDIR)/generated/model.bss.s \
+	$(BUILDDIR)/generated/world_object.bss.s \
+	$(BUILDDIR)/generated/unk_0x80137A24.bss.s \
+	$(BUILDDIR)/generated/butterfly.bss.s \
+	$(BUILDDIR)/generated/libmrcd.bss.s \
+	$(BUILDDIR)/generated/bubble.bss.s \
+	$(BUILDDIR)/generated/battle_ui.bss.s \
+	$(BUILDDIR)/generated/unk_0x801555D0.bss.s
+
 # evolution.c is not yet added by default due to it needing a garbage function to 
 # reach 100% and the toolchain for that is not yet set up.
 
 MAIN_SRC := \
 	$(MAIN_ASM_SRC) \
-	$(BUILDDIR)/generated/bss.s \
-	$(BUILDDIR)/generated/sbss.s \
+	$(MAIN_BSS) \
+	$(MAIN_SBSS) \
 	src/main/aabb.c \
 	src/main/bubble.c \
 	src/main/butterfly.c \
@@ -335,13 +353,13 @@ $(BUILDDIR)/%.s.o: %.s
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
-$(BUILDDIR)/generated/bss.s: config/symbols.txt
+$(MAIN_SBSS): config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
-	tools/gen_bss.py $< $@
+	tools/gen_bss.py $^ $(BUILDDIR)/generated/
 
-$(BUILDDIR)/generated/sbss.s: config/symbols.txt
+$(MAIN_BSS): config/bss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
-	tools/gen_sbss.py $< $@
+	tools/gen_bss.py $^ $(BUILDDIR)/generated/
 
 $(BUILDDIR)/generated/%.ld: config/%.yaml
 	@mkdir -p $(dir $@)

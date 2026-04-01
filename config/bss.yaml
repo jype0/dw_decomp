@@ -1,0 +1,15 @@
+name: bss
+start: 0x801353F8
+end: 0x801FFF00
+subsegments:
+  - [0x801353F8, unk_0x801353F8]
+  - [0x80136DD4, libgs]
+  - [0x80137130, libgte]
+  - [0x80137140, model]
+  - [0x80137418, world_object]
+  - [0x80137A24, unk_0x80137A24]
+  - [0x80155430, butterfly]
+  - [0x80155440, libmrcd]
+  - [0x80155560, bubble]
+  - [0x801555A8, battle_ui]
+  - [0x801555D0, unk_0x801555D0]
