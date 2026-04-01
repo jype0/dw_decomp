@@ -226,7 +226,11 @@ SECTIONS
     sbss_ROM_START = __romPos;
     .sbss main_SBSS_START : AT(sbss_ROM_START) SUBALIGN(4)
     {
-        build/build/generated/sbss.s.o(.sbss);
+        build/build/generated/unk_0x80134C4C.sbss.s.o(.sbss);
+        /* TODO: enable when symbol order is fixed */
+        /* build/src/main/fade.c.o(.sbss); */
+        build/build/generated/fade.sbss.s.o(.sbss);
+        build/build/generated/unk_0x80134CC0.sbss.s.o(.sbss);
         . = ALIGN(., 4);
         main_SBSS_END = .;
         main_SBSS_SIZE = ABSOLUTE(main_SBSS_END - main_SBSS_START);
@@ -239,7 +243,17 @@ SECTIONS
     bss_ROM_START = __romPos;
     .bss main_BSS_START : AT(bss_ROM_START) SUBALIGN(4)
     {
-        build/build/generated/bss.s.o(.bss);
+        build/build/generated/unk_0x801353F8.bss.s.o(.bss);
+        build/build/generated/libgs.bss.s.o(.bss);
+        build/build/generated/libgte.bss.s.o(.bss);
+        build/build/generated/model.bss.s.o(.bss);
+        build/build/generated/world_object.bss.s.o(.bss);
+        build/build/generated/unk_0x80137A24.bss.s.o(.bss);
+        build/src/main/butterfly.c.o(.bss);
+        build/build/generated/libmrcd.bss.s.o(.bss);
+        build/build/generated/bubble.bss.s.o(.bss);
+        build/build/generated/battle_ui.bss.s.o(.bss);
+        build/build/generated/unk_0x801555D0.bss.s.o(.bss);
         . = ALIGN(., 4);
         main_BSS_END = .;
         main_BSS_SIZE = ABSOLUTE(main_BSS_END - main_BSS_START);
