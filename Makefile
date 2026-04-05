@@ -27,7 +27,7 @@ export MWCIncludes =
 
 WIBO ?= bin/wibo-x86_64
 
-METROWRAP := bin/metrowrap/mw
+METROWRAP ?= bin/metrowrap/mw
 METROWRAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
 METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections --split-plain-names \
 		 --elf-flags 0x00001001 \
