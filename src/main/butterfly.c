@@ -6,7 +6,6 @@
 
 #include "common.h"
 
-#pragma optimization_level 4
 
 #define NUM_BUTTERFLIES		2
 
@@ -44,7 +43,13 @@ static GsSPRITE BUTTERFLY_SPRITE = { // NOLINT used in not-implemented function
 	0x0,		/* scaley */
 	0x0,		/* rotate */
 };
-
+void* butterfly_functions[] = {
+	unsetButterfly,
+	renderButterfly,
+	tickButterfly,
+	setButterfly,
+	initializeButterfly
+};
 void initializeButterfly(void)
 {
 	int32_t i;

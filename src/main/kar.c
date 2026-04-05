@@ -1,7 +1,6 @@
 #include <dw/kar.h>
 #include <dw/utils.h>
 
-#pragma optimization_level 4
 
 #pragma section sbss begin
 extern uint8_t KAR_LOADING_COMPLETE;

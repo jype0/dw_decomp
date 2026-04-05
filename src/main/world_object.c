@@ -1,8 +1,7 @@
 #include <dw/world_object.h>
 
-#pragma optimization_level 4
 
-extern WorldObject WORLD_OBJECTS[];
+WorldObject WORLD_OBJECTS[NUM_WORLD_OBJECTS + 1];
 
 void initializeWorldObjects(void)
 {

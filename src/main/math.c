@@ -1,7 +1,6 @@
 #include <dw/math.h>
 #include <rand.h>
 
-#pragma optimization_level 4
 
 int32_t random(int32_t limit)
 {

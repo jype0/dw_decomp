@@ -5,7 +5,6 @@
 
 #include "common.h"
 
-#pragma optimization_level 4
 
 #pragma section sbss begin
 extern int32_t VIEWPORT_DISTANCE;

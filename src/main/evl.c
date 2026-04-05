@@ -4,7 +4,6 @@
 #include "common.h"
 #include "dw/entity.h"
 
-#pragma optimization_level 4
 
 void stopBGM(void);
 void EVL_initEvoSequence();
@@ -19,7 +18,12 @@ void loadVLALL();
 extern void *MAIN_D_801344F4;
 extern int8_t EVL_LOADING_COMPLETE;
 #pragma section sdata end
-
+void* evl_functions[] = {
+	evoSequenceAlwaysTrue,
+	getEvoSequenceState,
+	renderEvoSequenceLoading,
+	tickEvoSequenceLoading
+};
 void tickEvoSequenceLoading(int32_t instanceId)
 {
 	EvoSequenceData *data;

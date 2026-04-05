@@ -1,6 +1,5 @@
 #include <dw/swap.h>
 
-#pragma optimization_level 4
 
 void swapByte(uint8_t *a, uint8_t *b)
 {

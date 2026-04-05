@@ -2,20 +2,27 @@
 
 #include "common.h"
 
-#pragma optimization_level 4
+ int16_t FADE_OUT_TARGET; 
+ int16_t FADE_IN_TARGET; 
+ int16_t FADE_OUT_CURRENT; 
+ int16_t FADE_IN_CURRENT; 
+ uint8_t FADE_PROGRESS; 
+ uint8_t FADE_MODE; 
+ int32_t FADE_PROTECTION; 
+ int8_t MAIN_D_80134CBC; 
 
-#pragma section sbss begin
-/* TODO: add garbage function to force order */
-/* int16_t FADE_OUT_TARGET; */
-/* int16_t FADE_IN_TARGET; */
-/* int16_t FADE_OUT_CURRENT; */
-/* int16_t FADE_IN_CURRENT; */
-/* uint8_t FADE_PROGRESS; */
-/* uint8_t FADE_MODE; */
-/* uint16_t FADE_PADDING; */
-/* int32_t FADE_PROTECTION; */
-/* int8_t MAIN_D_80134CBC; */
-#pragma section sbss end
+
+void force_fade_sbss_order();
+void force_fade_sbss_order(void) {
+	FADE_OUT_TARGET = 0; 
+	FADE_IN_TARGET = 0;
+	FADE_OUT_CURRENT = 0;
+	FADE_IN_CURRENT = 0;
+	FADE_PROGRESS = 0;
+ 	FADE_MODE = 0;
+ 	FADE_PROTECTION = 0; 
+ 	MAIN_D_80134CBC = 0;
+}
 
 void initializeFadeData(void)
 {
