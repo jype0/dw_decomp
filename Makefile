@@ -67,7 +67,6 @@ MAIN_BSS := \
 	$(BUILDDIR)/generated/libgs.bss.s \
 	$(BUILDDIR)/generated/libgte.bss.s \
 	$(BUILDDIR)/generated/model.bss.s \
-	$(BUILDDIR)/generated/world_object.bss.s \
 	$(BUILDDIR)/generated/unk_0x80137A24.bss.s \
 	$(BUILDDIR)/generated/butterfly.bss.s \
 	$(BUILDDIR)/generated/libmrcd.bss.s \
