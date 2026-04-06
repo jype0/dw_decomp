@@ -6,11 +6,9 @@
 #include "common.h"
 
 
-#pragma section sbss begin
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t DRAWING_OFFSET_Y;
 extern int32_t IS_IN_MENU;
-#pragma section sbss end
 
 typedef struct {
 	int16_t duration;

@@ -12,7 +12,6 @@
 #include "common.h"
 
 
-#pragma section sbss begin
 extern int32_t HAS_BUTTERFLY;
 extern int32_t BUTTERFLY_ID;
 extern int8_t PARTNER_STATE;
@@ -42,7 +41,6 @@ extern int32_t TARGET_MENU;
 extern int32_t MEMORY_CARD_ID;
 extern int32_t MEMORY_CARD_SLOT;
 extern int32_t CHECKED_MEMORY_CARD;
-#pragma section sbss end
 
 typedef struct
 {
