@@ -8,7 +8,6 @@
 
 #include "common.h"
 
-#pragma optimization_level 4
 
 /* TODO: Move to a header file */
 #define TEXTURE_BUFFER		0x80088800

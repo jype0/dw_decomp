@@ -38,7 +38,8 @@ make -j$(nproc) regenerate
 # (Optional) Create file local.mk to override defaults
 MWCCWRAP := /path/to/mwccwrap.exe
 MWCCWRAP_FLAGS := -dll "/path/to/cc_mips.dll"
-MWCCGAP_FLAGS := --use-wibo --wibo-path /path/to/wibo
+METROWRAP := /path/to/mw
+METROWRAP_FLAGS := --use-wibo --wibo-path /path/to/wibo
 TOOLCHAIN := /path/to/mipsel-linux-gnu-
 
 # Build new binaries

@@ -4,7 +4,6 @@
 #include <dw/entity.h>
 #include <dw/params.h>
 
-#pragma optimization_level 4
 
 void unusedAABB(void)
 {

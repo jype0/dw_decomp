@@ -7,7 +7,6 @@
 #include <dw/params.h>
 #include <dw/types.h>
 
-#pragma optimization_level 4
 
 int32_t getTamerState(void);
 void setTamerState(int32_t state);

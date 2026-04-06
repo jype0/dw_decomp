@@ -2,8 +2,7 @@
 #define DW_MATH_H
 
 #include <dw/types.h>
-#include <dw/atan_table.h>
-#include <dw/sine_table.h>
+#include <dw/file_table.h>
 
 #define ABS(x) (((x) < 0) ? -(x) : (x))
 

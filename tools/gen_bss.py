@@ -74,6 +74,9 @@ def __main():
             prev_sym, prev_addr = None, None
 
             for line in lines:
+                line = line.strip()
+                if not line or line.startswith('//'):
+                    continue
                 line = line.split(' //')[0]
                 cur_sym, _, cur_addr = line.split()
                 cur_addr = int(cur_addr.strip(';'), 16)

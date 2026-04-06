@@ -11,7 +11,6 @@
 
 #include "common.h"
 
-#pragma optimization_level 4
 
 #pragma section sbss begin
 extern int32_t HAS_BUTTERFLY;
@@ -148,6 +147,33 @@ int32_t DOOA_getSequenceState(int32_t unused, int32_t isInitialized);
 void STD_tickPartnerTournament(int32_t instanceId);
 
 void KAR_start();
+void * partner_functions[] = {
+	MAIN_func_800DF7F8,
+	callDigimonRoutine,
+	startPartnerAnimation,
+	getPartnerState,
+	MAIN_func_800DF5A0,
+	checkEatDistance,
+	setPartnerState,
+	setPartnerIdle,
+	updateConditionAnimation,
+	setPartnerSlowWalking,
+	getPartnerTamerCloseness,
+	tickPartnerWalking,
+	tickPartnerDying2,
+	tickPartnerEvolving,
+	tickPartnerIdle,
+	partnerEatShit,
+	tickPartnerDying,
+	partnerWildPoop,
+	tickPartnerToilet,
+	partnerFeedItem,
+	partnerPraiseScold,
+	partnerSleep,
+	tickNormal,
+	tickPartnerOverworld,
+	tickPartner
+};
 
 void tickPartner(int32_t instanceId)
 {

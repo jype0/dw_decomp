@@ -20,16 +20,17 @@ SPLAT := $(PYTHON) -m splat split
 
 MWCCWRAP ?= bin/mwccwrap/mwccwrap.exe
 MWCCWRAP_FLAGS ?= -dll "bin/cc_mips/cc_mips_40.dll"
-MWCCWRAP_FLAGS += -Werror -requireprotos -gccincludes \
+MWCCWRAP_FLAGS += -O4 -sdata 8 -Werror -requireprotos -gccincludes \
 		  -lang c -Cpp_exceptions off -RTTI off
 
 export MWCIncludes =
 
 WIBO ?= bin/wibo-x86_64
 
-MWCCGAP := $(PYTHON) external/mwccgap/mwccgap.py
-MWCCGAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
-MWCCGAP_FLAGS += --mwcc-path $(MWCCWRAP) \
+METROWRAP ?= bin/metrowrap/mw
+METROWRAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
+METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections --split-plain-names \
+		 --elf-flags 0x00001001 \
 		 --as-march r3000 \
 		 --macro-inc-path include/macro.inc
 
@@ -51,14 +52,14 @@ CFLAGS := -g -Wall -Wextra -Werror -std=c99 -Os -G0 -mno-gpopt $(ARCHFLAGS)
 CPPFLAGS := $(INC)
 DEPFLAGS = -MM -MF $(@:.o=.d) -MT $@
 LDFLAGS := -g $(addprefix -T ,$(CPPLDSCRIPT)) -static \
-	   -Wl,--no-check-sections -Wl,-Map=% -Wl,--build-id=none
+	   -Wl,--no-check-sections -Wl,-Map=% -Wl,--build-id=none \
+	   -Wl,--gc-sections -Wl,--print-gc-sections
 
 MAIN_ASM_SRC := $(shell find $(ASM_DIR)/main -path '*.s' \
 		-not -path '$(ASM_DIR)/main/*matchings*' 2> /dev/null)
 
 MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134C4C.sbss.s \
-	$(BUILDDIR)/generated/fade.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134CC0.sbss.s
 
 MAIN_BSS := \
@@ -66,16 +67,12 @@ MAIN_BSS := \
 	$(BUILDDIR)/generated/libgs.bss.s \
 	$(BUILDDIR)/generated/libgte.bss.s \
 	$(BUILDDIR)/generated/model.bss.s \
-	$(BUILDDIR)/generated/world_object.bss.s \
 	$(BUILDDIR)/generated/unk_0x80137A24.bss.s \
 	$(BUILDDIR)/generated/butterfly.bss.s \
 	$(BUILDDIR)/generated/libmrcd.bss.s \
 	$(BUILDDIR)/generated/bubble.bss.s \
 	$(BUILDDIR)/generated/battle_ui.bss.s \
 	$(BUILDDIR)/generated/unk_0x801555D0.bss.s
-
-# evolution.c is not yet added by default due to it needing a garbage function to 
-# reach 100% and the toolchain for that is not yet set up.
 
 MAIN_SRC := \
 	$(MAIN_ASM_SRC) \
@@ -85,14 +82,13 @@ MAIN_SRC := \
 	src/main/bubble.c \
 	src/main/butterfly.c \
 	src/main/clock.c \
+	src/main/evolution.c \
 	src/main/fade.c \
 	src/main/file.c \
 	src/main/evl.c \
 	src/main/kar.c \
 	src/main/math.c \
-	src/main/atan_table.c \
 	src/main/file_table.c \
-	src/main/sine_table.c \
 	src/main/particle.c \
 	src/main/partner.c \
 	src/main/world_object.c \
@@ -345,13 +341,18 @@ $(EXE): $(ELF) $(OVERLAY:%=$(BUILDDIR)/%_REL.BIN)
 $(BUILDDIR)/%.c.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
-	$(MWCCGAP) $(MWCCGAP_FLAGS) $< $@ $(MWCCWRAP_FLAGS) $(CPPFLAGS)
-	@tools/fix_elf_flags.py $@
+	$(METROWRAP) -o $@ $(METROWRAP_FLAGS) $(MWCCWRAP_FLAGS) $(CPPFLAGS) $<
 
 $(BUILDDIR)/%.s.o: %.s
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+	@$(OBJCOPY) --set-section-alignment .text=4 \
+				--set-section-alignment .data=4 \
+				--set-section-alignment .rodata=4 \
+				--set-section-alignment .bss=4 \
+				--set-section-alignment .sbss=4 \
+				--set-section-alignment .sdata=4 $@
 
 $(MAIN_SBSS): config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)

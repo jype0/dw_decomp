@@ -5,7 +5,6 @@
 
 #include "common.h"
 
-#pragma optimization_level 4
 
 extern GsSPRITE CLOCK_SPRITE;
 
@@ -34,6 +33,17 @@ int32_t readPStat(int32_t id);
 void writePStat(int32_t id, int32_t value);
 void addTamerLevel(int32_t chance, int32_t amount);
 void updateBGM();
+void* clock_functions[] = {
+	startGameTime,
+	stopGameTime,
+	updateMinuteHand,
+	advanceToTime,
+	updatePlaytime,
+	renderGameClock,
+	tickGameClock,
+	addClock,
+	initializeClockData
+};
 
 INCLUDE_ASM("asm/main/nonmatchings/clock", initializeClockData);
 

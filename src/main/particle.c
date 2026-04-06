@@ -5,7 +5,6 @@
 #include <dw/particle.h>
 #include <dw/world_object.h>
 
-#pragma optimization_level 4
 
 // prototypes for functions used below. relocate when appropriate
 void renderFXParticle(SVECTOR *worldPos, int32_t scale, RGB8 *rgb);

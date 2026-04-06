@@ -5,28 +5,28 @@ SECTIONS
 	OVERLAY 0x80052AE0 : NOCROSSREFS SUBALIGN(4)
 	{
 		.BTL {
-			build/asm/btl/data/texture.rodata.s.o(.rodata);
-			build/asm/btl/data/model_0.rodata.s.o(.rodata);
-			build/asm/btl/data/model_1.rodata.s.o(.rodata);
-			build/asm/btl/data/model_2.rodata.s.o(.rodata);
-			build/asm/btl/data/model_3.rodata.s.o(.rodata);
+			KEEP(build/asm/btl/data/texture.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/btl/data/model_0.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/btl/data/model_1.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/btl/data/model_2.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/btl/data/model_3.rodata.s.o(.rodata .rodata*));
 
 			btl_TEXT_START = .;
 
-			build/asm/btl/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/btl/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/btl/41C8.s.o(.text);
+			KEEP(build/asm/btl/41C8.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/btl/41C8.s.o(.rodata);
+			KEEP(build/asm/btl/41C8.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/btl/41C8.s.o(.data);
-			build/asm/btl/data/20280.data.s.o(.data);
+			KEEP(build/asm/btl/41C8.s.o(.data .data*));
+			KEEP(build/asm/btl/data/20280.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/btl/41C8.s.o(.bss);
+			KEEP(build/asm/btl/41C8.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -36,20 +36,20 @@ SECTIONS
 		.DGET {
 			dget_TEXT_START = .;
 
-			build/asm/dget/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/dget/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/dget/40.s.o(.text);
+			KEEP(build/asm/dget/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/dget/40.s.o(.rodata);
+			KEEP(build/asm/dget/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/dget/40.s.o(.data);
-			build/asm/dget/data/14CC.data.s.o(.data);
+			KEEP(build/asm/dget/40.s.o(.data .data*));
+			KEEP(build/asm/dget/data/14CC.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/dget/40.s.o(.bss);
+			KEEP(build/asm/dget/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -59,20 +59,20 @@ SECTIONS
 		.DOO2 {
 			doo2_TEXT_START = .;
 
-			build/asm/doo2/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/doo2/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/doo2/40.s.o(.text);
+			KEEP(build/asm/doo2/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/doo2/40.s.o(.rodata);
+			KEEP(build/asm/doo2/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/doo2/40.s.o(.data);
-			build/asm/doo2/data/1A80.data.s.o(.data);
+			KEEP(build/asm/doo2/40.s.o(.data .data*));
+			KEEP(build/asm/doo2/data/1A80.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/doo2/40.s.o(.bss);
+			KEEP(build/asm/doo2/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -82,20 +82,20 @@ SECTIONS
 		.DOOA {
 			dooa_TEXT_START = .;
 
-			build/asm/dooa/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/dooa/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/dooa/40.s.o(.text);
+			KEEP(build/asm/dooa/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/dooa/40.s.o(.rodata);
+			KEEP(build/asm/dooa/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/dooa/40.s.o(.data);
-			build/asm/dooa/data/48D4.data.s.o(.data);
+			KEEP(build/asm/dooa/40.s.o(.data .data*));
+			KEEP(build/asm/dooa/data/48D4.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/dooa/40.s.o(.bss);
+			KEEP(build/asm/dooa/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -105,20 +105,20 @@ SECTIONS
 		.EAB {
 			eab_TEXT_START = .;
 
-			build/asm/eab/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/eab/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/eab/40.s.o(.text);
+			KEEP(build/asm/eab/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/eab/40.s.o(.rodata);
+			KEEP(build/asm/eab/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/eab/40.s.o(.data);
-			build/asm/eab/data/16DC.data.s.o(.data);
+			KEEP(build/asm/eab/40.s.o(.data .data*));
+			KEEP(build/asm/eab/data/16DC.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/eab/40.s.o(.bss);
+			KEEP(build/asm/eab/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -128,20 +128,20 @@ SECTIONS
 		.ENDI {
 			endi_TEXT_START = .;
 
-			build/asm/endi/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/endi/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/endi/40.s.o(.text);
+			KEEP(build/asm/endi/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/endi/40.s.o(.rodata);
+			KEEP(build/asm/endi/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/endi/40.s.o(.data);
-			build/asm/endi/data/D98.data.s.o(.data);
+			KEEP(build/asm/endi/40.s.o(.data .data*));
+			KEEP(build/asm/endi/data/D98.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/endi/40.s.o(.bss);
+			KEEP(build/asm/endi/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -151,20 +151,20 @@ SECTIONS
 		.EVL {
 			evl_TEXT_START = .;
 
-			build/asm/evl/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/evl/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/evl/40.s.o(.text);
+			KEEP(build/asm/evl/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/evl/40.s.o(.rodata);
+			KEEP(build/asm/evl/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/evl/40.s.o(.data);
-			build/asm/evl/data/3EE8.data.s.o(.data);
+			KEEP(build/asm/evl/40.s.o(.data .data*));
+			KEEP(build/asm/evl/data/3EE8.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/evl/40.s.o(.bss);
+			KEEP(build/asm/evl/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -174,20 +174,20 @@ SECTIONS
 		.FISH {
 			fish_TEXT_START = .;
 
-			build/asm/fish/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/fish/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/fish/40.s.o(.text);
+			KEEP(build/asm/fish/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/fish/40.s.o(.rodata);
+			KEEP(build/asm/fish/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/fish/40.s.o(.data);
-			build/asm/fish/data/A160.data.s.o(.data);
+			KEEP(build/asm/fish/40.s.o(.data .data*));
+			KEEP(build/asm/fish/data/A160.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/fish/40.s.o(.bss);
+			KEEP(build/asm/fish/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -197,20 +197,20 @@ SECTIONS
 		.KAR {
 			kar_TEXT_START = .;
 
-			build/asm/kar/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/kar/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/kar/40.s.o(.text);
+			KEEP(build/asm/kar/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/kar/40.s.o(.rodata);
+			KEEP(build/asm/kar/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/kar/40.s.o(.data);
-			build/asm/kar/data/7310.data.s.o(.data);
+			KEEP(build/asm/kar/40.s.o(.data .data*));
+			KEEP(build/asm/kar/data/7310.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/kar/40.s.o(.bss);
+			KEEP(build/asm/kar/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -220,20 +220,20 @@ SECTIONS
 		.MOV {
 			mov_TEXT_START = .;
 
-			build/asm/mov/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/mov/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/mov/40.s.o(.text);
+			KEEP(build/asm/mov/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/mov/40.s.o(.rodata);
+			KEEP(build/asm/mov/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/mov/40.s.o(.data);
-			build/asm/mov/data/94C.data.s.o(.data);
+			KEEP(build/asm/mov/40.s.o(.data .data*));
+			KEEP(build/asm/mov/data/94C.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/mov/40.s.o(.bss);
+			KEEP(build/asm/mov/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -243,20 +243,20 @@ SECTIONS
 		.MURD {
 			murd_TEXT_START = .;
 
-			build/asm/murd/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/murd/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/murd/40.s.o(.text);
+			KEEP(build/asm/murd/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/murd/40.s.o(.rodata);
+			KEEP(build/asm/murd/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/murd/40.s.o(.data);
-			build/asm/murd/data/1748.data.s.o(.data);
+			KEEP(build/asm/murd/40.s.o(.data .data*));
+			KEEP(build/asm/murd/data/1748.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/murd/40.s.o(.bss);
+			KEEP(build/asm/murd/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -266,20 +266,20 @@ SECTIONS
 		.SHOP {
 			shop_TEXT_START = .;
 
-			build/asm/shop/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/shop/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/shop/40.s.o(.text);
+			KEEP(build/asm/shop/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/shop/40.s.o(.rodata);
+			KEEP(build/asm/shop/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/shop/40.s.o(.data);
-			build/asm/shop/data/7860.data.s.o(.data);
+			KEEP(build/asm/shop/40.s.o(.data .data*));
+			KEEP(build/asm/shop/data/7860.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/shop/40.s.o(.bss);
+			KEEP(build/asm/shop/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -287,28 +287,28 @@ SECTIONS
 	OVERLAY 0x80052AE0 : NOCROSSREFS SUBALIGN(4)
 	{
 		.STD {
-			build/asm/std/data/texture.rodata.s.o(.rodata);
-			build/asm/std/data/model_0.rodata.s.o(.rodata);
-			build/asm/std/data/model_1.rodata.s.o(.rodata);
-			build/asm/std/data/model_2.rodata.s.o(.rodata);
-			build/asm/std/data/model_3.rodata.s.o(.rodata);
+			KEEP(build/asm/std/data/texture.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/std/data/model_0.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/std/data/model_1.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/std/data/model_2.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/std/data/model_3.rodata.s.o(.rodata .rodata*));
 
 			std_TEXT_START = .;
 
-			build/asm/std/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/std/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/std/41C8.s.o(.text);
+			KEEP(build/asm/std/41C8.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/std/41C8.s.o(.rodata);
+			KEEP(build/asm/std/41C8.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/std/41C8.s.o(.data);
-			build/asm/std/data/26E0C.data.s.o(.data);
+			KEEP(build/asm/std/41C8.s.o(.data .data*));
+			KEEP(build/asm/std/data/26E0C.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/std/41C8.s.o(.bss);
+			KEEP(build/asm/std/41C8.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -318,20 +318,20 @@ SECTIONS
 		.TRN2 {
 			trn2_TEXT_START = .;
 
-			build/asm/trn2/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/trn2/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/trn2/40.s.o(.text);
+			KEEP(build/asm/trn2/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/trn2/40.s.o(.rodata);
+			KEEP(build/asm/trn2/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/trn2/40.s.o(.data);
-			build/asm/trn2/data/5130.data.s.o(.data);
+			KEEP(build/asm/trn2/40.s.o(.data .data*));
+			KEEP(build/asm/trn2/data/5130.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/trn2/40.s.o(.bss);
+			KEEP(build/asm/trn2/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -341,20 +341,20 @@ SECTIONS
 		.TRN {
 			trn_TEXT_START = .;
 
-			build/asm/trn/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/trn/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/trn/40.s.o(.text);
+			KEEP(build/asm/trn/40.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/trn/40.s.o(.rodata);
+			KEEP(build/asm/trn/40.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/trn/40.s.o(.data);
-			build/asm/trn/data/6758.data.s.o(.data);
+			KEEP(build/asm/trn/40.s.o(.data .data*));
+			KEEP(build/asm/trn/data/6758.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/trn/40.s.o(.bss);
+			KEEP(build/asm/trn/40.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
@@ -362,28 +362,28 @@ SECTIONS
 	OVERLAY 0x80052AE0 : NOCROSSREFS SUBALIGN(4)
 	{
 		.VS {
-			build/asm/vs/data/texture.rodata.s.o(.rodata);
-			build/asm/vs/data/model_0.rodata.s.o(.rodata);
-			build/asm/vs/data/model_1.rodata.s.o(.rodata);
-			build/asm/vs/data/model_2.rodata.s.o(.rodata);
-			build/asm/vs/data/model_3.rodata.s.o(.rodata);
+			KEEP(build/asm/vs/data/texture.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/vs/data/model_0.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/vs/data/model_1.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/vs/data/model_2.rodata.s.o(.rodata .rodata*));
+			KEEP(build/asm/vs/data/model_3.rodata.s.o(.rodata .rodata*));
 
 			vs_TEXT_START = .;
 
-			build/asm/vs/data/header.rodata.s.o(.rodata);
+			KEEP(build/asm/vs/data/header.rodata.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/vs/41C8.s.o(.text);
+			KEEP(build/asm/vs/41C8.s.o(.text .text*));
 			. = ALIGN(., 4);
 
-			build/asm/vs/41C8.s.o(.rodata);
+			KEEP(build/asm/vs/41C8.s.o(.rodata .rodata*));
 			. = ALIGN(., 4);
 
-			build/asm/vs/41C8.s.o(.data);
-			build/asm/vs/data/1CEDC.data.s.o(.data);
+			KEEP(build/asm/vs/41C8.s.o(.data .data*));
+			KEEP(build/asm/vs/data/1CEDC.data.s.o(.data .data*));
 			. = ALIGN(., 4);
 
-			build/asm/vs/41C8.s.o(.bss);
+			KEEP(build/asm/vs/41C8.s.o(.bss .bss*));
 			. = ALIGN(., 4);
 		}
 	}
