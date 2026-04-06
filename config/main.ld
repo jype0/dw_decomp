@@ -15,7 +15,7 @@ SECTIONS
     . = ALIGN(., 4);
 
     main_ROM_START = __romPos;
-    .main : AT(main_ROM_START) SUBALIGN(4)
+    .main : AT(main_ROM_START)
     {
         main_TEXT_START = .;
         KEEP(build/asm/main/psyq/libapi.s.o(.text .text.*));
