@@ -14,10 +14,9 @@ void loadMapSounds2();
 void isSoundLoaded();
 void loadVLALL();
 
-#pragma section sdata begin
 extern void *MAIN_D_801344F4;
 extern int8_t EVL_LOADING_COMPLETE;
-#pragma section sdata end
+
 void* evl_functions[] = {
 	evoSequenceAlwaysTrue,
 	getEvoSequenceState,

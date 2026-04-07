@@ -9,11 +9,9 @@
 
 #define NUM_BUTTERFLIES		2
 
-#pragma section sbss begin
 
 extern int32_t IS_IN_MENU;
 
-#pragma section sbss end
 
 typedef struct {
 	int16_t frame;

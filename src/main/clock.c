@@ -8,17 +8,15 @@
 
 extern GsSPRITE CLOCK_SPRITE;
 
-#pragma section sbss begin
 extern int16_t LAST_HANDLED_FRAME;
 extern int8_t GAME_STATE;
 extern uint8_t MAP_LAYER_ENABLED;
-extern uint8_t CLOCK_TEXCOORD_U[];
-extern uint8_t CLOCK_TEXCOORD_V[];
+extern uint8_t CLOCK_TEXCOORD_U[2][4];
+extern uint8_t CLOCK_TEXCOORD_V[2][4];
 extern GsOT *ACTIVE_ORDERING_TABLE;
-#pragma section sbss end
 
-extern uint8_t CLOCK_HOUR_X[];
-extern uint8_t CLOCK_HOUR_Y[];
+extern uint8_t CLOCK_HOUR_X[24];
+extern uint8_t CLOCK_HOUR_Y[24];
 
 void renderRectPolyFT4(int32_t posX, int32_t posY,
 		       int32_t width, int32_t height,

@@ -19,11 +19,9 @@ void initializeReincarnatedPartner(int32_t type, int32_t posX, int32_t posY,
 int32_t hasDigimonRaised(int32_t digimonId);
 void setDigimonRaised(int32_t type);
 
-#pragma section sbss begin
 extern uint8_t CURRENT_SCREEN;
 extern int32_t NANIMON_TRIGGER;
 extern int16_t EVOLUTION_TARGET;
-#pragma section sbss end
 
 extern Stats DEATH_STATS;
 
