@@ -369,11 +369,11 @@ $(BUILDDIR)/%.sdata.s.o: %.sdata.s
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_SDATA=1 -o $@ $<
 
-$(MAIN_SBSS): config/sbss.yaml config/symbols.txt
+$(MAIN_SBSS) &: config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_bss.py $^ $(BUILDDIR)/generated/
 
-$(MAIN_BSS): config/bss.yaml config/symbols.txt
+$(MAIN_BSS) &: config/bss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_bss.py $^ $(BUILDDIR)/generated/
 
