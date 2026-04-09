@@ -152,6 +152,8 @@ segments:
       - [0x98080, data, psyq/libspu]
       - [0x9880C, data, psyq/libsnd]
       - [0x989F4, data, map]
+      - [0x9ABEC, data, evolution]
+      - [0x9B918, data, utils]
       - [0x9BBD0, data, psyq/libpress]
       - [0x9CB40, .data, butterfly]
       - [0x9CB64, data, psyq/libmcrd]
@@ -160,5 +162,7 @@ segments:
       - [0xA3B2C, sdata]
       - [0xA40FC, sdata, file_table]
       - [0xA41EC, sdata]
+      - [0xA4240, sdata, map_impl]
+      - [0xA4250, sdata]
 
   - [0xA4C4C]

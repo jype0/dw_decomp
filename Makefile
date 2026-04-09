@@ -29,7 +29,7 @@ WIBO ?= bin/wibo-x86_64
 
 METROWRAP ?= bin/metrowrap/mw
 METROWRAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
-METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections --split-plain-names \
+METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections \
 		 --elf-flags 0x00001001 \
 		 --as-march r3000 \
 		 --macro-inc-path include/macro.inc
