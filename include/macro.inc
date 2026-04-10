@@ -70,7 +70,7 @@
 
 
 # Label to signal the symbol haven't been matched yet.
-.macro nonmatching label, size=1
+.macro nonmatching label, size=0
     .global \label\().NON_MATCHING
     .type \label\().NON_MATCHING, @object
     .size \label\().NON_MATCHING, \size
