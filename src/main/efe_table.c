@@ -4,7 +4,7 @@
 
 #include "common.h"
 
-char* EFEX_PATH_ARRAY[] = {
+int8_t* EFEX_PATH_ARRAY[] = {
     "\\ETCDAT\\FEEL_EF.TMD",
     "\\ETCDAT\\EX.TIM",
     "\\ETCDAT\\EX.TMD"
@@ -19,14 +19,14 @@ extern EFEX_FileLookup EFEX_TABLE[MAX_EFEX_FILES];
 // the populated table is never read from
 void fillEFEXTable(void)
 {
-    int i;
+    int32_t i;
     EFEX_FileLookup *itr;
-    char path [64];
+    int8_t path[64];
     CdlFILE searchResult;
 
     itr = EFEX_TABLE;
 
-    while (CdReadSync(1,0));
+    while (CdReadSync(1, 0));
 
     for (i = 0; i < NUM_EFEX_FILES; i++) {
         path[0] = '\\';

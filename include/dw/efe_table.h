@@ -14,7 +14,7 @@ typedef struct {
 
 
 extern EFEX_FileLookup EFEX_TABLE[MAX_EFEX_FILES];
-extern char* EFEX_PATH_ARRAY[NUM_EFEX_FILES];
+extern int8_t* EFEX_PATH_ARRAY[NUM_EFEX_FILES];
 
 void fillEFEXTable(void);
 
