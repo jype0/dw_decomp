@@ -162,7 +162,7 @@ segments:
       - [0x9CE18, data, bubble]
       - [0x9CE64, data, main]
       - [0xA3B2C, sdata]
-      - [0xA40FC, sdata, file_table]
+      - [0xA40FC, .sdata, file_table]
       - [0xA41EC, sdata]
       - [0xA4240, sdata, map_impl]
       - [0xA4250, sdata]
