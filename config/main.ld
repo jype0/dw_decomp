@@ -106,7 +106,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/kar.c.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/efe_table.s.o(.text.*)
+        build/src/main/efe_table.c.o(.text.*)
         . = ALIGN(., 4);
         build/asm/main/sound_async.s.o(.text.*)
         . = ALIGN(., 4);
@@ -220,7 +220,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/kar.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/efe_table.s.o(.rodata.*)
+        build/src/main/efe_table.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/sound_async.s.o(.rodata.*)
         . = ALIGN(., 4);
@@ -348,7 +348,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/kar.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/efe_table.s.o(.data.*)
+        build/src/main/efe_table.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/9BB74.data.s.o(.data.*);
         . = ALIGN(., 4);
         build/asm/main/sound_async.s.o(.data.*)
         . = ALIGN(., 4);
@@ -385,6 +387,10 @@ SECTIONS
         build/asm/main/data/map_impl.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
         build/asm/main/data/A4250.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/src/main/efe_table.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        build/asm/main/data/A443C.sdata.s.o(.sdata.*);
         . = ALIGN(., 4);
         main_SDATA_END = .;
         main_SDATA_SIZE = ABSOLUTE(main_SDATA_END - main_SDATA_START);

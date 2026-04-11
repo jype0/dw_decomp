@@ -82,6 +82,7 @@ MAIN_SRC := \
 	src/main/bubble.c \
 	src/main/butterfly.c \
 	src/main/clock.c \
+	src/main/efe_table.c \
 	src/main/evolution.c \
 	src/main/fade.c \
 	src/main/file.c \
