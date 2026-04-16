@@ -1,8 +1,9 @@
 #ifndef DW_PARTICLE_H
 #define DW_PARTICLE_H
 
-#include <dw/types.h>
 #include <libgte.h>
+#include <dw/graphics.h>
+#include <dw/types.h>
 
 #define NUM_HEALING_PARTICLES 20
 #define NUM_HEALING_INSTANCES 1
@@ -21,10 +22,6 @@ typedef struct {
     ParticleObjEntry entries1[NUM_HEALING_PARTICLES];
     ParticleObjEntry entries2[NUM_HEALING_PARTICLES];
 } HealingParticle;
-
-typedef struct {
-    uint8_t r,g,b;
-} RGB8;
 
 extern HealingParticle HEALING_PARTICLES[NUM_HEALING_INSTANCES];
 

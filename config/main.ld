@@ -64,7 +64,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/anim.s.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/ui.s.o(.text.*)
+        build/src/main/ui.c.o(.text.*)
         . = ALIGN(., 4);
         build/asm/main/item.s.o(.text.*)
         . = ALIGN(., 4);
@@ -178,7 +178,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/anim.s.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/ui.s.o(.rodata.*)
+        build/src/main/ui.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/data/item.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
@@ -302,7 +302,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/anim.s.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/ui.s.o(.data.*)
+        build/src/main/ui.c.o(.data.*)
         . = ALIGN(., 4);
         build/asm/main/item.s.o(.data.*)
         . = ALIGN(., 4);
