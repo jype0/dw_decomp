@@ -1,6 +1,7 @@
 #include <libgs.h>
 #include <dw/clock.h>
 #include <dw/params.h>
+#include <dw/pstat.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -64,11 +65,12 @@ void tickGameClock(int32_t instanceId)
 		return;
 	}
 
-	if ((IS_GAMETIME_RUNNING == 1) && (readPStat(0) == 3)) {
-		writePStat(0, 0);
+	if ((IS_GAMETIME_RUNNING == 1) &&
+	    (readPStat(PSTAT_TIME_SPEED) == 3)) {
+		writePStat(PSTAT_TIME_SPEED, 0);
 	}
 
-	timeSpeed = readPStat(0);
+	timeSpeed = readPStat(PSTAT_TIME_SPEED);
 	if (timeSpeed == 3) {
 		return;
 	}

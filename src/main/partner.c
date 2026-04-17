@@ -6,6 +6,7 @@
 #include <dw/map.h>
 #include <dw/params.h>
 #include <dw/partner.h>
+#include <dw/pstat.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
 
@@ -820,7 +821,7 @@ void tickPartnerDying2(void)
                                 TAMER_ENTITY.entity.posData->location;
 			SOME_SCRIPT_SYNC_BIT = 1;
 			PARTNER_SUB_STATE = 2;
-			writePStat(0, 0);
+			writePStat(PSTAT_TIME_SPEED, 0);
 		}
 		break;
 	default:
@@ -907,7 +908,7 @@ void callDigimonRoutine(int32_t routine)
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 2:
-		EVOLUTION_TARGET = readPStat(5);
+		EVOLUTION_TARGET = readPStat(PSTAT_SUKAMON_BACKUP_DIGIMON);
 		setPartnerState(13);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
@@ -961,7 +962,7 @@ void callDigimonRoutine(int32_t routine)
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 10:
-		EVOLUTION_TARGET = readPStat(254);
+		EVOLUTION_TARGET = readPStat(PSTAT_254);
 		setPartnerState(13);
 		SOME_SCRIPT_SYNC_BIT = 0;
 	default:
