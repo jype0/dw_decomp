@@ -13,11 +13,11 @@ sha256sum -c "$BIN_DIR/mwccwrap.zip.sha256"
 unzip -d "$BIN_DIR/mwccwrap" "$BIN_DIR/mwccwrap.zip"
 rm -rf "$BIN_DIR/mwccwrap.zip"
 
-rm -rf "$BIN_DIR/metrowrap-v0.1.3-custom.032aebc-linux-x86_64.zip" "$BIN_DIR/metrowrap"
-wget -O "$BIN_DIR/metrowrap-v0.1.3-custom.032aebc-linux-x86_64.zip" https://github.com/ThirstyWraith/metrowrap/releases/download/v0.1.3-custom.032aebc/metrowrap-v0.1.3-custom.032aebc-linux-x86_64.zip
-sha256sum -c "$BIN_DIR/metrowrap-v0.1.3-custom.032aebc-linux-x86_64.zip.sha256"
-unzip -d "$BIN_DIR/metrowrap" "$BIN_DIR/metrowrap-v0.1.3-custom.032aebc-linux-x86_64.zip"
-rm -rf "$BIN_DIR/metrowrap-v0.1.3-custom.032aebc-linux-x86_64.zip"
+rm -rf "$BIN_DIR/metrowrap-v0.1.3-custom.9b977e7-linux-x86_64.zip" "$BIN_DIR/metrowrap"
+wget -O "$BIN_DIR/metrowrap-v0.1.3-custom.9b977e7-linux-x86_64.zip" https://github.com/ThirstyWraith/metrowrap/releases/download/v0.1.3-custom.9b977e7/metrowrap-v0.1.3-custom.9b977e7-linux-x86_64.zip
+sha256sum -c "$BIN_DIR/metrowrap-v0.1.3-custom.9b977e7-linux-x86_64.zip.sha256"
+unzip -d "$BIN_DIR/metrowrap" "$BIN_DIR/metrowrap-v0.1.3-custom.9b977e7-linux-x86_64.zip"
+rm -rf "$BIN_DIR/metrowrap-v0.1.3-custom.9b977e7-linux-x86_64.zip"
 
 rm -rf "$BIN_DIR/mkpsxiso-2.20-Linux.zip" "$BIN_DIR/mkpsxiso-2.20-Linux"
 wget -O "$BIN_DIR/mkpsxiso-2.20-Linux.zip" https://github.com/Lameguy64/mkpsxiso/releases/download/v2.20/mkpsxiso-2.20-Linux.zip

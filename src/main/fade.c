@@ -6,14 +6,14 @@
 
 #include "common.h"
 
- int16_t FADE_OUT_TARGET; 
- int16_t FADE_IN_TARGET; 
- int16_t FADE_OUT_CURRENT; 
- int16_t FADE_IN_CURRENT; 
- uint8_t FADE_PROGRESS; 
- uint8_t FADE_MODE; 
- int32_t FADE_PROTECTION; 
- int8_t MAIN_D_80134CBC; 
+int16_t FADE_OUT_TARGET;
+int16_t FADE_IN_TARGET;
+int16_t FADE_OUT_CURRENT;
+int16_t FADE_IN_CURRENT;
+uint8_t FADE_PROGRESS;
+uint8_t FADE_MODE;
+int32_t FADE_PROTECTION;
+int8_t MAIN_D_80134CBC;
 
 // Garbage function to force sbss symbol order and ensure
 // correct codegen for renderFadeOut()
@@ -24,9 +24,9 @@ static void __garbage__()
 	FADE_OUT_CURRENT = 0;
 	FADE_IN_CURRENT = 0;
 	FADE_PROGRESS = 0;
- 	FADE_MODE = 0;
- 	FADE_PROTECTION = 0;
- 	MAIN_D_80134CBC = 0;
+	FADE_MODE = 0;
+	FADE_PROTECTION = 0;
+	MAIN_D_80134CBC = 0;
 	return;
 }
 
@@ -54,20 +54,6 @@ void fadeToBlack(int32_t frames)
 	stopGameTime();
 	FADE_PROTECTION = 1;
 	return;
-}
-
-void renderFadeOut(void)
-{
-  uint8_t next;
-  next = FADE_PROGRESS += 160 / FADE_OUT_TARGET;
-  if (160 < next)
-  {
-    next = 160;
-    FADE_PROGRESS = 160;
-  }
-  renderFade(next);
-  FADE_OUT_CURRENT++;
-  return;
 }
 
 void fadeFromBlack(int32_t frames)
@@ -98,6 +84,20 @@ void renderFadeIn(int32_t arg0)
         FADE_PROTECTION = 0;
     }
     return;
+}
+
+void renderFadeOut(void)
+{
+  uint8_t next;
+  next = FADE_PROGRESS += 160 / FADE_OUT_TARGET;
+  if (160 < next)
+  {
+    next = 160;
+    FADE_PROGRESS = 160;
+  }
+  renderFade(next);
+  FADE_OUT_CURRENT++;
+  return;
 }
 
 void setPosDataPolyFT4(POLY_FT4 *prim, int16_t posX, int16_t posY, int16_t width, int16_t height);
