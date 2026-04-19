@@ -15,7 +15,6 @@ disks/us/FISH_REL.BIN
 disks/us/KAR_REL.BIN
 disks/us/MOV_REL.BIN
 disks/us/MURD_REL.BIN
-disks/us/SHOP_REL.BIN
 disks/us/STD_REL.BIN
 disks/us/TRN2_REL.BIN
 disks/us/TRN_REL.BIN

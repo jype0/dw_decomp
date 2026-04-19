@@ -270,30 +270,6 @@ SECTIONS
 		}
 	}
 
-	OVERLAY 0x80080800 : NOCROSSREFS
-	{
-		.SHOP {
-			shop_TEXT_START = .;
-
-			KEEP(build/asm/shop/data/header.rodata.s.o(.rodata.*));
-			. = ALIGN(., 4);
-
-			KEEP(build/asm/shop/40.s.o(.text.*));
-			. = ALIGN(., 4);
-
-			KEEP(build/asm/shop/40.s.o(.rodata.*));
-			. = ALIGN(., 4);
-
-			KEEP(build/asm/shop/40.s.o(.data.*));
-			. = ALIGN(., 4);
-			KEEP(build/asm/shop/data/7860.data.s.o(.data.*));
-			. = ALIGN(., 4);
-
-			KEEP(build/asm/shop/40.s.o(.bss.*));
-			. = ALIGN(., 4);
-		}
-	}
-
 	OVERLAY 0x80052AE0 : NOCROSSREFS
 	{
 		.STD {

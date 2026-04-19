@@ -47,10 +47,6 @@ categories:
     name: MURD Overlay
     paths:
       - murd
-  - id: shop
-    name: SHOP Overlay
-    paths:
-      - shop
   - id: std
     name: STD Overlay
     paths:

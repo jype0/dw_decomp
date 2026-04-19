@@ -239,18 +239,6 @@ DEP += $(MURD_DEP)
 
 OVERLAY += MURD
 
-SHOP_SRC := \
-	$(wildcard $(ASM_DIR)/shop/*.s) \
-	$(wildcard $(ASM_DIR)/shop/data/*.s)
-
-SHOP_OBJ := $(SHOP_SRC:%=$(BUILDDIR)/%.o)
-SHOP_DEP := $(SHOP_OBJ:%.o=%.d)
-
-OBJ += $(SHOP_OBJ)
-DEP += $(SHOP_DEP)
-
-OVERLAY += SHOP
-
 STD_SRC := \
 	$(wildcard $(ASM_DIR)/std/*.s) \
 	$(wildcard $(ASM_DIR)/std/data/*.s)
