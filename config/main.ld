@@ -54,9 +54,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/asm/main/psyq/libcd.s.o(.text.*))
         . = ALIGN(., 4);
-        build/asm/main/map_impl.s.o(.text.*)
-        . = ALIGN(., 4);
-        build/asm/main/game_menu.s.o(.text.*)
+        build/asm/main/overworld.s.o(.text.*)
         . = ALIGN(., 4);
         build/asm/main/map_collision.s.o(.text.*)
         . = ALIGN(., 4);
@@ -168,9 +166,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/asm/main/data/psyq/libcd.rodata.s.o(.rodata.*))
         . = ALIGN(., 4);
-        build/asm/main/data/map_impl.rodata.s.o(.rodata.*)
-        . = ALIGN(., 4);
-        build/asm/main/data/game_menu.rodata.s.o(.rodata.*)
+        build/asm/main/data/overworld.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/map_collision.s.o(.rodata.*)
         . = ALIGN(., 4);
@@ -292,9 +288,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/asm/main/data/psyq/libcd.data.s.o(.data.*))
         . = ALIGN(., 4);
-        build/asm/main/data/map_impl.data.s.o(.data.*)
-        . = ALIGN(., 4);
-        build/asm/main/game_menu.s.o(.data.*)
+        build/asm/main/data/overworld.data.s.o(.data.*)
         . = ALIGN(., 4);
         build/asm/main/map_collision.s.o(.data.*)
         . = ALIGN(., 4);
@@ -350,9 +344,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/efe_table.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/data/9BB74.data.s.o(.data.*);
-        . = ALIGN(., 4);
-        build/asm/main/sound_async.s.o(.data.*)
+        build/asm/main/data/sound_async.data.s.o(.data.*);
         . = ALIGN(., 4);
         KEEP(build/asm/main/data/psyq/libpress.data.s.o(.data.*))
         . = ALIGN(., 4);
@@ -378,19 +370,49 @@ SECTIONS
         main_DATA_SIZE = ABSOLUTE(main_DATA_END - main_DATA_START);
 
         main_SDATA_START = .;
-        build/asm/main/data/A3B2C.sdata.s.o(.sdata.*)
+        build/asm/main/data/model.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
         build/src/main/file_table.c.o(.sdata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/A41EC.sdata.s.o(.sdata.*)
+        build/asm/main/data/partner_impl.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/map_impl.sdata.s.o(.sdata.*)
+        build/asm/main/data/tamer.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/A4250.sdata.s.o(.sdata.*)
+        build/asm/main/data/efe.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/overworld.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/ui.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/item.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/sound.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/map.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/inventory.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/clock.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/entity_text.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/tmd_object.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/file_queue.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/graphics2.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/utils.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
         build/src/main/efe_table.c.o(.sdata.*);
         . = ALIGN(., 4);
-        build/asm/main/data/A443C.sdata.s.o(.sdata.*);
+        build/asm/main/data/sound_async.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/bubble.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/battle_ui.sdata.s.o(.sdata.*)
+        . = ALIGN(., 4);
+        build/asm/main/data/main.sdata.s.o(.sdata.*);
         . = ALIGN(., 4);
         main_SDATA_END = .;
         main_SDATA_SIZE = ABSOLUTE(main_SDATA_END - main_SDATA_START);
