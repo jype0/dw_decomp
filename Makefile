@@ -86,6 +86,7 @@ MAIN_SRC := \
 	src/main/evolution.c \
 	src/main/fade.c \
 	src/main/file.c \
+	src/main/fish.c \
 	src/main/evl.c \
 	src/main/kar.c \
 	src/main/math.c \
@@ -93,8 +94,8 @@ MAIN_SRC := \
 	src/main/particle.c \
 	src/main/partner.c \
 	src/main/ui.c \
-	src/main/world_object.c \
-	src/main/swap.c
+	src/main/utils.c \
+	src/main/world_object.c
 
 MAIN_OBJ := $(MAIN_SRC:%=$(BUILDDIR)/%.o)
 MAIN_DEP := $(MAIN_OBJ:%.o=%.d)

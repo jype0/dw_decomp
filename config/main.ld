@@ -90,11 +90,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/graphics2.s.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/fish.s.o(.text.*)
+        build/src/main/fish.c.o(.text.*)
         . = ALIGN(., 4);
-        build/src/main/swap.c.o(.text.*)
-        . = ALIGN(., 4);
-        build/asm/main/utils.s.o(.text.*)
+        build/src/main/utils.c.o(.text.*)
         . = ALIGN(., 4);
         build/asm/main/tournament.s.o(.text.*)
         . = ALIGN(., 4);
@@ -202,11 +200,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/graphics2.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/fish.s.o(.rodata.*)
+        build/src/main/fish.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/src/main/swap.c.o(.rodata.*)
-        . = ALIGN(., 4);
-        build/asm/main/utils.s.o(.rodata.*)
+        build/src/main/utils.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/tournament.s.o(.rodata.*)
         . = ALIGN(., 4);
@@ -328,11 +324,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/graphics2.s.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/fish.s.o(.data.*)
+        build/src/main/fish.c.o(.data.*)
         . = ALIGN(., 4);
-        build/src/main/swap.c.o(.data.*)
-        . = ALIGN(., 4);
-        build/asm/main/utils.s.o(.data.*)
+        build/src/main/utils.c.o(.data.*)
         . = ALIGN(., 4);
         build/asm/main/tournament.s.o(.data.*)
         . = ALIGN(., 4);
