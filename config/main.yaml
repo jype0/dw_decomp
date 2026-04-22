@@ -61,7 +61,7 @@ segments:
       - [0x2844, asm, psyq/libgpu]
       - [0x6C40, asm, psyq/libgs]
       - [0xA618, asm, psyq/libgte]
-      - [0x10A50, asm, model]
+      - [0x10A50, c, model]
       - [0x12EF8, c, world_object]
       - [0x131F0, c, file]
       - [0x136D4, c, math]

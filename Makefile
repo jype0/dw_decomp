@@ -90,6 +90,7 @@ MAIN_SRC := \
 	src/main/evl.c \
 	src/main/kar.c \
 	src/main/math.c \
+	src/main/model.c \
 	src/main/file_table.c \
 	src/main/particle.c \
 	src/main/partner.c \
