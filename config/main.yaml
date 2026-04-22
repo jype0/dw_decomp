@@ -93,7 +93,7 @@ segments:
       - [0x53C48, asm, graphics2]
       - [0x54CAC, c, fish]
       - [0x55000, c, utils]
-      - [0x56D10, asm, tournament]
+      - [0x56D10, c, tournament]
       - [0x57220, c, evl]
       - [0x57484, asm, btl]
       - [0x589C8, c, kar]

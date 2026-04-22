@@ -93,6 +93,7 @@ MAIN_SRC := \
 	src/main/file_table.c \
 	src/main/particle.c \
 	src/main/partner.c \
+	src/main/tournament.c \
 	src/main/ui.c \
 	src/main/utils.c \
 	src/main/world_object.c

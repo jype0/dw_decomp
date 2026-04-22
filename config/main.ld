@@ -94,7 +94,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/utils.c.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/tournament.s.o(.text.*)
+        build/src/main/tournament.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/evl.c.o(.text.*)
         . = ALIGN(., 4);
@@ -204,7 +204,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/utils.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/tournament.s.o(.rodata.*)
+        build/src/main/tournament.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/evl.c.o(.rodata.*)
         . = ALIGN(., 4);
@@ -328,7 +328,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/utils.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/tournament.s.o(.data.*)
+        build/src/main/tournament.c.o(.data.*)
         . = ALIGN(., 4);
         build/src/main/evl.c.o(.data.*)
         . = ALIGN(., 4);

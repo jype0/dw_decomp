@@ -2,36 +2,26 @@
 #include <libetc.h>
 #include <libgpu.h>
 #include <dw/clock.h>
-#include <dw/dget.h>
 #include <dw/entity.h>
 #include <dw/pstat.h>
+#include <dw/tournament.h>
 #include <dw/trigger.h>
 #include <dw/ui.h>
 
 #include "common.h"
 
-#define TOURNAMENT_ARRAY_SIZE	30
-
-extern uint8_t TOURNAMENT_DATA[];
-extern char *TOURNAMENT_GRADES[];
-
-extern uint8_t *TOURNAMENT_ARRAY;
-extern uint8_t TOURNAMENT_SELECTED_COLUMN;
-extern uint8_t TOURNAMENT_SELECTED_ROW;
 extern char *TEXT_BUFFERS_PTR;
 
-extern uint16_t LOADED_SCRIPT_ID;
+extern uint16_t ACTIVE_MAP_SCRIPT;
 
 extern uint16_t SELECTION_MENU_STATE;
 
 extern int32_t MAIN_D_801353B0;
-extern uint8_t MAIN_D_80134FE8;
-extern uint8_t MAIN_D_80135008;
-extern uint16_t MAIN_D_80135014;
+extern uint8_t ACTIVE_INSTRUCTION;
+extern uint8_t SCRIPT_STATE_3;
+extern uint16_t SCRIPT_STATE_4;
 extern uint8_t *MAIN_D_80134FDC;
-extern uint8_t MAIN_D_80134FE8;
-
-int32_t minutesOfDay(void);
+extern uint8_t ACTIVE_INSTRUCTION;
 
 uint8_t readPStat(uint32_t address);
 
@@ -54,9 +44,6 @@ int32_t isTriggerSet(uint16_t trigger);
 uint8_t* getScript(uint32_t scriptId);
 uint8_t* getScriptSection(uint8_t* ptr, int32_t section);
 
-uint8_t *getScriptJumpTableEntry(int32_t, int32_t);
-uint8_t *readScriptJumpTableEntry(uint8_t *, int32_t);
-
 int32_t isXPressedAfterDialogue(void);
 int32_t isKeyDown(int32_t);
 void triggerBoxCloseFlag(int32_t);
@@ -73,19 +60,6 @@ void renderString(int32_t colorId,
 void renderVerticalLine(int32_t, int32_t, int32_t, int32_t);
 void renderHorizontalLine(int32_t, int32_t, int32_t, int32_t);
 void renderSelectionCursor(int16_t, int16_t, int16_t, int16_t, uint16_t);
-
-void fillEnabledTournamentTable(void);
-void buildScheduleLabels(void);
-void buildScheduleEntries(void);
-void initTournamentInfo(int32_t param_1);
-int32_t tournamentCheckFair(uint8_t value);
-int32_t isTournamentEnabled(uint8_t value);
-int32_t tournamentCheckEligible(uint8_t value);
-void renderTournamentTextbox(void);
-void tickTournamentSchedule(void);
-void renderTournamentSchedule(void);
-void tickTournamentInfo(void);
-void renderTournamentInfo(void);
 
 static void *dget_functions[] = {
 	initTournamentSchedule,
@@ -288,8 +262,8 @@ int32_t tournamentCheckFair(uint8_t value)
 	uint8_t *typePtr;
 	uint8_t type;
 
-	jumpTable = getScriptJumpTableEntry(10, value);
-	sectionPtr = readScriptJumpTableEntry(jumpTable, 2);
+	jumpTable = getCupDataJumpTable(10, value);
+	sectionPtr = getCupDataJumpTableEntry(jumpTable, 2);
 	typePtr = (uint8_t *)(sectionPtr + 2);
 
 	while ((type = *typePtr++) < 0xfe) {
@@ -315,9 +289,9 @@ int32_t isTournamentEnabled(uint8_t tournament)
 	int32_t trigIdx;
 	uint8_t trigger;
 
-	scriptEntry = getScriptJumpTableEntry(10, tournament);
-	reqSection = (uint8_t *)readScriptJumpTableEntry(scriptEntry, 1) + 2;
-	entrySection = (uint8_t *)readScriptJumpTableEntry(scriptEntry, 4);
+	scriptEntry = getCupDataJumpTable(10, tournament);
+	reqSection = (uint8_t *)getCupDataJumpTableEntry(scriptEntry, 1) + 2;
+	entrySection = (uint8_t *)getCupDataJumpTableEntry(scriptEntry, 4);
 	minTriggers = reqSection[0];
 	minWins = reqSection[1];
 	reqType = (uint32_t)reqSection[2];
@@ -357,7 +331,7 @@ int32_t isTournamentEnabled(uint8_t tournament)
 	case 1:
 		return isTriggerSet(TRIGGER_GRADE_A_CUP_WON);
 	case 2:
-		scriptEntry = (uint8_t *)getScript(LOADED_SCRIPT_ID);
+		scriptEntry = (uint8_t *)getScript(ACTIVE_MAP_SCRIPT);
 		triggerPtr = (uint8_t *)getScriptSection(scriptEntry, 0xb) + 2;
 		triggerCount = 0;
 		while ((trigger = *triggerPtr++) < 0xfe) {
@@ -371,7 +345,7 @@ int32_t isTournamentEnabled(uint8_t tournament)
 		}
 		break;
 	default:
-		triggerPtr = readScriptJumpTableEntry(scriptEntry, 4) + 2;
+		triggerPtr = getCupDataJumpTableEntry(scriptEntry, 4) + 2;
 		triggerCount = 0;
 		while ((trigger = *triggerPtr++) <= reqType) {
 			triggered = isTriggerSet(trigger + TRIGGER_OGRE_FORTRESS_OPENED);
@@ -395,8 +369,8 @@ int32_t tournamentCheckEligible(uint8_t tournament)
 	uint8_t *sectionPtr;
 	uint8_t *typePtr;
 
-	jumpTable = getScriptJumpTableEntry(10, tournament);
-	sectionPtr = readScriptJumpTableEntry(jumpTable, 3);
+	jumpTable = getCupDataJumpTable(10, tournament);
+	sectionPtr = getCupDataJumpTableEntry(jumpTable, 3);
 	typePtr = (uint8_t *)(sectionPtr + 2);
 
 	while ((type = *typePtr++) < 0xfe) {
@@ -556,7 +530,7 @@ void initTournamentSchedule(void)
 	case 0:
 		triggered = isTriggerSet(TRIGGER_TOURNAMENT_REGISTERED);
 		if (triggered != 0) {
-			MAIN_D_80134FE8 = 0;
+			ACTIVE_INSTRUCTION = 0;
 		} else {
 			TOURNAMENT_ARRAY = allocateArray(TOURNAMENT_ARRAY_SIZE);
 			memset(TOURNAMENT_ARRAY, 0xff, TOURNAMENT_ARRAY_SIZE);
@@ -571,7 +545,7 @@ void initTournamentSchedule(void)
 		break;
 	case 1:
 		freeArray(TOURNAMENT_ARRAY);
-		MAIN_D_80134FE8 = 0;
+		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
 		setInputRepeatMask(0);
@@ -595,15 +569,15 @@ void initTournamentSchedule(void)
 				unsetTrigger(TRIGGER_TOURNAMENT_OVERLEVELED);
 			}
 			SELECTION_MENU_STATE = 2;
-			MAIN_D_80135014 = 4;
-			MAIN_D_80135008 = 1;
+			SCRIPT_STATE_4 = 4;
+			SCRIPT_STATE_3 = 1;
 		}
 		break;
 	case 4:
 		showMapheadSelection(4, 0xfd, 2, &selectionResult, 0x4d8);
 		SELECTION_MENU_STATE = 2;
-		MAIN_D_80135014 = 5;
-		MAIN_D_80135008 = 2;
+		SCRIPT_STATE_4 = 5;
+		SCRIPT_STATE_3 = 2;
 		break;
 	case 5:
 		triggerBoxCloseFlag(3);

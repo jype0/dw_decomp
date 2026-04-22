@@ -177,6 +177,6 @@ INCLUDE_ASM("asm/main/nonmatchings/utils", unlearnMove);
 
 INCLUDE_ASM("asm/main/nonmatchings/utils", isTamerOnScreen);
 
-INCLUDE_ASM("asm/main/nonmatchings/utils", MAIN_func_800E6818);
+INCLUDE_ASM("asm/main/nonmatchings/utils", updateMapLightState);
 
-INCLUDE_ASM("asm/main/nonmatchings/utils", MAIN_func_800E6928);
+INCLUDE_ASM("asm/main/nonmatchings/utils", startTournament);
