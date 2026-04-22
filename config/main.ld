@@ -30,7 +30,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/asm/main/psyq/libgte.s.o(.text.*))
         . = ALIGN(., 4);
-        build/asm/main/model.s.o(.text.*)
+        build/src/main/model.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/world_object.c.o(.text.*)
         . = ALIGN(., 4);
@@ -144,7 +144,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/asm/main/psyq/libgte.s.o(.rodata.*))
         . = ALIGN(., 4);
-        build/asm/main/model.s.o(.rodata.*)
+        build/src/main/model.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/world_object.c.o(.rodata.*)
         . = ALIGN(., 4);
