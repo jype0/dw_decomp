@@ -3,6 +3,7 @@ FROM ubuntu:noble
 RUN apt-get update && \
     apt-get install -y \
     binutils-mipsel-linux-gnu \
+    cpp \
     gcc-mipsel-linux-gnu \
     git \
     make \
