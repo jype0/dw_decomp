@@ -5,3 +5,5 @@ subsegments:
   - [0x80134C4C, unk_0x80134C4C]
   - [0x80134CAC, fade]
   - [0x80134CC0, unk_0x80134CC0]
+  - [0x80134E54, file_queue]
+  - [0x80134E68, unk_0x80134E68]

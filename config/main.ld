@@ -86,7 +86,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/evolution.c.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/file_queue.s.o(.text.*)
+        build/src/main/file_queue.c.o(.text.*)
         . = ALIGN(., 4);
         build/asm/main/graphics2.s.o(.text.*)
         . = ALIGN(., 4);
@@ -196,7 +196,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/evolution.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/file_queue.s.o(.rodata.*)
+        build/src/main/file_queue.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/data/graphics2.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
@@ -320,7 +320,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/evolution.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/file_queue.s.o(.data.*)
+        build/src/main/file_queue.c.o(.data.*)
         . = ALIGN(., 4);
         build/asm/main/graphics2.s.o(.data.*)
         . = ALIGN(., 4);
@@ -392,7 +392,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/tmd_object.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/file_queue.sdata.s.o(.sdata.*)
+        build/src/main/file_queue.c.o(.sdata.*)
         . = ALIGN(., 4);
         build/asm/main/data/graphics2.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
@@ -429,6 +429,10 @@ SECTIONS
         . = ALIGN(., 4);
         build/build/generated/unk_0x80134CC0.sbss.s.o(.sbss.*)
         . = ALIGN(., 4);
+        build/src/main/file_queue.c.o(.sbss.*)
+        . = ALIGN(., 4);
+        build/build/generated/unk_0x80134E68.sbss.s.o(.sbss.*)
+        . = ALIGN(., 4);
         main_SBSS_END = .;
         main_SBSS_SIZE = ABSOLUTE(main_SBSS_END - main_SBSS_START);
         main_BSS_START = .;
@@ -451,6 +455,10 @@ SECTIONS
         build/src/main/world_object.c.o(.bss.*)
         . = ALIGN(., 4);
         build/build/generated/unk_0x80137A24.bss.s.o(.bss.*)
+        . = ALIGN(., 4);
+        build/src/main/file_queue.c.o(.bss.*)
+        . = ALIGN(., 4);
+        build/build/generated/unk_0x80154F80.bss.s.o(.bss.*)
         . = ALIGN(., 4);
         build/src/main/butterfly.c.o(.bss.*)
         . = ALIGN(., 4);

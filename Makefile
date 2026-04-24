@@ -60,7 +60,8 @@ MAIN_ASM_SRC := $(shell find $(ASM_DIR)/main -path '*.s' \
 
 MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134C4C.sbss.s \
-	$(BUILDDIR)/generated/unk_0x80134CC0.sbss.s
+	$(BUILDDIR)/generated/unk_0x80134CC0.sbss.s \
+	$(BUILDDIR)/generated/unk_0x80134E68.sbss.s
 
 MAIN_BSS := \
 	$(BUILDDIR)/generated/unk_0x801353F8.bss.s \
@@ -68,6 +69,7 @@ MAIN_BSS := \
 	$(BUILDDIR)/generated/libgte.bss.s \
 	$(BUILDDIR)/generated/model.bss.s \
 	$(BUILDDIR)/generated/unk_0x80137A24.bss.s \
+	$(BUILDDIR)/generated/unk_0x80154F80.bss.s \
 	$(BUILDDIR)/generated/butterfly.bss.s \
 	$(BUILDDIR)/generated/libmrcd.bss.s \
 	$(BUILDDIR)/generated/bubble.bss.s \
@@ -86,6 +88,7 @@ MAIN_SRC := \
 	src/main/evolution.c \
 	src/main/fade.c \
 	src/main/file.c \
+	src/main/file_queue.c \
 	src/main/fish.c \
 	src/main/evl.c \
 	src/main/kar.c \
