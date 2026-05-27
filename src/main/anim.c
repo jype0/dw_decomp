@@ -183,7 +183,8 @@ void readMomentumInstructions(MomentumData *base, int16_t **instrPtr)
 void animateEntityTexture(Entity *entity, EntityAnim *anim)
 {
     int16_t texX;
-    uint16_t frame;
+    int16_t frame;
+    int32_t temp;
     RECT rect;
 
     if (entity->type == 0x7F) {
@@ -198,10 +199,11 @@ void animateEntityTexture(Entity *entity, EntityAnim *anim)
         return;
     }
 
-    frame = PLAYTIME_FRAMES;
-    if (frame & 1) {
+    temp = (int16_t)PLAYTIME_FRAMES & 1;
+    if (temp) {
         return;
     }
+    frame = (int16_t)PLAYTIME_FRAMES;
 
     if (frame % 6 == 0) {
         frame = 2;
@@ -469,7 +471,7 @@ void tickAnimation(Entity *entity)
     int16_t *framePtr;
     int16_t *instrPtr;
     int16_t instruction;
-    int16_t opcode;
+    int32_t opcode;
 
     anim = &entity->anim;
     momentum = anim->momentum;
@@ -497,11 +499,31 @@ loop:
     opcode = instruction & 0xF000;
 
     if (opcode == 0x4000) {
-        *instrPtrPtr = instrPtr + 1;
-        instruction = **instrPtrPtr;
-        tickAnimation_loopSound(entity, instruction);
-        *instrPtrPtr += 1;
-    } else if (opcode == 0x3000) {
+        goto op_4000;
+    }
+    if (opcode == 0x3000) {
+        goto op_3000;
+    }
+    if (opcode == 0x2000) {
+        goto op_2000;
+    }
+    if (opcode == 0x1000) {
+        goto op_1000;
+    }
+    if (opcode == 0x0000) {
+        goto op_0000;
+    }
+    goto op_end;
+
+op_4000:
+    *instrPtrPtr = instrPtr + 1;
+    instruction = **instrPtrPtr;
+    tickAnimation_loopSound(entity, instruction);
+    *instrPtrPtr += 1;
+    goto op_end;
+
+op_3000:
+    {
         RECT rect;
         int16_t dx, dy;
 
@@ -516,28 +538,34 @@ loop:
         dy = anim->textureX + ((*instrPtrPtr)[0] & 0xFF);
         *instrPtrPtr += 1;
         MoveImage(&rect, dx, dy);
-    } else if (opcode == 0x2000) {
-        if (anim->loopCount != 0xFF) {
-            anim->loopCount--;
-        }
-        if (anim->loopCount == 0) {
-            *instrPtrPtr = instrPtr + 2;
-        } else {
-            *instrPtrPtr = instrPtr + 1;
-            *framePtr = **instrPtrPtr;
-            *instrPtrPtr = anim->loopStart;
-        }
-    } else if (opcode == 0x1000) {
-        anim->loopCount = instruction;
-        *instrPtrPtr = instrPtr + 1;
-        anim->loopStart = *instrPtrPtr;
-    } else if (opcode == 0x0000) {
-        *instrPtrPtr = instrPtr + 1;
-        readMomentumInstructions(momentum, instrPtrPtr);
+    }
+    goto op_end;
+
+op_2000:
+    if (anim->loopCount != 0xFF) {
+        anim->loopCount--;
+    }
+    if (anim->loopCount == 0) {
+        *instrPtrPtr = instrPtr + 2;
     } else {
         *instrPtrPtr = instrPtr + 1;
+        *framePtr = **instrPtrPtr;
+        *instrPtrPtr = anim->loopStart;
     }
+    goto op_end;
 
+op_1000:
+    anim->loopCount = instruction;
+    *instrPtrPtr = instrPtr + 1;
+    anim->loopStart = *instrPtrPtr;
+    goto op_end;
+
+op_0000:
+    *instrPtrPtr = instrPtr + 1;
+    readMomentumInstructions(momentum, instrPtrPtr);
+    /* fall through to op_end */
+
+op_end:
     if (*framePtr == anim->loopEndFrame) {
         goto loop;
     }
