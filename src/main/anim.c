@@ -187,18 +187,31 @@ void animateEntityTexture(Entity *entity, EntityAnim *anim)
     int32_t temp;
     RECT rect;
 
-    if (entity->type == 0x7F) {
-        texX = 0x2C;
-    } else if (entity->type == 0x45 || entity->type == 0x65) {
-        texX = 0x10;
-    } else if (entity->type == 0x8F || entity->type == 0x6A || entity->type == 0x15) {
-        texX = 0x28;
-    } else if (entity->type == 0x68 || entity->type == 0x85 || entity->type == 0x09) {
-        texX = 0x1E;
-    } else {
-        return;
-    }
+    if (entity->type == 0x7F) goto tex_2c;
+    if (entity->type == 0x45) goto tex_10;
+    if (entity->type == 0x65) goto tex_10;
+    if (entity->type == 0x8F) goto tex_28;
+    if (entity->type == 0x6A) goto tex_28;
+    if (entity->type == 0x15) goto tex_28;
+    if (entity->type == 0x68) goto tex_1e;
+    if (entity->type == 0x85) goto tex_1e;
+    if (entity->type != 0x09) return;
+    texX = 0x1E;
+    goto tex_done;
 
+tex_2c:
+    texX = 0x2C;
+    goto tex_done;
+tex_10:
+    texX = 0x10;
+    goto tex_done;
+tex_28:
+    texX = 0x28;
+    goto tex_done;
+tex_1e:
+    texX = 0x1E;
+
+tex_done:
     temp = (int16_t)PLAYTIME_FRAMES & 1;
     if (temp) {
         return;
@@ -234,11 +247,17 @@ void startAnimation(Entity *entity, int32_t animId)
     int entityType;
     int i;
 
-    animData = (int16_t *)entity->animPtr[animId];
-    if (animData == NULL) {
-        return;
-    }
+    {
+        int32_t *animTable;
+        int32_t animOffset;
 
+        animTable = entity->animPtr;
+        animOffset = animTable[animId];
+        if (animOffset == 0) {
+            return;
+        }
+        animData = (int16_t *)((uint8_t *)animTable + animOffset);
+    }
     instrPtr = animData;
     posData = entity->posData;
     momentum = entity->anim.momentum;
