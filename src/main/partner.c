@@ -3,6 +3,7 @@
 #include <dw/entity.h>
 #include <dw/evl.h>
 #include <dw/fade.h>
+#include <dw/main.h>
 #include <dw/map.h>
 #include <dw/params.h>
 #include <dw/partner.h>
@@ -28,8 +29,6 @@ extern uint16_t WILD_POOP_ID;
 extern uint8_t POOP_TO_EAT;
 extern int32_t SOME_SCRIPT_SYNC_BIT;
 extern int16_t MAIN_D_80134E34;
-
-extern uint8_t *GENERAL_BUFFER_PTR;
 
 extern int8_t MAIN_STATE;
 extern int8_t GAME_STATE;

@@ -4,12 +4,11 @@
 #include <string.h>
 
 #include <dw/file.h>
+#include <dw/main.h>
 #include <dw/sound.h>
 #include <dw/types.h>
 
 #include "common.h"
-
-#define GENERAL_BUFFER		((void *)0x80010000)
 
 extern char MAIN_D_80127E88[];
 extern char MAIN_D_80127E94[];

@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include <dw/file_queue.h>
+#include <dw/main.h>
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/types.h>
@@ -14,8 +15,6 @@ typedef struct {
 	int8_t isLoading;
 	int8_t pad;
 } SoundBuffer;
-
-#define GENERAL_BUFFER		((uint8_t *)0x80010000)
 
 #define NUM_SOUND_BUFFERS	10
 

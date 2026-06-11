@@ -6,6 +6,7 @@
 #include <dw/butterfly.h>
 #include <dw/entity.h>
 #include <dw/fade.h>
+#include <dw/main.h>
 #include <dw/map.h>
 #include <dw/math.h>
 #include <dw/params.h>
@@ -26,7 +27,6 @@ extern int32_t BUTTERFLY_ID;
 extern int32_t HAS_LEVELS_AWARD_PENDING;
 extern int32_t HAS_MEDAL_AWARD_PENDING;
 extern int32_t SOME_SCRIPT_SYNC_BIT;
-extern uint8_t *GENERAL_BUFFER_PTR;
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern int8_t INTERACTED_CHEST_STATE;
 extern uint8_t TARGET_MAP;
