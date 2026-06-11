@@ -3,7 +3,6 @@
 
 #include <dw/types.h>
 
-#pragma section sbss begin
 extern int8_t IS_GAMETIME_RUNNING;
 extern uint16_t CURRENT_FRAME;
 extern int16_t MINUTE;
@@ -15,7 +14,6 @@ extern uint16_t PLAYTIME_MINUTES;
 extern uint16_t PLAYTIME_HOURS;
 extern uint16_t SUBFRAME_COUNT;
 extern int16_t CLOCK_OFFSET_X;
-#pragma section sbss end
 
 void initializeClockData(void);
 void addClock(void);

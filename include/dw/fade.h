@@ -19,4 +19,5 @@ void renderFadeIn(int32_t arg0);
 void renderFade(uint8_t progress);
 void fadeToWhite(int32_t frames);
 void fadeFromWhite(int32_t frames);
+
 #endif

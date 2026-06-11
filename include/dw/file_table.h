@@ -2,6 +2,7 @@
 #define DW_FILE_TABLE_H
 
 #include <dw/types.h>
+
 extern int16_t ATAN_LOOKUP_TABLE[];
 extern int16_t SIN_LOOKUP_TABLE[];
 

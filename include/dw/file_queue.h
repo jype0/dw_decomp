@@ -14,7 +14,8 @@ void tickFileReadQueue(int32_t instanceId);
 void setFileReadCallback2(FileRequestCallback callback, void *param);
 
 int32_t addFileReadRequestPath(const char *path, uint8_t *buffer,
-			       uint8_t *isRunning, FileRequestCallback callback,
+			       uint8_t *isRunning,
+			       FileRequestCallback callback,
 			       void *callbackParam);
 int32_t addFileReadRequest(const char *path, uint8_t *buffer,
 			   uint8_t *isRunning, FileRequestCallback callback,
