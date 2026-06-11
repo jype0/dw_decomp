@@ -82,7 +82,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/entity_text.s.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/tmd_object.s.o(.text.*)
+        build/src/main/tmd_object.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/evolution.c.o(.text.*)
         . = ALIGN(., 4);
@@ -192,7 +192,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/entity_text.s.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/tmd_object.rodata.s.o(.rodata.*)
+        build/src/main/tmd_object.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/evolution.c.o(.rodata.*)
         . = ALIGN(., 4);
@@ -315,8 +315,6 @@ SECTIONS
         build/src/main/partner.c.o(.data.*)
         . = ALIGN(., 4);
         build/asm/main/entity_text.s.o(.data.*)
-        . = ALIGN(., 4);
-        build/asm/main/tmd_object.s.o(.data.*)
         . = ALIGN(., 4);
         build/src/main/evolution.c.o(.data.*)
         . = ALIGN(., 4);

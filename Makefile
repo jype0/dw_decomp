@@ -103,6 +103,7 @@ MAIN_SRC := \
 	src/main/sound.c \
 	src/main/sound_async.c \
 	src/main/tamer.c \
+	src/main/tmd_object.c \
 	src/main/tournament.c \
 	src/main/ui.c \
 	src/main/utils.c \
