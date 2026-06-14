@@ -62,6 +62,7 @@ MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134C4C.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134CC0.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134D9C.sbss.s \
+	$(BUILDDIR)/generated/unk_0x80134E50.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E68.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E90.sbss.s
 

@@ -304,6 +304,8 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/map.data.s.o(.data.*)
         . = ALIGN(., 4);
+        build/src/main/tmd_object.c.o(.data.*)
+        . = ALIGN(., 4);
         build/asm/main/data/evolution.data.s.o(.data.*)
         . = ALIGN(., 4);
         build/asm/main/data/utils.data.s.o(.data.*)
@@ -388,7 +390,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/entity_text.sdata.s.o(.sdata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/tmd_object.sdata.s.o(.sdata.*)
+        build/src/main/tmd_object.c.o(.sdata.*)
         . = ALIGN(., 4);
         build/src/main/file_queue.c.o(.sdata.*)
         . = ALIGN(., 4);
@@ -431,6 +433,10 @@ SECTIONS
         . = ALIGN(., 4);
         build/build/generated/unk_0x80134D9C.sbss.s.o(.sbss.*)
         . = ALIGN(., 4);
+        KEEP(build/src/main/tmd_object.c.o(.sbss.*))
+        . = ALIGN(., 4);
+        build/build/generated/unk_0x80134E50.sbss.s.o(.sbss.*)
+        . = ALIGN(., 4);
         build/src/main/file_queue.c.o(.sbss.*)
         . = ALIGN(., 4);
         build/build/generated/unk_0x80134E68.sbss.s.o(.sbss.*)
@@ -465,6 +471,8 @@ SECTIONS
         build/src/main/sound.c.o(.bss.*)
         . = ALIGN(., 4);
         KEEP(build/build/generated/unk_0x8014DBEC.bss.s.o(.bss.*))
+        . = ALIGN(., 4);
+        build/src/main/tmd_object.c.o(.bss.*)
         . = ALIGN(., 4);
         build/src/main/file_queue.c.o(.bss.*)
         . = ALIGN(., 4);

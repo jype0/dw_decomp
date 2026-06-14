@@ -16,7 +16,7 @@ typedef struct {
 	uint8_t special[3];
 	uint8_t dropItem;
 	uint8_t dropChance;
-	int8_t moves[16];
+	uint8_t moves[16];
 	uint8_t padding;
 } DigimonPara;
 

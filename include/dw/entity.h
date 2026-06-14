@@ -51,7 +51,7 @@ typedef struct {
 	PositionData *posData;
 	int32_t *animPtr;
 	EntityAnim anim;
-	uint8_t isOnMap;
+	int8_t isOnMap;
 	int8_t isOnScreen;
 	uint8_t flatSprite;
 	uint8_t flatTimer;
@@ -82,6 +82,13 @@ typedef struct {
 } DigimonEntity;
 
 typedef struct {
+	Entity entity;
+	int8_t tamerLevel;
+	uint8_t raisedCount;
+	uint16_t padding;
+} TamerEntity;
+
+typedef struct {
 	DigimonEntity digimonEntity;
 	uint32_t learnedMoves[2];
 	uint32_t unk1;
@@ -92,14 +99,20 @@ typedef struct {
 } PartnerEntity;
 
 typedef struct {
-	Entity entity;
-	int8_t tamerLevel;
-	uint8_t raisedCount;
-	uint16_t padding;
-} TamerEntity;
+	DigimonEntity digimonEntity;
+	SVECTOR flee;
+	int16_t bits;
+	uint8_t unk1;
+	int8_t unk1_2;
+	uint8_t unk2;
+	uint8_t scriptId;
+	uint8_t autotalk;
+	uint8_t unk5;
+} NPCEntity;
 
 extern Entity *ENTITY_TABLE[ENTITY_MAX];
-extern PartnerEntity PARTNER_ENTITY;
 extern TamerEntity TAMER_ENTITY;
+extern PartnerEntity PARTNER_ENTITY;
+extern NPCEntity NPC_ENTITIES[8];
 
 #endif

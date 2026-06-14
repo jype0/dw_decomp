@@ -7,6 +7,8 @@ subsegments:
   - [0x80134CC0, unk_0x80134CC0]
   - [0x80134D90, sound]
   - [0x80134D9C, unk_0x80134D9C]
+  - [0x80134E38, tmd_object]
+  - [0x80134E50, unk_0x80134E50]
   - [0x80134E54, file_queue]
   - [0x80134E68, unk_0x80134E68]
   - [0x80134E8C, sound_async]

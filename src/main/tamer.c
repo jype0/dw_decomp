@@ -114,15 +114,6 @@ typedef struct {
 extern Chest CHEST_ARRAY[8];
 
 typedef struct {
-	uint8_t autotalk;
-	uint8_t name[3];
-	uint16_t scriptId;
-	DigimonEntity digimonEntity;
-} NpcEntity;
-
-extern NpcEntity NPC_ENTITIES[8];
-
-typedef struct {
 	int16_t spawnX[10];
 	int16_t spawnY[10];
 	int16_t spawnZ[10];
