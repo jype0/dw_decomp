@@ -50,7 +50,7 @@ void triggerBoxCloseFlag(int32_t);
 void playSound(int16_t, int16_t);
 void writePStat(int32_t id, uint8_t value);
 
-void drawString(const char *str, uint32_t x, uint32_t y);
+void drawString(char *str, uint32_t x, uint32_t y);
 void renderString(int32_t colorId,
 		  int32_t posX, int32_t posY,
 		  int16_t uvWidth, int16_t uvHeight,

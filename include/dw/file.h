@@ -14,15 +14,14 @@ typedef struct {
 	uint32_t unk5;
 } FileLookup;
 
-int32_t lookupFileTable(FileLookup *lookup, const char *path);
-uint32_t lookupFileSize(const char *path);
-int32_t loadTextureFile(const char *path, uint32_t *outTPage,
-			uint32_t *outClut);
-int32_t readFile(const char *path, void *buffer);
+int32_t lookupFileTable(FileLookup *lookup, char *path);
+uint32_t lookupFileSize(char *path);
+int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut);
+int32_t readFile(char *path, void *buffer);
 int32_t loadTIMFile(char *path, void *buffer);
-int32_t loadStackedTIMEntry(const char *path, void *buffer, int32_t offset,
+int32_t loadStackedTIMEntry(char *path, void *buffer, int32_t offset,
 			    int32_t sectors);
-int32_t readFileSectors(const char *path, void *buffer, int32_t offset,
+int32_t readFileSectors(char *path, void *buffer, int32_t offset,
 			int32_t sectors);
 
 #endif

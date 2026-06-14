@@ -36,7 +36,7 @@ METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections \
 
 OBJDIFF ?= bin/objdiff-cli-linux-x86_64
 
-INC := -Iexternal/psyq_headers/include -Iinclude
+INC := -Iexternal/psyq_headers/mw_lib41/include -Iinclude
 
 LDSCRIPT := \
 	config/overlay.ld \

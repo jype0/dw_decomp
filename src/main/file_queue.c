@@ -170,7 +170,7 @@ void setFileReadCallback2(FileRequestCallback callback, void *param)
 	FILE_QUEUE_CALLBACK_PARAM = param;
 }
 
-int32_t addFileReadRequestPath(const char *path, uint8_t *buffer,
+int32_t addFileReadRequestPath(char *path, uint8_t *buffer,
 			       uint8_t *isRunning,
 			       FileRequestCallback callback,
 			       void *callbackParam)
@@ -179,9 +179,9 @@ int32_t addFileReadRequestPath(const char *path, uint8_t *buffer,
 				  callbackParam, NULL, -1);
 }
 
-int32_t addFileReadRequest(const char *path, uint8_t *buffer,
-			   uint8_t *isRunning, FileRequestCallback callback,
-			   void *callbackParam, CdlLOC *loc, int32_t size)
+int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning,
+			   FileRequestCallback callback, void *callbackParam,
+			   CdlLOC *loc, int32_t size)
 {
 	FileRequest *slot;
 	int32_t result;
@@ -243,9 +243,8 @@ int32_t addFileReadRequest(const char *path, uint8_t *buffer,
 	return result;
 }
 
-int32_t addFileReadRequestSection(const char *path, uint8_t *buffer,
-				  int32_t offset, int32_t sectors,
-				  uint8_t *isRunning,
+int32_t addFileReadRequestSection(char *path, uint8_t *buffer, int32_t offset,
+				  int32_t sectors, uint8_t *isRunning,
 				  FileRequestCallback callback,
 				  void *callbackParam)
 {
@@ -263,7 +262,7 @@ int32_t addFileReadRequestSection(const char *path, uint8_t *buffer,
 	return -1;
 }
 
-int32_t addFileReadRequestLookup(const char *path, uint8_t *buffer,
+int32_t addFileReadRequestLookup(char *path, uint8_t *buffer,
 				 uint8_t *isRunning,
 				 FileRequestCallback callback,
 				 void *callbackParam)

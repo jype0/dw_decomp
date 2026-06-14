@@ -16,5 +16,5 @@ bin/metrowrap/mw \
     -dll "bin/cc_mips/cc_mips_40.dll" \
     -O4 -sdata 8 -Werror -requireprotos -gccincludes \
     -lang c -Cpp_exceptions off -RTTI off \
-    -Iexternal/psyq_headers/include -Iinclude \
+    -Iexternal/psyq_headers/mw_lib41/include -Iinclude \
     "$INPUT"

@@ -34,7 +34,7 @@ char SOUND_SB_PATH[] = "SOUND\\SB";
 int32_t LOAD_SOUND_COMPLETE_STATE;
 
 void loadFullVHB(int32_t vabId, char *path, uint8_t *buffer);
-void concatStrings2(char *dst, const char *s1, const char *s2);
+void concatStrings2(char *dst, char *s1, char *s2);
 int32_t loadSoundFinishCallback(void *param);
 void loadVHBFile(int32_t vabId, char *path, uint8_t *buffer, int32_t offset,
 		 int32_t sectors);
@@ -77,7 +77,7 @@ void loadFullVHB(int32_t vabId, char *path, uint8_t *buffer)
 				 loadSoundFinishCallback, (void *)vabId);
 }
 
-void concatStrings2(char *dst, const char *s1, const char *s2)
+void concatStrings2(char *dst, char *s1, char *s2)
 {
 	while (*s1) {
 		*dst++ = *s1++;

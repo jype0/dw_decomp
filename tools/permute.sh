@@ -93,7 +93,7 @@ echo "Generating permuter/$FUNCTION_NAME/target.s"
 } > "permuter/$FUNCTION_NAME/target.s"
 
 echo "Preprocessing permuter/$FUNCTION_NAME/base.c"
-mipsel-linux-gnu-gcc -E -P -Iexternal/psyq_headers/include -Iinclude "$C_FILE" > "permuter/$FUNCTION_NAME/base.c"
+mipsel-linux-gnu-gcc -E -P -Iexternal/psyq_headers/mw_lib41/include -Iinclude "$C_FILE" > "permuter/$FUNCTION_NAME/base.c"
 python3 external/decomp-permuter/strip_other_fns.py "permuter/$FUNCTION_NAME/base.c" "$FUNCTION_NAME"
 
 echo "Assembling permuter/$FUNCTION_NAME/target.o"
@@ -102,7 +102,7 @@ mipsel-linux-gnu-gcc -c -g -Wall -Wextra -Werror -std=c99 -Os -G0 -mno-gpopt \
 	-fno-pic -mno-shared -mno-abicalls -mno-llsc \
 	-fno-stack-protector -nostdlib -ffreestanding \
 	-Xassembler -no-pad-sections \
-	-Iexternal/psyq_headers/include -Iinclude \
+	-Iexternal/psyq_headers/mw_lib41/include -Iinclude \
 	-o "permuter/$FUNCTION_NAME/target.o" "permuter/$FUNCTION_NAME/target.s"
 
 # Run decomp-permuter if the --run flag is set

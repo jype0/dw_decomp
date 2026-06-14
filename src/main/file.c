@@ -5,20 +5,17 @@
 #include <sys/types.h>
 #include <dw/file.h>
 #include <dw/file_table.h>
+#include <dw/main.h>
 
 #include "common.h"
 
-
-/* TODO: Move to a header file */
-#define TEXTURE_BUFFER		0x80088800
-
-static void empty_800a31f0(const char *path)
+static void empty_800a31f0(char *path)
 {
 }
 
-int32_t lookupFileTable(FileLookup *lookup, const char *path)
+int32_t lookupFileTable(FileLookup *lookup, char *path)
 {
-	const char *filename;
+	char *filename;
 	int32_t result;
 	FileEntry *entry;
 
@@ -46,7 +43,7 @@ int32_t lookupFileTable(FileLookup *lookup, const char *path)
 	}
 }
 
-uint32_t lookupFileSize(const char *path)
+uint32_t lookupFileSize(char *path)
 {
 	FileLookup lookup;
 
@@ -55,8 +52,7 @@ uint32_t lookupFileSize(const char *path)
 	return lookup.size;
 }
 
-int32_t loadTextureFile(const char *path, uint32_t *outTPage,
-			uint32_t *outClut)
+int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut)
 {
 	GsIMAGE image;
 	RECT rect;
@@ -92,7 +88,7 @@ int32_t loadTextureFile(const char *path, uint32_t *outTPage,
 	return result;
 }
 
-int32_t readFile(const char *path, void *buffer)
+int32_t readFile(char *path, void *buffer)
 {
 	FileLookup lookup;
 	uint32_t sector;
@@ -144,7 +140,7 @@ int32_t loadTIMFile(char *path, void *buffer)
 	return result;
 }
 
-int32_t loadStackedTIMEntry(const char *path, void *buffer, int32_t offset,
+int32_t loadStackedTIMEntry(char *path, void *buffer, int32_t offset,
 			    int32_t sectors)
 {
 	GsIMAGE image;
@@ -171,7 +167,7 @@ int32_t loadStackedTIMEntry(const char *path, void *buffer, int32_t offset,
 	return result;
 }
 
-int32_t readFileSectors(const char *path, void *buffer, int32_t offset,
+int32_t readFileSectors(char *path, void *buffer, int32_t offset,
 			int32_t sectors)
 {
 	FileLookup lookup;
