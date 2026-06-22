@@ -122,7 +122,25 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/vs.s.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/script.s.o(.text.*)
+        build/src/main/script_common.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr10.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr28.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr64.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_anim.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_music.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_engine.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_tick.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_ops.c.o(.text.*)
+        . = ALIGN(., 4);
+        build/src/main/script_draw.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/main_menu.c.o(.text.*)
         . = ALIGN(., 4);
@@ -232,7 +250,25 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/vs.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/script.rodata.s.o(.rodata.*)
+        build/src/main/script_common.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_tick.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr10.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_anim.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_ops.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr28.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_music.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr64.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_engine.c.o(.rodata.*)
+        . = ALIGN(., 4);
+        build/src/main/script_draw.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/data/main_menu.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
@@ -356,7 +392,25 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/vs.s.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/script.s.o(.data.*)
+        build/src/main/script_common.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr10.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr28.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_instr64.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_music.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_anim.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_engine.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_tick.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_ops.c.o(.data.*)
+        . = ALIGN(., 4);
+        build/src/main/script_draw.c.o(.data.*)
         . = ALIGN(., 4);
         build/src/main/main_menu.c.o(.data.*)
         . = ALIGN(., 4);

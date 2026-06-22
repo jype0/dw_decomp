@@ -116,6 +116,16 @@ MAIN_SRC := \
 	src/main/particle.c \
 	src/main/partner.c \
 	src/main/partner_impl.c \
+	src/main/script_common.c \
+	src/main/script_instr10.c \
+	src/main/script_instr28.c \
+	src/main/script_instr64.c \
+	src/main/script_music.c \
+	src/main/script_anim.c \
+	src/main/script_engine.c \
+	src/main/script_tick.c \
+	src/main/script_ops.c \
+	src/main/script_draw.c \
 	src/main/sound.c \
 	src/main/sound_async.c \
 	src/main/tamer.c \

@@ -747,7 +747,7 @@ void unloadMapParts(void)
 	emptyChests();
 }
 
-int32_t tickRotateDoor(int32_t instance, int32_t target)
+int32_t tickRotateDoor(int16_t instance, int8_t target)
 {
 	switch (MAP_3D_OBJECTS[instance].modelId) {
 	case 0:

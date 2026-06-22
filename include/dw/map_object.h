@@ -42,7 +42,7 @@ void loadTrainingPoop(void);
 void spawnChest(int32_t posX, int32_t posY, int32_t posZ, int32_t rotation,
 		uint8_t item, uint16_t trigger);
 void unloadMapParts(void);
-int32_t tickRotateDoor(int32_t instance, int32_t target);
+int32_t tickRotateDoor(int16_t instance, int8_t target);
 void drawObject(GsDOBJ2 *obj, GsOT *ot, int32_t flag);
 int32_t tickOpenChestTray(int32_t chestId);
 int32_t tickCloseChestTray(int32_t chestId);
