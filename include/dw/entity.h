@@ -110,7 +110,7 @@ typedef struct {
 	uint32_t learnedMoves[2];
 	uint32_t unk1;
 	uint32_t unk2;
-	uint8_t name[20];
+	char name[20];
 	int8_t lives;
 	int8_t pad[3];
 } PartnerEntity;

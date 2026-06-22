@@ -11,6 +11,8 @@ rom:0x00000B88 reloc:MIPS_HI16 symbol:MAIN_jtbl_801353FC
 rom:0x00000B8C reloc:MIPS_LO16 symbol:MAIN_jtbl_801353FC
 rom:0x00000B94 reloc:MIPS_HI16 symbol:MAIN_jtbl_80135400
 rom:0x00000B98 reloc:MIPS_LO16 symbol:MAIN_jtbl_80135400
+rom:0x0000A750 reloc:MIPS_NONE symbol:NONE
+rom:0x0000A758 reloc:MIPS_NONE symbol:NONE
 //rom:0x00013318 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10000
 //rom:0x00013324 reloc:MIPS_LO16 symbol:TEXTURE_BUFFER
 //rom:0x00013328 reloc:MIPS_HI16 symbol:TEXTURE_BUFFER addend:-0x10004
@@ -303,8 +305,8 @@ rom:0x00074014 reloc:MIPS_26 symbol:TRN_func_8008C068
 rom:0x00074024 reloc:MIPS_26 symbol:TRN_func_8008B0D0
 rom:0x00074034 reloc:MIPS_26 symbol:TRN_func_8008CE90
 rom:0x00074158 reloc:MIPS_26 symbol:DOO2_func_8007189C
-rom:0x00074370 reloc:MIPS_HI16 symbol:MAIN_D_80058000 addend:-0x10000
-rom:0x0007437C reloc:MIPS_LO16 symbol:MAIN_D_80058000
+//rom:0x00074370 reloc:MIPS_HI16 symbol:MAIN_D_80058000 addend:-0x10000
+//rom:0x0007437C reloc:MIPS_LO16 symbol:MAIN_D_80058000
 rom:0x00074424 reloc:MIPS_26 symbol:EAB_func_8006148C
 rom:0x00075DDC reloc:MIPS_26 symbol:initTournamentSchedule
 rom:0x00075E4C reloc:MIPS_26 symbol:DOO2_func_80071934
@@ -361,4 +363,4 @@ rom:0x0009B9A8 reloc:MIPS_32 symbol:EAB_D_80060000
 rom:0x000A48D8 reloc:MIPS_32 symbol:STD_D_8007AAB0
 rom:0x000A4A20 reloc:MIPS_32 symbol:KAR_D_8005ABB8
 rom:0x000A4B10 reloc:MIPS_32 symbol:VS_D_80070B1C
-rom:0x000A4C28 reloc:MIPS_32 symbol:MAIN_D_80058000
+//rom:0x000A4C28 reloc:MIPS_32 symbol:MAIN_D_80058000

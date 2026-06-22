@@ -247,8 +247,8 @@ void buildScheduleEntries(void)
 	}
 
 	textBox = &TEXT_BOX_DATA[2];
-	textBox->unk_0x15 = 1;
-	++textBox->unk_0x11;
+	textBox->pageReady = 1;
+	++textBox->writeCount;
 }
 
 extern void MAIN_func_80101EF8(int32_t, int32_t);
@@ -388,7 +388,7 @@ void renderTournamentTextbox(void)
 	int16_t posX;
 	int16_t posY;
 
-	uvY = TEXT_BOX_DATA[1].unk_0x20 * 12;
+	uvY = TEXT_BOX_DATA[1].vramRow * 12;
 	posX = UI_BOX_DATA[1].finalPos.x + 6;
 	posY = UI_BOX_DATA[1].finalPos.y + 3;
 
@@ -504,7 +504,7 @@ void renderTournamentInfo(void)
 	int16_t posY;
 	int32_t i;
 
-	uvY = TEXT_BOX_DATA[3].unk_0x20 * 12;
+	uvY = TEXT_BOX_DATA[3].vramRow * 12;
 	posX = UI_BOX_DATA[3].finalPos.x + 6;
 	posY = UI_BOX_DATA[3].finalPos.y + 3;
 

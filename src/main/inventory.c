@@ -33,7 +33,6 @@ void startAnimation(Entity *e, int32_t anim);
 void startFeedingItem(uint8_t type);
 void startThrowingItem(void);
 void removeItem(int32_t type, uint32_t amount);
-extern uint8_t ITEM_PARA[];
 extern char MAIN_D_801343BC;
 extern char MAIN_D_801343C4;
 extern char MAIN_D_801343CC;
@@ -131,8 +130,8 @@ void *inventory_order_anchor[] = {
 
 int32_t MAIN_func_800DAAF8(int32_t mode)
 {
+	Item *item;
 	uint8_t t;
-	char *p;
 
 	if ((mode == 1) || (mode == 2)) {
 		return 9;
@@ -140,19 +139,19 @@ int32_t MAIN_func_800DAAF8(int32_t mode)
 	t = INVENTORY_ITEM_TYPES[INVENTORY_POINTER];
 	if (mode == 0) {
 		if (t != 0xFF) {
-			p = (char *)&ITEM_PARA[t << 5];
+			item = &ITEM_PARA[t];
 			switch (GAME_STATE) {
 			case 0:
-				if ((((uint8_t *)p)[0x1C] == 0) ||
-				    (((uint8_t *)p)[0x1C] == 2)) {
+				if ((item->itemColor == 0) ||
+				    (item->itemColor == 2)) {
 					return 9;
 				}
 				return 0xA;
 			case 1:
 			case 2:
 			case 3:
-				if ((((uint8_t *)p)[0x1C] == 1) ||
-				    (((uint8_t *)p)[0x1C] == 2)) {
+				if ((item->itemColor == 1) ||
+				    (item->itemColor == 2)) {
 					return 9;
 				}
 				return 0xA;
@@ -164,7 +163,8 @@ int32_t MAIN_func_800DAAF8(int32_t mode)
 			return 0xA;
 		}
 		if (t != 0xFF) {
-			if (((uint8_t *)&ITEM_PARA[t << 5])[0x1D] == 1) {
+			item = &ITEM_PARA[t];
+			if (item->droppable == 1) {
 				return 9;
 			}
 			return 0xA;
@@ -419,8 +419,8 @@ void MAIN_func_800DC75C(void)
 
 void MAIN_func_800DC788(void)
 {
+	Item *item;
 	uint8_t t;
-	char *p;
 
 	if ((MAIN_D_80134E04 != 0xB) && (MAIN_D_80134E04 != 0xC) &&
 	    (MAIN_D_80134E04 != 0xD) && (UI_BOX_DATA[3].state == 0)) {
@@ -428,17 +428,17 @@ void MAIN_func_800DC788(void)
 		case 0:
 			t = INVENTORY_ITEM_TYPES[INVENTORY_POINTER];
 			if (t != 0xFF) {
-				p = (char *)&ITEM_PARA[INVENTORY_ITEM_TYPES[INVENTORY_POINTER] << 5];
+				item = &ITEM_PARA[INVENTORY_ITEM_TYPES[INVENTORY_POINTER]];
 				switch (GAME_STATE) {
 				case 0:
-					if ((((uint8_t *)p)[0x1C] == 0) ||
-					    (((uint8_t *)p)[0x1C] == 2)) {
+					if ((item->itemColor == 0) ||
+					    (item->itemColor == 2)) {
 						MAIN_D_80134E04 = 5;
 					}
 					break;
 				case 1:
-					if ((((uint8_t *)p)[0x1C] == 1) ||
-					    (((uint8_t *)p)[0x1C] == 2)) {
+					if ((item->itemColor == 1) ||
+					    (item->itemColor == 2)) {
 						MAIN_D_80134E04 = 5;
 					}
 					break;
@@ -456,9 +456,7 @@ void MAIN_func_800DC788(void)
 		case 3:
 			if (GAME_STATE == 0) {
 				t = INVENTORY_ITEM_TYPES[INVENTORY_POINTER];
-				if ((t != 0xFF) &&
-				    (((uint8_t *)((char *)ITEM_PARA + 0x1D))
-					     [INVENTORY_ITEM_TYPES[INVENTORY_POINTER] << 5] == 1)) {
+				if ((t != 0xFF) && ITEM_PARA[INVENTORY_ITEM_TYPES[INVENTORY_POINTER]].droppable == 1) {
 					MAIN_D_80134E04 = 0xE;
 				}
 			}

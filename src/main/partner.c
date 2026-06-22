@@ -879,7 +879,7 @@ int32_t getPartnerState(void)
 	return PARTNER_STATE;
 }
 
-void startPartnerAnimation(int8_t animId)
+void startPartnerAnimation(int32_t animId)
 {
 	startAnimation(&PARTNER_ENTITY.digimonEntity.entity, animId);
 }

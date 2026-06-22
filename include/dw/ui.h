@@ -21,21 +21,21 @@ typedef struct {
 } UIBoxData;
 
 typedef struct {
-	RECT rect1;
-	RECT rect2;
-	uint8_t unk_0x10;
-	uint8_t unk_0x11;
-	uint8_t unk_0x12;
-	uint8_t unk_0x13;
-	uint8_t unk_0x14;
-	uint8_t unk_0x15;
-	uint8_t unk_0x16;
-	uint8_t unk_0x17;
-	uint32_t unk_0x18;
-	uint32_t unk_0x1c;
-	uint32_t unk_0x20;
-	uint32_t unk_0x24;
-	uint32_t unk_0x28;
+	RECT origin;
+	RECT rect;
+	uint8_t flags;
+	uint8_t writeCount;
+	uint8_t renderCount;
+	uint8_t flipCount;
+	uint8_t registered;
+	uint8_t pageReady;
+	uint8_t idle;
+	uint8_t doubleBuffered;
+	uint32_t backPage;
+	uint32_t vramMode;
+	uint32_t vramRow;
+	uint32_t vramRows;
+	uint32_t writeRow;
 	TickFunction tick;
 	RenderFunction render;
 } TextBoxData;

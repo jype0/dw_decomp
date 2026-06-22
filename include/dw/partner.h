@@ -33,7 +33,7 @@ void setPartnerState(int8_t state);
 int32_t checkEatDistance(int32_t distance);
 void MAIN_func_800DF5A0(void);
 int32_t getPartnerState(void);
-void startPartnerAnimation(int8_t animId);
+void startPartnerAnimation(int32_t animId);
 void callDigimonRoutine(int32_t routine);
 int32_t MAIN_func_800DF7F8(void);
 
