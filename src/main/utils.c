@@ -1,36 +1,8 @@
+#include <dw/combat.h>
 #include <dw/entity.h>
 #include <dw/utils.h>
 
 #include "common.h"
-
-typedef struct {
-	int32_t statusFxId;
-	int32_t effectSlot[4];
-	int32_t unk11;
-	int16_t finisherGoal;
-	int16_t finisherProgress;
-	int16_t poisonTimer;
-	int16_t confusionTimer;
-	int16_t stunTimer;
-	int16_t flatTimer;
-	int16_t flatAttackTimer;
-	int16_t invulnerableTimer;
-	int16_t cooldown;
-	int16_t senileTimer;
-	int16_t unk15;
-	int16_t hpDamageBuffer;
-	int16_t mpDamageBuffer;
-	int16_t speedBuffer;
-	int16_t flags;
-	uint8_t moveRange;
-	uint8_t targetId;
-	uint8_t queuedAnim;
-	uint8_t buffsRemaining;
-	uint8_t buffPrioTimer;
-	uint8_t unk16;
-	uint8_t table1[150];
-	uint8_t table2[150];
-} FighterData;
 
 void damageTick(FighterData* fighter, Stats* stats);
 void sortItemsById(uint8_t *data, int32_t count);
@@ -40,27 +12,27 @@ INCLUDE_ASM("asm/main/nonmatchings/utils", pauseFrame);
 void damageTick(FighterData* fighter, Stats* stats)
 {
 	if (fighter->hpDamageBuffer > 999) {
-		stats->currentHP -= 900;
+		stats->current.currentHP -= 900;
 		fighter->hpDamageBuffer -= 900;
 	}
 
 	if (fighter->hpDamageBuffer > 99) {
-		stats->currentHP -= 80;
+		stats->current.currentHP -= 80;
 		fighter->hpDamageBuffer -= 80;
 	}
 
 	if (fighter->hpDamageBuffer > 9) {
-		stats->currentHP -= 6;
+		stats->current.currentHP -= 6;
 		fighter->hpDamageBuffer -= 6;
 	}
 
 	if (fighter->hpDamageBuffer > 0) {
-		stats->currentHP -= 1;
+		stats->current.currentHP -= 1;
 		fighter->hpDamageBuffer -= 1;
 	}
 
-	if (stats->currentHP <= 0) {
-		stats->currentHP = 0;
+	if (stats->current.currentHP <= 0) {
+		stats->current.currentHP = 0;
 		fighter->hpDamageBuffer = 0;
 	}
 }

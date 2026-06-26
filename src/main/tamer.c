@@ -268,7 +268,7 @@ void renderAwardSomethingTextbox(int32_t instanceId);
 void setTamerDirection(int32_t direction);
 void setupTamerOnWarp(int32_t x, int32_t y, int32_t z, int32_t rotationY);
 int32_t tickEntitySetRotation(uint32_t scriptId, int16_t rotationY);
-int32_t getMapRotation(void);
+int16_t getMapRotation(void);
 Entity *getEntityFromScriptId(uint8_t *scriptId);
 int32_t startBattle(int16_t instanceId);
 void advanceBattleTime(int32_t result);
@@ -480,13 +480,15 @@ void tickTamer(int16_t instanceId)
 	}
 }
 
-int32_t getMapRotation(void)
+int16_t getMapRotation(void)
 {
 	int16_t dz;
+	int16_t dx;
 
-	dz = (int16_t)(MAIN_D_80185BB0[0] - MAIN_D_80185BBC[0]);
-	return (int16_t)_atan(dz,
-	                      (int16_t)(GS_VIEWPOINT.vpx - MAIN_D_80185BB4[0]));
+	dz = GS_VIEWPOINT.vpz - GS_VIEWPOINT.vrz;
+	dx = GS_VIEWPOINT.vpx - GS_VIEWPOINT.vrx;
+
+	return _atan(dz, dx);
 }
 
 void setTamerDirection(int32_t direction)

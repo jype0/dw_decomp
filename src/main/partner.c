@@ -3,6 +3,7 @@
 #include <dw/entity.h>
 #include <dw/evl.h>
 #include <dw/fade.h>
+#include <dw/item.h>
 #include <dw/main.h>
 #include <dw/map.h>
 #include <dw/params.h>
@@ -12,7 +13,6 @@
 #include <dw/utils.h>
 
 #include "common.h"
-
 
 extern int32_t HAS_BUTTERFLY;
 extern int32_t BUTTERFLY_ID;
@@ -41,17 +41,6 @@ extern int32_t TARGET_MENU;
 extern int32_t MEMORY_CARD_ID;
 extern int32_t MEMORY_CARD_SLOT;
 extern int32_t CHECKED_MEMORY_CARD;
-
-typedef struct
-{
-	SVECTOR spriteLocation;
-	int32_t type;
-} WorldItem;
-
-typedef struct {
-	WorldItem worldItem;
-	int32_t time;
-} TamerItem;
 
 extern TamerItem TAMER_ITEM;
 extern VECTOR STORED_TAMER_POS;

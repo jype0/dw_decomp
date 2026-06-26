@@ -30,7 +30,7 @@ int32_t calculateRequirementScore(int32_t current, int16_t target,
                                   int8_t currentBest);
 int32_t getNumMasteredMoves(void);
 
-static void __garbage__(Stats* stats) { // NOLINT
+static void __garbage__(BaseStats* stats) { // NOLINT
   int16_t statsArray[6];
   int16_t statsArray2[6];
   statsArray[0] = statsArray2[0] = stats->hp / 10;
@@ -121,27 +121,27 @@ int16_t getRookieEvolutionTarget(int32_t currentDigimon) {
       int32_t targetId = *targetPtr;
 
       if (EVO_REQ_DATA[targetId].hp != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.hp / 10;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.hp / 10;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].mp != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.mp / 10;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.mp / 10;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].offense != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.off;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.off;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].defense != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.def;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.def;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].speed != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.speed;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.speed;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].brain != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.brain;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.brain;
         statCount++;
       }
 
@@ -191,27 +191,27 @@ int16_t getChampionEvolutionTarget(int32_t currentDigimon) {
       int32_t targetId = *targetPtr;
 
       if (EVO_REQ_DATA[targetId].hp != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.hp / 10;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.hp / 10;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].mp != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.mp / 10;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.mp / 10;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].offense != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.off;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.off;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].defense != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.def;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.def;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].speed != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.speed;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.speed;
         statCount++;
       }
       if (EVO_REQ_DATA[targetId].brain != -1) {
-        statTotal += PARTNER_ENTITY.digimonEntity.stats.brain;
+        statTotal += PARTNER_ENTITY.digimonEntity.stats.base.brain;
         statCount++;
       }
 
@@ -245,7 +245,7 @@ int32_t handleSpecialEvolutions(int32_t mode, Entity *entity) {
 
   type = entity->type;
   level = DIGIMON_DATA[type].level;
-  def = PARTNER_ENTITY.digimonEntity.stats.def;
+  def = PARTNER_ENTITY.digimonEntity.stats.base.def;
   discipline = PARTNER_PARA.discipline;
   happiness = PARTNER_PARA.happiness;
   evotimer = PARTNER_PARA.evoTimer;
@@ -304,7 +304,7 @@ int32_t calculateRequirementScore(int32_t current, int16_t target,
                                   int8_t isMaxCM, int8_t isMaxBattles,
                                   int8_t currentBest_) {
   EvoRequirements *reqs;
-  Stats *partnerEntity;
+  BaseStats *partnerEntity;
   PartnerPara *partner;
   int8_t reqPoints;
   int8_t isBonusFulfilled;
@@ -314,7 +314,7 @@ int32_t calculateRequirementScore(int32_t current, int16_t target,
   int32_t currentBest = currentBest_;
 
   reqs = &EVO_REQ_DATA[target];
-  partnerEntity = &PARTNER_ENTITY.digimonEntity.stats;
+  partnerEntity = &PARTNER_ENTITY.digimonEntity.stats.base;
   partner = &PARTNER_PARA;
   reqPoints = 0;
 
@@ -437,10 +437,10 @@ void reincarnatePartner(int32_t unused, Stats *stats, PartnerPara *partner,
   ptr = &EVO_GAINS_DATA[digimonId];
   id = ptr->targetDigimon;
 
-  PARTNER_ENTITY.digimonEntity.stats.moves[0] = 0x2e;
-  PARTNER_ENTITY.digimonEntity.stats.moves[1] = 0xff;
-  PARTNER_ENTITY.digimonEntity.stats.moves[2] = 0xff;
-  PARTNER_ENTITY.digimonEntity.stats.moves[3] = 0xff;
+  PARTNER_ENTITY.digimonEntity.stats.base.moves[0] = 0x2e;
+  PARTNER_ENTITY.digimonEntity.stats.base.moves[1] = 0xff;
+  PARTNER_ENTITY.digimonEntity.stats.base.moves[2] = 0xff;
+  PARTNER_ENTITY.digimonEntity.stats.base.moves[3] = 0xff;
   previousId = PARTNER_ENTITY.digimonEntity.entity.type;
   removeEntity(previousId, 1);
   ENTITY_TABLE[1] = NULL;

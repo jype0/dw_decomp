@@ -97,6 +97,7 @@ MAIN_SRC := \
 	src/main/file_table.c \
 	src/main/fish.c \
 	src/main/kar.c \
+	src/main/main.c \
 	src/main/map_object.c \
 	src/main/math.c \
 	src/main/model.c \

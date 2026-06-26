@@ -118,7 +118,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/battle_ui.s.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/main.s.o(.text.*)
+        build/src/main/main.c.o(.text.*)
         . = ALIGN(., 4);
         build/asm/main/vs.s.o(.text.*)
         . = ALIGN(., 4);
@@ -228,7 +228,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/battle_ui.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/main.rodata.s.o(.rodata.*)
+        build/src/main/main.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/asm/main/data/vs.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);

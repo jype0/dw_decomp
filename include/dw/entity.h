@@ -66,6 +66,9 @@ typedef struct {
 	uint8_t moves[4];
 	int16_t hp;
 	int16_t mp;
+} BaseStats;
+
+typedef struct {
 	int16_t currentHP;
 	int16_t currentMP;
 	int16_t unk1;
@@ -74,7 +77,21 @@ typedef struct {
 	int16_t vabId;
 	uint8_t chargeMode;
 	uint8_t field7_0x57;
+} CurrentStats;
+
+typedef struct {
+	BaseStats base;
+	CurrentStats current;
 } Stats;
+
+typedef struct {
+	int16_t hp;
+	int16_t mp;
+	int16_t offense;
+	int16_t defense;
+	int16_t speed;
+	int16_t brains;
+} StatsGains;
 
 typedef struct {
 	Entity entity;
