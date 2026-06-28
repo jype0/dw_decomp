@@ -45,19 +45,7 @@
 
 # A data symbol.
 .macro dlabel label, visibility=global
-.ifdef _RODATA
-    .section .rodata.\label
-.else
-.ifdef _SDATA
-    .section .sdata.\label
-.else
-.ifdef _DATA
-    .section .data.\label
-.else
-    .section .text.\label
-.endif
-.endif
-.endif
+    .pushsection %S.\label
     .\visibility \label
     .type \label, @object
     \label:
@@ -66,6 +54,7 @@
 # End of a data symbol.
 .macro enddlabel label
     .size \label, . - \label
+    .popsection
 .endm
 
 

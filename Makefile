@@ -48,6 +48,7 @@ ARCHFLAGS := -march=r3000 -mtune=r3000 -mabi=32 -EL -mfp32 \
 	     -fno-pic -mno-shared -mno-abicalls -mno-llsc \
 	     -fno-stack-protector -nostdlib -ffreestanding \
 	     -Xassembler -no-pad-sections
+ASFLAGS := -Wa,--sectname-subst
 CFLAGS := -g -Wall -Wextra -Werror -std=c99 -Os -G0 -mno-gpopt $(ARCHFLAGS)
 CPPFLAGS := $(INC)
 DEPFLAGS = -MM -MF $(@:.o=.d) -MT $@
@@ -354,28 +355,13 @@ $(BUILDDIR)/%.c.o: %.c
 $(BUILDDIR)/%.s.o: %.s
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(ASFLAGS) -o $@ $<
 	@$(OBJCOPY) --set-section-alignment .text=4 \
 				--set-section-alignment .data=4 \
 				--set-section-alignment .rodata=4 \
 				--set-section-alignment .bss=4 \
 				--set-section-alignment .sbss=4 \
 				--set-section-alignment .sdata=4 $@
-
-$(BUILDDIR)/%.rodata.s.o: %.rodata.s
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_RODATA=1 -o $@ $<
-
-$(BUILDDIR)/%.data.s.o: %.data.s
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_DATA=1 -o $@ $<
-
-$(BUILDDIR)/%.sdata.s.o: %.sdata.s
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -Wa,--defsym,_SDATA=1 -o $@ $<
 
 $(MAIN_SBSS) &: config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
