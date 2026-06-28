@@ -131,8 +131,6 @@ void readMomentumInstruction(int16_t *delta, int16_t *scale1, int16_t *subDelta,
     }
 }
 
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void readMomentumInstructions(MomentumData *base, int16_t **instrPtr)
 {
     MomentumData *momentum;
@@ -180,8 +178,6 @@ void readMomentumInstructions(MomentumData *base, int16_t **instrPtr)
     } while (instruction & 0x8000);
 }
 
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void animateEntityTexture(Entity *entity, EntityAnim *anim)
 {
     int16_t texX;
@@ -253,8 +249,6 @@ tex_done:
     MoveImage(&rect, anim->textureX, anim->textureY);
 }
 
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void startAnimation(Entity *entity, int32_t animId)
 {
     int16_t *animData;
@@ -349,10 +343,7 @@ void startAnimation(Entity *entity, int32_t animId)
 
     entity->anim.animInstrPtr = instrPtr;
 }
-#pragma GCC pop_options
 
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void applyRootMomentum(MomentumData *momentum, Entity *entity)
 {
     int16_t *delta;
@@ -495,7 +486,6 @@ void tickMomentum(Entity *entity, MomentumData *momentumBase)
                 {
                     break;
                 }
-#pragma GCC pop_options
 
                 updateLoc = 1;
                 (&posData->location.vx)[elemIndex - 6] = applyMomentum(
