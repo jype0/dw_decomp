@@ -68,13 +68,17 @@ int32_t applyMomentum(int32_t offset, int32_t step, int32_t delta, int16_t *valu
 void calculatePosMatrix(PositionData *posData, int32_t unused1,
                         int32_t unused2, int32_t updateTrans)
 {
+    GsCOORDINATE2 *posMatrix;
+
+    posMatrix = &posData->posMatrix;
+
     if (updateTrans != 0)
     {
-        TransMatrix(&posData->posMatrix.coord, &posData->location);
+        TransMatrix(&posMatrix->coord, &posData->location);
     }
-    RotMatrix(&posData->rotation, &posData->posMatrix.coord);
-    ScaleMatrix(&posData->posMatrix.coord, &posData->scale);
-    posData->posMatrix.flg = 0;
+    RotMatrix(&posData->rotation, &posMatrix->coord);
+    ScaleMatrix(&posMatrix->coord, &posData->scale);
+    posMatrix->flg = 0;
 }
 
 void setupModelMatrix(PositionData *posData)
