@@ -97,6 +97,8 @@ MAIN_SRC := \
 	src/main/file_queue.c \
 	src/main/file_table.c \
 	src/main/fish.c \
+	src/main/graphics.c \
+	src/main/graphics2.c \
 	src/main/kar.c \
 	src/main/main.c \
 	src/main/map_object.c \

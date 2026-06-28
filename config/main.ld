@@ -38,7 +38,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/math.c.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/graphics.s.o(.text.*)
+        build/src/main/graphics.c.o(.text.*)
         . = ALIGN(., 4);
         KEEP(build/asm/main/entrypoint.s.o(.text.*))
         . = ALIGN(., 4);
@@ -88,7 +88,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/file_queue.c.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/graphics2.s.o(.text.*)
+        build/src/main/graphics2.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/fish.c.o(.text.*)
         . = ALIGN(., 4);
@@ -152,7 +152,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/math.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/graphics.s.o(.rodata.*)
+        build/src/main/graphics.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/tamer.c.o(.rodata.*);
         . = ALIGN(., 4);
@@ -198,7 +198,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/file_queue.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/data/graphics2.rodata.s.o(.rodata.*)
+        build/src/main/graphics2.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/fish.c.o(.rodata.*)
         . = ALIGN(., 4);
@@ -322,7 +322,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/file_queue.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/graphics2.s.o(.data.*)
+        build/src/main/graphics2.c.o(.data.*)
         . = ALIGN(., 4);
         build/src/main/fish.c.o(.data.*)
         . = ALIGN(., 4);

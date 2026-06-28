@@ -37,6 +37,8 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 
+  migrate_rodata_to_functions: False
+
   use_gp_rel_macro: True
 
 segments:

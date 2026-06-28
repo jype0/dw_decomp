@@ -38,6 +38,8 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 
+  migrate_rodata_to_functions: False
+
   use_gp_rel_macro: True
 
 segments:
@@ -65,7 +67,7 @@ segments:
       - [0x12EF8, c, world_object]
       - [0x131F0, c, file]
       - [0x136D4, c, math]
-      - [0x13924, asm, graphics]
+      - [0x13924, c, graphics]
       - [0x14238, asm, entrypoint]
       - [0x1435C, asm, partner_impl]
       - [0x197F4, c, tamer]
@@ -90,7 +92,7 @@ segments:
       - [0x4FE48, c, map_object]
       - [0x52544, c, evolution]
       - [0x53674, c, file_queue]
-      - [0x53C48, asm, graphics2]
+      - [0x53C48, c, graphics2]
       - [0x54CAC, c, fish]
       - [0x55000, c, utils]
       - [0x56D10, c, tournament]
@@ -124,7 +126,7 @@ segments:
       - [0x84BC8, rodata, map]
       - [0x84C08, .rodata, partner]
       - [0x84CE4, .rodata, map_object]
-      - [0x84D68, rodata, graphics2]
+      - [0x84D68, .rodata, graphics2]
       - [0x84E68, rodata, psyq/libpress]
       - [0x84F18, rodata, psyq/libmcrd]
       - [0x851E8, rodata, battle_ui]
