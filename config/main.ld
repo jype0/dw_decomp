@@ -60,7 +60,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/particle.c.o(.text.*)
         . = ALIGN(., 4);
-        build/asm/main/anim.s.o(.text.*)
+        build/src/main/anim.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/ui.c.o(.text.*)
         . = ALIGN(., 4);
@@ -170,7 +170,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/particle.c.o(.rodata.*)
         . = ALIGN(., 4);
-        build/asm/main/anim.s.o(.rodata.*)
+        build/src/main/anim.c.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/ui.c.o(.rodata.*)
         . = ALIGN(., 4);
@@ -292,7 +292,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/particle.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/anim.s.o(.data.*)
+        build/src/main/anim.c.o(.data.*)
         . = ALIGN(., 4);
         build/src/main/ui.c.o(.data.*)
         . = ALIGN(., 4);

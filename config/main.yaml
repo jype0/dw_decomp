@@ -76,7 +76,7 @@ segments:
       - [0x23D84, asm, overworld]
       - [0x30A90, asm, map_collision]
       - [0x310AC, c, particle]
-      - [0x31734, asm, anim]
+      - [0x31734, c, anim]
       - [0x32838, c, ui]
       - [0x33860, asm, item]
       - [0x35AD8, c, sound]
