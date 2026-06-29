@@ -86,6 +86,7 @@ MAIN_SRC := \
 	$(MAIN_BSS) \
 	$(MAIN_SBSS) \
 	src/main/aabb.c \
+	src/main/anim.c \
 	src/main/bubble.c \
 	src/main/butterfly.c \
 	src/main/clock.c \
