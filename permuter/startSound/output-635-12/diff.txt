@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -844,7 +844,8 @@
+     if (note == (*((tones + ofs) + 7)))
+     {
+       chan = getNextFreeChannel(chan);
+-      if (chan == (-1))
++      mask = -1;
++      if (chan == mask)
+       {
+         break;
+       }

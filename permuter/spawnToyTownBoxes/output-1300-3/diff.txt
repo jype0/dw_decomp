@@ -1,0 +1,25 @@
+--- before
++++ after
+@@ -3031,7 +3031,7 @@
+   smallLoc.pad = SMALL_BOX_LOCATION.pad;
+   readFile(BIG_BOX_TMD, GENERAL_MESH_BUFFER);
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+-  readFile(SMALL_BOX_TMD, buf2);
++  readFile(SMALL_BOX_TMD, ((char *) GENERAL_MESH_BUFFER) + 0x800);
+   new_var6 = (char *) GENERAL_MESH_BUFFER;
+   GsMapModelingData((u_long *) (new_var6 + 4));
+   GsMapModelingData((u_long *) (buf2 + 4));
+@@ -3054,12 +3054,12 @@
+     GsLinkObject4((u_long) (buf2 + 0xC), &GENERAL_OBJECT[new_var4], new_var4);
+     GENERAL_OBJECT[new_var4].attribute = 0;
+     GENERAL_OBJECT[new_var4].coord2 = gc;
+-    gc++;
+   }
+ 
+   TransMatrix(&WARP_CRYSTAL_COORDS[0].coord, &bigLoc);
+   WARP_CRYSTAL_COORDS[0].flg = 0;
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
++  gc++;
+   do
+   {
+     SMALL_BOX_LID_PROGRESS = 0;

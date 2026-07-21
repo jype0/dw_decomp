@@ -1,0 +1,18 @@
+--- before
++++ after
+@@ -3019,6 +3019,7 @@
+   char *new_var2;
+   int new_var3;
+   bigLoc.vx = BIG_BOX_LOCATION.vx;
++  SMALL_BOX_LID_PROGRESS = 0;
+   bigLoc.vy = BIG_BOX_LOCATION.vy;
+   smallLoc.vx = SMALL_BOX_LOCATION.vx;
+   if (SMALL_BOX_LOCATION.pad == 0U)
+@@ -3062,7 +3063,6 @@
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
+   do
+   {
+-    SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+     GENERAL_COORDS[0].flg = new_var3;
+     BIG_BOX_LID_PROGRESS = 0;

@@ -1,0 +1,26 @@
+--- before
++++ after
+@@ -835,16 +835,19 @@
+   unsigned int chan;
+   int16_t i;
+   int32_t ofs;
++  int16_t new_var;
+   mask = 0;
+   tones = ((char *) VHB_HEADER_ADDR[vabId]) + 0x820;
+   tones = inline_fn(tones, prog);
+   chan = 0x18;
+-  for (i = 0, ofs = 0; i < 0x10; i++, ofs += 0x20)
+-  {
+-    if (note == (*((tones + ofs) + 7)))
++  new_var = (i = 0);
++  for (new_var, ofs = 0; i < 0x10; i++, ofs += 0x20)
++  {
++ ;
++    if (note == (*((tones + (ofs & 0xFFFFFFFF)) + 7)))
+     {
+       chan = getNextFreeChannel(chan);
+-      if (chan == (-1))
++      if (chan == (ofs = -1))
+       {
+         break;
+       }

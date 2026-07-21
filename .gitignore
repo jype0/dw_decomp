@@ -6,4 +6,3 @@ disks/
 expected/
 local.mk
 objdiff.json
-tools/m2c/

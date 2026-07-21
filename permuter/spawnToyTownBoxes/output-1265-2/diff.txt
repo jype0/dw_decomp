@@ -1,0 +1,53 @@
+--- before
++++ after
+@@ -3004,6 +3004,11 @@
+ void projectPosition(GsCOORDINATE2 *coord, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
+ void renderBoulder(int32_t instanceId);
+ void initializeMedalModel(void);
++inline int inline_fn(int32_t arg0)
++{
++  return (arg0 + 1) - 1;
++}
++
+ void spawnToyTownBoxes(void)
+ {
+   VECTOR bigLoc;
+@@ -3025,7 +3030,7 @@
+   {
+   }
+   bigLoc.vz = BIG_BOX_LOCATION.vz;
+-  smallLoc.vy = SMALL_BOX_LOCATION.vy;
++  (&smallLoc)->vy = SMALL_BOX_LOCATION.vy;
+   bigLoc.pad = BIG_BOX_LOCATION.pad;
+   smallLoc.vz = SMALL_BOX_LOCATION.vz;
+   smallLoc.pad = SMALL_BOX_LOCATION.pad;
+@@ -3041,17 +3046,17 @@
+   new_var = &GENERAL_COORDS[1];
+   GsInitCoordinate2(0, &GENERAL_COORDS[0]);
+   GsInitCoordinate2(&GENERAL_COORDS[0], new_var);
+-  wc = WARP_CRYSTAL_COORDS;
+   wc++;
+   gc = GENERAL_COORDS;
+   new_var2 = new_var6 + 0xC;
+-  for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
++  wc = WARP_CRYSTAL_COORDS;
++  for (i = 0; inline_fn(i) <= (2 - 1); i++)
+   {
+     GsLinkObject4((u_long) new_var2, new_var5 = &WARP_CRYSTAL_OBJECT[i], i);
+     new_var4 = i;
+     WARP_CRYSTAL_OBJECT[new_var4].attribute = 0;
+     WARP_CRYSTAL_OBJECT[new_var4].coord2 = wc;
+-    GsLinkObject4((u_long) (buf2 + 0xC), &GENERAL_OBJECT[new_var4], new_var4);
++    GsLinkObject4((u_long) (buf2 + ((((((((0xC & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF) & 0xFFFFFFFF)), &GENERAL_OBJECT[new_var4], new_var4);
+     GENERAL_OBJECT[new_var4].attribute = 0;
+     GENERAL_OBJECT[new_var4].coord2 = gc;
+     gc++;
+@@ -3064,7 +3069,7 @@
+   {
+     SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+-    GENERAL_COORDS[0].flg = new_var3;
++    GENERAL_COORDS[0].flg = (0, new_var3);
+     BIG_BOX_LID_PROGRESS = 0;
+     TOY_TOWN_SELECTED_BOX = 0;
+   }

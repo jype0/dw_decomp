@@ -1,0 +1,29 @@
+--- before
++++ after
+@@ -3031,10 +3031,13 @@
+   int32_t r;
+   int32_t total;
+   int32_t i;
++  int new_var;
+   int32_t ofs;
++  char *new_var2;
+   MemCardSync(0, &cmd, &result);
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
+-  if (r == (-1))
++  new_var = r == (-1);
++  if (new_var)
+   {
+     setMemoryCardReadError(0, slot);
+   }
+@@ -3043,9 +3046,10 @@
+   {
+     total = 0;
+     ofs = 0;
++    new_var2 = ((char *) MAIN_D_801346D0) + ofs;
+     for (i = 0; i < nfiles; i++)
+     {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++      total += ((*((int32_t *) (new_var2 + 0x18))) + 0x1FFF) / 0x2000;
+       ofs += 0x28;
+     }
+ 

@@ -1,0 +1,45 @@
+--- before
++++ after
+@@ -3010,31 +3010,37 @@
+   VECTOR smallLoc;
+   char *buf2;
+   int32_t i;
++  long new_var9;
+   int32_t new_var4;
+   GsCOORDINATE2 *new_var;
++  char *new_var8;
+   GsCOORDINATE2 *wc;
+   GsDOBJ2 *new_var5;
+   GsCOORDINATE2 *gc;
+   char *new_var6;
+   char *new_var2;
+   int new_var3;
+-  bigLoc.vx = BIG_BOX_LOCATION.vx;
++  int new_var7;
++  bigLoc.vx = (new_var9 = BIG_BOX_LOCATION.vx);
++  new_var7 = SMALL_BOX_LOCATION.pad == 0U;
+   bigLoc.vy = BIG_BOX_LOCATION.vy;
+   smallLoc.vx = SMALL_BOX_LOCATION.vx;
+-  if (SMALL_BOX_LOCATION.pad == 0U)
++  if (new_var7)
+   {
+   }
++ if (1) { } if (1) { } if (1) { } if (1) { }
+   bigLoc.vz = BIG_BOX_LOCATION.vz;
+   smallLoc.vy = SMALL_BOX_LOCATION.vy;
+   bigLoc.pad = BIG_BOX_LOCATION.pad;
+   smallLoc.vz = SMALL_BOX_LOCATION.vz;
+   smallLoc.pad = SMALL_BOX_LOCATION.pad;
+   readFile(BIG_BOX_TMD, GENERAL_MESH_BUFFER);
+-  buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+-  readFile(SMALL_BOX_TMD, buf2);
++  ;
++  readFile(SMALL_BOX_TMD, ((char *) GENERAL_MESH_BUFFER) + 0x800);
+   new_var6 = (char *) GENERAL_MESH_BUFFER;
+   GsMapModelingData((u_long *) (new_var6 + 4));
+-  GsMapModelingData((u_long *) (buf2 + 4));
++  new_var8 = buf2 + 4;
++  GsMapModelingData((u_long *) new_var8);
+   GsInitCoordinate2(0, &WARP_CRYSTAL_COORDS[0]);
+   GsInitCoordinate2(&WARP_CRYSTAL_COORDS[0], &WARP_CRYSTAL_COORDS[1]);
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;

@@ -1,0 +1,30 @@
+--- before
++++ after
+@@ -3036,12 +3036,14 @@
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
+   if (r == (-1))
+   {
+-    setMemoryCardReadError(0, slot);
+   }
+   else
++  {
+     if ((r == 3) || (r == 0))
+   {
++      setMemoryCardReadError(r, slot);
+     total = 0;
++      setMemoryCardReadError(0, slot);
+     ofs = 0;
+     for (i = 0; i < nfiles; i++)
+     {
+@@ -3053,7 +3055,10 @@
+   }
+   else
+   {
+-    setMemoryCardReadError(r, slot);
++    }
++    if ((r && r) && r)
++    {
++    }
+   }
+   return -1;
+ }

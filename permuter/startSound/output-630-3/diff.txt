@@ -1,0 +1,19 @@
+--- before
++++ after
+@@ -843,13 +843,13 @@
+   {
+     if (note == (*((tones + ofs) + 7)))
+     {
+-      chan = getNextFreeChannel(chan);
++      ofs = (chan = getNextFreeChannel(chan));
+       if (chan == (-1))
+       {
+         break;
+       }
+-      SsUtKeyOnV(chan, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, 0x7F, 0x7F);
+-      mask |= 1 << chan;
++      SsUtKeyOnV(ofs, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, 0x7F, 0x7F);
++      mask |= 1 << ofs;
+     }
+   }
+ 

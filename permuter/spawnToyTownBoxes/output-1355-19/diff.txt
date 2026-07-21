@@ -1,0 +1,15 @@
+--- before
++++ after
+@@ -3062,11 +3062,11 @@
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
+   do
+   {
+-    SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+     GENERAL_COORDS[0].flg = new_var3;
+     BIG_BOX_LID_PROGRESS = 0;
+     TOY_TOWN_SELECTED_BOX = 0;
++    SMALL_BOX_LID_PROGRESS = 0;
+   }
+   while (0);
+   addObject(0xFBD, 0, 0, renderToyTownBoxes);

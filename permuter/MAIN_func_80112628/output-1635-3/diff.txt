@@ -1,0 +1,19 @@
+--- before
++++ after
+@@ -3034,12 +3034,14 @@
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
++  result = slot;
++  total = (r == 3) || (r == (0 ^ 0));
+   if (r == (-1))
+   {
+-    setMemoryCardReadError(0, slot);
++    setMemoryCardReadError(0, result);
+   }
+   else
+-    if ((r == 3) || (r == 0))
++    if (total)
+   {
+     total = 0;
+     ofs = 0;

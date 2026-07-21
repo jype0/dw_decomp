@@ -1,0 +1,36 @@
+--- before
++++ after
+@@ -3025,11 +3025,11 @@
+ int32_t MAIN_func_801125A8(int32_t unused, int32_t mode);
+ int32_t MAIN_func_80112628(int32_t channel, int32_t slot)
+ {
+-  long cmd;
+   long result;
+   long nfiles;
+   int32_t r;
+   int32_t total;
++  long cmd;
+   int32_t i;
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
+@@ -3039,7 +3039,9 @@
+     setMemoryCardReadError(0, slot);
+   }
+   else
+-    if ((r == 3) || (r == 0))
++  {
++    ofs = r == 0;
++    if ((r == 3) || ofs)
+   {
+     total = 0;
+     ofs = 0;
+@@ -3053,7 +3055,8 @@
+   }
+   else
+   {
+-    setMemoryCardReadError(r, slot);
++      setMemoryCardReadError(r, r = slot);
++    }
+   }
+   return -1;
+ }

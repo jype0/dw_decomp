@@ -1,0 +1,24 @@
+--- before
++++ after
+@@ -835,6 +835,7 @@
+   unsigned int chan;
+   int16_t i;
+   int32_t ofs;
++  int new_var;
+   mask = 0;
+   tones = ((char *) VHB_HEADER_ADDR[vabId]) + 0x820;
+   tones = inline_fn(tones, prog);
+@@ -844,11 +845,12 @@
+     if (note == (*((tones + ofs) + 7)))
+     {
+       chan = getNextFreeChannel(chan);
++      new_var = chan;
+       if (chan == (-1))
+       {
+         break;
+       }
+-      SsUtKeyOnV(chan, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, 0x7F, 0x7F);
++      SsUtKeyOnV(new_var, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, 0x7F, 0x7F);
+       mask |= 1 << chan;
+     }
+   }

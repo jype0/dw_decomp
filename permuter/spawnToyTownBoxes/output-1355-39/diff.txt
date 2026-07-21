@@ -1,0 +1,13 @@
+--- before
++++ after
+@@ -3062,9 +3062,9 @@
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
+   do
+   {
+-    SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+     GENERAL_COORDS[0].flg = new_var3;
++    SMALL_BOX_LID_PROGRESS = 0;
+     BIG_BOX_LID_PROGRESS = 0;
+     TOY_TOWN_SELECTED_BOX = 0;
+   }

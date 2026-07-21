@@ -1,0 +1,28 @@
+--- before
++++ after
+@@ -3015,12 +3015,13 @@
+   GsCOORDINATE2 *wc;
+   GsDOBJ2 *new_var5;
+   GsCOORDINATE2 *gc;
++  char *new_var7;
+   char *new_var6;
+   char *new_var2;
+   int new_var3;
+   bigLoc.vx = BIG_BOX_LOCATION.vx;
+   bigLoc.vy = BIG_BOX_LOCATION.vy;
+-  smallLoc.vx = SMALL_BOX_LOCATION.vx;
++  (&smallLoc)->vx = SMALL_BOX_LOCATION.vx;
+   if (SMALL_BOX_LOCATION.pad == 0U)
+   {
+   }
+@@ -3043,8 +3044,9 @@
+   GsInitCoordinate2(&GENERAL_COORDS[0], new_var);
+   wc = WARP_CRYSTAL_COORDS;
+   wc++;
++  new_var2 = new_var7;
+   gc = GENERAL_COORDS;
+-  new_var2 = new_var6 + 0xC;
++  new_var7 = new_var6 + 0xC;
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+   {
+     GsLinkObject4((u_long) new_var2, new_var5 = &WARP_CRYSTAL_OBJECT[i], i);

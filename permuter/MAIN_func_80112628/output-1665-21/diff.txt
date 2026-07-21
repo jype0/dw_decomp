@@ -1,0 +1,21 @@
+--- before
++++ after
+@@ -3039,7 +3039,9 @@
+     setMemoryCardReadError(0, slot);
+   }
+   else
+-    if ((r == 3) || (r == 0))
++  {
++    i = r == 0;
++    if ((r == 3) || i)
+   {
+     total = 0;
+     ofs = 0;
+@@ -3054,6 +3056,7 @@
+   else
+   {
+     setMemoryCardReadError(r, slot);
++    }
+   }
+   return -1;
+ }

@@ -1,0 +1,14 @@
+--- before
++++ after
+@@ -3043,9 +3043,10 @@
+   {
+     total = 0;
+     ofs = 0;
++    ofs = ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+     for (i = 0; i < nfiles; i++)
+     {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++      total += ofs;
+       ofs += 0x28;
+     }
+ 

@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -3049,7 +3049,8 @@
+       ofs += 0x28;
+     }
+ 
+-    return total;
++    result = total;
++    return result;
+   }
+   else
+   {

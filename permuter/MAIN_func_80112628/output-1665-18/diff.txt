@@ -1,0 +1,25 @@
+--- before
++++ after
+@@ -3026,6 +3026,7 @@
+ int32_t MAIN_func_80112628(int32_t channel, int32_t slot)
+ {
+   long cmd;
++  char *new_var;
+   long result;
+   long nfiles;
+   int32_t r;
+@@ -3041,11 +3042,11 @@
+   else
+     if ((r == 3) || (r == 0))
+   {
+-    total = 0;
+-    ofs = 0;
++    total = (ofs = 0);
++    new_var = (char *) MAIN_D_801346D0;
+     for (i = 0; i < nfiles; i++)
+     {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++      total += ((*((int32_t *) ((new_var + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+       ofs += 0x28;
+     }
+ 

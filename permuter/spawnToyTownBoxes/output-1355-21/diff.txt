@@ -1,0 +1,14 @@
+--- before
++++ after
+@@ -3018,9 +3018,10 @@
+   char *new_var6;
+   char *new_var2;
+   int new_var3;
++  new_var3 = SMALL_BOX_LOCATION.vx;
+   bigLoc.vx = BIG_BOX_LOCATION.vx;
+   bigLoc.vy = BIG_BOX_LOCATION.vy;
+-  smallLoc.vx = SMALL_BOX_LOCATION.vx;
++  smallLoc.vx = new_var3;
+   if (SMALL_BOX_LOCATION.pad == 0U)
+   {
+   }

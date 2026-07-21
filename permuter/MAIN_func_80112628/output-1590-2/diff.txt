@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -3054,8 +3054,8 @@
+   else
+   {
+     setMemoryCardReadError(r, slot);
++    return -1;
+   }
+-  return -1;
+ }
+ 
+ int32_t MAIN_func_8011296C(MenuCursor *cursor, int32_t which);

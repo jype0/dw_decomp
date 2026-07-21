@@ -1,0 +1,34 @@
+--- before
++++ after
+@@ -3028,22 +3028,24 @@
+   long cmd;
+   long result;
+   long nfiles;
++  short new_var;
+   int32_t r;
+   int32_t total;
+   int32_t i;
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
+-  r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
++  new_var = 0;
++  r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, new_var, 0xF);
+   if (r == (-1))
+   {
+-    setMemoryCardReadError(0, slot);
++    setMemoryCardReadError(new_var, slot);
+   }
+   else
+-    if ((r == 3) || (r == 0))
+-  {
+-    total = 0;
+-    ofs = 0;
+-    for (i = 0; i < nfiles; i++)
++    if ((r == 3) || (r == new_var))
++  {
++    total = new_var;
++    ofs = new_var;
++    for (i = new_var; i < nfiles; i++)
+     {
+       total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+       ofs += 0x28;

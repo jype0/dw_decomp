@@ -1,0 +1,37 @@
+--- before
++++ after
+@@ -3025,6 +3025,8 @@
+ int32_t MAIN_func_801125A8(int32_t unused, int32_t mode);
+ int32_t MAIN_func_80112628(int32_t channel, int32_t slot)
+ {
++  int32_t *new_var2;
++  int new_var;
+   long cmd;
+   long result;
+   long nfiles;
+@@ -3036,6 +3038,7 @@
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
+   if (r == (-1))
+   {
++ do { } while (0);
+     setMemoryCardReadError(0, slot);
+   }
+   else
+@@ -3043,13 +3046,15 @@
+   {
+     total = 0;
+     ofs = 0;
++    new_var2 = (int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18);
+     for (i = 0; i < nfiles; i++)
+     {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+-      ofs += 0x28;
++      total += ((*new_var2) + 0x1FFF) / 0x2000;
+     }
+ 
++    new_var = 0x28;
+     return total;
++    ofs += new_var;
+   }
+   else
+   {

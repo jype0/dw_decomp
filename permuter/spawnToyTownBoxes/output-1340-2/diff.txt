@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -3027,8 +3027,8 @@
+   bigLoc.vz = BIG_BOX_LOCATION.vz;
+   smallLoc.vy = SMALL_BOX_LOCATION.vy;
+   bigLoc.pad = BIG_BOX_LOCATION.pad;
++  smallLoc.pad = SMALL_BOX_LOCATION.pad;
+   smallLoc.vz = SMALL_BOX_LOCATION.vz;
+-  smallLoc.pad = SMALL_BOX_LOCATION.pad;
+   readFile(BIG_BOX_TMD, GENERAL_MESH_BUFFER);
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+   readFile(SMALL_BOX_TMD, buf2);

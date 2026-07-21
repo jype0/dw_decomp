@@ -1,0 +1,35 @@
+--- before
++++ after
+@@ -3006,8 +3006,8 @@
+ void initializeMedalModel(void);
+ void spawnToyTownBoxes(void)
+ {
++  VECTOR smallLoc;
+   VECTOR bigLoc;
+-  VECTOR smallLoc;
+   char *buf2;
+   int32_t i;
+   int32_t new_var4;
+@@ -3018,12 +3018,13 @@
+   char *new_var6;
+   char *new_var2;
+   int new_var3;
+-  bigLoc.vx = BIG_BOX_LOCATION.vx;
++  bigLoc.vx = BIG_BOX_LOCATION.vx & 0xFFu;
+   bigLoc.vy = BIG_BOX_LOCATION.vy;
+   smallLoc.vx = SMALL_BOX_LOCATION.vx;
+   if (SMALL_BOX_LOCATION.pad == 0U)
+   {
+   }
++  gc++;
+   bigLoc.vz = BIG_BOX_LOCATION.vz;
+   smallLoc.vy = SMALL_BOX_LOCATION.vy;
+   bigLoc.pad = BIG_BOX_LOCATION.pad;
+@@ -3054,7 +3055,6 @@
+     GsLinkObject4((u_long) (buf2 + 0xC), &GENERAL_OBJECT[new_var4], new_var4);
+     GENERAL_OBJECT[new_var4].attribute = 0;
+     GENERAL_OBJECT[new_var4].coord2 = gc;
+-    gc++;
+   }
+ 
+   TransMatrix(&WARP_CRYSTAL_COORDS[0].coord, &bigLoc);

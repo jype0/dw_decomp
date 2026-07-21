@@ -1,0 +1,35 @@
+--- before
++++ after
+@@ -828,12 +828,18 @@
+   return arg0 + (arg1 << 9);
+ }
+ 
++inline char *inline_fn2(char *arg0, int32_t arg1)
++{
++  return arg0 + arg1;
++}
++
+ uint32_t startSound(int32_t vabId, char prog, char note)
+ {
+   int32_t mask;
+   char *tones;
+   unsigned int chan;
+-  int16_t i;
++  volatile int new_var;
++  int i;
+   int32_t ofs;
+   mask = 0;
+   tones = ((char *) VHB_HEADER_ADDR[vabId]) + 0x820;
+@@ -841,10 +847,10 @@
+   chan = 0x18;
+   for (i = 0, ofs = 0; i < 0x10; i++, ofs += 0x20)
+   {
+-    if (note == (*((tones + ofs) + 7)))
++    if (note == (*(inline_fn2(tones, ofs) + 7)))
+     {
+       chan = getNextFreeChannel(chan);
+-      if (chan == (-1))
++      if ((new_var = chan) == (-1))
+       {
+         break;
+       }

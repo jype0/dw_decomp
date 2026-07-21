@@ -1,0 +1,17 @@
+--- before
++++ after
+@@ -3048,13 +3048,13 @@
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+   {
+     GsLinkObject4((u_long) new_var2, new_var5 = &WARP_CRYSTAL_OBJECT[i], i);
++    gc++;
+     new_var4 = i;
+     WARP_CRYSTAL_OBJECT[new_var4].attribute = 0;
+     WARP_CRYSTAL_OBJECT[new_var4].coord2 = wc;
+     GsLinkObject4((u_long) (buf2 + 0xC), &GENERAL_OBJECT[new_var4], new_var4);
+     GENERAL_OBJECT[new_var4].attribute = 0;
+     GENERAL_OBJECT[new_var4].coord2 = gc;
+-    gc++;
+   }
+ 
+   TransMatrix(&WARP_CRYSTAL_COORDS[0].coord, &bigLoc);

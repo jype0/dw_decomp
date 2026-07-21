@@ -1,0 +1,27 @@
+--- before
++++ after
+@@ -3033,7 +3033,7 @@
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+   readFile(SMALL_BOX_TMD, buf2);
+   new_var6 = (char *) GENERAL_MESH_BUFFER;
+-  GsMapModelingData((u_long *) (new_var6 + 4));
++  GsMapModelingData((u_long *) (4 + new_var6));
+   GsMapModelingData((u_long *) (buf2 + 4));
+   GsInitCoordinate2(0, &WARP_CRYSTAL_COORDS[0]);
+   GsInitCoordinate2(&WARP_CRYSTAL_COORDS[0], &WARP_CRYSTAL_COORDS[1]);
+@@ -3044,6 +3044,7 @@
+   wc = WARP_CRYSTAL_COORDS;
+   wc++;
+   gc = GENERAL_COORDS;
++  SMALL_BOX_LID_PROGRESS = 0;
+   new_var2 = new_var6 + 0xC;
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+   {
+@@ -3062,7 +3063,6 @@
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
+   do
+   {
+-    SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+     GENERAL_COORDS[0].flg = new_var3;
+     BIG_BOX_LID_PROGRESS = 0;

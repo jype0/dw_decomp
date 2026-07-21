@@ -1,0 +1,28 @@
+--- before
++++ after
+@@ -3039,6 +3039,8 @@
+     setMemoryCardReadError(0, slot);
+   }
+   else
++  {
++    cmd = 0x28;
+     if ((r == 3) || (r == 0))
+   {
+     total = 0;
+@@ -3046,7 +3048,7 @@
+     for (i = 0; i < nfiles; i++)
+     {
+       total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+-      ofs += 0x28;
++        ofs += cmd;
+     }
+ 
+     return total;
+@@ -3054,6 +3056,7 @@
+   else
+   {
+     setMemoryCardReadError(r, slot);
++    }
+   }
+   return -1;
+ }

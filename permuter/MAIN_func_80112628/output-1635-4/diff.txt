@@ -1,0 +1,49 @@
+--- before
++++ after
+@@ -3027,25 +3027,31 @@
+ {
+   long cmd;
+   long result;
++  unsigned short new_var3;
++  int new_var2;
++  char *new_var;
+   long nfiles;
+   int32_t r;
+   int32_t total;
+   int32_t i;
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
++  new_var2 = 1;
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
+-  if (r == (-1))
++  new_var3 = r;
++  if (new_var3 == (-1))
+   {
+     setMemoryCardReadError(0, slot);
+   }
+   else
+-    if ((r == 3) || (r == 0))
++    if ((new_var3 == 3) || (new_var3 == 0))
+   {
+     total = 0;
+     ofs = 0;
++    new_var = (char *) MAIN_D_801346D0;
+     for (i = 0; i < nfiles; i++)
+     {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++      total += ((*((int32_t *) ((new_var + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+       ofs += 0x28;
+     }
+ 
+@@ -3053,9 +3059,9 @@
+   }
+   else
+   {
+-    setMemoryCardReadError(r, slot);
++    setMemoryCardReadError(new_var3, slot);
+   }
+-  return -1;
++  return -new_var2;
+ }
+ 
+ int32_t MAIN_func_8011296C(MenuCursor *cursor, int32_t which);

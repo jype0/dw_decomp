@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -3044,7 +3044,8 @@
+   wc = WARP_CRYSTAL_COORDS;
+   wc++;
+   gc = GENERAL_COORDS;
+-  new_var2 = new_var6 + 0xC;
++  new_var2 = new_var6;
++  new_var2 = new_var2 + 0xC;
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+   {
+     GsLinkObject4((u_long) new_var2, new_var5 = &WARP_CRYSTAL_OBJECT[i], i);

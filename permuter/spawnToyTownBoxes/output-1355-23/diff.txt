@@ -1,0 +1,18 @@
+--- before
++++ after
+@@ -3055,6 +3055,7 @@
+     GENERAL_OBJECT[new_var4].attribute = 0;
+     GENERAL_OBJECT[new_var4].coord2 = gc;
+     gc++;
++    SMALL_BOX_LID_PROGRESS = 0;
+   }
+ 
+   TransMatrix(&WARP_CRYSTAL_COORDS[0].coord, &bigLoc);
+@@ -3062,7 +3063,6 @@
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
+   do
+   {
+-    SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+     GENERAL_COORDS[0].flg = new_var3;
+     BIG_BOX_LID_PROGRESS = 0;

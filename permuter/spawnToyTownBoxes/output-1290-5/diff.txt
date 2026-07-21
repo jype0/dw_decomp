@@ -1,0 +1,27 @@
+--- before
++++ after
+@@ -3034,7 +3034,6 @@
+   readFile(SMALL_BOX_TMD, buf2);
+   new_var6 = (char *) GENERAL_MESH_BUFFER;
+   GsMapModelingData((u_long *) (new_var6 + 4));
+-  GsMapModelingData((u_long *) (buf2 + 4));
+   GsInitCoordinate2(0, &WARP_CRYSTAL_COORDS[0]);
+   GsInitCoordinate2(&WARP_CRYSTAL_COORDS[0], &WARP_CRYSTAL_COORDS[1]);
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+@@ -3043,6 +3042,7 @@
+   GsInitCoordinate2(&GENERAL_COORDS[0], new_var);
+   wc = WARP_CRYSTAL_COORDS;
+   wc++;
++  GsMapModelingData((u_long *) (buf2 + 4));
+   gc = GENERAL_COORDS;
+   new_var2 = new_var6 + 0xC;
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+@@ -3069,7 +3069,7 @@
+     TOY_TOWN_SELECTED_BOX = 0;
+   }
+   while (0);
+-  addObject(0xFBD, 0, 0, renderToyTownBoxes);
++  addObject(0xFBD, (long long) 0, 0, renderToyTownBoxes);
+ }
+ 
+ void renderToyTownBoxes(int32_t instanceId);

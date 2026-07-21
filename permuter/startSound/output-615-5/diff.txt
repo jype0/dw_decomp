@@ -1,0 +1,41 @@
+--- before
++++ after
+@@ -828,27 +828,34 @@
+   return arg0 + (arg1 << 9);
+ }
+ 
++inline void *inline_fn2(int32_t arg0)
++{
++  return VHB_HEADER_ADDR[arg0];
++}
++
+ uint32_t startSound(int32_t vabId, char prog, char note)
+ {
+   int32_t mask;
+   char *tones;
+   unsigned int chan;
+   int16_t i;
++  int new_var;
+   int32_t ofs;
+   mask = 0;
+-  tones = ((char *) VHB_HEADER_ADDR[vabId]) + 0x820;
++  tones = ((char *) inline_fn2(vabId)) + 0x820;
+   tones = inline_fn(tones, prog);
+   chan = 0x18;
+-  for (i = 0, ofs = 0; i < 0x10; i++, ofs += 0x20)
++  new_var = 0x7F;
++  for ((i = 0) & 0xFFFFFFFFFFFFFFFF, ofs = 0; i <= (0x10 - 1); i++, ofs += 0x20)
+   {
+     if (note == (*((tones + ofs) + 7)))
+     {
+-      chan = getNextFreeChannel(chan);
++      mask = (chan = getNextFreeChannel(chan));
+       if (chan == (-1))
+       {
+         break;
+       }
+-      SsUtKeyOnV(chan, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, 0x7F, 0x7F);
++      SsUtKeyOnV(mask, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, new_var, new_var);
+       mask |= 1 << chan;
+     }
+   }

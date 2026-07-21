@@ -1,0 +1,23 @@
+--- before
++++ after
+@@ -3023,6 +3023,11 @@
+ int32_t MAIN_func_80112524(int32_t menu);
+ void setMemoryCardReadError(int32_t id, int32_t slot);
+ int32_t MAIN_func_801125A8(int32_t unused, int32_t mode);
++inline int32_t inline_fn(int32_t arg0)
++{
++  return arg0;
++}
++
+ int32_t MAIN_func_80112628(int32_t channel, int32_t slot)
+ {
+   long cmd;
+@@ -3034,7 +3039,7 @@
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
+-  if (r == (-1))
++  if (inline_fn(r) == (-1))
+   {
+     setMemoryCardReadError(0, slot);
+   }

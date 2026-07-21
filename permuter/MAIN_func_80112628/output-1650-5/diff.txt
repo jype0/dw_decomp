@@ -1,0 +1,55 @@
+--- before
++++ after
+@@ -2828,7 +2828,7 @@
+ extern uint8_t MAIN_D_80131B2C[];
+ extern uint8_t MAIN_D_8013192C[];
+ long MemCardExist();
+-long MemCardSync(long mode, long *cmd, long *result);
++long MemCardSync(volatile char mode, long *cmd, long *result);
+ void *memcpy(void *dst, void *src, int32_t n);
+ void clearTextSubArea(RECT *area);
+ void drawString(char *text, int32_t color, int32_t pos);
+@@ -3023,29 +3023,38 @@
+ int32_t MAIN_func_80112524(int32_t menu);
+ void setMemoryCardReadError(int32_t id, int32_t slot);
+ int32_t MAIN_func_801125A8(int32_t unused, int32_t mode);
++inline int inline_fn(int32_t arg0, long arg1)
++{
++  return arg0 < arg1;
++}
++
+ int32_t MAIN_func_80112628(int32_t channel, int32_t slot)
+ {
+   long cmd;
+   long result;
+   long nfiles;
++  int new_var;
+   int32_t r;
++  int new_var2;
+   int32_t total;
+   int32_t i;
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
+   r = MemCardGetDirentry(channel, &(&MAIN_D_801346C0)[2], MAIN_D_801346D0, &nfiles, 0, 0xF);
+-  if (r == (-1))
++  new_var2 = (i = r) == (-1);
++  if (new_var2)
+   {
+     setMemoryCardReadError(0, slot);
+   }
+   else
+-    if ((r == 3) || (r == 0))
++    if ((i == 3) || (i == 0))
+   {
+     total = 0;
+     ofs = 0;
+-    for (i = 0; i < nfiles; i++)
+-    {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++    new_var = ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++    for (i = 0; inline_fn(i, nfiles); i++)
++    {
++      total += new_var;
+       ofs += 0x28;
+     }
+ 

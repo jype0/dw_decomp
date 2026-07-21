@@ -1,0 +1,33 @@
+--- before
++++ after
+@@ -3006,6 +3006,7 @@
+ void initializeMedalModel(void);
+ void spawnToyTownBoxes(void)
+ {
++  GsCOORDINATE2 *new_var7;
+   VECTOR bigLoc;
+   VECTOR smallLoc;
+   char *buf2;
+@@ -3032,19 +3033,20 @@
+   readFile(BIG_BOX_TMD, GENERAL_MESH_BUFFER);
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+   readFile(SMALL_BOX_TMD, buf2);
++  new_var2 = new_var6 + 0xC;
+   new_var6 = (char *) GENERAL_MESH_BUFFER;
+   GsMapModelingData((u_long *) (new_var6 + 4));
++  new_var7 = &GENERAL_COORDS[1];
+   GsMapModelingData((u_long *) (buf2 + 4));
+   GsInitCoordinate2(0, &WARP_CRYSTAL_COORDS[0]);
+   GsInitCoordinate2(&WARP_CRYSTAL_COORDS[0], &WARP_CRYSTAL_COORDS[1]);
+   buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
+-  new_var = &GENERAL_COORDS[1];
++  new_var = new_var7;
+   GsInitCoordinate2(0, &GENERAL_COORDS[0]);
+   GsInitCoordinate2(&GENERAL_COORDS[0], new_var);
+   wc = WARP_CRYSTAL_COORDS;
+   wc++;
+   gc = GENERAL_COORDS;
+-  new_var2 = new_var6 + 0xC;
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+   {
+     GsLinkObject4((u_long) new_var2, new_var5 = &WARP_CRYSTAL_OBJECT[i], i);

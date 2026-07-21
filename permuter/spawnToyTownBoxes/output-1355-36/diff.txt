@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -3030,7 +3030,8 @@
+   smallLoc.vz = SMALL_BOX_LOCATION.vz;
+   smallLoc.pad = SMALL_BOX_LOCATION.pad;
+   readFile(BIG_BOX_TMD, GENERAL_MESH_BUFFER);
+-  buf2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
++  new_var2 = ((char *) GENERAL_MESH_BUFFER) + 0x800;
++  buf2 = new_var2;
+   readFile(SMALL_BOX_TMD, buf2);
+   new_var6 = (char *) GENERAL_MESH_BUFFER;
+   GsMapModelingData((u_long *) (new_var6 + 4));

@@ -1,0 +1,28 @@
+--- before
++++ after
+@@ -830,6 +830,7 @@
+ 
+ uint32_t startSound(int32_t vabId, char prog, char note)
+ {
++  int new_var;
+   int32_t mask;
+   char *tones;
+   unsigned int chan;
+@@ -843,12 +844,16 @@
+   {
+     if (note == (*((tones + ofs) + 7)))
+     {
++      if (!chan)
++      {
++      }
+       chan = getNextFreeChannel(chan);
++      new_var = i ^ 0;
+       if (chan == (-1))
+       {
+         break;
+       }
+-      SsUtKeyOnV(chan, vabId, prog, (0, i ^ 0), note, (i < 0x10) * 0, 0x7F, 0x7F);
++      SsUtKeyOnV(chan, vabId, prog, (0, new_var), note, (i < 0x10) * 0, 0x7F, 0x7F);
+       mask |= 1 << chan;
+     }
+   }

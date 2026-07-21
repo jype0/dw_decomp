@@ -1,0 +1,18 @@
+--- before
++++ after
+@@ -3062,7 +3062,6 @@
+   TransMatrix(&GENERAL_COORDS[0].coord, &smallLoc);
+   do
+   {
+-    SMALL_BOX_LID_PROGRESS = 0;
+     new_var3 = 0;
+     GENERAL_COORDS[0].flg = new_var3;
+     BIG_BOX_LID_PROGRESS = 0;
+@@ -3070,6 +3069,7 @@
+   }
+   while (0);
+   addObject(0xFBD, 0, 0, renderToyTownBoxes);
++  SMALL_BOX_LID_PROGRESS = 0;
+ }
+ 
+ void renderToyTownBoxes(int32_t instanceId);

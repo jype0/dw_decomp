@@ -1,0 +1,12 @@
+--- before
++++ after
+@@ -3024,8 +3024,8 @@
+   if (SMALL_BOX_LOCATION.pad == 0U)
+   {
+   }
++  smallLoc.vy = SMALL_BOX_LOCATION.vy;
+   bigLoc.vz = BIG_BOX_LOCATION.vz;
+-  smallLoc.vy = SMALL_BOX_LOCATION.vy;
+   bigLoc.pad = BIG_BOX_LOCATION.pad;
+   smallLoc.vz = SMALL_BOX_LOCATION.vz;
+   smallLoc.pad = SMALL_BOX_LOCATION.pad;

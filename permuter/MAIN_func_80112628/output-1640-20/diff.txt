@@ -1,0 +1,28 @@
+--- before
++++ after
+@@ -3025,6 +3025,7 @@
+ int32_t MAIN_func_801125A8(int32_t unused, int32_t mode);
+ int32_t MAIN_func_80112628(int32_t channel, int32_t slot)
+ {
++  int new_var;
+   long cmd;
+   long result;
+   long nfiles;
+@@ -3043,13 +3044,15 @@
+   {
+     total = 0;
+     ofs = 0;
++    new_var = ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+     for (i = 0; i < nfiles; i++)
+     {
+-      total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
++      total += new_var;
+       ofs += 0x28;
+     }
+ 
+-    return total;
++    cmd = total;
++    return cmd;
+   }
+   else
+   {

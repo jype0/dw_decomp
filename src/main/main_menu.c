@@ -1,5 +1,9 @@
 #include <libgs.h>
 
+#include <libmcrd.h>
+#include <stdio.h>
+#include <string.h>
+
 #include <dw/entity.h>
 #include <dw/params.h>
 
@@ -23,8 +27,6 @@ extern int32_t MAIN_D_80135060;
 extern uint8_t MAIN_D_80131B2C[];
 extern uint8_t MAIN_D_8013192C[];
 long MemCardExist();
-long MemCardSync(long mode, long *cmd, long *result);
-void *memcpy(void *dst, void *src, int32_t n);
 void clearTextSubArea(RECT *area);
 void drawString(char *text, int32_t color, int32_t pos);
 extern char MAIN_D_80131658[];
@@ -40,23 +42,13 @@ typedef struct {
 	int8_t max;
 } MenuCursor;
 
-struct DIRENTRY {
-	char name[20];
-	long attr;
-	long size;
-	struct DIRENTRY *next;
-	char system[8];
-};
 
-long MemCardGetDirentry(long chan, char *name, struct DIRENTRY *pdir,
-			long *files, long ofs, long max);
 extern char MAIN_D_801346C0;
 extern struct DIRENTRY *volatile MAIN_D_801346D0;
 
 #include <dw/entity.h>
 #include <dw/params.h>
 
-int32_t sprintf(char *dst, char *fmt, ...);
 int8_t getFileCityTopMap(void);
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t MAIN_D_80135034;
@@ -131,7 +123,6 @@ extern uint8_t MAIN_D_801315F8[];
 extern uint8_t MAIN_D_80131618[];
 extern char MAIN_D_801346C4;
 extern char MAIN_D_8013468C;
-char *strcpy(char *dst, char *src);
 extern uint8_t MAIN_D_80131639[];
 extern uint8_t MAIN_D_8013163A[];
 void renderUIBoxBorder(int16_t *rect, int32_t flag);
@@ -667,8 +658,8 @@ INCLUDE_ASM("asm/main/nonmatchings/main_menu", MAIN_func_8010FC48);
 
 void updateMemoryCardState(void)
 {
-	long result;
-	long cmd;
+	unsigned long result;
+	unsigned long cmd;
 	int32_t mask;
 
 	switch (MemCardSync(1, &cmd, &result)) {
@@ -792,8 +783,8 @@ void setMemoryCardReadError(int32_t id, int32_t slot)
 
 int32_t MAIN_func_801125A8(int32_t unused, int32_t mode)
 {
-	long cmd;
-	long result;
+	unsigned long cmd;
+	unsigned long result;
 
 	if ((mode == 0) || (mode == 3)) {
 		return 0;

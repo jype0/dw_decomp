@@ -1,0 +1,39 @@
+--- before
++++ after
+@@ -3009,11 +3009,12 @@
+   VECTOR bigLoc;
+   VECTOR smallLoc;
+   char *buf2;
++  GsDOBJ2 *new_var7;
+   int32_t i;
+   int32_t new_var4;
+-  GsCOORDINATE2 *new_var;
+   GsCOORDINATE2 *wc;
+   GsDOBJ2 *new_var5;
++  GsCOORDINATE2 *new_var;
+   GsCOORDINATE2 *gc;
+   char *new_var6;
+   char *new_var2;
+@@ -3044,17 +3045,19 @@
+   wc = WARP_CRYSTAL_COORDS;
+   wc++;
+   gc = GENERAL_COORDS;
+-  new_var2 = new_var6 + 0xC;
++  new_var2 = new_var6;
++  new_var2 = new_var2 + 0xC;
+   for (i = 0; ((i + 1) - 1) <= (2 - 1); i++)
+   {
+-    GsLinkObject4((u_long) new_var2, new_var5 = &WARP_CRYSTAL_OBJECT[i], i);
++    new_var7 = &WARP_CRYSTAL_OBJECT[i];
++    GsLinkObject4((u_long) new_var2, new_var5 = new_var7, i);
+     new_var4 = i;
+     WARP_CRYSTAL_OBJECT[new_var4].attribute = 0;
+     WARP_CRYSTAL_OBJECT[new_var4].coord2 = wc;
+     GsLinkObject4((u_long) (buf2 + 0xC), &GENERAL_OBJECT[new_var4], new_var4);
+     GENERAL_OBJECT[new_var4].attribute = 0;
++    gc++;
+     GENERAL_OBJECT[new_var4].coord2 = gc;
+-    gc++;
+   }
+ 
+   TransMatrix(&WARP_CRYSTAL_COORDS[0].coord, &bigLoc);

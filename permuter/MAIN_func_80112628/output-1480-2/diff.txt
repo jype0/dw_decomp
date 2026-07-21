@@ -1,0 +1,40 @@
+--- before
++++ after
+@@ -3027,9 +3027,11 @@
+ {
+   long cmd;
+   long result;
++  struct DIRENTRY * volatile new_var2;
+   long nfiles;
+   int32_t r;
+   int32_t total;
++  int new_var;
+   int32_t i;
+   int32_t ofs;
+   MemCardSync(0, &cmd, &result);
+@@ -3039,10 +3041,15 @@
+     setMemoryCardReadError(0, slot);
+   }
+   else
++  {
++    if (!(new_var2 = MAIN_D_801346D0))
++    {
++    }
+     if ((r == 3) || (r == 0))
+   {
+-    total = 0;
+-    ofs = 0;
++      new_var = 0;
++      total = new_var;
++      ofs = new_var;
+     for (i = 0; i < nfiles; i++)
+     {
+       total += ((*((int32_t *) ((((char *) MAIN_D_801346D0) + ofs) + 0x18))) + 0x1FFF) / 0x2000;
+@@ -3054,6 +3061,7 @@
+   else
+   {
+     setMemoryCardReadError(r, slot);
++    }
+   }
+   return -1;
+ }

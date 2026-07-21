@@ -1,0 +1,25 @@
+--- before
++++ after
+@@ -3039,9 +3039,13 @@
+     setMemoryCardReadError(0, slot);
+   }
+   else
++  {
++    total = 0;
+     if ((r == 3) || (r == 0))
+   {
+-    total = 0;
++      if (!channel)
++      {
++      }
+     ofs = 0;
+     for (i = 0; i < nfiles; i++)
+     {
+@@ -3054,6 +3058,7 @@
+   else
+   {
+     setMemoryCardReadError(r, slot);
++    }
+   }
+   return -1;
+ }

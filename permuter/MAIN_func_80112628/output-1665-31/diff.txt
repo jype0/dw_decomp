@@ -1,0 +1,10 @@
+--- before
++++ after
+@@ -3049,6 +3049,7 @@
+       ofs += 0x28;
+     }
+ 
++    nfiles = nfiles;
+     return total;
+   }
+   else

@@ -1,0 +1,10 @@
+--- before
++++ after
+@@ -844,6 +844,7 @@
+     if (note == (*((tones + ofs) + 7)))
+     {
+       chan = getNextFreeChannel(chan);
++      ofs = 0;
+       if (chan == (-1))
+       {
+         break;
