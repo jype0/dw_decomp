@@ -255,7 +255,7 @@ void renderDateDigits(void);
 void renderTriangleCursor(void);
 void isUIBoxAvailable(void);
 void setSleepDisabled(int32_t arg);
-void removeItem(uint32_t type, uint8_t amount);
+void removeItem(int32_t type, uint32_t amount);
 void startFeedingItem(int32_t arg);
 void removeOneSelectedItem(void);
 void renderFeedingItem(int32_t arg);

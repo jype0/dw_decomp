@@ -416,7 +416,37 @@ int32_t getItemCount(uint8_t type)
 
 INCLUDE_ASM("asm/main/nonmatchings/item", giveItem);
 
-INCLUDE_ASM("asm/main/nonmatchings/item", removeItem);
+void removeItem(int32_t type, uint32_t amount)
+{
+  int32_t new_var;
+  int32_t i;
+  uint8_t *new_var2;
+  uint8_t *amt;
+  if (type == 0xFF)
+  {
+    return;
+  }
+  for (i = 0; i < INVENTORY_SIZE[0]; i++)
+  {
+    if (INVENTORY_ITEM_TYPES.array[i] == type)
+    {
+      amt = (&INVENTORY_ITEM_TYPES.array[i]) + 0x1E;
+      new_var2 = amt;
+      new_var = amount < (*new_var2);
+      if (new_var)
+      {
+        *amt = (*new_var2) - amount;
+      }
+      else
+      {
+        *new_var2 = 0;
+        INVENTORY_ITEM_TYPES.array[i] = 0xFF;
+        INVENTORY_ITEM_NAMES.array[i] = 0xFF;
+      }
+    }
+  }
+
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/item", pickupItem);
 
@@ -561,4 +591,28 @@ void setTrainingBoost(int32_t flag, int32_t value, int32_t duration)
 	PARTNER_PARA.trainBoostTimer = duration * 1200;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/item", handleItemSickness);
+void handleItemSickness(int16_t chance)
+{
+  int32_t new_var;
+  int16_t r;
+  char buf[0x18];
+  r = (int16_t) random(0x64);
+  new_var = PARTNER_PARA.condition & 0x40;
+  if ((r < chance) && (!new_var))
+  {
+    PARTNER_PARA.condition |= 0x40;
+    PARTNER_PARA.timesBeingSick++;
+    PARTNER_PARA.sicknessTimer = 1;
+    if (PARTNER_PARA.condition & 0x20)
+    {
+      PARTNER_PARA.condition &= ~0x20;
+      PARTNER_PARA.injuryTimer = 0;
+    }
+    setTamerState(0x14);
+    clearTextArea();
+    setTextColor(0xA);
+    sprintf(buf, &MAIN_D_80134368, PARTNER_ENTITY.name);
+    strcat(buf, MAIN_D_80125F64);
+    drawString(buf, 0, 0x78);
+  }
+}
