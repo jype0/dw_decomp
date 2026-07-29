@@ -13,7 +13,14 @@
 #include <dw/types.h>
 #include <dw/world_object.h>
 
+#include <dw/params.h>
+
 #include "common.h"
+
+int32_t isTriggerSet(uint16_t trigger);
+void unsetTrigger(uint16_t trigger);
+
+
 
 typedef struct {
 	uint32_t unk1;
@@ -441,7 +448,35 @@ INCLUDE_ASM("asm/main/nonmatchings/main", newGameScene);
 
 INCLUDE_ASM("asm/main/nonmatchings/main", MAIN_func_800EF38C);
 
-INCLUDE_ASM("asm/main/nonmatchings/main", recalculatePPandArena);
+void recalculatePPandArena(void)
+{
+	uint8_t pp;
+	int32_t i;
+
+	pp = 0;
+	for (i = 3; i < 0x3B; i++) {
+		if ((DIGIMON_DATA[i].level >= 3) && (isTriggerSet((uint16_t)(0xC8 + i)) != 0)) {
+			if ((i == 0xB) || (i == 0x27) || (i == 0x35)) {
+				pp++;
+			} else {
+				pp += (uint8_t)(DIGIMON_DATA[i].level - 2);
+			}
+		}
+	}
+	writePStat(1, pp);
+	pp = readPStat(3);
+	if (pp >= 0x17) {
+		if (isTriggerSet(0x25) != 0) {
+			unsetTrigger(0x25);
+		}
+		if (isTriggerSet(0x26) != 0) {
+			unsetTrigger(0x26);
+		}
+		if (isTriggerSet(0x27) != 0) {
+			unsetTrigger(0x27);
+		}
+	}
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/main", gameLoop);
 
@@ -727,7 +762,22 @@ void tickNPCBattle(int32_t instanceId)
 	}
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/main", tickNewGameJijimon);
+void tickNewGameJijimon(int32_t instanceId)
+{
+	int16_t *p;
+
+	p = &MAIN_D_80134F10;
+	if (*p < 0x7530) {
+		*p += 1;
+	}
+	if (*p == 0x23) {
+		setEntityRotation(2, 0, 0x71, 0);
+		setupEntityMatrix(2);
+		startAnimation(ENTITY_TABLE[2], 0);
+		writePStat(0xF3, 0);
+	}
+	tickAnimation(ENTITY_TABLE[2]);
+}
 
 void loadNewgameScene(void)
 {
