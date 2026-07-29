@@ -27,6 +27,6 @@ typedef struct {
 } ModelComponent;
 
 void initializeModelComponents(void);
-ModelComponent *getEntityModelComponent(int32_t instance, int32_t type);
+ModelComponent *getEntityModelComponent(int32_t instance, char type);
 
 #endif

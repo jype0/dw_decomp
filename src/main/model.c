@@ -290,9 +290,77 @@ void unloadModel(int32_t digiType, int32_t modelType)
 	}
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/model", getEntityModelComponent);
+ModelComponent *getEntityModelComponent(int32_t instance, char type)
+{
+	ModelComponent *p;
+	int32_t i;
 
-INCLUDE_ASM("asm/main/nonmatchings/model", getEntityType);
+	i = type;
+	if (i == 2) {
+		return &TAMER_MODEL;
+	}
+	if (i == 3) {
+		return &PARTNER_MODEL;
+	}
+	if (i == 0) {
+		i = instance;
+		if ((i < 0) || (instance >= 0xB4)) {
+			return 0;
+		}
+		p = NPC_MODEL;
+		for (i = 0; i < 5; p++, i++) {
+			if (p->digiType == instance) {
+				break;
+			}
+		}
+		if (i == 5) {
+			return 0;
+		}
+		if (p->useCount != 0) {
+			goto done;
+		}
+		return 0;
+	}
+	if (i == 1) {
+		i = instance;
+		if ((instance < 0) || (i >= 0x96)) {
+			return 0;
+		}
+		p = &UNKNOWN_MODEL[i];
+		if (p->useCount == 0) {
+			return 0;
+		}
+	}
+done:
+	return p;
+}
+
+int32_t getEntityType(Entity* entity)
+{
+	int32_t i;
+	int32_t v;
+
+	for (i = 0; i < 10; i++) {
+		if (ENTITY_TABLE[i] == entity) {
+			break;
+		}
+	}
+	switch (i) {
+	case 0:
+		v = 2;
+		break;
+	case 1:
+		v = 3;
+		break;
+	case 10:
+		v = -1;
+		break;
+	default:
+		v = 0;
+		break;
+	}
+	return v;
+}
 
 static inline int32_t applyTPageOffset(int32_t tpageOffset,
 				       int32_t pixelOffset)
