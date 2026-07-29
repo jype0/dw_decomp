@@ -66,7 +66,7 @@ extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[2];
 extern SVECTOR POOP_ROTATION;
 
-extern int8_t PARTNER_AREA_RESPONSE;
+extern int8_t PARTNER_AREA_RESPONSE[];
 extern uint16_t CURRENT_FRAME;
 extern uint16_t LAST_HANDLED_FRAME;
 extern int32_t MAIN_D_80134C6C;
@@ -322,7 +322,39 @@ INCLUDE_ASM("asm/main/nonmatchings/partner_impl", createPoopPile);
 
 INCLUDE_ASM("asm/main/nonmatchings/partner_impl", sleepRegen);
 
-INCLUDE_ASM("asm/main/nonmatchings/partner_impl", tickTirednessMechanics);
+void tickTirednessMechanics(void)
+{
+	if (((PARTNER_PARA.areaEffectTimer % 1200) == 0) && (PARTNER_PARA.areaEffectTimer > 0)) {
+		if (PARTNER_AREA_RESPONSE[0] == 1) {
+			PARTNER_PARA.happiness = PARTNER_PARA.happiness + 1;
+			PARTNER_PARA.tiredness = PARTNER_PARA.tiredness - 2;
+		}
+		if (PARTNER_AREA_RESPONSE[0] == 2) {
+			PARTNER_PARA.happiness = PARTNER_PARA.happiness - 1;
+			PARTNER_PARA.tiredness = PARTNER_PARA.tiredness + 1;
+		}
+	}
+	if (PARTNER_PARA.subTiredness >= 0x3C) {
+		PARTNER_PARA.tiredness = PARTNER_PARA.tiredness + 1;
+		if (PARTNER_PARA.tiredness >= 0x64) {
+			PARTNER_PARA.tiredness = 0x64;
+		}
+		PARTNER_PARA.subTiredness = 0;
+	}
+	if (PARTNER_PARA.tiredness >= 0x32) {
+		PARTNER_PARA.tirednessHungerTimer = PARTNER_PARA.tirednessHungerTimer + 1;
+	} else {
+		PARTNER_PARA.tirednessHungerTimer = 0;
+	}
+	if (PARTNER_PARA.tiredness >= 0x50) {
+		PARTNER_PARA.condition |= 2;
+		if (((CURRENT_FRAME % 100) == 0) && (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
+			PARTNER_PARA.happiness = PARTNER_PARA.happiness - 2;
+		}
+	} else {
+		PARTNER_PARA.condition &= ~2;
+	}
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/partner_impl", partnerWillRefuseItem);
 
