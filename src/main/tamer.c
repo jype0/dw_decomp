@@ -2,6 +2,7 @@
 #include <libgpu.h>
 #include <libgs.h>
 #include <libgte.h>
+#include <mwinline_n.h>
 
 #include <dw/butterfly.h>
 #include <dw/endi.h>
@@ -486,7 +487,78 @@ INCLUDE_ASM("asm/main/nonmatchings/tamer", checkItemPickup);
 
 INCLUDE_ASM("asm/main/nonmatchings/tamer", checkMapInteraction);
 
-INCLUDE_ASM("asm/main/nonmatchings/tamer", checkMedalConditions);
+void checkMedalConditions(void)
+{
+	int32_t i;
+
+	if (hasMedal(5) == 0) {
+		i = 0;
+		while (i < 0x39) {
+			if (hasMove(i) == 0) {
+				break;
+			}
+			i++;
+		}
+		if (i == 0x39) {
+			unlockMedal(5);
+			HAS_MEDAL_AWARD_PENDING = 1;
+		}
+	}
+	if (hasMedal(7) == 0) {
+		BaseStats *bs = &PARTNER_ENTITY.digimonEntity.stats.base;
+		if ((bs->hp == 0x270F) &&
+		    (bs->mp == 0x270F) &&
+		    (bs->off == 0x3E7) &&
+		    (bs->def == 0x3E7) &&
+		    (bs->brain == 0x3E7) &&
+		    (bs->speed == 0x3E7)) {
+			unlockMedal(7);
+			HAS_MEDAL_AWARD_PENDING = 1;
+		}
+	}
+	if ((hasMedal(0xD) == 0) && (MONEY == 0xF423F)) {
+		unlockMedal(0xD);
+		HAS_MEDAL_AWARD_PENDING = 1;
+	}
+	if ((hasMedal(0xE) == 0) && (YEAR == 0xA)) {
+		unlockMedal(0xE);
+		HAS_MEDAL_AWARD_PENDING = 1;
+	}
+	if (hasMedal(6) == 0) {
+		i = 1;
+		while (i < 0x3E) {
+			if (hasDigimonRaised((uint16_t)i) == 0) {
+				break;
+			}
+			i++;
+		}
+		if (i == 0x3E) {
+			unlockMedal(6);
+			HAS_MEDAL_AWARD_PENDING = 1;
+			TAMER_ENTITY.tamerLevel = TAMER_ENTITY.tamerLevel + 1;
+			if (TAMER_ENTITY.tamerLevel >= 0xB) {
+				TAMER_ENTITY.tamerLevel = 0xA;
+			}
+		}
+	}
+	if ((hasMedal(9) == 0) && (PARTNER_PARA.fishCaught >= 0x64)) {
+		unlockMedal(9);
+		HAS_MEDAL_AWARD_PENDING = 1;
+	}
+	if (hasMedal(0xC) == 0) {
+		i = 0;
+		while (i < 0x42) {
+			if (getCardAmount((uint8_t)i) == 0) {
+				break;
+			}
+			i++;
+		}
+		if (i == 0x42) {
+			unlockMedal(0xC);
+			HAS_MEDAL_AWARD_PENDING = 1;
+		}
+	}
+}
 
 void checkPendingAwards(void)
 {
@@ -674,7 +746,28 @@ INCLUDE_ASM("asm/main/nonmatchings/tamer", tickEntityMoveTo);
 
 INCLUDE_ASM("asm/main/nonmatchings/tamer", tickEntityMoveToAxis);
 
-INCLUDE_ASM("asm/main/nonmatchings/tamer", worldPosToScreenPos2);
+static inline int16_t tamer_s16(int16_t a)
+{
+	return a;
+}
+void worldPosToScreenPos2(int16_t *x, int16_t *y, int16_t *z)
+{
+	SVECTOR v;
+	SVECTOR sxy;
+	int16_t new_var;
+
+	SetRotMatrix(&GsWSMATRIX);
+	SetTransMatrix(&GsWSMATRIX);
+	v.vx = *x;
+	v.vy = *y;
+	v.vz = *z;
+	gte_ldv0(&v);
+	gte_rtps();
+	gte_stsxy((long *)&sxy);
+	new_var = sxy.vx;
+	*x = tamer_s16(new_var) - (0xA0 - DRAWING_OFFSET_X);
+	*y = sxy.vy - (0x78 - DRAWING_OFFSET_Y);
+}
 
 uint8_t checkChestCollision(void)
 {
