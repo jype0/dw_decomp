@@ -1,14 +1,34 @@
 #include <libcd.h>
 
+#include <dw/clock.h>
 #include <dw/combat.h>
 #include <dw/main.h>
 #include <dw/params.h>
 #include <dw/entity.h>
+#include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
 
+#include <mwinline_n.h>
+
 #include "common.h"
+
+void MAIN_func_800D92EC(int32_t a, int32_t b, int32_t c, int32_t d);
+void MAIN_thunk_func_800D92EC(int32_t a, int32_t b, int32_t c, int32_t d);
+extern char MAIN_D_801345C4[];
+extern uint16_t MAIN_D_80134FFE;
+void setMapObjectsFlag(int16_t a, int16_t b, int32_t flag);
+typedef struct {
+	uint8_t map;
+	uint8_t lightOn;
+	int16_t a;
+	int16_t b;
+	uint16_t trigger;
+} MapLightEntry;
+
+void updateMapLightState(void);
+
 
 void damageTick(FighterData* fighter, Stats* stats);
 void sortItemsById(uint8_t *data, int32_t count);
@@ -164,7 +184,24 @@ void swapInt(int32_t *a, int32_t *b)
 	*b = tmp;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/utils", getEntityScreenPos);
+void getEntityScreenPos(Entity *e, int32_t boneId, int16_t *out)
+{
+	MATRIX *w;
+	SVECTOR v;
+	int16_t ox;
+
+	GsSetLsMatrix(&GsWSMATRIX);
+	w = &e->posData[boneId].posMatrix.workm;
+	v.vx = w->t[0];
+	v.vy = w->t[1];
+	v.vz = w->t[2];
+	gte_ldv0(&v);
+	gte_rtps();
+	gte_stsxy((long *)out);
+	ox = 0xA0 - DRAWING_OFFSET_X;
+	out[0] = out[0] - ox;
+	out[1] -= 0x78 - DRAWING_OFFSET_Y;
+}
 
 void MAIN_func_800E53B4(POLY_FT4* poly, int32_t x, int32_t y)
 {
@@ -346,7 +383,10 @@ void renderPauseBox(int32_t instanceId)
   renderString(0, (int16_t) ((*new_var).x + 6), (int16_t) ((*new_var).y + 6), 0x2A, 0xC, 0x78, 0xF0, 0, 1);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/utils", MAIN_thunk_func_800D92EC);
+void MAIN_thunk_func_800D92EC(int32_t a, int32_t b, int32_t c, int32_t d)
+{
+	MAIN_func_800D92EC(a, b, c, d);
+}
 
 void setMapLayerEnabled(uint8_t enabled)
 {
@@ -391,6 +431,28 @@ int32_t isTamerOnScreen(void)
 	return 0;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/utils", updateMapLightState);
+void updateMapLightState(void)
+{
+	int32_t i;
+	MapLightEntry *p;
+
+	p = (MapLightEntry *)MAIN_D_801345C4;
+	for (i = 0; i <= 0; i++, p++) {
+		if ((p->map == (MAIN_D_80134FFE & 0xFF)) &&
+		    ((p->trigger == 0xFFFF) || (isTriggerSet(p->trigger) != 0))) {
+			if ((HOUR >= 7) && (HOUR < 0x13)) {
+				if (p->lightOn == 0) {
+					setMapObjectsFlag(p->a, p->b, 0);
+				} else {
+					setMapObjectsFlag(p->a, p->b, 1);
+				}
+			} else if (p->lightOn == 1) {
+				setMapObjectsFlag(p->a, p->b, 0);
+			} else {
+				setMapObjectsFlag(p->a, p->b, 1);
+			}
+		}
+	}
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/utils", startTournament);

@@ -126,7 +126,7 @@ void setTamerState(int8_t state);
 void tickScriptDialogueBox(void);
 void renderScriptDialogueBox(void);
 void returnFromScriptFile(void);
-int32_t getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
+void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
 void readFileSection(char *filename, void *dest, uint32_t offset,
 		     uint32_t size);
 void dailyPStatTrigger(void);
