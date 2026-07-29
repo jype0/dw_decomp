@@ -182,6 +182,8 @@ typedef struct {
 	int16_t h;
 } MenuHighlight;
 void MAIN_func_801136C8(MenuHighlight *b);
+extern int8_t MAIN_D_80131818[];
+extern MenuHighlight MAIN_D_801316B8[];
 int32_t createByteSum(uint8_t *data, int32_t len);
 void openSaveMachine(void);
 int32_t MAIN_func_801138B0(void);
@@ -912,7 +914,74 @@ int32_t MAIN_func_8011341C(uint8_t *p)
 	return count;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/main_menu", renderMainMenu);
+void renderMainMenu(void)
+{
+	int8_t menu;
+
+	if (CURRENT_MENU >= 0) {
+		menu = MAIN_D_80131818[CURRENT_MENU];
+		if (menu != -1) {
+			MAIN_func_801136C8(&MAIN_D_801316B8[menu]);
+		}
+		switch (menu) {
+		case 0:
+			MAIN_func_8010D034();
+			break;
+		case 1:
+			MAIN_func_8010D3E0();
+			break;
+		case 2:
+		case 4:
+			MAIN_func_8010D554();
+			break;
+		case 5:
+			MAIN_func_8010D694();
+			break;
+		case 6:
+			MAIN_func_8010D70C();
+			break;
+		case 7:
+			MAIN_func_8010DA44();
+			break;
+		case 8:
+			renderContinueSaveSelection();
+			break;
+		case 9:
+			MAIN_func_8010DEBC();
+			break;
+		case 10:
+			MAIN_func_8010DFAC();
+			break;
+		case 11:
+			MAIN_func_8010E0C8();
+			break;
+		case 12:
+			MAIN_func_8010E16C();
+			break;
+		case 13:
+			MAIN_func_8010E350();
+			break;
+		case 14:
+			MAIN_func_8010E4B8();
+			break;
+		case 15:
+			MAIN_func_8010E638();
+			break;
+		case 16:
+			MAIN_func_8010E73C();
+			break;
+		case 17:
+			MAIN_func_8010E8C0();
+			break;
+		case 18:
+			MAIN_func_8010E938();
+			break;
+		case 19:
+			MAIN_func_8010EA1C();
+			break;
+		}
+	}
+}
 
 void registerBattleData(void)
 {

@@ -292,6 +292,8 @@ SECTIONS
         . = ALIGN(., 4);
         build/asm/main/data/main_menu.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
+        build/src/main/main_menu.c.o(.rodata.* .rodata)
+        . = ALIGN(., 4);
         KEEP(build/asm/main/psyq/libapi.s.o(.rodata.*))
         . = ALIGN(., 4);
         main_RODATA_END = .;
