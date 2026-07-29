@@ -883,7 +883,13 @@ int32_t createByteSum(uint8_t *data, int32_t len)
 	return sum;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/main_menu", createSavegameChecksum);
+int32_t createSavegameChecksum(int32_t slot)
+{
+	uint32_t first;
+
+	first = createByteSum(&MAIN_D_8013192C[slot * 0xF00] + 0x200, 0x4E4);
+	return first + (uint32_t)createByteSum(&MAIN_D_8013192C[slot * 0xF00] + 0x700, 0xA00);
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/main_menu", loadSavegame);
 
