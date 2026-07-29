@@ -5,6 +5,12 @@
 #include <dw/types.h>
 #include <libcd.h>
 
+typedef struct {
+	int16_t state;
+	int16_t unk2;
+	int16_t unk4;
+} CloudFXEntry;
+
 extern int16_t MAIN_D_80138AA4[];
 extern int16_t MAIN_D_801389B4[];
 extern char *EFE_FLASH_DATA;
@@ -12,7 +18,7 @@ extern uint32_t MAIN_D_8012343C[];
 extern char MAIN_D_8012342C[];
 extern char MAIN_D_80134220[];
 extern int16_t EFE_LOADED_MOVE_DATA[];
-extern char EFE_SCRIPT_MEM1_DATA;
+extern char EFE_SCRIPT_MEM1_DATA[];
 extern char *EFE_DATA_STACK;
 extern u_long SOME_IMAGE_DATA[];
 void setShortWithStride();
@@ -80,7 +86,7 @@ void renderEntityParticleFX(int32_t id);
 void removeEntityParticleFX();
 void initializeCloudFXData();
 void removeAllCloudFX();
-void createCloudFX(int32_t *pos);
+void createCloudFX(int16_t *pos);
 void tickCloudFX();
 void renderCloudFX(int32_t id);
 void rotateVector();
@@ -196,9 +202,36 @@ void initializeCloudFXData(void)
 	setShortWithStride(MAIN_D_80138AA4, -1, 0x3C, 6);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/efe", removeAllCloudFX);
+void removeAllCloudFX(void)
+{
+	int32_t i;
 
-INCLUDE_ASM("asm/main/nonmatchings/efe", createCloudFX);
+	for (i = 0; i < 0x3C; i++) {
+		if (((CloudFXEntry *)MAIN_D_80138AA4)[i].state != -1) {
+			((CloudFXEntry *)MAIN_D_80138AA4)[i].state = -1;
+			removeObject(0x601, i);
+		}
+	}
+}
+
+void createCloudFX(int16_t *pos)
+{
+	CloudFXEntry *e;
+	int32_t i;
+
+	for (i = 0; i < 0x3C; i++) {
+		if (((CloudFXEntry *)MAIN_D_80138AA4)[i].state < 0) {
+			break;
+		}
+	}
+	if (i != 0x3C) {
+		e = &((CloudFXEntry *)MAIN_D_80138AA4)[i];
+		e->state = 0;
+		e->unk2 = pos[0];
+		e->unk4 = pos[2];
+		addObject(0x601, i, tickCloudFX, renderCloudFX);
+	}
+}
 
 void tickCloudFX(int32_t id)
 {
@@ -269,7 +302,12 @@ INCLUDE_ASM("asm/main/nonmatchings/efe", modifySomeImage);
 
 INCLUDE_ASM("asm/main/nonmatchings/efe", findEFEDATFile);
 
-INCLUDE_ASM("asm/main/nonmatchings/efe", initializeEFE);
+void initializeEFE(void)
+{
+	setShortWithStride(EFE_LOADED_MOVE_DATA, -1, 0x11, 2);
+	EFE_DATA_STACK = EFE_SCRIPT_MEM1_DATA;
+	findEFEDATFile();
+}
 
 void getEFEDATEntry(int32_t id)
 {
