@@ -53,7 +53,7 @@ int8_t getFileCityTopMap(void);
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t MAIN_D_80135034;
 extern int32_t MAIN_D_80135038;
-extern int8_t MAIN_D_8013172B;
+extern int8_t MAIN_D_8013172B[];
 extern char *MOVE_NAMES[];
 extern TamerEntity TAMER_ENTITY;
 extern uint8_t INVENTORY_ITEM_TYPES[30];
@@ -406,7 +406,52 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 	renderMenuBox(x, y, 0xE0, 0x24);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/main_menu", MAIN_func_8010DA44);
+void MAIN_func_8010DA44(void)
+{
+	POLY_FT4 *ft4;
+	int32_t page;
+	int32_t y;
+	int32_t i;
+
+	ft4 = (POLY_FT4 *)GsGetWorkBase();
+	renderText(ft4++, 0x3A, 0x18, 0, 0, 0xD6, 0xC, 0);
+	GsSetWorkBase((PACKET *)ft4);
+	renderMenuBox(0x30, 0x13, 0xE0, 0x16);
+
+	if (MAIN_D_80135038 < MAIN_D_8013172B[0] * 10) {
+		MAIN_D_80135038 += 2;
+	}
+
+	if (MAIN_D_8013172B[0] * 10 < MAIN_D_80135038) {
+		MAIN_D_80135038 -= 2;
+	}
+
+	page = MAIN_D_80135038 / 10;
+
+	for (i = 1; i < 6; ++i) {
+		y = (i * 0x24) + ((page * 10 - MAIN_D_80135038) * 36 / 10 + 0x29);
+		if (y < 0x29) {
+			y = 0x29;
+		}
+
+		if (!(y < 0xBA)) {
+			y = 0xB9;
+		}
+
+		renderSaveSlotBox(page + i, 0x30, y);
+	}
+
+	y = (page * 10 - MAIN_D_80135038) * 36 / 10 + 0x29;
+	if (y < 0x29) {
+		y = 0x29;
+	}
+
+	if (!(y < 0xBA)) {
+		y = 0xB9;
+	}
+
+	renderSaveSlotBox(page, 0x30, y);
+}
 
 void renderContinueSaveSelection(void)
 {
