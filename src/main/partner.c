@@ -104,8 +104,9 @@ void removeOneSelectedItem();
 void removeTamerItem();
 void partnerHandleFoodFeed(int32_t type);
 void createCameraMovement(VECTOR* pos, int32_t instanceId);
-int32_t tickEntityWalkTo(uint32_t scriptId1, uint32_t scriptId2,
-                         int32_t targetX, int32_t targetZ, int32_t withCamera);
+int32_t tickEntityWalkTo(uint8_t scriptId1, uint8_t scriptId2,
+			 int32_t targetX, int32_t targetZ,
+			 int8_t withCamera);
 void handleToilet();
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
 int32_t createPoopPile(int32_t tileX, int32_t tileY);

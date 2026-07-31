@@ -74,7 +74,7 @@ extern int16_t HOUR;
 extern int16_t DAY;
 extern uint8_t YEAR;
 extern int32_t MONEY;
-extern int8_t NPC_IS_WALKING_TOWARDS[8];
+extern int32_t NPC_IS_WALKING_TOWARDS[8];
 extern uint8_t MAIN_D_801341FC[6];
 extern uint8_t MAIN_D_80122D80[];
 extern uint8_t MAIN_D_80122D68[];
@@ -266,9 +266,9 @@ int32_t getTamerState(void);
 void startAnimationTamer(int32_t animId);
 void checkPendingAwards(void);
 int32_t isTrainingComplete(void);
-int32_t tickEntityWalkTo(uint32_t scriptId1, uint32_t scriptId2,
+int32_t tickEntityWalkTo(uint8_t scriptId1, uint8_t scriptId2,
 			 int32_t targetX, int32_t targetZ,
-			 int32_t withCamera);
+			 int8_t withCamera);
 int32_t tickLookAtEntity(uint32_t scriptId1, uint32_t scriptId2);
 int32_t tickEntityMoveTo(uint32_t scriptId1, uint32_t scriptId2,
 			 int32_t targetX, int32_t targetZ, int32_t speed,
@@ -727,7 +727,56 @@ void startAnimationTamer(int32_t animId)
 	startAnimation(&TAMER_ENTITY.entity, animId);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/tamer", tickEntityWalkTo);
+int32_t tickEntityWalkTo(uint8_t scriptId, uint8_t targetId, int32_t x, int32_t z, int8_t useCamera)
+{
+	Entity *e;
+	PositionData *pd;
+	VECTOR from;
+	VECTOR to;
+	int16_t fromTileX;
+	int16_t fromTileY;
+	int16_t toTileX;
+	int16_t toTileY;
+	int16_t col;
+
+	col = -1;
+	e = getEntityFromScriptId(&scriptId);
+	if (scriptId >= 2) {
+		NPC_IS_WALKING_TOWARDS[scriptId - 2] = 1;
+	}
+	pd = e->posData;
+	from = pd->location;
+	if (targetId == 0xFF) {
+		to.vx = x;
+		to.vy = e->posData->location.vy;
+		to.vz = z;
+	} else {
+		pd = getEntityFromScriptId(&targetId)->posData;
+		to = pd->location;
+	}
+	if ((PREVIOUS_CAMERA_POS_INITIALIZED == 0) && (useCamera == 1)) {
+		PREVIOUS_CAMERA_POS = from;
+		PREVIOUS_CAMERA_POS_INITIALIZED = 1;
+	}
+	getModelTile(&from, &fromTileX, &fromTileY);
+	getModelTile(&to, &toTileX, &toTileY);
+	entityLookAtLocation(e, &to);
+	if (useCamera == 1) {
+		moveCameraByDiff(&PREVIOUS_CAMERA_POS, &from);
+		PREVIOUS_CAMERA_POS = from;
+	}
+	if (targetId != 0xFF) {
+		col = entityCheckCollision(0, e, 0, 0);
+	}
+	if (((fromTileX == toTileX) && (fromTileY == toTileY)) || ((col != -1) && (col < 9))) {
+		PREVIOUS_CAMERA_POS_INITIALIZED = 0;
+		if (scriptId >= 2) {
+			NPC_IS_WALKING_TOWARDS[scriptId - 2] = 0;
+		}
+		return 1;
+	}
+	return 0;
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/tamer", getEntityFromScriptId);
 

@@ -7,9 +7,9 @@
 
 int32_t tickLookAtEntity(uint32_t scriptId1, uint32_t scriptId2);
 int32_t tickEntitySetRotation(uint32_t scriptId, int16_t rotationY);
-int32_t tickEntityWalkTo(uint32_t scriptId1, uint32_t scriptId2,
+int32_t tickEntityWalkTo(uint8_t scriptId1, uint8_t scriptId2,
 			 int32_t targetX, int32_t targetZ,
-			 int32_t withCamera);
+			 int8_t withCamera);
 int32_t tickMoveCameraTo(int32_t x, int32_t y, uint8_t speed);
 int32_t tickMoveCameraToEntity(uint32_t scriptId, uint8_t speed);
 int32_t tickEntityMoveTo(uint32_t scriptId1, uint32_t scriptId2,
@@ -133,19 +133,19 @@ void tickScriptedMovement(int32_t slot)
 					     movement->posX);
 		break;
 	case 2:
-		done = tickEntityWalkTo(movement->entityId, 0xff,
+		done = tickEntityWalkTo((uint8_t)movement->entityId, 0xff,
 					movement->posX, movement->posY, 0);
 		break;
 	case 3:
-		done = tickEntityWalkTo(movement->entityId, movement->target,
+		done = tickEntityWalkTo((uint8_t)movement->entityId, movement->target,
 					0, 0, 0);
 		break;
 	case 4:
-		done = tickEntityWalkTo(movement->entityId, 0xff,
+		done = tickEntityWalkTo((uint8_t)movement->entityId, 0xff,
 					movement->posX, movement->posY, 1);
 		break;
 	case 5:
-		done = tickEntityWalkTo(movement->entityId, movement->target,
+		done = tickEntityWalkTo((uint8_t)movement->entityId, movement->target,
 					0, 0, 1);
 		break;
 	case 6:
