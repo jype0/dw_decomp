@@ -152,6 +152,8 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/script_draw.c.o(.text.*)
         . = ALIGN(., 4);
+        build/src/main/main_menu.c.o(".text.MAIN_func_8010D034")
+        . = ALIGN(., 4);
         build/src/main/main_menu.c.o(.text.*)
         . = ALIGN(., 16);
         main_TEXT_END = .;

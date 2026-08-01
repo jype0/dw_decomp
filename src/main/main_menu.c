@@ -245,7 +245,7 @@ void *main_menu_order_anchor[] = {
 	MAIN_func_8010D034,
 };
 
-INCLUDE_ASM("asm/main/nonmatchings/main_menu", MAIN_func_8010D034);
+
 
 void renderText(POLY_FT4 *prim, int32_t x, int32_t y, uint8_t u, int32_t v,
 		int32_t w, int32_t h, int32_t textColor)
@@ -1534,4 +1534,20 @@ int32_t MAIN_func_80113A20(void)
 	}
 
 	return 0;
+}
+
+void MAIN_func_8010D034(void)
+{
+	POLY_FT4 *cur;
+
+	cur = (POLY_FT4 *)GsGetWorkBase();
+	renderText(cur++, 0x52, 0x37, 0, 0, 0xB0, 0xC, 0);
+	if (MAIN_D_80135030 != 0) {
+		renderText(cur++, 0x52, 0x43, 0, 0xC, 0xB0, 0x18, 0);
+	} else {
+		renderText(cur++, 0x52, 0x43, 0, 0xC, 0xB0, 0x18, 1);
+	}
+	renderText(cur++, 0x52, 0x5B, 0, 0x24, 0xB0, 0xC, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x48, 0x32, 0xB0, 0x3A);
 }
