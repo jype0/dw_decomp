@@ -150,9 +150,10 @@ void MAIN_func_8010E73C();
 void MAIN_func_8010E8C0(void);
 void MAIN_func_8010E938(void);
 void MAIN_func_8010EA1C(void);
+void clearTextArea(void);
 void drawMainMenuStrings();
 void drawSaveSlotText(int32_t slot, int32_t row);
-char *MAIN_func_8010FB7C(int32_t value, char *buf);
+char *MAIN_func_8010FB7C(int32_t value, char *buf, int32_t digits);
 void MAIN_func_8010FBB0();
 void MAIN_func_8010FC48();
 void updateMemoryCardState();
@@ -660,7 +661,386 @@ void MAIN_func_8010EA1C(void)
 	renderMenuBox(0x24, 0x40, 0xF8, 0x2E);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/main_menu", drawMainMenuStrings);
+extern char *MAIN_D_80131868[];
+extern char *MAIN_D_8013186C[];
+extern char *MAIN_D_80131870[];
+extern char *MAIN_D_80131874[];
+extern char *MAIN_D_80131878[];
+extern char *MAIN_D_8013187C[];
+extern char *MAIN_D_80131880[];
+extern char *MAIN_D_80131884[];
+extern char *MAIN_D_8013188C[];
+extern char *MAIN_D_80131890[];
+extern char *MAIN_D_80131898[];
+extern char *MAIN_D_801318B0[];
+extern char *MAIN_D_801318DC[];
+extern char *MAIN_D_801318FC[];
+extern char *MAIN_D_80131900[];
+extern char *MAIN_D_80131904[];
+extern char *MAIN_D_80131908[];
+extern char MAIN_D_80131278[];
+extern char MAIN_D_80131290[];
+extern char MAIN_D_801312A0[];
+extern char MAIN_D_801312B8[];
+extern char MAIN_D_801312D0[];
+extern char MAIN_D_801312E4[];
+extern char MAIN_D_801312FC[];
+extern char MAIN_D_80131318[];
+extern char MAIN_D_80131328[];
+extern char MAIN_D_80131340[];
+extern char MAIN_D_8013134C[];
+extern char MAIN_D_8013136C[];
+extern char MAIN_D_80131378[];
+extern char MAIN_D_80131390[];
+extern char MAIN_D_801313B0[];
+extern char MAIN_D_801313D0[];
+extern char MAIN_D_801313E4[];
+extern char MAIN_D_80131400[];
+extern char MAIN_D_8013141C[];
+extern char MAIN_D_8013143C[];
+extern char MAIN_D_80131448[];
+extern char MAIN_D_80131454[];
+extern char MAIN_D_80131460[];
+extern char MAIN_D_8013147C[];
+extern char MAIN_D_80131498[];
+extern char MAIN_D_801314B0[];
+extern char MAIN_D_801314C8[];
+extern char MAIN_D_801314E4[];
+extern char MAIN_D_80131500[];
+extern char MAIN_D_8013151C[];
+extern char MAIN_D_80131538[];
+extern char MAIN_D_8013154C[];
+extern char MAIN_D_80131568[];
+extern char MAIN_D_80131580[];
+extern char MAIN_D_801315A0[];
+extern char MAIN_D_801315C0[];
+extern char MAIN_D_801315D0[];
+extern char MAIN_D_801315EC[];
+extern char MAIN_D_80134660;
+extern char MAIN_D_80134662;
+extern char MAIN_D_80134664;
+extern char MAIN_D_8013466C;
+extern char MAIN_D_80134674;
+extern char MAIN_D_80134678;
+extern char MAIN_D_8013467C;
+extern char MAIN_D_80134680;
+extern char MAIN_D_80134684;
+extern char MAIN_D_80134694;
+extern char MAIN_D_80134698;
+extern char MAIN_D_8013469C;
+extern char MAIN_D_801346A4;
+extern char MAIN_D_801346AC;
+extern char MAIN_D_801346B0;
+extern char MAIN_D_801346B4;
+extern char MAIN_D_801346B8;
+extern int32_t MAIN_D_80135048;
+extern int32_t MAIN_D_80135054;
+extern int32_t MAIN_D_80135058;
+extern int32_t MAIN_D_8013505C;
+
+void drawMainMenuStrings(int32_t menu)
+{
+	int32_t view;
+	int32_t i;
+	char buf[0x2C];
+	int32_t type;
+
+	MAIN_D_80135048 = 0;
+	CURRENT_MENU = menu;
+	if (menu == -1) {
+		return;
+	}
+	view = MAIN_D_80131818[menu];
+	if (view == -1) {
+		return;
+	}
+	MAIN_D_801316B8[view].pos = MAIN_D_801316B8[view].pad[1];
+	MAIN_D_801316B8[view].pad[2] = 0;
+	MAIN_D_80135038 = 0;
+	MAIN_D_80135050 = 0;
+	clearTextArea();
+	switch (view) {
+	case 0:
+		drawString(MAIN_D_80131868[0], 0, 0);
+		drawString(MAIN_D_8013186C[0], 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131870[0], 0, 0x18);
+		drawString(MAIN_D_80131874[0], 0, 0x24);
+		break;
+	case 1:
+		drawString(MAIN_D_80131878[0], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131878[0], 0, 0xC);
+		drawString(&MAIN_D_80134662, 0x76, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131884[0], 0, 0x18);
+		break;
+	case 2:
+		drawString(MAIN_D_8013187C[0], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_8013187C[0], 0, 0xC);
+		drawString(&MAIN_D_80134662, 0x9A, 0xC);
+		MAIN_D_80135054 = 1;
+		break;
+	case 4:
+		drawString(MAIN_D_80131880[0], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131880[0], 0, 0xC);
+		drawString(&MAIN_D_80134662, 0x76, 0xC);
+		MAIN_D_80135054 = 2;
+		break;
+	case 5:
+		drawString(MAIN_D_80131898[MAIN_D_80135058], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131278, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131290, 0, 0x18);
+		break;
+	case 6:
+		drawString(MAIN_D_80131884[0], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801312A0, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_801312B8, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_801312D0, 0, 0x24);
+		DrawSync(0);
+		drawString(MAIN_D_801312E4, 0, 0x30);
+		DrawSync(0);
+		drawString(&MAIN_D_80134664, 0, 0xF0);
+		break;
+	case 7:
+		drawString(MAIN_D_80131878[MAIN_D_80135034], 0, 0);
+		DrawSync(0);
+		if (MAIN_D_80135034 == 0 || MAIN_D_80135034 == 1 ||
+		    MAIN_D_80135034 == 2) {
+			if (MEMORY_CARD_ID != 0) {
+				if (MAIN_D_80135054 == 1) {
+					drawString(&MAIN_D_80134662, 0x9A, 0);
+				}
+				if (MAIN_D_80135054 == 2) {
+					drawString(&MAIN_D_80134662, 0x76, 0);
+				}
+			}
+		}
+		for (i = 0; i < 6; i++) {
+			drawSaveSlotText(i, i);
+		}
+		break;
+	case 9:
+		drawString(MAIN_D_801312FC, 0, 0);
+		DrawSync(0);
+		if (MEMORY_CARD_ID != 0) {
+			drawString(&MAIN_D_80134662, 0x76, 0);
+		}
+		DrawSync(0);
+		drawString(MAIN_D_80131318, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131328, 0, 0x18);
+		DrawSync(0);
+		drawString(&MAIN_D_8013466C, 0, 0xF0);
+		break;
+	case 8:
+		drawString(MAIN_D_80131878[MAIN_D_80135034], 0, 0);
+		if (MAIN_D_80135034 == 0 || MAIN_D_80135034 == 1 ||
+		    MAIN_D_80135034 == 2) {
+			if (MEMORY_CARD_ID != 0) {
+				if (MAIN_D_80135054 == 1) {
+					drawString(&MAIN_D_80134662, 0x9A, 0);
+				}
+				if (MAIN_D_80135054 == 2) {
+					drawString(&MAIN_D_80134662, 0x76, 0);
+				}
+			}
+		}
+		DrawSync(0);
+		drawString(MAIN_D_80131340, 0x90, 0);
+		DrawSync(0);
+		drawString(&MAIN_D_80131658[(MEMORY_CARD_SLOT + 1) * 6], 0, 0xC);
+		DrawSync(0);
+		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 4, 0x18, 0xC);
+		DrawSync(0);
+		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 0x18, 0x6C, 0xC);
+		DrawSync(0);
+		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 0x2C, 0, 0x18);
+		DrawSync(0);
+		drawString(&MAIN_D_80131658[(MEMORY_CARD_SLOT + 1) * 6], 0, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_801318DC[MAIN_D_80135034], 0x18, 0x30);
+		DrawSync(0);
+		drawString(&MAIN_D_8013466C, 0, 0xF0);
+		if (MAIN_D_80135034 == 2) {
+			MAIN_D_801316B8[view].pos = 1;
+		}
+		break;
+	case 10:
+		drawString(MAIN_D_8013134C, 0, 0);
+		DrawSync(0);
+		if (MEMORY_CARD_ID != 0) {
+			drawString(&MAIN_D_80134674, 0x30, 0);
+		}
+		if (MAIN_D_80135040 == 1) {
+			drawString(&MAIN_D_80134678, 0x3C, 0);
+		}
+		if (MAIN_D_80135040 == 1 || MAIN_D_80135040 == 4) {
+			drawString(&MAIN_D_8013467C, 0x9C, 0);
+		}
+		if (MAIN_D_80135040 == 3) {
+			drawString(&MAIN_D_80134680, 0x9C, 0);
+		}
+		DrawSync(0);
+		drawString(MAIN_D_801318B0[MAIN_D_80135040], 0, 0xC);
+		break;
+	case 11:
+		drawString(MAIN_D_8013136C, 0, 0);
+		drawString(MAIN_D_80131378, 0, 0xC);
+		break;
+	case 12:
+		drawString(MAIN_D_80131390, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801313B0, 0, 0xC);
+		DrawSync(0);
+		if (MAIN_D_80135040 != -1) {
+			drawString(MAIN_D_801313D0, 0, 0x24);
+			DrawSync(0);
+			if (MEMORY_CARD_ID != 0) {
+				drawString(&MAIN_D_80134660, 0x30, 0x24);
+			}
+			if (MAIN_D_80135040 == 1) {
+				drawString(&MAIN_D_80134660, 0x3C, 0x24);
+			}
+			if (MAIN_D_80135040 == 1 || MAIN_D_80135040 == 4) {
+				drawString(&MAIN_D_80134660, 0x9C, 0x24);
+			}
+			if (MAIN_D_80135040 == 3) {
+				drawString(&MAIN_D_80134660, 0x9C, 0x24);
+			}
+			DrawSync(0);
+			drawString(MAIN_D_801318B0[MAIN_D_80135040], 0, 0x30);
+			DrawSync(0);
+		}
+		drawString(&MAIN_D_80134664, 0, 0xF0);
+		break;
+	case 13:
+		drawString(MAIN_D_8013188C[0], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801313E4, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131400, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_8013141C, 0, 0x24);
+		DrawSync(0);
+		drawString(&MAIN_D_80134664, 0, 0xF0);
+		if (MAIN_D_8013505C == 1) {
+			drawString(&MAIN_D_80134662, 0x76, 0x24);
+			drawString(&MAIN_D_80134662, 0xB4, 0x24);
+		}
+		break;
+	case 14:
+		drawString(MAIN_D_80131890[0], 0, 0);
+		DrawSync(0);
+		drawString(&MAIN_D_80134684, 0, 0xC);
+		drawString(PARTNER_ENTITY.name, 0x64, 0xC);
+		DrawSync(0);
+		drawString(&MAIN_D_8013468C, 0, 0x18);
+		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x64, 0x18);
+		DrawSync(0);
+		drawString(&MAIN_D_80134694, 0, 0x24);
+		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
+		DrawSync(0);
+		drawString(&MAIN_D_80134698, 0, 0x30);
+		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
+		DrawSync(0);
+		drawString(&MAIN_D_8013469C, 0, 0x3C);
+		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
+		DrawSync(0);
+		drawString(&MAIN_D_801346A4, 0, 0x48);
+		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
+		DrawSync(0);
+		drawString(MAIN_D_8013143C, 0, 0x54);
+		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x64, 0x54);
+		DrawSync(0);
+		drawString(MAIN_D_80131448, 0, 0x60);
+		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[1], 0x64, 0x60);
+		DrawSync(0);
+		drawString(MAIN_D_80131454, 0, 0x6C);
+		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[2], 0x64, 0x6C);
+		DrawSync(0);
+		drawString(MAIN_D_80131460, 0, 0x78);
+		drawString(&MAIN_D_801346AC, 0, 0x84);
+		drawString(&MAIN_D_801346B0, 0, 0x90);
+		break;
+	case 15:
+		drawString(MAIN_D_80131890[0], 0, 0);
+		DrawSync(0);
+		MAIN_func_8010FC48(0);
+		drawString(MAIN_D_8013147C, 0, 0x84);
+		break;
+	case 16:
+		drawString(MAIN_D_80131890[0], 0, 0);
+		DrawSync(0);
+		strcpy(buf, MAIN_D_80131498);
+		drawString(buf, 0, 0xC);
+		DrawSync(0);
+		strcpy(buf, PARTNER_ENTITY.name);
+		drawString(buf, 0, 0x18);
+		DrawSync(0);
+		drawString(&MAIN_D_80131658[((MAIN_D_80135060 + 1) / 10) * 6] + 2, 0, 0xC);
+		DrawSync(0);
+		drawString(&MAIN_D_80131658[((MAIN_D_80135060 + 1) % 10) * 6] + 2, 0xC, 0xC);
+		DrawSync(0);
+		drawString(&MAIN_D_801346AC, 0, 0x24);
+		DrawSync(0);
+		drawString(&MAIN_D_801346B0, 0, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_801314B0, 0, 0x3C);
+		DrawSync(0);
+		drawString(MAIN_D_801314C8, 0, 0x48);
+		drawString(MAIN_D_801314E4, 0, 0x54);
+		break;
+	case 17:
+		drawString(MAIN_D_80131500, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_8013151C, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131538, 0, 0x18);
+		drawString(MAIN_D_8013154C, 0, 0x24);
+		break;
+	case 18:
+		drawString(MAIN_D_80131568, 0, 0);
+		DrawSync(0);
+		drawString(&MAIN_D_8013466C, 0, 0xC);
+		break;
+	case 19:
+		strcpy(buf, PARTNER_ENTITY.name);
+		strcat(buf, &MAIN_D_801346B4);
+		strcat(buf, DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name);
+		strcat(buf, &MAIN_D_801346B8);
+		drawString(buf, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131580, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_801315A0, 0, 0x18);
+		break;
+	case 20:
+		drawString(MAIN_D_801318FC[0], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131900[0], 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_80131904[0], 0, 0x18);
+		drawString(MAIN_D_80131908[0], 0, 0x24);
+		break;
+	case 21:
+		drawString(MAIN_D_801315C0, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801315D0, 0, 0xC);
+		DrawSync(0);
+		drawString(MAIN_D_801315EC, 0, 0x18);
+		DrawSync(0);
+		drawString(&MAIN_D_80134664, 0, 0x24);
+		break;
+	}
+}
 
 void drawSaveSlotText(int32_t slot, int32_t row)
 {
@@ -683,7 +1063,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 	}
 }
 
-char *MAIN_func_8010FB7C(int32_t value, char *buf)
+char *MAIN_func_8010FB7C(int32_t value, char *buf, int32_t digits)
 {
 	sprintf(buf, &MAIN_D_801346CC, value);
 	return buf;

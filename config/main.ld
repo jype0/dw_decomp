@@ -370,6 +370,8 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/script_draw.c.o(.rodata.*)
         . = ALIGN(., 4);
+        build/src/main/main_menu.c.o(".rodata.@184")
+        . = ALIGN(., 4);
         build/asm/main/data/main_menu.rodata.s.o(.rodata.*)
         . = ALIGN(., 4);
         build/src/main/main_menu.c.o(.rodata.* .rodata)
@@ -490,7 +492,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/battle_ui.c.o(.data.*)
         . = ALIGN(., 4);
-        build/asm/main/data/main.data.s.o(.data.*)
+        KEEP(build/asm/main/data/main.data.s.o(.data.*))
         . = ALIGN(., 4);
         build/src/main/vs.c.o(.data.*)
         . = ALIGN(., 4);
