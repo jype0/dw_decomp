@@ -16,7 +16,7 @@ extern int16_t MAIN_D_801389B4[];
 extern char *EFE_FLASH_DATA;
 extern uint32_t MAIN_D_8012343C[];
 extern char MAIN_D_8012342C[];
-extern char MAIN_D_80134220[];
+extern char MAIN_D_80134220[4];
 extern int16_t EFE_LOADED_MOVE_DATA[];
 extern char EFE_SCRIPT_MEM1_DATA[];
 extern char *EFE_DATA_STACK;
@@ -300,7 +300,23 @@ void downloadSomeImage(void)
 
 INCLUDE_ASM("asm/main/nonmatchings/efe", modifySomeImage);
 
-INCLUDE_ASM("asm/main/nonmatchings/efe", findEFEDATFile);
+void findEFEDATFile(void)
+{
+	char name[0x40];
+	CdlFILE file;
+	uint8_t mode;
+	int32_t i;
+
+	i = 0;
+	while (CdReadSync(1, 0) != 0) {}
+	mode = 0x80;
+	name[0] = 0x5C;
+	strcpy(&name[1], MAIN_D_8012342C);
+	strcat(name, MAIN_D_80134220);
+	while ((int32_t)CdSearchFile(&file, name) == -1) {}
+	CdControl(0xE, &mode, 0);
+	MAIN_D_8012343C[i] = CdPosToInt(&file.pos);
+}
 
 void initializeEFE(void)
 {
