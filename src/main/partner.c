@@ -836,7 +836,48 @@ void setPartnerSlowWalking(void)
 	startAnimation(ENTITY_TABLE[1], PARTNER_ANIMATION);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/partner", updateConditionAnimation);
+void updateConditionAnimation(void)
+{
+	int32_t cond;
+	int32_t anim;
+	int32_t v;
+
+	v = (cond = PARTNER_PARA.condition);
+	anim = PARTNER_ENTITY.digimonEntity.entity.anim.animId;
+	if (v == 0) {
+		if (PARTNER_PARA.happiness < -0x1E) {
+			PARTNER_ANIMATION = 7;
+		} else if (PARTNER_PARA.happiness >= 0x1F) {
+			PARTNER_ANIMATION = 5;
+		} else {
+			setPartnerIdle();
+		}
+	} else if ((cond & 0x20) || (cond & 0x40)) {
+		if (anim != 0xE) {
+			PARTNER_ANIMATION = 0xE;
+		}
+	} else if (cond & 8) {
+		if (anim != 0x10) {
+			PARTNER_ANIMATION = 0x10;
+		}
+	} else if (cond & 4) {
+		if (anim != 0xF) {
+			PARTNER_ANIMATION = 0xF;
+		}
+	} else if (cond & 2) {
+		if (anim != 0x12) {
+			PARTNER_ANIMATION = 0x12;
+		}
+	} else if (cond & 1) {
+		if (anim != 0x11) {
+			PARTNER_ANIMATION = 0x11;
+		}
+	} else if (cond & 0x10) {
+		if (anim != 0x13) {
+			PARTNER_ANIMATION = 0x13;
+		}
+	}
+}
 
 
 
