@@ -100,6 +100,11 @@ extern int32_t MAIN_D_80134D2C;
 extern int8_t MENU_STATE;
 extern int8_t MAIN_D_80134D36;
 extern int8_t MAIN_D_80134D37;
+typedef struct {
+  uint8_t digimon;
+  uint8_t moves;
+} MenuTabPair;
+
 extern uint8_t MAIN_D_801342A0[2];
 extern uint8_t MAIN_D_801342A4[4];
 extern char *MAIN_D_801247B8[];
@@ -1606,7 +1611,32 @@ INCLUDE_ASM("asm/main/nonmatchings/overworld", createMenuBox);
 
 INCLUDE_ASM("asm/main/nonmatchings/overworld", tickDigimonMenu);
 
-INCLUDE_ASM("asm/main/nonmatchings/overworld", renderDigimonMenu);
+void renderDigimonMenu(void)
+{
+  int8_t tabs[2];
+  int32_t v;
+  MenuTabPair *tp;
+  long nv;
+  tp = (MenuTabPair *)MAIN_D_801342A0;
+  nv = tp->digimon;
+  v = tp->moves;
+  tabs[0] = nv;
+  tabs[1] = v;
+  v = MAIN_D_80134D36;
+  if (v != 1) {
+    if (v == 0) {
+      renderDigimonStatsView();
+    }
+  } else {
+    renderDigimonMovesView();
+  }
+  tabs[MAIN_D_80134D36] = 0;
+  renderString(tabs[0], -0x8A, -((short) 0x65), 0x3C, 0xC, 0, 0, 5, 1);
+  renderString(tabs[1], -0x3F, -0x65, 0x30, 0xC, 0x3C, 0, 5, 1);
+  nv = tabs[0];
+  renderMenuTab(-0x91, 0x4C, nv);
+  renderMenuTab(-0x46, 0x40, tabs[1]);
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/overworld", tickPlayerMenu);
 
