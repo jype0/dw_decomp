@@ -410,18 +410,42 @@ SECTIONS
 			KEEP(build/asm/vs/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/vs/41C8.s.o(.text.*));
+			build/src/vs/vs_scene.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_main.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_hud.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_effect.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/vs/41C8.s.o(.rodata.*));
+			build/src/vs/vs_scene.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_main.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_hud.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_effect.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/vs/41C8.s.o(.data.*));
+			build/src/vs/vs_scene.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/vs/data/1CEDC.data.s.o(.data.*));
+			build/src/vs/vs_main.c.o(.data.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_hud.c.o(.data.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_effect.c.o(.data.*);
+			. = ALIGN(., 4);
+			KEEP(build/asm/vs/data/1CF48.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/vs/41C8.s.o(.bss.*));
+			build/src/vs/vs_scene.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_main.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_hud.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/vs/vs_effect.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}
