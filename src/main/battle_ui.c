@@ -12,12 +12,12 @@
 #include <dw/ui.h>
 #include <dw/world_object.h>
 
-void BTL_func_80062F58();
+void BTL_tickBattleEndText();
 void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits,
 		  int32_t value, int32_t layer);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
 		  int32_t f, int32_t g, int32_t h, int32_t i);
-void BTL_func_8006306C(int32_t layer);
+void BTL_renderBattleEndText(int32_t layer);
 void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
 			 int32_t y1, int32_t order, uint32_t mode);
 void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
@@ -31,17 +31,17 @@ void drawString(char *text, int32_t color, int32_t pos);
 void clearTextArea(void);
 int32_t hasMove(int32_t moveId);
 void learnMove(int32_t moveId);
-void BTL_func_8005DEC4(void);
-void BTL_func_800628B4(int32_t a, int32_t b, RECT *r);
-void BTL_func_8006291C(Entity *e);
-void BTL_func_800629F4(char *name);
-void BTL_func_80062A58(void);
-void BTL_func_80062C2C(void);
-void BTL_func_80062D70(int32_t arg0);
-void BTL_func_80062DE4(int32_t a);
-int32_t BTL_func_800630C0(void);
+void BTL_battleTickFrame(void);
+void BTL_initializeBattleEndText(int32_t a, int32_t b, RECT *r);
+void BTL_appendItemDroppedText(Entity *e);
+void BTL_appendInjuredText(char *name);
+void BTL_appendCommandLearnedText(void);
+void BTL_appendMPBonusText(void);
+void BTL_appendMoveLearnedText(int32_t arg0);
+void BTL_drawBattleEndText(int32_t a);
+int32_t BTL_isEndBoxTextFinished(void);
 void spawnDroppedItems(Entity *e, int32_t item);
-void MAIN_func_800E53B4(POLY_FT4 *poly, int32_t x, int32_t y);
+void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
 
 void initBitBox();
 void battleStatsGainsAndDrops(uint8_t *droppedItems);
@@ -71,7 +71,7 @@ extern POLY_FT4 BIT_BOX;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern int16_t STATS_GAINS[6];
 extern int16_t MAIN_D_80134EA0;
-extern int8_t BTL_D_80073EA0[];
+extern int8_t BTL_END_BOX_TEXTBUFFER[];
 extern int8_t HAS_STAT_GAIN[6];
 extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
@@ -253,7 +253,7 @@ void battleMoveLearning(void)
 
 	moveId = learnableMoves[random(count)];
 	learnMove(moveId);
-	BTL_func_80062D70(moveId);
+	BTL_appendMoveLearnedText(moveId);
 }
 
 void createBitBox(void)
@@ -265,7 +265,7 @@ void createBitBox(void)
 	finalPos.x = -88;
 	finalPos.y = 18;
 	finalPos.w = 176;
-	finalPos.h = BTL_D_80073EA0[0] ? 66 : 31;
+	finalPos.h = BTL_END_BOX_TEXTBUFFER[0] ? 66 : 31;
 
 	getEntityScreenPos(ENTITY_TABLE[0], 1, screenPos);
 
@@ -298,7 +298,7 @@ void handleBattleEndBox(void)
 	boxPosition.y = 54;
 	boxPosition.w = 156;
 	boxPosition.h = 24;
-	BTL_func_800628B4(0x60, 2, &boxPosition);
+	BTL_initializeBattleEndText(0x60, 2, &boxPosition);
 
 	for (i = 0; i < 3; i++) {
 		slot = i;
@@ -307,7 +307,7 @@ void handleBattleEndBox(void)
 			continue;
 		}
 
-		BTL_func_8006291C(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[slot + 1]]);
+		BTL_appendItemDroppedText(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[slot + 1]]);
 	}
 
 	if (!(PARTNER_PARA.condition & 0x20)) {
@@ -316,12 +316,12 @@ void handleBattleEndBox(void)
 		}
 
 		if (PARTNER_PARA.condition & 0x20) {
-			BTL_func_800629F4(DIGIMON_DATA[ENTITY_TABLE[1]->type].name);
+			BTL_appendInjuredText(DIGIMON_DATA[ENTITY_TABLE[1]->type].name);
 		}
 	}
 
-	BTL_func_80062A58();
-	BTL_func_80062C2C();
+	BTL_appendCommandLearnedText();
+	BTL_appendMPBonusText();
 	battleMoveLearning();
 	GAME_STATE = 2;
 	createPostBattleStatsBox();
@@ -333,13 +333,13 @@ void handleBattleEndBox(void)
 			break;
 		}
 
-		BTL_func_8005DEC4();
+		BTL_battleTickFrame();
 	}
 
-	if (BTL_D_80073EA0[0]) {
+	if (BTL_END_BOX_TEXTBUFFER[0]) {
 		for (i = 0; i < 2; i++) {
-			BTL_func_80062DE4(1);
-			BTL_func_8005DEC4();
+			BTL_drawBattleEndText(1);
+			BTL_battleTickFrame();
 		}
 	}
 
@@ -355,7 +355,7 @@ void handleBattleEndBox(void)
 			done = 1;
 		}
 
-		BTL_func_8005DEC4();
+		BTL_battleTickFrame();
 	}
 
 	done = 0;
@@ -366,7 +366,7 @@ void handleBattleEndBox(void)
 			done = 1;
 		}
 
-		BTL_func_8005DEC4();
+		BTL_battleTickFrame();
 	}
 
 	while (1) {
@@ -374,17 +374,17 @@ void handleBattleEndBox(void)
 			break;
 		}
 
-		BTL_func_8005DEC4();
+		BTL_battleTickFrame();
 	}
 
 	MAIN_D_80134E9C = 0;
 
 	while (1) {
-		if (BTL_func_800630C0()) {
+		if (BTL_isEndBoxTextFinished()) {
 			break;
 		}
 
-		BTL_func_8005DEC4();
+		BTL_battleTickFrame();
 	}
 
 	for (i = 0; i < ENEMY_COUNT; i++) {
@@ -413,7 +413,7 @@ void tickBitBox(int32_t instanceId)
 	}
 
 	if ((bits = MAIN_D_80134E90) == 0) {
-		BTL_func_80062F58(instanceId, bits);
+		BTL_tickBattleEndText(instanceId, bits);
 		return;
 	}
 
@@ -458,10 +458,10 @@ void renderBitBox(uint8_t layer)
 
 	renderString(4, -78, 28, 48, 12, 0, 72, 6 - layer, 0);
 
-	if (BTL_D_80073EA0[0]) {
+	if (BTL_END_BOX_TEXTBUFFER[0]) {
 		renderLinePrimitive(0x8e8e8e, -86, 50, 84, 50, 6 - layer, 0);
 		renderLinePrimitive(0x121212, -85, 51, 85, 51, 6 - layer, 0);
-		BTL_func_8006306C(layer);
+		BTL_renderBattleEndText(layer);
 	}
 }
 
@@ -637,7 +637,7 @@ void MAIN_func_800EE1FC(uint8_t depth)
 
 		if (STATS_GAINS[i] != 0) {
 			POLY_FT4 *prim = (POLY_FT4 *)GsGetWorkBase();
-			MAIN_func_800E53B4(prim, 256, 491);
+			setEntityTextDigit(prim, 256, 491);
 			prim->r0 = 0x80;
 			prim->g0 = 0x80;
 			prim->b0 = 0x80;

@@ -156,9 +156,17 @@ DEP += $(MAIN_DEP)
 
 OVERLAY :=
 
+BTL_ASM_SRC := $(shell find $(ASM_DIR)/btl -path '*.s' \
+		-not -path '$(ASM_DIR)/btl/*matchings*')
+
 BTL_SRC := \
-	$(wildcard $(ASM_DIR)/btl/*.s) \
-	$(wildcard $(ASM_DIR)/btl/data/*.s)
+	$(BTL_ASM_SRC) \
+	src/btl/battle_effect.c \
+	src/btl/battle_hud.c \
+	src/btl/battle_main.c \
+	src/btl/battle_setup.c \
+	src/btl/command_menu.c \
+	src/btl/command_shout.c
 
 BTL_OBJ := $(BTL_SRC:%=$(BUILDDIR)/%.o)
 BTL_DEP := $(BTL_OBJ:%.o=%.d)

@@ -37,7 +37,7 @@ typedef struct {
 typedef struct {
 	int32_t unk1;
 	DVECTOR pos;
-	int16_t unk2;
+	uint16_t unk2;
 	int16_t unk3;
 	int16_t unk4;
 	uint8_t unk5;
@@ -70,7 +70,7 @@ typedef struct {
 	PlayerDataSub unk1[4];
 	uint16_t hitCount;
 	uint16_t blockedCount;
-	int16_t statusedCount;
+	uint16_t statusedCount;
 	uint16_t unk2;
 	int16_t startingHP;
 	int16_t commandDelay[2];
@@ -80,11 +80,10 @@ typedef struct {
 	uint8_t availableCommands[2][9];
 	uint8_t numCommands[2];
 	uint8_t finisherChargeup[2];
-	uint8_t remainingChargeupTime[2];
+	int8_t remainingChargeupTime[2];
 	uint8_t entityIds[4];
 	uint8_t unk4;
-	uint8_t unk5;
-	uint8_t unk6;
+	uint8_t unk5[2];
 	uint8_t unk7;
 	uint8_t changeTarget;
 	uint8_t usedMoves[12];

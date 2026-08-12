@@ -19,18 +19,58 @@ SECTIONS
 			KEEP(build/asm/btl/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/btl/41C8.s.o(.text.*));
+			build/src/btl/battle_setup.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_main.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_shout.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_menu.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_hud.c.o(.text.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_effect.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/btl/41C8.s.o(.rodata.*));
+			build/src/btl/battle_main.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_setup.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_menu.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			KEEP(build/asm/btl/data/command_shout.rodata.s.o(.rodata.*));
+			. = ALIGN(., 4);
+			build/src/btl/command_shout.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			KEEP(build/asm/btl/data/battle_hud.rodata.s.o(.rodata.*));
+			. = ALIGN(., 4);
+			build/src/btl/battle_hud.c.o(.rodata.*);
+			. = ALIGN(., 4);
+			KEEP(build/asm/btl/data/battle_effect.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/btl/41C8.s.o(.data.*));
+			build/src/btl/battle_setup.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/btl/data/20280.data.s.o(.data.*));
+			build/src/btl/battle_main.c.o(.data.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_shout.c.o(.data.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_menu.c.o(.data.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_hud.c.o(.data.*);
+			. = ALIGN(., 4);
+			KEEP(build/asm/btl/data/20B24.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/btl/41C8.s.o(.bss.*));
+			build/src/btl/battle_setup.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_main.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_shout.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/btl/command_menu.c.o(.bss.*);
+			. = ALIGN(., 4);
+			build/src/btl/battle_hud.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}

@@ -91,7 +91,18 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x41C8, asm]
-      - [0x20280, data]
+      - [0x41C8, c, battle_setup]
+      - [0x50F0, c, battle_main]
+      - [0xE51C, c, command_shout]
+      - [0xE94C, c, command_menu]
+      - [0xF32C, c, battle_hud]
+      - [0x11FA0, c, battle_effect]
+      - [0x20280, .rodata, battle_main]
+      - [0x20294, .rodata, battle_setup]
+      - [0x202B0, .rodata, command_menu]
+      - [0x202CC, rodata, command_shout]
+      - [0x20324, rodata, battle_hud]
+      - [0x20418, rodata, battle_effect]
+      - [0x20B24, data]
 
   - [0x2349C]

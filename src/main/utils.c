@@ -70,7 +70,7 @@ void setItemTexture(POLY_FT4 *p, int32_t id);
 void entityLookAtLocation(int32_t *loc);
 uint8_t entityGetTechFromAnim(Entity *e, int32_t anim);
 void entityLookAtTile(int32_t tileX, int32_t tileY);
-void MAIN_func_800E53B4(POLY_FT4* poly, int32_t x, int32_t y);
+void setEntityTextDigit(POLY_FT4* poly, int32_t x, int32_t y);
 void MAIN_func_800E642C(void);
 int32_t hasMove(int32_t move);
 void learnMove(int32_t move);
@@ -203,7 +203,7 @@ void getEntityScreenPos(Entity *e, int32_t boneId, int16_t *out)
 	out[1] -= 0x78 - DRAWING_OFFSET_Y;
 }
 
-void MAIN_func_800E53B4(POLY_FT4* poly, int32_t x, int32_t y)
+void setEntityTextDigit(POLY_FT4* poly, int32_t x, int32_t y)
 {
 	SetPolyFT4(poly);
 	poly->tpage = 0x1E;
@@ -308,7 +308,7 @@ void MAIN_func_800E60E0(int16_t x, int16_t y, int16_t u, int32_t otOffset)
 	POLY_FT4 *prim;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	MAIN_func_800E53B4(prim, 0x100, 0x1E6);
+	setEntityTextDigit(prim, 0x100, 0x1E6);
 	setRGB0(prim, 0x80, 0x80, 0x80);
 	setUVDataPolyFT4(prim, u, 0xB8, 8, 8);
 	setPosDataPolyFT4(prim, x, y, 8, 8);

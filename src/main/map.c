@@ -152,8 +152,8 @@ void MAIN_func_800D9BA8(int32_t level, int16_t *src);
 void MAIN_func_800D9E68(u_long *buffer);
 void MAIN_func_800D9F14(int32_t fade, int16_t *src);
 int32_t MAIN_func_800DA0F4(POLY_FT3 *prim, int32_t order);
-void MAIN_func_800DA15C(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
-void MAIN_func_800DA52C(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
+void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
+void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
 void MAIN_func_800DA60C(int32_t count, int32_t arg1, int32_t arg2, int32_t *out);
 int32_t MAIN_func_800DA63C(int32_t count, int32_t t, int32_t *keys, int32_t *values, int32_t *slopes);
 int32_t MAIN_func_800DA740(int16_t *rect, DVECTOR *line);
@@ -351,13 +351,13 @@ static void *map_functions[] = {
 	MAIN_func_800DA740,
 	MAIN_func_800DA63C,
 	MAIN_func_800DA60C,
-	MAIN_func_800DA52C,
+	renderTMDModel,
 	setShortWithStride,
 	addFXPrim,
 	renderSprite,
 	worldPosToScreenPos,
 	add3DSpritePrim,
-	MAIN_func_800DA15C,
+	addScreenPolyFT3,
 	MAIN_func_800DA0F4,
 	MAIN_func_800D9F14,
 	MAIN_func_800D9E68,
@@ -3383,7 +3383,7 @@ int32_t MAIN_func_800DA0F4(POLY_FT3 *prim, int32_t order)
 	return order;
 }
 
-void MAIN_func_800DA15C(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2)
+void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2)
 {
 	int32_t otz;
 	long p;
@@ -3493,7 +3493,7 @@ void setShortWithStride(int16_t *dest, int16_t value, int32_t count,
 	}
 }
 
-void MAIN_func_800DA52C(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord,
+void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord,
 			GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot,
 			VECTOR *scale)
 {
