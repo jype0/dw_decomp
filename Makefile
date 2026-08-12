@@ -339,9 +339,15 @@ DEP += $(TRN_DEP)
 
 OVERLAY += TRN
 
+VS_ASM_SRC := $(shell find $(ASM_DIR)/vs -path '*.s' \
+	      -not -path '$(ASM_DIR)/vs/*matchings*')
+
 VS_SRC := \
-	$(wildcard $(ASM_DIR)/vs/*.s) \
-	$(wildcard $(ASM_DIR)/vs/data/*.s)
+	$(VS_ASM_SRC) \
+	src/vs/vs_effect.c \
+	src/vs/vs_hud.c \
+	src/vs/vs_main.c \
+	src/vs/vs_scene.c
 
 VS_OBJ := $(VS_SRC:%=$(BUILDDIR)/%.o)
 VS_DEP := $(VS_OBJ:%.o=%.d)

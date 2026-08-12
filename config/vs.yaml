@@ -91,7 +91,13 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x41C8, asm]
-      - [0x1CEDC, data]
+      - [0x41C8, c, vs_scene]
+      - [0x8984, c, vs_main]
+      - [0xD07C, c, vs_hud]
+      - [0x10758, c, vs_effect]
+      # the three switch jump tables here are emitted by mwcc from the C
+      # switches in VS_tickVersusIntro / VS_tickVSPhase / VS_addCommandMenu
+      - [0x1CEDC, .data]
+      - [0x1CF48, data]
 
   - [0x20788]

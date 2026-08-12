@@ -18,7 +18,6 @@
 
 #include "common.h"
 
-extern int16_t BTL_D_80073E9E[];
 extern GsSPRITE BTL_D_80073E54;
 extern GsSPRITE BTL_D_80073E78;
 extern char BTL_END_BOX_TEXTBUFFER[];
