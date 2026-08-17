@@ -1,3 +1,4 @@
+#include <dw/eab.h>
 #include <dw/clock.h>
 #include <dw/fade.h>
 #include <dw/file_queue.h>
@@ -31,7 +32,6 @@ int32_t startBattle(int16_t instanceId);
 void setLoopCountToOne(int32_t a0);
 void MAIN_func_800D9360(int32_t a0);
 void DOO2_func_8007189C(void);
-void EAB_func_8006148C(Entity *e);
 int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut);
 
 void setMapHeadActive(void);
@@ -257,7 +257,7 @@ void scriptInstruction64to7E(int32_t op)
 			break;
 		case 0x28:
 			isSoundLoaded(0, 8);
-			EAB_func_8006148C(
+			EAB_startBuildup(
 				ENTITY_TABLE[scriptIdToEntityId(5)]);
 			break;
 		case 0x35:

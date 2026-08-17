@@ -215,9 +215,12 @@ DEP += $(DOOA_DEP)
 
 OVERLAY += DOOA
 
+EAB_ASM_SRC := $(shell find $(ASM_DIR)/eab -path '*.s' \
+		-not -path '$(ASM_DIR)/eab/*matchings*' 2> /dev/null)
+
 EAB_SRC := \
-	$(wildcard $(ASM_DIR)/eab/*.s) \
-	$(wildcard $(ASM_DIR)/eab/data/*.s)
+	$(EAB_ASM_SRC) \
+	src/eab/eab.c
 
 EAB_OBJ := $(EAB_SRC:%=$(BUILDDIR)/%.o)
 EAB_DEP := $(EAB_OBJ:%.o=%.d)

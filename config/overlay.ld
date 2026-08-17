@@ -150,18 +150,18 @@ SECTIONS
 			KEEP(build/asm/eab/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/eab/40.s.o(.text.*));
+			build/src/eab/eab.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/eab/40.s.o(.rodata.*));
+			build/src/eab/eab.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/eab/40.s.o(.data.*));
+			build/src/eab/eab.c.o(.data.*);
 			. = ALIGN(., 4);
 			KEEP(build/asm/eab/data/16DC.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/eab/40.s.o(.bss.*));
+			build/src/eab/eab.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}

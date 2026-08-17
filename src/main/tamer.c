@@ -4,6 +4,7 @@
 #include <libgte.h>
 #include <mwinline_n.h>
 
+#include <dw/eab.h>
 #include <dw/butterfly.h>
 #include <dw/endi.h>
 #include <dw/entity.h>
@@ -223,7 +224,6 @@ extern uint8_t GS_WORK_BASES[2][81920];
 extern MATRIX GsWSMATRIX;
 extern int32_t FADE_PROTECTION;
 int32_t MURD_tick(Entity *entity, int32_t isInitialized);
-int32_t EAB_tick(Entity *entity, int32_t isInitialized);
 int32_t DOOA_tick(PartnerEntity *partner, void *data, int32_t isInitialized);
 
 void tickTamerBattle(int32_t instanceId);
@@ -381,6 +381,29 @@ void setupTamerOnWarp(int32_t x, int32_t y, int32_t z, int32_t rotationY)
 	startAnimation(ENTITY_TABLE[0], 0);
 }
 
+void tickTamer(int16_t instanceId)
+{
+	if (((GAME_STATE != 0) || (TAMER_STATE != 0)) && (HAS_BUTTERFLY == 0)) {
+		unsetButterfly(BUTTERFLY_ID);
+		HAS_BUTTERFLY = -1;
+	}
+	switch (GAME_STATE) {
+	case 0:
+		tickTamerOverworld(instanceId);
+		break;
+	case 1:
+	case 2:
+	case 3:
+		tickTamerBattle(instanceId);
+		break;
+	case 4:
+	case 5:
+		STD_tickTamerTournament(instanceId);
+	default:
+		break;
+	}
+}
+
 void tickTamerOverworld(int16_t instanceId)
 {
 	int8_t state;
@@ -439,29 +462,6 @@ void tickTamerOverworld(int16_t instanceId)
 	}
 
 	tickAnimation(&TAMER_ENTITY.entity);
-}
-
-void tickTamer(int16_t instanceId)
-{
-	if (((GAME_STATE != 0) || (TAMER_STATE != 0)) && (HAS_BUTTERFLY == 0)) {
-		unsetButterfly(BUTTERFLY_ID);
-		HAS_BUTTERFLY = -1;
-	}
-	switch (GAME_STATE) {
-	case 0:
-		tickTamerOverworld(instanceId);
-		break;
-	case 1:
-	case 2:
-	case 3:
-		tickTamerBattle(instanceId);
-		break;
-	case 4:
-	case 5:
-		STD_tickTamerTournament(instanceId);
-	default:
-		break;
-	}
 }
 
 int16_t getMapRotation(void)
