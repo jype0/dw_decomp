@@ -47,68 +47,6 @@ static void *script_draw_functions[] = {
 	MAIN_func_8010B648,
 };
 
-void MAIN_func_8010C28C(void)
-{
-	int32_t selection = 0;
-	uint8_t owner = readPStat(PSTAT_254);
-
-	switch (SELECTION_MENU_STATE) {
-	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0xc, 6, 0xd2, 0x18, 6,
-				      0x5a);
-		MAIN_func_80107AB8();
-		showMapHeadTextbox(4, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
-		break;
-	case 1:
-		break;
-	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F68);
-		ACTIVE_INSTRUCTION = 0;
-		break;
-	case 3:
-		MAIN_func_800FC968(1);
-		MAIN_func_80107B98();
-		setInputRepeatMask(0x5000);
-		SELECTION_MENU_STATE = 1;
-		break;
-	case 4:
-		setInputRepeatMask(0);
-		showMapheadSelection(7, 0xfd, 2, &selection, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 5;
-		SCRIPT_STATE_3 = 2;
-		break;
-	case 5:
-		{
-			uint8_t idx;
-
-			triggerBoxCloseFlag(2);
-			triggerBoxCloseFlag(1);
-
-			idx = MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow + MAIN_D_80134F68->cursor) * 2] & 0x7f;
-			writePStat(PSTAT_247, MAIN_D_8013024C[idx].mapId);
-			writePStat(PSTAT_248, MAIN_D_8013024C[idx].unk_0x1);
-			CURRENT_SCRIPT_PTR = (int32_t)getScript(0);
-			MAIN_D_80134FDC = getScriptSection((uint8_t *)CURRENT_SCRIPT_PTR, 0x4e3);
-			MONEY -= MAIN_D_8013500C;
-			SELECTION_MENU_STATE = 2;
-			break;
-		}
-	case 6:
-		setInputRepeatMask(0);
-		triggerBoxCloseFlag(2);
-		triggerBoxCloseFlag(1);
-		showMapHeadTextbox(5, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
-		break;
-	}
-}
-
 void MAIN_func_8010B648(void)
 {
 	uint8_t owner = readPStat(PSTAT_254);
@@ -501,6 +439,68 @@ void openJukebox(void)
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 		showMapHeadTextbox(1, owner, 0, 0x4d6);
+		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_4 = 2;
+		SCRIPT_STATE_3 = 1;
+		break;
+	}
+}
+
+void MAIN_func_8010C28C(void)
+{
+	int32_t selection = 0;
+	uint8_t owner = readPStat(PSTAT_254);
+
+	switch (SELECTION_MENU_STATE) {
+	case 0:
+		initializeItemMenuBox(&MAIN_D_80134F68, 0xc, 6, 0xd2, 0x18, 6,
+				      0x5a);
+		MAIN_func_80107AB8();
+		showMapHeadTextbox(4, owner, 0, 0x4d6);
+		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_4 = 3;
+		SCRIPT_STATE_3 = 1;
+		break;
+	case 1:
+		break;
+	case 2:
+		destroyItemMenuBox(&MAIN_D_80134F68);
+		ACTIVE_INSTRUCTION = 0;
+		break;
+	case 3:
+		MAIN_func_800FC968(1);
+		MAIN_func_80107B98();
+		setInputRepeatMask(0x5000);
+		SELECTION_MENU_STATE = 1;
+		break;
+	case 4:
+		setInputRepeatMask(0);
+		showMapheadSelection(7, 0xfd, 2, &selection, 0x4d6);
+		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_4 = 5;
+		SCRIPT_STATE_3 = 2;
+		break;
+	case 5:
+		{
+			uint8_t idx;
+
+			triggerBoxCloseFlag(2);
+			triggerBoxCloseFlag(1);
+
+			idx = MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow + MAIN_D_80134F68->cursor) * 2] & 0x7f;
+			writePStat(PSTAT_247, MAIN_D_8013024C[idx].mapId);
+			writePStat(PSTAT_248, MAIN_D_8013024C[idx].unk_0x1);
+			CURRENT_SCRIPT_PTR = (int32_t)getScript(0);
+			MAIN_D_80134FDC = getScriptSection((uint8_t *)CURRENT_SCRIPT_PTR, 0x4e3);
+			MONEY -= MAIN_D_8013500C;
+			SELECTION_MENU_STATE = 2;
+			break;
+		}
+	case 6:
+		setInputRepeatMask(0);
+		triggerBoxCloseFlag(2);
+		triggerBoxCloseFlag(1);
+		showMapHeadTextbox(5, owner, 0, 0x4d6);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_4 = 2;
 		SCRIPT_STATE_3 = 1;
