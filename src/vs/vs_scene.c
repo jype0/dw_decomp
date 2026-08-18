@@ -9,6 +9,8 @@
 #include <dw/types.h>
 #include <dw/vs.h>
 
+extern uint8_t MAIN_D_80135258[2];
+extern uint8_t MAIN_D_8013525A[2];
 extern uint8_t MAIN_D_80135260;
 extern int16_t MAIN_D_8013525C;
 extern int16_t MAIN_D_8013525E;
@@ -123,6 +125,7 @@ void VS_tickFighterCounter(void);
 void VS_renderFighterCounter(void);
 void addObject(int32_t objectId, int32_t instanceId, void *tick, void *render);
 void removeObject(int32_t objectId, int32_t instanceId);
+void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits, int32_t value, int32_t layer);
 void removeEntity(int32_t type, int32_t entityId);
 void thunkUnloadModel(int32_t digiType, int32_t modelType);
 
