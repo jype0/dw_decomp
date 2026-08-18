@@ -1628,7 +1628,22 @@ INCLUDE_ASM("asm/main/nonmatchings/script_common", renderHorizontalLine);
 
 INCLUDE_ASM("asm/main/nonmatchings/script_common", MAIN_func_800FE150);
 
-INCLUDE_ASM("asm/main/nonmatchings/script_common", MAIN_func_800FE258);
+void MAIN_func_800FE258(int32_t spriteId, int16_t x, int16_t y, int32_t depth)
+{
+	POLY_FT4 *prim;
+
+	prim = (POLY_FT4 *)GsGetWorkBase();
+	SetPolyFT4(prim);
+	prim->tpage = 5;
+	prim->clut = GetClut(0x60, 0x1ED);
+	prim->r0 = 0x80;
+	prim->g0 = 0x80;
+	prim->b0 = 0x80;
+	setUVDataPolyFT4(prim, spriteId * 12 + 0x200, 0x1C0, 0xC, 0xC);
+	setPosDataPolyFT4(prim, x, y, 0xC, 0xC);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + depth, prim++);
+	GsSetWorkBase((PACKET *)prim);
+}
 
 void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
 			int32_t section)
