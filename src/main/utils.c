@@ -253,7 +253,26 @@ INCLUDE_ASM("asm/main/nonmatchings/utils", renderSelectionCursor);
 
 INCLUDE_ASM("asm/main/nonmatchings/utils", renderString);
 
-INCLUDE_ASM("asm/main/nonmatchings/utils", renderItemSprite);
+void renderItemSprite(int32_t type, int16_t x, int16_t y, int32_t layer)
+{
+	POLY_FT4 *prim;
+	int16_t width;
+	int16_t height;
+
+	prim = (POLY_FT4 *)GsGetWorkBase();
+	SetPolyFT4(prim);
+	prim->tpage = 5;
+	setItemTexture(prim, type);
+
+	width = prim->u1 - prim->u0;
+	height = prim->v2 - prim->v0;
+	prim->r0 = 0x80;
+	prim->g0 = 0x80;
+	prim->b0 = 0x80;
+	setPosDataPolyFT4(prim, x, y, width, height);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
+	GsSetWorkBase((PACKET *)prim);
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/utils", setItemTexture);
 
