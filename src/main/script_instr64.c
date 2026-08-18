@@ -1,5 +1,6 @@
 #include <dw/eab.h>
 #include <dw/clock.h>
+#include <dw/doo.h>
 #include <dw/fade.h>
 #include <dw/file_queue.h>
 #include <dw/item.h>
@@ -31,7 +32,6 @@ void addEntityText(int32_t a0, int32_t a1, int32_t a2, int32_t a3,
 int32_t startBattle(int16_t instanceId);
 void setLoopCountToOne(int32_t a0);
 void MAIN_func_800D9360(int32_t a0);
-void DOO2_func_8007189C(void);
 int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut);
 
 void setMapHeadActive(void);
@@ -165,7 +165,7 @@ void scriptInstruction64to7E(int32_t op)
 			resetMapObjectAnimation(byteArg1, byteArg2);
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x1d:
-			DOO2_func_8007189C();
+			DOO2_openEggBox();
 			/* fall through */
 		case 0x17: case 0x18: case 0x32:
 			ACTIVE_INSTRUCTION = 0x64;

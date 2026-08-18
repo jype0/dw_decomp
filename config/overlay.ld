@@ -102,18 +102,18 @@ SECTIONS
 			KEEP(build/asm/doo2/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/doo2/40.s.o(.text.*));
+			build/src/doo2/doo2.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/doo2/40.s.o(.rodata.*));
+			build/src/doo2/doo2.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/doo2/40.s.o(.data.*));
+			build/src/doo2/doo2.c.o(.data.*);
 			. = ALIGN(., 4);
 			KEEP(build/asm/doo2/data/1A80.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/doo2/40.s.o(.bss.*));
+			build/src/doo2/doo2.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}
@@ -126,18 +126,18 @@ SECTIONS
 			KEEP(build/asm/dooa/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dooa/40.s.o(.text.*));
+			build/src/dooa/dooa.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dooa/40.s.o(.rodata.*));
+			build/src/dooa/dooa.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dooa/40.s.o(.data.*));
+			build/src/dooa/dooa.c.o(.data.*);
 			. = ALIGN(., 4);
 			KEEP(build/asm/dooa/data/48D4.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/dooa/40.s.o(.bss.*));
+			build/src/dooa/dooa.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}

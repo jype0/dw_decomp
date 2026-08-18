@@ -3,6 +3,7 @@
 #include <libgte.h>
 
 #include <dw/btl.h>
+#include <dw/doo.h>
 #include <dw/entity.h>
 #include <dw/file.h>
 #include <dw/file_queue.h>
@@ -69,7 +70,6 @@ int32_t getEntityType(Entity *entity);
 void renderParticleFlash(int16_t *params);
 void renderDropShadow(Entity *entity);
 void setFullState(int32_t state, int32_t value);
-int32_t DOOA_tick(PartnerEntity *partner, void *data, int32_t isInitialized);
 
 void MAIN_func_800D91EC(int32_t message, int32_t value);
 void MAIN_func_800D91FC(int32_t value);
