@@ -258,7 +258,7 @@ int32_t addObject(int32_t objectId, int32_t instanceId, void (*tick)(int32_t),
 void addGameMenu(void);
 void renderDateDigits(void);
 void renderTriangleCursor(void);
-void isUIBoxAvailable(void);
+int32_t isUIBoxAvailable(int32_t id);
 void setSleepDisabled(int32_t arg);
 void removeItem(int32_t type, uint32_t amount);
 void startFeedingItem(int32_t arg);
@@ -1642,7 +1642,18 @@ INCLUDE_ASM("asm/main/nonmatchings/overworld", tickPlayerMenu);
 
 INCLUDE_ASM("asm/main/nonmatchings/overworld", renderPlayerMenu);
 
-INCLUDE_ASM("asm/main/nonmatchings/overworld", isUIBoxAvailable);
+int32_t isUIBoxAvailable(int32_t id)
+{
+	if (UI_BOX_DATA[id].state == 1) {
+		return 1;
+	}
+
+	if (UI_BOX_DATA[id].frame == 0) {
+		return 1;
+	}
+
+	return 0;
+}
 
 void handleGameMenuSelection(int32_t selection)
 {
