@@ -123,6 +123,8 @@ void VS_tickFighterCounter(void);
 void VS_renderFighterCounter(void);
 void addObject(int32_t objectId, int32_t instanceId, void *tick, void *render);
 void removeObject(int32_t objectId, int32_t instanceId);
+void removeEntity(int32_t type, int32_t entityId);
+void thunkUnloadModel(int32_t digiType, int32_t modelType);
 
 static void *vs_scene_functions[] = {
 	VS_removeFighterCounter,
@@ -199,7 +201,28 @@ void VS_addInputObjects(void)
 
 INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_loadFighterEntities);
 
-INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_unloadFighterEntities);
+void VS_unloadFighterEntities(void)
+{
+	int32_t type;
+
+	PLAYTIME_FRAMES = 0;
+	removeObject(0xFB9, 0);
+	removeObject(0x1B2, 0);
+	removeObject(0x1B2, 1);
+
+	type = ENTITY_TABLE[1]->type;
+	removeEntity(type, 1);
+	thunkUnloadModel(type, 3);
+
+	type = ENTITY_TABLE[2]->type;
+	removeEntity(type, 2);
+	thunkUnloadModel(type, 0);
+
+	VS_unloadArenaAssets();
+
+	ENTITY_TABLE[2] = NULL;
+	ENTITY_TABLE[1] = NULL;
+}
 
 INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_renderVersusFlash);
 
