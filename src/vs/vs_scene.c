@@ -329,7 +329,20 @@ void VS_unloadArenaAssets(void)
 {
 }
 
-INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_addArenaRenderers);
+void VS_addArenaRenderers(void)
+{
+	switch (VS_D_800716B2[0]) {
+	case 0:
+		addObject(0x1A7, 0, NULL, VS_renderArenaViewLeft);
+		break;
+	case 1:
+		addObject(0x1A7, 0, NULL, VS_renderArenaViewRight);
+		break;
+	case 2:
+		addObject(0x1A7, 0, NULL, VS_renderArenaViewFull);
+		break;
+	}
+}
 
 INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_renderArenaViewLeft);
 
