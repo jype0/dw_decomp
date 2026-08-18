@@ -789,13 +789,7 @@ void BTL_renderNumber(int32_t a, int32_t digits, int32_t x, int32_t y, int16_t v
 
 void BTL_renderFinisherGauge(int32_t idx)
 {
-	struct EfeFighter {
-		int32_t unk0[6];
-		int16_t goal;
-		int16_t progress;
-		int8_t unk1C[0x14c];
-	};
-	struct EfeFighter *f;
+	FighterData *f;
 	int32_t hp;
 	int32_t i;
 
@@ -803,8 +797,8 @@ void BTL_renderFinisherGauge(int32_t idx)
 		return;
 	}
 
-	f = (struct EfeFighter *)COMBAT_DATA_PTR;
-	hp = f[idx].progress * 6 / f[idx].goal;
+	f = COMBAT_DATA_PTR->fighter;
+	hp = f[idx].finisherProgress * 6 / f[idx].finisherGoal;
 
 	if (MAIN_D_801350C8 != hp) {
 		MAIN_D_801350C6 = 0;
