@@ -69,6 +69,7 @@ extern uint8_t MAIN_D_801350C8;
 extern uint8_t MAIN_D_801350C9;
 extern uint8_t MAIN_D_801350CA;
 extern uint8_t MAIN_D_801350CB;
+extern int32_t BTL_D_80073290[12];
 
 void removeObject(int32_t objectId, int32_t instanceId);
 void addObject(int32_t objectId, int32_t instanceId, void *tick, void *render);
@@ -786,7 +787,59 @@ void BTL_renderNumber(int32_t a, int32_t digits, int32_t x, int32_t y, int16_t v
 	GsSetWorkBase((PACKET *)prim);
 }
 
-INCLUDE_ASM("asm/btl/nonmatchings/battle_hud", BTL_renderFinisherGauge);
+void BTL_renderFinisherGauge(int32_t idx)
+{
+	struct EfeFighter {
+		int32_t unk0[6];
+		int16_t goal;
+		int16_t progress;
+		int8_t unk1C[0x14c];
+	};
+	struct EfeFighter *f;
+	int32_t hp;
+	int32_t i;
+
+	if (MAIN_D_801350C4 != 7) {
+		return;
+	}
+
+	f = (struct EfeFighter *)COMBAT_DATA_PTR;
+	hp = f[idx].progress * 6 / f[idx].goal;
+
+	if (MAIN_D_801350C8 != hp) {
+		MAIN_D_801350C6 = 0;
+		MAIN_D_801350C8 = hp;
+	}
+
+	MAIN_D_801350C7 = BTL_D_80073290[MAIN_D_801350C6];
+	if (MAIN_D_801350C6 < 0xB) {
+		MAIN_D_801350C6++;
+	}
+
+	if (hp == 6) {
+		if (MAIN_D_801350C5 < 0xA) {
+			MAIN_D_801350C5++;
+		}
+
+		if (MAIN_D_801350C5 >= 3) {
+			hp++;
+		}
+
+		if (MAIN_D_801350C5 >= 5) {
+			hp++;
+			BTL_renderFinisherReadyIcon();
+
+			if (MAIN_D_801350C5 == 0xA) {
+				MAIN_D_801350C9 = 1;
+				MAIN_D_801350C6 %= 0xB;
+			}
+		}
+	}
+
+	for (i = 0; i < hp; i++) {
+		BTL_renderFinisherGaugeSegment(i, idx);
+	}
+}
 
 void BTL_renderFinisherReadyIcon(void)
 {
