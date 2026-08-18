@@ -201,7 +201,25 @@ INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_loadFighterEntities);
 
 INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_unloadFighterEntities);
 
-INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_renderVersusFlash);
+void VS_renderVersusFlash(void)
+{
+	POLY_FT4 *prim;
+	int32_t y;
+
+	prim = (POLY_FT4 *)GsGetWorkBase();
+	SetPolyFT4(prim);
+	prim->r0 = 0x80;
+	prim->g0 = 0x80;
+	prim->b0 = 0x80;
+	prim->tpage = 5;
+	prim->clut = GetClut(0x40, 0x1E9);
+	setUVDataPolyFT4(prim, 0x30, 0x10, 0x4E, 0x18);
+
+	y = MAIN_D_80135261 * 20 - 0x39;
+	setPosDataPolyFT4(prim, -0x27, y, 0x4E, 0x18);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1E, prim++);
+	GsSetWorkBase((PACKET *)prim);
+}
 
 INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_renderFighterNamePlate);
 
