@@ -24,11 +24,14 @@ extern int8_t MAIN_D_80134AC8[2];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
 void VS_tickCommandMenu(uint8_t i);
+extern uint8_t MAIN_D_801352CC[2];
 extern uint8_t MAIN_D_801352CE[2];
 extern uint8_t MAIN_D_801352D0[2];
 extern uint8_t MAIN_D_801352D2[2];
 extern uint8_t MAIN_D_801352D4[2];
 extern uint8_t MAIN_D_801352D6[2];
+extern uint8_t MAIN_D_801352D8[2];
+extern uint8_t MAIN_D_801352DA[2];
 extern int32_t VS_D_80070A60[];
 
 extern int32_t ACTIVE_FRAMEBUFFER;
