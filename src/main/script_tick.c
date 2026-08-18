@@ -1,4 +1,5 @@
 #include <dw/clock.h>
+#include <dw/doo.h>
 #include <dw/map_object.h>
 #include <dw/script.h>
 #include <dw/tournament.h>
@@ -12,7 +13,6 @@ extern int32_t MAIN_func_800DF7F8(void);
 extern int32_t tickRemoveMist(void);
 extern int32_t MAIN_func_801138B0(void);
 extern int32_t MAIN_func_80113A20(void);
-extern int32_t DOO2_func_80071934(void);
 extern int32_t isTrainingComplete(void);
 extern void setCameraFollowPlayer(void);
 extern void MAIN_func_80100258(int32_t a0);
@@ -170,7 +170,7 @@ int32_t tickScript(void)
 			}
 			break;
 		case 29:
-			if (DOO2_func_80071934()) {
+			if (DOO2_tickEggInput()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;

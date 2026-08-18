@@ -191,9 +191,12 @@ DEP += $(DGET_DEP)
 
 OVERLAY += DGET
 
+DOO2_ASM_SRC := $(shell find $(ASM_DIR)/doo2 -path '*.s' \
+		-not -path '$(ASM_DIR)/doo2/*matchings*' 2> /dev/null)
+
 DOO2_SRC := \
-	$(wildcard $(ASM_DIR)/doo2/*.s) \
-	$(wildcard $(ASM_DIR)/doo2/data/*.s)
+	$(DOO2_ASM_SRC) \
+	src/doo2/doo2.c
 
 DOO2_OBJ := $(DOO2_SRC:%=$(BUILDDIR)/%.o)
 DOO2_DEP := $(DOO2_OBJ:%.o=%.d)
@@ -203,9 +206,12 @@ DEP += $(DOO2_DEP)
 
 OVERLAY += DOO2
 
+DOOA_ASM_SRC := $(shell find $(ASM_DIR)/dooa -path '*.s' \
+		-not -path '$(ASM_DIR)/dooa/*matchings*' 2> /dev/null)
+
 DOOA_SRC := \
-	$(wildcard $(ASM_DIR)/dooa/*.s) \
-	$(wildcard $(ASM_DIR)/dooa/data/*.s)
+	$(DOOA_ASM_SRC) \
+	src/dooa/dooa.c
 
 DOOA_OBJ := $(DOOA_SRC:%=$(BUILDDIR)/%.o)
 DOOA_DEP := $(DOOA_OBJ:%.o=%.d)

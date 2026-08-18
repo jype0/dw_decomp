@@ -1,6 +1,7 @@
 #include <libgte.h>
 #include <dw/butterfly.h>
 #include <dw/entity.h>
+#include <dw/doo.h>
 #include <dw/evl.h>
 #include <dw/fade.h>
 #include <dw/item.h>
@@ -130,8 +131,6 @@ void checkShopMap(int32_t mapId);
 void checkArenaMap(int32_t mapId);
 void readMapTFS(int32_t mapId);
 
-int32_t DOOA_tick(PartnerEntity* partner, void* data, int32_t isInitialized);
-int32_t DOOA_getSequenceState(int32_t unused, int32_t isInitialized);
 
 
 void KAR_start();
