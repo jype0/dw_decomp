@@ -31,6 +31,7 @@ extern IconRect MAIN_D_801241CC[];
 extern IconRect MAIN_D_80124044[];
 extern StringRect MAIN_D_80124234[];
 extern IconRect MAIN_D_80124294[];
+extern char MAIN_D_80123E78[];
 
 int32_t drawDigimonMovesText(void);
 u_short GetTPage(int32_t tp, int32_t abr, int32_t x, int32_t y);
@@ -46,13 +47,15 @@ void renderDigimonMoveBox(void);
 void renderLinePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
 			 int32_t y1, int32_t otz, int32_t flag);
 int32_t getCardAmount(uint8_t card);
+int32_t loadStackedTIMEntry(char *path, void *buffer, int32_t offset,
+			     int32_t sectors);
 void renderNumber(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
 		  int32_t f);
 void renderSeperatorLines(int16_t *lines, int32_t b, ...);
 void renderDigimonMovesSelected(int32_t arg);
 int32_t drawMoveViewHelpStrings(void);
 void renderDigimonMovesView(void);
-void loadCardImage(void);
+int32_t loadCardImage(int32_t id);
 void renderCardImage(void);
 void renderCardCount(void);
 void renderDigimonStatsView(void);
@@ -69,7 +72,11 @@ static void *overworld_menu_views_functions[] = {
 	loadCardImage,
 };
 
-INCLUDE_ASM("asm/main/nonmatchings/overworld_menu_views", loadCardImage);
+int32_t loadCardImage(int32_t id)
+{
+	return loadStackedTIMEntry(MAIN_D_80123E78, (uint8_t *)0x80088800,
+				    id * 0xE, 0xE);
+}
 
 void renderCardImage(void)
 {
