@@ -51,7 +51,7 @@ typedef struct {
 	int8_t sleepCycle;
 	int8_t favoredRegion;
 	int8_t trainingType;
-	int8_t defaultWeight;
+	uint8_t defaultWeight;
 	int16_t viewX;
 	int16_t viewY;
 	int16_t viewZ;
