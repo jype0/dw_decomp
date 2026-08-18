@@ -356,7 +356,16 @@ void VS_applyViewpoint(void)
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
-INCLUDE_ASM("asm/vs/nonmatchings/vs_scene", VS_setCameraSimple);
+void VS_setCameraSimple(void)
+{
+	MAIN_D_801B1C0E[0] += 2;
+	MAIN_D_801B1C0E[0] &= 0xFFF;
+	MAIN_D_801B1BB8[0] = 0;
+	RotMatrix((SVECTOR *)MAIN_D_801B1C0C, (MATRIX *)MAIN_D_801B1B98);
+	TransMatrix((MATRIX *)MAIN_D_801B1B98, (VECTOR *)MAIN_D_801B1C14);
+	MAIN_D_801B1BBC[0] = 0;
+	GsSetView2((GsVIEW2 *)MAIN_D_801B1B98);
+}
 
 void VS_setCameraParams(int16_t a, int16_t b, int16_t c, int32_t d, int16_t e, int16_t f)
 {
