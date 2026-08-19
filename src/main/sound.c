@@ -11,8 +11,6 @@
 
 #include "common.h"
 
-char MAIN_D_80134384[] = "FAALL";
-
 uint8_t VHB_HEADER_SS[0x1000];
 uint8_t VHB_HEADER_SL[0x1000];
 uint8_t VHB_HEADER_FAALL[0x2000];
@@ -693,7 +691,7 @@ int32_t loadMusicFont(int32_t font)
 	uint32_t start;
 	uint32_t end;
 
-	if (readVHBFileSectors(2, MAIN_D_80134384, GENERAL_BUFFER,
+	if (readVHBFileSectors(2, "FAALL", GENERAL_BUFFER,
 			       (font - 1) * 0x27, 0x27) == -1) {
 		return 0;
 	}
