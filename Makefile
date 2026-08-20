@@ -293,9 +293,12 @@ DEP += $(MOV_DEP)
 
 OVERLAY += MOV
 
+MURD_ASM_SRC := $(shell find $(ASM_DIR)/murd -path '*.s' \
+		-not -path '$(ASM_DIR)/murd/*matchings*' 2> /dev/null)
+
 MURD_SRC := \
-	$(wildcard $(ASM_DIR)/murd/*.s) \
-	$(wildcard $(ASM_DIR)/murd/data/*.s)
+	$(MURD_ASM_SRC) \
+	src/murd/murd.c
 
 MURD_OBJ := $(MURD_SRC:%=$(BUILDDIR)/%.o)
 MURD_DEP := $(MURD_OBJ:%.o=%.d)

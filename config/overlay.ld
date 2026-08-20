@@ -292,18 +292,18 @@ SECTIONS
 			KEEP(build/asm/murd/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/murd/40.s.o(.text.*));
+			build/src/murd/murd.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/murd/40.s.o(.rodata.*));
+			build/src/murd/murd.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/murd/40.s.o(.data.*));
+			build/src/murd/murd.c.o(.data.*);
 			. = ALIGN(., 4);
 			KEEP(build/asm/murd/data/1748.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/murd/40.s.o(.bss.*));
+			build/src/murd/murd.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}

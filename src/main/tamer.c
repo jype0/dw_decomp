@@ -13,6 +13,7 @@
 #include <dw/main.h>
 #include <dw/map.h>
 #include <dw/math.h>
+#include <dw/murd.h>
 #include <dw/params.h>
 #include <dw/partner.h>
 #include <dw/pstat.h>
@@ -223,7 +224,6 @@ extern GsOT GS_ORDERING_TABLE[2];
 extern uint8_t GS_WORK_BASES[2][81920];
 extern MATRIX GsWSMATRIX;
 extern int32_t FADE_PROTECTION;
-int32_t MURD_tick(Entity *entity, int32_t isInitialized);
 int32_t DOOA_tick(PartnerEntity *partner, void *data, int32_t isInitialized);
 
 void tickTamerBattle(int32_t instanceId);
@@ -1230,11 +1230,11 @@ void tickSicknessLostLife(void)
 	switch (TAMER_SUBSTATE) {
 	case 0:
 		loadDynamicLibrary(MURD_REL, 0, 0, 0, 0);
-		MURD_tick(ENTITY_TABLE[1], 0);
+		MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 0);
 		TAMER_SUBSTATE = 1;
 		break;
 	case 1:
-		value = MURD_tick(ENTITY_TABLE[1], 1);
+		value = MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 1);
 		if ((0 > value) &&
 		    (value = DOOA_tick((PartnerEntity *)ENTITY_TABLE[1],
 		                       GENERAL_BUFFER_PTR + 0x4b000, 1),
@@ -1272,11 +1272,11 @@ void tickBattleLostLife(void)
 	switch (TAMER_SUBSTATE) {
 	case 0:
 		loadDynamicLibrary(MURD_REL, 0, 0, 0, 0);
-		MURD_tick(ENTITY_TABLE[1], 0);
+		MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 0);
 		TAMER_SUBSTATE = 1;
 		break;
 	case 1:
-		value = MURD_tick(ENTITY_TABLE[1], 1);
+		value = MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 1);
 		if (0 > value) {
 			SOME_SCRIPT_SYNC_BIT = 1;
 		}

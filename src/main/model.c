@@ -290,7 +290,7 @@ void unloadModel(int32_t digiType, int32_t modelType)
 	}
 }
 
-ModelComponent *getEntityModelComponent(int32_t instance, char type)
+ModelComponent *getEntityModelComponent(int32_t instance, int32_t type)
 {
 	ModelComponent *p;
 	int32_t i;
