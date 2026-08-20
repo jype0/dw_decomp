@@ -206,7 +206,202 @@ void initializeInventoryObject(void)
 	}
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/inventory", tickInventoryObject);
+extern uint8_t INVENTORY_ITEM_AMOUNTS[30];
+
+static void tickInventoryObject__garbage__(void)
+{
+        int32_t v0;
+        int32_t v1;
+        int32_t v2;
+        int32_t v3;
+
+        v0 = INVENTORY_ITEM_AMOUNTS[0] + 0;
+        v1 = INVENTORY_ITEM_AMOUNTS[1] + 1;
+        v2 = INVENTORY_ITEM_AMOUNTS[2] + 2;
+        v3 = INVENTORY_ITEM_AMOUNTS[3] + 3;
+        INVENTORY_ITEM_AMOUNTS[0] = (uint8_t)((v0 * v1) + v2);
+        INVENTORY_ITEM_AMOUNTS[1] = (uint8_t)((v1 * v2) + v3);
+        INVENTORY_ITEM_AMOUNTS[2] = (uint8_t)((v2 * v3) + v0);
+        INVENTORY_ITEM_AMOUNTS[3] = (uint8_t)((v3 * v0) + v1);
+}
+
+extern uint8_t INVENTORY_ITEM_AMOUNTS[30];
+
+void tickInventoryObject(int32_t instanceId)
+{
+  TamerEntity *tam;
+  int new_var;
+  uint8_t *it;
+  if ((*((uint8_t *) (COMBAT_DATA_PTR + 0x64E))) != 1)
+  {
+    tam = &TAMER_ENTITY;
+    if ((POLLED_INPUT & (~POLLED_INPUT_PREVIOUS)) & 0x40)
+    {
+      if (UI_BOX_DATA[3].state == 1)
+      {
+        if (ACTION_CURSOR == 2)
+        {
+          selectSorting();
+        }
+        else
+        {
+          confirmDrop();
+        }
+      }
+      else
+        if (UI_BOX_DATA[2].state == 1)
+      {
+        selectAction();
+      }
+      else
+      {
+        selectInventoryItem();
+      }
+    }
+    if ((POLLED_INPUT & (~POLLED_INPUT_PREVIOUS)) & 0x10)
+    {
+      if (UI_BOX_DATA[3].state == 1)
+      {
+        if (ACTION_CURSOR == 2)
+        {
+          INVENTORY_STATE = 9;
+        }
+        else
+        {
+          INVENTORY_STATE = 0xF;
+        }
+      }
+      else
+        if (UI_BOX_DATA[2].state == 0)
+      {
+        new_var = 1;
+        if (UI_BOX_DATA[0].state == 4)
+        {
+          playSound(0, 3);
+          UI_BOX_DATA[0].state = new_var;
+          INVENTORY_STATE = 0;
+        }
+        else
+          if (UI_BOX_DATA[1].state == 1)
+        {
+          INVENTORY_STATE = 2;
+        }
+      }
+      else
+        if (UI_BOX_DATA[2].state == 1)
+      {
+        INVENTORY_STATE = 4;
+      }
+    }
+    switch (INVENTORY_STATE)
+    {
+      case 1:
+        createInventoryUI();
+        if (tam->entity.anim.animId != 4)
+      {
+        startAnimation(&tam->entity, 4);
+      }
+        break;
+
+      case 2:
+        closeInventoryBoxes2();
+        if ((GAME_STATE == 0) && (UI_BOX_DATA[0].frame == 0))
+      {
+        closeTriangleMenu();
+        addGameMenu();
+        startAnimation(&(&TAMER_ENTITY)->entity, 0);
+      }
+        break;
+
+      case 3:
+        openActionMenu();
+        break;
+
+      case 4:
+
+      case 6:
+        closeActionMenu();
+        break;
+
+      case 5:
+        if (closeActionMenu() != 0)
+      {
+        closeInventoryBoxes2();
+      }
+        if (UI_BOX_DATA[0].state == 0)
+      {
+        if (GAME_STATE == 0)
+        {
+          startFeedingItem(INVENTORY_ITEM_TYPES[INVENTORY_POINTER]);
+          INVENTORY_STATE = 0;
+        }
+        else
+          if (GAME_STATE == 1)
+        {
+          startThrowingItem();
+          INVENTORY_STATE = 0;
+        }
+      }
+        break;
+
+      case 7:
+        if (UI_BOX_DATA[3].state != 0)
+      {
+        closeSubMenuThunk();
+      }
+      else
+        if (UI_BOX_DATA[2].state != 0)
+      {
+        closeActionMenu();
+      }
+      else
+      {
+        INVENTORY_STATE = 0;
+        it = &INVENTORY_ITEM_TYPES[INVENTORY_POINTER];
+        removeItem(it[0], it[0x1E]);
+      }
+        break;
+
+      case 8:
+        openSortTypeMenu();
+        break;
+
+      case 9:
+        closeSubMenu();
+        break;
+
+      case 11:
+
+      case 12:
+
+      case 13:
+        if (UI_BOX_DATA[3].state != 0)
+      {
+        closeSubMenu();
+      }
+      else
+        if (UI_BOX_DATA[2].state != 0)
+      {
+        closeActionMenu();
+      }
+      else
+      {
+        INVENTORY_STATE = 0;
+      }
+        break;
+
+      case 14:
+        openDropConfirm();
+        break;
+
+      case 15:
+        closeSubMenuThunk();
+        break;
+
+    }
+
+  }
+}
 
 void closeInventoryBoxes(void)
 {
