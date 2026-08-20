@@ -544,7 +544,38 @@ void renderMainMenuBackground(void)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/main", view_init);
+static void view_init__garbage__(void)
+{
+	int32_t v0;
+	int32_t v1;
+	int32_t v2;
+	int32_t v3;
+
+	v0 = MAIN_D_80155670[0] + 0;
+	v1 = MAIN_D_80155670[1] + 1;
+	v2 = MAIN_D_80155670[2] + 2;
+	v3 = MAIN_D_80155670[0] + 3;
+	MAIN_D_80155670[0] = ((v0 * v1) + v2);
+	MAIN_D_80155670[1] = ((v1 * v2) + v3);
+	MAIN_D_80155670[2] = ((v2 * v3) + v0);
+	MAIN_D_80155670[0] = ((v3 * v0) + v1);
+}
+void view_init(void)
+{
+	GsSetProjection(0x400);
+	GS_VIEWPOINT.vpx = 0;
+	GS_VIEWPOINT.vpy = -0xB73;
+	GS_VIEWPOINT.vpz = -0xB73;
+	GS_VIEWPOINT.vpy = 0;
+	GS_VIEWPOINT.vpz = -0x7D0;
+	GS_VIEWPOINT.vrx = 0;
+	GS_VIEWPOINT.vry = 0;
+	GS_VIEWPOINT.vrz = 0;
+	GS_VIEWPOINT.rz = 0;
+	GS_VIEWPOINT.super = 0;
+	GsSetRefView2(&GS_VIEWPOINT);
+	GsSetNearClip(0x64);
+}
 
 void initializeEffectData(void)
 {
