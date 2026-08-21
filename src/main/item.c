@@ -414,7 +414,53 @@ int32_t getItemCount(uint8_t type)
 	return 0;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/item", giveItem);
+int32_t giveItem(uint32_t item, uint8_t amount)
+{
+	int16_t used[30];
+	int32_t i;
+	int32_t j;
+	int32_t n;
+	uint8_t *p;
+	uint8_t *q;
+
+	for (i = 0; i < (n = *(volatile uint8_t *)INVENTORY_SIZE); i++) {
+		if (INVENTORY_ITEM_TYPES.array[i] == item) {
+			q = &INVENTORY_ITEM_TYPES.array[i] + 0x1E;
+			p = q - 0x1E;
+			if (q[0] != 0x63) {
+				q[0] += amount;
+				if (q[0] >= 0x64) {
+					q[0] = 0x63;
+				}
+				return 1;
+			}
+			return 0;
+		}
+	}
+	for (i = 0; i < n; i++) {
+		if (INVENTORY_ITEM_TYPES.array[i] == 0xFF) {
+			p = &INVENTORY_ITEM_TYPES.array[i];
+			p[0] = item;
+			INVENTORY_ITEM_AMOUNTS.array[i] = amount;
+			for (j = 0; j < INVENTORY_SIZE[0]; j++) {
+				used[j] = 0;
+			}
+			for (j = 0; j < INVENTORY_SIZE[0]; j++) {
+				if (INVENTORY_ITEM_NAMES.array[j] != 0xFF) {
+					used[INVENTORY_ITEM_NAMES.array[j]] = 1;
+				}
+			}
+			for (j = 0; j < INVENTORY_SIZE[0]; j++) {
+				if (used[j] == 0) {
+					INVENTORY_ITEM_NAMES.array[i] = j;
+					break;
+				}
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
 
 void removeItem(int32_t type, uint32_t amount)
 {
@@ -448,7 +494,18 @@ void removeItem(int32_t type, uint32_t amount)
 
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/item", pickupItem);
+int32_t pickupItem(int16_t itemId)
+{
+	int32_t *tp;
+	int32_t got;
+
+	tp = &DROPPED_ITEMS->worldItem.type;
+	got = giveItem((uint8_t)tp[itemId << 2], 1);
+	if (got != 0) {
+		deleteDroppedItem(itemId);
+	}
+	return got;
+}
 
 void initializeInventory(void)
 {
