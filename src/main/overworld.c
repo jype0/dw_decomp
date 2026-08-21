@@ -139,6 +139,7 @@ void handleGameMenuSelection(int32_t selection);
 void createMenuBox(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
 		   int32_t f, void (*tick)(void), void (*render)(void));
 void closeUIBoxIfOpen(int32_t arg);
+void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
 void initializeInventoryObject(void);
 void clearTextArea(void);
 void tickGameMenu(void);
@@ -1593,7 +1594,15 @@ void closeTriangleMenu(void)
 	removeObject(0xfa4, 0);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/overworld", closeUIBoxIfOpen);
+void closeUIBoxIfOpen(int32_t id)
+{
+	int16_t pos[2];
+
+	if (UI_BOX_DATA[id].frame >= 5 && UI_BOX_DATA[id].state == 1) {
+		getEntityScreenPos(ENTITY_TABLE[0], 0, pos);
+		removeAnimatedUIBox(id, 0);
+	}
+}
 
 INCLUDE_ASM("asm/main/nonmatchings/overworld", renderGameMenu);
 

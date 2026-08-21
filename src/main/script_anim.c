@@ -1,8 +1,29 @@
 #include <dw/partner.h>
+#include <dw/params.h>
 #include <dw/script.h>
 
 #include "common.h"
 
+typedef struct {
+	int8_t hungerTimes[8];
+	uint8_t energyCap;
+	uint8_t energyThreshold;
+	int8_t energyUsage;
+	int16_t poopTimer;
+	int16_t unk2;
+	uint8_t poopSize;
+	uint8_t favoriteFood;
+	int8_t sleepCycle;
+	int8_t favoredRegion;
+	int8_t trainingType;
+	int8_t defaultWeight;
+	int16_t viewX;
+	int16_t viewY;
+	int16_t viewZ;
+} RaiseData;
+
+extern RaiseData RAISE_DATA[66];
+void setFoodTimer(int32_t type);
 void setActiveAnim(int32_t state);
 
 static void *script_anim_functions[] = {
@@ -13,7 +34,19 @@ static void *script_anim_functions[] = {
 	MAIN_func_801050C0,
 };
 
-INCLUDE_ASM("asm/main/nonmatchings/script_anim", scriptUpdateEnergyBoundaries);
+void scriptUpdateEnergyBoundaries(int32_t a0, int32_t a1)
+{
+	if (PARTNER_PARA.energyLevel > RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyCap) {
+		PARTNER_PARA.energyLevel = RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyCap;
+	}
+	if (PARTNER_PARA.condition & 4) {
+		if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold <= PARTNER_PARA.energyLevel) {
+			PARTNER_PARA.condition &= ~4;
+			setFoodTimer(PARTNER_ENTITY.digimonEntity.entity.type);
+			PARTNER_PARA.starvationTimer = 0;
+		}
+	}
+}
 
 void MAIN_func_801053EC(void)
 {
