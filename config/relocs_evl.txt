@@ -1,0 +1,2 @@
+rom:0x000005E0 reloc:MIPS_HI16 symbol:EVL_D_80063EFC addend:-0x70
+rom:0x000005E4 reloc:MIPS_LO16 symbol:EVL_D_80063EFC addend:-0x70

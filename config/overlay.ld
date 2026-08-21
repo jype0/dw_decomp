@@ -196,18 +196,18 @@ SECTIONS
 			KEEP(build/asm/evl/data/header.rodata.s.o(.rodata.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/evl/40.s.o(.text.*));
+			build/src/evl/evl.c.o(.text.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/evl/40.s.o(.rodata.*));
+			build/src/evl/evl.c.o(.rodata.*);
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/evl/40.s.o(.data.*));
+			build/src/evl/evl.c.o(.data.*);
 			. = ALIGN(., 4);
 			KEEP(build/asm/evl/data/3EE8.data.s.o(.data.*));
 			. = ALIGN(., 4);
 
-			KEEP(build/asm/evl/40.s.o(.bss.*));
+			build/src/evl/evl.c.o(.bss.*);
 			. = ALIGN(., 4);
 		}
 	}

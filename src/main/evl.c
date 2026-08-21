@@ -6,7 +6,6 @@
 
 
 void stopBGM(void);
-void EVL_initEvoSequence();
 void startAnimation(Entity* entity, int32_t animId);
 void addConditionBubble(int32_t bubbleType, Entity* entity);
 void stopSound(void);

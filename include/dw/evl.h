@@ -75,4 +75,6 @@ int32_t getEvoSequenceState(PartnerEntity *partner, void *buffer,
 			    int16_t isInitialized);
 int32_t evoSequenceAlwaysTrue(int32_t unused);
 
+void EVL_initEvoSequence(void);
+
 #endif

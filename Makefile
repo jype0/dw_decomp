@@ -251,9 +251,12 @@ DEP += $(ENDI_DEP)
 
 OVERLAY += ENDI
 
+EVL_ASM_SRC := $(shell find $(ASM_DIR)/evl -path '*.s' \
+		-not -path '$(ASM_DIR)/evl/*matchings*' 2> /dev/null)
+
 EVL_SRC := \
-	$(wildcard $(ASM_DIR)/evl/*.s) \
-	$(wildcard $(ASM_DIR)/evl/data/*.s)
+	$(EVL_ASM_SRC) \
+	src/evl/evl.c
 
 EVL_OBJ := $(EVL_SRC:%=$(BUILDDIR)/%.o)
 EVL_DEP := $(EVL_OBJ:%.o=%.d)
