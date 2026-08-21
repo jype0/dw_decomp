@@ -98,7 +98,7 @@ static inline int16_t *efe_s16ptr(char *arg0)
 void createFlash();
 void tickEFEFlash();
 void renderEFEFlash(int32_t layer);
-void setEFEFlashOffset(int32_t id, int16_t x, int16_t y);
+volatile unsigned long setEFEFlashOffset(int32_t id, int16_t x, int16_t y);
 void downloadSomeImage();
 void modifySomeImage(int32_t dim, int16_t stp);
 void findEFEDATFile(void);
@@ -284,7 +284,16 @@ void tickEFEFlash(int32_t id)
 
 INCLUDE_ASM("asm/main/nonmatchings/efe", renderEFEFlash);
 
-INCLUDE_ASM("asm/main/nonmatchings/efe", setEFEFlashOffset);
+volatile unsigned long setEFEFlashOffset(int32_t id, int16_t x, int16_t y)
+{
+	char *e;
+	char *new_var;
+
+	new_var = EFE_FLASH_DATA + (id *= 0x28);
+	e = new_var;
+	((int16_t *)e)[18] = x;
+	((int16_t *)e)[19] = y;
+}
 
 void downloadSomeImage(void)
 {

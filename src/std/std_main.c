@@ -397,7 +397,7 @@ int32_t BTL_getUsableMoves(int16_t *out, int16_t index);
 void VS__func_800F1E9C(Entity *entity, int32_t id);
 void BTL_clearConfusion(DigimonEntity *digimon, FighterData *fighter);
 void STD_func_8005A44C(void);
-void STD_func_80064FCC(int32_t count);
+void STD_func_80064FCC(unsigned short count);
 int16_t BTL_calculateHitChance(DigimonEntity *attacker, DigimonEntity *defender, FighterData *fighter, int16_t move);
 void BTL_retargetAfterHit(DigimonEntity *digimon, FighterData *fighter, AttackObject attack);
 void BTL_startQueuedMove(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter);
@@ -3068,7 +3068,14 @@ void STD_startHitAnimation(Entity *entity, AttackObject *attack, int32_t animId)
 	createParticleFX(MOVE_DATA[tech].special, 1, &attack->position, entity, MOVE_DATA[tech].iframes + 0x10);
 }
 
-INCLUDE_ASM("asm/std/nonmatchings/std_main", STD_func_80064FCC);
+void STD_func_80064FCC(unsigned short count)
+{
+	int32_t i;
+
+	for (i = 0; i <= count; i++) {
+		STD_battleTickFrame();
+	}
+}
 
 void STD_battleTickFrame(void)
 {
