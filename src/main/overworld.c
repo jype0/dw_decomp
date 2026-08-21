@@ -107,7 +107,11 @@ typedef struct {
 } MenuTabPair;
 
 extern uint8_t MAIN_D_801342A0[2];
-extern uint8_t MAIN_D_801342A4[4];
+typedef struct {
+	int8_t tab[4];
+} PlayerTabs;
+
+extern PlayerTabs MAIN_D_801342A4;
 extern char *MAIN_D_801247B8[];
 extern uint8_t GAME_MENU_SPRITES[];
 extern uint8_t INVENTORY_ITEM_TYPES[];
@@ -1640,7 +1644,43 @@ void renderDigimonMenu(void)
 
 INCLUDE_ASM("asm/main/nonmatchings/overworld", tickPlayerMenu);
 
-INCLUDE_ASM("asm/main/nonmatchings/overworld", renderPlayerMenu);
+void renderPlayerMenu(void);
+
+void renderPlayerMenu(void)
+{
+	int8_t tabs[4];
+	int32_t v;
+	int32_t t1;
+	int32_t t2;
+	int32_t t3;
+
+	*(PlayerTabs *)tabs = MAIN_D_801342A4;
+	v = MAIN_D_80134D37;
+	if (v != 3) {
+		if (v != 2) {
+			if (v != 1) {
+				if (v == 0) {
+					renderPlayerInfoView();
+				}
+			} else {
+				renderEvoChartView();
+			}
+		} else {
+			renderMedalView();
+		}
+	} else {
+		renderCardsView();
+	}
+	tabs[MAIN_D_80134D37] = 0;
+	renderString(tabs[0], -0x89, -0x65, 0x3C, 0xC, 0, 0, 5, 1);
+	renderString(t1 = tabs[1], -0x3E, -0x65, 0x3C, 0xC, 0x3C, 0, 5, 1);
+	renderString(t2 = tabs[2], 0xD, -0x65, 0x24, 0xC, 0x78, 0, 5, 1);
+	renderString(t3 = tabs[3], 0x40, -0x65, 0x24, 0xC, 0x9C, 0, 5, 1);
+	renderMenuTab(-0x91, 0x4C, tabs[0]);
+	renderMenuTab(-0x46, 0x4C, t1);
+	renderMenuTab(5, 0x34, t2);
+	renderMenuTab(0x38, 0x34, t3);
+}
 
 int32_t isUIBoxAvailable(int32_t id)
 {
