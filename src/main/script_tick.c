@@ -1,7 +1,11 @@
 #include <dw/clock.h>
 #include <dw/doo.h>
 #include <dw/map_object.h>
+#define CURRENT_SCRIPT_PTR CURRENT_SCRIPT_PTR_shadow
 #include <dw/script.h>
+#undef CURRENT_SCRIPT_PTR
+
+extern uint8_t *CURRENT_SCRIPT_PTR;
 #include <dw/tournament.h>
 #include <dw/trigger.h>
 
@@ -399,4 +403,47 @@ void writePStat(int32_t index, uint8_t value)
 
 	ptr = &SCRIPT_STATE_PTR->pstats[index];
 	*ptr = value;
+}
+
+void setMapHeadActive(void);
+extern uint16_t MAIN_D_80134FFE;
+extern int32_t MAIN_D_80134FEC;
+void MAIN_func_800D634C(int32_t param_1, int32_t param_2);
+
+void returnFromScriptFile(void)
+{
+	StackEntry entry;
+	uint8_t *script;
+	uint8_t *section;
+	int32_t type;
+
+	for (;;) {
+		popScriptStack(&entry);
+		type = entry.smth[0];
+		if (type == 0) {
+			break;
+		}
+		if (type == 3) {
+			readMapTFS(MAIN_D_80134FFE);
+			MAIN_func_800D634C(MAIN_D_80134FFE, 0);
+			MAIN_D_80134FEC = 0;
+			script = getScript(CURRENT_SCRIPT_ID);
+			section = getScriptSection(script, 0xFE);
+			if (section != 0) {
+				CURRENT_SCRIPT_PTR = script;
+				MAIN_D_80134FDC = section;
+				longjmp(SCRIPT_JMP_BUF, 1);
+			}
+		} else if (type == 4) {
+			if (entry.smth[1] != 0xFF) {
+				CURRENT_SCRIPT_PTR = getScript(CURRENT_SCRIPT_ID);
+				MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, entry.smth[1]);
+			} else {
+				setMapHeadActive();
+			}
+			longjmp(SCRIPT_JMP_BUF, 2);
+		}
+	}
+	IS_SCRIPT_PAUSED = 1;
+	longjmp(SCRIPT_JMP_BUF, 2);
 }

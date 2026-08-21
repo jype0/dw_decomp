@@ -138,6 +138,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/script_instr28.c.o(.text.*)
         . = ALIGN(., 4);
+        build/src/main/script_instr64.c.o(".text.scriptInstruction64to7E")
+        build/src/main/script_instr64.c.o(".text.setMapHeadActive")
+        build/src/main/script_tick.c.o(".text.returnFromScriptFile")
         build/src/main/script_instr64.c.o(.text.*)
         . = ALIGN(., 4);
         build/src/main/script_anim.c.o(.text.*)

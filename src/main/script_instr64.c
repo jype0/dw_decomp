@@ -594,7 +594,7 @@ script_end:
 	longjmp(SCRIPT_JMP_BUF, 1);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/script_instr64", returnFromScriptFile);
+
 
 void setMapHeadActive(void)
 {
