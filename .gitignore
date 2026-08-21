@@ -1,11 +1,9 @@
 .venv/
 asm/
-assets/
 bin/
 build/
 disks/
 expected/
 permuter/
-CLAUDE.md
 local.mk
 objdiff.json
