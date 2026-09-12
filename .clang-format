@@ -1,0 +1,30 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+ColumnLimit: 78
+
+UseTab: AlignWithSpaces
+TabWidth: 8
+IndentWidth: 8
+ContinuationIndentWidth: 8
+
+BreakBeforeBraces: Linux
+PointerAlignment: Right
+SpaceBeforeParens: ControlStatements
+Cpp11BracedListStyle: false
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+IndentCaseLabels: false
+IndentGotoLabels: false
+InsertBraces: false
+
+AlignAfterOpenBracket: Align
+AlignEscapedNewlines: Left
+AlignTrailingComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+SortIncludes: Never

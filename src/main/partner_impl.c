@@ -42,137 +42,995 @@ char MAIN_D_801225A0[12] = "is Sick!";
 char MAIN_D_801225AC[16] = "\\ETCNA\\UNTI.TMD";
 RaiseData RAISE_DATA[66] = {
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 670, 200, -2270 },
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  670,
+	  200,
+	  -2270 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 6, 3, 18, 1200, 6, 0, 6, 8, 0, 5, 710, 140, -2210 },
+	  25,
+	  6,
+	  3,
+	  18,
+	  1200,
+	  6,
+	  0,
+	  6,
+	  8,
+	  0,
+	  5,
+	  710,
+	  140,
+	  -2210 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 10, 3, 18, 1200, 7, 0, 7, 8, 0, 10, 460, 210, -1770 },
+	  25,
+	  10,
+	  3,
+	  18,
+	  1200,
+	  7,
+	  0,
+	  7,
+	  8,
+	  0,
+	  10,
+	  460,
+	  210,
+	  -1770 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  40, 20, 5, 24, 1200, 8, 38, 1, 0, 0, 15, 550, 230, -1870 },
+	  40,
+	  20,
+	  5,
+	  24,
+	  1200,
+	  8,
+	  38,
+	  1,
+	  0,
+	  0,
+	  15,
+	  550,
+	  230,
+	  -1870 },
 	{ { 0, 5, 9, 14, 19, -1, -1, -1 },
-	  40, 22, 5, 24, 1200, 8, 63, 2, 4, 3, 15, 370, 230, -1570 },
+	  40,
+	  22,
+	  5,
+	  24,
+	  1200,
+	  8,
+	  63,
+	  2,
+	  4,
+	  3,
+	  15,
+	  370,
+	  230,
+	  -1570 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 45, 9, 36, 1200, 12, 40, 1, 0, 0, 30, 30, 390, -880 },
+	  80,
+	  45,
+	  9,
+	  36,
+	  1200,
+	  12,
+	  40,
+	  1,
+	  0,
+	  0,
+	  30,
+	  30,
+	  390,
+	  -880 },
 	{ { 4, 9, 14, 18, 23, -1, -1, -1 },
-	  80, 30, 6, 36, 1200, 10, 46, 4, 6, 0, 20, 130, 350, -1120 },
+	  80,
+	  30,
+	  6,
+	  36,
+	  1200,
+	  10,
+	  46,
+	  4,
+	  6,
+	  0,
+	  20,
+	  130,
+	  350,
+	  -1120 },
 	{ { 5, 11, 17, 23, -1, -1, -1, -1 },
-	  80, 35, 6, 36, 1200, 10, 40, 1, 2, 2, 30, 260, 380, -1450 },
+	  80,
+	  35,
+	  6,
+	  36,
+	  1200,
+	  10,
+	  40,
+	  1,
+	  2,
+	  2,
+	  30,
+	  260,
+	  380,
+	  -1450 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  80, 55, 14, 36, 1200, 13, 51, 3, 0, 0, 30, 50, 340, -940 },
+	  80,
+	  55,
+	  14,
+	  36,
+	  1200,
+	  13,
+	  51,
+	  3,
+	  0,
+	  0,
+	  30,
+	  50,
+	  340,
+	  -940 },
 	{ { 4, 9, 14, 18, 23, -1, -1, -1 },
-	  80, 35, 8, 36, 1200, 10, 41, 4, 0, 1, 20, 130, 360, -1090 },
+	  80,
+	  35,
+	  8,
+	  36,
+	  1200,
+	  10,
+	  41,
+	  4,
+	  0,
+	  1,
+	  20,
+	  130,
+	  360,
+	  -1090 },
 	{ { 0, 4, 8, 12, 16, 20, -1, -1 },
-	  80, 42, 11, 36, 1200, 11, 65, 2, 4, 3, 30, 230, 280, -1400 },
+	  80,
+	  42,
+	  11,
+	  36,
+	  1200,
+	  11,
+	  65,
+	  2,
+	  4,
+	  3,
+	  30,
+	  230,
+	  280,
+	  -1400 },
 	{ { 0, 3, 6, 9, 12, 15, 18, 21 },
-	  80, 34, 11, 36, 1200, 13, 68, 2, 6, 4, 20, 270, 280, -1340 },
+	  80,
+	  34,
+	  11,
+	  36,
+	  1200,
+	  13,
+	  68,
+	  2,
+	  6,
+	  4,
+	  20,
+	  270,
+	  280,
+	  -1340 },
 	{ { 0, 4, 8, 12, 16, 20, -1, -1 },
-	  80, 45, 11, 36, 1200, 15, 53, 2, 3, 0, 50, -30, 390, -780 },
+	  80,
+	  45,
+	  11,
+	  36,
+	  1200,
+	  15,
+	  53,
+	  2,
+	  3,
+	  0,
+	  50,
+	  -30,
+	  390,
+	  -780 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 24, 5, 36, 1200, 8, 52, 1, 3, 0, 5, 570, 170, -1900 },
+	  80,
+	  24,
+	  5,
+	  36,
+	  1200,
+	  8,
+	  52,
+	  1,
+	  3,
+	  0,
+	  5,
+	  570,
+	  170,
+	  -1900 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 40, 8, 36, 1200, 10, 47, 1, 2, 3, 40, 340, 300, -1460 },
+	  80,
+	  40,
+	  8,
+	  36,
+	  1200,
+	  10,
+	  47,
+	  1,
+	  2,
+	  3,
+	  40,
+	  340,
+	  300,
+	  -1460 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 6, 3, 18, 1200, 6, 0, 6, 8, 3, 5, 660, 160, -2090 },
+	  25,
+	  6,
+	  3,
+	  18,
+	  1200,
+	  6,
+	  0,
+	  6,
+	  8,
+	  3,
+	  5,
+	  660,
+	  160,
+	  -2090 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 10, 3, 18, 1200, 7, 0, 7, 8, 3, 10, 460, 220, -1720 },
+	  25,
+	  10,
+	  3,
+	  18,
+	  1200,
+	  7,
+	  0,
+	  7,
+	  8,
+	  3,
+	  10,
+	  460,
+	  220,
+	  -1720 },
 	{ { 2, 5, 8, 11, 14, 17, 20, 23 },
-	  40, 25, 8, 24, 1200, 8, 38, 2, 5, 3, 15, 420, 230, -1610 },
+	  40,
+	  25,
+	  8,
+	  24,
+	  1200,
+	  8,
+	  38,
+	  2,
+	  5,
+	  3,
+	  15,
+	  420,
+	  230,
+	  -1610 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  40, 23, 6, 24, 1200, 8, 62, 1, 5, 1, 15, 250, 240, -1410 },
+	  40,
+	  23,
+	  6,
+	  24,
+	  1200,
+	  8,
+	  62,
+	  1,
+	  5,
+	  1,
+	  15,
+	  250,
+	  240,
+	  -1410 },
 	{ { 2, 7, 12, 17, 21, -1, -1, -1 },
-	  80, 45, 9, 36, 1200, 12, 57, 5, 7, 1, 30, 210, 360, -1290 },
+	  80,
+	  45,
+	  9,
+	  36,
+	  1200,
+	  12,
+	  57,
+	  5,
+	  7,
+	  1,
+	  30,
+	  210,
+	  360,
+	  -1290 },
 	{ { 7, 12, 17, -1, -1, -1, -1, -1 },
-	  80, 24, 4, 36, 1200, 9, 59, 1, 2, 2, 20, 50, 350, -1030 },
+	  80,
+	  24,
+	  4,
+	  36,
+	  1200,
+	  9,
+	  59,
+	  1,
+	  2,
+	  2,
+	  20,
+	  50,
+	  350,
+	  -1030 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 35, 8, 36, 1200, 10, 49, 1, 0, 1, 20, 250, 400, -1320 },
+	  80,
+	  35,
+	  8,
+	  36,
+	  1200,
+	  10,
+	  49,
+	  1,
+	  0,
+	  1,
+	  20,
+	  250,
+	  400,
+	  -1320 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 35, 8, 36, 1200, 10, 39, 1, 1, 0, 30, 190, 290, -1200 },
+	  80,
+	  35,
+	  8,
+	  36,
+	  1200,
+	  10,
+	  39,
+	  1,
+	  1,
+	  0,
+	  30,
+	  190,
+	  290,
+	  -1200 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  80, 42, 11, 36, 1200, 11, 45, 3, 1, 2, 30, 80, 340, -1020 },
+	  80,
+	  42,
+	  11,
+	  36,
+	  1200,
+	  11,
+	  45,
+	  3,
+	  1,
+	  2,
+	  30,
+	  80,
+	  340,
+	  -1020 },
 	{ { 2, 6, 10, 14, 18, 21, -1, -1 },
-	  80, 50, 13, 36, 1200, 15, 48, 1, 4, 3, 40, 200, 360, -1360 },
+	  80,
+	  50,
+	  13,
+	  36,
+	  1200,
+	  15,
+	  48,
+	  1,
+	  4,
+	  3,
+	  40,
+	  200,
+	  360,
+	  -1360 },
 	{ { 3, 7, 11, 14, 18, 23, -1, -1 },
-	  80, 40, 10, 36, 1200, 11, 42, 0, 5, 2, 10, 280, 270, -1450 },
+	  80,
+	  40,
+	  10,
+	  36,
+	  1200,
+	  11,
+	  42,
+	  0,
+	  5,
+	  2,
+	  10,
+	  280,
+	  270,
+	  -1450 },
 	{ { 4, 12, 20, -1, -1, -1, -1, -1 },
-	  80, 30, 4, 36, 1200, 14, 67, 4, 6, 1, 30, 30, 390, -940 },
+	  80,
+	  30,
+	  4,
+	  36,
+	  1200,
+	  14,
+	  67,
+	  4,
+	  6,
+	  1,
+	  30,
+	  30,
+	  390,
+	  -940 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 24, 5, 36, 1200, 8, 52, 1, 3, 3, 5, 550, 170, -1900 },
+	  80,
+	  24,
+	  5,
+	  36,
+	  1200,
+	  8,
+	  52,
+	  1,
+	  3,
+	  3,
+	  5,
+	  550,
+	  170,
+	  -1900 },
 	{ { 4, 9, 14, 18, 23, -1, -1, -1 },
-	  80, 35, 7, 36, 1200, 10, 53, 4, 3, 2, 15, 440, 350, -1730 },
+	  80,
+	  35,
+	  7,
+	  36,
+	  1200,
+	  10,
+	  53,
+	  4,
+	  3,
+	  2,
+	  15,
+	  440,
+	  350,
+	  -1730 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 6, 3, 18, 1200, 6, 0, 6, 8, 1, 5, 680, 270, -2140 },
+	  25,
+	  6,
+	  3,
+	  18,
+	  1200,
+	  6,
+	  0,
+	  6,
+	  8,
+	  1,
+	  5,
+	  680,
+	  270,
+	  -2140 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 10, 3, 18, 1200, 7, 0, 7, 8, 1, 10, 420, 220, -1630 },
+	  25,
+	  10,
+	  3,
+	  18,
+	  1200,
+	  7,
+	  0,
+	  7,
+	  8,
+	  1,
+	  10,
+	  420,
+	  220,
+	  -1630 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  40, 20, 5, 24, 1200, 8, 63, 1, 5, 0, 15, 470, 180, -1720 },
+	  40,
+	  20,
+	  5,
+	  24,
+	  1200,
+	  8,
+	  63,
+	  1,
+	  5,
+	  0,
+	  15,
+	  470,
+	  180,
+	  -1720 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  40, 20, 5, 24, 1200, 8, 69, 4, 7, 1, 15, 290, 280, -1380 },
+	  40,
+	  20,
+	  5,
+	  24,
+	  1200,
+	  8,
+	  69,
+	  4,
+	  7,
+	  1,
+	  15,
+	  290,
+	  280,
+	  -1380 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 35, 7, 36, 1200, 11, 39, 1, 2, 0, 30, 240, 370, -1360 },
+	  80,
+	  35,
+	  7,
+	  36,
+	  1200,
+	  11,
+	  39,
+	  1,
+	  2,
+	  0,
+	  30,
+	  240,
+	  370,
+	  -1360 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  80, 48, 12, 36, 1200, 13, 50, 3, 5, 1, 30, 280, 340, -1390 },
+	  80,
+	  48,
+	  12,
+	  36,
+	  1200,
+	  13,
+	  50,
+	  3,
+	  5,
+	  1,
+	  30,
+	  280,
+	  340,
+	  -1390 },
 	{ { 0, 4, 8, 12, 16, 20, -1, -1 },
-	  80, 56, 14, 36, 1200, 15, 54, 2, 4, 3, 40, 0, 320, -880 },
+	  80,
+	  56,
+	  14,
+	  36,
+	  1200,
+	  15,
+	  54,
+	  2,
+	  4,
+	  3,
+	  40,
+	  0,
+	  320,
+	  -880 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 40, 8, 36, 1200, 11, 58, 1, 0, 2, 30, 310, 370, -1370 },
+	  80,
+	  40,
+	  8,
+	  36,
+	  1200,
+	  11,
+	  58,
+	  1,
+	  0,
+	  2,
+	  30,
+	  310,
+	  370,
+	  -1370 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 33, 8, 36, 1200, 9, 69, 4, 6, 2, 20, 490, 340, -1810 },
+	  80,
+	  33,
+	  8,
+	  36,
+	  1200,
+	  9,
+	  69,
+	  4,
+	  6,
+	  2,
+	  20,
+	  490,
+	  340,
+	  -1810 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 60, 12, 36, 1200, 12, 39, 4, 5, 1, 40, 210, 340, -1220 },
+	  80,
+	  60,
+	  12,
+	  36,
+	  1200,
+	  12,
+	  39,
+	  4,
+	  5,
+	  1,
+	  40,
+	  210,
+	  340,
+	  -1220 },
 	{ { 0, 3, 6, 9, 12, 15, 18, 21 },
-	  80, 35, 11, 36, 1200, 13, 68, 1, 6, 4, 30, 300, 260, -1420 },
+	  80,
+	  35,
+	  11,
+	  36,
+	  1200,
+	  13,
+	  68,
+	  1,
+	  6,
+	  4,
+	  30,
+	  300,
+	  260,
+	  -1420 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 32, 6, 36, 1200, 10, 46, 1, 3, 2, 40, 260, 360, -1400 },
+	  80,
+	  32,
+	  6,
+	  36,
+	  1200,
+	  10,
+	  46,
+	  1,
+	  3,
+	  2,
+	  40,
+	  260,
+	  360,
+	  -1400 },
 	{ { 4, 9, 13, 18, 23, -1, -1, -1 },
-	  80, 30, 6, 36, 1200, 8, 50, 3, 3, 1, 5, 370, 270, -1610 },
+	  80,
+	  30,
+	  6,
+	  36,
+	  1200,
+	  8,
+	  50,
+	  3,
+	  3,
+	  1,
+	  5,
+	  370,
+	  270,
+	  -1610 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 40, 10, 36, 1200, 10, 55, 1, 5, 1, 20, 500, 230, -1870 },
+	  80,
+	  40,
+	  10,
+	  36,
+	  1200,
+	  10,
+	  55,
+	  1,
+	  5,
+	  1,
+	  20,
+	  500,
+	  230,
+	  -1870 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 6, 3, 18, 1200, 6, 0, 6, 8, 2, 5, 670, 230, -2100 },
+	  25,
+	  6,
+	  3,
+	  18,
+	  1200,
+	  6,
+	  0,
+	  6,
+	  8,
+	  2,
+	  5,
+	  670,
+	  230,
+	  -2100 },
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
-	  25, 10, 3, 18, 1200, 7, 0, 7, 8, 2, 10, 330, 230, -1480 },
+	  25,
+	  10,
+	  3,
+	  18,
+	  1200,
+	  7,
+	  0,
+	  7,
+	  8,
+	  2,
+	  10,
+	  330,
+	  230,
+	  -1480 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  40, 20, 5, 24, 1200, 8, 44, 1, 5, 2, 15, 540, 210, -1880 },
+	  40,
+	  20,
+	  5,
+	  24,
+	  1200,
+	  8,
+	  44,
+	  1,
+	  5,
+	  2,
+	  15,
+	  540,
+	  210,
+	  -1880 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  40, 23, 6, 24, 1200, 8, 44, 0, 5, 2, 15, 480, 260, -1750 },
+	  40,
+	  23,
+	  6,
+	  24,
+	  1200,
+	  8,
+	  44,
+	  0,
+	  5,
+	  2,
+	  15,
+	  480,
+	  260,
+	  -1750 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 53, 12, 36, 1200, 13, 66, 1, 0, 3, 40, 0, 350, -870 },
+	  80,
+	  53,
+	  12,
+	  36,
+	  1200,
+	  13,
+	  66,
+	  1,
+	  0,
+	  3,
+	  40,
+	  0,
+	  350,
+	  -870 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 33, 7, 36, 1200, 10, 40, 1, 5, 0, 20, 200, 330, -1320 },
+	  80,
+	  33,
+	  7,
+	  36,
+	  1200,
+	  10,
+	  40,
+	  1,
+	  5,
+	  0,
+	  20,
+	  200,
+	  330,
+	  -1320 },
 	{ { 4, 8, 13, 18, 23, -1, -1, -1 },
-	  80, 35, 7, 36, 1200, 10, 64, 3, 4, 1, 30, 270, 380, -1400 },
+	  80,
+	  35,
+	  7,
+	  36,
+	  1200,
+	  10,
+	  64,
+	  3,
+	  4,
+	  1,
+	  30,
+	  270,
+	  380,
+	  -1400 },
 	{ { 3, 8, 13, 18, 23, -1, -1, -1 },
-	  80, 40, 8, 36, 1200, 11, 65, 0, 5, 3, 30, 310, 330, -1520 },
+	  80,
+	  40,
+	  8,
+	  36,
+	  1200,
+	  11,
+	  65,
+	  0,
+	  5,
+	  3,
+	  30,
+	  310,
+	  330,
+	  -1520 },
 	{ { 4, 9, 14, 18, 23, -1, -1, -1 },
-	  80, 43, 9, 36, 1200, 12, 56, 4, 7, 3, 30, 60, 333, -1030 },
+	  80,
+	  43,
+	  9,
+	  36,
+	  1200,
+	  12,
+	  56,
+	  4,
+	  7,
+	  3,
+	  30,
+	  60,
+	  333,
+	  -1030 },
 	{ { 3, 8, 13, 18, 23, -1, -1, -1 },
-	  80, 42, 8, 36, 1200, 11, 63, 0, 1, 0, 20, 360, 270, -1620 },
+	  80,
+	  42,
+	  8,
+	  36,
+	  1200,
+	  11,
+	  63,
+	  0,
+	  1,
+	  0,
+	  20,
+	  360,
+	  270,
+	  -1620 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  80, 35, 9, 36, 1200, 10, 40, 3, 6, 4, 20, 530, 230, -1890 },
+	  80,
+	  35,
+	  9,
+	  36,
+	  1200,
+	  10,
+	  40,
+	  3,
+	  6,
+	  4,
+	  20,
+	  530,
+	  230,
+	  -1890 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 45, 11, 36, 1200, 14, 48, 4, 3, 0, 50, 0, 460, -940 },
+	  80,
+	  45,
+	  11,
+	  36,
+	  1200,
+	  14,
+	  48,
+	  4,
+	  3,
+	  0,
+	  50,
+	  0,
+	  460,
+	  -940 },
 	{ { 3, 8, 13, 18, 23, -1, -1, -1 },
-	  80, 24, 5, 36, 1200, 8, 52, 0, 2, 2, 5, 470, 330, -1800 },
+	  80,
+	  24,
+	  5,
+	  36,
+	  1200,
+	  8,
+	  52,
+	  0,
+	  2,
+	  2,
+	  5,
+	  470,
+	  330,
+	  -1800 },
 	{ { 0, 3, 6, 9, 12, 15, 18, 21 },
-	  80, 50, 14, 36, 1200, 9, 70, 1, 6, 0, 10, 550, 200, -1960 },
+	  80,
+	  50,
+	  14,
+	  36,
+	  1200,
+	  9,
+	  70,
+	  1,
+	  6,
+	  0,
+	  10,
+	  550,
+	  200,
+	  -1960 },
 	{ { 1, 5, 9, 13, 17, 21, -1, -1 },
-	  40, 22, 6, 24, 1200, 8, 62, 1, 1, 0, 15, 450, 240, -1760 },
+	  40,
+	  22,
+	  6,
+	  24,
+	  1200,
+	  8,
+	  62,
+	  1,
+	  1,
+	  0,
+	  15,
+	  450,
+	  240,
+	  -1760 },
 	{ { 3, 8, 13, 18, 23, -1, -1, -1 },
-	  80, 24, 6, 36, 1200, 8, 52, 0, 5, 1, 10, 550, 180, -1920 },
+	  80,
+	  24,
+	  6,
+	  36,
+	  1200,
+	  8,
+	  52,
+	  0,
+	  5,
+	  1,
+	  10,
+	  550,
+	  180,
+	  -1920 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 35, 7, 36, 1200, 12, 61, 1, 0, 2, 30, 120, 430, -1230 },
+	  80,
+	  35,
+	  7,
+	  36,
+	  1200,
+	  12,
+	  61,
+	  1,
+	  0,
+	  2,
+	  30,
+	  120,
+	  430,
+	  -1230 },
 	{ { 2, 7, 12, 17, 21, -1, -1, -1 },
-	  80, 45, 9, 36, 1200, 13, 60, 5, 7, 3, 40, 0, 360, -950 },
+	  80,
+	  45,
+	  9,
+	  36,
+	  1200,
+	  13,
+	  60,
+	  5,
+	  7,
+	  3,
+	  40,
+	  0,
+	  360,
+	  -950 },
 	{ { 0, 5, 9, 14, 19, -1, -1, -1 },
-	  80, 42, 8, 36, 1200, 12, 67, 2, 4, 1, 30, 110, 320, -1180 },
+	  80,
+	  42,
+	  8,
+	  36,
+	  1200,
+	  12,
+	  67,
+	  2,
+	  4,
+	  1,
+	  30,
+	  110,
+	  320,
+	  -1180 },
 	{ { 0, 0, 0, 0, 0, -1, -1, -1 },
-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0,
+	  0 },
 	{ { 2, 6, 11, 16, 21, -1, -1, -1 },
-	  80, 33, 7, 36, 1200, 10, 40, 1, 2, 0, 20, 200, 330, -1320 },
+	  80,
+	  33,
+	  7,
+	  36,
+	  1200,
+	  10,
+	  40,
+	  1,
+	  2,
+	  0,
+	  20,
+	  200,
+	  330,
+	  -1320 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 45, 11, 36, 1200, 14, 48, 4, 3, 0, 50, 0, 460, -940 },
+	  80,
+	  45,
+	  11,
+	  36,
+	  1200,
+	  14,
+	  48,
+	  4,
+	  3,
+	  0,
+	  50,
+	  0,
+	  460,
+	  -940 },
 	{ { 2, 6, 10, 14, 18, 22, -1, -1 },
-	  80, 40, 10, 36, 1200, 10, 55, 1, 3, 1, 20, 500, 230, -1870 },
+	  80,
+	  40,
+	  10,
+	  36,
+	  1200,
+	  10,
+	  55,
+	  1,
+	  3,
+	  1,
+	  20,
+	  500,
+	  230,
+	  -1870 },
 };
 
 typedef struct {
@@ -185,21 +1043,17 @@ typedef struct {
 } SleepPattern;
 
 SleepPattern SLEEP_PATTERN[8] = {
-	{16, 0, 1, 0, 15, 9},
-	{19, 0, 4, 0, 15, 9},
-	{22, 0, 7, 0, 15, 9},
-	{2, 0, 11, 0, 15, 9},
-	{7, 0, 16, 0, 15, 9},
-	{10, 0, 19, 0, 15, 9},
-	{0, 0, 0, 0, 4, 1},
-	{0, 0, 0, 0, 8, 3},
+	{ 16, 0, 1, 0, 15, 9 }, { 19, 0, 4, 0, 15, 9 },
+	{ 22, 0, 7, 0, 15, 9 }, { 2, 0, 11, 0, 15, 9 },
+	{ 7, 0, 16, 0, 15, 9 }, { 10, 0, 19, 0, 15, 9 },
+	{ 0, 0, 0, 0, 4, 1 },   { 0, 0, 0, 0, 8, 3 },
 };
 
 int8_t ITEM_TAKE_DISTANCE[68] = {
 	10, 10, 10, 10, 15, 10, 10, 15, 10, 15, 10, 15, 10, 10, 10, 10, 10,
 	10, 15, 10, 10, 15, 10, 15, 10, 25, 10, 10, 10, 10, 10, 10, 10, 10,
 	15, 15, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 15,
-	10, 10, 10, 10, 10, 10, 10, 10, 15, 15, 10, 10, 10, 10, 10, 0, 0,
+	10, 10, 10, 10, 10, 10, 10, 10, 15, 15, 10, 10, 10, 10, 10, 0,  0,
 };
 
 extern uint8_t MAIN_D_80137C00[2048];
@@ -211,7 +1065,6 @@ extern int8_t GAME_STATE;
 extern int32_t FADE_PROTECTION;
 extern int8_t PARTNER_STATE;
 extern int8_t PARTNER_SUB_STATE;
-
 
 extern int8_t STOP_DISTANCE_TIMER;
 extern uint8_t CURRENT_SCREEN;
@@ -245,29 +1098,28 @@ void setTextColor(int32_t color);
 void drawString(char *str, int32_t x, int32_t y);
 int32_t isInDaytimeTransition(void);
 void renderRectPolyFT4(int32_t posX, int32_t posY, int32_t width,
-		       int32_t height, int32_t texX, int32_t texY,
-		       int32_t texturePage, int32_t clut, int32_t zIndex,
-		       int32_t flag);
+                       int32_t height, int32_t texX, int32_t texY,
+                       int32_t texturePage, int32_t clut, int32_t zIndex,
+                       int32_t flag);
 
 void initializeStatusObjects(void);
 void initializePoop(void);
-void initializePartner(int32_t type, int32_t posX, int32_t posY,
-		       int32_t posZ, int32_t rotX, int32_t rotY,
-		       int32_t rotZ);
+void initializePartner(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
+                       int32_t rotX, int32_t rotY, int32_t rotZ);
 void setSleepTimes(PartnerPara *para, int32_t type);
 void setFoodTimer(int16_t type);
 void renderPoop(int32_t instanceId);
 void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY,
-			      int32_t posZ, int32_t rotX, int32_t rotY,
-			      int32_t rotZ);
+                              int32_t posZ, int32_t rotX, int32_t rotY,
+                              int32_t rotZ);
 void resetPartnerPara(PartnerPara *para, int32_t type);
 void initializeReincarnatedPartner(int32_t type, int32_t posX, int32_t posY,
-				    int32_t posZ, int32_t rotX, int32_t rotY,
-				    int32_t rotZ);
+                                   int32_t posZ, int32_t rotX, int32_t rotY,
+                                   int32_t rotZ);
 void setReincarnateStats(int16_t hp, int16_t mp, int16_t offense,
-			 int16_t defense, int16_t speed, int16_t brains);
+                         int16_t defense, int16_t speed, int16_t brains);
 void setupPartnerOnWarp(int32_t posX, int32_t posY, int32_t posZ,
-			int32_t rotation);
+                        int32_t rotation);
 void tickConditionBoundaries(void);
 void tickSleepMechanics(void);
 void tickUnhappinessMechanics(void);
@@ -366,7 +1218,7 @@ void initializePoop(void)
 }
 
 static uint32_t primeInitializePartnerScheduler(uint32_t a, uint32_t b,
-						uint32_t c, uint32_t d)
+                                                uint32_t c, uint32_t d)
 {
 	uint32_t value = a;
 
@@ -376,9 +1228,8 @@ static uint32_t primeInitializePartnerScheduler(uint32_t a, uint32_t b,
 	return value + a + b + c + d;
 }
 
-void initializePartner(int32_t type, int32_t posX, int32_t posY,
-		       int32_t posZ, int32_t rotX, int32_t rotY,
-		       int32_t rotZ)
+void initializePartner(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
+                       int32_t rotX, int32_t rotY, int32_t rotZ)
 {
 	int32_t i;
 
@@ -471,7 +1322,8 @@ void renderPoop(int32_t instanceId)
 	for (i = 0; i < 100; i++) {
 		if (((size = WORLD_POOP[i].size) != 0) &&
 		    (CURRENT_SCREEN == WORLD_POOP[i].map)) {
-			height = PARTNER_ENTITY.digimonEntity.entity.posData->location.vy;
+			height = PARTNER_ENTITY.digimonEntity.entity.posData
+			                 ->location.vy;
 			scaleValue = size * 4096 / 10;
 			pos.vx = (int16_t)((WORLD_POOP[i].x - 50) * 100 + 50);
 			pos.vy = height;
@@ -479,15 +1331,17 @@ void renderPoop(int32_t instanceId)
 			scale.vx = scaleValue;
 			scale.vy = scaleValue;
 			scale.vz = scaleValue;
-			projectPosition(&POOP_COORDINATES, &pos, &rotation, &scale);
-			drawObject(&POOP_OBJECT, GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
+			projectPosition(&POOP_COORDINATES, &pos, &rotation,
+			                &scale);
+			drawObject(&POOP_OBJECT,
+			           GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
 		}
 	}
 }
 
 void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY,
-			      int32_t posZ, int32_t rotX, int32_t rotY,
-			      int32_t rotZ)
+                              int32_t posZ, int32_t rotX, int32_t rotY,
+                              int32_t rotZ)
 {
 	removeObject((int16_t)type, 1);
 	applyMMD(type, 3, &EVO_SEQUENCE_DATA.modelData);
@@ -517,7 +1371,7 @@ void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY,
  * reproduces the state required by resetPartnerPara and setSleepTimes and is
  * linker-GC'd. */
 static uint32_t primeResetPartnerParaScheduler(uint32_t a, uint32_t b,
-					       uint32_t c, uint32_t d)
+                                               uint32_t c, uint32_t d)
 {
 	uint32_t value = a;
 
@@ -577,29 +1431,34 @@ void setSleepTimes(PartnerPara *para, int32_t type)
 
 		para->sleepyHour =
 			(HOUR +
-			 (hoursAwake = awakeTimeBase + (int16_t)random(1))) % 24;
+		         (hoursAwake = awakeTimeBase + (int16_t)random(1))) %
+			24;
 		para->sleepyMinute = 0;
-		para->wakeupHour =
-			(para->sleepyHour +
-			 SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].sleepyHours);
+		para->wakeupHour = (para->sleepyHour +
+		                    SLEEP_PATTERN[RAISE_DATA[type].sleepCycle]
+		                            .sleepyHours);
 		para->wakeupMinute = para->sleepyMinute;
 		para->wakeupHour %= 24;
 		para->hoursAwakeDefault = hoursAwake;
 		para->hoursAsleepDefault =
-			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].sleepyHours;
+			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle]
+				.sleepyHours;
 	} else {
 		para->sleepyHour =
 			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].sleepyHour;
 		para->sleepyMinute =
-			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].sleepyMinute;
+			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle]
+				.sleepyMinute;
 		para->wakeupHour =
 			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].wakeupHour;
 		para->wakeupMinute =
-			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].wakeupMinute;
+			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle]
+				.wakeupMinute;
 		para->hoursAwakeDefault =
 			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].awakeHours;
 		para->hoursAsleepDefault =
-			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle].sleepyHours;
+			SLEEP_PATTERN[RAISE_DATA[type].sleepCycle]
+				.sleepyHours;
 	}
 
 	PARTNER_PARA.timeAwakeToday = PARTNER_PARA.hoursAwakeDefault * 6;
@@ -631,7 +1490,8 @@ void setFoodTimer(int16_t type)
 				if (PARTNER_PARA.nextHungerHour <
 				    RAISE_DATA[type].hungerTimes[i]) {
 					PARTNER_PARA.nextHungerHour =
-						RAISE_DATA[type].hungerTimes[i];
+						RAISE_DATA[type]
+							.hungerTimes[i];
 					goto calculateTimer;
 				}
 			} else if (HOUR < RAISE_DATA[type].hungerTimes[i]) {
@@ -646,18 +1506,22 @@ void setFoodTimer(int16_t type)
 				int32_t nextJ;
 
 				for (j = 0, nextJ = 1; j < 8; j++, nextJ++) {
-					if (HOUR < RAISE_DATA[type].hungerTimes[j]) {
+					if (HOUR <
+					    RAISE_DATA[type].hungerTimes[j]) {
 						PARTNER_PARA.nextHungerHour =
 							RAISE_DATA[type]
-								.hungerTimes[j];
+								.hungerTimes
+									[j];
 						goto calculateTimer;
 					}
 
-					if (RAISE_DATA[type].hungerTimes[nextJ] == -1 ||
+					if (RAISE_DATA[type].hungerTimes
+					                    [nextJ] == -1 ||
 					    j == 7) {
 						PARTNER_PARA.nextHungerHour =
 							RAISE_DATA[type]
-								.hungerTimes[0];
+								.hungerTimes
+									[0];
 						goto calculateTimer;
 					}
 				}
@@ -684,12 +1548,11 @@ calculateTimer:
 }
 
 void initializeReincarnatedPartner(int32_t type, int32_t posX, int32_t posY,
-				    int32_t posZ, int32_t rotX, int32_t rotY,
-				    int32_t rotZ)
+                                   int32_t posZ, int32_t rotX, int32_t rotY,
+                                   int32_t rotZ)
 {
 	removeObject((int16_t)type, 1);
-	applyMMD(type, 3,
-		 (EvoModelData *)&DOOA_REINCARNATION_SEQ.modelData);
+	applyMMD(type, 3, (EvoModelData *)&DOOA_REINCARNATION_SEQ.modelData);
 
 	ENTITY_TABLE[1] = (Entity *)&PARTNER_ENTITY;
 	initializeDigimonObject(type, 1, tickPartner);
@@ -737,7 +1600,7 @@ void initializeReincarnatedPartner(int32_t type, int32_t posX, int32_t posY,
 }
 
 void setReincarnateStats(int16_t hp, int16_t mp, int16_t offense,
-			 int16_t defense, int16_t speed, int16_t brains)
+                         int16_t defense, int16_t speed, int16_t brains)
 {
 	int16_t percentage;
 	Stats *stats;
@@ -773,12 +1636,13 @@ void setReincarnateStats(int16_t hp, int16_t mp, int16_t offense,
 }
 
 void setupPartnerOnWarp(int32_t posX, int32_t posY, int32_t posZ,
-			int32_t rotation)
+                        int32_t rotation)
 {
 	setEntityPosition(1, posX, posY, posZ);
-	setEntityRotation(1, PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vx,
-			  rotation,
-			  PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vz);
+	setEntityRotation(
+		1, PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vx,
+		rotation,
+		PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vz);
 	setupEntityMatrix(1);
 
 	startAnimation(ENTITY_TABLE[1], 0);
@@ -817,7 +1681,8 @@ void tickConditionBoundaries(void)
 	if (PARTNER_PARA.energyLevel >
 	    RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyCap) {
 		PARTNER_PARA.energyLevel =
-			RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyCap;
+			RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+				.energyCap;
 	}
 
 	if (PARTNER_PARA.energyLevel < 0) {
@@ -851,23 +1716,22 @@ void tickSleepMechanics(void)
 			(int16_t)(PARTNER_PARA.tiredness * 3 / 10);
 	}
 
-	if ((wasSleepy == 0) &&
-	    (PARTNER_PARA.tirednessSleepTimer >= 180) &&
+	if ((wasSleepy == 0) && (PARTNER_PARA.tirednessSleepTimer >= 180) &&
 	    ((CURRENT_FRAME % 200) == 0) &&
 	    (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
 		PARTNER_PARA.timeAwakeToday--;
 		PARTNER_PARA.tirednessSleepTimer = 0;
 
-		hoursLate =
-			(delta = PARTNER_PARA.hoursAwakeDefault * 6 -
-				 PARTNER_PARA.timeAwakeToday) / 6;
+		hoursLate = (delta = PARTNER_PARA.hoursAwakeDefault * 6 -
+		                     PARTNER_PARA.timeAwakeToday) /
+		            6;
 		if ((delta % 6) != 0)
 			hoursLate++;
 
 		minutePart = PARTNER_PARA.timeAwakeToday % 6;
-		PARTNER_PARA.sleepyHour =
-			PARTNER_PARA.wakeupHour -
-			PARTNER_PARA.hoursAsleepDefault - hoursLate;
+		PARTNER_PARA.sleepyHour = PARTNER_PARA.wakeupHour -
+		                          PARTNER_PARA.hoursAsleepDefault -
+		                          hoursLate;
 		if (PARTNER_PARA.sleepyHour < 0)
 			PARTNER_PARA.sleepyHour += 24;
 		PARTNER_PARA.sleepyMinute = minutePart * 10;
@@ -889,7 +1753,7 @@ void tickSleepMechanics(void)
 				PARTNER_PARA.discipline--;
 			}
 		} else if (((CURRENT_FRAME % 1200) == 0) &&
-			   (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
+		           (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
 			PARTNER_PARA.happiness -= 2;
 			PARTNER_PARA.discipline -= 4;
 		}
@@ -951,7 +1815,7 @@ void tickSleepMechanics(void)
 				PARTNER_PARA.condition |= 1;
 			}
 		} else if (PARTNER_PARA.sleepyHour <
-			   PARTNER_PARA.wakeupHour) {
+		           PARTNER_PARA.wakeupHour) {
 			if ((HOUR >= PARTNER_PARA.sleepyHour) &&
 			    (HOUR < PARTNER_PARA.wakeupHour)) {
 				PARTNER_PARA.condition |= 1;
@@ -971,8 +1835,7 @@ void tickUnhappinessMechanics(void)
 	int16_t randomValue;
 	Stats *stats;
 
-	if ((PARTNER_PARA.condition == 0) &&
-	    (PARTNER_PARA.happiness < 0) &&
+	if ((PARTNER_PARA.condition == 0) && (PARTNER_PARA.happiness < 0) &&
 	    ((CURRENT_FRAME % 200) == 0) &&
 	    (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
 		happiness = PARTNER_PARA.happiness;
@@ -993,10 +1856,8 @@ void tickUnhappinessMechanics(void)
 		if (((CURRENT_FRAME % 300) == 0) &&
 		    (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
 			stats = &PARTNER_ENTITY.digimonEntity.stats;
-			stats->base.hp -=
-				(int16_t)(stats->base.hp * 2 / 100);
-			stats->base.mp -=
-				(int16_t)(stats->base.mp * 2 / 100);
+			stats->base.hp -= (int16_t)(stats->base.hp * 2 / 100);
+			stats->base.mp -= (int16_t)(stats->base.mp * 2 / 100);
 			stats->base.off -=
 				(int16_t)(stats->base.off * 2 / 100);
 			stats->base.def -=
@@ -1073,10 +1934,10 @@ void handlePraiseScold(int32_t state)
 	PARTNER_PARA.happiness += happinessDelta;
 
 	if (state == 4) {
-		level = DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].level;
+		level = DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+		                .level;
 		NANIMON_TRIGGER = 0;
-		if ((level == 3) &&
-		    (oldDiscipline2 == 0) &&
+		if ((level == 3) && (oldDiscipline2 == 0) &&
 		    (oldHappiness == -100)) {
 			NANIMON_TRIGGER = 1;
 		}
@@ -1104,16 +1965,14 @@ void handleSleeping(void)
 		PARTNER_PARA.remainingLifetime = 0;
 
 	if (DIGIMON_DATA[type].level < 3) {
-		PARTNER_PARA.sleepyHour =
-			PARTNER_PARA.wakeupHour +
-			PARTNER_PARA.hoursAwakeDefault;
+		PARTNER_PARA.sleepyHour = PARTNER_PARA.wakeupHour +
+		                          PARTNER_PARA.hoursAwakeDefault;
 		if (PARTNER_PARA.sleepyHour >= 24)
 			PARTNER_PARA.sleepyHour -= 24;
 		PARTNER_PARA.sleepyMinute = 0;
 
-		PARTNER_PARA.wakeupHour =
-			PARTNER_PARA.sleepyHour +
-			PARTNER_PARA.hoursAsleepDefault;
+		PARTNER_PARA.wakeupHour = PARTNER_PARA.sleepyHour +
+		                          PARTNER_PARA.hoursAsleepDefault;
 		if (PARTNER_PARA.wakeupHour >= 24)
 			PARTNER_PARA.wakeupHour -= 24;
 		PARTNER_PARA.wakeupMinute = 0;
@@ -1141,8 +2000,9 @@ void handleSleeping(void)
 	IMMORTAL_HOUR = (int8_t)HOUR;
 
 	if (PARTNER_PARA.condition & 8) {
-		getModelTile(&PARTNER_ENTITY.digimonEntity.entity.posData->location,
-			     &tileX, &tileY);
+		getModelTile(&PARTNER_ENTITY.digimonEntity.entity.posData
+		                      ->location,
+		             &tileX, &tileY);
 		createPoopPile(tileX, tileY);
 		PARTNER_PARA.condition &= ~8;
 		PARTNER_PARA.poopLevel =
@@ -1214,7 +2074,10 @@ int32_t createPoopPile(int16_t tileX, int16_t tileY)
 				WORLD_POOP[i].x = tileX;
 				WORLD_POOP[i].y = tileY;
 				WORLD_POOP[i].size =
-					RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopSize;
+					RAISE_DATA[PARTNER_ENTITY
+				                           .digimonEntity
+				                           .entity.type]
+						.poopSize;
 				break;
 			}
 		}
@@ -1225,7 +2088,8 @@ int32_t createPoopPile(int16_t tileX, int16_t tileY)
 		WORLD_POOP[CURRENT_POOP_ID].x = tileX;
 		WORLD_POOP[CURRENT_POOP_ID].y = tileY;
 		WORLD_POOP[CURRENT_POOP_ID].size =
-			RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopSize;
+			RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+				.poopSize;
 		CURRENT_POOP_ID++;
 	}
 	if (count >= 16) {
@@ -1235,7 +2099,10 @@ int32_t createPoopPile(int16_t tileX, int16_t tileY)
 				WORLD_POOP[i].x = tileX;
 				WORLD_POOP[i].y = tileY;
 				WORLD_POOP[i].size =
-					RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopSize;
+					RAISE_DATA[PARTNER_ENTITY
+				                           .digimonEntity
+				                           .entity.type]
+						.poopSize;
 				CURRENT_POOP_ID++;
 				break;
 			}
@@ -1277,8 +2144,7 @@ void sleepRegen(void)
 	if ((MINUTE > 0) && (HOUR != PARTNER_PARA.sleepyHour))
 		hoursSlept++;
 
-	sleepFactor =
-		(int16_t)(hoursSlept * 100 / hoursAsleepDefault);
+	sleepFactor = (int16_t)(hoursSlept * 100 / hoursAsleepDefault);
 	if (getItemCount(0x22) != 0)
 		sleepFactor = (int16_t)(sleepFactor * 12 / 10);
 
@@ -1292,16 +2158,16 @@ void sleepRegen(void)
 	healRoll = random(10);
 	PARTNER_ENTITY.digimonEntity.stats.current.currentHP +=
 		(int16_t)(sleepFactor * (maxHP * (healRoll + 70) / 100) /
-			  100);
+	                  100);
 	PARTNER_ENTITY.digimonEntity.stats.current.currentMP +=
 		(int16_t)(sleepFactor * (maxMP * (healRoll + 70) / 100) /
-			  100);
+	                  100);
 
 	tiredPercent = (int16_t)random(20) + 80;
 	PARTNER_PARA.tiredness -=
 		(int16_t)(sleepFactor *
-			  (PARTNER_PARA.tiredness * tiredPercent / 100) /
-			  100);
+	                  (PARTNER_PARA.tiredness * tiredPercent / 100) /
+	                  100);
 
 	if (PARTNER_ENTITY.digimonEntity.stats.current.currentHP >= maxHP)
 		PARTNER_ENTITY.digimonEntity.stats.current.currentHP = maxHP;
@@ -1311,14 +2177,16 @@ void sleepRegen(void)
 		PARTNER_PARA.tiredness = 0;
 
 	PARTNER_PARA.weight -=
-		(int16_t)(RAISE_DATA[ENTITY_TABLE[1]->type].defaultWeight / 10);
+		(int16_t)(RAISE_DATA[ENTITY_TABLE[1]->type].defaultWeight /
+	                  10);
 	if (PARTNER_PARA.weight <= 0)
 		PARTNER_PARA.weight = 1;
 }
 
 void tickTirednessMechanics(void)
 {
-	if (((PARTNER_PARA.areaEffectTimer % 1200) == 0) && (PARTNER_PARA.areaEffectTimer > 0)) {
+	if (((PARTNER_PARA.areaEffectTimer % 1200) == 0) &&
+	    (PARTNER_PARA.areaEffectTimer > 0)) {
 		if (PARTNER_AREA_RESPONSE[0] == 1) {
 			PARTNER_PARA.happiness = PARTNER_PARA.happiness + 1;
 			PARTNER_PARA.tiredness = PARTNER_PARA.tiredness - 2;
@@ -1336,13 +2204,15 @@ void tickTirednessMechanics(void)
 		PARTNER_PARA.subTiredness = 0;
 	}
 	if (PARTNER_PARA.tiredness >= 0x32) {
-		PARTNER_PARA.tirednessHungerTimer = PARTNER_PARA.tirednessHungerTimer + 1;
+		PARTNER_PARA.tirednessHungerTimer =
+			PARTNER_PARA.tirednessHungerTimer + 1;
 	} else {
 		PARTNER_PARA.tirednessHungerTimer = 0;
 	}
 	if (PARTNER_PARA.tiredness >= 0x50) {
 		PARTNER_PARA.condition |= 2;
-		if (((CURRENT_FRAME % 100) == 0) && (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
+		if (((CURRENT_FRAME % 100) == 0) &&
+		    (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
 			PARTNER_PARA.happiness = PARTNER_PARA.happiness - 2;
 		}
 	} else {
@@ -1375,14 +2245,23 @@ int32_t partnerWillRefuseItem(void)
 	if (((item >= 0x47) && (item < 0x73)) ||
 	    ((item >= 0x7D) && (item < 0x80))) {
 		if (item == 0x7E) {
-			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].level != 3)
+			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity
+			                         .type]
+			            .level != 3)
 				return 1;
 		} else if ((item == 0x7D) || (item == 0x7F)) {
-			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].level != 4)
+			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity
+			                         .type]
+			            .level != 4)
 				return 1;
 		} else {
-			if (((level = DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].level) ==
-			     (targetLevel = DIGIMON_DATA[MAIN_D_80127C15[item]].level)) ||
+			if (((level = DIGIMON_DATA[PARTNER_ENTITY
+			                                   .digimonEntity
+			                                   .entity.type]
+			                      .level) ==
+			     (targetLevel =
+			              DIGIMON_DATA[MAIN_D_80127C15[item]]
+			                      .level)) ||
 			    (level + 2 == targetLevel) ||
 			    (level - 1 == targetLevel))
 				return 1;
@@ -1395,8 +2274,8 @@ int32_t partnerWillRefuseItem(void)
 	}
 	if ((0 <= item) && (item < 0x26)) {
 		disciplineChance = random(100);
-		if (disciplineChance < 110 -
-		    (PARTNER_PARA.discipline + (random(10) + 10))) {
+		if (disciplineChance <
+		    110 - (PARTNER_PARA.discipline + (random(10) + 10))) {
 			ITEM_SCOLD_FLAG = 1;
 			return 1;
 		}
@@ -1422,7 +2301,7 @@ void tickHungerMechanics(void)
 		    (CURRENT_FRAME != LAST_HANDLED_FRAME))
 			PARTNER_PARA.starvationTimer--;
 	} else if (((CURRENT_FRAME % 20) == 0) &&
-		   (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
+	           (CURRENT_FRAME != LAST_HANDLED_FRAME)) {
 		PARTNER_PARA.foodLevel--;
 	}
 
@@ -1445,7 +2324,8 @@ void tickHungerMechanics(void)
 		PARTNER_PARA.starvationTimer = 0;
 		PARTNER_PARA.condition &= ~4;
 		if (PARTNER_PARA.energyLevel <
-		    RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold)
+		    RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+		            .energyThreshold)
 			PARTNER_PARA.careMistakes++;
 	}
 
@@ -1464,8 +2344,8 @@ void tickHungerMechanics(void)
 	    (CURRENT_FRAME != LAST_HANDLED_FRAME))
 		PARTNER_PARA.foodLevel -= 3;
 
-	if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold <=
-	    PARTNER_PARA.energyLevel)
+	if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+	            .energyThreshold <= PARTNER_PARA.energyLevel)
 		setTrigger(0x280);
 }
 
@@ -1506,23 +2386,25 @@ void handleConditionBubble(void)
 		newBubble = 3;
 	}
 
-	if ((cond & 0x10) && (newBubble == -1) &&
-	    (HAS_BUTTERFLY != 0) && (cond == 0x10)) {
+	if ((cond & 0x10) && (newBubble == -1) && (HAS_BUTTERFLY != 0) &&
+	    (cond == 0x10)) {
 		unsetBubble(MAIN_D_80134C70);
 		BUTTERFLY_ID = setButterfly(ENTITY_TABLE[1]);
 		HAS_BUTTERFLY = 0;
 		return;
 	} else if ((newBubble != MAIN_D_80134C6C) && (newBubble != -1) &&
-		   (MAIN_D_80134C74 >= 50)) {
+	           (MAIN_D_80134C74 >= 50)) {
 		if (HAS_BUTTERFLY == 0) {
 			unsetButterfly(BUTTERFLY_ID);
 			HAS_BUTTERFLY = -1;
 			PARTNER_PARA.condition &= ~0x10;
-			PARTNER_ENTITY.digimonEntity.entity.anim.loopCount = 1;
+			PARTNER_ENTITY.digimonEntity.entity.anim.loopCount =
+				1;
 		}
 
 		unsetBubble(MAIN_D_80134C70);
-		MAIN_D_80134C70 = addConditionBubble(newBubble, ENTITY_TABLE[1]);
+		MAIN_D_80134C70 =
+			addConditionBubble(newBubble, ENTITY_TABLE[1]);
 		MAIN_D_80134C74 = 0;
 		MAIN_D_80134C6C = newBubble;
 	}
@@ -1545,28 +2427,32 @@ void partnerHandleFoodFeed(int32_t itemType)
 
 		type = PARTNER_ENTITY.digimonEntity.entity.type;
 
-		if (!(RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold >
-		      PARTNER_PARA.energyLevel)) {
+		if (!(RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+		              .energyThreshold > PARTNER_PARA.energyLevel)) {
 			PARTNER_PARA.happiness += 5;
 			PARTNER_PARA.discipline += 1;
 			PARTNER_PARA.condition &= ~4;
-			setFoodTimer(PARTNER_ENTITY.digimonEntity.entity.type);
+			setFoodTimer(
+				PARTNER_ENTITY.digimonEntity.entity.type);
 			PARTNER_PARA.starvationTimer = 0;
 		}
 
 		if ((TAMER_ITEM.worldItem.type ==
-		     RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].favoriteFood) ||
+		     RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+		             .favoriteFood) ||
 		    !(PARTNER_PARA.energyLevel <
-		      RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold)) {
+		      RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+		              .energyThreshold)) {
 			PARTNER_ANIMATION = 0xb;
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0xb);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0xb);
 		}
 
 		return;
 	}
 
-	if (((itemType < 0x26) || (itemType >= 0x47)) &&
-	    (itemType != 0x79) && (itemType != 0x7a)) {
+	if (((itemType < 0x26) || (itemType >= 0x47)) && (itemType != 0x79) &&
+	    (itemType != 0x7a)) {
 		return;
 	}
 
@@ -1653,8 +2539,10 @@ void handleToilet(void)
 	PARTNER_PARA.happiness += 2;
 	PARTNER_PARA.discipline += 2;
 	PARTNER_PARA.poopLevel =
-		(RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopTimer +
-		 RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopTimer);
+		(RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+	                 .poopTimer +
+	         RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+	                 .poopTimer);
 	PARTNER_PARA.condition &= ~8;
 	handlePoopWeightLoss(ENTITY_TABLE[1]->type);
 }
@@ -1678,8 +2566,10 @@ void handleWildPoop(void)
 	PARTNER_PARA.happiness -= 10;
 	PARTNER_PARA.discipline -= 5;
 	PARTNER_PARA.poopLevel =
-		(RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopTimer +
-		 RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopTimer);
+		(RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+	                 .poopTimer +
+	         RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+	                 .poopTimer);
 
 	handlePoopWeightLoss(ENTITY_TABLE[1]->type);
 }
@@ -1759,7 +2649,7 @@ void tickSicknessMechanics(void)
 	    (CURRENT_FRAME != LAST_HANDLED_FRAME) && !wasSick) {
 		PARTNER_PARA.sicknessTries++;
 		chance = (PARTNER_PARA.sicknessTries - 10) * 5 +
-			 (PARTNER_PARA.tiredness - 50);
+		         (PARTNER_PARA.tiredness - 50);
 		roll = random(100);
 		if (roll < chance) {
 			PARTNER_PARA.condition |= 0x40;
@@ -1872,7 +2762,8 @@ void skipHours(int32_t hours)
 	updateTimeOfDay();
 
 	if ((HOUR + (rawHours % 4) == 0) && (PARTNER_PARA.happiness < 80))
-		PARTNER_PARA.remainingLifetime = PARTNER_PARA.remainingLifetime -
+		PARTNER_PARA.remainingLifetime =
+			PARTNER_PARA.remainingLifetime -
 			((PARTNER_PARA.happiness - 80) / -50 + 1);
 	if (PARTNER_PARA.remainingLifetime < 0)
 		PARTNER_PARA.remainingLifetime = 0;
@@ -1885,13 +2776,15 @@ void skipHours(int32_t hours)
 		PARTNER_PARA.starvationTimer -= (int16_t)(rawHours * 120);
 		if ((PARTNER_PARA.starvationTimer <= 0) &&
 		    (PARTNER_PARA.energyLevel <
-		     RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold))
+		     RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+		             .energyThreshold))
 			PARTNER_PARA.careMistakes++;
 	} else {
 		PARTNER_PARA.foodLevel -= (int16_t)(rawHours * 60);
 	}
 	PARTNER_PARA.energyLevel -=
-		RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyUsage;
+		RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
+			.energyUsage;
 	if ((PARTNER_PARA.condition & 8) != 0)
 		PARTNER_PARA.poopingTimer -= 1200;
 	else
@@ -1957,7 +2850,8 @@ void tickPartnerNormal(void)
 		PARTNER_PARA.trainBoostTimer = 0;
 	}
 	if (CURRENT_FRAME % 4800 == 0 && PARTNER_PARA.happiness < 80) {
-		PARTNER_PARA.remainingLifetime = PARTNER_PARA.remainingLifetime -
+		PARTNER_PARA.remainingLifetime =
+			PARTNER_PARA.remainingLifetime -
 			((PARTNER_PARA.happiness - 80) / -50 + 1);
 		if (PARTNER_PARA.remainingLifetime < 0)
 			PARTNER_PARA.remainingLifetime = 0;
@@ -1988,13 +2882,14 @@ void tickPartnerNormal(void)
 			EVOLUTION_TARGET = getChampionEvolutionTarget(
 				PARTNER_ENTITY.digimonEntity.entity.type);
 		if (level == 4 && evoTimer == 360)
-			EVOLUTION_TARGET = handleSpecialEvolutions(
-				3, ENTITY_TABLE[1]);
+			EVOLUTION_TARGET =
+				handleSpecialEvolutions(3, ENTITY_TABLE[1]);
 	}
 	if (PARTNER_PARA.virusBar >= 16) {
-		/* MWCC requires this qualifier for the retail load/register sequence. */
-		int32_t type = *(volatile int32_t *)
-			&PARTNER_ENTITY.digimonEntity.entity.type;
+		/* MWCC requires this qualifier for the retail load/register
+		 * sequence. */
+		int32_t type = *(volatile int32_t *)&PARTNER_ENTITY
+		                        .digimonEntity.entity.type;
 		if (type != 0x27) {
 			EVOLUTION_TARGET = 0x27;
 			writePStat(5, type);
@@ -2034,8 +2929,10 @@ void renderStatusBars(int32_t state)
 		STATUS_UI_OFFSET_X = 240;
 	if (STATUS_UI_OFFSET_X < 75)
 		STATUS_UI_OFFSET_X = 75;
-	renderRectPolyFT4(STATUS_UI_OFFSET_X, 85, 75, 8, 0, 236, 5, 0x7D06, 15, 0);
-	renderRectPolyFT4(STATUS_UI_OFFSET_X, 97, 75, 8, 0, 236, 5, 0x7D06, 15, 0);
+	renderRectPolyFT4(STATUS_UI_OFFSET_X, 85, 75, 8, 0, 236, 5, 0x7D06,
+	                  15, 0);
+	renderRectPolyFT4(STATUS_UI_OFFSET_X, 97, 75, 8, 0, 236, 5, 0x7D06,
+	                  15, 0);
 	if (PARTNER_PARA.happiness >= 0)
 		texX = 64;
 	else
@@ -2046,34 +2943,42 @@ void renderStatusBars(int32_t state)
 		else if (PARTNER_AREA_RESPONSE[0] == 1)
 			texX -= 11;
 	}
-	renderRectPolyFT4(STATUS_UI_OFFSET_X + 3, 83, 11, 11, texX, 244, 5, GetClut(96, 503), 14, 0);
+	renderRectPolyFT4(STATUS_UI_OFFSET_X + 3, 83, 11, 11, texX, 244, 5,
+	                  GetClut(96, 503), 14, 0);
 	if (PARTNER_PARA.discipline >= 50)
 		texX = 22;
 	else
 		texX = 33;
-	renderRectPolyFT4(STATUS_UI_OFFSET_X + 3, 95, 11, 11, texX, 244, 5, GetClut(96, 498), 14, 0);
+	renderRectPolyFT4(STATUS_UI_OFFSET_X + 3, 95, 11, 11, texX, 244, 5,
+	                  GetClut(96, 498), 14, 0);
 	if (PARTNER_PARA.happiness >= 0) {
 		texY = 153;
 		count = PARTNER_PARA.happiness / 4;
 		for (i = 0; i < 25; i++)
-			renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 88, 2, 2, 232, 151, 5, GetClut(96, 503), 14, 0);
+			renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 88,
+			                  2, 2, 232, 151, 5, GetClut(96, 503),
+			                  14, 0);
 	} else {
 		texY = 151;
 		count = (PARTNER_PARA.happiness + 100) / 4;
 	}
 	for (i = 0; i < count; i++)
-		renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 88, 2, 2, 232, texY, 5, GetClut(96, 503), 13, 0);
+		renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 88, 2, 2,
+		                  232, texY, 5, GetClut(96, 503), 13, 0);
 	if (PARTNER_PARA.discipline >= 50) {
 		texY = 153;
 		count = (PARTNER_PARA.discipline - 50) / 2;
 		for (i = 0; i < 25; i++)
-			renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 100, 2, 2, 232, 151, 5, GetClut(96, 503), 14, 0);
+			renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2,
+			                  100, 2, 2, 232, 151, 5,
+			                  GetClut(96, 503), 14, 0);
 	} else {
 		texY = 151;
 		count = PARTNER_PARA.discipline / 2;
 	}
 	for (i = 0; i < count; i++)
-		renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 100, 4, 2, 232, texY, 5, GetClut(96, 503), 13, 0);
+		renderRectPolyFT4(STATUS_UI_OFFSET_X + 18 + i * 2, 100, 4, 2,
+		                  232, texY, 5, GetClut(96, 503), 13, 0);
 }
 
 void setImmortalHour(void)
