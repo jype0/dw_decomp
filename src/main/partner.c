@@ -94,14 +94,14 @@ void fadeFromBlack(int32_t frames);
 void sleepRegen();
 void handleSleeping();
 void setCameraFollowPlayer();
-void handleSpecialEvolutions(int32_t mode, Entity* partner);
+void handleSpecialEvolutions(int32_t mode, Entity *partner);
 void startGameTime();
 void updateTimeOfDay();
 void handlePraiseScold();
 int32_t partnerWillRefuseItem();
 void removeOneSelectedItem();
 void partnerHandleFoodFeed(int32_t type);
-void createCameraMovement(VECTOR* pos, int32_t instanceId);
+void createCameraMovement(VECTOR *pos, int32_t instanceId);
 void handleToilet();
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
 int32_t createPoopPile(int16_t tileX, int16_t tileY);
@@ -116,7 +116,7 @@ void setFishingEnabled();
 void setFishingDisabled();
 void handleEatingPoop();
 int16_t entityCheckCollision(Entity *source, Entity *entity, int32_t arg2,
-			     int32_t arg3);
+                             int32_t arg3);
 int32_t random(int32_t limit);
 void writePStat(int32_t id, int32_t value);
 int32_t readPStat(int32_t id);
@@ -127,33 +127,31 @@ void checkShopMap(int32_t mapId);
 void checkArenaMap(int32_t mapId);
 void readMapTFS(int32_t mapId);
 
-static void *partner_text_order[] = {
-	MAIN_func_800DF7F8,
-	callDigimonRoutine,
-	startPartnerAnimation,
-	getPartnerState,
-	MAIN_func_800DF5A0,
-	checkEatDistance,
-	setPartnerState,
-	setPartnerIdle,
-	updateConditionAnimation,
-	setPartnerSlowWalking,
-	getPartnerTamerCloseness,
-	tickPartnerWalking,
-	tickPartnerDying2,
-	tickPartnerEvolving,
-	tickPartnerIdle,
-	partnerEatShit,
-	tickPartnerDying,
-	partnerWildPoop,
-	tickPartnerToilet,
-	partnerFeedItem,
-	partnerPraiseScold,
-	partnerSleep,
-	tickNormal,
-	tickPartnerOverworld,
-	tickPartner
-};
+static void *partner_text_order[] = { MAIN_func_800DF7F8,
+	                              callDigimonRoutine,
+	                              startPartnerAnimation,
+	                              getPartnerState,
+	                              MAIN_func_800DF5A0,
+	                              checkEatDistance,
+	                              setPartnerState,
+	                              setPartnerIdle,
+	                              updateConditionAnimation,
+	                              setPartnerSlowWalking,
+	                              getPartnerTamerCloseness,
+	                              tickPartnerWalking,
+	                              tickPartnerDying2,
+	                              tickPartnerEvolving,
+	                              tickPartnerIdle,
+	                              partnerEatShit,
+	                              tickPartnerDying,
+	                              partnerWildPoop,
+	                              tickPartnerToilet,
+	                              partnerFeedItem,
+	                              partnerPraiseScold,
+	                              partnerSleep,
+	                              tickNormal,
+	                              tickPartnerOverworld,
+	                              tickPartner };
 
 void tickPartner(int32_t instanceId)
 {
@@ -227,7 +225,8 @@ void tickPartnerOverworld(int32_t instanceId)
 			break;
 		}
 
-		isOffScreen = entityIsOffScreen(&PARTNER_ENTITY.digimonEntity.entity, 320, 240);
+		isOffScreen = entityIsOffScreen(
+			&PARTNER_ENTITY.digimonEntity.entity, 320, 240);
 		PARTNER_ENTITY.digimonEntity.entity.isOnScreen =
 			isOffScreen ^ 1;
 
@@ -256,7 +255,8 @@ void partnerSleep(void)
 		unsetCameraFollowPlayer();
 		closeness = getPartnerTamerCloseness();
 		if (closeness != 2) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               2);
 		}
 		setTamerState(6);
 		tickPartnerWaypoints();
@@ -264,28 +264,32 @@ void partnerSleep(void)
 		break;
 	case 1:
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
-                                     &TAMER_ENTITY.entity.posData->location);
+		                     &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness == 2) {
 			playSound(0, 15);
 			startAnimation(&TAMER_ENTITY.entity, 8);
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0);
 			PARTNER_SUB_STATE = 2;
 		}
 		break;
 	case 2:
 		if (TAMER_ENTITY.entity.anim.animFrame >=
-                    TAMER_ENTITY.entity.anim.frameCount) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 11);
+		    TAMER_ENTITY.entity.anim.frameCount) {
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               11);
 			PARTNER_SUB_STATE = 3;
 		}
 		break;
 	case 3:
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 9);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               9);
 			PARTNER_SUB_STATE = 4;
 		}
 		break;
@@ -303,16 +307,16 @@ void partnerSleep(void)
 			if (UI_BOX_DATA[0].state == 0) {
 				CHECKED_MEMORY_CARD = 0x10;
 				if ((MEMORY_CARD_ID == -1) ||
-                                    (MEMORY_CARD_SLOT == -1)) {
+				    (MEMORY_CARD_SLOT == -1)) {
 					CURRENT_MENU = -1;
 					TARGET_MENU = -1;
-				}
-				else {
+				} else {
 					CURRENT_MENU = -2;
 					TARGET_MENU = 40;
 					MAIN_STATE = 1;
 				}
-				addObject(5000, 0, tickMainMenu, renderMainMenu);
+				addObject(5000, 0, tickMainMenu,
+				          renderMainMenu);
 				PARTNER_SUB_STATE = 6;
 			}
 		}
@@ -321,7 +325,8 @@ void partnerSleep(void)
 		if (CURRENT_MENU == -1) {
 			removeObject(5000, 0);
 			fadeFromBlack(40);
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0);
 			updateTimeOfDay();
 			PARTNER_SUB_STATE = 7;
 		}
@@ -331,7 +336,8 @@ void partnerSleep(void)
 			PARTNER_STATE = 1;
 			setTamerState(0);
 			setCameraFollowPlayer();
-			handleSpecialEvolutions(2, &PARTNER_ENTITY.digimonEntity.entity);
+			handleSpecialEvolutions(
+				2, &PARTNER_ENTITY.digimonEntity.entity);
 			startGameTime();
 		}
 		break;
@@ -350,7 +356,8 @@ void partnerPraiseScold(int32_t partnerState)
 		tickPartnerWaypoints();
 		closeness = getPartnerTamerCloseness();
 		if (closeness != 2) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               2);
 		}
 		PARTNER_SUB_STATE = 1;
 		MAIN_D_80134E28 = 0;
@@ -358,17 +365,18 @@ void partnerPraiseScold(int32_t partnerState)
 	case 1:
 		++MAIN_D_80134E28;
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
-                                     &TAMER_ENTITY.entity.posData->location);
+		                     &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness == 2) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0);
 			if (partnerState == 15) {
 				playSound(0, 14);
 				setTamerState(13);
-			}
-			else {
+			} else {
 				setTamerState(9);
 			}
 			PARTNER_SUB_STATE = 2;
@@ -381,8 +389,10 @@ void partnerPraiseScold(int32_t partnerState)
 		}
 		break;
 	case 3:
-		if (PARTNER_ENTITY.digimonEntity.entity.anim.loopCount == 255) {
-			PARTNER_ENTITY.digimonEntity.entity.anim.loopCount = 1;
+		if (PARTNER_ENTITY.digimonEntity.entity.anim.loopCount ==
+		    255) {
+			PARTNER_ENTITY.digimonEntity.entity.anim.loopCount =
+				1;
 		}
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
@@ -404,38 +414,49 @@ void partnerFeedItem(void)
 
 	switch (PARTNER_SUB_STATE) {
 	case 0:
-		isClose = checkEatDistance(ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity.type - 1]);
+		isClose = checkEatDistance(
+			ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity
+		                                   .type -
+		                           1]);
 		if (isClose == 1) {
 			PARTNER_SUB_STATE = 1;
-		}
-		else {
+		} else {
 			PARTNER_SUB_STATE = 2;
 		}
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
-		PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy += 2048;
+		PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy +=
+			2048;
 		tickPartnerWaypoints();
 		break;
 	case 1:
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
-		isClose = checkEatDistance(ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity.type - 1]);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
+		isClose = checkEatDistance(
+			ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity
+		                                   .type -
+		                           1]);
 		if (isClose == 0) {
 			PARTNER_SUB_STATE = 3;
 		}
 		break;
 	case 2:
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
-                                     &TAMER_ENTITY.entity.posData->location);
-		isClose = checkEatDistance(ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity.type - 1]);
+		                     &TAMER_ENTITY.entity.posData->location);
+		isClose = checkEatDistance(
+			ITEM_TAKE_DISTANCE[PARTNER_ENTITY.digimonEntity.entity
+		                                   .type -
+		                           1]);
 		if (isClose == 1) {
 			PARTNER_SUB_STATE = 3;
 		}
 		break;
 	case 3:
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
-                                     &TAMER_ENTITY.entity.posData->location);
+		                     &TAMER_ENTITY.entity.posData->location);
 		startAnimationTamer(5);
 		playSound(0, 12);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
@@ -446,21 +467,26 @@ void partnerFeedItem(void)
 		if (7 < TAMER_ENTITY.entity.anim.animFrame) {
 			isClose = partnerWillRefuseItem();
 			if (isClose == 0) {
-				startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 8);
+				startAnimation(
+					&PARTNER_ENTITY.digimonEntity.entity,
+					8);
 				PARTNER_SUB_STATE = 5;
-			}
-			else {
-				startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 13);
+			} else {
+				startAnimation(
+					&PARTNER_ENTITY.digimonEntity.entity,
+					13);
 				PARTNER_SUB_STATE = 7;
 			}
 		}
 		break;
 	case 5:
-		if ((PARTNER_ENTITY.digimonEntity.entity.anim.animFrame == 11) &&
+		if ((PARTNER_ENTITY.digimonEntity.entity.anim.animFrame ==
+		     11) &&
 		    (PARTNER_ENTITY.digimonEntity.entity.anim.animId == 8)) {
 			removeObject(0xfa7, 0);
 		}
-		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame == 15) {
+		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame ==
+		    15) {
 			startAnimation(&TAMER_ENTITY.entity, 0);
 		}
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
@@ -477,8 +503,10 @@ void partnerFeedItem(void)
 			setTamerState(0);
 			setCameraFollowPlayer();
 
-			if (ITEM_FUNCTIONS[TAMER_ITEM.worldItem.type] != NULL) {
-				ITEM_FUNCTIONS[TAMER_ITEM.worldItem.type](TAMER_ITEM.worldItem.type);
+			if (ITEM_FUNCTIONS[TAMER_ITEM.worldItem.type] !=
+			    NULL) {
+				ITEM_FUNCTIONS[TAMER_ITEM.worldItem.type](
+					TAMER_ITEM.worldItem.type);
 			}
 
 			removeOneSelectedItem();
@@ -490,14 +518,15 @@ void partnerFeedItem(void)
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
 			removeObject(0xfa7, 0);
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0);
 			startAnimationTamer(4);
 			PARTNER_SUB_STATE = 8;
 		}
 		break;
 	case 8:
 		if (TAMER_ENTITY.entity.anim.animFrame >=
-                    TAMER_ENTITY.entity.anim.frameCount) {
+		    TAMER_ENTITY.entity.anim.frameCount) {
 			setTamerState(0);
 			PARTNER_STATE = 1;
 			removeTamerItem();
@@ -535,7 +564,7 @@ void tickPartnerToilet(void)
 	case 1:
 		entityLookAtLocation(&TAMER_ENTITY.entity, location);
 		finished = tickEntityWalkTo(0xfc, 0xff, TOILET_POS1.vx,
-                                            TOILET_POS1.vz, 0);
+		                            TOILET_POS1.vz, 0);
 		if (finished == 1) {
 			PARTNER_SUB_STATE = 2;
 		}
@@ -543,9 +572,10 @@ void tickPartnerToilet(void)
 	case 2:
 		entityLookAtLocation(&TAMER_ENTITY.entity, location);
 		finished = tickEntityWalkTo(0xfc, 0xff, TOILET_POS2.vx,
-                                            TOILET_POS2.vz, 0);
+		                            TOILET_POS2.vz, 0);
 		if (finished == 1) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 10);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               10);
 			PARTNER_SUB_STATE = 3;
 		}
 		break;
@@ -553,15 +583,20 @@ void tickPartnerToilet(void)
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
 			handleToilet();
-			createCameraMovement(&TAMER_ENTITY.entity.posData->location, 20);
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
+			createCameraMovement(
+				&TAMER_ENTITY.entity.posData->location, 20);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               2);
 			PARTNER_SUB_STATE = 4;
 		}
 		break;
 	case 4:
-		entityLookAtLocation(&TAMER_ENTITY.entity, (VECTOR*)&location); // BUG: this shouldn't be a pointer?
+		entityLookAtLocation(
+			&TAMER_ENTITY.entity,
+			(VECTOR *)&location); // BUG: this shouldn't be a
+		                              // pointer?
 		finished = tickEntityWalkTo(0xfc, 0xff, TOILET_POS1.vx,
-                                            TOILET_POS1.vz, 0);
+		                            TOILET_POS1.vz, 0);
 		if (finished == 1) {
 			SOME_SCRIPT_SYNC_BIT = 1;
 		}
@@ -581,13 +616,14 @@ void partnerWildPoop(void)
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		setTamerState(6);
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		unsetCameraFollowPlayer();
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
-                                     &TAMER_ENTITY.entity.posData->location);
+		                     &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness > 0) {
 			startAnimation(ENTITY_TABLE[1], 10);
@@ -597,8 +633,9 @@ void partnerWildPoop(void)
 	case 2:
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
-			getModelTile(&PARTNER_ENTITY.digimonEntity.entity.posData->location,
-                                     &tileX, &tileY);
+			getModelTile(&PARTNER_ENTITY.digimonEntity.entity
+			                      .posData->location,
+			             &tileX, &tileY);
 			WILD_POOP_ID = createPoopPile(tileX, tileY);
 			handleWildPoop();
 			startAnimation(ENTITY_TABLE[1], 12);
@@ -632,7 +669,8 @@ void tickPartnerDying(void)
 		removeUIBox1();
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		unsetCameraFollowPlayer();
 		loadDynamicLibrary(9, 0, 0, 0, 0);
 		loadMapSounds2(19);
@@ -640,11 +678,14 @@ void tickPartnerDying(void)
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
-		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity, &(TAMER_ENTITY.entity.posData)->location);
+		entityLookAtLocation(
+			&PARTNER_ENTITY.digimonEntity.entity,
+			&(TAMER_ENTITY.entity.posData)->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness > 0) {
 			isSoundLoaded(0, 8);
-			DOOA_tick((PartnerEntity*)ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 0);
+			DOOA_tick((PartnerEntity *)ENTITY_TABLE[1],
+			          GENERAL_BUFFER_PTR + 0x4b000, 0);
 			setFishingDisabled();
 			setTamerState(6);
 			unsetCameraFollowPlayer();
@@ -652,14 +693,15 @@ void tickPartnerDying(void)
 		}
 		break;
 	case 2:
-		value = DOOA_tick((PartnerEntity*)ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 1);
+		value = DOOA_tick((PartnerEntity *)ENTITY_TABLE[1],
+		                  GENERAL_BUFFER_PTR + 0x4b000, 1);
 		if (value == -1) {
 			setFishingEnabled();
 			PARTNER_PARA.remainingLifetime = 360;
 			PARTNER_PARA.sicknessTimer = 0;
 			PARTNER_PARA.injuryTimer = 0;
 			STORED_TAMER_POS =
-                                TAMER_ENTITY.entity.posData->location;
+				TAMER_ENTITY.entity.posData->location;
 			SOME_SCRIPT_SYNC_BIT = 1;
 		}
 		break;
@@ -688,7 +730,8 @@ void partnerEatShit(void)
 		break;
 	case 1:
 		entityLookAtLocation(ENTITY_TABLE[0],
-				     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		finished = tickEntityWalkTo(0xfc, 0xff, tileX, tileY, 0);
 		if (finished == 1) {
 			startAnimation(ENTITY_TABLE[1], 8);
@@ -733,26 +776,27 @@ void tickPartnerEvolving(void)
 		setFishingDisabled();
 		unsetCameraFollowPlayer();
 		entityLookAtLocation(&TAMER_ENTITY.entity,
-                                     &PARTNER_ENTITY.digimonEntity.entity.posData->location);
+		                     &PARTNER_ENTITY.digimonEntity.entity
+		                              .posData->location);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity,
-                                     &TAMER_ENTITY.entity.posData->location);
+		                     &TAMER_ENTITY.entity.posData->location);
 		closeness = getPartnerTamerCloseness();
 		if (closeness > 0) {
-			getEvoSequenceState((PartnerEntity*)ENTITY_TABLE[1],
-                                            GENERAL_BUFFER_PTR, &PARTNER_PARA,
-                                            EVOLUTION_TARGET, 0);
+			getEvoSequenceState((PartnerEntity *)ENTITY_TABLE[1],
+			                    GENERAL_BUFFER_PTR, &PARTNER_PARA,
+			                    EVOLUTION_TARGET, 0);
 			MAIN_D_80134E34 = 0;
 			PARTNER_SUB_STATE = 2;
 		}
 		break;
 	case 2:
-		value = getEvoSequenceState((PartnerEntity*)ENTITY_TABLE[1],
-                                            GENERAL_BUFFER_PTR, &PARTNER_PARA,
-                                            EVOLUTION_TARGET, 1);
+		value = getEvoSequenceState((PartnerEntity *)ENTITY_TABLE[1],
+		                            GENERAL_BUFFER_PTR, &PARTNER_PARA,
+		                            EVOLUTION_TARGET, 1);
 		if (value == -1) {
 			startGameTime();
 			EVOLUTION_TARGET = -1;
@@ -765,8 +809,7 @@ void tickPartnerEvolving(void)
 			setPartnerState(1);
 			if (SOME_SCRIPT_SYNC_BIT == 0) {
 				SOME_SCRIPT_SYNC_BIT = 1;
-			}
-			else {
+			} else {
 				setTamerState(0);
 				setCameraFollowPlayer();
 			}
@@ -799,7 +842,7 @@ void tickPartnerDying2(void)
 			PARTNER_PARA.sicknessTimer = 0;
 			PARTNER_PARA.injuryTimer = 0;
 			STORED_TAMER_POS =
-                                TAMER_ENTITY.entity.posData->location;
+				TAMER_ENTITY.entity.posData->location;
 			SOME_SCRIPT_SYNC_BIT = 1;
 			PARTNER_SUB_STATE = 2;
 			writePStat(PSTAT_TIME_SPEED, 0);
@@ -830,44 +873,38 @@ void tickPartnerWalking(void)
 			if (anim->loopCount == 0) {
 				PARTNER_ANIMATION = 4;
 			}
-		}
-		else if ((anim->animId != 4) && (isUnhappy == 0)) {
+		} else if ((anim->animId != 4) && (isUnhappy == 0)) {
 			PARTNER_ANIMATION = 4;
-		}
-		else {
+		} else {
 			if (isUnhappy == 0) {
 				PARTNER_ANIMATION = 4;
-			}
-			else {
+			} else {
 				PARTNER_ANIMATION = 2;
 			}
 			if (PARTNER_ANIMATION != anim->animId) {
-				startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
-					       (uint8_t)PARTNER_ANIMATION);
+				startAnimation(
+					&PARTNER_ENTITY.digimonEntity.entity,
+					(uint8_t)PARTNER_ANIMATION);
 			}
 		}
 		PARTNER_IS_STANDING_STILL = 1;
-	}
-	else if (closeness == 1) {
+	} else if (closeness == 1) {
 		if (anim->animId == 4) {
 			setPartnerSlowWalking();
-		}
-		else if ((anim->animId != 2) && (anim->animId != 3)) {
+		} else if ((anim->animId != 2) && (anim->animId != 3)) {
 			if (anim->loopCount == 0xff) {
 				anim->loopCount = 1;
 			}
 			if (anim->animFrame >= anim->frameCount) {
 				setPartnerSlowWalking();
 			}
-		}
-		else if (anim->loopCount == 0) {
+		} else if (anim->loopCount == 0) {
 			setPartnerSlowWalking();
 		}
 
 		EMOTION_ANIM_TIMEOUT = -1;
 		PARTNER_IS_STANDING_STILL = 1;
-	}
-	else if (closeness == 2) {
+	} else if (closeness == 2) {
 		if ((anim->animId == 0) || (anim->animId == 1)) {
 			if (PARTNER_IS_STANDING_STILL != 2) {
 				updateConditionAnimation();
@@ -875,9 +912,9 @@ void tickPartnerWalking(void)
 		}
 
 		if ((anim->animId > 1) && (anim->animId < 5)) {
-			collision = entityCheckCollision(NULL,
-					 &PARTNER_ENTITY.digimonEntity.entity,
-					 0, 0);
+			collision = entityCheckCollision(
+				NULL, &PARTNER_ENTITY.digimonEntity.entity, 0,
+				0);
 			if (anim->loopCount == 0xff) {
 				anim->loopCount = 1;
 			}
@@ -900,8 +937,7 @@ void tickPartnerWalking(void)
 			EMOTION_ANIM_TIMEOUT = random(5) + 1;
 			setPartnerIdle();
 			STOP_DISTANCE_TIMER = 0;
-		}
-		else if ((anim->animId != 0) && (anim->animId != 1)) {
+		} else if ((anim->animId != 0) && (anim->animId != 1)) {
 			if ((anim->animFlag & 1) != 1) {
 				EMOTION_ANIM_TIMEOUT = random(5) + 1;
 				setPartnerIdle();
@@ -915,25 +951,33 @@ void tickPartnerWalking(void)
 
 	if (PARTNER_ANIMATION != anim->animId) {
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
-			       (uint8_t)PARTNER_ANIMATION);
+		               (uint8_t)PARTNER_ANIMATION);
 		STOP_DISTANCE_TIMER = 0;
 	}
 
 	if ((TAMER_ENTITY.entity.anim.animId == 2) &&
 	    (getItemCount(0x25) != 0)) {
 		if (HEALTH_SHOE_FRAMES >= 20) {
-			PARTNER_ENTITY.digimonEntity.stats.current.currentHP += 5;
-			PARTNER_ENTITY.digimonEntity.stats.current.currentMP += 5;
+			PARTNER_ENTITY.digimonEntity.stats.current
+				.currentHP += 5;
+			PARTNER_ENTITY.digimonEntity.stats.current
+				.currentMP += 5;
 
-			if (PARTNER_ENTITY.digimonEntity.stats.current.currentHP >
+			if (PARTNER_ENTITY.digimonEntity.stats.current
+			            .currentHP >
 			    PARTNER_ENTITY.digimonEntity.stats.base.hp) {
-				PARTNER_ENTITY.digimonEntity.stats.current.currentHP =
-					PARTNER_ENTITY.digimonEntity.stats.base.hp;
+				PARTNER_ENTITY.digimonEntity.stats.current
+					.currentHP =
+					PARTNER_ENTITY.digimonEntity.stats
+						.base.hp;
 			}
-			if (PARTNER_ENTITY.digimonEntity.stats.current.currentMP >
+			if (PARTNER_ENTITY.digimonEntity.stats.current
+			            .currentMP >
 			    PARTNER_ENTITY.digimonEntity.stats.base.mp) {
-				PARTNER_ENTITY.digimonEntity.stats.current.currentMP =
-					PARTNER_ENTITY.digimonEntity.stats.base.mp;
+				PARTNER_ENTITY.digimonEntity.stats.current
+					.currentMP =
+					PARTNER_ENTITY.digimonEntity.stats
+						.base.mp;
 			}
 			HEALTH_SHOE_FRAMES = 0;
 		}
@@ -953,15 +997,20 @@ int32_t getPartnerTamerCloseness(void)
 	int32_t sprintDistance;
 
 	tamerLocation = &TAMER_ENTITY.entity.posData->location;
-	partnerLocation = &PARTNER_ENTITY.digimonEntity.entity.posData->location;
-	distanceZ = (tamerLocation->vz - partnerLocation->vz) * (tamerLocation->vz - partnerLocation->vz);
-	distanceX = (tamerLocation->vx - partnerLocation->vx) * (tamerLocation->vx - partnerLocation->vx);
+	partnerLocation =
+		&PARTNER_ENTITY.digimonEntity.entity.posData->location;
+	distanceZ = (tamerLocation->vz - partnerLocation->vz) *
+	            (tamerLocation->vz - partnerLocation->vz);
+	distanceX = (tamerLocation->vx - partnerLocation->vx) *
+	            (tamerLocation->vx - partnerLocation->vx);
 	distance = distanceX + distanceZ;
 
-	walkDistance = DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].radius;
+	walkDistance =
+		DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].radius;
 	sprintDistance = walkDistance;
 	walkDistance = (walkDistance * 5 / 2) * (walkDistance * 5 / 2);
-	sprintDistanceSquared = (sprintDistance * 7 / 2) * (sprintDistance * 7 / 2);
+	sprintDistanceSquared =
+		(sprintDistance * 7 / 2) * (sprintDistance * 7 / 2);
 
 	if (sprintDistanceSquared < distance) {
 		return 0;
@@ -1029,12 +1078,9 @@ void updateConditionAnimation(void)
 	}
 }
 
-
-
 void setPartnerIdle(void)
 {
-	if (((PARTNER_ANIMATION != 1) &&
-	     (PARTNER_ANIMATION != 0)) ||
+	if (((PARTNER_ANIMATION != 1) && (PARTNER_ANIMATION != 0)) ||
 	    (PARTNER_IS_STANDING_STILL != 2)) {
 		if ((((PARTNER_PARA.condition & 0x1) != 0) ||
 		     ((PARTNER_PARA.condition & 0x2) != 0)) ||
@@ -1046,7 +1092,7 @@ void setPartnerIdle(void)
 		}
 
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
-			       (uint8_t)PARTNER_ANIMATION);
+		               (uint8_t)PARTNER_ANIMATION);
 	}
 }
 
@@ -1068,9 +1114,12 @@ int32_t checkEatDistance(int32_t distance)
 	targetDistance = distance * 200 / 10 + 160;
 	tamerX = (int16_t)TAMER_ENTITY.entity.posData->location.vx;
 	tamerZ = (int16_t)TAMER_ENTITY.entity.posData->location.vz;
-	partnerX = (int16_t)PARTNER_ENTITY.digimonEntity.entity.posData->location.vx;
-	partnerZ = (int16_t)PARTNER_ENTITY.digimonEntity.entity.posData->location.vz;
-	partnerDistance = (tamerX - partnerX) * (tamerX - partnerX) + (tamerZ - partnerZ) * (tamerZ - partnerZ);
+	partnerX = (int16_t)PARTNER_ENTITY.digimonEntity.entity.posData
+	                   ->location.vx;
+	partnerZ = (int16_t)PARTNER_ENTITY.digimonEntity.entity.posData
+	                   ->location.vz;
+	partnerDistance = (tamerX - partnerX) * (tamerX - partnerX) +
+	                  (tamerZ - partnerZ) * (tamerZ - partnerZ);
 	if (partnerDistance < 0) {
 		partnerDistance = -partnerDistance;
 	}
@@ -1144,7 +1193,8 @@ void callDigimonRoutine(int32_t routine)
 		}
 		if ((PARTNER_ENTITY.digimonEntity.entity.anim.animId > 1) &&
 		    (PARTNER_ENTITY.digimonEntity.entity.anim.animId < 5)) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0);
 		}
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
@@ -1162,7 +1212,8 @@ void callDigimonRoutine(int32_t routine)
 		}
 		if ((PARTNER_ENTITY.digimonEntity.entity.anim.animId > 1) &&
 		    (PARTNER_ENTITY.digimonEntity.entity.anim.animId < 5)) {
-			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
+			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
+			               0);
 		}
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
