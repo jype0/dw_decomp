@@ -11,7 +11,7 @@
 #define NUM_CHESTS		8
 
 typedef struct {
-	uint8_t modelId[6];
+	int8_t modelId[6];
 	int16_t posX[6];
 	int16_t posY[6];
 	int16_t posZ[6];

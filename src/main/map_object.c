@@ -233,7 +233,87 @@ void loadStaticTMD(char *path, char *buffer, GsDOBJ2 *obj,
 	obj->coord2 = coord;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/map_object", loadDoors);
+void loadDoors(int16_t doorEntryId)
+{
+	char *pathSrc = DOOR_PATH_PREFIX;
+	char *const digits = DIGIT_CHARS;
+	char *extensionSrc = TMD_EXTENSION;
+	char *pathPrefix;
+	char *extension;
+	char *dst;
+	char path[32];
+	int32_t i;
+	int32_t slot;
+	int8_t modelId;
+	int16_t rotation;
+
+	if (DOORS_DISABLED == 1) {
+		return;
+	}
+
+	for (slot = 0; slot < 4; ++slot) {
+		DOOR_MODEL_IDS[slot] = -1;
+	}
+	for (i = 0; i < NUM_MAP_3D_OBJECTS; ++i) {
+		modelId = DOOR_MAPDATA[doorEntryId].modelId[i];
+		for (slot = 0; slot < 4; ++slot) {
+			if (DOOR_MODEL_IDS[slot] == -1) {
+				/* MWCC requires this qualifier for the retail reload. */
+				DOOR_MODEL_IDS[slot] =
+					((volatile DoorStruct *)DOOR_MAPDATA)
+						[doorEntryId].modelId[i];
+				break;
+			}
+			if (DOOR_MODEL_IDS[slot] == modelId) {
+				break;
+			}
+		}
+	}
+	pathPrefix = pathSrc;
+	extension = extensionSrc;
+	for (slot = 0; slot < 4; ++slot) {
+		if (DOOR_MODEL_IDS[slot] != -1) {
+			pathSrc = pathPrefix;
+			extensionSrc = extension;
+			dst = path;
+			while (*pathSrc != '\0') {
+				*dst++ = *pathSrc++;
+			}
+
+			*dst++ = digits[DOOR_MODEL_IDS[slot] / 10];
+			*dst++ = digits[DOOR_MODEL_IDS[slot] % 10];
+
+			while (*extensionSrc != '\0') {
+				*dst++ = *extensionSrc++;
+			}
+			*dst = '\0';
+
+			loadStaticTMD(path, GENERAL_MESH_BUFFER[slot],
+				      &DOOR_OBJECTS[slot], &DOOR_COORDS[slot]);
+		}
+	}
+
+	for (slot = 0; slot < NUM_MAP_3D_OBJECTS; ++slot) {
+		MAP_3D_OBJECTS[slot].modelId =
+			DOOR_MAPDATA[doorEntryId].modelId[slot];
+		MAP_3D_OBJECTS[slot].translation.vx =
+			DOOR_MAPDATA[doorEntryId].posX[slot];
+		MAP_3D_OBJECTS[slot].translation.vy =
+			DOOR_MAPDATA[doorEntryId].posY[slot];
+		MAP_3D_OBJECTS[slot].translation.vz =
+			DOOR_MAPDATA[doorEntryId].posZ[slot];
+		MAP_3D_OBJECTS[slot].rotation.vx = 0;
+		rotation = DOOR_MAPDATA[doorEntryId].rotation[slot];
+		MAP_3D_OBJECTS[slot].rotation.vy = rotation;
+		/* Preserve the retail reload before storing the direction. */
+		rotation = DOOR_MAPDATA[doorEntryId].rotation[slot];
+		MAP_3D_OBJECTS[slot].rotation.vz = 0;
+		MAP_3D_OBJECTS[slot].direction = rotation;
+	}
+
+	DOOR_ROTATION_TIMER = 0;
+	addObject(0xfa9, 0, NULL, renderDoors);
+}
 
 void renderDoors(int32_t instanceId)
 {
