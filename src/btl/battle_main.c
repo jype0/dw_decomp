@@ -2014,7 +2014,57 @@ void BTL_retargetAfterHit(DigimonEntity *digimon, FighterData *fighter, AttackOb
 	}
 }
 
-INCLUDE_ASM("asm/btl/nonmatchings/battle_main", BTL_calculateDamage);
+int32_t BTL_calculateDamage(DigimonEntity *attacker, DigimonEntity *defender, int16_t move)
+{
+	uint8_t mult[3];
+	int32_t i;
+	int32_t dmg;
+	int32_t diff;
+	int16_t off;
+	int16_t def;
+
+	for (i = 0; i < 3; i++) {
+		if (DIGIMON_DATA[defender->entity.type].special[i] != 0xff) {
+			mult[i] = MAIN_D_80125F70[MOVE_DATA[move].special][DIGIMON_DATA[defender->entity.type].special[i]];
+		} else {
+			mult[i] = 10;
+		}
+	}
+	off = attacker->stats.base.off;
+	def = defender->stats.base.def;
+	if (move == 0x2d) {
+		def = def * 3 / 10;
+	}
+	if ((move >= 0x3a) && (move < 0x71)) {
+		dmg = (off + MOVE_DATA[move].power) * (mult[0] + mult[1] + mult[2]) / 30;
+	} else {
+		diff = off - def;
+		if (diff >= 0x1f5) {
+			diff = 0x1f4;
+		}
+		if (diff < -0x1f4) {
+			diff = -0x1f4;
+		}
+		dmg = (mult[0] + mult[1] + mult[2]) * (MOVE_DATA[move].power + diff * MOVE_DATA[move].power / 500) / 30 * (random(0x15) + 0x5a) / 100;
+	}
+	if ((move >= 0x3a) && (move < 0x71)) {
+		if ((Entity *)attacker == ENTITY_TABLE[1]) {
+			if (COMBAT_DATA_PTR->player.finisherChargeup[0] >= 0x29) {
+				dmg = dmg * COMBAT_DATA_PTR->player.finisherChargeup[0] / 40;
+			}
+		} else {
+			dmg = dmg * (random(0x65) + 0x64) / 100;
+		}
+		dmg = dmg * (random(0x15) + 0x5a) / 100;
+	}
+	if (dmg <= 0) {
+		dmg = 1;
+	}
+	if (dmg >= 10000) {
+		dmg = 9999;
+	}
+	return dmg;
+}
 
 int16_t BTL_getFighterSlot(int16_t entityId)
 {

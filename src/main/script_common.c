@@ -968,7 +968,45 @@ uint8_t getRecycleId(uint8_t value)
 	return 0xff;
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/script_common", dailyPStatTrigger);
+void dailyPStatTrigger(void)
+{
+	ScriptState *st;
+	int32_t i;
+	int32_t j;
+	uint8_t r;
+	uint8_t v;
+
+	st = SCRIPT_STATE_PTR;
+	for (i = 0; i < 6; i++) {
+		st->smth[i] = 0xff;
+	}
+	for (i = 0; i < 6; i++) {
+retry:
+		r = random(0x40);
+		r++;
+		if (r == 4) {
+			goto retry;
+		}
+		for (j = 0; j < 6; j++) {
+			if (r == st->smth[i]) {
+				goto retry;
+			}
+		}
+		st->smth[i] = r;
+	}
+	for (i = 0x1c; i < 0x20; i++) {
+		v = readPStat(i & 0xff);
+		if (v != 0xff) {
+			v++;
+			writePStat((uint8_t)i, v);
+		}
+	}
+	v = readPStat(2);
+	if (v != 0xff) {
+		v &= 0x7f;
+		writePStat(2, v);
+	}
+}
 
 int32_t isPartnerBaby(void)
 {
