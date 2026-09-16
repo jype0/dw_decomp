@@ -18,6 +18,10 @@ typedef struct {
 } SelectionBoxOffsetData;
 
 extern GsOT *ACTIVE_ORDERING_TABLE;
+void MAIN_func_800FD7D8(int32_t boxId, int32_t idx, int16_t x, int16_t y);
+void MAIN_func_800FD8D4(ItemMenuBox *box);
+void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
+void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h, int32_t layer);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t h);
 extern SelectionBoxUVData MAIN_D_8013460C;
 extern SelectionBoxUVData MAIN_D_80134614;
@@ -1546,7 +1550,22 @@ void MAIN_func_801091DC(void)
 	}
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/script_ops", MAIN_func_801093E4);
+void MAIN_func_801093E4(void)
+{
+	int16_t bx;
+	int16_t by;
+	int16_t cy;
+
+	bx = UI_BOX_DATA[1].finalPos.x;
+	by = UI_BOX_DATA[1].finalPos.y;
+	MAIN_func_800FD7D8(1, 4, bx + 8, by + 5);
+	MAIN_func_800FD7D8(1, 5, bx + 0x26, by + 5);
+	MAIN_func_800FD8D4(MAIN_D_80134F68);
+	cy = by + MAIN_D_80134F68->cursor * 0x12 + 0x11;
+draw:
+	renderSelectionCursor(bx + 5, cy, 0xca, 0x12, 5);
+	MAIN_func_800FDC5C(MAIN_D_80134F68, bx + 8, by + 0x13, 0, 0, 2);
+}
 
 void MAIN_func_801094F0(void)
 {
@@ -1603,7 +1622,22 @@ void MAIN_func_801094F0(void)
 	}
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/script_ops", MAIN_func_801096E8);
+void MAIN_func_801096E8(void)
+{
+	int16_t bx;
+	int16_t by;
+	int16_t cy;
+
+	bx = UI_BOX_DATA[1].finalPos.x;
+	by = UI_BOX_DATA[1].finalPos.y;
+	MAIN_func_800FD7D8(1, 6, bx + 8, by + 5);
+	MAIN_func_800FD7D8(1, 2, bx + 0xa2, by + 5);
+	MAIN_func_800FD8D4(MAIN_D_80134F68);
+	cy = by + MAIN_D_80134F68->cursor * 0x12 + 0x11;
+draw:
+	renderSelectionCursor(bx + 5, cy, 0xca, 0x12, 5);
+	MAIN_func_800FDC5C(MAIN_D_80134F68, bx + 8, by + 0x13, 0, 0, 2);
+}
 
 void MAIN_func_801097F4(void)
 {
