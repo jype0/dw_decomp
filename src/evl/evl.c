@@ -4,6 +4,7 @@
 #include <libgs.h>
 #include <libgte.h>
 
+#include <dw/efe.h>
 #include <dw/entity.h>
 #include <dw/evl.h>
 #include <dw/graphics.h>
@@ -16,15 +17,6 @@
 #include <dw/world_object.h>
 
 #include "common.h"
-
-typedef struct {
-	int32_t timer;
-	SVECTOR pos;
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	uint8_t pad;
-} EvlParticle;
 
 typedef struct {
 	int16_t timer;
@@ -43,12 +35,6 @@ typedef struct {
 	int16_t vz;
 } EvlModelVertex;
 
-typedef struct {
-	int16_t bone;
-	int16_t timer;
-	Entity *entity;
-} EvlSpark;
-
 extern int32_t MAIN_D_8013520C;
 extern uint8_t *MAIN_D_80135210;
 extern EvlModelVertex *MAIN_D_80135214;
@@ -57,7 +43,6 @@ extern int8_t HAS_USED_EVOITEM;
 extern char *MAIN_D_80135208;
 extern int8_t EVL_D_80068938[];
 extern EvlParticle EVL_D_80068944[100];
-extern int16_t EVL_D_80068F84[][4];
 extern int16_t EVL_D_80063F3C[];
 extern VECTOR EVL_D_80064D40;
 extern char EVL_D_80064D50[];
@@ -66,27 +51,8 @@ extern u_long EVL_D_80065398[];
 extern u_long EVL_D_8006569C[];
 extern char EVL_D_80065FA0[];
 extern char EVL_D_80066274[];
-extern char EVL_D_800677B0[];
-extern int16_t EVL_D_80067992[];
-extern int16_t EVL_D_80067994[];
-void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
-			      int32_t rotationX, int32_t rotationY, int32_t rotationZ);
-void MAIN_func_800D9B60(int16_t *clut);
-void MAIN_func_800D9E68(char *base);
-char *initializeFlashData(char *base);
-int32_t customRandom(int32_t a, int32_t b);
-void MAIN_func_80092B60(POLY_FT4 *prim);
-void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
-int32_t add3DSpritePrim(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
-void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
-void addTamerLevel(int32_t chance, int32_t amount);
-void learnMove(int32_t moveId);
-void EVL_brightenDigimonClut(int16_t *clut, Entity *entity, int16_t *dst, int32_t start,
-			     int32_t end, int32_t t);
-void setDigimonRaised(int32_t type);
-
-int32_t lerp(int32_t start, int32_t end, int32_t tMin, int32_t tMax, int32_t t);
-int32_t worldPosToScreenPos(SVECTOR *worldPos, DVECTOR *screenPos);
+extern EfeFlashData EVL_D_800677B0[12];
+extern int16_t EVL_D_80067990[42];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern GsRVIEW2 EVL_D_800688E8;
 extern int32_t VIEWPORT_DISTANCE;
@@ -99,6 +65,23 @@ extern int32_t MAIN_D_801351F8;
 extern SVECTOR MAIN_D_801349F8;
 extern SVECTOR MAIN_D_80134A00;
 
+void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
+                              int32_t rotationX, int32_t rotationY, int32_t rotationZ);
+void MAIN_func_800D9B60(int16_t *clut);
+void MAIN_func_800D9E68(char *base);
+char *initializeFlashData(char *base);
+int32_t customRandom(int32_t a, int32_t b);
+void MAIN_func_80092B60(POLY_FT4 *prim);
+void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
+int32_t add3DSpritePrim(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
+void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
+void addTamerLevel(int32_t chance, int32_t amount);
+void learnMove(int32_t moveId);
+void EVL_brightenDigimonClut(int16_t *clut, Entity *entity, int16_t *dst, int32_t start,
+                             int32_t end, int32_t t);
+void setDigimonRaised(int32_t type);
+int32_t lerp(int32_t start, int32_t end, int32_t tMin, int32_t tMax, int32_t t);
+int32_t worldPosToScreenPos(SVECTOR *worldPos, DVECTOR *screenPos);
 void EVL_setScratchTop(int32_t size);
 void EVL_resetParticles(void);
 void EVL_resetSparks(void);
@@ -110,13 +93,11 @@ void EVL_storeClutBank0(u_long *pixels);
 void EVL_setOtherEntitiesVisible(int32_t restore);
 int32_t EVL_spawnParticle(VECTOR *position, RGB8 *color);
 void EVL_renderParticle(int32_t id);
-
 char *EVL_initShardSets(char *base);
 void EVL_tickEvoSequence(int32_t instanceId);
 void EVL_fadeClutBank0(int16_t *srcClut, void *entity, int16_t *dstClut, int32_t startFrame, int32_t endFrame, int32_t frame);
 void EVL_fadeClutBank1(int16_t *srcClut, void *entity, int16_t *dstClut, int32_t startFrame, int32_t endFrame, int32_t frame);
 void EVL_updateEvoCamera(Entity *entity, int32_t unused, int32_t frame);
-
 int32_t EVL_buildShardSet(Entity *entity, int32_t objIndex, int32_t bone);
 int32_t EVL_spawnSpark(void *owner, int32_t timer, int32_t param);
 void EVL_calculateCameraVectors(VECTOR *viewRef, VECTOR *viewPos, Entity *entity, SVECTOR *rotation, int32_t distance, int32_t height);
@@ -164,6 +145,23 @@ static void *evl_functions[] = {
 	EVL_storeClutBank0,
 	EVL_storeDigimonClut,
 };
+
+// clang-format off
+int8_t EVL_D_80063EFC[44] = {
+	0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0x01, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0x02, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0x03, 0xff, 0xff, 0xff, 0x04, 0xff,
+	0x05, 0xff, 0x06, 0x00,
+};
+
+int8_t EVL_D_80063F28[20] = {
+	0x01, 0x02, 0x03, 0x04, 0x05, 0x04, 0x03, 0x02,
+	0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00,
+};
+// clang-format on
 
 void EVL_storeDigimonClut(uint16_t *buffer, Entity *entity)
 {
@@ -241,7 +239,7 @@ void EVL_resetSparks(void)
 	int32_t i;
 
 	for (i = 0; i < 0x10; i++) {
-		EVL_D_80068F84[i][0] = -1;
+		EVL_D_80068F84[i].bone = -1;
 	}
 }
 
@@ -387,9 +385,7 @@ void EVL_updateEvoCamera(Entity *entity, int32_t unused, int32_t frame)
 		MAIN_D_801351F8 = 0x638;
 		rot = MAIN_D_801349F8;
 		rot.vy = entity->posData->rotation.vy + 0x638;
-		size = (DIGIMON_DATA[entity->type].height < DIGIMON_DATA[entity->type].radius) ?
-		       (int32_t)DIGIMON_DATA[entity->type].radius :
-		       (int32_t)DIGIMON_DATA[entity->type].height;
+		size = (DIGIMON_DATA[entity->type].height < DIGIMON_DATA[entity->type].radius) ? (int32_t)DIGIMON_DATA[entity->type].radius : (int32_t)DIGIMON_DATA[entity->type].height;
 		size = (size * 5) + 0x4b0;
 		EVL_calculateCameraVectors(&viewRef, &viewPos, entity, &rot, size, DIGIMON_DATA[entity->type].height);
 		if (frame < 0x41) {
@@ -462,7 +458,7 @@ int32_t EVL_spawnSpark(void *owner, int32_t timer, int32_t param)
 	int16_t *p;
 
 	for (i = 0; i < 16; i++) {
-		if (EVL_D_80068F84[i][0] == -1) {
+		if (EVL_D_80068F84[i].bone == -1) {
 			break;
 		}
 	}
@@ -471,7 +467,7 @@ int32_t EVL_spawnSpark(void *owner, int32_t timer, int32_t param)
 		return -1;
 	}
 
-	p = EVL_D_80068F84[i];
+	p = (int16_t *)&EVL_D_80068F84[i];
 	p[0] = timer;
 	*(int32_t *)&p[2] = (int32_t)owner;
 	p[1] = param;
@@ -601,7 +597,7 @@ void EVL_renderTriShard(EvlModelVertex *drift, int32_t unused1, int16_t speed, i
 }
 
 void EVL_brightenDigimonClut(int16_t *clut, Entity *entity, int16_t *dst,
-			     int32_t start, int32_t end, int32_t t)
+                             int32_t start, int32_t end, int32_t t)
 {
 	ModelComponent *model;
 	RECT rect;
@@ -618,8 +614,9 @@ void EVL_brightenDigimonClut(int16_t *clut, Entity *entity, int16_t *dst,
 	int32_t channels;
 
 	model = getEntityModelComponent(entity->type, getEntityType(entity));
-	if (end < t)
+	if (end < t) {
 		t = end;
+	}
 
 	redFactor = rand() % 100;
 	greenFactor = rand() % 100;
@@ -634,8 +631,9 @@ void EVL_brightenDigimonClut(int16_t *clut, Entity *entity, int16_t *dst,
 		blue = (channels >> 10) & 0x1f;
 		stp = (*clut++ >> 15) & 1;
 		if (red || green || blue) {
-			if (t != start)
+			if (t != start) {
 				stp = 1;
+			}
 
 			color = ((0x1f - red) * (t - start)) / (end - start);
 			red += (redFactor * color) / 100;
@@ -653,7 +651,7 @@ void EVL_brightenDigimonClut(int16_t *clut, Entity *entity, int16_t *dst,
 	}
 
 	setRECT(&rect, (model->clutPage & 0x3f) << 4,
-		model->clutPage >> 6, 0x10, 0x18);
+	        model->clutPage >> 6, 0x10, 0x18);
 	LoadImage(&rect, (u_long *)dst);
 }
 
@@ -842,7 +840,7 @@ void EVL_renderSparkStreak(int32_t id)
 	int32_t lenSq;
 	int32_t scale;
 
-	e = &((EvlSpark *)EVL_D_80068F84)[id];
+	e = &EVL_D_80068F84[id];
 	calculateBoneMatrix(e->entity, e->bone, &m);
 	a.vx = m.t[0];
 	a.vy = m.t[1];
@@ -877,7 +875,7 @@ void EVL_tickSpark(int32_t id)
 {
 	int16_t *p;
 
-	p = EVL_D_80068F84[id];
+	p = (int16_t *)&EVL_D_80068F84[id];
 	if (p[1] < 0) {
 		removeObject(0x605, id);
 		p[0] = -1;
@@ -907,15 +905,15 @@ void EVL_initEvoSequence(void)
 	EVL_storeClutBank1(EVL_D_8006569C);
 	EVL_initShardSets(EVL_D_80065FA0);
 	EVL_setScratchTop((int32_t)EVL_D_80066274);
-	initializeFlashData(EVL_D_800677B0);
+	initializeFlashData((char *)EVL_D_800677B0);
 	EVL_resetParticles();
 	EVL_resetSparks();
 
 	for (i = 0; i < 40; i++) {
-		EVL_D_80067994[i] = -1;
+		(EVL_D_80067990 + 2)[i] = -1;
 	}
 
-	EVL_D_80067992[DIGIMON_DATA[partner->digimonEntity.entity.type].boneCount] = -2;
+	(EVL_D_80067990 + 1)[DIGIMON_DATA[partner->digimonEntity.entity.type].boneCount] = -2;
 
 	for (i = 1; i < DIGIMON_DATA[partner->digimonEntity.entity.type].boneCount; i++) {
 		order[i] = rand() & 0xfff;
@@ -930,18 +928,20 @@ void EVL_initEvoSequence(void)
 				bestVal = order[j];
 			}
 		}
-		EVL_D_80067992[i] = best;
+		(EVL_D_80067990 + 1)[i] = best;
 		order[best] = 0x1000;
 	}
 
 	addObject(0x80a, 0, EVL_tickEvoSequence, (RenderFunction)EVL_renderEvoSequence);
 }
 
+// clang-format off
 void EVL_applyEvolution(entity, stats, para, digimonId)
 	Entity *entity;
 	Stats *stats;
 	PartnerPara *para;
 	int16_t digimonId;
+// clang-format on
 {
 	EvoStatsGains *gains;
 	int32_t newId;
@@ -968,7 +968,7 @@ void EVL_applyEvolution(entity, stats, para, digimonId)
 	newId = gains->targetDigimon;
 	targetLevel = DIGIMON_DATA[digimonId].level;
 	if (digimonId == 0x0b || digimonId == 0x27 || digimonId == 0x35 || digimonId == 6 ||
-		currentType == 0x27 || targetLevel < 3) {
+	    currentType == 0x27 || targetLevel < 3) {
 		EVL_scaleBaseStats(stats, (int8_t)gains->brains, digimonId);
 		newId = gains->targetDigimon;
 	} else {
@@ -1073,12 +1073,15 @@ void EVL_applyEvolution(entity, stats, para, digimonId)
 		PARTNER_ENTITY.digimonEntity.stats.base.moves[0] = 0x2e;
 	}
 	for (i = 15; i >= 0; i--) {
-		if (DIGIMON_DATA[newId].moves[i] == 0xff)
+		if (DIGIMON_DATA[newId].moves[i] == 0xff) {
 			continue;
-		if (DIGIMON_DATA[newId].moves[i] < 0x3a)
+		}
+		if (DIGIMON_DATA[newId].moves[i] < 0x3a) {
 			continue;
-		if (DIGIMON_DATA[newId].moves[i] >= 0x71)
+		}
+		if (DIGIMON_DATA[newId].moves[i] >= 0x71) {
 			continue;
+		}
 		PARTNER_ENTITY.digimonEntity.stats.base.moves[3] = i + 0x2e;
 		break;
 	}

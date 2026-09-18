@@ -58,6 +58,7 @@ segments:
     subsegments:
       - [0x40, c, evl]
       - [0x3EE8, rodata]
-      - [0x3EFC, data]
+      - [0x3EFC, .data, evl]
+      - [0x3F3C, .data, evl_bss]
 
   - [0x9008]

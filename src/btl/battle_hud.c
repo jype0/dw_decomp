@@ -1,15 +1,13 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <libcd.h>
-#include <libetc.h>
 #include <libgpu.h>
 #include <libgs.h>
 #include <libgte.h>
 #include <mwinline_n.h>
 
 #include <dw/aabb.h>
+#include <dw/battle.h>
 #include <dw/btl.h>
 #include <dw/combat.h>
 #include <dw/font.h>
@@ -22,25 +20,11 @@
 
 #include "common.h"
 
-typedef struct {
-	int16_t clut;
-	uint8_t u;
-	uint8_t v;
-	uint8_t w;
-	uint8_t h;
-	int16_t x;
-	int16_t y;
-} BtlBarSprite;
-
-extern GsSPRITE BTL_D_80073E54;
-extern GsSPRITE BTL_D_80073E78;
-extern char BTL_END_BOX_TEXTBUFFER[];
 extern int16_t MAIN_D_8013509C;
 extern uint8_t *MAIN_D_801350A4;
 extern uint16_t MAIN_D_801350A8;
 extern uint16_t MAIN_D_801350AA;
 extern uint16_t MAIN_D_801350AC;
-extern int16_t BTL_D_80073E9C[];
 extern char *BTL_D_80072E34[];
 extern int16_t MAIN_D_80135090[2];
 extern int32_t MAIN_D_801350C0;
@@ -59,7 +43,6 @@ extern char BTL_D_80072FA4[];
 extern char BTL_D_80072FBC[];
 extern char BTL_D_80072FD8[];
 extern char BTL_D_80072F18[];
-extern uint8_t BTL_D_800742A0[];
 extern MATRIX BTL_D_80072FF4;
 extern char BTL_D_80072FE4[];
 extern char BTL_D_80072F2C[];
@@ -74,7 +57,7 @@ extern uint8_t MAIN_D_801350C7;
 extern uint8_t MAIN_D_801350C8;
 extern uint8_t MAIN_D_801350C9;
 extern int16_t BTL_D_80073280[];
-extern BtlBarSprite BTL_D_800732C0[];
+extern BarSprite BTL_D_800732C0[];
 extern uint8_t MAIN_D_801350CA;
 extern uint8_t MAIN_D_801350CB;
 extern int32_t BTL_D_80073290[12];
@@ -93,7 +76,7 @@ void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t u, int32_t v, int32_t w, int32_t h);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t h);
 void BTL_drawBattleEndText(int32_t a);
-void swapByte(char *a, char *b);
+void swapByte(uint8_t *a, uint8_t *b);
 void BTL_renderBattleStartTextBurst(void);
 void BTL_scrollBattleEndText(void);
 void BTL_appendItemDroppedText(int32_t *p);
@@ -291,14 +274,14 @@ void BTL_initializeDeathCountdown(void)
 	BTL_D_80073E54.r = 0x80;
 	BTL_D_80073E54.g = 0x80;
 	BTL_D_80073E54.b = 0x80;
-	BTL_D_80073E78 = BTL_D_80073E54;
-	sp = &BTL_D_80073E78;
+	BTL_D_80073E78.data.sprite = BTL_D_80073E54;
+	sp = &BTL_D_80073E78.data.sprite;
 	do {
 		sp->mx = 8;
 		sp->my = 8;
 		setWH(sp, 0x10, 0x10);
 	} while (0);
-	BTL_D_80073E9C[1] = -1;
+	BTL_D_80073E78.data.timer = -1;
 }
 
 void BTL_addDeathCountdown(Entity *entity)
@@ -307,9 +290,9 @@ void BTL_addDeathCountdown(Entity *entity)
 	GsSPRITE *sp;
 	int16_t py;
 
-	if (BTL_D_80073E9C[1] == -1) {
-		BTL_D_80073E9C[1] = 0;
-		BTL_D_80073E9C[0] = 0;
+	if (BTL_D_80073E78.data.timer == -1) {
+		BTL_D_80073E78.data.timer = 0;
+		BTL_D_80073E78.data.step = 0;
 		getEntityScreenPos(entity, 1, pos);
 		if (pos[0] >= 0x8d) {
 			pos[0] = 0x8c;
@@ -323,7 +306,7 @@ void BTL_addDeathCountdown(Entity *entity)
 		if (pos[1] < -0x64) {
 			pos[1] = -0x64;
 		}
-		sp = &BTL_D_80073E78;
+		sp = &BTL_D_80073E78.data.sprite;
 		do {
 			BTL_D_80073E54.cy = 0x1ed;
 			sp->cy = 0x1ed;
@@ -349,14 +332,14 @@ void BTL_tickDeathCountdown(void)
 
 	if (TAMER_ITEM.worldItem.type == 0xff) {
 		base = &BTL_D_80073E54;
-		spin = &BTL_D_80073E78;
+		spin = &BTL_D_80073E78.data.sprite;
 		do {
-			BTL_D_80073E9C[1]++;
-			if ((BTL_D_80073E9C[1] % 31) == 0) {
-				BTL_D_80073E9C[0] = 0;
+			BTL_D_80073E78.data.timer++;
+			if ((BTL_D_80073E78.data.timer % 31) == 0) {
+				BTL_D_80073E78.data.step = 0;
 			}
-			BTL_D_80073E9C[0]++;
-			frame = (BTL_D_80073E9C[1] + 0x1d) / 30;
+			BTL_D_80073E78.data.step++;
+			frame = (BTL_D_80073E78.data.timer + 0x1d) / 30;
 			if (frame < 5) {
 				spin->u = (MAIN_D_80134730 + frame)[7];
 				vpos = (MAIN_D_80134730 + frame)[0xb];
@@ -365,18 +348,18 @@ void BTL_tickDeathCountdown(void)
 				vpos = 0x80;
 			}
 			spin->v = vpos;
-			if ((BTL_D_80073E9C[0] > 0) && (BTL_D_80073E9C[0] < 0x15)) {
-				if (BTL_D_80073E9C[0] == 1) {
+			if ((BTL_D_80073E78.data.step > 0) && (BTL_D_80073E78.data.step < 0x15)) {
+				if (BTL_D_80073E78.data.step == 1) {
 					base->scaley = 0x1000;
 					base->scalex = 0x1000;
 					base->rotate = 0;
 					spin->rotate = 0;
 				}
-				if ((BTL_D_80073E9C[0] >= 2) && (BTL_D_80073E9C[0] < 5)) {
+				if ((BTL_D_80073E78.data.step >= 2) && (BTL_D_80073E78.data.step < 5)) {
 					scale = spin->scalex + 0x199;
 					spin->scalex = scale;
 					spin->scaley = scale;
-				} else if ((BTL_D_80073E9C[0] >= 5) && (BTL_D_80073E9C[0] < 8)) {
+				} else if ((BTL_D_80073E78.data.step >= 5) && (BTL_D_80073E78.data.step < 8)) {
 					scale = spin->scalex - 0x199;
 					spin->scalex = scale;
 					spin->scaley = scale;
@@ -384,14 +367,14 @@ void BTL_tickDeathCountdown(void)
 					spin->scaley = 0x1000;
 					spin->scalex = 0x1000;
 				}
-				if ((BTL_D_80073E9C[0] % 3) == 0) {
+				if ((BTL_D_80073E78.data.step % 3) == 0) {
 					base->cy = base->cy + 1;
 					if (base->cy >= 0x1f0) {
 						base->cy = 0x1ed;
 					}
 				}
 			} else {
-				scale = ((0x64 - ((BTL_D_80073E9C[0] - 0x14) * 5)) << 0xc) / 100;
+				scale = ((0x64 - ((BTL_D_80073E78.data.step - 0x14) * 5)) << 0xc) / 100;
 				base->scalex = scale;
 				base->scaley = scale;
 				spin->scaley = scale;
@@ -410,18 +393,18 @@ void BTL_tickDeathCountdown(void)
 
 void BTL_renderDeathCountdown(void)
 {
-	GsSortSprite(&BTL_D_80073E78, ACTIVE_ORDERING_TABLE, 7);
+	GsSortSprite(&BTL_D_80073E78.data.sprite, ACTIVE_ORDERING_TABLE, 7);
 	GsSortSprite(&BTL_D_80073E54, ACTIVE_ORDERING_TABLE, 7);
-	if (BTL_D_80073E9C[1] >= 0x96) {
+	if (BTL_D_80073E78.data.timer >= 0x96) {
 		BTL_removeDeathCountdown();
 	}
 }
 
 void BTL_removeDeathCountdown(void)
 {
-	if (BTL_D_80073E9C[1] != -1) {
+	if (BTL_D_80073E78.data.timer != -1) {
 		removeObject(0x197, 0);
-		BTL_D_80073E9C[1] = -1;
+		BTL_D_80073E78.data.timer = -1;
 	}
 }
 
@@ -651,13 +634,13 @@ void BTL_shuffleBattleStartTextPieces(void)
 	int32_t i;
 
 	for (i = 0; i < 0x9b; i++) {
-		swapByte(&((char (*)[20])BTL_D_800742A0)[i][0x11], &((char (*)[20])BTL_D_800742A0)[random(0x9b)][0x11]);
+		swapByte(&BTL_D_800742A0[i][0x11], &BTL_D_800742A0[random(0x9b)][0x11]);
 	}
 }
 
 void BTL_initializeBattleStartText(void)
 {
-	char (*p)[20];
+	uint8_t (*p)[20];
 	int32_t sgn;
 	int32_t i;
 	int32_t r;
@@ -665,7 +648,7 @@ void BTL_initializeBattleStartText(void)
 
 	MAIN_D_801350BC = 0;
 	MAIN_D_801350C0 = 0;
-	p = (char (*)[20])BTL_D_800742A0;
+	p = BTL_D_800742A0;
 	for (i = 0; i < 0x9b; i++, p++) {
 		(*p)[0x11] = i;
 		(*p)[0x12] = 0x18;
@@ -674,7 +657,7 @@ void BTL_initializeBattleStartText(void)
 
 	BTL_shuffleBattleStartTextPieces();
 
-	p = (char (*)[20])BTL_D_800742A0;
+	p = BTL_D_800742A0;
 	for (i = 0; i < 0x9b; i++, p++) {
 		if (random(2) == 1) {
 			sgn = 1;
@@ -707,7 +690,7 @@ void BTL_renderBattleStartText(void)
 {
 	POLY_FT4 *ft;
 	POLY_F4 *shadow;
-	char (*p)[20];
+	uint8_t (*p)[20];
 	POLY_FT4 *prim;
 	GsOT_TAG *ot;
 	int32_t i;
@@ -729,7 +712,7 @@ void BTL_renderBattleStartText(void)
 
 	n = 0;
 	for (i = 0; i < 0x9b; i++) {
-		if ((BTL_D_800742A0 + 0x12)[i * 20] != 0) {
+		if (BTL_D_800742A0[i][0x12] != 0) {
 			break;
 		}
 		n++;
@@ -743,7 +726,7 @@ void BTL_renderBattleStartText(void)
 		clut = GetClut(0x100, 0x1e8);
 	}
 
-	p = (char (*)[20])BTL_D_800742A0;
+	p = BTL_D_800742A0;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	ot = ACTIVE_ORDERING_TABLE->org;
 	for (i = 0; i < 0x9b; i++, p++) {
@@ -856,7 +839,7 @@ void BTL_renderBattleStartTextBurst(void)
 {
 	POLY_FT4 *ft;
 	POLY_F4 *shadow;
-	char (*p)[20];
+	uint8_t (*p)[20];
 	POLY_FT4 *prim;
 	GsOT_TAG *ot;
 	int32_t i;
@@ -888,7 +871,7 @@ void BTL_renderBattleStartTextBurst(void)
 
 	ot = ACTIVE_ORDERING_TABLE->org;
 	dead = 0;
-	p = (char (*)[20])BTL_D_800742A0;
+	p = BTL_D_800742A0;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	for (i = 0; i < 0x9b; i++, p++) {
 		if ((((int16_t *)*p)[6] == 0) && (((int16_t *)*p)[7] == 0)) {
@@ -1013,12 +996,12 @@ void BTL_renderFinisherGauge(int32_t idx)
 	}
 
 	MAIN_D_801350C7 = BTL_D_80073290[MAIN_D_801350C6];
-	if (MAIN_D_801350C6 < 0xB) {
+	if (MAIN_D_801350C6 < 0xb) {
 		MAIN_D_801350C6++;
 	}
 
 	if (hp == 6) {
-		if (MAIN_D_801350C5 < 0xA) {
+		if (MAIN_D_801350C5 < 0xa) {
 			MAIN_D_801350C5++;
 		}
 
@@ -1030,9 +1013,9 @@ void BTL_renderFinisherGauge(int32_t idx)
 			hp++;
 			BTL_renderFinisherReadyIcon();
 
-			if (MAIN_D_801350C5 == 0xA) {
+			if (MAIN_D_801350C5 == 0xa) {
 				MAIN_D_801350C9 = 1;
-				MAIN_D_801350C6 %= 0xB;
+				MAIN_D_801350C6 %= 0xb;
 			}
 		}
 	}
@@ -1151,7 +1134,7 @@ void BTL_tickPartnerStatusBars(void)
 void BTL_renderPartnerStatusBars(int16_t idx)
 {
 	POLY_FT4 *prim;
-	BtlBarSprite *p;
+	BarSprite *p;
 	FighterData *fighter;
 	int16_t *hpPtr;
 	int16_t *mpPtr;

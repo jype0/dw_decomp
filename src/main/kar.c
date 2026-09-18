@@ -3,7 +3,6 @@
 #include <dw/kar.h>
 #include <dw/utils.h>
 
-extern char KAR_D_8005ABB8[];
 extern uint8_t KAR_LOADING_COMPLETE;
 
 KarWeightTbl MAIN_D_80134A08 = { { 30, 25, 35, 30 } };
@@ -21,5 +20,7 @@ int8_t MAIN_D_80134A4F = -1;
 
 void checkCurlingMap(int32_t mapId)
 {
-    if (mapId == 136) loadDynamicLibrary(KAR_REL, &KAR_LOADING_COMPLETE, DW_FALSE, NULL, NULL);
+	if (mapId == 136) {
+		loadDynamicLibrary(KAR_REL, &KAR_LOADING_COMPLETE, DW_FALSE, NULL, NULL);
+	}
 }

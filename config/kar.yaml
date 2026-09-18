@@ -58,6 +58,7 @@ segments:
     subsegments:
       - [0x40, c, kar]
       - [0x732C, rodata]
-      - [0x7380, data]
+      - [0x7380, .data, kar]
+      - [0x7DA0, .data, kar_bss]
 
   - [0x101EC]

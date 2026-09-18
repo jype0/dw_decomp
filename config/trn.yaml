@@ -68,5 +68,6 @@ segments:
       - [0x6850, .data, trn_reward]
       - [0x69AC, .data, trn_hud]
       - [0x6ACC, .data, trn_slots]
+      - [0x6B20, .data, trn_bss]
 
   - [0x6BD4]

@@ -59,7 +59,9 @@ SECTIONS
 			. = ALIGN(., 4);
 			build/src/btl/battle_hud.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/btl/data/20B24.data.s.o(.data.*));
+			build/src/btl/battle_effect.c.o(.data.*);
+			. = ALIGN(., 4);
+			KEEP(build/src/btl/btl_bss.c.o(.data.*));
 			. = ALIGN(., 4);
 
 			build/src/btl/battle_setup.c.o(.bss.*);
@@ -71,6 +73,11 @@ SECTIONS
 			build/src/btl/command_menu.c.o(.bss.*);
 			. = ALIGN(., 4);
 			build/src/btl/battle_hud.c.o(.bss.*);
+			. = ALIGN(., 4);
+
+			/* Trailer */
+			LONG(0);
+
 			. = ALIGN(., 4);
 		}
 	}
@@ -222,7 +229,11 @@ SECTIONS
 
 			build/src/evl/evl.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/evl/data/3EFC.data.s.o(.data.*));
+			build/src/evl/evl_bss.c.o(.data.*);
+			. = ALIGN(., 4);
+
+			/* Trailer */
+			LONG(0);
 			. = ALIGN(., 4);
 
 			build/src/evl/evl.c.o(.bss.*);
@@ -280,7 +291,7 @@ SECTIONS
 
 			build/src/kar/kar.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/kar/data/7380.data.s.o(.data.*));
+			KEEP(build/src/kar/kar_bss.c.o(.data.*));
 			. = ALIGN(., 4);
 
 			build/src/kar/kar.c.o(.bss.*);
@@ -382,7 +393,7 @@ SECTIONS
 			. = ALIGN(., 4);
 			build/src/std/std_effect.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/std/data/26ED4.data.s.o(.data.*));
+			KEEP(build/src/std/std_bss.c.o(.data.*));
 			. = ALIGN(., 4);
 
 			build/src/std/std_setup.c.o(.bss.*);
@@ -392,6 +403,11 @@ SECTIONS
 			build/src/std/std_hud.c.o(.bss.*);
 			. = ALIGN(., 4);
 			build/src/std/std_effect.c.o(.bss.*);
+			. = ALIGN(., 4);
+
+			/* Trailer */
+			LONG(0);
+
 			. = ALIGN(., 4);
 		}
 	}
@@ -459,6 +475,8 @@ SECTIONS
 			build/src/trn2/trn2_hud.c.o(.data.*);
 			. = ALIGN(., 4);
 			build/src/trn2/trn2_slots.c.o(.data.*);
+			. = ALIGN(., 4);
+			KEEP(build/src/trn2/trn2_bss.c.o(.data.*));
 			. = ALIGN(., 4);
 			build/src/trn2/trn2_hp_map99.c.o(.bss.*);
 			. = ALIGN(., 4);
@@ -545,6 +563,8 @@ SECTIONS
 			. = ALIGN(., 4);
 			build/src/trn/trn_slots.c.o(.data.*);
 			. = ALIGN(., 4);
+			KEEP(build/src/trn/trn_bss.c.o(.data.*));
+			. = ALIGN(., 4);
 			build/src/trn/trn_reward.c.o(.bss.*);
 			. = ALIGN(., 4);
 			build/src/trn/trn_hp.c.o(.bss.*);
@@ -611,7 +631,8 @@ SECTIONS
 			. = ALIGN(., 4);
 			build/src/vs/vs_effect.c.o(.data.*);
 			. = ALIGN(., 4);
-			KEEP(build/asm/vs/data/1CF48.data.s.o(.data.*));
+			KEEP(build/src/vs/vs_bss.c.o(.data.*));
+			. = ALIGN(., 4);
 			. = ALIGN(., 4);
 
 			build/src/vs/vs_scene.c.o(.bss.*);
@@ -621,6 +642,11 @@ SECTIONS
 			build/src/vs/vs_hud.c.o(.bss.*);
 			. = ALIGN(., 4);
 			build/src/vs/vs_effect.c.o(.bss.*);
+			. = ALIGN(., 4);
+
+			/* Trailer */
+			LONG(0);
+
 			. = ALIGN(., 4);
 		}
 	}

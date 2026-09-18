@@ -170,6 +170,11 @@ typedef struct {
 } EfeFlashData;
 
 typedef struct {
+	EfeFlashData data[12];
+	int32_t unk1E0;
+} EfeFlashBuffer;
+
+typedef struct {
 	DVECTOR screenPos;
 	int16_t depth;
 	int16_t pad;

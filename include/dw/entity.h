@@ -16,6 +16,12 @@ typedef struct {
 	VECTOR location;
 } PositionData;
 
+/* Hack to match overlay .bss */
+typedef union {
+	uint8_t raw[136];
+	PositionData data;
+} PositionDataRaw;
+
 typedef struct {
 	int16_t scale1[9];
 	int16_t subDelta[9];

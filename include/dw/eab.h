@@ -4,6 +4,7 @@
 #include <libgs.h>
 #include <libgte.h>
 
+#include <dw/efe.h>
 #include <dw/entity.h>
 #include <dw/graphics.h>
 #include <dw/types.h>
@@ -15,12 +16,27 @@ typedef struct {
 	VECTOR location;
 } EabState;
 
-extern int16_t EAB_D_800617D0[][4];
+typedef struct {
+	int16_t timer;
+	int16_t pad;
+	Entity *entity;
+} EabModelFX;
+
+typedef struct {
+	int32_t timer;
+	SVECTOR pos;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t pad;
+} EabParticle;
+
+extern EabModelFX EAB_D_800617D0[];
 extern EabState EAB_D_800617E8;
-extern char EAB_D_80061800[];
+extern EfeFlashBuffer EAB_D_80061800;
 extern GsRVIEW2 EAB_D_800619E4;
 extern int8_t EAB_D_80061A04[12];
-extern int32_t EAB_D_80061A10[100][4];
+extern EabParticle EAB_D_80061A10[];
 
 extern char *MAIN_D_80134C28;
 extern SVECTOR MAIN_D_80134C2C;

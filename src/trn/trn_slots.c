@@ -36,7 +36,8 @@ static void *trn_slots_functions[] = {
 
 // clang-format off
 int8_t TRN_D_8008F2CC[12] = {
-	0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x1, 0x1, 0x1, 0x2, 0x0, 0x0,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01,
+	0x01, 0x02, 0x00, 0x00,
 };
 
 GsSPRITE TRN_SLOT_SPRITE1 = {
@@ -80,20 +81,6 @@ GsSPRITE TRN_SLOT_SPRITE2 = {
 	0x2000,		/* scaley */
 	0x0,		/* rotate */
 };
-
-VECTOR TRN_D_8008F320 = { 0 };
-
-VECTOR TRN_D_8008F330 = { 0 };
-
-SVECTOR TRN_D_8008F340[3] = { 0 };
-
-VECTOR TRN_D_8008F358 = { 0 };
-
-int16_t TRN_D_8008F368[16] = { 0 };
-
-int16_t TRN_D_8008F388[16] = { 0 };
-
-SlotMachine TRN_SLOT_MACHINE = { 0 };
 // clang-format on
 
 static void trn_slots__garbage__(void)

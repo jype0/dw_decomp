@@ -96,6 +96,7 @@ segments:
       - [0xD07C, c, vs_hud]
       - [0x10758, c, vs_effect]
       - [0x1CEDC, .rodata]
-      - [0x1CF48, data]
+      - [0x1CF48, .data, vs]
+      - [0x1EBB0, .data, vs_bss]
 
   - [0x20788]

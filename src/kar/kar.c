@@ -20,155 +20,18 @@
 
 #include "common.h"
 
-typedef struct {
-	int32_t state;
-	int8_t type;
-	int8_t unk5;
-	int16_t weight;
-	int16_t speed;
-	int16_t unkA;
-	int32_t angle;
-	int8_t ring;
-	int8_t prevRing;
-	int8_t pad12[2];
-	VECTOR target;
-	GsDOBJ2 obj;
-	GsCOORDINATE2 coord;
-	int8_t pad84[16];
-	int16_t unk94;
-	int16_t selectPhase;
-	int16_t unk98;
-	int16_t pad9A;
-	VECTOR pos;
-} KarStone;
-
-typedef struct {
-	int8_t score;
-	int8_t thrown;
-	int16_t unk2;
-	uint16_t unk4;
-	int8_t pad6[2];
-	KarStone stones[5];
-} KarStoneRow;
-
-typedef struct {
-	struct {
-		int16_t dx;
-		int16_t dz;
-		int16_t radius;
-	} ring[4];
-} KarZones;
-
-typedef struct {
-	char *text[61];
-} KarStrTbl;
-
-typedef struct {
-	int8_t start[10];
-} KarOffTbl;
-
-typedef struct {
-	int32_t id[3];
-} KarModelIds;
-
-typedef struct {
-	int32_t x[3];
-} KarSpawnX;
-
-typedef struct {
-	int32_t type[2][4];
-} KarShotPlan;
-
-typedef struct {
-	int32_t x;
-	int32_t y;
-	int32_t z;
-	int32_t pad;
-} KarPos;
-
-typedef struct {
-	int16_t x;
-	int16_t y;
-	int16_t clutX;
-	int16_t clutY;
-	int16_t u;
-	int16_t v;
-	int16_t w;
-	int16_t h;
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	uint8_t pad;
-} KarSprite;
-
-typedef struct {
-	KarSprite sprite[5];
-} KarSpriteSet;
-
-typedef struct {
-	KarSprite sprite[2];
-} KarSpritePair;
-
-typedef struct {
-	struct {
-		int16_t u;
-		int16_t v;
-	} glyph[11];
-} KarDigits;
-
-extern GsOT_TAG KAR_D_800637CC[];
-extern GsOT_TAG KAR_D_8006384C[];
-extern GsOT KAR_D_800638CC[];
-extern KarStoneRow KAR_D_8005B5A0[];
-extern KarZones KAR_D_8005B438;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
 extern GsOT GS_ORDERING_TABLE[];
 extern GsRVIEW2 GS_VIEWPOINT;
-extern GsRVIEW2 KAR_D_8005B580;
-extern uint16_t MAIN_D_80135252;
-extern KarModelIds KAR_D_8005AB80;
-extern KarOffTbl KAR_D_8005AB8C;
-extern KarSpawnX KAR_D_8005AB98;
-extern int32_t KAR_D_80063914[];
-extern uint8_t MAIN_D_8013522C;
-extern KarStrTbl KAR_D_8005AF58;
-extern KarOffTbl KAR_D_8005B04C;
-extern KarStrTbl KAR_D_8005B318;
-extern KarOffTbl KAR_D_8005B40C;
-extern KarShotPlan KAR_D_8005B418;
-extern KarSprite KAR_D_8005B48C;
-extern KarDigits KAR_D_8005B4A0;
-extern KarSpritePair KAR_D_8005B4CC;
-extern int16_t MAIN_D_8013523E;
-extern KarSpriteSet KAR_D_8005B4F4;
-extern KarSprite KAR_D_8005B558;
-extern KarSprite KAR_D_8005B478;
-extern KarSprite KAR_D_8005B56C;
-extern uint8_t MAIN_D_80135220;
-extern char KAR_D_8005ABA4[];
-extern u_long KAR_D_8005BFCC[];
-extern u_long *MAIN_D_80135240;
-extern int32_t MAIN_D_80135244;
-extern uint8_t MAIN_D_80135248;
-extern KarStone *KAR_D_800639C0[];
-extern int16_t MAIN_D_8013523A;
-extern int8_t MAIN_D_80135256;
-extern int8_t MAIN_D_80135250;
-extern int8_t MAIN_D_8013523C;
-extern int16_t MAIN_D_80135254;
 
-extern int32_t MAIN_D_8013524C;
-extern uint16_t MAIN_D_80135238;
-extern int8_t MAIN_D_8013522D;
-extern int8_t MAIN_D_8013522E;
-extern int32_t MAIN_D_80135230;
-extern int32_t MAIN_D_80135234;
 extern int8_t MAP_TILE_X;
 extern int8_t MAP_TILE_Y;
 extern int8_t MAP_WIDTH[];
 extern int16_t CAMERA_Y[];
 extern uint8_t MAP_TILE_DATA[];
+extern char MAIN_D_80134A38[];
+extern char MAIN_D_80134A3C[];
 
 void renderSelectionCursor(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
@@ -290,6 +153,507 @@ static void *kar_functions[] = {
 	KAR_initializeOrderingTables,
 };
 
+// clang-format off
+KarModelIds KAR_D_8005AB80 = { { 0x00000002, 0x00000001, 0x00000000 } };
+
+KarOffTbl KAR_D_8005AB8C = {
+	{
+		0x03, 0x02, 0x02, 0x01, 0x01, 0x01, 0x00, 0x00,
+		0x00, 0x00,
+	},
+};
+
+KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
+
+char KAR_D_8005ABA4[20] = "\\ETCDAT\\KARRING.TMD";
+
+char KAR_D_8005ABB8[24] = "Start GameExplain Game";
+
+char KAR_D_8005ABD0[16] = " Penguinmon ";
+
+char KAR_D_8005ABE0[28] = "First of all, please choose";
+
+char KAR_D_8005ABFC[20] = "your curling stone.";
+
+char KAR_D_8005AC10[32] = "There are heavy, medium, and";
+
+char KAR_D_8005AC30[32] = "light ones, so think about the";
+
+char KAR_D_8005AC50[24] = "best order to use them.";
+
+char KAR_D_8005AC68[28] = "Some stones have four pegs.";
+
+char KAR_D_8005AC84[32] = "They stick to where they land";
+
+char KAR_D_8005ACA4[28] = "and can become very useful.";
+
+char KAR_D_8005ACC0[28] = "Move the Directional Pad ";
+
+char KAR_D_8005ACDC[32] = "left and right to choose the ";
+
+char KAR_D_8005ACFC[28] = "direction of your throw.";
+
+char KAR_D_8005AD18[28] = "Move screen up or down with";
+
+char KAR_D_8005AD34[28] = "Dir. Pad. Use X button to";
+
+char KAR_D_8005AD50[24] = "select throw direction.";
+
+char KAR_D_8005AD68[28] = "Press X button when power";
+
+char KAR_D_8005AD84[28] = "gauge reaches the desired";
+
+char KAR_D_8005ADA0[32] = "level to pick throw strength.";
+
+char KAR_D_8005ADC0[28] = "If your curling stone lands";
+
+char KAR_D_8005ADDC[28] = "and touches the GOOD mark,";
+
+char KAR_D_8005ADF8[20] = "you get two points.";
+
+char KAR_D_8005AE0C[28] = "If you get it on the blue";
+
+char KAR_D_8005AE28[32] = "line, but outside the center";
+
+char KAR_D_8005AE48[24] = "GOOD mark, one point.";
+
+char KAR_D_8005AE60[24] = "If you touch the BAD on";
+
+char KAR_D_8005AE78[28] = "bottom right, you'll lose";
+
+char KAR_D_8005AE94[28] = "two points, so be careful.";
+
+char KAR_D_8005AEB0[28] = "And, in the case of a tie,";
+
+char KAR_D_8005AECC[28] = "So let's start the game!!";
+
+char KAR_D_8005AEE8[24] = "You're not that great!";
+
+char KAR_D_8005AF00[32] = "The battle is just beginning!";
+
+char KAR_D_8005AF20[24] = "Hey you're pretty good!";
+
+char KAR_D_8005AF38[16] = "Yeah! I won!";
+
+char KAR_D_8005AF48[16] = "Awh, I lost. ";
+
+KarStrTbl KAR_D_8005AF58 = {{
+	KAR_D_8005ABD0,
+	KAR_D_8005ABE0,
+	KAR_D_8005ABFC,
+	MAIN_D_80134A38,
+	KAR_D_8005ABD0,
+	KAR_D_8005AC10,
+	KAR_D_8005AC30,
+	KAR_D_8005AC50,
+	KAR_D_8005ABD0,
+	KAR_D_8005AC68,
+	KAR_D_8005AC84,
+	KAR_D_8005ACA4,
+	KAR_D_8005ABD0,
+	KAR_D_8005ACC0,
+	KAR_D_8005ACDC,
+	KAR_D_8005ACFC,
+	KAR_D_8005ABD0,
+	KAR_D_8005AD18,
+	KAR_D_8005AD34,
+	KAR_D_8005AD50,
+	KAR_D_8005ABD0,
+	KAR_D_8005AD68,
+	KAR_D_8005AD84,
+	KAR_D_8005ADA0,
+	KAR_D_8005ABD0,
+	KAR_D_8005ADC0,
+	KAR_D_8005ADDC,
+	KAR_D_8005ADF8,
+	KAR_D_8005ABD0,
+	KAR_D_8005AE0C,
+	KAR_D_8005AE28,
+	KAR_D_8005AE48,
+	KAR_D_8005ABD0,
+	KAR_D_8005AE60,
+	KAR_D_8005AE78,
+	KAR_D_8005AE94,
+	KAR_D_8005ABD0,
+	KAR_D_8005AEB0,
+	MAIN_D_80134A3C,
+	KAR_D_8005AECC,
+	KAR_D_8005ABD0,
+	MAIN_D_80134A38,
+	KAR_D_8005AEE8,
+	MAIN_D_80134A38,
+	KAR_D_8005ABD0,
+	KAR_D_8005AF00,
+	MAIN_D_80134A38,
+	MAIN_D_80134A38,
+	KAR_D_8005ABD0,
+	KAR_D_8005AF20,
+	MAIN_D_80134A38,
+	MAIN_D_80134A38,
+	KAR_D_8005ABD0,
+	KAR_D_8005AF38,
+	MAIN_D_80134A38,
+	MAIN_D_80134A38,
+	KAR_D_8005ABD0,
+	KAR_D_8005AF48,
+	MAIN_D_80134A38,
+	MAIN_D_80134A38,
+	(char *)0x00000000,
+}};
+
+KarOffTbl KAR_D_8005B04C = {
+	{
+		0x00, 0x0c, 0x14, 0x18, 0x28, 0x2c, 0x30, 0x34,
+		0x38, 0x3c,
+	},
+};
+
+char KAR_D_8005B058[16] = " MetalMamemon ";
+
+char KAR_D_8005B068[28] = "Yeah. You gotta first pick";
+
+char KAR_D_8005B084[28] = "the type of curling stone.";
+
+char KAR_D_8005B0A0[28] = "I'm a genius, so I can use";
+
+char KAR_D_8005B0BC[28] = "various stones in the right";
+
+char KAR_D_8005B0D8[28] = "order. It's key to winning.";
+
+char KAR_D_8005B0F4[28] = "Stones with four pegs stop";
+
+char KAR_D_8005B110[28] = "and stay where they land,";
+
+char KAR_D_8005B12C[28] = "so they are very valuable.";
+
+char KAR_D_8005B148[32] = "Choose the direction of throw";
+
+char KAR_D_8005B168[28] = "with the Directional Pad,";
+
+char KAR_D_8005B184[32] = "by moving it left and right.";
+
+char KAR_D_8005B1A4[32] = "You can scroll screen moving";
+
+char KAR_D_8005B1C4[32] = "Directional Pad up and down.";
+
+char KAR_D_8005B1E4[28] = "Press X button to throw it.";
+
+char KAR_D_8005B200[28] = "gauge reaches the desired ";
+
+char KAR_D_8005B21C[24] = "Points: If you get the";
+
+char KAR_D_8005B234[24] = "stone on the GOOD mark,";
+
+char KAR_D_8005B24C[28] = "If you get on right bottom";
+
+char KAR_D_8005B268[28] = "BAD mark, it will be minus";
+
+char KAR_D_8005B284[32] = "In the case of a tie, I win!";
+
+char KAR_D_8005B2A4[20] = "Start the game!!";
+
+char KAR_D_8005B2B8[12] = "I'll win!";
+
+char KAR_D_8005B2C4[20] = "I haven't lost yet!";
+
+char KAR_D_8005B2D8[28] = "I can't lose this match!";
+
+char KAR_D_8005B2F4[16] = "Yeah, I won!";
+
+char KAR_D_8005B304[20] = "Awh, I almost won.";
+
+KarStrTbl KAR_D_8005B318 = {{
+	KAR_D_8005B058,
+	KAR_D_8005B068,
+	KAR_D_8005B084,
+	&MAIN_D_80134A3C[7],
+	KAR_D_8005B058,
+	KAR_D_8005B0A0,
+	KAR_D_8005B0BC,
+	KAR_D_8005B0D8,
+	KAR_D_8005B058,
+	KAR_D_8005B0F4,
+	KAR_D_8005B110,
+	KAR_D_8005B12C,
+	KAR_D_8005B058,
+	KAR_D_8005B148,
+	KAR_D_8005B168,
+	KAR_D_8005B184,
+	KAR_D_8005B058,
+	KAR_D_8005B1A4,
+	KAR_D_8005B1C4,
+	KAR_D_8005B1E4,
+	KAR_D_8005B058,
+	KAR_D_8005AD68,
+	KAR_D_8005B200,
+	KAR_D_8005ADA0,
+	KAR_D_8005B058,
+	KAR_D_8005B21C,
+	KAR_D_8005B234,
+	KAR_D_8005ADF8,
+	KAR_D_8005B058,
+	KAR_D_8005AE0C,
+	KAR_D_8005AE28,
+	KAR_D_8005AE48,
+	KAR_D_8005B058,
+	KAR_D_8005B24C,
+	KAR_D_8005B268,
+	KAR_D_8005AE94,
+	KAR_D_8005B058,
+	KAR_D_8005B284,
+	KAR_D_8005B2A4,
+	&MAIN_D_80134A3C[7],
+	KAR_D_8005B058,
+	KAR_D_8005B2B8,
+	&MAIN_D_80134A3C[7],
+	&MAIN_D_80134A3C[7],
+	KAR_D_8005B058,
+	KAR_D_8005B2C4,
+	&MAIN_D_80134A3C[7],
+	&MAIN_D_80134A3C[7],
+	KAR_D_8005B058,
+	KAR_D_8005B2D8,
+	&MAIN_D_80134A3C[7],
+	&MAIN_D_80134A3C[7],
+	KAR_D_8005B058,
+	KAR_D_8005B2F4,
+	&MAIN_D_80134A3C[7],
+	&MAIN_D_80134A3C[7],
+	KAR_D_8005B058,
+	KAR_D_8005B304,
+	&MAIN_D_80134A3C[7],
+	&MAIN_D_80134A3C[7],
+	&MAIN_D_80134A3C[7],
+}};
+
+KarOffTbl KAR_D_8005B40C = {
+	{
+		0x00, 0x0c, 0x14, 0x18, 0x28, 0x2c, 0x30, 0x34,
+		0x38, 0x3c,
+	},
+};
+
+KarShotPlan KAR_D_8005B418 = {
+	{
+		0x00000001, 0x00000000, 0x00000002, 0x00000003,
+		0x00000003, 0x00000002, 0x00000000, 0x00000001,
+	},
+};
+
+KarZones KAR_D_8005B438 = {
+	{
+		{ 0x0000, 0x06b6, 0x0091 },
+		{ 0x0000, 0x06b6, 0x0177 },
+		{ 0xfe70, 0x090e, 0x00cd },
+		{ 0x0190, 0x090e, 0x00cd },
+	},
+};
+
+int16_t KAR_D_8005B450[8] = {
+	0x0019, 0x0001, 0x0013, 0x0004, 0x0010, 0x0003, 0x000d, 0x0003,
+};
+
+int16_t KAR_D_8005B460[12] = {
+	0x0000, 0x06b6, 0x0091, 0x0000, 0x06b6, 0x0177, 0xfe70, 0x090e,
+	0x00cd, 0x0190, 0x090e, 0x00cd,
+};
+
+KarSprite KAR_D_8005B478 = {
+	0xff6a,
+	0x0000,
+	0x0080,
+	0x01e6,
+	0x0000,
+	0x0028,
+	0x0018,
+	0x0018,
+	0x80,
+	0x80,
+	0x80,
+	0x00,
+};
+
+KarSprite KAR_D_8005B48C = {
+	0xff6a,
+	0x0000,
+	0x0010,
+	0x01e6,
+	0x0000,
+	0x0028,
+	0x0010,
+	0x0010,
+	0x80,
+	0x80,
+	0x80,
+	0x00,
+};
+
+KarDigits KAR_D_8005B4A0 = {
+	{
+		{ 0x0040, 0x0018 },
+		{ 0x0050, 0x0018 },
+		{ 0x0060, 0x0018 },
+		{ 0x0040, 0x0028 },
+		{ 0x0050, 0x0028 },
+		{ 0x0060, 0x0028 },
+		{ 0x0048, 0x0038 },
+		{ 0x0058, 0x0038 },
+		{ 0x0048, 0x0048 },
+		{ 0x0058, 0x0048 },
+		{ 0x0000, 0x0040 },
+	},
+};
+
+KarSpritePair KAR_D_8005B4CC = {
+	{
+		{
+			0xffce,
+			0xffce,
+			0x0080,
+			0x01e6,
+			0x0030,
+			0x0018,
+			0x0010,
+			0x0010,
+			0x80,
+			0x80,
+			0x80,
+			0x00,
+		},
+		{
+			0xffce,
+			0xffce,
+			0x0070,
+			0x01e6,
+			0x0000,
+			0x0018,
+			0x0030,
+			0x0010,
+			0x80,
+			0x80,
+			0x80,
+			0x00,
+		},
+	},
+};
+
+KarSpriteSet KAR_D_8005B4F4 = {
+	{
+		{
+			0xff74,
+			0xffa1,
+			0x0090,
+			0x01e6,
+			0x0070,
+			0x0018,
+			0x0020,
+			0x0020,
+			0x80,
+			0x80,
+			0x80,
+			0x00,
+		},
+		{
+			0xff7e,
+			0xffba,
+			0x0070,
+			0x01e6,
+			0x0018,
+			0x0038,
+			0x0030,
+			0x0020,
+			0x80,
+			0x80,
+			0x80,
+			0x00,
+		},
+		{
+			0x0064,
+			0xffa1,
+			0x00a0,
+			0x01e6,
+			0x0090,
+			0x0018,
+			0x0020,
+			0x0020,
+			0x80,
+			0x80,
+			0x80,
+			0x00,
+		},
+		{
+			0x0050,
+			0xffba,
+			0x0080,
+			0x01e6,
+			0x0018,
+			0x0038,
+			0x0030,
+			0x0020,
+			0x80,
+			0x80,
+			0x80,
+			0x00,
+		},
+		{
+			0x0000,
+			0x0000,
+			0x0000,
+			0x0000,
+			0x0000,
+			0x0000,
+			0x0000,
+			0x0000,
+			0x00,
+			0x00,
+			0x00,
+			0x00,
+		},
+	},
+};
+
+KarSprite KAR_D_8005B558 = {
+	0x0064,
+	0xffa1,
+	0x00c0,
+	0x01e6,
+	0x00b0,
+	0x0018,
+	0x0020,
+	0x0020,
+	0x80,
+	0x80,
+	0x80,
+	0x00,
+};
+
+KarSprite KAR_D_8005B56C = {
+	0xffcc,
+	0x0000,
+	0x00b0,
+	0x01e6,
+	0x0068,
+	0x003e,
+	0x0097,
+	0x000a,
+	0x80,
+	0x80,
+	0x80,
+	0x00,
+};
+
+GsRVIEW2 KAR_D_8005B580 = {
+	0x00000000,
+	0x00000000,
+	0xfffff308,
+	0x00000000,
+	0x00000000,
+	0x00000000,
+	0x00000000,
+	NULL,
+};
+// clang-format on
+
 static void kar__garbage__(void)
 {
 	int32_t t0 = KAR_D_800638CC[0].length;
@@ -328,12 +692,12 @@ void KAR_setupMatch(int32_t mode)
 	MAIN_D_8013523E = 0;
 
 	for (p = 0; p < 3; p++) {
-		stone = KAR_D_8005B5A0[p].stones;
+		stone = KAR_D_8005B5A0[p].row.stones;
 		rand();
-		KAR_D_8005B5A0[p].score = 0;
-		KAR_D_8005B5A0[p].thrown = 0;
-		KAR_D_8005B5A0[p].unk2 = 0;
-		KAR_D_8005B5A0[p].unk4 = 0;
+		KAR_D_8005B5A0[p].row.score = 0;
+		KAR_D_8005B5A0[p].row.thrown = 0;
+		KAR_D_8005B5A0[p].row.unk2 = 0;
+		KAR_D_8005B5A0[p].row.unk4 = 0;
 
 		for (i = 0; i < 5;) {
 			models = KAR_D_8005AB80;
@@ -421,7 +785,7 @@ void KAR_tickStones(int32_t instanceId)
 	int16_t step;
 
 	for (p = 0; p < 3; p++) {
-		stone = KAR_D_8005B5A0[p].stones;
+		stone = KAR_D_8005B5A0[p].row.stones;
 		for (i = 0; i < 5; i++, stone++) {
 			if (stone->state != 3 && stone->state != 2) {
 				stone->target = stone->pos;
@@ -485,7 +849,7 @@ void KAR_renderScene(int32_t instanceId)
 	GsClearOt(0, 0xa, &KAR_D_800638CC[ACTIVE_FRAMEBUFFER]);
 
 	for (p = 0; p < 3; p++) {
-		stone = KAR_D_8005B5A0[p].stones;
+		stone = KAR_D_8005B5A0[p].row.stones;
 
 		for (i = 0; i < 5;) {
 			if ((p == 1) && (MAIN_D_80135244 != 3) && (MAIN_D_80135244 < 0x10)) {
@@ -583,9 +947,9 @@ void KAR_finishMatch(void)
 	removeObject(0x1388, 0xf);
 	setTextColor(1);
 
-	v = KAR_D_8005B5A0[0].score;
-	if (v > KAR_D_8005B5A0[1].score) {
-		if (KAR_D_8005B5A0[0].score >= 0xa) {
+	v = KAR_D_8005B5A0[0].row.score;
+	if (v > KAR_D_8005B5A0[1].row.score) {
+		if (KAR_D_8005B5A0[0].row.score >= 0xa) {
 			writePStat(0x79, 2);
 		} else {
 			writePStat(0x79, 1);
@@ -645,7 +1009,7 @@ void KAR_renderAimArrow(void)
 
 	if (MAIN_D_80135244 >= 2) {
 		if (MAIN_D_80135252-- != 0) {
-			MAIN_D_80135252 += 0xBF;
+			MAIN_D_80135252 += 0xbf;
 		}
 		if (MAIN_D_80135238++ >= 0x28) {
 			MAIN_D_80135238 = 0;
@@ -654,33 +1018,33 @@ void KAR_renderAimArrow(void)
 		MAIN_D_80135238 = 0;
 	}
 
-	for (i = 0, j = 1, angle = 0; i < 0xF; i++, angle += 0xBF, j++) {
+	for (i = 0, j = 1, angle = 0; i < 0xf; i++, angle += 0xbf, j++) {
 		j = j;
 		vec.vx = 0;
 		vec.vy = 0;
 		vec.vz = j * -200;
 		RotMatrix(&ENTITY_TABLE[player]->posData->rotation, &m);
 		ApplyMatrixSV(&m, &vec, &out);
-		out.vx += KAR_D_8005B5A0[MAIN_D_8013523C].stones[MAIN_D_8013523A].pos.vx;
-		out.vz += KAR_D_8005B5A0[MAIN_D_8013523C].stones[MAIN_D_8013523A].pos.vz;
-		tmp = (MAIN_D_80135252 + (angle / 15)) & 0xFF;
+		out.vx += KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos.vx;
+		out.vz += KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos.vz;
+		tmp = (MAIN_D_80135252 + (angle / 15)) & 0xff;
 		shade = tmp;
-		if (tmp >= 0xBF) {
-			shade = (shade - 0xBFU) & 0xFF;
+		if (tmp >= 0xbf) {
+			shade = (shade - 0xbfU) & 0xff;
 		}
-		while ((out.vx < -0x2EE) || (out.vx >= 0x2EF)) {
-			if (out.vx < -0x2EE) {
+		while ((out.vx < -0x2ee) || (out.vx >= 0x2ef)) {
+			if (out.vx < -0x2ee) {
 				w = out.vx;
 				if (!otz) {
 				}
-				w = w + 0x2EE;
+				w = w + 0x2ee;
 				out.vx = out.vx - (int16_t)(w * 2);
 			}
-			if (out.vx >= 0x2EF) {
+			if (out.vx >= 0x2ef) {
 				w = out.vx;
 				if (!otz) {
 				}
-				w = w - 0x2EE;
+				w = w - 0x2ee;
 				w = w * 2;
 				out.vx = out.vx - w;
 			}
@@ -693,13 +1057,13 @@ void KAR_renderAimArrow(void)
 		gte_rtps();
 		gte_stsxy(&sxy);
 		gte_stszotz(&otz);
-		if (i < 0xE) {
+		if (i < 0xe) {
 			setUVWH(prim, 0x18, 0x38, 16, -16);
 			setXY4(prim, sxy.vx - 8, sxy.vy + 8, sxy.vx + 8, sxy.vy + 8, sxy.vx - 8,
 			       sxy.vy - 8, sxy.vx + 8, sxy.vy - 8);
 		} else {
 			rot = ratan2(prev.vz - out.vz, prev.vx - out.vx);
-			rot = rot - 0xC00;
+			rot = rot - 0xc00;
 			rot = rot % 0x1000;
 			pts[0].vx = -8;
 			pts[0].vy = 0;
@@ -729,7 +1093,7 @@ void KAR_renderAimArrow(void)
 			setXY4(prim, pts[0].vx, pts[0].vz, pts[1].vx, pts[1].vz, pts[2].vx,
 			       pts[2].vz, pts[3].vx, pts[3].vz);
 		}
-		setClut(prim, 0x80, 0x1E6);
+		setClut(prim, 0x80, 0x1e6);
 		prim->tpage = getTPage(0, 0, 640, 0);
 		if (i != (MAIN_D_80135238 / 3)) {
 			AddPrim(ot + otz, prim);
@@ -909,12 +1273,12 @@ void KAR_checkStonesStopped(void)
 	KarStone *stone2;
 
 	moving = 0;
-	if (MAIN_D_80135244 != 0xB) {
+	if (MAIN_D_80135244 != 0xb) {
 		return;
 	}
 	for (p = 0; p < 3; p++) {
 		p = p;
-		stone = KAR_D_8005B5A0[p].stones;
+		stone = KAR_D_8005B5A0[p].row.stones;
 		for (n = 0; n < 5; n++, stone++) {
 			if (stone->state > 0) {
 				if (stone->speed > 0) {
@@ -926,13 +1290,13 @@ void KAR_checkStonesStopped(void)
 		}
 	}
 	if (moving == 0) {
-		MAIN_D_80135244 = 0xC;
+		MAIN_D_80135244 = 0xc;
 	}
 	for (p = 0; p < 3; p++) {
-		stone2 = KAR_D_8005B5A0[p].stones;
+		stone2 = KAR_D_8005B5A0[p].row.stones;
 		for (n = 0; n < 5; n++, stone2++) {
 			if (stone2->state > 0) {
-				if (stone2->pos.vz >= 0xBE) {
+				if (stone2->pos.vz >= 0xbe) {
 					if (stone2->speed <= 0) {
 						stone2->state = -0x65;
 					}
@@ -977,7 +1341,7 @@ void KAR_updateCollisions(void)
 
 	for (step = 0; step < 0xb; step++) {
 		for (p = 0; p < 3; p++) {
-			stone = KAR_D_8005B5A0[p].stones;
+			stone = KAR_D_8005B5A0[p].row.stones;
 
 			for (i = 0; i < 5;) {
 				if (stone->state > 0) {
@@ -995,17 +1359,17 @@ void KAR_updateCollisions(void)
 		}
 
 		for (a = 0, next = 1; a < 15; a++, next++) {
-			if (KAR_D_8005B5A0[a / 5].stones[a % 5].state > 0) {
+			if (KAR_D_8005B5A0[a / 5].row.stones[a % 5].state > 0) {
 				for (b = next; b < 15; b++) {
-					if (KAR_D_8005B5A0[b / 5].stones[b % 5].state > 0) {
+					if (KAR_D_8005B5A0[b / 5].row.stones[b % 5].state > 0) {
 						if (KAR_distance(cur[a].vx - cur[b].vx, cur[a].vz - cur[b].vz) < 0x96) {
 							collided = 1;
 							if (step == 0) {
-								KAR_resolveStoneCollision(&KAR_D_8005B5A0[b / 5].stones[b % 5], cur[b],
-								                          &KAR_D_8005B5A0[a / 5].stones[a % 5], cur[a]);
+								KAR_resolveStoneCollision(&KAR_D_8005B5A0[b / 5].row.stones[b % 5], cur[b],
+								                          &KAR_D_8005B5A0[a / 5].row.stones[a % 5], cur[a]);
 							} else {
-								KAR_resolveStoneCollision(&KAR_D_8005B5A0[b / 5].stones[b % 5], prev[b],
-								                          &KAR_D_8005B5A0[a / 5].stones[a % 5], prev[a]);
+								KAR_resolveStoneCollision(&KAR_D_8005B5A0[b / 5].row.stones[b % 5], prev[b],
+								                          &KAR_D_8005B5A0[a / 5].row.stones[a % 5], prev[a]);
 							}
 						}
 					}
@@ -1034,7 +1398,7 @@ void KAR_bounceOffWall(void)
 	int16_t zone;
 
 	for (p = 0; p < 3; p++) {
-		stone = KAR_D_8005B5A0[p].stones;
+		stone = KAR_D_8005B5A0[p].row.stones;
 		for (n = 0; n < 5; n++, stone++) {
 			if (stone->state <= 0) {
 				continue;
@@ -1418,10 +1782,10 @@ void KAR_beginAiming(void)
 		startAnimation(ENTITY_TABLE[MAIN_D_80135248], 0x1c);
 	}
 
-	KAR_D_8005B5A0[MAIN_D_8013523C].stones[MAIN_D_8013523A].state = 0;
-	if (KAR_D_8005B5A0[MAIN_D_8013523C].stones[MAIN_D_8013523A].type == 3) {
+	KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].state = 0;
+	if (KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].type == 3) {
 		n = (MAIN_D_8013523C != 0) ? 1 : 2;
-		GsLinkObject4((u_long)(MAIN_D_80135240 + 3), &KAR_D_8005B5A0[MAIN_D_8013523C].stones[MAIN_D_8013523A].obj, n);
+		GsLinkObject4((u_long)(MAIN_D_80135240 + 3), &KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].obj, n);
 	}
 
 	MAIN_D_8013524C = -0x400;
@@ -1434,7 +1798,7 @@ void KAR_selectPreviousStone(void)
 
 	if (MAIN_D_8013523A > 0) {
 		for (row = MAIN_D_8013523A - 1; row >= 0; row--) {
-			if (KAR_D_8005B5A0[MAIN_D_8013523C].stones[row].state == -1) {
+			if (KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[row].state == -1) {
 				MAIN_D_8013523A = row;
 				return;
 			}
@@ -1448,7 +1812,7 @@ void KAR_selectNextStone(void)
 
 	if (MAIN_D_8013523A < 4) {
 		for (row = MAIN_D_8013523A + 1; row < 5; row++) {
-			if (KAR_D_8005B5A0[MAIN_D_8013523C].stones[row].state == -1) {
+			if (KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[row].state == -1) {
 				MAIN_D_8013523A = row;
 				return;
 			}
@@ -1603,8 +1967,8 @@ void KAR_classifyStoneRings(void)
 	int32_t zi;
 
 	for (p = 0; p < 2; p++) {
-		stone = KAR_D_8005B5A0[p].stones;
-		KAR_D_8005B5A0[p].score = 0;
+		stone = KAR_D_8005B5A0[p].row.stones;
+		KAR_D_8005B5A0[p].row.score = 0;
 		for (i = 0; i < 5; i++, stone++) {
 			cur = stone;
 			stone->prevRing = cur->ring;
@@ -1653,17 +2017,17 @@ int32_t KAR_tickScoreTally(void)
 	if (MAIN_D_8013522D == 1 && (MAIN_D_8013522E == 2 || MAIN_D_8013522E == 1)) {
 		KarStone *stone;
 
-		MAIN_D_80135256 = KAR_D_8005B5A0[0].thrown + KAR_D_8005B5A0[1].thrown;
+		MAIN_D_80135256 = KAR_D_8005B5A0[0].row.thrown + KAR_D_8005B5A0[1].row.thrown;
 		MAIN_D_80135256--;
-		KAR_D_8005B5A0[0].score = 0;
-		KAR_D_8005B5A0[1].score = 0;
+		KAR_D_8005B5A0[0].row.score = 0;
+		KAR_D_8005B5A0[1].row.score = 0;
 		while (MAIN_D_80135256 >= 0) {
 			stone = KAR_D_800639C0[MAIN_D_80135256];
 			rawRing = stone->ring;
 			player = (rawRing & 0x10) ? 1 : 0;
-			ring = rawRing & 0xF;
+			ring = rawRing & 0xf;
 			if (stone->state > 0 && ring != 0) {
-				KAR_D_8005B5A0[player].score += values.value[ring - 1];
+				KAR_D_8005B5A0[player].row.score += values.value[ring - 1];
 			}
 			MAIN_D_80135256--;
 		}
@@ -1671,7 +2035,7 @@ int32_t KAR_tickScoreTally(void)
 		for (i = 0; i < 3; i++) {
 			KarStone *rowStone;
 
-			rowStone = KAR_D_8005B5A0[i].stones;
+			rowStone = KAR_D_8005B5A0[i].row.stones;
 			for (j = 0; j < 5; j++, rowStone++) {
 				if (rowStone->state >= 100) {
 					rowStone->state -= 100;
@@ -1690,7 +2054,7 @@ int32_t KAR_tickScoreTally(void)
 
 		while (MAIN_D_80135256 >= 0) {
 			stone = KAR_D_800639C0[MAIN_D_80135256];
-			if ((int8_t)(stone->ring & 0xF) != 0) {
+			if ((int8_t)(stone->ring & 0xf) != 0) {
 				MAIN_D_80134A4F = MAIN_D_80135256;
 				MAIN_D_8013522E = 0;
 				break;
@@ -1715,7 +2079,7 @@ int32_t KAR_tickScoreTally(void)
 		if (changed != 0) {
 			cameraZ = stone->pos.vz;
 			done = tickMoveCameraTo(stone->pos.vx, cameraZ, 5);
-			if ((CAMERA_Y[0] % 0x80) == 0 || (CAMERA_Y[0] % 0x80) >= 0x6A) {
+			if ((CAMERA_Y[0] % 0x80) == 0 || (CAMERA_Y[0] % 0x80) >= 0x6a) {
 				i = MAP_WIDTH[0];
 				j = i;
 				i = MAP_TILE_Y;
@@ -1738,11 +2102,11 @@ int32_t KAR_tickScoreTally(void)
 		stone = KAR_D_800639C0[MAIN_D_80135256];
 		rawRing = stone->ring;
 		player = (rawRing & 0x10) ? 1 : 0;
-		ring = rawRing & 0xF;
+		ring = rawRing & 0xf;
 		ringIndex = ring;
-		KAR_D_8005B5A0[player].score += values.value[ringIndex - 1];
+		KAR_D_8005B5A0[player].row.score += values.value[ringIndex - 1];
 		MAIN_D_8013522E = 2;
-		if (stone->ring != stone->prevRing && (stone->ring & 0xF) != 0) {
+		if (stone->ring != stone->prevRing && (stone->ring & 0xf) != 0) {
 			if (ringIndex == 3) {
 				playSound2(8, 6);
 			} else {
@@ -1757,8 +2121,8 @@ int32_t KAR_tickScoreTally(void)
 
 		stone = KAR_D_800639C0[MAIN_D_80135256];
 		changed = stone->ring != stone->prevRing;
-		if (changed != 0 && (stone->ring & 0xF) != 0) {
-			if (MAIN_D_80135234++ >= 0xB) {
+		if (changed != 0 && (stone->ring & 0xf) != 0) {
+			if (MAIN_D_80135234++ >= 0xb) {
 				if (stone->state < 100) {
 					stone->state += 100;
 				} else {
@@ -1851,7 +2215,7 @@ int32_t KAR_findClearShotAngle(int32_t x, int32_t z)
 		pz = (int16_t)(pz + (int16_t)((step * rsin(ang)) / 4096));
 		for (p = 0; p < 3; p++) {
 			p = p;
-			stone = KAR_D_8005B5A0[p].stones;
+			stone = KAR_D_8005B5A0[p].row.stones;
 			for (n = 0; n < 5; n++, stone++) {
 				if (stone->state > 0) {
 					if (KAR_distance(px - stone->pos.vx, pz - stone->pos.vz) < 0x97) {
@@ -1877,7 +2241,7 @@ int32_t KAR_aimAtStoneInRing(int32_t player, int32_t key, int16_t *outX, int16_t
 	int32_t i;
 	int32_t r;
 
-	stone = KAR_D_8005B5A0[player].stones;
+	stone = KAR_D_8005B5A0[player].row.stones;
 	for (i = 0; i < 5; i++, stone++) {
 		if ((stone->state < 2) && (stone->ring == key)) {
 			r = KAR_findClearShotAngle((int16_t)stone->pos.vx, (int16_t)stone->pos.vz);
@@ -1902,14 +2266,14 @@ void KAR_setOpponentShot(int32_t row, int32_t val, int32_t b, int32_t c)
 		t = KAR_D_8005B418;
 		n = KAR_findUnusedStoneOfType((int8_t)t.type[row][i]);
 		if (n >= 0) {
-			KAR_D_8005B5A0[1].unk4 = n;
-			stone = &KAR_D_8005B5A0[1].stones[n];
+			KAR_D_8005B5A0[1].row.unk4 = n;
+			stone = &KAR_D_8005B5A0[1].row.stones[n];
 			break;
 		}
 	}
 
 	stone->angle = val;
-	KAR_D_8005B5A0[1].unk2 = KAR_computeThrowPower(stone->weight, b, c);
+	KAR_D_8005B5A0[1].row.unk2 = KAR_computeThrowPower(stone->weight, b, c);
 }
 
 int32_t KAR_aimAtRandomStone(void)
@@ -1921,8 +2285,8 @@ int32_t KAR_aimAtRandomStone(void)
 	int16_t px;
 	int16_t pz;
 
-	stone = KAR_D_8005B5A0[0].stones;
-	if (KAR_D_80063914[0] < 0) {
+	stone = KAR_D_8005B5A0[0].row.stones;
+	if (KAR_D_800638F4[8] < 0) {
 		return ratan2(-0xc1c, -0x190);
 	}
 
@@ -1968,7 +2332,7 @@ int32_t KAR_findUnusedStoneOfType(int32_t key)
 	KarStone *stone;
 	int32_t i;
 
-	stone = KAR_D_8005B5A0[1].stones;
+	stone = KAR_D_8005B5A0[1].row.stones;
 	for (i = 0; i < 5; i++, stone++) {
 		if ((stone->state == -1) && (stone->type == key)) {
 			return i;
@@ -1997,16 +2361,16 @@ int32_t KAR_computeThrowPower(int32_t a, int32_t b, int32_t c)
 	if (MAIN_D_80135248 == 2) {
 		cur -= 0x258;
 	} else {
-		cur -= 0x1F4;
+		cur -= 0x1f4;
 	}
 	return cur;
 }
 
 void KAR_registerThrownStone(void)
 {
-	MAIN_D_80135256 = KAR_D_8005B5A0[0].thrown + KAR_D_8005B5A0[1].thrown;
+	MAIN_D_80135256 = KAR_D_8005B5A0[0].row.thrown + KAR_D_8005B5A0[1].row.thrown;
 	KAR_D_800639C0[MAIN_D_80135256] =
-		&KAR_D_8005B5A0[MAIN_D_8013523C].stones[MAIN_D_8013523A];
+		&KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A];
 	MAIN_D_80134A4F = -1;
 }
 

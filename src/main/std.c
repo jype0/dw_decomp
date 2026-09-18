@@ -1,10 +1,7 @@
-#include <libgpu.h>
 
 #include <dw/graphics.h>
 #include <dw/std.h>
 #include <dw/types.h>
-
-extern char STD_D_8007AAB0[];
 
 StdArenaCfg MAIN_D_801347FC = { { 3, 4 }, { 4, 1 } };
 uint8_t MAIN_D_80134800[4] = { 64, 44, 38, 32 };
