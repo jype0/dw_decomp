@@ -1,9 +1,6 @@
 #include <malloc.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include <libcd.h>
 #include <libetc.h>
 #include <libgpu.h>
 #include <libgs.h>
@@ -35,22 +32,9 @@ extern int32_t MAIN_D_801B1BBC[];
 extern GsF_LIGHT LIGHT_DATA[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t ACTIVE_FRAMEBUFFER;
-extern GsDOBJ2 STD_D_8007B97C[];
-extern GsOT STD_D_8007B684[];
-extern GsOT STD_D_8007B6AC[];
-extern GsCOORDINATE2 STD_D_8007B83C[];
-extern GsOT_TAG STD_D_8007B664[];
-extern GsOT_TAG STD_D_8007B674[];
-extern GsOT_TAG STD_D_8007B6D4[];
-extern GsOT_TAG STD_D_8007B6E4[];
-extern char *STD_D_80079C24[];
-extern char STD_D_80079C80[];
-extern char STD_D_80079C94[];
 extern uint8_t MAIN_D_801350F8;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
-extern char STD_D_80079CA8[];
-extern int16_t STD_D_800799B4[];
 extern int16_t MAIN_D_801350E4;
 extern int32_t MAIN_D_801350F0;
 extern uint8_t CURRENT_SCREEN;
@@ -135,6 +119,92 @@ static void *std_setup_functions[] = {
 	STD_func_80056E2C,
 	STD_func_80056CA8,
 };
+
+// clang-format off
+int16_t STD_D_800799B4[24] = {
+	0x0064, 0x0096, 0x00c8, 0x00fa, 0x012c, 0x0000, 0x00c8, 0x00c8,
+	0x00c8, 0x00c8, 0x00c8, 0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x00fa,
+	0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x015e, 0x0000,
+};
+
+char STD_D_800799E4[28] = "\\STDDAT\\GRADE\\GRADED.TIM";
+
+char STD_D_80079A00[28] = "\\STDDAT\\GRADE\\GRADEC.TIM";
+
+char STD_D_80079A1C[28] = "\\STDDAT\\GRADE\\GRADEB.TIM";
+
+char STD_D_80079A38[28] = "\\STDDAT\\GRADE\\GRADEA.TIM";
+
+char STD_D_80079A54[28] = "\\STDDAT\\GRADE\\GRADES.TIM";
+
+char STD_D_80079A70[28] = "\\STDDAT\\GRADE\\GRADER.TIM";
+
+char STD_D_80079A8C[24] = "\\STDDAT\\GRADE\\CAPV1.TIM";
+
+char STD_D_80079AA4[24] = "\\STDDAT\\GRADE\\CAPV2.TIM";
+
+char STD_D_80079ABC[24] = "\\STDDAT\\GRADE\\CAPV3.TIM";
+
+char STD_D_80079AD4[24] = "\\STDDAT\\GRADE\\CAPV4.TIM";
+
+char STD_D_80079AEC[24] = "\\STDDAT\\GRADE\\CAPVO.TIM";
+
+char STD_D_80079B04[24] = "\\STDDAT\\GRADE\\FR.TIM";
+
+char STD_D_80079B1C[24] = "\\STDDAT\\GRADE\\GP.TIM";
+
+char STD_D_80079B34[24] = "\\STDDAT\\GRADE\\TW.TIM";
+
+char STD_D_80079B4C[24] = "\\STDDAT\\GRADE\\CO.TIM";
+
+char STD_D_80079B64[24] = "\\STDDAT\\GRADE\\NT.TIM";
+
+char STD_D_80079B7C[24] = "\\STDDAT\\GRADE\\MT.TIM";
+
+char STD_D_80079B94[24] = "\\STDDAT\\GRADE\\DT.TIM";
+
+char STD_D_80079BAC[24] = "\\STDDAT\\GRADE\\DY.TIM";
+
+char STD_D_80079BC4[24] = "\\STDDAT\\GRADE\\WI.TIM";
+
+char STD_D_80079BDC[24] = "\\STDDAT\\GRADE\\AN.TIM";
+
+char STD_D_80079BF4[24] = "\\STDDAT\\GRADE\\HU.TIM";
+
+char STD_D_80079C0C[24] = "\\STDDAT\\GRADE\\BT.TIM";
+
+char *STD_D_80079C24[23] = {
+	STD_D_800799E4,
+	STD_D_80079A00,
+	STD_D_80079A1C,
+	STD_D_80079A38,
+	STD_D_80079A54,
+	STD_D_80079A70,
+	STD_D_80079A8C,
+	STD_D_80079AA4,
+	STD_D_80079ABC,
+	STD_D_80079AD4,
+	STD_D_80079AEC,
+	STD_D_80079B04,
+	STD_D_80079B1C,
+	STD_D_80079B34,
+	STD_D_80079B4C,
+	STD_D_80079B64,
+	STD_D_80079B7C,
+	STD_D_80079B94,
+	STD_D_80079BAC,
+	STD_D_80079BC4,
+	STD_D_80079BDC,
+	STD_D_80079BF4,
+	STD_D_80079C0C,
+};
+
+char STD_D_80079C80[20] = "\\STDDAT\\STDTIM.BIN";
+
+char STD_D_80079C94[20] = "\\STDDAT\\TIME.TIM";
+
+char STD_D_80079CA8[20] = "\\ETCDAT\\SBOY.TIM";
+// clang-format on
 
 void STD_func_80056CA8(int32_t arena, uint8_t *arg)
 {
@@ -350,9 +420,9 @@ void STD_func_80057628(void)
 
 void STD_func_80057778(void)
 {
-	removeObject(0xFA2, 0);
-	removeObject(0xFA0, 0);
-	removeObject(0xFA8, 0);
+	removeObject(0xfa2, 0);
+	removeObject(0xfa0, 0);
+	removeObject(0xfa8, 0);
 }
 
 void STD_func_800577B4(void)
@@ -533,9 +603,9 @@ void STD_func_80057E5C(id)
 	GsMapModelingData((u_long *)MAIN_D_80135130 + 1);
 	for (i = 0; i < MAIN_D_801347FC.modelCount[id]; i++) {
 		GsLinkObject4((u_long)((char *)MAIN_D_80135130 + 0xc), &STD_D_8007B97C[i], i);
-		GsInitCoordinate2(NULL, &STD_D_8007B83C[i]);
+		GsInitCoordinate2(NULL, &STD_D_8007B83C[i].coord);
 		STD_D_8007B97C[i].attribute = 0;
-		STD_D_8007B97C[i].coord2 = &STD_D_8007B83C[i];
+		STD_D_8007B97C[i].coord2 = &STD_D_8007B83C[i].coord;
 	}
 	readFile(STD_D_8007A358[id], MAP_COLLISION_DATA);
 }
@@ -549,10 +619,10 @@ void STD_func_80057FD0(int16_t which)
 {
 	switch (which) {
 	case 0:
-		addObject(0x1A7, 0, (TickFunction)0, (RenderFunction)STD_func_80058030);
+		addObject(0x1a7, 0, (TickFunction)0, (RenderFunction)STD_func_80058030);
 		break;
 	case 1:
-		addObject(0x1A7, 0, (TickFunction)0, (RenderFunction)STD_func_80058254);
+		addObject(0x1a7, 0, (TickFunction)0, (RenderFunction)STD_func_80058254);
 		break;
 	}
 }
@@ -562,9 +632,9 @@ void STD_func_80058030(void)
 	MATRIX m;
 	int32_t i;
 
-	GsGetLw(&STD_D_8007B83C[1], &m);
+	GsGetLw(&STD_D_8007B83C[1].coord, &m);
 	GsSetLightMatrix(&m);
-	GsGetLs(&STD_D_8007B83C[1], &m);
+	GsGetLs(&STD_D_8007B83C[1].coord, &m);
 	GsSetLsMatrix(&m);
 	GsSortObject4(&STD_D_8007B97C[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	if (STD_func_8005DFF8() == 1) {
@@ -578,9 +648,9 @@ void STD_func_80058030(void)
 		if (i == 1) {
 			continue;
 		}
-		GsGetLw(&STD_D_8007B83C[i], &m);
+		GsGetLw(&STD_D_8007B83C[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&STD_D_8007B83C[i], &m);
+		GsGetLs(&STD_D_8007B83C[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
@@ -601,9 +671,9 @@ void STD_func_80058254(void)
 	int32_t i;
 
 	if (STD_func_8005DFF8() == 1) {
-		GsGetLw(&STD_D_8007B83C[3], &m);
+		GsGetLw(&STD_D_8007B83C[3].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&STD_D_8007B83C[3], &m);
+		GsGetLs(&STD_D_8007B83C[3].coord, &m);
 		GsSetLsMatrix(&m);
 		GsSortObject4(&STD_D_8007B97C[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	}
@@ -615,9 +685,9 @@ void STD_func_80058254(void)
 	GsClearOt(0, 0xfff, &STD_D_8007B684[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER]);
 	for (i = 2; i >= 0; i--) {
-		GsGetLw(&STD_D_8007B83C[i], &m);
+		GsGetLw(&STD_D_8007B83C[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&STD_D_8007B83C[i], &m);
+		GsGetLs(&STD_D_8007B83C[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:

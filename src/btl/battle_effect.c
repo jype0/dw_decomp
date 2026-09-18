@@ -46,128 +46,23 @@ typedef struct {
 	int32_t w[13];
 } EfeFileHeader;
 
-typedef struct {
-	int32_t life;
-	SVECTOR p[4];
-} EfeTrail;
-
-typedef struct {
-	int16_t frame;
-	MATRIX *matrix;
-	Entity *entity;
-	EfeTrail trails[8];
-} EfeTrailEffect;
-
-typedef struct {
-	int16_t frame;
-	int16_t buffId;
-	MATRIX *bone;
-	SVECTOR rotation[5];
-	int16_t unk30[8];
-	int32_t scale;
-	int32_t scaleTarget;
-	int16_t unk48[16];
-	RGB8 color;
-	uint8_t pad;
-} EfeBuffRings;
-
-typedef struct {
-	int16_t frame;
-	MATRIX *bone;
-	Entity *entity;
-	SVECTOR rotation;
-	int32_t scaleXZ;
-	int32_t scaleTargetXZ;
-	int32_t scaleY;
-	int32_t scaleTargetY;
-} EfeBuffDisk;
-
-typedef struct {
-	int16_t velocityX;
-	int16_t velocityY;
-	int16_t velocityZ;
-	int16_t fadeStep;
-	int32_t life;
-	int32_t positionX;
-	int32_t positionY;
-	int32_t positionZ;
-	int16_t brightness;
-	int16_t pad;
-} BtlItemParticle;
-
-typedef struct {
-	int16_t timer;
-	int16_t pad;
-	BtlItemParticle particles[20];
-} BtlItemParticleEffect;
-
-typedef struct {
-	int16_t vx;
-	int16_t vy;
-	int16_t vz;
-} BtlParticleVelocity;
-
-typedef struct {
-	int16_t x;
-	int16_t z;
-} BtlParticleDrag;
-
-extern SVECTOR BTL_D_80075244[];
-extern VECTOR BTL_D_8007382C;
-extern uint8_t BTL_D_80073704[];
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
 extern int32_t MAIN_D_801350DC;
-extern VECTOR BTL_D_8007380C;
-extern VECTOR BTL_D_8007381C;
-extern int16_t BTL_D_8007383C[];
-extern uint8_t BTL_D_8007372C[];
-extern VECTOR BTL_D_800737FC;
-extern GsSPRITE BTL_POISON_BUBBLE_SPRITE;
-extern VECTOR BTL_D_8007375C;
-extern int32_t (*BTL_D_800736EC[])(int32_t);
-extern void (*BTL_D_8007364C[][8])(int32_t *);
 extern int32_t MAIN_D_801350D4;
 extern char *MAIN_D_801350E0;
 extern char *MAIN_D_80139B24[];
 extern int32_t BTL_D_800732FC[];
 extern void *BTL_D_80073300[];
-extern GsSPRITE BTL_D_8007376C;
-extern GsSPRITE BTL_D_80073790;
-extern GsSPRITE BTL_D_800737B4;
-extern GsSPRITE BTL_D_800737D8;
-extern int16_t BTL_D_80075130[][6];
-extern int16_t BTL_D_80075234[];
 extern char *MAIN_D_801350D8;
-extern int16_t BTL_D_800750D0[][4];
-extern int16_t BTL_D_800750F0[][8];
-extern int16_t BTL_D_8007516C[][4];
 extern int32_t MAIN_D_80139AD0[][2];
-extern void (*BTL_D_80074EBC[])(void);
 extern int32_t VIEWPORT_DISTANCE;
-extern int16_t BTL_D_80075040[];
-extern void (*BTL_jtbl_80073604[])(void);
 extern int32_t MAIN_D_801350CC;
 extern int32_t MAIN_D_801350D0;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
-extern int16_t BTL_D_80075DCC[];
-extern int16_t BTL_D_80075DDC[];
-extern int16_t BTL_D_80075DEC[];
-extern int16_t BTL_D_80075DFC[];
-extern int16_t BTL_D_80073E48[];
-extern BtlParticleVelocity BTL_D_800752E4[];
-extern BtlParticleDrag BTL_D_8007535C[];
-extern SVECTOR BTL_D_80075E78[];
 extern uint8_t *BUFF_MODEL[];
-extern EfeTrailEffect BTL_D_80075CA0[];
-extern EfeBuffRings BTL_D_80075E0C[];
-extern BtlItemParticleEffect BTL_D_800753AC[];
-extern EfeBuffDisk BTL_D_80075C7C[];
-extern uint8_t BTL_D_80073714[];
-extern int16_t BTL_D_8007371C[];
-extern int16_t BTL_D_80073724[];
 
 void setRotTransMatrix(MATRIX *m);
 void setMapLayerEnabled(int32_t enabled);
@@ -669,6 +564,326 @@ static void *battle_effect_functions[] = {
 	BTL_tickEFEEngine,
 	BTL_initializeParticleEmitters,
 };
+
+// clang-format off
+void (*BTL_jtbl_80073604[18])(void) = {
+	BTL_loadEFEImmediate,
+	BTL_loadEFEVariable,
+	BTL_loadEFERandomValue,
+	BTL_loadEFEIndexedVariable,
+	BTL_applyEFEVariableOperator,
+	BTL_stopEFEScript,
+	BTL_stopEFEScript,
+	BTL_branchEFEOnComparison,
+	BTL_stopEFEScript,
+	BTL_jumpEFEScript,
+	BTL_pushEFEImmediate,
+	BTL_pushEFEVariable,
+	BTL_pushEFEVariableAddress,
+	BTL_callEFESubroutine,
+	BTL_dispatchEFESubOpcode,
+	BTL_returnFromEFESubroutine,
+	BTL_popEFEValueToVariable,
+	BTL_spawnEFESubEffect,
+};
+
+int32_t (*BTL_D_8007364C[5][8])() = {
+	{
+		BTL_setInt8Variable,
+		BTL_addInt8Variable,
+		BTL_subtractInt8Variable,
+		BTL_multiplyInt8Variable,
+		BTL_divideInt8Variable,
+		BTL_moduloInt8Variable,
+		BTL_shiftLeftInt8Variable,
+		BTL_shiftRightInt8Variable,
+	},
+	{
+		BTL_setInt8Variable,
+		BTL_addInt8Variable,
+		BTL_subtractInt8Variable,
+		BTL_multiplyInt8Variable,
+		BTL_divideInt8Variable,
+		BTL_moduloInt8Variable,
+		BTL_shiftLeftInt8Variable,
+		BTL_shiftRightInt8Variable,
+	},
+	{
+		BTL_setInt16Variable,
+		BTL_addInt16Variable,
+		BTL_subtractInt16Variable,
+		BTL_multiplyInt16Variable,
+		BTL_divideInt16Variable,
+		BTL_moduloInt16Variable,
+		BTL_shiftLeftInt16Variable,
+		BTL_shiftRightInt16Variable,
+	},
+	{
+		BTL_setInt8Variable,
+		BTL_addInt8Variable,
+		BTL_subtractInt8Variable,
+		BTL_multiplyInt8Variable,
+		BTL_divideInt8Variable,
+		BTL_moduloInt8Variable,
+		BTL_shiftLeftInt8Variable,
+		BTL_shiftRightInt8Variable,
+	},
+	{
+		BTL_setInt32Variable,
+		BTL_addInt32Variable,
+		BTL_subtractInt32Variable,
+		BTL_multiplyInt32Variable,
+		BTL_divideInt32Variable,
+		BTL_moduloInt32Variable,
+		BTL_shiftLeftInt32Variable,
+		BTL_shiftRightInt32Variable,
+	},
+};
+
+int32_t (*BTL_D_800736EC[6])(int32_t) = {
+	BTL_compareEqual,
+	BTL_compareNotEqual,
+	BTL_compareLess,
+	BTL_compareLessOrEqual,
+	BTL_compareGreater,
+	BTL_compareGreaterOrEqual,
+};
+
+uint8_t BTL_D_80073704[16] = {
+	0x00, 0x01, 0x02, 0x03, 0x05, 0x04, 0x07, 0x06,
+	0x01, 0x05, 0x06, 0x02, 0x04, 0x00, 0x03, 0x07,
+};
+
+uint8_t BTL_D_80073714[24] = {
+	0x07, 0x10, 0x07, 0x1f, 0x00, 0x10, 0x00, 0x1f,
+	0x08, 0x00, 0x08, 0x0f, 0x17, 0x00, 0x17, 0x0f,
+	0x17, 0x00, 0x17, 0x0f, 0x08, 0x00, 0x08, 0x0f,
+};
+
+uint8_t BTL_D_8007372C[12] = {
+	0x7c, 0x7c, 0x7c, 0x00, 0x00, 0x7c, 0x7c, 0x00,
+	0x3c, 0x7c, 0x3c, 0x00,
+};
+
+GsSPRITE BTL_POISON_BUBBLE_SPRITE = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0010,
+	0x0010,
+	0x005f,
+	0x20,
+	0xb0,
+	0x0110,
+	0x01e7,
+	0x80,
+	0x80,
+	0x80,
+	0x0008,
+	0x0008,
+	0x0000,
+	0x0000,
+	0x00000000,
+};
+
+VECTOR BTL_D_8007375C = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+
+GsSPRITE BTL_D_8007376C = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0028,
+	0x0016,
+	0x003e,
+	0x00,
+	0x80,
+	0x0100,
+	0x01e0,
+	0x80,
+	0x80,
+	0x80,
+	0x0014,
+	0x002c,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE BTL_D_80073790 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x000c,
+	0x0016,
+	0x003e,
+	0x28,
+	0x80,
+	0x0100,
+	0x01e0,
+	0x80,
+	0x80,
+	0x80,
+	0x0006,
+	0x0016,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE BTL_D_800737B4 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0008,
+	0x0009,
+	0x003e,
+	0x00,
+	0xb7,
+	0x0100,
+	0x01e2,
+	0x80,
+	0x80,
+	0x80,
+	0x000d,
+	0x0026,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE BTL_D_800737D8 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0004,
+	0x0007,
+	0x003e,
+	0x00,
+	0x96,
+	0x0100,
+	0x01e2,
+	0x80,
+	0x80,
+	0x80,
+	0xfffe,
+	0x0025,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+VECTOR BTL_D_800737FC = { 0x00003000, 0x00003000, 0x00003000, 0x00000000 };
+
+VECTOR BTL_D_8007380C = { 0x0000003c, 0x0000003c, 0x0000003c, 0x00000000 };
+
+VECTOR BTL_D_8007381C = { 0x0000005a, 0x0000005a, 0x0000005a, 0x00000000 };
+
+VECTOR BTL_D_8007382C = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+
+int16_t BTL_D_8007383C[774] = {
+	0x0000, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0001, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0070, 0x0002, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0070, 0x0003, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0004, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018, 0x0005, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x0006, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x0007, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0008, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0009, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x000a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x000b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x000c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x000d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0030, 0x000e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0038, 0x000f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070,
+	0x0010, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070, 0x0011, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0012, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x0013, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0014, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0015, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x0016, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0008, 0x0017, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0018, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020, 0x0019, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x001a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0000, 0x001b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0030,
+	0x001c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0048, 0x001d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0070, 0x001e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0070, 0x001f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0020, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018, 0x0021, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x0022, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x0023, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0024, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0025, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0026, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x0027, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0028, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x0029, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0030, 0x002a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0048, 0x002b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070,
+	0x002c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070, 0x002d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x002e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x002f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0030, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0031, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x0032, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0008, 0x0033, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0034, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060, 0x0035, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x0036, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0000, 0x0037, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0030,
+	0x0038, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0050, 0x0039, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x003a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0068, 0x003b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x003c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058, 0x003d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x003e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x003f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0040, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x0041, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0038, 0x0042, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0050, 0x0043, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0044, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0045, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0046, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0038, 0x0047, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0048, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0049, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x004a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x004b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x004c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x004d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x004e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0060, 0x004f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0050, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060, 0x0051, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0052, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0010, 0x0053, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018,
+	0x0054, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010, 0x0055, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0056, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x0057, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0058, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0059, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x005a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0058, 0x005b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x005c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x005d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x005e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x005f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0060, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010, 0x0061, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0060, 0x0062, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0010, 0x0063, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0064, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0065, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0066, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0058, 0x0067, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060,
+	0x0068, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0069, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x006a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x006b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x006c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x006d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x006e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x006f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0070, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058, 0x0071, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0072, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x0073, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0074, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0075, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x0076, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x0077, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0x0078, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0079, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x007a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x007b, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0x007c, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x007d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x007e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x007f, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0xffff, 0xffff, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+
+int16_t BTL_D_80073E48[6] = {
+	0x0003, 0x0000, 0x0001, 0x0002, 0x0004, 0x0000,
+};
+// clang-format on
 
 char *BTL_initializeParticleEmitters(char *base)
 {
@@ -1773,9 +1988,7 @@ void BTL_renderRingTube(void)
 			if (j == 9) {
 				goto wrap;
 			}
-			if (q[2] < 0x21 || q[2] >= 0x1000 || q[5] < 0x21 || q[5] >= 0x1000
-			    || q[32] < 0x21 || q[32] >= 0x1000 || q[35] < 0x21
-			    || q[35] >= 0x1000) {
+			if (q[2] < 0x21 || q[2] >= 0x1000 || q[5] < 0x21 || q[5] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000 || q[35] < 0x21 || q[35] >= 0x1000) {
 				continue;
 			}
 			setXY2(p, q[33], q[34], q[3], q[4]);
@@ -1788,9 +2001,7 @@ emit:
 			p++;
 			continue;
 wrap:
-			if (q[2] < 0x21 || q[2] >= 0x1000 || q[-25] < 0x21
-			    || q[-25] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000
-			    || q[5] < 0x21 || q[5] >= 0x1000) {
+			if (q[2] < 0x21 || q[2] >= 0x1000 || q[-25] < 0x21 || q[-25] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000 || q[5] < 0x21 || q[5] >= 0x1000) {
 				continue;
 			}
 			setXY2(p, q[3], q[4], q[-27], q[-26]);
@@ -1812,7 +2023,7 @@ void BTL_tickRibbonPoints(void)
 	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
 	for (i = 0; i < 10; i++) {
 		if (((EFE_RIBBON_SCRATCH->frame + i * 8) % 10) == 0) {
-			q[i].pad = customRandom(-0xF, 0xF);
+			q[i].pad = customRandom(-0xf, 0xf);
 		}
 		q[i].vy += q[i].pad;
 		w = q[i].vy;
@@ -1859,8 +2070,6 @@ void BTL_renderRadialWaves(void)
 {
 	POLY_FT4 *prim;
 	int16_t *uv;
-	int16_t *t38;
-	int16_t *t40;
 	int32_t i;
 	int32_t w;
 
@@ -1887,8 +2096,6 @@ void BTL_renderRadialWaves(void)
 		GsSetLightMatrix(&EFE_SCRATCH->m1);
 		GsSetLsMatrix(&EFE_SCRATCH->m0);
 		EFE_WAVE_SCRATCH->radius = 0xc8;
-		t38 = BTL_D_8007371C;
-		t40 = BTL_D_80073724;
 		for (; EFE_WAVE_SCRATCH->radius < 0xbb8;
 		     EFE_WAVE_SCRATCH->radius += 0x64) {
 			w = (EFE_WAVE_SCRATCH->radius < 0x2ef)
@@ -1927,9 +2134,9 @@ void BTL_renderRadialWaves(void)
 					prim->clut = EFE_WAVE_SCRATCH->clut;
 					prim->tpage = EFE_WAVE_SCRATCH->tpage;
 					if (EFE_WAVE_SCRATCH->radius == 0x12c) {
-						uv = t38;
+						uv = (int16_t *)&BTL_D_80073714[8];
 					} else if (EFE_WAVE_SCRATCH->radius >= 0xb54) {
-						uv = t40;
+						uv = (int16_t *)&BTL_D_80073714[16];
 					} else {
 						uv = (int16_t *)BTL_D_80073714;
 					}
@@ -2316,7 +2523,7 @@ void BTL_renderWireframeBox(void)
 		gte_ldv0(&p);
 		gte_rtps();
 		gte_stsxy(&pts[i]);
-		pts[i].vx += (int16_t)(0xA0 - ox);
+		pts[i].vx += (int16_t)(0xa0 - ox);
 		pts[i].vy += (int16_t)(0x78 - oy);
 	}
 
@@ -4148,7 +4355,7 @@ void BTL_spawnEFESubEffect(void)
 	}
 
 	MAIN_D_80134CDC = 1;
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xC);
+	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xc);
 }
 
 void BTL_popEFEValueToVariable(void)
@@ -4589,8 +4796,8 @@ void BTL_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, S
 		if ((depth > 0x200) && (depth < 0x10000)) {
 			depth = worldPosToScreenPos(b, (DVECTOR *)&prim->x1);
 			getDrawingOffsetCopy(&ox, &oy);
-			prim->x0 += (int16_t)(0xA0 - ox);
-			prim->x1 += (int16_t)(0xA0 - ox);
+			prim->x0 += (int16_t)(0xa0 - ox);
+			prim->x1 += (int16_t)(0xa0 - ox);
 			prim->y0 += (int16_t)(0x78 - oy);
 			prim->y1 += (int16_t)(0x78 - oy);
 			if ((depth > 0x200) && (depth < 0x10000)) {
@@ -4652,11 +4859,11 @@ void BTL_renderRibbonStrip(void)
 	i = (int32_t)((uint32_t)(g / 10) % 3);
 	nxt = (uint32_t)(i + 1) % 3;
 	EFE_RIBBON_SCRATCH->color.r = BTL_interpolateClamped(0, 10, f % 10,
-	                                                    (BTL_D_8007372C + i * 4)[0], (BTL_D_8007372C + nxt * 4)[0]);
+	                                                     (BTL_D_8007372C + i * 4)[0], (BTL_D_8007372C + nxt * 4)[0]);
 	EFE_RIBBON_SCRATCH->color.g = BTL_interpolateClamped(0, 10, EFE_RIBBON_SCRATCH->frame % 10,
-	                                                    (BTL_D_8007372C + i * 4)[1], (BTL_D_8007372C + nxt * 4)[1]);
+	                                                     (BTL_D_8007372C + i * 4)[1], (BTL_D_8007372C + nxt * 4)[1]);
 	EFE_RIBBON_SCRATCH->color.b = BTL_interpolateClamped(0, 10, EFE_RIBBON_SCRATCH->frame % 10,
-	                                                    (BTL_D_8007372C + i * 4)[2], (BTL_D_8007372C + nxt * 4)[2]);
+	                                                     (BTL_D_8007372C + i * 4)[2], (BTL_D_8007372C + nxt * 4)[2]);
 	if (EFE_RIBBON_SCRATCH->frame < 0xf) {
 		i = BTL_interpolateClamped(1, 7, *(uint32_t *)&EFE_RIBBON_SCRATCH->frame, 0, 0x1000);
 	} else {
@@ -4768,7 +4975,7 @@ int32_t BTL_runEFEScript(int32_t script)
 
 void BTL_resetPoisonBubbles(void)
 {
-	setShortWithStride(BTL_D_80075040, -1, 0xc, 0xc);
+	setShortWithStride((int16_t *)BTL_D_80075040, -1, 0xc, 0xc);
 }
 
 int32_t BTL_addPoisonBubble(int32_t arg)
@@ -4777,7 +4984,7 @@ int32_t BTL_addPoisonBubble(int32_t arg)
 	int16_t *p;
 
 	for (i = 0; i < 0xc; i++) {
-		if (((int16_t (*)[6])BTL_D_80075040)[i][0] == -1) {
+		if (BTL_D_80075040[i][0] == -1) {
 			break;
 		}
 	}
@@ -4786,7 +4993,7 @@ int32_t BTL_addPoisonBubble(int32_t arg)
 		return -1;
 	}
 
-	p = ((int16_t (*)[6])BTL_D_80075040)[i];
+	p = BTL_D_80075040[i];
 	p[0] = 0;
 	*(int32_t *)&p[4] = arg;
 	p[2] = (rand() % 100) - 0x32;
@@ -4800,7 +5007,7 @@ void BTL_tickPoisonBubble(int32_t i)
 {
 	int16_t *p;
 
-	p = &BTL_D_80075040[i * 6];
+	p = BTL_D_80075040[i];
 	p[0]++;
 	if (p[0] >= 0x28) {
 		p[0] = -1;
@@ -4817,7 +5024,7 @@ void BTL_renderPoisonBubble(int32_t i)
 	int32_t otz;
 	int32_t d;
 
-	p = &BTL_D_80075040[i * 6];
+	p = BTL_D_80075040[i];
 	frame = p[0];
 	translateConditionFXToEntity((Entity *)*(int32_t *)&p[4], &pos);
 	pos.vx += p[2];
@@ -5267,7 +5474,7 @@ void BTL_tickFinisherAura(int32_t i)
 {
 	int16_t *p;
 
-	p = &BTL_D_80075234[i * 4];
+	p = BTL_D_80075234[i];
 	p[0]++;
 	if (p[0] > p[1]) {
 		removeObject(0x80d, i);
@@ -5289,7 +5496,7 @@ void BTL_renderFinisherAura(int32_t id)
 	int32_t t;
 	int32_t i;
 
-	fa = &BTL_D_80075234[id * 4];
+	fa = BTL_D_80075234[id];
 	e = (Entity *)*(int32_t *)&fa[2];
 
 	if (fa[0] < 10) {
@@ -5399,7 +5606,7 @@ void BTL_initializeFinisherAuraModel(char *tim, char *base)
 	BTL_setTMDObjectColor(4, (int32_t *)&ca, (char *)MAIN_D_801350DC);
 
 	for (j = 0; j < 2; j++) {
-		((int16_t (*)[4])BTL_D_80075234)[j][0] = -1;
+		BTL_D_80075234[j][0] = -1;
 	}
 
 	p = BTL_D_80075244;
@@ -5423,7 +5630,7 @@ int32_t BTL_addFinisherAura(int32_t arg, int32_t val)
 	int16_t *p;
 
 	for (i = 0; i < 2; i++) {
-		if (((int16_t (*)[4])BTL_D_80075234)[i][0] < 0) {
+		if (BTL_D_80075234[i][0] < 0) {
 			break;
 		}
 	}
@@ -5432,7 +5639,7 @@ int32_t BTL_addFinisherAura(int32_t arg, int32_t val)
 		return -1;
 	}
 
-	p = &BTL_D_80075234[i * 4];
+	p = BTL_D_80075234[i];
 	p[0] = 0;
 	p[1] = val;
 	*(int32_t *)&p[2] = arg;
@@ -5444,7 +5651,7 @@ int32_t BTL_addFinisherAura(int32_t arg, int32_t val)
 void BTL_removeFinisherAura(int32_t i)
 {
 	removeObject(0x80d, i);
-	BTL_D_80075234[i * 4] = -1;
+	BTL_D_80075234[i][0] = -1;
 }
 
 void BTL_removeAllFinisherAuras(void)

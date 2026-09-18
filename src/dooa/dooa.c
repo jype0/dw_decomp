@@ -1638,7 +1638,7 @@ int32_t DOOA_tick(PartnerEntity *partner, void *buffer, int32_t isInitialized)
 	if (isInitialized != 0) {
 		return panel->frame;
 	}
-	initializeFlashData(DOOA_FLASH_DATA);
+	initializeFlashData((char *)DOOA_FLASH_DATA.data);
 	if (partner->lives != 0) {
 		panel->frame = 0;
 	} else {

@@ -57,72 +57,29 @@ typedef struct {
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern SVECTOR STD_D_8007FE24[];
-extern VECTOR STD_D_8007B048;
 extern int32_t MAIN_D_801351D0;
-extern VECTOR STD_D_8007B028;
-extern VECTOR STD_D_8007B038;
-extern int16_t STD_D_8007B058[];
-extern VECTOR STD_D_8007B018;
-extern GsSPRITE STD_POISON_BUBBLE_SPRITE;
-extern VECTOR STD_D_8007AF78;
-extern int32_t (*STD_D_8007AF08[])(int32_t);
-extern void (*STD_D_8007AE68[][8])(int32_t *);
 extern int32_t MAIN_D_801351C8;
 extern char *MAIN_D_801351D4;
-extern int32_t STD_D_8007AB18[];
-extern void *STD_D_8007AB1C[];
-extern int16_t STD_D_8007FD10[][6];
-extern int16_t STD_D_8007FE14[];
 extern char *MAIN_D_801351CC;
-extern int16_t STD_D_8007FCB0[][4];
-extern int16_t STD_D_8007FCD0[][8];
-extern int16_t STD_D_8007FD4C[][4];
 extern int32_t MAIN_D_80139AD0[][2];
-extern void (*STD_jtbl_8007FA7C[])(void);
-extern int16_t STD_D_8007FC20[];
-extern void (*STD_jtbl_8007AE20[])(void);
 extern int32_t MAIN_D_801351B8;
-extern int32_t STD_D_8007FC00[];
 extern int32_t MAIN_D_801351C0;
 extern int32_t MAIN_D_801351C4;
 extern int8_t *MAIN_D_80139B24[];
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t MAIN_D_801350F4;
-extern PositionData STD_D_8007F528[];
-extern PositionData STD_D_8007C7B0[4];
-extern int16_t STD_D_8007FA1C[];
-extern char STD_D_8007FA5C[];
 extern int16_t STD_D_8007AA70[];
-extern int16_t STD_D_8007AA40[];
-extern int16_t STD_D_8007FA08[];
 extern int16_t MAIN_D_801351A4;
 extern uint8_t MAIN_D_801351B4;
-extern int16_t STD_D_8007F968[];
 extern int16_t STD_D_8007AA30[];
-extern GsOT STD_D_8007B714[];
-extern int32_t STD_D_8007AA10[];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t ACTIVE_FRAMEBUFFER;
-extern int16_t STD_D_8007CC78[];
-extern int16_t STD_D_8007CCA4[];
-extern int16_t STD_D_8007CCD0[];
-extern int16_t STD_D_8007CCFC[];
-extern GsSPRITE STD_D_8007AFD0;
-extern GsSPRITE STD_D_8007AFF4;
-extern GsSPRITE STD_D_8007AF88;
-extern GsSPRITE STD_D_8007AFAC;
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
 extern int32_t MAIN_D_801351BC;
-extern uint8_t STD_D_8007AF30[];
-extern int16_t STD_D_8007AF38[];
-extern int16_t STD_D_8007AF40[];
-extern uint8_t STD_D_8007AF20[];
-extern uint8_t STD_D_8007AF48[];
 
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void setMapLayerEnabled(int32_t enabled);
@@ -391,6 +348,9 @@ int32_t STD_renderProjectedSprite__garbage__(int32_t i);
 long RotTransPers(SVECTOR *v0, long *sxy, long *p, long *flag);
 int32_t STD_func_800770C0(int32_t lo, int32_t hi, int32_t t, int32_t a, int32_t b);
 
+void createFlash();
+void rotateVector();
+
 static void *std_effect_functions[] = {
 	STD_func_80079874,
 	STD_addAuraProjectile,
@@ -619,10 +579,416 @@ static void *std_effect_functions[] = {
 	STD_func_8006BFB4,
 };
 
+// clang-format off
+StdEfeSubOpcode STD_D_8007AB18[97] = {
+	{ 0x00000000, STD_checkTechCompatibility },
+	{ 0x00000001, STD_initializeUVAnim },
+	{ 0x00000002, STD_initializeSubEffectInstructions },
+	{ 0x00000003, STD_func_80075BF8 },
+	{ 0x00000005, STD_initializeEFETransform },
+	{ 0x00000007, rotateVector },
+	{ 0x00000004, STD_renderCenteredSprite },
+	{ 0x00000008, STD_setTransformToTargetBone },
+	{ 0x00000009, STD_addAttackObjectToTarget },
+	{ 0x00000006, STD_checkCollisionWithDefaultPower },
+	{ 0x0000000a, STD_getScatteredSpawnPosition },
+	{ 0x0000000b, STD_discardEFEOperandPair },
+	{ 0x0000000c, STD_interpolateVector },
+	{ 0x0000000d, STD_steerTransformTowardPoint },
+	{ 0x0000000e, STD_copyTargetEntityPosition },
+	{ 0x0000000f, STD_setEFEModelObjectColor },
+	{ 0x00000010, STD_addParticleEmitter },
+	{ 0x00000011, STD_selectNextTargetEntity },
+	{ 0x00000012, createFlash },
+	{ 0x00000013, STD_addCloudEffect },
+	{ 0x00000014, STD_renderScreenSprite },
+	{ 0x00000015, STD_projectPositionToScreen },
+	{ 0x00000016, STD_renderParticleFlashSprite },
+	{ 0x00000017, STD_func_80074A70 },
+	{ 0x00000018, STD_renderProjectedSprite },
+	{ 0x00000019, STD_calculatePolarOffset },
+	{ 0x0000001a, STD_copyFromParentTransform },
+	{ 0x0000001b, STD_addSourceEntityParticleFX },
+	{ 0x0000001c, STD_playEFESound },
+	{ 0x0000001d, STD_setTransformToBoneOffset },
+	{ 0x0000001e, STD_renderScrollingBackground },
+	{ 0x0000001f, STD_renderParallaxSprites },
+	{ 0x00000020, STD_setTransformToSourceBone },
+	{ 0x00000021, STD_rotateTransformTowardPoint },
+	{ 0x00000022, STD_checkTargetCollision },
+	{ 0x00000023, STD_getUVAnimTimer },
+	{ 0x00000024, STD_applyHomingMovement },
+	{ 0x00000025, STD_func_800734B4 },
+	{ 0x00000026, STD_func_80073440 },
+	{ 0x00000027, STD_func_800733CC },
+	{ 0x00000028, STD_interpolateValue },
+	{ 0x00000029, STD_getRandomInRange },
+	{ 0x0000002a, STD_printDebugValue },
+	{ 0x0000002b, STD_getVectorEulerAngles },
+	{ 0x0000002c, STD_findHitEntity },
+	{ 0x0000002d, STD_func_80072FF8 },
+	{ 0x0000002e, STD_setTargetToHitEntity },
+	{ 0x0000002f, STD_getVectorLength },
+	{ 0x00000030, STD_copyVector },
+	{ 0x00000031, STD_addVectors },
+	{ 0x00000032, STD_subtractVectors },
+	{ 0x00000033, STD_multiplyVectors },
+	{ 0x00000034, STD_divideVectors },
+	{ 0x00000035, STD_maskVectors },
+	{ 0x00000036, STD_shiftVectorsRight },
+	{ 0x00000037, STD_centerTransformOnEntities },
+	{ 0x00000038, STD_getTargetBoneTransform },
+	{ 0x00000039, STD_rotateVectorByAngles },
+	{ 0x0000003a, STD_func_800728D4 },
+	{ 0x0000003b, STD_combineRotations },
+	{ 0x0000003c, STD_renderEFELine },
+	{ 0x0000003d, STD_copyToParentTransform },
+	{ 0x0000003e, STD_getSourceBoneTransform },
+	{ 0x0000003f, STD_setupFixedCamera },
+	{ 0x00000040, STD_restoreCameraView },
+	{ 0x00000041, STD_render2DTexturedQuad },
+	{ 0x00000042, STD_renderWireframeGrid },
+	{ 0x00000043, STD_discardEFEOperand },
+	{ 0x00000044, STD_renderWireframeBox },
+	{ 0x00000045, STD_setTransformToBoneMatrix },
+	{ 0x00000046, STD_render3DTexturedQuad },
+	{ 0x00000047, STD_multiplyVectorByScalar },
+	{ 0x00000048, STD_divideVectorByScalar },
+	{ 0x00000049, STD_maskVectorByScalar },
+	{ 0x0000004a, STD_convertToViewSpace },
+	{ 0x0000004b, STD_selectRandomTargetEntity },
+	{ 0x0000004c, STD_getCameraRotation },
+	{ 0x0000004d, STD_func_80070EA0 },
+	{ 0x0000004e, STD_loadClutColors },
+	{ 0x0000004f, STD_drawTMDScreenSpace },
+	{ 0x00000050, STD_addClutLoadPrim },
+	{ 0x00000051, STD_func_80070A40 },
+	{ 0x00000052, STD_renderRadialWaves },
+	{ 0x00000053, STD_initializeRibbonPoints },
+	{ 0x00000054, STD_tickRibbonPoints },
+	{ 0x00000055, STD_renderRibbonStrip },
+	{ 0x00000056, STD_renderRingTube },
+	{ 0x00000057, STD_renderScreenOverlay },
+	{ 0x00000058, STD_faceTargetEntity },
+	{ 0x00000059, STD_applyLineAttackHit },
+	{ 0x0000005a, STD_applyRadiusAttackHit },
+	{ 0x0000005b, STD_applyBoxAttackHit },
+	{ 0x0000005c, STD_renderScreenFade },
+	{ 0x0000005d, STD_disableMapLayer },
+	{ 0x0000005e, STD_func_8006EB58 },
+	{ 0x0000005f, STD_markEFEFinished },
+	{ 0x00000060, STD_isTargetUnhit },
+};
+
+void (*STD_jtbl_8007AE20[18])(void) = {
+	STD_loadEFEImmediate,
+	STD_loadEFEVariable,
+	STD_loadEFERandomValue,
+	STD_loadEFEIndexedVariable,
+	STD_applyEFEVariableOperator,
+	STD_stopEFEScript,
+	STD_stopEFEScript,
+	STD_branchEFEOnComparison,
+	STD_stopEFEScript,
+	STD_jumpEFEScript,
+	STD_pushEFEImmediate,
+	STD_pushEFEVariable,
+	STD_pushEFEVariableAddress,
+	STD_callEFESubroutine,
+	STD_dispatchEFESubOpcode,
+	STD_returnFromEFESubroutine,
+	STD_popEFEValueToVariable,
+	STD_spawnEFESubEffect,
+};
+
+int32_t (*STD_D_8007AE68[5][8])() = {
+	STD_setInt8Variable,
+	STD_addInt8Variable,
+	STD_subtractInt8Variable,
+	STD_multiplyInt8Variable,
+	STD_divideInt8Variable,
+	STD_moduloInt8Variable,
+	STD_shiftLeftInt8Variable,
+	STD_shiftRightInt8Variable,
+	STD_setInt8Variable,
+	STD_addInt8Variable,
+	STD_subtractInt8Variable,
+	STD_multiplyInt8Variable,
+	STD_divideInt8Variable,
+	STD_moduloInt8Variable,
+	STD_shiftLeftInt8Variable,
+	STD_shiftRightInt8Variable,
+	STD_setInt16Variable,
+	STD_addInt16Variable,
+	STD_subtractInt16Variable,
+	STD_multiplyInt16Variable,
+	STD_divideInt16Variable,
+	STD_moduloInt16Variable,
+	STD_shiftLeftInt16Variable,
+	STD_shiftRightInt16Variable,
+	STD_setInt8Variable,
+	STD_addInt8Variable,
+	STD_subtractInt8Variable,
+	STD_multiplyInt8Variable,
+	STD_divideInt8Variable,
+	STD_moduloInt8Variable,
+	STD_shiftLeftInt8Variable,
+	STD_shiftRightInt8Variable,
+	STD_setInt32Variable,
+	STD_addInt32Variable,
+	STD_subtractInt32Variable,
+	STD_multiplyInt32Variable,
+	STD_divideInt32Variable,
+	STD_moduloInt32Variable,
+	STD_shiftLeftInt32Variable,
+	STD_shiftRightInt32Variable,
+};
+
+int32_t (*STD_D_8007AF08[6])(int32_t) = {
+	STD_compareEqual,
+	STD_compareNotEqual,
+	STD_compareLess,
+	STD_compareLessOrEqual,
+	STD_compareGreater,
+	STD_compareGreaterOrEqual,
+};
+
+uint8_t STD_D_8007AF20[16] = {
+	0x00, 0x01, 0x02, 0x03, 0x05, 0x04, 0x07, 0x06,
+	0x01, 0x05, 0x06, 0x02, 0x04, 0x00, 0x03, 0x07,
+};
+
+uint8_t STD_D_8007AF30[24] = {
+	0x07, 0x10, 0x07, 0x1f, 0x00, 0x10, 0x00, 0x1f,
+	0x08, 0x00, 0x08, 0x0f, 0x17, 0x00, 0x17, 0x0f,
+	0x17, 0x00, 0x17, 0x0f, 0x08, 0x00, 0x08, 0x0f,
+};
+
+uint8_t STD_D_8007AF48[12] = {
+	0x7c, 0x7c, 0x7c, 0x00, 0x00, 0x7c, 0x7c, 0x00,
+	0x3c, 0x7c, 0x3c, 0x00,
+};
+
+GsSPRITE STD_POISON_BUBBLE_SPRITE = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0010,
+	0x0010,
+	0x005f,
+	0x20,
+	0xb0,
+	0x0110,
+	0x01e7,
+	0x80,
+	0x80,
+	0x80,
+	0x0008,
+	0x0008,
+	0x0000,
+	0x0000,
+	0x00000000,
+};
+
+VECTOR STD_D_8007AF78 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+
+GsSPRITE STD_D_8007AF88 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0028,
+	0x0016,
+	0x003e,
+	0x00,
+	0x80,
+	0x0100,
+	0x01e0,
+	0x80,
+	0x80,
+	0x80,
+	0x0014,
+	0x002c,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE STD_D_8007AFAC = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x000c,
+	0x0016,
+	0x003e,
+	0x28,
+	0x80,
+	0x0100,
+	0x01e0,
+	0x80,
+	0x80,
+	0x80,
+	0x0006,
+	0x0016,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE STD_D_8007AFD0 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0008,
+	0x0009,
+	0x003e,
+	0x00,
+	0xb7,
+	0x0100,
+	0x01e2,
+	0x80,
+	0x80,
+	0x80,
+	0x000d,
+	0x0026,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE STD_D_8007AFF4 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0004,
+	0x0007,
+	0x003e,
+	0x00,
+	0x96,
+	0x0100,
+	0x01e2,
+	0x80,
+	0x80,
+	0x80,
+	0xfffe,
+	0x0025,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+VECTOR STD_D_8007B018 = { 0x00003000, 0x00003000, 0x00003000, 0x00000000 };
+
+VECTOR STD_D_8007B028 = { 0x0000003c, 0x0000003c, 0x0000003c, 0x00000000 };
+
+VECTOR STD_D_8007B038 = { 0x0000005a, 0x0000005a, 0x0000005a, 0x00000000 };
+
+VECTOR STD_D_8007B048 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+
+int16_t STD_D_8007B058[774] = {
+	0x0000, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0001, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0070, 0x0002, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0070, 0x0003, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0004, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018, 0x0005, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x0006, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x0007, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0008, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0009, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x000a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x000b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x000c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x000d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0030, 0x000e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0038, 0x000f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070,
+	0x0010, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070, 0x0011, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0012, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x0013, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0014, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0015, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x0016, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0008, 0x0017, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0018, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020, 0x0019, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x001a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0000, 0x001b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0030,
+	0x001c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0048, 0x001d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0070, 0x001e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0070, 0x001f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0020, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018, 0x0021, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x0022, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x0023, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0024, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0025, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0026, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x0027, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0028, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x0029, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0030, 0x002a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0048, 0x002b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070,
+	0x002c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070, 0x002d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x002e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x002f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0030, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0031, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x0032, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0008, 0x0033, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0034, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060, 0x0035, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x0036, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0000, 0x0037, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0030,
+	0x0038, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0050, 0x0039, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x003a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0068, 0x003b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x003c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058, 0x003d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x003e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x003f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0040, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x0041, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0038, 0x0042, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0050, 0x0043, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0044, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0045, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0046, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0038, 0x0047, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0048, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0049, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x004a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x004b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x004c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x004d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x004e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0060, 0x004f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0050, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060, 0x0051, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0052, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0010, 0x0053, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018,
+	0x0054, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010, 0x0055, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0056, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x0057, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0058, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0059, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x005a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0058, 0x005b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x005c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x005d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x005e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x005f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0060, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010, 0x0061, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0060, 0x0062, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0010, 0x0063, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0064, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0065, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0066, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0058, 0x0067, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060,
+	0x0068, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0069, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x006a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x006b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x006c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x006d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x006e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x006f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0070, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058, 0x0071, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0072, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x0073, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0074, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0075, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x0076, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x0077, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0x0078, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0079, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x007a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x007b, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0x007c, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x007d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x007e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x007f, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0xffff, 0xffff, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+// clang-format on
+
 void STD_func_8006BFB4(void)
 {
 	MAIN_D_801350F4 = 0;
-	addObject(0x19D, 0, (TickFunction)STD_func_8006BFD4, (RenderFunction)STD_renderVersusModelScene2);
+	addObject(0x19d, 0, (TickFunction)STD_func_8006BFD4, (RenderFunction)STD_renderVersusModelScene2);
 }
 
 int32_t STD_func_8006BFD4__garbage__(int32_t i)
@@ -698,15 +1064,15 @@ void STD_func_8006BFD4(void)
 			}
 			if (MAIN_D_801351A4 >= i * 5) {
 				if (MAIN_D_801351A4 == i * 5 + 5) {
-					STD_D_8007C7B0[i].obj.attribute = 0;
+					STD_D_8007C7B0[i].data.obj.attribute = 0;
 				}
 				if (MAIN_D_801351A4 >= i * 5 + 0x14) {
-					STD_D_8007C7B0[i].rotation.vy = 0;
+					STD_D_8007C7B0[i].data.rotation.vy = 0;
 				} else {
-					STD_D_8007C7B0[i].rotation.vy = (STD_D_8007C7B0[i].rotation.vy + 0x200) & 0xfff;
+					STD_D_8007C7B0[i].data.rotation.vy = (STD_D_8007C7B0[i].data.rotation.vy + 0x200) & 0xfff;
 				}
 			}
-			setupModelMatrix(&STD_D_8007C7B0[i]);
+			setupModelMatrix(&STD_D_8007C7B0[i].data);
 		}
 		if (MAIN_D_801351A4 >= 0x61) {
 			MAIN_D_801351A4 = 0;
@@ -717,15 +1083,15 @@ void STD_func_8006BFD4(void)
 	case 1:
 		MAIN_D_801351A4++;
 		for (i = 0; i < 9; i++) {
-			if (STD_D_8007C7B0[i].location.vy < 0x258) {
-				STD_D_8007C7B0[i].location.vy += 0x32;
+			if (STD_D_8007C7B0[i].data.location.vy < 0x258) {
+				STD_D_8007C7B0[i].data.location.vy += 0x32;
 			}
-			setupModelMatrix(&STD_D_8007C7B0[i]);
+			setupModelMatrix(&STD_D_8007C7B0[i].data);
 		}
 		ENTITY_TABLE[1]->posData->location.vy -= 0x19;
 		ENTITY_TABLE[1]->anim.locY -= 0xc8000;
-		STD_D_8007F528[0].location.vy -= 0x19;
-		setupModelMatrix(&STD_D_8007F528[0]);
+		STD_D_8007F528[0].data.location.vy -= 0x19;
+		setupModelMatrix(&STD_D_8007F528[0].data);
 		if (MAIN_D_801351A4 < 0x50) {
 			rot.vx = 0;
 			rot.vy = STD_D_8007F968[MAIN_D_801351A4 - 1];
@@ -775,10 +1141,10 @@ void STD_renderVersusModelScene2(void)
 	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 9; i++) {
-		GsGetLws(STD_D_8007C7B0[i].obj.coord2, &lw, &ls);
+		GsGetLws(STD_D_8007C7B0[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007C7B0[i].obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_D_8007C7B0[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -788,14 +1154,14 @@ void STD_renderVersusModelScene2(void)
 
 void STD_func_8006C630(void)
 {
-	removeObject(0x19D, 0);
+	removeObject(0x19d, 0);
 	stopBGM();
 	stopSound();
 }
 
 void STD_addEnemyHPBars(void)
 {
-	addObject(0x1AE, 0, NULL, (RenderFunction)STD_func_8006C67C);
+	addObject(0x1ae, 0, NULL, (RenderFunction)STD_func_8006C67C);
 }
 
 void STD_func_8006C67C(void)
@@ -803,15 +1169,15 @@ void STD_func_8006C67C(void)
 	MATRIX lw;
 	MATRIX ls;
 
-	GsGetLws(STD_D_8007F528[0].obj.coord2, &lw, &ls);
+	GsGetLws(STD_D_8007F528[0].data.obj.coord2, &lw, &ls);
 	GsSetLightMatrix(&lw);
 	GsSetLsMatrix(&ls);
-	GsSortObject4(&STD_D_8007F528[0].obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4(&STD_D_8007F528[0].data.obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 }
 
 void STD_func_8006C6D0(void)
 {
-	removeObject(0x1AE, 0);
+	removeObject(0x1ae, 0);
 }
 
 void STD_func_8006C6DC(void)
@@ -871,28 +1237,28 @@ void STD_func_8006C7D4(void)
 	}
 	if (frame >= 0x74) {
 		if (frame < 0x82) {
-			STD_D_8007F528[4].rotation.vx = STD_D_8007AA70[frame - 0x74];
-			STD_D_8007F528[5].rotation.vx = STD_D_8007F528[4].rotation.vx;
-			STD_D_8007F528[6].rotation.vx = STD_D_8007F528[4].rotation.vx;
-			STD_D_8007F528[7].rotation.vx = STD_D_8007F528[4].rotation.vx;
+			STD_D_8007F528[4].data.rotation.vx = STD_D_8007AA70[frame - 0x74];
+			STD_D_8007F528[5].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
+			STD_D_8007F528[6].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
+			STD_D_8007F528[7].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
 		}
 		if (frame == 0x7f) {
 			STD_D_8007FA08[0] = 0;
 		}
 		if (frame >= 0x80) {
-			STD_D_8007F528[4].location.vy = STD_D_8007AA40[STD_D_8007FA08[0]] + 0x320;
-			STD_D_8007F528[5].location.vy = STD_D_8007F528[4].location.vy;
-			STD_D_8007F528[6].location.vy = STD_D_8007F528[4].location.vy;
-			STD_D_8007F528[7].location.vy = STD_D_8007F528[4].location.vy;
+			STD_D_8007F528[4].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[0]] + 0x320;
+			STD_D_8007F528[5].data.location.vy = STD_D_8007F528[4].data.location.vy;
+			STD_D_8007F528[6].data.location.vy = STD_D_8007F528[4].data.location.vy;
+			STD_D_8007F528[7].data.location.vy = STD_D_8007F528[4].data.location.vy;
 		}
 	} else {
-		STD_D_8007F528[4].location.vy = STD_D_8007AA40[STD_D_8007FA08[0]];
-		STD_D_8007F528[5].location.vy = STD_D_8007AA40[STD_D_8007FA08[1]];
-		STD_D_8007F528[6].location.vy = STD_D_8007AA40[STD_D_8007FA08[2]];
-		STD_D_8007F528[7].location.vy = STD_D_8007AA40[STD_D_8007FA08[3]];
+		STD_D_8007F528[4].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[0]];
+		STD_D_8007F528[5].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[1]];
+		STD_D_8007F528[6].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[2]];
+		STD_D_8007F528[7].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[3]];
 	}
 	for (i = 4; i < 8; i++) {
-		p = &STD_D_8007F528[i];
+		p = &STD_D_8007F528[i].data;
 		setupModelMatrix(p);
 	}
 }
@@ -920,10 +1286,10 @@ void STD_func_8006CB10(void)
 	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 4; i < 8; i++) {
-		GsGetLws(STD_D_8007F528[i].obj.coord2, &lw, &ls);
+		GsGetLws(STD_D_8007F528[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007F528[i].obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_D_8007F528[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -941,28 +1307,28 @@ void STD_func_8006CCE0(void)
 	PositionData *p;
 	int32_t i;
 
-	STD_D_8007F528[0].location.vx = -0xfa;
-	STD_D_8007F528[0].location.vy = 0;
-	STD_D_8007F528[0].location.vz = -0x30c;
-	STD_D_8007F528[1].location.vx = -0x32;
-	STD_D_8007F528[1].location.vy = 0;
-	STD_D_8007F528[1].location.vz = -0x30c;
-	STD_D_8007F528[2].location.vx = 0x64;
-	STD_D_8007F528[2].location.vy = 0;
-	STD_D_8007F528[2].location.vz = -0x30c;
-	STD_D_8007F528[3].location.vx = 0x104;
-	STD_D_8007F528[3].location.vy = 0;
+	STD_D_8007F528[0].data.location.vx = -0xfa;
+	STD_D_8007F528[0].data.location.vy = 0;
+	STD_D_8007F528[0].data.location.vz = -0x30c;
+	STD_D_8007F528[1].data.location.vx = -0x32;
+	STD_D_8007F528[1].data.location.vy = 0;
+	STD_D_8007F528[1].data.location.vz = -0x30c;
+	STD_D_8007F528[2].data.location.vx = 0x64;
+	STD_D_8007F528[2].data.location.vy = 0;
+	STD_D_8007F528[2].data.location.vz = -0x30c;
+	STD_D_8007F528[3].data.location.vx = 0x104;
+	STD_D_8007F528[3].data.location.vy = 0;
 	MAIN_D_801351A4 = 0;
-	STD_D_8007F528[3].location.vz = -0x30c;
+	STD_D_8007F528[3].data.location.vz = -0x30c;
 	for (i = 0; i < 4; i++) {
-		p = &STD_D_8007F528[i];
+		p = &STD_D_8007F528[i].data;
 		STD_D_8007FA08[i] = 0;
-		STD_D_8007F528[i].scale.vx = 0x1000;
-		STD_D_8007F528[i].scale.vy = 0x1000;
-		STD_D_8007F528[i].scale.vz = 0x1000;
-		STD_D_8007F528[i].rotation.vx = 0;
-		STD_D_8007F528[i].rotation.vy = 0;
-		STD_D_8007F528[i].rotation.vz = 0;
+		STD_D_8007F528[i].data.scale.vx = 0x1000;
+		STD_D_8007F528[i].data.scale.vy = 0x1000;
+		STD_D_8007F528[i].data.scale.vz = 0x1000;
+		STD_D_8007F528[i].data.rotation.vx = 0;
+		STD_D_8007F528[i].data.rotation.vy = 0;
+		STD_D_8007F528[i].data.rotation.vz = 0;
 		setupModelMatrix(p);
 	}
 	addObject(0x19d, 0, (TickFunction)STD_func_8006CE68, (RenderFunction)STD_func_8006D018);
@@ -979,22 +1345,22 @@ void STD_func_8006CE68(void)
 
 	for (i = 0, threshold = 0x3c; i < 4; i++, threshold += 6) {
 		if (MAIN_D_801351A4 > threshold) {
-			if (STD_D_8007F528[i].location.vz < 0xdc) {
-				STD_D_8007F528[i].location.vz += 0x32;
+			if (STD_D_8007F528[i].data.location.vz < 0xdc) {
+				STD_D_8007F528[i].data.location.vz += 0x32;
 			}
 			if (STD_D_8007FA08[i] < 0x14) {
 				STD_D_8007FA08[i]++;
 			}
-			STD_D_8007F528[i].rotation.vx = STD_D_8007CC78[STD_D_8007FA08[i]];
-			STD_D_8007F528[i].rotation.vy = STD_D_8007CCA4[STD_D_8007FA08[i]];
+			STD_D_8007F528[i].data.rotation.vx = STD_D_8007CC78[STD_D_8007FA08[i]];
+			STD_D_8007F528[i].data.rotation.vy = STD_D_8007CCA4[STD_D_8007FA08[i]];
 			if (i == 0) {
-				STD_D_8007F528[i].location.vx = STD_D_8007CCD0[STD_D_8007FA08[i]];
+				STD_D_8007F528[i].data.location.vx = STD_D_8007CCD0[STD_D_8007FA08[i]];
 			}
 			if (i == 3) {
-				STD_D_8007F528[3].location.vx = STD_D_8007CCFC[STD_D_8007FA08[3]];
+				STD_D_8007F528[3].data.location.vx = STD_D_8007CCFC[STD_D_8007FA08[3]];
 			}
 		}
-		setupModelMatrix(&STD_D_8007F528[i]);
+		setupModelMatrix(&STD_D_8007F528[i].data);
 	}
 }
 
@@ -1009,10 +1375,10 @@ void STD_func_8006D018(void)
 	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 3; i >= 0; i--) {
-		GsGetLws(STD_D_8007F528[i].obj.coord2, &lw, &ls);
+		GsGetLws(STD_D_8007F528[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007F528[i].obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_D_8007F528[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -2147,7 +2513,7 @@ void STD_tickRibbonPoints(void)
 	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
 	for (i = 0; i < 10; i++) {
 		if (((EFE_RIBBON_SCRATCH->frame + i * 8) % 10) == 0) {
-			q[i].pad = customRandom(-0xF, 0xF);
+			q[i].pad = customRandom(-0xf, 0xf);
 		}
 		q[i].vy += q[i].pad;
 		w = q[i].vy;
@@ -2194,8 +2560,6 @@ void STD_renderRadialWaves(void)
 {
 	POLY_FT4 *prim;
 	int16_t *uv;
-	int16_t *t38;
-	int16_t *t40;
 	int32_t i;
 	int32_t w;
 
@@ -2222,8 +2586,6 @@ void STD_renderRadialWaves(void)
 		GsSetLightMatrix(&EFE_SCRATCH->m1);
 		GsSetLsMatrix(&EFE_SCRATCH->m0);
 		EFE_WAVE_SCRATCH->radius = 0xc8;
-		t38 = STD_D_8007AF38;
-		t40 = STD_D_8007AF40;
 		for (; EFE_WAVE_SCRATCH->radius < 0xbb8;
 		     EFE_WAVE_SCRATCH->radius += 0x64) {
 			w = (EFE_WAVE_SCRATCH->radius < 0x2ef)
@@ -2262,9 +2624,9 @@ void STD_renderRadialWaves(void)
 					prim->clut = EFE_WAVE_SCRATCH->clut;
 					prim->tpage = EFE_WAVE_SCRATCH->tpage;
 					if (EFE_WAVE_SCRATCH->radius == 0x12c) {
-						uv = t38;
+						uv = (int16_t *)&STD_D_8007AF30[8];
 					} else if (EFE_WAVE_SCRATCH->radius >= 0xb54) {
-						uv = t40;
+						uv = (int16_t *)&STD_D_8007AF30[16];
 					} else {
 						uv = (int16_t *)STD_D_8007AF30;
 					}
@@ -2803,14 +3165,14 @@ void STD_restoreCameraView(void)
 	GsSetProjection(VIEWPORT_DISTANCE);
 	DRAWING_OFFSET_X = MAIN_D_801351C0;
 	DRAWING_OFFSET_Y = MAIN_D_801351C4;
-	GsWSMATRIX = *(MATRIX *)STD_D_8007FC00;
+	GsWSMATRIX = STD_D_8007FC00.m;
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
 }
 
 void STD_setupFixedCamera(void)
 {
-	*(MATRIX *)STD_D_8007FC00 = GsWSMATRIX;
+	STD_D_8007FC00.m = GsWSMATRIX;
 	MAIN_D_801351C0 = DRAWING_OFFSET_X;
 	MAIN_D_801351C4 = DRAWING_OFFSET_Y;
 	MAIN_D_80139B34.vpx = 0;
@@ -4476,7 +4838,7 @@ void STD_spawnEFESubEffect(void)
 	}
 
 	MAIN_D_80134CDC = 1;
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xC);
+	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xc);
 }
 
 void STD_popEFEValueToVariable(void)
@@ -5068,7 +5430,7 @@ void STD_initializeEFESubOpcodeTable(void)
 		if ((uint32_t)((int32_t (*)[2])STD_D_8007AB18)[i][0] >= 0x61) {
 			exit(1);
 		}
-		STD_jtbl_8007FA7C[((int32_t (*)[2])STD_D_8007AB18)[i][0]] = (void (*)(void))((void *(*)[2])STD_D_8007AB1C)[i][0];
+		STD_jtbl_8007FA7C[STD_D_8007AB18[i].opcode] = STD_D_8007AB18[i].handler;
 	}
 }
 
@@ -5097,7 +5459,7 @@ int32_t STD_runEFEScript(int32_t script)
 
 void STD_resetPoisonBubbles(void)
 {
-	setShortWithStride(STD_D_8007FC20, -1, 0xc, 0xc);
+	setShortWithStride((int16_t *)STD_D_8007FC20, -1, 0xc, 0xc);
 }
 
 int32_t STD_addPoisonBubble(int32_t arg)
@@ -5106,7 +5468,7 @@ int32_t STD_addPoisonBubble(int32_t arg)
 	int16_t *p;
 
 	for (i = 0; i < 0xc; i++) {
-		if (((int16_t (*)[6])STD_D_8007FC20)[i][0] == -1) {
+		if (STD_D_8007FC20[i][0] == -1) {
 			break;
 		}
 	}
@@ -5115,7 +5477,7 @@ int32_t STD_addPoisonBubble(int32_t arg)
 		return -1;
 	}
 
-	p = ((int16_t (*)[6])STD_D_8007FC20)[i];
+	p = STD_D_8007FC20[i];
 	p[0] = 0;
 	*(int32_t *)&p[4] = arg;
 	p[2] = (rand() % 100) - 0x32;
@@ -5129,7 +5491,7 @@ void STD_tickPoisonBubble(int32_t i)
 {
 	int16_t *p;
 
-	p = &STD_D_8007FC20[i * 6];
+	p = STD_D_8007FC20[i];
 	p[0]++;
 	if (p[0] >= 0x28) {
 		p[0] = -1;
@@ -5146,7 +5508,7 @@ void STD_renderPoisonBubble(int32_t i)
 	int32_t otz;
 	int32_t d;
 
-	p = &STD_D_8007FC20[i * 6];
+	p = STD_D_8007FC20[i];
 	frame = p[0];
 	translateConditionFXToEntity((Entity *)*(int32_t *)&p[4], &pos);
 	pos.vx += p[2];
@@ -5596,7 +5958,7 @@ void STD_tickFinisherAura(int32_t i)
 {
 	int16_t *p;
 
-	p = &STD_D_8007FE14[i * 4];
+	p = STD_D_8007FE14[i];
 	p[0]++;
 	if (p[0] > p[1]) {
 		removeObject(0x80d, i);
@@ -5618,7 +5980,7 @@ void STD_renderFinisherAura(int32_t id)
 	int32_t t;
 	int32_t i;
 
-	fa = &STD_D_8007FE14[id * 4];
+	fa = STD_D_8007FE14[id];
 	e = (Entity *)*(int32_t *)&fa[2];
 
 	if (fa[0] < 10) {
@@ -5728,7 +6090,7 @@ void STD_initializeFinisherAuraModel(char *tim, char *base)
 	STD_setTMDObjectColor(4, (int32_t *)&ca, (char *)MAIN_D_801351D0);
 
 	for (j = 0; j < 2; j++) {
-		((int16_t (*)[4])STD_D_8007FE14)[j][0] = -1;
+		STD_D_8007FE14[j][0] = -1;
 	}
 
 	p = STD_D_8007FE24;
@@ -5752,7 +6114,7 @@ int32_t STD_addFinisherAura(int32_t arg, int32_t val)
 	int16_t *p;
 
 	for (i = 0; i < 2; i++) {
-		if (((int16_t (*)[4])STD_D_8007FE14)[i][0] < 0) {
+		if (STD_D_8007FE14[i][0] < 0) {
 			break;
 		}
 	}
@@ -5761,7 +6123,7 @@ int32_t STD_addFinisherAura(int32_t arg, int32_t val)
 		return -1;
 	}
 
-	p = &STD_D_8007FE14[i * 4];
+	p = STD_D_8007FE14[i];
 	p[0] = 0;
 	p[1] = val;
 	*(int32_t *)&p[2] = arg;
@@ -5773,7 +6135,7 @@ int32_t STD_addFinisherAura(int32_t arg, int32_t val)
 void STD_removeFinisherAura(int32_t i)
 {
 	removeObject(0x80d, i);
-	STD_D_8007FE14[i * 4] = -1;
+	STD_D_8007FE14[i][0] = -1;
 }
 
 void STD_func_800791E0(void)

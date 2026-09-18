@@ -13,7 +13,6 @@
 
 extern uint32_t POLLED_INPUT;
 extern int32_t TRAINING_COMPLETE;
-extern VECTOR TRN_D_8008F358;
 
 void createCameraMovement(VECTOR *pos, int32_t speed);
 void entityLookAtLocation(Entity *entity, VECTOR *pos);

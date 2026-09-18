@@ -11,6 +11,86 @@
 #include <dw/script.h>
 #include <dw/types.h>
 
+typedef struct {
+	int32_t life;
+	SVECTOR p[4];
+} EfeTrail;
+
+typedef struct {
+	int16_t frame;
+	int16_t pad;
+	MATRIX *matrix;
+	Entity *entity;
+	EfeTrail trails[8];
+} EfeTrailEffect;
+
+typedef struct {
+	int16_t frame;
+	int16_t buffId;
+	MATRIX *bone;
+	SVECTOR rotation[5];
+	int16_t unk30[8];
+	int32_t scale;
+	int32_t scaleTarget;
+	int16_t unk48[16];
+	RGB8 color;
+	uint8_t pad;
+} EfeBuffRings;
+
+typedef struct {
+	int16_t frame;
+	int16_t pad;
+	MATRIX *bone;
+	Entity *entity;
+	SVECTOR rotation;
+	int32_t scaleXZ;
+	int32_t scaleTargetXZ;
+	int32_t scaleY;
+	int32_t scaleTargetY;
+} EfeBuffDisk;
+
+typedef struct {
+	int16_t velocityX;
+	int16_t velocityY;
+	int16_t velocityZ;
+	int16_t fadeStep;
+	int32_t life;
+	int32_t positionX;
+	int32_t positionY;
+	int32_t positionZ;
+	int16_t brightness;
+	int16_t pad;
+} BtlItemParticle;
+
+typedef struct {
+	int16_t timer;
+	int16_t pad;
+	BtlItemParticle particles[20];
+} BtlItemParticleEffect;
+
+typedef struct {
+	int16_t vx;
+	int16_t vy;
+	int16_t vz;
+} BtlParticleVelocity;
+
+typedef struct {
+	int16_t x;
+	int16_t z;
+} BtlParticleDrag;
+
+typedef struct {
+	GsSPRITE sprite;
+	int16_t step;
+	int16_t timer;
+} BtlDeathCountdown;
+
+/* Hack to match overlay .bss */
+typedef union {
+	uint8_t raw[40];
+	BtlDeathCountdown data;
+} BtlDeathCountdownRaw;
+
 extern int16_t ENEMY_COUNT;
 extern int16_t MAIN_D_80134D66;
 extern int16_t MAIN_D_80134D68;
@@ -76,6 +156,30 @@ extern SVECTOR MAIN_D_801347E8;
 extern uint8_t MAIN_D_801347F0[4];
 extern uint8_t MAIN_D_801347F4[4];
 extern uint8_t MAIN_D_801347F8[4];
+
+extern GsSPRITE BTL_D_80073E54;
+extern BtlDeathCountdownRaw BTL_D_80073E78;
+extern char BTL_END_BOX_TEXTBUFFER[1024];
+extern uint8_t BTL_D_800742A0[155][20];
+extern void (*BTL_D_80074EBC[97])(void);
+extern int16_t BTL_D_80075040[12][6];
+extern int16_t BTL_D_800750D0[4][4];
+extern int16_t BTL_D_800750F0[4][8];
+extern int16_t BTL_D_80075130[5][6];
+extern int16_t BTL_D_8007516C[25][4];
+extern int16_t BTL_D_80075234[2][4];
+extern SVECTOR BTL_D_80075244[20];
+extern BtlParticleVelocity BTL_D_800752E4[20];
+extern BtlParticleDrag BTL_D_8007535C[20];
+extern BtlItemParticleEffect BTL_D_800753AC[4];
+extern EfeBuffDisk BTL_D_80075C7C[1];
+extern EfeTrailEffect BTL_D_80075CA0[1];
+extern int16_t BTL_D_80075DCC[8];
+extern int16_t BTL_D_80075DDC[8];
+extern int16_t BTL_D_80075DEC[8];
+extern int16_t BTL_D_80075DFC[8];
+extern EfeBuffRings BTL_D_80075E0C[1];
+extern SVECTOR BTL_D_80075E78[32];
 
 void BTL_initializeDeathCountdown(void);
 void BTL_initializePartnerTile(void);

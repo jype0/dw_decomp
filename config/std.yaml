@@ -100,6 +100,7 @@ segments:
       - [0x26E78, bin]
       - [0x26E8C, rodata]
       - [0x26EAC, bin]
-      - [0x26ED4, data]
+      - [0x26ED4, .data, std]
+      - [0x28B84, .data, std_bss]
 
   - [0x2D3E8]

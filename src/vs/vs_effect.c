@@ -56,49 +56,19 @@ extern int32_t MAIN_D_801352F4;
 extern char *MAIN_D_801352F8;
 extern int32_t MAIN_D_801352FC;
 extern char *MAIN_D_80135300;
-extern int32_t VS_D_80070B44[];
-extern void *VS_D_80070B48[];
-extern void (*VS_D_80070E94[][8])(int32_t *);
-extern int32_t (*VS_D_80070F34[])(int32_t);
-extern VECTOR VS_D_80070FA4;
-extern VECTOR VS_D_80071044;
-extern VECTOR VS_D_80071064;
-extern int16_t VS_D_80071084[];
-extern SVECTOR VS_D_800731C4[];
-extern VECTOR VS_D_80071074;
-extern GsSPRITE VS_POISON_BUBBLE_SPRITE;
-extern void (*VS_jtbl_80070E4C[])(void);
-extern VECTOR VS_D_80071054;
-extern int16_t VS_D_80072FC0[];
-extern int16_t VS_D_80073070[][8];
-extern int16_t VS_D_800730B0[][6];
-extern int16_t VS_D_800730EC[][4];
-extern int16_t VS_D_800731B4[];
-extern int32_t VS_D_80072FA0[];
 extern int32_t MAIN_D_801352EC;
 extern int32_t MAIN_D_801352F0;
 extern int8_t *MAIN_D_80139B24[];
 extern int32_t MAIN_D_801352E4;
 extern int32_t MAIN_D_80139AD0[][2];
-extern void (*VS_jtbl_80072E1C[])(void);
-extern int16_t VS_D_80073050[][4];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t VIEWPORT_DISTANCE;
-extern GsSPRITE VS_D_80070FFC;
-extern GsSPRITE VS_D_80071020;
-extern GsSPRITE VS_D_80070FB4;
-extern GsSPRITE VS_D_80070FD8;
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
 extern int32_t MAIN_D_801352E8;
-extern uint8_t VS_D_80070F5C[];
-extern int16_t VS_D_80070F64[];
-extern int16_t VS_D_80070F6C[];
-extern uint8_t VS_D_80070F4C[];
-extern uint8_t VS_D_80070F74[];
 
 void MAIN_func_80092B60(POLY_FT4 *prim);
 void MAIN_func_80092C18(PACKET *prim, RECT *rect);
@@ -341,6 +311,9 @@ int32_t VS_renderProjectedSprite__garbage__(int32_t i);
 long RotTransPers(SVECTOR *v0, long *sxy, long *p, long *flag);
 int32_t VS_interpolateClamped(int32_t lo, int32_t hi, int32_t t, int32_t a, int32_t b);
 
+void createFlash();
+void rotateVector();
+
 static void *vs_effect_functions[] = {
 	VS_removeAllAuraProjectiles,
 	VS_addAuraProjectile,
@@ -553,6 +526,412 @@ static void *vs_effect_functions[] = {
 	VS_tickEFEEngine,
 	VS_initializeParticleEmitters,
 };
+
+// clang-format off
+VsEfeSubOpcode VS_D_80070B44[97] = {
+	{ 0x00000000, VS_checkTechCompatibility },
+	{ 0x00000001, VS_initializeUVAnim },
+	{ 0x00000002, VS_initializeSubEffectInstructions },
+	{ 0x00000003, VS_drawTMD },
+	{ 0x00000005, VS_initializeEFETransform },
+	{ 0x00000007, rotateVector },
+	{ 0x00000004, VS_renderCenteredSprite },
+	{ 0x00000008, VS_setTransformToTargetBone },
+	{ 0x00000009, VS_addAttackObjectToTarget },
+	{ 0x00000006, VS_checkCollisionWithDefaultPower },
+	{ 0x0000000a, VS_getScatteredSpawnPosition },
+	{ 0x0000000b, VS_discardEFEOperandPair },
+	{ 0x0000000c, VS_interpolateVector },
+	{ 0x0000000d, VS_steerTransformTowardPoint },
+	{ 0x0000000e, VS_copyTargetEntityPosition },
+	{ 0x0000000f, VS_setEFEModelObjectColor },
+	{ 0x00000010, VS_addParticleEmitter },
+	{ 0x00000011, VS_selectNextTargetEntity },
+	{ 0x00000012, createFlash },
+	{ 0x00000013, VS_addCloudEffect },
+	{ 0x00000014, VS_renderScreenSprite },
+	{ 0x00000015, VS_projectPositionToScreen },
+	{ 0x00000016, VS_renderParticleFlashSprite },
+	{ 0x00000017, VS_getTargetDigimonSize },
+	{ 0x00000018, VS_renderProjectedSprite },
+	{ 0x00000019, VS_calculatePolarOffset },
+	{ 0x0000001a, VS_copyFromParentTransform },
+	{ 0x0000001b, VS_addSourceEntityParticleFX },
+	{ 0x0000001c, VS_playEFESound },
+	{ 0x0000001d, VS_setTransformToBoneOffset },
+	{ 0x0000001e, VS_renderScrollingBackground },
+	{ 0x0000001f, VS_renderParallaxSprites },
+	{ 0x00000020, VS_setTransformToSourceBone },
+	{ 0x00000021, VS_rotateTransformTowardPoint },
+	{ 0x00000022, VS_checkTargetCollision },
+	{ 0x00000023, VS_getUVAnimTimer },
+	{ 0x00000024, VS_applyHomingMovement },
+	{ 0x00000025, VS_getSourceDigimonSize },
+	{ 0x00000026, VS_calculateSine },
+	{ 0x00000027, VS_calculateCosine },
+	{ 0x00000028, VS_interpolateValue },
+	{ 0x00000029, VS_getRandomInRange },
+	{ 0x0000002a, VS_printDebugValue },
+	{ 0x0000002b, VS_getVectorEulerAngles },
+	{ 0x0000002c, VS_findHitEntity },
+	{ 0x0000002d, VS_normalizeRotationAngles },
+	{ 0x0000002e, VS_setTargetToHitEntity },
+	{ 0x0000002f, VS_getVectorLength },
+	{ 0x00000030, VS_copyVector },
+	{ 0x00000031, VS_addVectors },
+	{ 0x00000032, VS_subtractVectors },
+	{ 0x00000033, VS_multiplyVectors },
+	{ 0x00000034, VS_divideVectors },
+	{ 0x00000035, VS_maskVectors },
+	{ 0x00000036, VS_shiftVectorsRight },
+	{ 0x00000037, VS_centerTransformOnEntities },
+	{ 0x00000038, VS_getTargetBoneTransform },
+	{ 0x00000039, VS_rotateVectorByAngles },
+	{ 0x0000003a, VS_normalizeRotationAngles2 },
+	{ 0x0000003b, VS_combineRotations },
+	{ 0x0000003c, VS_renderEFELine },
+	{ 0x0000003d, VS_copyToParentTransform },
+	{ 0x0000003e, VS_getSourceBoneTransform },
+	{ 0x0000003f, VS_setupFixedCamera },
+	{ 0x00000040, VS_restoreCameraView },
+	{ 0x00000041, VS_render2DTexturedQuad },
+	{ 0x00000042, VS_renderWireframeGrid },
+	{ 0x00000043, VS_discardEFEOperand },
+	{ 0x00000044, VS_renderWireframeBox },
+	{ 0x00000045, VS_setTransformToBoneMatrix },
+	{ 0x00000046, VS_render3DTexturedQuad },
+	{ 0x00000047, VS_multiplyVectorByScalar },
+	{ 0x00000048, VS_divideVectorByScalar },
+	{ 0x00000049, VS_maskVectorByScalar },
+	{ 0x0000004a, VS_convertToViewSpace },
+	{ 0x0000004b, VS_selectRandomTargetEntity },
+	{ 0x0000004c, VS_getCameraRotation },
+	{ 0x0000004d, VS_drawTMDYXZ },
+	{ 0x0000004e, VS_loadClutColors },
+	{ 0x0000004f, VS_drawTMDScreenSpace },
+	{ 0x00000050, VS_addClutLoadPrim },
+	{ 0x00000051, VS_getViewportDistance },
+	{ 0x00000052, VS_renderRadialWaves },
+	{ 0x00000053, VS_initializeRibbonPoints },
+	{ 0x00000054, VS_tickRibbonPoints },
+	{ 0x00000055, VS_renderRibbonStrip },
+	{ 0x00000056, VS_renderRingTube },
+	{ 0x00000057, VS_renderScreenOverlay },
+	{ 0x00000058, VS_faceTargetEntity },
+	{ 0x00000059, VS_applyLineAttackHit },
+	{ 0x0000005a, VS_applyRadiusAttackHit },
+	{ 0x0000005b, VS_applyBoxAttackHit },
+	{ 0x0000005c, VS_renderScreenFade },
+	{ 0x0000005d, VS_disableMapLayer },
+	{ 0x0000005e, VS_getViewportDistance2 },
+	{ 0x0000005f, VS_markEFEFinished },
+	{ 0x00000060, VS_isTargetUnhit },
+};
+
+void (*VS_jtbl_80070E4C[18])(void) = {
+	VS_loadEFEImmediate,
+	VS_loadEFEVariable,
+	VS_loadEFERandomValue,
+	VS_loadEFEIndexedVariable,
+	VS_applyEFEVariableOperator,
+	VS_stopEFEScript,
+	VS_stopEFEScript,
+	VS_branchEFEOnComparison,
+	VS_stopEFEScript,
+	VS_jumpEFEScript,
+	VS_pushEFEImmediate,
+	VS_pushEFEVariable,
+	VS_pushEFEVariableAddress,
+	VS_callEFESubroutine,
+	VS_dispatchEFESubOpcode,
+	VS_returnFromEFESubroutine,
+	VS_popEFEValueToVariable,
+	VS_spawnEFESubEffect,
+};
+
+int32_t (*VS_D_80070E94[5][8])() = {
+	VS_setInt8Variable,
+	VS_addInt8Variable,
+	VS_subtractInt8Variable,
+	VS_multiplyInt8Variable,
+	VS_divideInt8Variable,
+	VS_moduloInt8Variable,
+	VS_shiftLeftInt8Variable,
+	VS_shiftRightInt8Variable,
+	VS_setInt8Variable,
+	VS_addInt8Variable,
+	VS_subtractInt8Variable,
+	VS_multiplyInt8Variable,
+	VS_divideInt8Variable,
+	VS_moduloInt8Variable,
+	VS_shiftLeftInt8Variable,
+	VS_shiftRightInt8Variable,
+	VS_setInt16Variable,
+	VS_addInt16Variable,
+	VS_subtractInt16Variable,
+	VS_multiplyInt16Variable,
+	VS_divideInt16Variable,
+	VS_moduloInt16Variable,
+	VS_shiftLeftInt16Variable,
+	VS_shiftRightInt16Variable,
+	VS_setInt8Variable,
+	VS_addInt8Variable,
+	VS_subtractInt8Variable,
+	VS_multiplyInt8Variable,
+	VS_divideInt8Variable,
+	VS_moduloInt8Variable,
+	VS_shiftLeftInt8Variable,
+	VS_shiftRightInt8Variable,
+	VS_setInt32Variable,
+	VS_addInt32Variable,
+	VS_subtractInt32Variable,
+	VS_multiplyInt32Variable,
+	VS_divideInt32Variable,
+	VS_moduloInt32Variable,
+	VS_shiftLeftInt32Variable,
+	VS_shiftRightInt32Variable,
+};
+
+int32_t (*VS_D_80070F34[6])(int32_t) = {
+	VS_compareEqual,
+	VS_compareNotEqual,
+	VS_compareLess,
+	VS_compareLessOrEqual,
+	VS_compareGreater,
+	VS_compareGreaterOrEqual,
+};
+
+uint8_t VS_D_80070F4C[16] = {
+	0x00, 0x01, 0x02, 0x03, 0x05, 0x04, 0x07, 0x06,
+	0x01, 0x05, 0x06, 0x02, 0x04, 0x00, 0x03, 0x07,
+};
+
+uint8_t VS_D_80070F5C[24] = {
+	0x07, 0x10, 0x07, 0x1f, 0x00, 0x10, 0x00, 0x1f,
+	0x08, 0x00, 0x08, 0x0f, 0x17, 0x00, 0x17, 0x0f,
+	0x17, 0x00, 0x17, 0x0f, 0x08, 0x00, 0x08, 0x0f,
+};
+
+uint8_t VS_D_80070F74[12] = {
+	0x7c, 0x7c, 0x7c, 0x00, 0x00, 0x7c, 0x7c, 0x00,
+	0x3c, 0x7c, 0x3c, 0x00,
+};
+
+GsSPRITE VS_POISON_BUBBLE_SPRITE = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0010,
+	0x0010,
+	0x005f,
+	0x20,
+	0xb0,
+	0x0110,
+	0x01e7,
+	0x80,
+	0x80,
+	0x80,
+	0x0008,
+	0x0008,
+	0x0000,
+	0x0000,
+	0x00000000,
+};
+
+VECTOR VS_D_80070FA4 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+
+GsSPRITE VS_D_80070FB4 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0028,
+	0x0016,
+	0x003e,
+	0x00,
+	0x80,
+	0x0100,
+	0x01e0,
+	0x80,
+	0x80,
+	0x80,
+	0x0014,
+	0x002c,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE VS_D_80070FD8 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x000c,
+	0x0016,
+	0x003e,
+	0x28,
+	0x80,
+	0x0100,
+	0x01e0,
+	0x80,
+	0x80,
+	0x80,
+	0x0006,
+	0x0016,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE VS_D_80070FFC = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0008,
+	0x0009,
+	0x003e,
+	0x00,
+	0xb7,
+	0x0100,
+	0x01e2,
+	0x80,
+	0x80,
+	0x80,
+	0x000d,
+	0x0026,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+GsSPRITE VS_D_80071020 = {
+	0x50000000,
+	0x0000,
+	0x0000,
+	0x0004,
+	0x0007,
+	0x003e,
+	0x00,
+	0x96,
+	0x0100,
+	0x01e2,
+	0x80,
+	0x80,
+	0x80,
+	0xfffe,
+	0x0025,
+	0x1000,
+	0x1000,
+	0x00000000,
+};
+
+VECTOR VS_D_80071044 = { 0x00003000, 0x00003000, 0x00003000, 0x00000000 };
+
+VECTOR VS_D_80071054 = { 0x0000003c, 0x0000003c, 0x0000003c, 0x00000000 };
+
+VECTOR VS_D_80071064 = { 0x0000005a, 0x0000005a, 0x0000005a, 0x00000000 };
+
+VECTOR VS_D_80071074 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+
+int16_t VS_D_80071084[774] = {
+	0x0000, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0001, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0070, 0x0002, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0070, 0x0003, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0004, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018, 0x0005, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x0006, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x0007, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0008, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0009, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x000a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x000b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x000c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x000d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0030, 0x000e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0038, 0x000f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070,
+	0x0010, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070, 0x0011, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0012, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x0013, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0014, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0015, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x0016, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0008, 0x0017, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0018, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020, 0x0019, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x001a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0000, 0x001b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0030,
+	0x001c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0048, 0x001d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0070, 0x001e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0070, 0x001f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0020, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018, 0x0021, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x0022, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x0023, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0024, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0025, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0026, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x0027, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0028, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x0029, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0030, 0x002a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0048, 0x002b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070,
+	0x002c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070, 0x002d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x002e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x002f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0030, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0031, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x0032, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0008, 0x0033, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0034, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060, 0x0035, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x0036, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0000, 0x0037, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0030,
+	0x0038, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0050, 0x0039, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x003a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0068, 0x003b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x003c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058, 0x003d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x003e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x003f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x0040, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x0041, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0038, 0x0042, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0050, 0x0043, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0044, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0045, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0046, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0038, 0x0047, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010,
+	0x0048, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0049, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x004a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x004b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x004c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0000, 0x004d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0040, 0x004e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0060, 0x004f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x0050, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060, 0x0051, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0052, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0010, 0x0053, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0018,
+	0x0054, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010, 0x0055, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0056, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0018, 0x0057, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0058, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008, 0x0059, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x005a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0058, 0x005b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0020,
+	0x005c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x005d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x005e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0028, 0x005f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0008,
+	0x0060, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0010, 0x0061, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0060, 0x0062, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0010, 0x0063, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0040,
+	0x0064, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0065, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0010, 0x0066, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0058, 0x0067, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0060,
+	0x0068, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x0069, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0008, 0x006a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x006b, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028,
+	0x006c, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0028, 0x006d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0020, 0x006e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0x0020, 0x006f, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0070, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058, 0x0071, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0x0028, 0x0072, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x0073, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0058,
+	0x0074, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0075, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x0076, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x0077, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0x0078, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x0079, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x007a, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x007b, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0x007c, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff, 0x007d, 0x0000,
+	0x0000, 0xff6a, 0xff38, 0xffff, 0x007e, 0x0000, 0x0000, 0xff6a,
+	0xff38, 0xffff, 0x007f, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff,
+	0xffff, 0xffff, 0x0000, 0x0000, 0x0000, 0x0000,
+};
+// clang-format on
 
 char *VS_initializeParticleEmitters(char *base)
 {
@@ -1676,7 +2055,7 @@ void VS_tickRibbonPoints(void)
 	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
 	for (i = 0; i < 10; i++) {
 		if (((EFE_RIBBON_SCRATCH->frame + i * 8) % 10) == 0) {
-			q[i].pad = customRandom(-0xF, 0xF);
+			q[i].pad = customRandom(-0xf, 0xf);
 		}
 		q[i].vy += q[i].pad;
 		w = q[i].vy;
@@ -1723,8 +2102,6 @@ void VS_renderRadialWaves(void)
 {
 	POLY_FT4 *prim;
 	int16_t *uv;
-	int16_t *t38;
-	int16_t *t40;
 	int32_t i;
 	int32_t w;
 
@@ -1751,8 +2128,6 @@ void VS_renderRadialWaves(void)
 		GsSetLightMatrix(&EFE_SCRATCH->m1);
 		GsSetLsMatrix(&EFE_SCRATCH->m0);
 		EFE_WAVE_SCRATCH->radius = 0xc8;
-		t38 = VS_D_80070F64;
-		t40 = VS_D_80070F6C;
 		for (; EFE_WAVE_SCRATCH->radius < 0xbb8;
 		     EFE_WAVE_SCRATCH->radius += 0x64) {
 			w = (EFE_WAVE_SCRATCH->radius < 0x2ef)
@@ -1791,9 +2166,9 @@ void VS_renderRadialWaves(void)
 					prim->clut = EFE_WAVE_SCRATCH->clut;
 					prim->tpage = EFE_WAVE_SCRATCH->tpage;
 					if (EFE_WAVE_SCRATCH->radius == 0x12c) {
-						uv = t38;
+						uv = (int16_t *)&VS_D_80070F5C[8];
 					} else if (EFE_WAVE_SCRATCH->radius >= 0xb54) {
-						uv = t40;
+						uv = (int16_t *)&VS_D_80070F5C[16];
 					} else {
 						uv = (int16_t *)VS_D_80070F5C;
 					}
@@ -2332,14 +2707,14 @@ void VS_restoreCameraView(void)
 	GsSetProjection(VIEWPORT_DISTANCE);
 	DRAWING_OFFSET_X = MAIN_D_801352EC;
 	DRAWING_OFFSET_Y = MAIN_D_801352F0;
-	GsWSMATRIX = *(MATRIX *)VS_D_80072FA0;
+	GsWSMATRIX = VS_D_80072FA0.m;
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
 }
 
 void VS_setupFixedCamera(void)
 {
-	*(MATRIX *)VS_D_80072FA0 = GsWSMATRIX;
+	VS_D_80072FA0.m = GsWSMATRIX;
 	MAIN_D_801352EC = DRAWING_OFFSET_X;
 	MAIN_D_801352F0 = DRAWING_OFFSET_Y;
 	MAIN_D_80139B34.vpx = 0;
@@ -4008,7 +4383,7 @@ void VS_spawnEFESubEffect(void)
 	}
 
 	MAIN_D_80134CDC = 1;
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xC);
+	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xc);
 }
 
 void VS_popEFEValueToVariable(void)
@@ -4600,7 +4975,7 @@ void VS_initializeEFESubOpcodeTable(void)
 		if ((uint32_t)((int32_t (*)[2])VS_D_80070B44)[i][0] >= 0x61) {
 			exit(1);
 		}
-		VS_jtbl_80072E1C[((int32_t (*)[2])VS_D_80070B44)[i][0]] = (void (*)(void))((void *(*)[2])VS_D_80070B48)[i][0];
+		VS_jtbl_80072E1C[VS_D_80070B44[i].opcode] = VS_D_80070B44[i].handler;
 	}
 }
 
@@ -4629,7 +5004,7 @@ int32_t VS_runEFEScript(int32_t script)
 
 void VS_resetPoisonBubbles(void)
 {
-	setShortWithStride(VS_D_80072FC0, -1, 0xc, 0xc);
+	setShortWithStride((int16_t *)VS_D_80072FC0, -1, 0xc, 0xc);
 }
 
 int32_t VS_addPoisonBubble(int32_t arg)
@@ -4638,7 +5013,7 @@ int32_t VS_addPoisonBubble(int32_t arg)
 	int16_t *p;
 
 	for (i = 0; i < 0xc; i++) {
-		if (((int16_t (*)[6])VS_D_80072FC0)[i][0] == -1) {
+		if (VS_D_80072FC0[i][0] == -1) {
 			break;
 		}
 	}
@@ -4647,7 +5022,7 @@ int32_t VS_addPoisonBubble(int32_t arg)
 		return -1;
 	}
 
-	p = ((int16_t (*)[6])VS_D_80072FC0)[i];
+	p = VS_D_80072FC0[i];
 	p[0] = 0;
 	*(int32_t *)&p[4] = arg;
 	p[2] = (rand() % 100) - 0x32;
@@ -4661,7 +5036,7 @@ void VS_tickPoisonBubble(int32_t i)
 {
 	int16_t *p;
 
-	p = &VS_D_80072FC0[i * 6];
+	p = VS_D_80072FC0[i];
 	p[0]++;
 	if (p[0] >= 0x28) {
 		p[0] = -1;
@@ -4678,7 +5053,7 @@ void VS_renderPoisonBubble(int32_t i)
 	int32_t otz;
 	int32_t d;
 
-	p = &VS_D_80072FC0[i * 6];
+	p = VS_D_80072FC0[i];
 	frame = p[0];
 	translateConditionFXToEntity((Entity *)*(int32_t *)&p[4], &pos);
 	pos.vx += p[2];
@@ -5127,7 +5502,7 @@ void VS_tickFinisherAura(int32_t i)
 {
 	int16_t *p;
 
-	p = &VS_D_800731B4[i * 4];
+	p = VS_D_800731B4[i];
 	p[0]++;
 	if (p[0] > p[1]) {
 		removeObject(0x80d, i);
@@ -5149,7 +5524,7 @@ void VS_renderFinisherAura(int32_t id)
 	int32_t t;
 	int32_t i;
 
-	fa = &VS_D_800731B4[id * 4];
+	fa = VS_D_800731B4[id];
 	e = (Entity *)*(int32_t *)&fa[2];
 
 	if (fa[0] < 10) {
@@ -5259,7 +5634,7 @@ void VS_initializeFinisherAuraModel(char *tim, char *base)
 	VS_setTMDObjectColor(4, (int32_t *)&ca, (char *)MAIN_D_801352FC);
 
 	for (j = 0; j < 2; j++) {
-		((int16_t (*)[4])VS_D_800731B4)[j][0] = -1;
+		VS_D_800731B4[j][0] = -1;
 	}
 
 	p = VS_D_800731C4;
@@ -5283,7 +5658,7 @@ int32_t VS_addFinisherAura(int32_t arg, int32_t val)
 	int16_t *p;
 
 	for (i = 0; i < 2; i++) {
-		if (((int16_t (*)[4])VS_D_800731B4)[i][0] < 0) {
+		if (VS_D_800731B4[i][0] < 0) {
 			break;
 		}
 	}
@@ -5292,7 +5667,7 @@ int32_t VS_addFinisherAura(int32_t arg, int32_t val)
 		return -1;
 	}
 
-	p = &VS_D_800731B4[i * 4];
+	p = VS_D_800731B4[i];
 	p[0] = 0;
 	p[1] = val;
 	*(int32_t *)&p[2] = arg;
@@ -5304,7 +5679,7 @@ int32_t VS_addFinisherAura(int32_t arg, int32_t val)
 void VS_removeFinisherAura(int32_t i)
 {
 	removeObject(0x80d, i);
-	VS_D_800731B4[i * 4] = -1;
+	VS_D_800731B4[i][0] = -1;
 }
 
 void VS_removeAllFinisherAuras(void)

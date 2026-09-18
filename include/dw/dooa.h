@@ -4,6 +4,7 @@
 #include <libgs.h>
 #include <libgte.h>
 
+#include <dw/efe.h>
 #include <dw/entity.h>
 #include <dw/types.h>
 
@@ -41,7 +42,7 @@ typedef struct {
 	int8_t flash;
 } DooaShardEffect;
 
-extern char DOOA_FLASH_DATA[];
+extern EfeFlashBuffer DOOA_FLASH_DATA;
 extern GsRVIEW2 DOOA_CAMERA_START_VIEW;
 extern VECTOR DOOA_SAVED_LOCATION;
 extern uint8_t DOOA_SAVED_ENTITY_CLUT[];

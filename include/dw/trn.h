@@ -4,13 +4,16 @@
 #include <libgpu.h>
 #include <libgte.h>
 
+#include <dw/training.h>
 #include <dw/types.h>
 
 extern VECTOR TRN_D_8008F320;
 extern VECTOR TRN_D_8008F330;
 extern SVECTOR TRN_D_8008F340[];
+extern VECTOR TRN_D_8008F358;
 extern int16_t TRN_D_8008F368[];
 extern int16_t TRN_D_8008F388[];
+extern SlotMachine TRN_SLOT_MACHINE;
 
 extern char MAIN_D_80134BC0[7];
 extern RECT MAIN_D_80134BC8;

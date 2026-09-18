@@ -1,8 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include <libcd.h>
 #include <libetc.h>
 #include <libgpu.h>
 #include <libgs.h>
@@ -11,6 +8,7 @@
 
 #include <dw/aabb.h>
 #include <dw/anim.h>
+#include <dw/battle.h>
 #include <dw/clock.h>
 #include <dw/combat.h>
 #include <dw/entity.h>
@@ -35,28 +33,14 @@ typedef struct {
 	int32_t scale;
 } StdTmdObject;
 
-typedef struct {
-	int16_t clut;
-	uint8_t u;
-	uint8_t v;
-	uint8_t w;
-	uint8_t h;
-	int16_t x;
-	int16_t y;
-} VsBarSprite;
-
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern int16_t MAIN_D_8013518C[2];
 extern int32_t MAIN_D_80135194;
-extern int16_t STD_D_8007A738[][2];
-extern int16_t STD_D_8007A73A[][2];
 extern uint8_t MAIN_D_80135190;
-extern uint8_t STD_D_8007BB94[];
 extern int16_t MAIN_D_801351A4;
 extern uint8_t MAIN_D_801351B4;
-extern int16_t STD_D_8007FA08[];
 extern uint8_t MAIN_D_80134D64;
 extern int8_t GAME_STATE;
 extern uint8_t MAIN_D_80135198[2];
@@ -66,48 +50,14 @@ extern uint8_t MAIN_D_8013519E[2];
 extern uint8_t MAIN_D_801351A0[2];
 extern uint8_t MAIN_D_801351A2[2];
 extern int16_t MAIN_D_8013518E;
-extern PositionData STD_D_8007C7B0[4];
-extern GsOT STD_D_8007B714[];
-extern int32_t STD_D_8007AA10[];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
 extern uint8_t *MAIN_D_801351A8;
-extern int32_t STD_D_8007A9A4[];
-extern MATRIX STD_D_8007A718;
-extern VsBarSprite STD_D_8007A9D4[];
-extern PositionData STD_D_8007F528[8];
-extern int16_t STD_D_8007CC50[];
-extern int16_t STD_D_8007CC7C[];
-extern int16_t STD_D_8007CCA8[];
-extern int16_t STD_D_8007CCD4[];
-extern int16_t STD_D_8007AA8C[];
-extern int16_t STD_D_8007AA44[];
-extern GsOT_TAG STD_D_8007B73C[];
-extern GsOT_TAG STD_D_8007B7BC[];
-extern char STD_D_8007AAC4[];
-extern char STD_D_8007CD28[];
 extern uint8_t CURRENT_SCREEN;
 extern int32_t MAIN_D_801351AC;
 extern int32_t MAIN_D_801350F0;
 extern uint8_t *MAIN_D_801351B0;
-extern int16_t STD_D_8007F968[];
-extern int16_t STD_D_8007F9B8[];
-extern char STD_D_8007AADC[];
-extern char STD_D_8007AAF0[];
-extern char STD_D_8007AB04[];
-extern int32_t STD_D_8007CAD0[];
-extern int32_t STD_D_8007CAD4[];
-extern int32_t STD_D_8007CAD8[];
-extern int32_t STD_D_8007CB58[];
-extern int32_t STD_D_8007CB5C[];
-extern int32_t STD_D_8007CB60[];
-extern int32_t STD_D_8007CBE0[];
-extern int32_t STD_D_8007CBE4[];
-extern int32_t STD_D_8007CBE8[];
-extern int32_t STD_D_8007CC68[];
-extern int32_t STD_D_8007CC6C[];
-extern int32_t STD_D_8007CC70[];
 
 void STD_func_8006B1F0(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx);
 void STD_func_8006B6F4(void);
@@ -117,7 +67,7 @@ void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount, int32_t *
 void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t u, int32_t v, int32_t w, int32_t h);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t h);
-void swapByte(char *a, char *b);
+void swapByte(uint8_t *a, uint8_t *b);
 void STD_renderBattleStartTextBurst(void);
 void STD_tickFinisherChargeup(void);
 void STD_renderFinisherChargeup(void);
@@ -186,6 +136,226 @@ static void *std_hud_functions[] = {
 	STD_func_80069134,
 };
 
+// clang-format off
+MATRIX STD_D_8007A718 = {
+	{
+		0x100a, 0x0000, 0x0000, 0x0000,
+		0x08e4, 0xf299, 0x0000, 0x0d5e,
+		0x08e9,
+	},
+	{ 0x00000000, 0xfffffffe, 0x000002d4 },
+};
+
+int16_t STD_D_8007A738[155][2] = {
+	{ 0xff54, 0xffd0 },
+	{ 0xff5c, 0xffd0 },
+	{ 0xff64, 0xffd0 },
+	{ 0xff6c, 0xffd0 },
+	{ 0xff74, 0xffd0 },
+	{ 0xff54, 0xffdc },
+	{ 0xff5c, 0xffdc },
+	{ 0xff74, 0xffdc },
+	{ 0xff7c, 0xffdc },
+	{ 0xff54, 0xffe8 },
+	{ 0xff5c, 0xffe8 },
+	{ 0xff74, 0xffe8 },
+	{ 0xff7c, 0xffe8 },
+	{ 0xff54, 0xfff4 },
+	{ 0xff5c, 0xfff4 },
+	{ 0xff64, 0xfff4 },
+	{ 0xff6c, 0xfff4 },
+	{ 0xff74, 0xfff4 },
+	{ 0xff54, 0x0000 },
+	{ 0xff5c, 0x0000 },
+	{ 0xff74, 0x0000 },
+	{ 0xff7c, 0x0000 },
+	{ 0xff54, 0x000c },
+	{ 0xff5c, 0x000c },
+	{ 0xff74, 0x000c },
+	{ 0xff7c, 0x000c },
+	{ 0xff54, 0x0018 },
+	{ 0xff5c, 0x0018 },
+	{ 0xff74, 0x0018 },
+	{ 0xff7c, 0x0018 },
+	{ 0xff54, 0x0024 },
+	{ 0xff5c, 0x0024 },
+	{ 0xff64, 0x0024 },
+	{ 0xff6c, 0x0024 },
+	{ 0xff74, 0x0024 },
+	{ 0xffa4, 0xffd0 },
+	{ 0xffac, 0xffd0 },
+	{ 0xffa4, 0xffdc },
+	{ 0xffac, 0xffdc },
+	{ 0xff9c, 0xffe8 },
+	{ 0xffa4, 0xffe8 },
+	{ 0xffac, 0xffe8 },
+	{ 0xffb4, 0xffe8 },
+	{ 0xff94, 0xfff4 },
+	{ 0xff9c, 0xfff4 },
+	{ 0xffb4, 0xfff4 },
+	{ 0xffbc, 0xfff4 },
+	{ 0xff94, 0x0000 },
+	{ 0xff9c, 0x0000 },
+	{ 0xffb4, 0x0000 },
+	{ 0xffbc, 0x0000 },
+	{ 0xff8c, 0x000c },
+	{ 0xff94, 0x000c },
+	{ 0xff9c, 0x000c },
+	{ 0xffa4, 0x000c },
+	{ 0xffac, 0x000c },
+	{ 0xffb4, 0x000c },
+	{ 0xffbc, 0x000c },
+	{ 0xffc4, 0x000c },
+	{ 0xff8c, 0x0018 },
+	{ 0xff94, 0x0018 },
+	{ 0xffbc, 0x0018 },
+	{ 0xffc4, 0x0018 },
+	{ 0xff8c, 0x0024 },
+	{ 0xff94, 0x0024 },
+	{ 0xffbc, 0x0024 },
+	{ 0xffc4, 0x0024 },
+	{ 0xffd4, 0xffd0 },
+	{ 0xffdc, 0xffd0 },
+	{ 0xffe4, 0xffd0 },
+	{ 0xffec, 0xffd0 },
+	{ 0xfff4, 0xffd0 },
+	{ 0xfffc, 0xffd0 },
+	{ 0xffe4, 0xffdc },
+	{ 0xffec, 0xffdc },
+	{ 0xffe4, 0xffe8 },
+	{ 0xffec, 0xffe8 },
+	{ 0xffe4, 0xfff4 },
+	{ 0xffec, 0xfff4 },
+	{ 0xffe4, 0x0000 },
+	{ 0xffec, 0x0000 },
+	{ 0xffe4, 0x000c },
+	{ 0xffec, 0x000c },
+	{ 0xffe4, 0x0018 },
+	{ 0xffec, 0x0018 },
+	{ 0xffe4, 0x0024 },
+	{ 0xffec, 0x0024 },
+	{ 0x0014, 0xffd0 },
+	{ 0x001c, 0xffd0 },
+	{ 0x0024, 0xffd0 },
+	{ 0x002c, 0xffd0 },
+	{ 0x0034, 0xffd0 },
+	{ 0x003c, 0xffd0 },
+	{ 0x0024, 0xffdc },
+	{ 0x002c, 0xffdc },
+	{ 0x0024, 0xffe8 },
+	{ 0x002c, 0xffe8 },
+	{ 0x0024, 0xfff4 },
+	{ 0x002c, 0xfff4 },
+	{ 0x0024, 0x0000 },
+	{ 0x002c, 0x0000 },
+	{ 0x0024, 0x000c },
+	{ 0x002c, 0x000c },
+	{ 0x0024, 0x0018 },
+	{ 0x002c, 0x0018 },
+	{ 0x0024, 0x0024 },
+	{ 0x002c, 0x0024 },
+	{ 0x004c, 0xffd0 },
+	{ 0x0054, 0xffd0 },
+	{ 0x004c, 0xffdc },
+	{ 0x0054, 0xffdc },
+	{ 0x004c, 0xffe8 },
+	{ 0x0054, 0xffe8 },
+	{ 0x004c, 0xfff4 },
+	{ 0x0054, 0xfff4 },
+	{ 0x004c, 0x0000 },
+	{ 0x0054, 0x0000 },
+	{ 0x004c, 0x000c },
+	{ 0x0054, 0x000c },
+	{ 0x004c, 0x0018 },
+	{ 0x0054, 0x0018 },
+	{ 0x004c, 0x0024 },
+	{ 0x0054, 0x0024 },
+	{ 0x005c, 0x0024 },
+	{ 0x0064, 0x0024 },
+	{ 0x006c, 0x0024 },
+	{ 0x0074, 0x0024 },
+	{ 0x0084, 0xffd0 },
+	{ 0x008c, 0xffd0 },
+	{ 0x0094, 0xffd0 },
+	{ 0x009c, 0xffd0 },
+	{ 0x00a4, 0xffd0 },
+	{ 0x00ac, 0xffd0 },
+	{ 0x0084, 0xffdc },
+	{ 0x008c, 0xffdc },
+	{ 0x0084, 0xffe8 },
+	{ 0x008c, 0xffe8 },
+	{ 0x0084, 0xfff4 },
+	{ 0x008c, 0xfff4 },
+	{ 0x0094, 0xfff4 },
+	{ 0x009c, 0xfff4 },
+	{ 0x00a4, 0xfff4 },
+	{ 0x00ac, 0xfff4 },
+	{ 0x0084, 0x0000 },
+	{ 0x008c, 0x0000 },
+	{ 0x0084, 0x000c },
+	{ 0x008c, 0x000c },
+	{ 0x0084, 0x0018 },
+	{ 0x008c, 0x0018 },
+	{ 0x0084, 0x0024 },
+	{ 0x008c, 0x0024 },
+	{ 0x0094, 0x0024 },
+	{ 0x009c, 0x0024 },
+	{ 0x00a4, 0x0024 },
+	{ 0x00ac, 0x0024 },
+};
+
+int32_t STD_D_8007A9A4[12] = {
+	0x00000020, 0x00000040, 0x00000060, 0x00000080,
+	0x000000a0, 0x000000c0, 0x000000e0, 0x000000ff,
+	0x000000e0, 0x000000c0, 0x000000a0, 0x00000080,
+};
+
+BarSprite STD_D_8007A9D4[6] = {
+	{ 0x01ec, 0x80, 0xa8, 0x68, 0x08, 0x0000, 0x0000 },
+	{ 0x01eb, 0x90, 0xb0, 0x0b, 0x0b, 0x0003, 0xfffe },
+	{ 0x01eb, 0x80, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
+	{ 0x01ec, 0x80, 0xa8, 0x68, 0x08, 0x0000, 0x0000 },
+	{ 0x01eb, 0x9b, 0xb0, 0x0b, 0x0b, 0x0003, 0xfffe },
+	{ 0x01eb, 0x84, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
+};
+
+int32_t STD_D_8007AA10[8] = {
+	0x00001004, 0x00000000, 0x00001000, 0x00000000,
+	0x00001004, 0x00000000, 0x00000000, 0x000003e8,
+};
+
+int16_t STD_D_8007AA30[8] = {
+	0xfe90, 0xfdfb, 0xfd7b, 0xfd0e, 0xfcb6, 0xfc70, 0xfc21, 0xfc18,
+};
+
+int16_t STD_D_8007AA40[24] = {
+	0xfd44, 0xfd4c, 0xfd64, 0xfd8c, 0xfdc4, 0xfe0c, 0xfe64, 0xfecc,
+	0xff44, 0xffcc, 0x0064, 0x0043, 0x002c, 0x001f, 0x001c, 0x001f,
+	0x002c, 0x0043, 0x0064, 0x0056, 0x0052, 0x0056, 0x0064, 0x0000,
+};
+
+int16_t STD_D_8007AA70[14] = {
+	0x0005, 0x0014, 0x002f, 0x0053, 0x0082, 0x00bc, 0x0100, 0x014e,
+	0x01a7, 0x020a, 0x0278, 0x02f0, 0x0372, 0x0400,
+};
+
+int16_t STD_D_8007AA8C[18] = {
+	0x0000, 0x0001, 0x0005, 0x000b, 0x0014, 0x001f, 0x002d, 0x003d,
+	0x0050, 0x0065, 0x007d, 0x0097, 0x00b4, 0x00d3, 0x00f5, 0x0119,
+	0x0140, 0x0000,
+};
+
+char STD_D_8007AAB0[20] = "\\STDDAT\\DRAW.TMD";
+
+char STD_D_8007AAC4[24] = "\\STDDAT\\WIN_LOSE.TMD";
+
+char STD_D_8007AADC[20] = "\\STDDAT\\CHAMP.TMD";
+
+char STD_D_8007AAF0[20] = "\\STDDAT\\B_DAI.TMD";
+
+char STD_D_8007AB04[20] = "\\STDDAT\\T_DAI.TMD";
+// clang-format on
+
 void STD_func_80069134(int16_t tech)
 {
 	COMBAT_DATA_PTR->player.finisherChargeup[0] = 0;
@@ -197,9 +367,9 @@ void STD_func_80069134(int16_t tech)
 
 	COMBAT_DATA_PTR->player.currentCommand[0] = 3;
 	COMBAT_DATA_PTR->player.bufferedCommand[0] = 3;
-	MAIN_D_8013518C[0] = -0x8C;
-	MAIN_D_8013518E = -0x4A;
-	addObject(0x19A, 0, (TickFunction)STD_tickFinisherChargeup, (RenderFunction)STD_renderFinisherChargeup);
+	MAIN_D_8013518C[0] = -0x8c;
+	MAIN_D_8013518E = -0x4a;
+	addObject(0x19a, 0, (TickFunction)STD_tickFinisherChargeup, (RenderFunction)STD_renderFinisherChargeup);
 }
 
 void STD_tickFinisherChargeup(void)
@@ -320,13 +490,13 @@ void STD_shuffleBattleStartTextPieces(void)
 	int32_t i;
 
 	for (i = 0; i < 0x9b; i++) {
-		swapByte(&((char (*)[20])STD_D_8007BB94)[i][0x11], &((char (*)[20])STD_D_8007BB94)[random(0x9b)][0x11]);
+		swapByte(&STD_D_8007BB94[i][0x11], &STD_D_8007BB94[random(0x9b)][0x11]);
 	}
 }
 
 void STD_initializeBattleStartText(void)
 {
-	char (*p)[20];
+	uint8_t (*p)[20];
 	int32_t sgn;
 	int32_t i;
 	int32_t r;
@@ -334,7 +504,7 @@ void STD_initializeBattleStartText(void)
 
 	MAIN_D_80135190 = 0;
 	MAIN_D_80135194 = 0;
-	p = (char (*)[20])STD_D_8007BB94;
+	p = STD_D_8007BB94;
 	for (i = 0; i < 0x9b; i++, p++) {
 		(*p)[0x11] = i;
 		(*p)[0x12] = 0x18;
@@ -343,14 +513,14 @@ void STD_initializeBattleStartText(void)
 
 	STD_shuffleBattleStartTextPieces();
 
-	p = (char (*)[20])STD_D_8007BB94;
+	p = STD_D_8007BB94;
 	for (i = 0; i < 0x9b; i++, p++) {
 		if (random(2) == 1) {
 			sgn = 1;
 		} else {
 			sgn = -1;
 		}
-		((int16_t *)*p)[5] = STD_D_8007A73A[i][0];
+		((int16_t *)*p)[5] = STD_D_8007A738[i][1];
 		(*p)[0x10] = -sgn * ((random(3) + 1) << 5);
 		if ((0 <= i) && (i < 0x33)) {
 			((int16_t *)*p)[4] = (sgn * 500) + random(100) - 50;
@@ -362,7 +532,7 @@ void STD_initializeBattleStartText(void)
 		r = random(5);
 		t = STD_D_8007A738[i][0];
 		((int16_t *)*p)[6] = (r + 8) * t / 8;
-		t = STD_D_8007A73A[i][0];
+		t = STD_D_8007A738[i][1];
 		((int16_t *)*p)[7] = (r + 8) * t / 8;
 		((int16_t *)*p)[0] = 0;
 		((int16_t *)*p)[1] = 0;
@@ -376,7 +546,7 @@ void STD_renderBattleStartText(void)
 {
 	POLY_FT4 *ft;
 	POLY_F4 *shadow;
-	char (*p)[20];
+	uint8_t (*p)[20];
 	POLY_FT4 *prim;
 	GsOT_TAG *ot;
 	int32_t i;
@@ -398,7 +568,7 @@ void STD_renderBattleStartText(void)
 
 	n = 0;
 	for (i = 0; i < 0x9b; i++) {
-		if ((STD_D_8007BB94 + 0x12)[i * 20] != 0) {
+		if (STD_D_8007BB94[i][0x12] != 0) {
 			break;
 		}
 		n++;
@@ -412,7 +582,7 @@ void STD_renderBattleStartText(void)
 		clut = GetClut(0x100, 0x1e8);
 	}
 
-	p = (char (*)[20])STD_D_8007BB94;
+	p = STD_D_8007BB94;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	ot = ACTIVE_ORDERING_TABLE->org;
 	for (i = 0; i < 0x9b; i++, p++) {
@@ -525,7 +695,7 @@ void STD_renderBattleStartTextBurst(void)
 {
 	POLY_FT4 *ft;
 	POLY_F4 *shadow;
-	char (*p)[20];
+	uint8_t (*p)[20];
 	POLY_FT4 *prim;
 	GsOT_TAG *ot;
 	int32_t i;
@@ -557,7 +727,7 @@ void STD_renderBattleStartTextBurst(void)
 
 	ot = ACTIVE_ORDERING_TABLE->org;
 	dead = 0;
-	p = (char (*)[20])STD_D_8007BB94;
+	p = STD_D_8007BB94;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	for (i = 0; i < 0x9b; i++, p++) {
 		if ((((int16_t *)*p)[6] == 0) && (((int16_t *)*p)[7] == 0)) {
@@ -785,7 +955,7 @@ void STD_func_8006AD00(int32_t id)
 void STD_func_8006AD68(uint8_t id)
 {
 	POLY_FT4 *prim;
-	VsBarSprite *p;
+	BarSprite *p;
 	FighterData *fighter;
 	DigimonEntity *e;
 	int16_t *hpPtr;
@@ -803,7 +973,7 @@ void STD_func_8006AD68(uint8_t id)
 	int32_t w;
 	int32_t t;
 
-	p = (VsBarSprite *)COMBAT_DATA_PTR;
+	p = (BarSprite *)COMBAT_DATA_PTR;
 	fighter = &COMBAT_DATA_PTR->fighter[id];
 	e = (DigimonEntity *)ENTITY_TABLE[((CombatData *)p)->player.entityIds[id]];
 	hpPtr = &e->stats.current.currentHP;
@@ -935,29 +1105,29 @@ void STD_func_8006B2BC(void)
 	GsMapModelingData((u_long *)(MAIN_D_801351A8 + 4));
 
 	for (i = 0; i < 4; i++) {
-		GsLinkObject4((u_long)(MAIN_D_801351A8 + 0xc), &STD_D_8007C7B0[i].obj, i);
-		GsInitCoordinate2(NULL, &STD_D_8007C7B0[i].posMatrix);
-		STD_D_8007C7B0[i].obj.attribute = 0;
-		STD_D_8007C7B0[i].obj.coord2 = &STD_D_8007C7B0[i].posMatrix;
+		GsLinkObject4((u_long)(MAIN_D_801351A8 + 0xc), &STD_D_8007C7B0[i].data.obj, i);
+		GsInitCoordinate2(NULL, &STD_D_8007C7B0[i].data.posMatrix);
+		STD_D_8007C7B0[i].data.obj.attribute = 0;
+		STD_D_8007C7B0[i].data.obj.coord2 = &STD_D_8007C7B0[i].data.posMatrix;
 	}
 
 	for (i = 0; i < 4; i++) {
-		STD_D_8007C7B0[i].scale.vx = 0x1000;
-		STD_D_8007C7B0[i].scale.vy = 0x1000;
-		STD_D_8007C7B0[i].scale.vz = 0x1000;
-		STD_D_8007C7B0[i].rotation.vx = 0;
-		STD_D_8007C7B0[i].rotation.vy = 0;
-		STD_D_8007C7B0[i].rotation.vz = 0;
-		STD_D_8007C7B0[i].location.vx = 0x3e8;
-		STD_D_8007C7B0[i].location.vy = 0x78;
-		STD_D_8007C7B0[i].location.vz = 0x280;
-		setupModelMatrix(&STD_D_8007C7B0[i]);
+		STD_D_8007C7B0[i].data.scale.vx = 0x1000;
+		STD_D_8007C7B0[i].data.scale.vy = 0x1000;
+		STD_D_8007C7B0[i].data.scale.vz = 0x1000;
+		STD_D_8007C7B0[i].data.rotation.vx = 0;
+		STD_D_8007C7B0[i].data.rotation.vy = 0;
+		STD_D_8007C7B0[i].data.rotation.vz = 0;
+		STD_D_8007C7B0[i].data.location.vx = 0x3e8;
+		STD_D_8007C7B0[i].data.location.vy = 0x78;
+		STD_D_8007C7B0[i].data.location.vz = 0x280;
+		setupModelMatrix(&STD_D_8007C7B0[i].data);
 	}
 }
 
 void STD_func_8006B468(void)
 {
-	addObject(0x19D, 0, (TickFunction)STD_tickVersusModelScene, (RenderFunction)STD_renderVersusModelScene);
+	addObject(0x19d, 0, (TickFunction)STD_tickVersusModelScene, (RenderFunction)STD_renderVersusModelScene);
 }
 
 void STD_tickVersusModelScene(void)
@@ -967,14 +1137,14 @@ void STD_tickVersusModelScene(void)
 	MAIN_D_801351A4++;
 	for (i = 0; i < 4; i++) {
 		if (i * 5 < MAIN_D_801351A4) {
-			if (STD_D_8007C7B0[i].location.vx != MAIN_D_801348DC[i]) {
-				STD_D_8007C7B0[i].location.vx -= 200;
-				if (STD_D_8007C7B0[i].location.vx < MAIN_D_801348DC[i]) {
-					STD_D_8007C7B0[i].location.vx = MAIN_D_801348DC[i];
+			if (STD_D_8007C7B0[i].data.location.vx != MAIN_D_801348DC[i]) {
+				STD_D_8007C7B0[i].data.location.vx -= 200;
+				if (STD_D_8007C7B0[i].data.location.vx < MAIN_D_801348DC[i]) {
+					STD_D_8007C7B0[i].data.location.vx = MAIN_D_801348DC[i];
 				}
 			}
 		}
-		setupModelMatrix(&STD_D_8007C7B0[i]);
+		setupModelMatrix(&STD_D_8007C7B0[i].data);
 	}
 }
 
@@ -989,10 +1159,10 @@ void STD_renderVersusModelScene(void)
 	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 4; i++) {
-		GsGetLws(STD_D_8007C7B0[i].obj.coord2, &lw, &ls);
+		GsGetLws(STD_D_8007C7B0[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007C7B0[i].obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_D_8007C7B0[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -1022,16 +1192,16 @@ void STD_func_8006B6F4(void)
 
 	for (i = 0x14; i < 0x29; i++) {
 		STD_D_8007CC50[i] = ((i * 0x2000) / 40) & 0xfff;
-		STD_D_8007CC7C[i] = (((i * 0x800) / 40) + 0x800) & 0xfff;
+		(&STD_D_8007CC78[2])[i] = (((i * 0x800) / 40) + 0x800) & 0xfff;
 		if ((i >= 0x14) && (i < 0x25)) {
-			STD_D_8007CCA8[i] = STD_D_8007AA8C[0x24 - i] - 0xe6;
+			(&STD_D_8007CCA4[2])[i] = STD_D_8007AA8C[0x24 - i] - 0xe6;
 			v = STD_D_8007AA8C[0x24 - i];
-			STD_D_8007CCD4[i] = 0x118 - v;
+			(&STD_D_8007CCD0[2])[i] = 0x118 - v;
 		}
 		if ((i >= 0x25) && (i < 0x29)) {
-			STD_D_8007CCA8[i] = STD_D_8007AA44[i] - 0xe6;
-			v = STD_D_8007AA44[i];
-			STD_D_8007CCD4[i] = 0x118 - v;
+			(&STD_D_8007CCA4[2])[i] = (&STD_D_8007AA40[2])[i] - 0xe6;
+			v = (&STD_D_8007AA40[2])[i];
+			(&STD_D_8007CCD0[2])[i] = 0x118 - v;
 		}
 	}
 
@@ -1043,23 +1213,23 @@ void STD_func_8006B6F4(void)
 	readFile(STD_D_8007AAC4, (void *)buf);
 	GsMapModelingData((u_long *)(buf + 4));
 	for (i = 0; i < 8; i++) {
-		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007F528[i].obj, i);
-		GsInitCoordinate2(NULL, &STD_D_8007F528[i].posMatrix);
-		STD_D_8007F528[i].obj.attribute = 0;
-		STD_D_8007F528[i].obj.coord2 = &STD_D_8007F528[i].posMatrix;
+		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007F528[i].data.obj, i);
+		GsInitCoordinate2(NULL, &STD_D_8007F528[i].data.posMatrix);
+		STD_D_8007F528[i].data.obj.attribute = 0;
+		STD_D_8007F528[i].data.obj.coord2 = &STD_D_8007F528[i].data.posMatrix;
 	}
 
 	for (i = 4; i < 8; i++) {
-		STD_D_8007F528[i].scale.vx = 0x1000;
-		STD_D_8007F528[i].scale.vy = 0x1000;
-		STD_D_8007F528[i].scale.vz = 0x1000;
-		STD_D_8007F528[i].rotation.vx = 0;
-		STD_D_8007F528[i].rotation.vy = 0;
-		STD_D_8007F528[i].rotation.vz = 0;
-		STD_D_8007F528[i].location.vx = 0;
-		STD_D_8007F528[i].location.vy = -0x2bc;
-		STD_D_8007F528[i].location.vz = 0xdc;
-		setupModelMatrix(&STD_D_8007F528[i]);
+		STD_D_8007F528[i].data.scale.vx = 0x1000;
+		STD_D_8007F528[i].data.scale.vy = 0x1000;
+		STD_D_8007F528[i].data.scale.vz = 0x1000;
+		STD_D_8007F528[i].data.rotation.vx = 0;
+		STD_D_8007F528[i].data.rotation.vy = 0;
+		STD_D_8007F528[i].data.rotation.vz = 0;
+		STD_D_8007F528[i].data.location.vx = 0;
+		STD_D_8007F528[i].data.location.vy = -0x2bc;
+		STD_D_8007F528[i].data.location.vz = 0xdc;
+		setupModelMatrix(&STD_D_8007F528[i].data);
 	}
 }
 
@@ -1090,47 +1260,47 @@ void STD_func_8006BA18(void)
 	}
 
 	for (i = 0; i < 9; i++) {
-		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007C7B0[i].obj, i);
-		GsInitCoordinate2(NULL, &STD_D_8007C7B0[i].posMatrix);
-		STD_D_8007C7B0[i].obj.attribute = 0x80000000;
-		STD_D_8007C7B0[i].obj.coord2 = &STD_D_8007C7B0[i].posMatrix;
+		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007C7B0[i].data.obj, i);
+		GsInitCoordinate2(NULL, &STD_D_8007C7B0[i].data.posMatrix);
+		STD_D_8007C7B0[i].data.obj.attribute = 0x80000000;
+		STD_D_8007C7B0[i].data.obj.coord2 = &STD_D_8007C7B0[i].data.posMatrix;
 	}
 
 	for (i = 0; i < 9; i++) {
-		STD_D_8007C7B0[i].scale.vx = 0x1000;
-		STD_D_8007C7B0[i].scale.vy = 0x2000;
-		STD_D_8007C7B0[i].scale.vz = 0x1000;
-		STD_D_8007C7B0[i].rotation.vx = 0;
-		STD_D_8007C7B0[i].rotation.vy = 0;
-		STD_D_8007C7B0[i].rotation.vz = 0;
+		STD_D_8007C7B0[i].data.scale.vx = 0x1000;
+		STD_D_8007C7B0[i].data.scale.vy = 0x2000;
+		STD_D_8007C7B0[i].data.scale.vz = 0x1000;
+		STD_D_8007C7B0[i].data.rotation.vx = 0;
+		STD_D_8007C7B0[i].data.rotation.vy = 0;
+		STD_D_8007C7B0[i].data.rotation.vz = 0;
 		switch (i) {
 		case 5:
 			STD_D_8007CAD0[0] = 0xbe;
-			STD_D_8007CAD4[0] = 0xc8;
-			STD_D_8007CAD8[0] = 0x7bc;
+			STD_D_8007CAD0[1] = 0xc8;
+			STD_D_8007CAD0[2] = 0x7bc;
 			break;
 		case 6:
 			STD_D_8007CB58[0] = 0x168;
-			STD_D_8007CB5C[0] = 0xc8;
-			STD_D_8007CB60[0] = 0x7bc;
+			STD_D_8007CB58[1] = 0xc8;
+			STD_D_8007CB58[2] = 0x7bc;
 			break;
 		case 7:
 			STD_D_8007CBE0[0] = 0x230;
-			STD_D_8007CBE4[0] = 0xc8;
-			STD_D_8007CBE8[0] = 0x7bc;
+			STD_D_8007CBE0[1] = 0xc8;
+			STD_D_8007CBE0[2] = 0x7bc;
 			break;
 		case 8:
 			STD_D_8007CC68[0] = 0x2e4;
-			STD_D_8007CC6C[0] = 0xc8;
-			STD_D_8007CC70[0] = 0x7bc;
+			STD_D_8007CC68[1] = 0xc8;
+			STD_D_8007CC68[2] = 0x7bc;
 			break;
 		default:
-			STD_D_8007C7B0[i].location.vx = i * 0xc8 - 0x2f8;
-			STD_D_8007C7B0[i].location.vy = 0xc8;
-			STD_D_8007C7B0[i].location.vz = 0x7bc;
+			STD_D_8007C7B0[i].data.location.vx = i * 0xc8 - 0x2f8;
+			STD_D_8007C7B0[i].data.location.vy = 0xc8;
+			STD_D_8007C7B0[i].data.location.vz = 0x7bc;
 			break;
 		}
-		setupModelMatrix(&STD_D_8007C7B0[i]);
+		setupModelMatrix(&STD_D_8007C7B0[i].data);
 	}
 
 	MAIN_D_801351B0 = (uint8_t *)0x80038000;
@@ -1140,20 +1310,20 @@ void STD_func_8006BA18(void)
 		readFile(STD_D_8007AB04, MAIN_D_801351B0);
 	}
 	GsMapModelingData((u_long *)(MAIN_D_801351B0 + 4));
-	GsLinkObject4((u_long)(MAIN_D_801351B0 + 0xc), &STD_D_8007F528[0].obj, 0);
-	GsInitCoordinate2(NULL, &STD_D_8007F528[0].posMatrix);
-	STD_D_8007F528[0].obj.attribute = 0;
-	STD_D_8007F528[0].obj.coord2 = &STD_D_8007F528[0].posMatrix;
-	STD_D_8007F528[0].scale.vx = 0x1000;
-	STD_D_8007F528[0].scale.vy = 0x1000;
-	STD_D_8007F528[0].scale.vz = 0x1000;
-	STD_D_8007F528[0].rotation.vx = 0;
-	STD_D_8007F528[0].rotation.vy = 0;
-	STD_D_8007F528[0].rotation.vz = 0;
-	STD_D_8007F528[0].location.vx = 0;
-	STD_D_8007F528[0].location.vy = -0x1e;
-	STD_D_8007F528[0].location.vz = 0;
-	setupModelMatrix(&STD_D_8007F528[0]);
+	GsLinkObject4((u_long)(MAIN_D_801351B0 + 0xc), &STD_D_8007F528[0].data.obj, 0);
+	GsInitCoordinate2(NULL, &STD_D_8007F528[0].data.posMatrix);
+	STD_D_8007F528[0].data.obj.attribute = 0;
+	STD_D_8007F528[0].data.obj.coord2 = &STD_D_8007F528[0].data.posMatrix;
+	STD_D_8007F528[0].data.scale.vx = 0x1000;
+	STD_D_8007F528[0].data.scale.vy = 0x1000;
+	STD_D_8007F528[0].data.scale.vz = 0x1000;
+	STD_D_8007F528[0].data.rotation.vx = 0;
+	STD_D_8007F528[0].data.rotation.vy = 0;
+	STD_D_8007F528[0].data.rotation.vz = 0;
+	STD_D_8007F528[0].data.location.vx = 0;
+	STD_D_8007F528[0].data.location.vy = -0x1e;
+	STD_D_8007F528[0].data.location.vz = 0;
+	setupModelMatrix(&STD_D_8007F528[0].data);
 }
 
 void STD_func_8006BE64(void)

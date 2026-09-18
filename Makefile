@@ -186,6 +186,7 @@ BTL_SRC := \
 	src/btl/battle_hud.c \
 	src/btl/battle_main.c \
 	src/btl/battle_setup.c \
+	src/btl/btl_bss.c \
 	src/btl/command_menu.c \
 	src/btl/command_shout.c
 
@@ -280,7 +281,8 @@ EVL_ASM_SRC := $(shell find $(ASM_DIR)/evl -path '*.s' \
 
 EVL_SRC := \
 	$(EVL_ASM_SRC) \
-	src/evl/evl.c
+	src/evl/evl.c \
+	src/evl/evl_bss.c
 
 EVL_OBJ := $(EVL_SRC:%=$(BUILDDIR)/%.o)
 EVL_DEP := $(EVL_OBJ:%.o=%.d)
@@ -314,7 +316,8 @@ KAR_ASM_SRC := $(shell find $(ASM_DIR)/kar -path '*.s' \
 
 KAR_SRC := \
 	$(KAR_ASM_SRC) \
-	src/kar/kar.c
+	src/kar/kar.c \
+	src/kar/kar_bss.c
 
 KAR_OBJ := $(KAR_SRC:%=$(BUILDDIR)/%.o)
 KAR_DEP := $(KAR_OBJ:%.o=%.d)
@@ -364,6 +367,7 @@ STD_SRC := \
 	src/std/std_setup.c \
 	src/std/std_main.c \
 	src/std/std_hud.c \
+	src/std/std_bss.c \
 	src/std/std_effect.c
 
 STD_OBJ := $(STD_SRC:%=$(BUILDDIR)/%.o)
@@ -387,7 +391,8 @@ TRN2_SRC := \
 	src/trn2/trn2_def_map108.c \
 	src/trn2/trn2_reward.c \
 	src/trn2/trn2_hud.c \
-	src/trn2/trn2_slots.c
+	src/trn2/trn2_slots.c \
+	src/trn2/trn2_bss.c
 
 TRN2_OBJ := $(TRN2_SRC:%=$(BUILDDIR)/%.o)
 TRN2_DEP := $(TRN2_OBJ:%.o=%.d)
@@ -410,7 +415,8 @@ TRN_SRC := \
 	src/trn/trn_speed.c \
 	src/trn/trn_brain.c \
 	src/trn/trn_hud.c \
-	src/trn/trn_slots.c
+	src/trn/trn_slots.c \
+	src/trn/trn_bss.c
 
 TRN_OBJ := $(TRN_SRC:%=$(BUILDDIR)/%.o)
 TRN_DEP := $(TRN_OBJ:%.o=%.d)
@@ -425,6 +431,7 @@ VS_ASM_SRC := $(shell find $(ASM_DIR)/vs -path '*.s' \
 
 VS_SRC := \
 	$(VS_ASM_SRC) \
+	src/vs/vs_bss.c \
 	src/vs/vs_effect.c \
 	src/vs/vs_hud.c \
 	src/vs/vs_main.c \

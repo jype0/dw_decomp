@@ -24,10 +24,6 @@ typedef struct {
 } MoveRanking;
 
 extern uint8_t MAIN_D_80125F70[][7];
-extern uint8_t VS_D_800707B4[];
-extern uint8_t VS_D_800707B5[];
-extern uint8_t VS_D_800707C4[];
-extern uint8_t VS_D_800707C5[];
 extern int16_t ENEMY_COUNT;
 extern int32_t MAIN_D_80134D74;
 extern int32_t MAIN_D_80135290;
@@ -46,13 +42,18 @@ extern char DRAW_OFFSETS[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t DRAWING_OFFSET_X;
 extern int16_t MAIN_D_801352AC[2];
-extern char *VS_D_80070744[];
 extern char *MOVE_NAMES[];
-extern int32_t MAIN_D_80135268;
 extern int32_t MAIN_D_80135268;
 extern char **MAIN_D_80135298;
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
+extern char MAIN_D_80134ACC[];
+extern char MAIN_D_80134AD0[];
+extern char MAIN_D_80134AD8[];
+extern char MAIN_D_80134AE0[];
+extern char VS_D_80070720[];
+extern char VS_D_8007072C[];
+extern char VS_D_80070738[];
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
                   int32_t f, int32_t g, int32_t h, int32_t i);
 void createParticleFX();
@@ -165,6 +166,40 @@ static void *vs_main_functions[] = {
 	VS_applyBuffMove,
 	VS_getAttackTech,
 };
+
+// clang-format off
+char *VS_D_80070744[8] = {
+	MAIN_D_80134ACC,
+	MAIN_D_80134AD0,
+	MAIN_D_80134AD8,
+	VS_D_80070720,
+	VS_D_8007072C,
+	VS_D_80070738,
+	MAIN_D_80134AE0,
+	(void *)0x00000000,
+};
+
+uint8_t VS_D_80070764[8][10] = {
+	{ 0x00, 0x04, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
+	{ 0x00, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
+	{ 0x00, 0x01, 0x02, 0x04, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
+	{ 0x00, 0x01, 0x02, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff },
+	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x04, 0xff, 0xff, 0xff, 0xff },
+	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff, 0xff, 0xff },
+	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x04, 0xff, 0xff },
+	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff },
+};
+
+uint8_t VS_D_800707B4[16] = {
+	0x00, 0xc0, 0x20, 0xc0, 0x40, 0xc0, 0x60, 0xc0,
+	0x80, 0xc0, 0xa0, 0xc0, 0xc0, 0xc0, 0x00, 0x00,
+};
+
+uint8_t VS_D_800707C4[16] = {
+	0x00, 0xd0, 0x20, 0xd0, 0x40, 0xd0, 0x60, 0xd0,
+	0x80, 0xd0, 0xa0, 0xd0, 0xc0, 0xd0, 0x00, 0x00,
+};
+// clang-format on
 
 int32_t VS_hasAffordableMoves(int16_t *out, int16_t index)
 {
@@ -1011,10 +1046,10 @@ void VS_updateFighterStatusVisuals(DigimonEntity *digimon, FighterData *fighter)
 		fighter->targetId = 0;
 	}
 
-	fighter->flags &= 0xFFFD;
+	fighter->flags &= 0xfffd;
 	fighter->confusionTimer = 0;
-	if (((fighter->flags & 0xC) == 0) && (fighter->flatTimer == 0)) {
-		fighter->flags &= 0xFFBF;
+	if (((fighter->flags & 0xc) == 0) && (fighter->flatTimer == 0)) {
+		fighter->flags &= 0xffbf;
 		VS_removeStatusEffectVisual(digimon, fighter, 2);
 		if (fighter->flags & 1) {
 			VS_addStatusEffectVisual(digimon, fighter, 1);
@@ -1836,8 +1871,8 @@ void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, int32_t index)
 
 	if ((index >= 8U) && (index < 0xcU)) {
 		eff = MOVE_DATA[entityGetTechFromAnim(&digimon->entity, digimon->stats.base.moves[index - 8])].special;
-		setUVWH(prim, VS_D_800707C4[eff * 2], VS_D_800707C5[eff * 2], 0x10, 0xf);
+		setUVWH(prim, VS_D_800707C4[eff * 2], (&VS_D_800707C4[1])[eff * 2], 0x10, 0xf);
 	} else {
-		setUVWH(prim, VS_D_800707B4[(index - 1) * 2], VS_D_800707B5[(index - 1) * 2], 0x10, 0xf);
+		setUVWH(prim, VS_D_800707B4[(index - 1) * 2], (&VS_D_800707B4[1])[(index - 1) * 2], 0x10, 0xf);
 	}
 }

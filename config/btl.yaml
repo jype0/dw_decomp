@@ -103,6 +103,7 @@ segments:
       - [0x202CC, rodata, command_shout]
       - [0x20324, rodata, battle_hud]
       - [0x20418, rodata, battle_effect]
-      - [0x20B24, data]
+      - [0x20B24, .data, battle_effect]
+      - [0x21374, .data, btl_bss]
 
   - [0x2349C]

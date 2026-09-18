@@ -68,5 +68,6 @@ segments:
       - [0x5220, .data, trn2_off]
       - [0x52A8, .data, trn2_hud]
       - [0x53C8, .data, trn2_slots]
+      - [0x541C, .data, trn2_bss]
 
   - [0x54C0]

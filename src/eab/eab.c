@@ -20,21 +20,6 @@ typedef struct {
 	Entity *entity;
 } EabHudState;
 
-typedef struct {
-	int16_t timer;
-	int16_t pad;
-	Entity *entity;
-} EabModelFX;
-
-typedef struct {
-	int32_t timer;
-	SVECTOR pos;
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-	uint8_t pad;
-} EabParticle;
-
 extern EabHudState MAIN_D_801353F0;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t *EFE_DATA_STACK;
@@ -183,7 +168,7 @@ void EAB_initializeRings(void)
 	int32_t i;
 
 	for (i = 0; i < 18; i++) {
-		EAB_D_800617D0[i][0] = -1;
+		EAB_D_800617D0[i].timer = -1;
 	}
 }
 
@@ -194,14 +179,14 @@ static void eab__garbage__(void)
 	int32_t v2;
 	int32_t v3;
 
-	v0 = EAB_D_800617D0[0][0] + 0;
-	v1 = EAB_D_800617D0[1][0] + 1;
-	v2 = EAB_D_800617D0[2][0] + 2;
-	v3 = EAB_D_800617D0[0][0] + 3;
-	EAB_D_800617D0[0][0] = (int16_t)((v0 * v1) + v2);
-	EAB_D_800617D0[1][0] = (int16_t)((v1 * v2) + v3);
-	EAB_D_800617D0[2][0] = (int16_t)((v2 * v3) + v0);
-	EAB_D_800617D0[0][0] = (int16_t)((v3 * v0) + v1);
+	v0 = EAB_D_800617D0[0].timer + 0;
+	v1 = EAB_D_800617D0[1].timer + 1;
+	v2 = EAB_D_800617D0[2].timer + 2;
+	v3 = EAB_D_800617D0[0].timer + 3;
+	EAB_D_800617D0[0].timer = (int16_t)((v0 * v1) + v2);
+	EAB_D_800617D0[1].timer = (int16_t)((v1 * v2) + v3);
+	EAB_D_800617D0[2].timer = (int16_t)((v2 * v3) + v0);
+	EAB_D_800617D0[0].timer = (int16_t)((v3 * v0) + v1);
 }
 
 int32_t EAB_addBuildupRing(Entity *entity)
@@ -210,7 +195,7 @@ int32_t EAB_addBuildupRing(Entity *entity)
 	int32_t i;
 
 	for (i = 0; i < 3; i++) {
-		if (((EabModelFX *)EAB_D_800617D0)[i].timer < 0) {
+		if (EAB_D_800617D0[i].timer < 0) {
 			break;
 		}
 	}
@@ -219,7 +204,7 @@ int32_t EAB_addBuildupRing(Entity *entity)
 		return -1;
 	}
 
-	fx = &((EabModelFX *)EAB_D_800617D0)[i];
+	fx = &EAB_D_800617D0[i];
 	fx->timer = 0;
 	fx->entity = entity;
 
@@ -230,7 +215,7 @@ void EAB_tickBuildupRing(int32_t id)
 {
 	int16_t *p;
 
-	p = &EAB_D_800617D0[id][0];
+	p = &EAB_D_800617D0[id].timer;
 	*p += 1;
 	if (*p >= 0x12) {
 		*p = -1;
@@ -247,7 +232,7 @@ void EAB_renderBuildupRing(int32_t id)
 	int16_t *p;
 	Entity *entity;
 
-	p = &EAB_D_800617D0[id][0];
+	p = &EAB_D_800617D0[id].timer;
 	entity = ((Entity **)p)[1];
 	rot = MAIN_D_80134C2C;
 	scale = EAB_D_800616EC;
@@ -263,7 +248,7 @@ int32_t EAB_addSpawnRing(Entity *entity)
 	int32_t i;
 
 	for (i = 0; i < 3; i++) {
-		if (((EabModelFX *)EAB_D_800617D0)[i].timer < 0) {
+		if (EAB_D_800617D0[i].timer < 0) {
 			break;
 		}
 	}
@@ -272,7 +257,7 @@ int32_t EAB_addSpawnRing(Entity *entity)
 		return -1;
 	}
 
-	fx = &((EabModelFX *)EAB_D_800617D0)[i];
+	fx = &EAB_D_800617D0[i];
 	fx->timer = 0;
 	fx->entity = entity;
 
@@ -283,7 +268,7 @@ void EAB_tickSpawnRing(int32_t id)
 {
 	int16_t *p;
 
-	p = &EAB_D_800617D0[id][0];
+	p = &EAB_D_800617D0[id].timer;
 	*p += 1;
 	if (*p >= 9) {
 		*p = -1;
@@ -300,7 +285,7 @@ void EAB_renderSpawnRing(int32_t id)
 	int16_t *p;
 	Entity *entity;
 
-	p = &EAB_D_800617D0[id][0];
+	p = &EAB_D_800617D0[id].timer;
 	entity = ((Entity **)p)[1];
 	rot = MAIN_D_80134C34;
 	scale = EAB_D_800616FC;
@@ -315,8 +300,8 @@ void EAB_removeRings(void)
 	int32_t i;
 
 	for (i = 0; i < 3; i++) {
-		if (EAB_D_800617D0[i][0] >= 0) {
-			EAB_D_800617D0[i][0] = -1;
+		if (EAB_D_800617D0[i].timer >= 0) {
+			EAB_D_800617D0[i].timer = -1;
 			removeObject(0x60d, i);
 		}
 	}
@@ -440,7 +425,7 @@ void EAB_initializeParticles(void)
 	int32_t i;
 
 	for (i = 0; i < 100; i++) {
-		EAB_D_80061A10[i][0] = -1;
+		EAB_D_80061A10[i].timer = -1;
 	}
 }
 
@@ -554,7 +539,7 @@ void EAB_removeParticles(void)
 	int32_t i;
 	int32_t *p;
 
-	p = &EAB_D_80061A10[0][0];
+	p = &EAB_D_80061A10[0].timer;
 	for (i = 0; i < 100; i++) {
 		if (*p >= 0) {
 			removeObject(0x607, i);
@@ -568,7 +553,7 @@ void EAB_tickParticle(int32_t id)
 {
 	int32_t *p;
 
-	p = &EAB_D_80061A10[id][0];
+	p = &EAB_D_80061A10[id].timer;
 	if (*p >= 0x56) {
 		removeObject(0x607, id);
 		*p = -1;
@@ -590,7 +575,7 @@ void EAB_renderParticle(int32_t id)
 	int32_t i;
 	int32_t j;
 
-	e = &((EabParticle *)EAB_D_80061A10)[id];
+	e = &EAB_D_80061A10[id];
 	size = lerp(8, 0x9c4, 0, 0x56, e->timer);
 	corners[0].vx = e->pos.vx + size;
 	corners[0].vz = e->pos.vz + size;
@@ -661,7 +646,7 @@ int32_t EAB_tick(Entity *entity, int32_t isInitialized)
 	state->location = entity->posData->location;
 	addObject(0x60c, 0, EAB_tickSpawn, (RenderFunction)EAB_renderSpawn);
 	EAB_initializeParticles();
-	initializeFlashData(EAB_D_80061800);
+	initializeFlashData((char *)EAB_D_80061800.data);
 	for (i = 0; i < 9; i++) {
 		*EFE_DATA_STACK++ = 0x20;
 		*EFE_DATA_STACK++ = (int32_t)EAB_D_8006170C[i];
