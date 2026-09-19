@@ -149,6 +149,7 @@ int32_t getSpeakerName(int32_t speakerId, uint8_t *buf);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits,
 			 int32_t flag);
 
+extern uint8_t MAIN_D_8012FFD9[];
 extern ScriptCameraMovement MAIN_D_801BE6B4[];
 extern TextBoxTable MAIN_D_801BE80C;
 extern uint8_t TEXTBOX_OPEN_TIMER;
