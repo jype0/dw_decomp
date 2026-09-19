@@ -70,7 +70,7 @@ void KAR_setupMatch(int32_t arg);
 void KAR_renderStoneCursor(void);
 void KAR_renderReadyPrompt(void);
 void KAR_registerThrownStone(void);
-void KAR_chooseOpponentShot(void);
+int32_t KAR_chooseOpponentShot(void);
 int32_t KAR_tickScoreTally(void);
 void KAR_bounceOffWall(void);
 void KAR_updateCollisions(void);
@@ -2148,7 +2148,144 @@ int32_t KAR_tickScoreTally(void)
 	return 0;
 }
 
-INCLUDE_ASM("asm/kar/nonmatchings/kar", KAR_chooseOpponentShot);
+int32_t KAR_chooseOpponentShot(void)
+{
+	int16_t tx;
+	int16_t tz;
+	int32_t angle;
+	int16_t px;
+	int16_t pz;
+	int32_t i;
+	int32_t clear;
+
+	if (MAIN_D_80135248 == 2) {
+		angle = KAR_findClearShotAngle(0, -0x6a4);
+		if (angle == -1) {
+			if (KAR_D_8005B5A0[0].row.score > KAR_D_8005B5A0[1].row.score) {
+				angle = KAR_aimAtStoneInRing(1, 0x14, &tx, &tz);
+				if (angle != -1) {
+					KAR_setOpponentShot(0, angle, tx, tz);
+				} else {
+					angle = KAR_aimAtStoneInRing(0, 2, &tx, &tz);
+					if (angle != -1) {
+						KAR_setOpponentShot(0, angle, tx, tz);
+					} else {
+						angle = KAR_findClearShotAngle(-0x190, -0x960);
+						if (angle != -1) {
+							KAR_setOpponentShot(1, angle, 0, -0x960);
+						} else {
+							angle = KAR_aimAtRandomStone();
+							KAR_setOpponentShot(0, angle, 0, -0x960);
+							KAR_D_8005B5A0[1].row.unk2 = 0x960;
+						}
+					}
+				}
+			} else {
+				angle = KAR_aimAtStoneInRing(0, 2, &tx, &tz);
+				if (angle != -1) {
+					KAR_setOpponentShot(0, angle, tx, tz);
+				} else {
+					angle = KAR_findClearShotAngle(-0x190, -0x960);
+					if (angle != -1) {
+						KAR_setOpponentShot(1, angle, 0, -0x960);
+					} else {
+						angle = KAR_aimAtRandomStone();
+						KAR_setOpponentShot(0, angle, 0, -0x960);
+						KAR_D_8005B5A0[1].row.unk2 = 0x960;
+					}
+				}
+			}
+		} else {
+			KAR_setOpponentShot(1, angle, 0, -0x6a4);
+		}
+	} else {
+		px = ENTITY_TABLE[MAIN_D_80135248]->posData[4].posMatrix.workm.t[0];
+		pz = ENTITY_TABLE[MAIN_D_80135248]->posData[4].posMatrix.workm.t[2];
+
+		if (KAR_D_8005B5A0[1].row.thrown == 0) {
+			angle = ratan2(-0x8fc - pz, -0x190 - px);
+			clear = KAR_findClearShotAngle(-0x190, -0x8fc);
+			if (angle == clear) {
+				KAR_setOpponentShot(1, angle, -0x190, -0x8fc);
+			} else {
+				angle = ratan2(-0x6a4 - pz, -px);
+				clear = KAR_findClearShotAngle(0, -0x6a4);
+				if (angle == clear) {
+					KAR_setOpponentShot(1, angle, 0, -0x6a4);
+				} else {
+					angle = ratan2(-0x6a4 - pz, -px);
+					if ((KAR_D_8005B5A0[1].row.thrown % 2) != 0) {
+						angle += rand() % 100;
+					} else {
+						angle -= rand() % 100;
+					}
+					KAR_setOpponentShot(0, angle, 0, -0x6a4);
+				}
+			}
+		} else {
+			for (i = 0; i < 5; i++) {
+				if (KAR_D_8005B5A0[1].row.stones[(uint32_t)i].state == -1) {
+					if (KAR_D_8005B5A0[1].row.stones[(uint32_t)i].type == 3) {
+						KAR_D_8005B5A0[1].row.unk4 = i;
+						angle = ratan2(-0x6a4 - pz, -px);
+						clear = KAR_findClearShotAngle(0, -0x6a4);
+						if (angle == clear) {
+							KAR_setOpponentShot(1, angle, 0, -0x6a4);
+						} else {
+							KAR_D_8005B5A0[1].row.unk4 = 6;
+						}
+						break;
+					}
+					KAR_D_8005B5A0[1].row.unk4 = 6;
+				}
+			}
+
+			if (KAR_D_8005B5A0[1].row.unk4 == 6) {
+				switch (((int8_t *)KAR_D_80063918)[0]) {
+				case 0:
+				case 1:
+				case 2:
+					if ((((int8_t *)KAR_D_80063924)[0] == 3) || (((int8_t *)KAR_D_80063924)[0] == 0)) {
+						angle = ratan2(-0x8fc - pz, -0x190 - px);
+						KAR_findClearShotAngle(-0x190, -0x8fc);
+						KAR_setOpponentShot(1, angle, -0x190, -0x8fc);
+					} else if (KAR_D_800638F4[8] < 0) {
+						angle = ratan2(-0x6a4 - pz, -px);
+						if ((KAR_D_8005B5A0[1].row.thrown % 2) != 0) {
+							angle += rand() % 100;
+						} else {
+							angle -= rand() % 100;
+						}
+						KAR_setOpponentShot(0, angle, 0, -0x6a4);
+					} else if ((rand() % 2) != 0) {
+						angle = ratan2(-0x8fc - pz, -0x190 - px);
+						clear = KAR_findClearShotAngle(-0x190, -0x8fc);
+						if (angle == clear) {
+							KAR_setOpponentShot(1, angle, -0x190, -0x8fc);
+						} else {
+							angle = ratan2(KAR_D_800639B0[2] - pz, KAR_D_800639B0[0] - px);
+							KAR_setOpponentShot(0, angle, (int16_t)KAR_D_800639B0[0], (int16_t)KAR_D_800639B0[2]);
+						}
+					} else {
+						angle = KAR_aimBankShot((KarStone *)&KAR_D_800638F4[8], 0x190, -0x8fc);
+						KAR_setOpponentShot(0, angle, 0x190, -0x8fc);
+						KAR_D_8005B5A0[1].row.unk2 = 0x960;
+					}
+					break;
+				case 3:
+					angle = ratan2(-0x6a4 - pz, -px);
+					if ((KAR_D_8005B5A0[1].row.thrown % 2) != 0) {
+						angle += rand() % 100;
+					} else {
+						angle -= rand() % 100;
+					}
+					KAR_setOpponentShot(0, angle, 0, -0x6a4);
+					break;
+				}
+			}
+		}
+	}
+}
 
 int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 {

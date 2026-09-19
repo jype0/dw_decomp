@@ -178,6 +178,9 @@ extern GsOT_TAG KAR_D_800637CC[];
 extern GsOT_TAG KAR_D_8006384C[];
 extern GsOT KAR_D_800638CC[];
 extern int32_t KAR_D_800638F4[];
+extern uint8_t KAR_D_80063918[];
+extern uint8_t KAR_D_80063924[];
+extern int32_t KAR_D_800639B0[];
 extern KarStone *KAR_D_800639C0[];
 
 void checkCurlingMap(int32_t mapId);
