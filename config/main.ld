@@ -148,22 +148,35 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/script_common.c.o(.text.*);
         . = ALIGN(., 4);
-        build/src/main/script_instr10.c.o(.text.*);
+        /*
+         * Four leaf helpers must remain in a separate TU to preserve the
+         * retail callers' register allocation.  The other script functions
+         * share one TU, so select its contiguous pre-helper range before
+         * inserting the helper object; the remaining wildcard is script_ops.
+         */
+        build/src/main/script_ops.c.o(".text.scriptInstruction10to27");
+        build/src/main/script_ops.c.o(".text.scriptInstruction28to3F");
+        build/src/main/script_ops.c.o(".text.scriptInstruction46to58");
+        build/src/main/script_ops.c.o(".text.scriptInstruction5Ato5F");
+        build/src/main/script_ops.c.o(".text.scriptInstruction64to7E");
+        build/src/main/script_ops.c.o(".text.setMapHeadActive");
+        build/src/main/script_ops.c.o(".text.returnFromScriptFile");
+        build/src/main/script_ops.c.o(".text.MAIN_func_801050C0");
+        build/src/main/script_ops.c.o(".text.scriptUpdateEnergyBoundaries");
+        build/src/main/script_ops.c.o(".text.MAIN_func_801053EC");
+        build/src/main/script_ops.c.o(".text.MAIN_func_80105464");
+        build/src/main/script_ops.c.o(".text.scriptStartAnimation");
+        build/src/main/script_ops.c.o(".text.handleMusicOverride");
+        build/src/main/script_ops.c.o(".text.tickScriptedMovement");
+        build/src/main/script_ops.c.o(".text.initializeScripts");
+        build/src/main/script_ops.c.o(".text.initializeLoadedNPCModels");
+        build/src/main/script_ops.c.o(".text.runMapHeadScript");
+        build/src/main/script_ops.c.o(".text.callScriptSection");
+        build/src/main/script_ops.c.o(".text.tickScript");
+        build/src/main/script_ops.c.o(".text.getScript");
+        build/src/main/script_ops.c.o(".text.getScriptSection");
         . = ALIGN(., 4);
-        build/src/main/script_instr28.c.o(.text.*);
-        . = ALIGN(., 4);
-        build/src/main/script_instr64.c.o(".text.scriptInstruction64to7E");
-        build/src/main/script_instr64.c.o(".text.setMapHeadActive");
-        build/src/main/script_tick.c.o(".text.returnFromScriptFile");
-        build/src/main/script_instr64.c.o(.text.*);
-        . = ALIGN(., 4);
-        build/src/main/script_anim.c.o(.text.*);
-        . = ALIGN(., 4);
-        build/src/main/script_music.c.o(.text.*);
-        . = ALIGN(., 4);
-        build/src/main/script_engine.c.o(.text.*);
-        . = ALIGN(., 4);
-        build/src/main/script_tick.c.o(.text.*);
+        build/src/main/script_helpers.c.o(.text.*);
         . = ALIGN(., 4);
         build/src/main/script_ops.c.o(.text.*);
         . = ALIGN(., 4);
@@ -382,21 +395,21 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/script_common.c.o(.rodata.*);
         . = ALIGN(., 4);
-        build/src/main/script_tick.c.o(.rodata.*);
-        . = ALIGN(., 4);
-        build/src/main/script_instr10.c.o(.rodata.*);
-        . = ALIGN(., 4);
-        build/src/main/script_anim.c.o(.rodata.*);
-        . = ALIGN(., 4);
+        /*
+         * MAIN_func_80106730 must be defined after scriptInstruction28to3F
+         * or Metrowerks sees the leaf and changes the caller's frame by four
+         * bytes.  Retail rodata orders the two comparison tables first, so
+         * restore the table order explicitly within their common source TU.
+         */
+        build/src/main/script_ops.c.o(".rodata.@172");
+        build/src/main/script_ops.c.o(".rodata.@245");
+        build/src/main/script_ops.c.o(".rodata.@316");
+        build/src/main/script_ops.c.o(".rodata.@492");
+        build/src/main/script_ops.c.o(".rodata.@501");
+        build/src/main/script_ops.c.o(".rodata.@392");
+        build/src/main/script_ops.c.o(".rodata.@459");
+        build/src/main/script_ops.c.o(".rodata.@468");
         build/src/main/script_ops.c.o(.rodata.*);
-        . = ALIGN(., 4);
-        build/src/main/script_instr28.c.o(.rodata.*);
-        . = ALIGN(., 4);
-        build/src/main/script_music.c.o(.rodata.*);
-        . = ALIGN(., 4);
-        build/src/main/script_instr64.c.o(.rodata.*);
-        . = ALIGN(., 4);
-        build/src/main/script_engine.c.o(.rodata.*);
         . = ALIGN(., 4);
         build/src/main/script_draw.c.o(.rodata.*);
         . = ALIGN(., 4);
@@ -568,21 +581,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/script_common.c.o(.data.*);
         . = ALIGN(., 4);
-        build/src/main/script_instr10.c.o(.data.*);
-        . = ALIGN(., 4);
-        build/src/main/script_instr28.c.o(.data.*);
-        . = ALIGN(., 4);
-        build/src/main/script_instr64.c.o(.data.*);
-        . = ALIGN(., 4);
-        build/src/main/script_anim.c.o(.data.*);
-        . = ALIGN(., 4);
-        build/src/main/script_music.c.o(.data.*);
-        . = ALIGN(., 4);
-        build/src/main/script_engine.c.o(.data.*);
-        . = ALIGN(., 4);
-        build/src/main/script_tick.c.o(.data.*);
-        . = ALIGN(., 4);
         build/src/main/script_ops.c.o(.data.*);
+        . = ALIGN(., 4);
+        build/src/main/script_helpers.c.o(.data.*);
         . = ALIGN(., 4);
         build/src/main/script_draw.c.o(.data.*);
         . = ALIGN(., 4);

@@ -468,8 +468,8 @@ void MAIN_func_8010C28C(void)
 			idx = MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow + MAIN_D_80134F68->cursor) * 2] & 0x7f;
 			writePStat(PSTAT_247, MAIN_D_8013024C[idx].mapId);
 			writePStat(PSTAT_248, MAIN_D_8013024C[idx].unk_0x1);
-			CURRENT_SCRIPT_PTR = (int32_t)getScript(0);
-			MAIN_D_80134FDC = getScriptSection((uint8_t *)CURRENT_SCRIPT_PTR, 0x4e3);
+			CURRENT_SCRIPT_PTR = getScript(0);
+			MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, 0x4e3);
 			MONEY -= MAIN_D_8013500C;
 			SELECTION_MENU_STATE = 2;
 			break;

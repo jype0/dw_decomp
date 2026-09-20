@@ -1,13 +1,1420 @@
+/* Script functions whose retail code generation permits a shared TU. */
 #include <string.h>
-
 #include <dw/item.h>
-#include <dw/pstat.h>
+#include <libcd.h>
+#include <dw/clock.h>
+#include <dw/math.h>
 #include <dw/script.h>
-#include <dw/sound.h>
-#include <dw/trigger.h>
 #include <dw/ui.h>
-
+#include <dw/params.h>
+#include <dw/partner.h>
+#include <dw/sound.h>
+#include <dw/doo2.h>
+#include <dw/eab.h>
+#include <dw/fade.h>
+#include <dw/file_queue.h>
+#include <dw/map_object.h>
+#include <dw/sound_async.h>
+#include <dw/tamer.h>
+#include <dw/tournament.h>
+#include <dw/trn.h>
+#include <dw/trn2.h>
+#include <dw/utils.h>
+#include <dw/font.h>
+#include <dw/trigger.h>
 #include "common.h"
+#include <dw/pstat.h>
+#include <dw/file.h>
+
+void renderNamingUnderscore(uint8_t boxId, int16_t x, int16_t y, int32_t w);
+void renderNameDisplayBox(void);
+void renderSelectionBox(void);
+void namingSelectionDown(int16_t column, int16_t row);
+void namingSelectionUp(int16_t column, int16_t row);
+void namingSelectionRight(int16_t col, int16_t row, int32_t specialIdx);
+void namingSelectionLeft(int16_t col, int16_t row, int32_t specialIdx);
+void terminateNamingBuffer(void);
+void namingDeleteLast(void);
+void updateNamingPreview(void);
+void MAIN_func_8010A79C(void);
+void renderNamingBox(void);
+void tickNamingBox(void);
+void setupNameDisplayBox(void);
+void setupNameSelectorBox(void);
+void showNewgameSelection(int32_t textId, int16_t nextState);
+void showNewgameDialogue(int32_t textId, int16_t nextState);
+void setupNewGameDialogueBox(void);
+void MAIN_func_80109BBC(void);
+void MAIN_func_801099E8(void);
+void MAIN_func_801097F4(void);
+void MAIN_func_801096E8(void);
+void MAIN_func_801094F0(void);
+void MAIN_func_801093E4(void);
+void MAIN_func_801091DC(void);
+void MAIN_func_80108EB4(ItemMenuBox *box, int8_t flag);
+void MAIN_func_80108DC0(int32_t item);
+void MAIN_func_80108C88(int32_t itemId);
+int32_t MAIN_func_80108A98(void);
+int32_t MAIN_func_80108890(void);
+int32_t MAIN_func_801086E0(void);
+void MAIN_func_801086D4(void);
+void MAIN_func_80108610(int32_t boxIndex);
+void MAIN_func_80108604(void);
+void MAIN_func_80108334(void);
+int32_t MAIN_func_80108230(void);
+void MAIN_func_80108090(void);
+void MAIN_func_80107E6C(void);
+void MAIN_func_80107DFC(void);
+void MAIN_func_80107D54(void);
+void MAIN_func_80107C4C(void);
+void MAIN_func_80107B98(void);
+void MAIN_func_80107AB8(void);
+void MAIN_func_801078F4(void);
+void MAIN_func_80107784(void);
+void MAIN_func_80107660(void);
+void MAIN_func_80107444(void);
+int32_t MAIN_func_801072C4(void);
+int32_t MAIN_func_80107200(void);
+void MAIN_func_80107110(void);
+int32_t MAIN_func_80107000(void);
+void showCardTextbox(void);
+uint8_t rollCard(void);
+int32_t MAIN_func_80106D28(void);
+int32_t MAIN_func_80106D1C(int32_t moveId);
+void getTriggerOffset(int32_t trigger, uint8_t **outPtr, uint8_t *outMask);
+void pollNextScriptTwoUShort(uint16_t *out1, uint16_t *out2);
+void scriptUnloadModel(int16_t modelId);
+void forceUpdateBGM(void);
+void updateBGM(void);
+void playBGM(int16_t bgmId);
+void pollNextTwoScriptShorts(int16_t *out1, int16_t *out2);
+void pollNextScriptShort(int16_t *out);
+void scriptLoadModel(int32_t modelId);
+void MAIN_func_8010692C(uint32_t totalMinutes, uint8_t *outYear,
+			uint8_t *outDay, uint8_t *outHour, uint8_t *outMinute);
+void pollNextInt(int32_t *out);
+uint32_t dateToSeconds(uint32_t years, uint32_t days, uint32_t hours,
+		       uint32_t minutes);
+int32_t setCardAmount(int32_t cardId, int32_t value);
+int32_t getCardAmount(int32_t cardId);
+void scriptLearnMove(int32_t moveId);
+void skipOneReadInteger(int32_t *out);
+int32_t MAIN_func_80106730(int32_t op, int32_t lhs, int32_t rhs);
+int32_t scriptCompareValues(uint8_t op, uint32_t lhs, uint32_t rhs);
+void pollNextTwoScriptBytes(uint8_t *out1, uint8_t *out2);
+void pollNextScriptUShort(uint16_t *out);
+void skipOnePollTwoScriptBytes(uint8_t *out1, uint8_t *out2);
+void unsetTrigger(uint16_t trigger);
+void setTrigger(uint16_t trigger);
+void pollNextScriptUByte(uint8_t *out);
+void pollOneUByteOneUShort(uint8_t *outByte, uint16_t *outShort);
+void skipOneReadOneUShort(uint16_t *out);
+int32_t popScriptStack(StackEntry *out);
+void resetBGM(void);
+void pushScriptStack(StackEntry *entry);
+void skipOneReadTwoShort(uint16_t *out1, uint16_t *out2);
+uint8_t *getScriptSection(uint8_t *script, int32_t section);
+uint8_t *getScript(int32_t mapId);
+int32_t tickScript(void);
+void callScriptSection(int32_t scriptId, int32_t section, int32_t param);
+void runMapHeadScript(int32_t section);
+void initializeLoadedNPCModels(void);
+void initializeScripts(void);
+void tickScriptedMovement(int32_t slot);
+void handleMusicOverride(uint8_t *outFont, uint8_t *outVariant);
+void scriptStartAnimation(uint8_t actorId, int32_t animationId);
+void MAIN_func_80105464(uint8_t actorId, int32_t animationId);
+void MAIN_func_801053EC(void);
+void scriptUpdateEnergyBoundaries(int32_t a0, int32_t a1);
+void MAIN_func_801050C0(void);
+void returnFromScriptFile(void);
+void setMapHeadActive(void);
+void scriptInstruction64to7E(int32_t op);
+void scriptInstruction5Ato5F(int32_t op);
+void scriptInstruction46to58(int32_t op);
+void scriptInstruction28to3F(int32_t op);
+void scriptInstruction10to27(int32_t op);
+
+static void *script_functions[] = {
+
+	renderNamingUnderscore,
+	renderNameDisplayBox,
+	renderSelectionBox,
+	namingSelectionDown,
+	namingSelectionUp,
+	namingSelectionRight,
+	namingSelectionLeft,
+	terminateNamingBuffer,
+	namingDeleteLast,
+	updateNamingPreview,
+	MAIN_func_8010A79C,
+	renderNamingBox,
+	tickNamingBox,
+	setupNameDisplayBox,
+	setupNameSelectorBox,
+	showNewgameSelection,
+	showNewgameDialogue,
+	setupNewGameDialogueBox,
+	MAIN_func_80109BBC,
+	MAIN_func_801099E8,
+	MAIN_func_801097F4,
+	MAIN_func_801096E8,
+	MAIN_func_801094F0,
+	MAIN_func_801093E4,
+	MAIN_func_801091DC,
+	MAIN_func_80108EB4,
+	MAIN_func_80108DC0,
+	MAIN_func_80108C88,
+	MAIN_func_80108A98,
+	MAIN_func_80108890,
+	MAIN_func_801086E0,
+	MAIN_func_801086D4,
+	MAIN_func_80108610,
+	MAIN_func_80108604,
+	MAIN_func_80108334,
+	MAIN_func_80108230,
+	MAIN_func_80108090,
+	MAIN_func_80107E6C,
+	MAIN_func_80107DFC,
+	MAIN_func_80107D54,
+	MAIN_func_80107C4C,
+	MAIN_func_80107B98,
+	MAIN_func_80107AB8,
+	MAIN_func_801078F4,
+	MAIN_func_80107784,
+	MAIN_func_80107660,
+	MAIN_func_80107444,
+	MAIN_func_801072C4,
+	MAIN_func_80107200,
+	MAIN_func_80107110,
+	MAIN_func_80107000,
+	showCardTextbox,
+	rollCard,
+	MAIN_func_80106D28,
+	MAIN_func_80106D1C,
+	getTriggerOffset,
+	pollNextScriptTwoUShort,
+	scriptUnloadModel,
+	forceUpdateBGM,
+	updateBGM,
+	playBGM,
+	pollNextTwoScriptShorts,
+	pollNextScriptShort,
+	scriptLoadModel,
+	MAIN_func_8010692C,
+	pollNextInt,
+	dateToSeconds,
+	setCardAmount,
+	getCardAmount,
+	scriptLearnMove,
+	skipOneReadInteger,
+	MAIN_func_80106730,
+	scriptCompareValues,
+	pollNextTwoScriptBytes,
+	pollNextScriptUShort,
+	skipOnePollTwoScriptBytes,
+	unsetTrigger,
+	setTrigger,
+	pollNextScriptUByte,
+	pollOneUByteOneUShort,
+	skipOneReadOneUShort,
+	popScriptStack,
+	resetBGM,
+	pushScriptStack,
+	skipOneReadTwoShort,
+	getScriptSection,
+	getScript,
+	tickScript,
+	callScriptSection,
+	runMapHeadScript,
+	initializeLoadedNPCModels,
+	initializeScripts,
+	tickScriptedMovement,
+	handleMusicOverride,
+	scriptStartAnimation,
+	MAIN_func_80105464,
+	MAIN_func_801053EC,
+	scriptUpdateEnergyBoundaries,
+	MAIN_func_801050C0,
+	returnFromScriptFile,
+	setMapHeadActive,
+	scriptInstruction64to7E,
+	scriptInstruction5Ato5F,
+	scriptInstruction46to58,
+	scriptInstruction28to3F,
+	scriptInstruction10to27,
+};
+
+uint8_t *getScript(int32_t mapId);
+uint8_t *getScriptSection(uint8_t *script, int32_t section);
+void runMapHeadScript(int32_t section);
+void initializeLoadedNPCModels(void);
+void initializeScripts(void);
+
+void unsetCameraFollowPlayer(void);
+extern int32_t MAIN_func_800D8E64(int32_t param_1, int32_t param_2,
+				  int32_t param_3);
+extern int32_t tickRemoveMist(void);
+extern int32_t MAIN_func_801138B0(void);
+extern int32_t MAIN_func_80113A20(void);
+extern int32_t isTrainingComplete(void);
+extern void setCameraFollowPlayer(void);
+
+extern uint8_t MAIN_D_80134FE4;
+extern uint8_t MAIN_D_80134FE9;
+extern int32_t MAIN_D_80134FF0;
+extern uint8_t MAIN_D_801BE6B5[];
+extern uint8_t MAIN_D_801BE6B6[];
+extern uint8_t *SCRIPT_HEADER_PTR;
+extern uint8_t *SCRIPT_DATA_PTR;
+extern char MAIN_D_80130388[];
+extern int8_t MAIN_STATE;
+extern int16_t SCRIPT_MAP_CHANGE_STATE;
+
+extern uint8_t MAIN_D_801BE6B4[];
+
+int32_t tickScript(void)
+{
+	int32_t ret;
+	int32_t offset;
+	int32_t entityId;
+	uint32_t op;
+	uint8_t i;
+
+	if (IS_SCRIPT_PAUSED) {
+		return 1;
+	}
+
+	MAIN_func_80100258(0);
+	tickScriptedMovements();
+	if (MAIN_D_80134FE9 == 0x4b) {
+		if (MAIN_func_800D8E64((int16_t)MAIN_D_80134FF8,
+				       (int16_t)SELECTION_MENU_STATE,
+				       MAIN_D_80134FA0)) {
+			MAIN_D_80134FF0 = 0;
+			MAIN_func_801062F8(0xff);
+			MAIN_D_80134FE9 = 0;
+		}
+	}
+
+	switch (ACTIVE_INSTRUCTION) {
+	case 0x67:
+		if (MAIN_D_80134FFC == 0) {
+			ACTIVE_INSTRUCTION = 0;
+		}
+		break;
+	case 0x64:
+		switch (MAIN_D_80134FF8) {
+		case 3:
+		case 4:
+		case 5:
+		case 12:
+		case 13:
+		case 15:
+		case 16:
+		case 17:
+		case 19:
+		case 20:
+		case 21:
+		case 25:
+		case 26:
+		case 27:
+		case 28:
+		case 30:
+		case 31:
+		case 33:
+		case 34:
+		case 35:
+		case 36:
+		case 38:
+		case 39:
+		case 40:
+		case 41:
+		case 42:
+		case 43:
+		case 44:
+		case 45:
+		case 46:
+		case 49:
+		case 51:
+		case 52:
+		case 55:
+		case 56:
+			goto done;
+		case 0:
+			MAIN_func_800FCB3C();
+			break;
+		case 1:
+			MAIN_func_8010BC10();
+			break;
+		case 8:
+			if (!isTriggerSet(TRIGGER_3)) {
+				MAIN_func_800FC508();
+			} else {
+				MAIN_func_8010B648();
+			}
+			break;
+		case 14:
+			if (!isTriggerSet(TRIGGER_3)) {
+				if (!isTriggerSet(TRIGGER_4)) {
+					rollCardPack();
+				} else {
+					MAIN_func_8010B9D8();
+				}
+			} else {
+				MAIN_func_8010BB0C();
+			}
+			break;
+		case 11:
+			MAIN_func_8010BF68();
+			break;
+		case 2:
+			MAIN_func_8010C4B0();
+			break;
+		case 9:
+			openJukebox();
+			break;
+		case 10:
+			MAIN_func_8010C28C();
+			break;
+		case 7:
+			if (isTrainingComplete()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 18:
+			initTournamentSchedule();
+			break;
+		case 6:
+			scriptStartTournament();
+			break;
+		case 22:
+			scriptCheckTournamentMedal();
+			break;
+		case 23:
+			if (tickOpenChestTray(readPStat(0xfe))) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 24:
+			if (tickCloseChestTray(readPStat(0xfe))) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 29:
+			if (DOO2_tickEggInput()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 37:
+			if (tickRemoveMist()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 47:
+			lostAllLives();
+			break;
+		case 48:
+			if (MAIN_func_801138B0()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 54:
+			if (MAIN_func_80113A20()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 50:
+			if (moveAngemonPedestal()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 32:
+			if (newGameStateMachine()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+			break;
+		case 53:
+			if (SOME_SCRIPT_SYNC_BIT == 1) {
+				ACTIVE_INSTRUCTION = 0;
+				MAIN_STATE = 3;
+				longjmp(SCRIPT_JMP_BUF, 2);
+			}
+			/* fall through */
+		done:
+		default:
+			break;
+		}
+		break;
+	case 0x4a:
+		if ((entityId = MAIN_D_80134FA4) == 0x19) {
+			if (MAIN_func_800DF7F8()) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+		} else if (entityId == 0x1a) {
+			if (TRN_LOADING_COMPLETE == 0) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+		} else if (entityId == 0xff) {
+			if (MAIN_func_800DF7F8()) {
+				for (i = 0, offset = 0;
+				     i < 0x16;
+				     ++i, offset += 0xc) {
+					if (MAIN_D_801BE6B4[offset] != 0xff) {
+						goto found;
+					}
+				}
+				ACTIVE_INSTRUCTION = 0;
+			found:;
+			}
+		} else {
+			if (MAIN_D_801BE6B4[entityId * 0xc] == 0xff) {
+				ACTIVE_INSTRUCTION = 0;
+			}
+		}
+		break;
+	case 0x10:
+	case 0x1a:
+	case 0xff:
+		break;
+	}
+
+	if (MAIN_D_80134FE9) {
+		return IS_SCRIPT_PAUSED;
+	}
+
+	if (ACTIVE_INSTRUCTION) {
+		return IS_SCRIPT_PAUSED;
+	}
+setjmp_retry:
+	ret = setjmp(SCRIPT_JMP_BUF);
+	if (ret == 0) {
+		op = *MAIN_D_80134FDC++;
+		if (op >= 0xfb && op < 0x100) {
+			scriptInstructionFBtoFF(op);
+		} else if (op >= 0x10 && op < 0x28) {
+			scriptInstruction10to27(op);
+		} else if (op >= 0x28 && op < 0x40) {
+			scriptInstruction28to3F(op);
+		} else if (op >= 0x46 && op < 0x59) {
+			scriptInstruction46to58(op);
+		} else if (op >= 0x5a && op < 0x60) {
+			scriptInstruction5Ato5F(op);
+		} else if (op >= 0x64 && op < 0x7f) {
+			scriptInstruction64to7E(op);
+		} else {
+			IS_SCRIPT_PAUSED = 1;
+			longjmp(SCRIPT_JMP_BUF, 2);
+		}
+	} else {
+		if (ret == 1) {
+			goto setjmp_retry;
+		}
+
+		if (ret == 3) {
+			MAIN_func_8010064C();
+			writePStat(0, MAIN_D_80134FE7);
+			MAIN_D_80134FE9 = 0x4b;
+			SCRIPT_MAP_CHANGE_STATE = 0;
+			return IS_SCRIPT_PAUSED;
+		}
+	}
+
+	if (IS_SCRIPT_PAUSED) {
+		MAIN_func_8010064C();
+		writePStat(0, MAIN_D_80134FE7);
+		if (MAIN_D_80134FF0 == 1) {
+			setMovementEnabled(-1, 0);
+			setCameraFollowPlayer();
+			startGameTime();
+		}
+	}
+
+	return IS_SCRIPT_PAUSED;
+}
+
+uint8_t *getScript(int32_t mapId)
+{
+	uint32_t *table;
+
+	if (mapId == 0) {
+		return MAPHEAD_DATA_PTR;
+	}
+
+	if (ACTIVE_MAP_SCRIPT == mapId) {
+		return SCRIPT_DATA_PTR;
+	}
+
+	ACTIVE_MAP_SCRIPT = mapId;
+	table = (uint32_t *)SCRIPT_HEADER_PTR;
+	readFileSection(MAIN_D_80130388, SCRIPT_DATA_PTR, table[mapId],
+			table[mapId + 1] - table[mapId]);
+
+	return SCRIPT_DATA_PTR;
+}
+
+uint8_t *getScriptSection(uint8_t *script, int32_t section)
+{
+	uint16_t *entry = (uint16_t *)&script[2];
+
+	while (1) {
+		if (entry[0] == section) {
+			return &script[entry[1]];
+		}
+
+		if (entry[0] == 0xffff) {
+			return 0;
+		}
+
+		entry = &entry[2];
+	}
+}
+
+void setMapHeadActive(void);
+void MAIN_func_800D634C(int32_t param_1, int32_t param_2);
+
+void returnFromScriptFile(void)
+{
+	StackEntry entry;
+	uint8_t *script;
+	uint8_t *section;
+	int32_t type;
+
+	for (;;) {
+		popScriptStack(&entry);
+		type = entry.smth[0];
+		if (type == 0) {
+			break;
+		}
+		if (type == 3) {
+			readMapTFS(CURRENT_MAP_ID);
+			MAIN_func_800D634C(CURRENT_MAP_ID, 0);
+			MAIN_D_80134FEC = 0;
+			script = getScript(CURRENT_SCRIPT_ID);
+			section = getScriptSection(script, 0xFE);
+			if (section != 0) {
+				CURRENT_SCRIPT_PTR = script;
+				MAIN_D_80134FDC = section;
+				longjmp(SCRIPT_JMP_BUF, 1);
+			}
+		} else if (type == 4) {
+			if (entry.smth[1] != 0xFF) {
+				CURRENT_SCRIPT_PTR = getScript(CURRENT_SCRIPT_ID);
+				MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, entry.smth[1]);
+			} else {
+				setMapHeadActive();
+			}
+			longjmp(SCRIPT_JMP_BUF, 2);
+		}
+	}
+	IS_SCRIPT_PAUSED = 1;
+	longjmp(SCRIPT_JMP_BUF, 2);
+}
+
+void scriptInstruction10to27(int32_t op)
+{
+	StackEntry entry;
+	uint16_t shortArg;
+	uint16_t offset;
+	uint8_t pstat;
+	uint8_t value;
+	uint8_t unusedByte;
+	int32_t newValue;
+
+	switch (op) {
+	case 0x10:
+		MAIN_D_80135000 = 1;
+		scriptShowSelection();
+		longjmp(SCRIPT_JMP_BUF, 2);
+		break;
+	case 0x13:
+		skipOneReadOneUShort(&shortArg);
+		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptId = ACTIVE_MAP_SCRIPT;
+		entry.smth[0] = 1;
+		pushScriptStack(&entry);
+		MAIN_D_80134FDC =
+			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		break;
+	case 0x14:
+		skipOneReadTwoShort(&shortArg, &offset);
+		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptId = ACTIVE_MAP_SCRIPT;
+		entry.smth[0] = 1;
+		pushScriptStack(&entry);
+		CURRENT_SCRIPT_PTR = getScript(shortArg);
+		MAIN_D_80134FDC = getScriptSection(
+			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
+		break;
+	case 0x15:
+		MAIN_D_80134FDC++;
+		popScriptStack(&entry);
+		CURRENT_SCRIPT_PTR = getScript(entry.scriptId);
+		MAIN_D_80134FDC = (uint8_t *)entry.scriptPtr;
+		break;
+	case 0x16:
+		skipOneReadOneUShort(&shortArg);
+		MAIN_D_80134FDC =
+			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		break;
+	case 0x17:
+		skipOneReadTwoShort(&shortArg, &offset);
+		CURRENT_SCRIPT_PTR = getScript(shortArg);
+		MAIN_D_80134FDC = getScriptSection(
+			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
+		break;
+	case 0x18:
+		pollOneUByteOneUShort(&pstat, &shortArg);
+		value = readPStat(pstat);
+		if (value >= shortArg) {
+			value = (shortArg - 1) & 0xff;
+		}
+		shortArg = *(uint16_t *)(MAIN_D_80134FDC + (value << 1));
+		MAIN_D_80134FDC =
+			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		break;
+	case 0x19:
+		MAIN_D_80134FDC++;
+		MAIN_func_801050C0();
+		break;
+	case 0x1a:
+		MAIN_D_80134FDC++;
+		if (MAIN_D_80135000 == 2) {
+			showTextbox(0, 0xff);
+		} else {
+			showTextbox(0, MAIN_D_80134FE6);
+		}
+		longjmp(SCRIPT_JMP_BUF, 2);
+	case 0x1b:
+		pollNextScriptUByte(&pstat);
+		MAIN_D_80135000 = 0;
+		if (UI_BOX_DATA[0].state != 1) {
+			MAIN_D_80134FE6 = pstat - 1;
+		}
+		setDialogueOwner(pstat);
+		break;
+	case 0x1c:
+		skipOneReadOneUShort(&shortArg);
+		setTrigger(shortArg);
+		break;
+	case 0x1d:
+		skipOneReadOneUShort(&shortArg);
+		unsetTrigger(shortArg);
+		break;
+	case 0x1e:
+		skipOnePollTwoScriptBytes(&pstat, &value);
+		writePStat(pstat, value);
+		break;
+	case 0x1f:
+		skipOnePollTwoScriptBytes(&pstat, &value);
+		newValue = readPStat(pstat) + value;
+		if (newValue >= 0x100) newValue = 0xff;
+		writePStat(pstat, newValue);
+		break;
+	case 0x20:
+		skipOnePollTwoScriptBytes(&pstat, &value);
+		newValue = readPStat(pstat) - value;
+		if (newValue < 0) newValue = 0;
+		writePStat(pstat, newValue);
+		break;
+	case 0x21:
+		pollNextScriptUByte(&pstat);
+		writePStat(pstat, CURRENT_MAP_ID);
+		break;
+	case 0x22:
+		pollNextScriptUByte(&pstat);
+		value = PARTNER_ENTITY.digimonEntity.entity.type;
+		writePStat(pstat, value);
+		break;
+	case 0x23:
+		pollNextScriptUByte(&pstat);
+		setInventorySize(pstat);
+		break;
+	case 0x24:
+		skipOnePollTwoScriptBytes(&pstat, &value);
+		writePStat(pstat, random(value + 1));
+		break;
+	case 0x25:
+		pollNextScriptUByte(&pstat);
+		writePStat(pstat, YEAR);
+		writePStat((pstat + 1) & 0xff, DAY);
+		writePStat((pstat + 2) & 0xff, HOUR);
+		writePStat((pstat + 3) & 0xff, MINUTE);
+		break;
+	case 0x26:
+		MAIN_func_801062F8(0xff);
+		MAIN_D_80135000 = 2;
+		scriptSetTextboxSize();
+		break;
+	case 0x27:
+		pollNextScriptUByte(&pstat);
+		closeBox(pstat);
+		longjmp(SCRIPT_JMP_BUF, 2);
+	}
+
+	longjmp(SCRIPT_JMP_BUF, 1);
+}
+
+void setFoodTimer(int32_t type);
+void setActiveAnim(int32_t state);
+
+void scriptUpdateEnergyBoundaries(int32_t a0, int32_t a1)
+{
+	if (PARTNER_PARA.energyLevel > RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyCap) {
+		PARTNER_PARA.energyLevel = RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyCap;
+	}
+	if (PARTNER_PARA.condition & 4) {
+		if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold <= PARTNER_PARA.energyLevel) {
+			PARTNER_PARA.condition &= ~4;
+			setFoodTimer(PARTNER_ENTITY.digimonEntity.entity.type);
+			PARTNER_PARA.starvationTimer = 0;
+		}
+	}
+}
+
+void MAIN_func_801053EC(void)
+{
+	int32_t state = readPStat(6) & 0xff;
+
+	switch (state) {
+	case 0:
+		MAIN_D_80134FA0 = (MAIN_D_80134FE0 != 0) ^ 1;
+		break;
+	case 1:
+		MAIN_D_80134FA0 = 1;
+		break;
+	case 2:
+		MAIN_D_80134FA0 = 0;
+		break;
+	}
+
+	writePStat(6, 0);
+}
+
+void MAIN_func_80105464(uint8_t actorId, int32_t animationId)
+{
+	if (actorId == 0xfd) {
+		startAnimationTamer((int16_t)(animationId + 2));
+		setTamerState(0xa);
+	} else if (actorId == 0xfc) {
+		startPartnerAnimation((animationId + 1) << 1);
+		setPartnerState(0xc);
+	} else {
+		startNPCAnimation(actorId, (animationId + 1) << 1);
+		setActiveAnim(0xc);
+	}
+}
+
+void scriptStartAnimation(uint8_t actorId, int32_t animationId)
+{
+	if (actorId == 0xfd) {
+		startAnimationTamer(animationId);
+		setTamerState(0xa);
+	} else if (actorId == 0xfc) {
+		startPartnerAnimation(animationId);
+		setPartnerState(0xc);
+	} else {
+		startNPCAnimation(actorId, animationId);
+		setActiveAnim(0xc);
+	}
+}
+
+void MAIN_func_801050C0(void)
+{
+	uint8_t condOp;
+	uint32_t one;
+	uint8_t pstatValue;
+	uint8_t comparand;
+	uint16_t shortArg;
+	int32_t cond;
+	int32_t result;
+
+	result = 0;
+	for (;;) {
+		pollNextScriptUByte(&condOp);
+		MAIN_D_80134FDC++;
+		if (condOp == 0x19) {
+			longjmp(SCRIPT_JMP_BUF, 1);
+		}
+		switch (condOp & 0x38) {
+		case 0:
+			pollNextScriptUShort(&shortArg);
+			cond = isTriggerSet(shortArg);
+			if ((condOp & 7) == 0) {
+				cond ^= (one = 1);
+				cond = (cond == 0);
+				break;
+			} else {
+				cond = (cond == 0);
+				break;
+			}
+		case (1 << 3):
+			pollNextTwoScriptBytes(&pstatValue, &comparand);
+			pstatValue = readPStat(pstatValue);
+			cond = scriptCompareValues(condOp, pstatValue,
+						   comparand);
+			break;
+		case (2 << 3):
+			pollNextScriptUShort(&shortArg);
+			if (result != 1) {
+				continue;
+			}
+			MAIN_D_80134FDC =
+				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
+					    shortArg);
+			longjmp(SCRIPT_JMP_BUF, 1);
+		case (3 << 3):
+			pollNextScriptUShort(&shortArg);
+			if (result != 0) {
+				continue;
+			}
+
+			MAIN_D_80134FDC =
+				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
+					    shortArg);
+			longjmp(SCRIPT_JMP_BUF, 1);
+		case (4 << 3):
+			switch (condOp & 7) {
+			case 0:
+				cond = MAIN_func_801022FC();
+				break;
+			case 1:
+				cond = MAIN_func_801024CC();
+				break;
+			case 2:
+				cond = MAIN_func_80102514();
+				break;
+			case 3:
+				cond = MAIN_func_80102564();
+				break;
+			case 4:
+				cond = MAIN_func_801025E8();
+				break;
+			case 5:
+				cond = MAIN_func_80102630();
+				break;
+			}
+			break;
+		}
+
+		if (condOp & 0x80) {
+			int32_t combined = 0;
+			if (result == 1 && cond == 1) combined = 1;
+			result = combined;
+		} else if (condOp & 0x40) {
+			int32_t combined = 1;
+			if (result != 1 && cond != 1) combined = 0;
+			result = combined;
+		} else {
+			result = cond;
+		}
+	}
+}
+
+void skipHours(int32_t hours);
+void scriptSetDigimon(int32_t a0, int32_t a1, int32_t a2);
+void scriptUnloadEntity(int32_t a0);
+void resetEntityOrigin(int32_t a0);
+void setMapObjectsFlag(int32_t start, int32_t count, int32_t flag);
+
+extern uint8_t MAIN_D_801BE6B4[];
+
+static void scriptInstruction28to3F__garbage__(int32_t op)
+{
+	StackEntry entry;
+	uint16_t shortArg;
+	uint16_t offset;
+	uint8_t pstat;
+	uint8_t value;
+	uint8_t unusedByte;
+	int32_t newValue;
+
+	switch (op) {
+	case 0x10:
+		MAIN_D_80135000 = 1;
+		scriptShowSelection();
+		longjmp(SCRIPT_JMP_BUF, 2);
+		break;
+	case 0x13:
+		skipOneReadOneUShort(&shortArg);
+		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptId = ACTIVE_MAP_SCRIPT;
+		entry.smth[0] = 1;
+		pushScriptStack(&entry);
+		MAIN_D_80134FDC = (uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		break;
+	}
+}
+
+void scriptInstruction28to3F(int32_t op)
+{
+	int16_t *statPtr;
+	uint32_t value32;
+	int32_t intArg;
+	uint16_t value;
+	uint8_t byteArg1;
+	uint8_t byteArg2;
+	uint8_t day;
+	uint8_t hour;
+	uint8_t minute;
+	uint32_t sec;
+
+	switch (op) {
+	case 0x28:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		if (giveItem(byteArg1, byteArg2) != 0) {
+			unsetTrigger(0);
+		} else {
+			setTrigger(0);
+		}
+		break;
+	case 0x29:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		removeItem(byteArg1, byteArg2);
+		break;
+	case 0x2a:
+		skipOneReadInteger(&intArg);
+		MONEY += intArg;
+		if (MONEY >= 0xf4240) {
+			MONEY = 0xf423f;
+		}
+		break;
+	case 0x2b:
+		skipOneReadInteger(&intArg);
+		MONEY -= intArg;
+		if (MONEY < 0) {
+			MONEY = 0;
+		}
+		break;
+	case 0x2c:
+		scriptCompareDate();
+		break;
+	case 0x2d:
+		pollNextScriptUByte(&byteArg1);
+		scriptLearnMove(byteArg1);
+		break;
+	case 0x2e:
+		pollNextScriptUByte(&byteArg1);
+		break;
+	case 0x2f:
+		pollNextScriptUByte(&byteArg1);
+		byteArg2 = getCardAmount(byteArg1);
+		if (byteArg2 < 9) {
+			byteArg2 = byteArg2 + 1u;
+			setCardAmount(byteArg1, byteArg2);
+		}
+		break;
+	case 0x30:
+		pollNextScriptUByte(&byteArg1);
+		byteArg2 = getCardAmount(byteArg1);
+		if (byteArg2 != 0) {
+			byteArg2 = byteArg2 - 1u;
+			setCardAmount(byteArg1, byteArg2);
+		}
+		break;
+	case 0x31:
+		skipOneReadOneUShort(&value);
+		MERIT = value;
+		if (MERIT >= 0x2710) {
+			MERIT = 0x270f;
+		}
+		break;
+	case 0x32:
+		skipOneReadOneUShort(&value);
+		MERIT += value;
+		if (MERIT >= 0x2710) {
+			MERIT = 0x270f;
+		}
+		break;
+	case 0x33:
+		skipOneReadOneUShort(&value);
+		MERIT = -value;
+		if (MERIT < 0) {
+			MERIT = 0;
+		}
+		break;
+	case 0x34:
+		pollOneUByteOneUShort(&byteArg1, &value);
+		statPtr = getStatsPointer(byteArg1);
+		value32 = value;
+		*statPtr = enforceStatsLimits(byteArg1, (int16_t)value32);
+		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
+		if (byteArg1 == 0x15) {
+			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+		}
+		if (byteArg1 == 0x16) {
+			PARTNER_ENTITY.lives = MAIN_D_80135004;
+		}
+		break;
+	case 0x35:
+		pollOneUByteOneUShort(&byteArg1, &value);
+		statPtr = getStatsPointer(byteArg1);
+		value32 = value;
+		*statPtr += value32;
+		*statPtr = enforceStatsLimits(byteArg1, *statPtr);
+		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
+		if (byteArg1 == 0x15) {
+			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+		}
+		if (byteArg1 == 0x16) {
+			PARTNER_ENTITY.lives = MAIN_D_80135004;
+		}
+		break;
+	case 0x36:
+		pollOneUByteOneUShort(&byteArg1, &value);
+		statPtr = getStatsPointer(byteArg1);
+		intArg = *statPtr - (int16_t)value;
+		if (byteArg1 != 9) {
+			if (intArg < 0) intArg = 0;
+		} else {
+			if (intArg < -0x64) intArg = -0x64;
+		}
+		*statPtr = intArg;
+		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
+		if (byteArg1 == 0x15) {
+			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+		}
+		if (byteArg1 == 0x16) {
+			PARTNER_ENTITY.lives = MAIN_D_80135004;
+		}
+		break;
+	case 0x37:
+		pollNextScriptUByte(&byteArg1);
+		byteArg2 = readPStat(byteArg1);
+		day = readPStat((byteArg1 + 1) & 0xff);
+		hour = readPStat((byteArg1 + 2) & 0xff);
+		minute = readPStat((byteArg1 + 3) & 0xff);
+		sec = dateToSeconds(byteArg2, day, hour, minute);
+		{
+			uint32_t cur_sec = dateToSeconds(YEAR, DAY & 0xff,
+							 HOUR & 0xff, MINUTE &
+							 0xff);
+			if (cur_sec < sec) {
+				skipHours((sec - cur_sec) / 60);
+			}
+		}
+		YEAR = byteArg2;
+		{
+			int16_t prev_day = DAY;
+			DAY = day;
+			HOUR = hour;
+			MINUTE = minute;
+			CURRENT_FRAME = HOUR * 1200 + MINUTE * 20;
+			if (DAY != prev_day) {
+				dailyPStatTrigger();
+			}
+		}
+		break;
+	case 0x38:
+	case 0x39:
+		pollNextScriptUByte(&byteArg1);
+		pollNextInt(&intArg);
+		byteArg2 = readPStat(byteArg1);
+		day = readPStat((byteArg1 + 1) & 0xff);
+		hour = readPStat((byteArg1 + 2) & 0xff);
+		minute = readPStat((byteArg1 + 3) & 0xff);
+		sec = dateToSeconds(byteArg2, day, hour, minute);
+		if (op == 0x38) {
+			intArg = sec + intArg;
+		} else {
+			intArg = sec - intArg;
+			if (intArg < 0) intArg = 0;
+		}
+		MAIN_func_8010692C(intArg, &byteArg2, &day, &hour, &minute);
+		writePStat(byteArg1, byteArg2);
+		writePStat((byteArg1 + 1) & 0xff, day);
+		writePStat((byteArg1 + 2) & 0xff, hour);
+		writePStat((byteArg1 + 3) & 0xff, minute);
+		break;
+	case 0x3a:
+	case 0x3b:
+	case 0x3c:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		break;
+	case 0x3d:
+	case 0x3e:
+		pollNextScriptUByte(&byteArg1);
+		break;
+	case 0x3f:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		byteArg1 = readPStat(byteArg1);
+		byteArg1 = DIGIMON_DATA[byteArg1].type;
+		writePStat(byteArg2, byteArg1);
+		break;
+	}
+
+	longjmp(SCRIPT_JMP_BUF, 1);
+}
+
+void scriptInstruction46to58(int32_t op)
+{
+	StackEntry entry;
+	int16_t posX;
+	int16_t posY;
+	uint8_t byteArg1;
+	uint8_t byteArg2;
+	uint8_t byteArg3;
+	uint8_t entityId;
+	uint8_t *b;
+
+	switch (op) {
+	case 0x46:
+		pollNextScriptUByte(&byteArg1);
+		scriptLoadModel(byteArg1);
+		break;
+	case 0x47:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		scriptSetDigimon(byteArg1, byteArg2, byteArg3);
+		break;
+	case 0x48:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		scriptUnloadEntity(byteArg1);
+		break;
+	case 0x49:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		callDigimonRoutine(byteArg1);
+		break;
+	case 0x4a:
+		pollNextScriptUByte(&byteArg1);
+		ACTIVE_INSTRUCTION = 0x4a;
+		if (byteArg1 == 0xff) {
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xc8) {
+			byteArg1 = 0xa;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xca) {
+			byteArg1 = 0xb;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xcb) {
+			byteArg1 = 0xc;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xcc) {
+			byteArg1 = 0xd;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xcd) {
+			byteArg1 = 0xe;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xce) {
+			byteArg1 = 0xf;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xcf) {
+			byteArg1 = 0x10;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd0) {
+			byteArg1 = 0x11;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd1) {
+			byteArg1 = 0x12;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd2) {
+			byteArg1 = 0x13;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd3) {
+			byteArg1 = 0x14;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd4) {
+			byteArg1 = 0x15;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xc9) {
+			byteArg1 = 0x19;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd5) {
+			byteArg1 = 0x19;
+			SOME_SCRIPT_SYNC_BIT = 0;
+			goto wait_for_entity_end;
+		}
+		if (byteArg1 == 0xd6) {
+			byteArg1 = 0x1a;
+			goto wait_for_entity_end;
+		}
+		byteArg1 = scriptIdToEntityId(byteArg1);
+	wait_for_entity_end:
+		MAIN_D_80134FA4 = byteArg1;
+		longjmp(SCRIPT_JMP_BUF, 2);
+	case 0x4b:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		MAIN_D_80134FF8 = byteArg1;
+		SELECTION_MENU_STATE = byteArg2;
+		MAIN_func_801053EC();
+		entry.smth[0] = 4;
+		entry.smth[1] = byteArg3;
+		pushScriptStack(&entry);
+		longjmp(SCRIPT_JMP_BUF, 3);
+	case 0x4c:
+		MAIN_func_801062F8(0xff);
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		entityId = scriptIdToEntityId(byteArg1);
+		if (entityId == 0xff) break;
+		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b[0] = 0;
+		b[1] = byteArg1;
+		b[2] = byteArg2;
+		break;
+	case 0x4d:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextScriptShort(&posX);
+		entityId = scriptIdToEntityId(byteArg1);
+		if (entityId == 0xff) break;
+		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b[0] = 1;
+		b[1] = byteArg1;
+		*(int16_t *)(b + 4) = posX;
+		break;
+	case 0x4e:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		MAIN_func_80105464(byteArg1, byteArg2);
+		entityId = scriptIdToEntityId(byteArg1);
+		if (entityId == 0xff) break;
+		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b[0] = 2;
+		b[1] = byteArg1;
+		*(int16_t *)(b + 4) = posX;
+		*(int16_t *)(b + 6) = posY;
+		break;
+	case 0x4f:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		b = (uint8_t *)&MAIN_D_801BE72C;
+		b[0] = 6;
+		*(int16_t *)(b + 4) = posX;
+		*(int16_t *)(b + 6) = posY;
+		b[3] = byteArg1;
+		break;
+	case 0x50:
+		MAIN_func_801062F8(0xff);
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		b = (uint8_t *)&MAIN_D_801BE72C;
+		b[0] = 7;
+		b[1] = byteArg1;
+		b[3] = byteArg2;
+		break;
+	case 0x51:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		MAIN_func_80105464(byteArg1, byteArg2);
+		entityId = scriptIdToEntityId(byteArg1);
+		if (entityId == 0xff) break;
+		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b[0] = 3;
+		b[1] = byteArg1;
+		b[2] = byteArg3;
+		break;
+	case 0x52:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		MAIN_func_80105464(byteArg1, byteArg2);
+		entityId = scriptIdToEntityId(byteArg1);
+		if (entityId == 0xff) break;
+		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b[0] = 4;
+		b[1] = byteArg1;
+		*(int16_t *)(b + 4) = posX;
+		*(int16_t *)(b + 6) = posY;
+		break;
+	case 0x53:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		MAIN_func_80105464(byteArg1, byteArg2);
+		entityId = scriptIdToEntityId(byteArg1);
+		if (entityId == 0xff) break;
+		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b[0] = 5;
+		b[1] = byteArg1;
+		b[2] = byteArg3;
+		break;
+	case 0x54:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		resetEntityOrigin(byteArg1);
+		break;
+	case 0x55:
+		MAIN_D_80134FDC++;
+		pollNextTwoScriptShorts(&MAIN_D_80134FD2, &MAIN_D_80134FD4);
+		pollNextScriptShort(&MAIN_D_80134FD6);
+		break;
+	case 0x56:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		scriptStartAnimation(byteArg1, byteArg2);
+		break;
+	case 0x57:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		setMapObjectsFlag(byteArg1, 1, byteArg2);
+		break;
+	case 0x58:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		MAIN_D_80134FF8 = readPStat(byteArg1);
+		SELECTION_MENU_STATE = readPStat((byteArg1 + 1) & 0xff);
+		MAIN_func_801053EC();
+		entry.smth[0] = 4;
+		entry.smth[1] = 0xff;
+		pushScriptStack(&entry);
+		longjmp(SCRIPT_JMP_BUF, 3);
+	}
+
+	longjmp(SCRIPT_JMP_BUF, 1);
+}
+
+void scriptInstruction5Ato5F(int32_t op)
+{
+	uint8_t byteArg1;
+	uint8_t byteArg2;
+
+	switch (op) {
+	case 0x5a:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		playSound(byteArg1, byteArg2);
+		break;
+	case 0x5b:
+		pollNextScriptUByte(&byteArg1);
+		break;
+	case 0x5c:
+		pollNextScriptUByte(&byteArg1);
+		break;
+	case 0x5d:
+		pollNextScriptUByte(&byteArg1);
+		playBGM(byteArg1);
+		break;
+	case 0x5e:
+		pollNextScriptUByte(&byteArg1);
+		resetBGM();
+		break;
+	case 0x5f:
+		pollNextScriptUByte(&byteArg1);
+		break;
+	}
+
+	longjmp(SCRIPT_JMP_BUF, 1);
+}
 
 typedef struct {
 	uint8_t data[8];
@@ -114,94 +1521,6 @@ void terminateNamingBuffer(void);
 void namingDeleteLast(void);
 extern uint32_t POLLED_INPUT;
 extern RECT MAIN_D_801302BC[];
-
-static void *script_ops_functions[] = {
-	renderNamingUnderscore,
-	renderNameDisplayBox,
-	renderSelectionBox,
-	namingSelectionDown,
-	namingSelectionUp,
-	namingSelectionRight,
-	namingSelectionLeft,
-	terminateNamingBuffer,
-	namingDeleteLast,
-	updateNamingPreview,
-	MAIN_func_8010A79C,
-	renderNamingBox,
-	tickNamingBox,
-	setupNameDisplayBox,
-	setupNameSelectorBox,
-	showNewgameSelection,
-	showNewgameDialogue,
-	setupNewGameDialogueBox,
-	MAIN_func_80109BBC,
-	MAIN_func_801099E8,
-	MAIN_func_801097F4,
-	MAIN_func_801096E8,
-	MAIN_func_801094F0,
-	MAIN_func_801093E4,
-	MAIN_func_801091DC,
-	MAIN_func_80108EB4,
-	MAIN_func_80108DC0,
-	MAIN_func_80108C88,
-	MAIN_func_80108A98,
-	MAIN_func_80108890,
-	MAIN_func_801086E0,
-	MAIN_func_801086D4,
-	MAIN_func_80108610,
-	MAIN_func_80108604,
-	MAIN_func_80108334,
-	MAIN_func_80108230,
-	MAIN_func_80108090,
-	MAIN_func_80107E6C,
-	MAIN_func_80107DFC,
-	MAIN_func_80107D54,
-	MAIN_func_80107C4C,
-	MAIN_func_80107B98,
-	MAIN_func_80107AB8,
-	MAIN_func_801078F4,
-	MAIN_func_80107784,
-	MAIN_func_80107660,
-	MAIN_func_80107444,
-	MAIN_func_801072C4,
-	MAIN_func_80107200,
-	MAIN_func_80107110,
-	MAIN_func_80107000,
-	showCardTextbox,
-	rollCard,
-	MAIN_func_80106D28,
-	MAIN_func_80106D1C,
-	getTriggerOffset,
-	pollNextScriptTwoUShort,
-	scriptUnloadModel,
-	forceUpdateBGM,
-	updateBGM,
-	playBGM,
-	pollNextTwoScriptShorts,
-	pollNextScriptShort,
-	scriptLoadModel,
-	MAIN_func_8010692C,
-	pollNextInt,
-	dateToSeconds,
-	setCardAmount,
-	getCardAmount,
-	scriptLearnMove,
-	skipOneReadInteger,
-	MAIN_func_80106730,
-	scriptCompareValues,
-	pollNextTwoScriptBytes,
-	pollNextScriptUShort,
-	skipOnePollTwoScriptBytes,
-	unsetTrigger,
-	setTrigger,
-	pollNextScriptUByte,
-	pollOneUByteOneUShort,
-	skipOneReadOneUShort,
-	popScriptStack,
-	resetBGM,
-	pushScriptStack,
-	skipOneReadTwoShort,
-};
 
 void pushScriptStack(StackEntry *entry)
 {
@@ -2576,3 +3895,829 @@ void renderNamingUnderscore(uint8_t boxId, int16_t x, int16_t y, int32_t w)
 	renderLinePrimitive(0x20202, x, y, (x + w) - 1, y, boxId, 0);
 }
 
+void handleMusicOverride(uint8_t *outFont, uint8_t *outVariant)
+{
+	switch (readPStat(PSTAT_245) & 0xff) {
+	case 0:
+		if (HOUR >= 6 && HOUR < 21) {
+			*outVariant = 0;
+		} else {
+			*outVariant = 1;
+		}
+		break;
+	case 1: *outVariant = 0;
+		break;
+	case 2:
+		*outFont = 6;
+		*outVariant = 2;
+		break;
+	case 3:
+		*outFont = 0xb;
+		*outVariant = 2;
+		break;
+	case 4:
+		*outFont = 0xf;
+		*outVariant = 2;
+		break;
+	case 5:
+		*outFont = 0x15;
+		*outVariant = 0;
+		break;
+	case 6:
+		*outFont = 0x15;
+		*outVariant = 1;
+		break;
+	case 7:
+		*outFont = 0x1a;
+		*outVariant = 0;
+		break;
+	case 8:
+		*outFont = 0x1a;
+		*outVariant = 1;
+		break;
+	case 9:
+		*outFont = 0x1b;
+		*outVariant = 0;
+		break;
+	case 0xa:
+		*outFont = 0x1b;
+		*outVariant = 1;
+		break;
+	}
+}
+
+void resetMapObjectAnimation(int32_t a0, int32_t a1);
+void createMeramonShake(void);
+void createNinjamonEffect(void);
+void openSaveMachine(void);
+void gameClearSave(void);
+void spawnSpriteAtLocation(int16_t x, int16_t y, int16_t z, int16_t w,
+			   int32_t type);
+void spawnSpriteAtEntity(int32_t entId, int32_t sprite, int32_t param);
+void setRectImpassible(int16_t x, int16_t y, int8_t w, int8_t h);
+void addEntityText(int32_t a0, int32_t a1, int32_t a2, int32_t a3,
+		   int32_t a4);
+void setLoopCountToOne(int32_t a0);
+void MAIN_func_800D9360(int32_t a0);
+int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut);
+
+void setMapHeadActive(void);
+
+extern char MAIN_D_80130394[];
+extern char MAIN_D_801303A8[];
+extern uint8_t PREVIOUS_SCREEN;
+extern uint8_t PREVIOUS_EXIT;
+extern uint8_t CURRENT_EXIT;
+extern uint8_t MAIN_D_801BE738[];
+
+extern uint8_t MAIN_D_801BE6B4[];
+
+void scriptInstruction64to7E(int32_t op)
+{
+	StackEntry entry;
+	int16_t posX;
+	int16_t posY;
+	int16_t posZ;
+	int16_t posW;
+	uint16_t triggerId;
+	uint8_t byteArg1;
+	uint8_t byteArg2;
+	uint8_t byteArg3;
+	uint8_t entityId;
+	uint8_t padByte;
+	uint8_t *b;
+
+	switch (op) {
+	case 0x64:
+		pollNextScriptUByte(&byteArg1);
+		MAIN_D_80134FF8 = byteArg1;
+		switch (byteArg1) {
+		case 0x16:
+			if (checkTournamentMedalConditions() == -1) break;
+			/* fall through */
+		case 0x00:
+		case 0x01:
+		case 0x02:
+		case 0x06:
+		case 0x08:
+		case 0x09:
+		case 0x0a:
+		case 0x0b:
+		case 0x0e:
+		case 0x12:
+		case 0x2f:
+			ACTIVE_INSTRUCTION = 0x64;
+			SELECTION_MENU_STATE = 0;
+			SCRIPT_STATE_3 = 0;
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x07:
+			byteArg1 = readPStat(0xfe);
+			if ((CURRENT_MAP_ID == 0x6b) ||
+			    (CURRENT_MAP_ID == 0x6c) ||
+			    (CURRENT_MAP_ID == 0xa5) ||
+			    (CURRENT_MAP_ID == 0x63)) {
+				switch (byteArg1) {
+				case 0:
+					TRN2_setupHpTraining(CURRENT_MAP_ID);
+					break;
+				case 1:
+					TRN2_setupOffenseTraining(CURRENT_MAP_ID);
+					break;
+				case 2:
+					TRN2_setupSpeedTraining(CURRENT_MAP_ID);
+					break;
+				case 3:
+					TRN2_setupDefenseTraining(CURRENT_MAP_ID);
+					break;
+				case 4:
+					TRN2_setupMpTraining(CURRENT_MAP_ID);
+					break;
+				}
+			} else {
+				switch (byteArg1) {
+				case 0:
+					TRN_setupHpTraining(CURRENT_MAP_ID);
+					break;
+				case 1:
+					TRN_setupOffenseTraining(CURRENT_MAP_ID);
+					break;
+				case 2:
+					TRN_setupSpeedTraining(CURRENT_MAP_ID);
+					break;
+				case 3:
+					TRN_setupDefenseTraining(CURRENT_MAP_ID);
+					break;
+				case 4:
+					TRN_setupMpTraining(CURRENT_MAP_ID);
+					break;
+				case 5:
+					TRN_setupBrainsTraining(CURRENT_MAP_ID);
+					break;
+				}
+			}
+			ACTIVE_INSTRUCTION = 0x64;
+			SCRIPT_STATE_3 = 0;
+			longjmp(SCRIPT_JMP_BUF, 2);
+			break;
+		case 0x0c:
+			byteArg1 = readPStat(0xfe);
+			if (byteArg1 != 0xff) removeItem(byteArg1, 1);
+			break;
+		case 0x0d:
+			byteArg1 = readPStat(0xfe);
+			if (byteArg1 != 0xff) removeItem(byteArg1, 0x63);
+			break;
+		case 0x0f:
+			MAIN_func_800FC968(1);
+			break;
+		case 0x10:
+			triggerBoxCloseFlag(2);
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x13:
+			byteArg1 = readPStat(0xfe);
+			setDirtCartModel(byteArg1);
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x14:
+			decreaseDirtPileSize();
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x15:
+			byteArg1 = readPStat(0xf7);
+			byteArg2 = readPStat(0xf8);
+			resetMapObjectAnimation(byteArg1, byteArg2);
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x1d:
+			DOO2_openEggBox();
+			/* fall through */
+		case 0x17: case 0x18: case 0x32:
+			ACTIVE_INSTRUCTION = 0x64;
+			SCRIPT_STATE_3 = 0;
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x19:
+			MAIN_D_80134FE7 = readPStat(0xfe);
+			break;
+		case 0x1a:
+			loadDirtCartModel();
+			break;
+		case 0x1b:
+			loadDirtPileModel();
+			break;
+		case 0x1c:
+			createMonochromonMoodBubble();
+			break;
+		case 0x1e:
+			MAIN_D_8013500C = 0;
+			break;
+		case 0x1f:
+			{
+				int32_t hi = readPStat(0xf3) << 8;
+				int32_t lo = readPStat(0xf4);
+				posX = lo + hi;
+				MAIN_D_8013500C += posX;
+			}
+			break;
+		case 0x38:
+			writePStat(0xf3, (MAIN_D_8013500C / 256) & 0xff);
+			writePStat(0xf4, MAIN_D_8013500C & 0xff);
+			break;
+		case 0x20:
+			initializeNamingBuffer(readPStat(0xfe));
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x21:
+			setTrigger(0x25);
+			setTrigger(0x26);
+			setTrigger(0x27);
+			if (DAY != 0x16) {
+				byteArg1 = 0x95;
+			} else {
+				byteArg1 = 0x16;
+			}
+			writePStat(2, byteArg1);
+			writePStat(3, 0x16);
+			writePStat(4,
+				   PARTNER_ENTITY.digimonEntity.entity.type);
+			break;
+		case 0x22:
+			createMeramonShake();
+			break;
+		case 0x23:
+			MAIN_func_800FF9AC();
+			break;
+		case 0x24:
+			readMapTFS(CURRENT_MAP_ID);
+			break;
+		case 0x27:
+			MAIN_func_800D9360(CURRENT_MAP_ID);
+			break;
+		case 0x30:
+			openSaveMachine();
+			/* fall through */
+		case 0x25:
+			ACTIVE_INSTRUCTION = 0x64;
+			SCRIPT_STATE_3 = 0;
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x36:
+			gameClearSave();
+			ACTIVE_INSTRUCTION = 0x64;
+			SCRIPT_STATE_3 = 0;
+			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x26:
+			createNinjamonEffect();
+			break;
+		case 0x33:
+			addFileReadRequestPath(MAIN_D_80130394,
+					       (uint8_t *)0x80058000, 0, 0,
+					       0);
+			loadDynamicLibrary(EAB_REL, 0, 0, 0, 0);
+			readVBALLSection(5, 0x73);
+			loadMapSounds2(0x15);
+			break;
+		case 0x34:
+			loadTextureFile(MAIN_D_801303A8, 0, 0);
+			loadDynamicLibrary(ENDI_REL, 0, 1, 0, 0);
+			loadMapSounds2(0x14);
+			break;
+		case 0x28:
+			isSoundLoaded(0, 8);
+			EAB_startBuildup(
+				ENTITY_TABLE[scriptIdToEntityId(5)]);
+			break;
+		case 0x35:
+			isSoundLoaded(0, 8);
+			setTamerState(0x10);
+			SOME_SCRIPT_SYNC_BIT = 0;
+			ACTIVE_INSTRUCTION = 0x64;
+			SCRIPT_STATE_3 = 0;
+			longjmp(SCRIPT_JMP_BUF, 2);
+			break;
+		case 0x37:
+			setLoopCountToOne(readPStat(0xfe));
+			longjmp(SCRIPT_JMP_BUF, 2);
+			break;
+		case 0x29:
+			spawnGearbox();
+			break;
+		case 0x2a:
+			{
+				int8_t pstat = readPStat(0xfe);
+				somethingToyTown(pstat);
+			}
+			break;
+		case 0x2b:
+			spawnToyTownBoxes();
+			break;
+		case 0x2c:
+			{
+				int8_t value = readPStat(0xfe);
+				openToyTownBox(value);
+			}
+			break;
+		case 0x2d:
+			{
+				int16_t value = readPStat(0xfe);
+				fadeToWhite(value);
+			}
+			break;
+		case 0x2e:
+			{
+				int16_t value = readPStat(0xfe);
+				fadeFromWhite(value);
+			}
+			break;
+		case 0x31:
+			spawnAngemonPedestal();
+			break;
+		case 0x03:
+		case 0x04:
+		case 0x05:
+		case 0x11:
+			goto script_end;
+		}
+		break;
+	case 0x65:
+		pollNextScriptUByte(&byteArg1);
+		PARTNER_PARA.condition &= ~byteArg1;
+		break;
+	case 0x66:
+		pollNextScriptUByte(&byteArg1);
+		if (MAIN_D_80134FC8 < 0x270f) {
+			MAIN_D_80134FC8++;
+		}
+		byteArg1 = readPStat(0xfa);
+		if (byteArg1 != 0) {
+			for (byteArg1 = 0xfb; byteArg1 < 0xfe; byteArg1++) {
+				byteArg2 = readPStat(byteArg1);
+				if (byteArg2 != 0xff) {
+					byteArg2 =
+						scriptIdToEntityId(byteArg2);
+					writePStat(byteArg1, byteArg2);
+				}
+			}
+		}
+		stopBGM();
+		{
+			int16_t outcome;
+
+			outcome = startBattle(MAIN_D_80134F9C);
+			writePStat(0xff, outcome);
+			if (outcome == -1) {
+				handleItemLoss();
+				PARTNER_ENTITY.lives -= 1;
+				if (PARTNER_ENTITY.lives == 0) {
+					PARTNER_PARA.remainingLifetime = 0;
+				}
+				CURRENT_SCRIPT_PTR = getScript(0);
+				MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, 0x4de);
+				break;
+			}
+			if (outcome == 0) {
+				if (MAIN_D_80134FCA < 0x270f) {
+					MAIN_D_80134FCA++;
+				}
+				MAIN_D_80134FA0 = 0;
+				MAIN_D_80134FF8 = PREVIOUS_SCREEN;
+				SELECTION_MENU_STATE = PREVIOUS_EXIT;
+				PREVIOUS_EXIT = CURRENT_EXIT;
+				entry.smth[0] = 4;
+				entry.smth[1] = 0xff;
+				pushScriptStack(&entry);
+				longjmp(SCRIPT_JMP_BUF, 3);
+			}
+		}
+		if (isTriggerSet(1) != 0) {
+			setMovementEnabled(-1, 1);
+			MAIN_func_8010020C();
+			break;
+		}
+
+		b = (uint8_t *)&MAIN_D_801BE72C;
+		b[0] = 7;
+		b[1] = 0xfd;
+		b[3] = 0xa;
+
+		ACTIVE_INSTRUCTION = 0x4a;
+		MAIN_D_80134FA4 = 0xa;
+		MAIN_func_8010020C();
+		longjmp(SCRIPT_JMP_BUF, 2);
+	case 0x67:
+		skipOneReadOneUShort(&MAIN_D_80134FFC);
+		ACTIVE_INSTRUCTION = 0x67;
+		longjmp(SCRIPT_JMP_BUF, 2);
+	case 0x68:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		MAIN_D_80134FE5 = byteArg1;
+		if (byteArg1 != 2) break;
+		MAIN_D_80135010 = byteArg2;
+		break;
+	case 0x69:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		{
+			int32_t damage;
+			damage = (PARTNER_ENTITY.digimonEntity.stats.base.hp *
+				  readPStat(byteArg1)) / 100;
+			if (PARTNER_ENTITY.digimonEntity.stats.current
+					.currentHP - (int16_t)damage < 1) {
+				damage = PARTNER_ENTITY.digimonEntity.stats
+						.current.currentHP - 1;
+			}
+			PARTNER_ENTITY.digimonEntity.stats.current
+					.currentHP -= damage;
+			addEntityText((int32_t)ENTITY_TABLE[1], 0, 0, damage,
+				      0);
+		}
+		break;
+	case 0x6a:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		byteArg1 = scriptIdToEntityId(byteArg1);
+		if (byteArg1 == 0xff || byteArg1 < 2) {
+			break;
+		}
+		NPC_ENTITIES[byteArg1 - 2].autotalk = byteArg2;
+		break;
+	case 0x6b:
+		break;
+	case 0x6c:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		entityId = scriptIdToEntityId(byteArg1);
+		&entityId;
+		if (entityId != 0xff) {
+			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b[0] = 8;
+			b[1] = byteArg1;
+			b[3] = byteArg2;
+			*(int16_t *)(b + 4) = posX;
+			*(int16_t *)(b + 6) = posY;
+		}
+		break;
+	case 0x6d:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		entityId = scriptIdToEntityId(byteArg1);
+		&entityId;
+		if (entityId != 0xff) {
+			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b[0] = 9;
+			b[1] = byteArg1;
+			b[2] = byteArg2;
+			b[3] = byteArg3;
+		}
+		break;
+	case 0x6e:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		entityId = scriptIdToEntityId(byteArg1);
+		&entityId;
+		if (entityId != 0xff) {
+			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b[0] = 0xb;
+			b[1] = byteArg1;
+			b[3] = byteArg2;
+			*(int16_t *)(b + 4) = posX;
+			*(int16_t *)(b + 6) = posY;
+		}
+		break;
+	case 0x6f:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		entityId = scriptIdToEntityId(byteArg1);
+		&entityId;
+		if (entityId != 0xff) {
+			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b[0] = 0xb;
+			b[1] = byteArg1;
+			b[2] = byteArg2;
+			b[3] = byteArg3;
+		}
+		break;
+	case 0x70:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		MAIN_D_801BE738[0] = 0xc;
+		MAIN_D_801BE738[1] = byteArg1;
+		MAIN_D_801BE738[2] = byteArg3;
+		break;
+	case 0x71:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		pollNextTwoScriptBytes(&entityId, &padByte);
+		pollNextTwoScriptShorts(&posX, &posY);
+		byteArg1 += 0xc;
+		b = MAIN_D_801BE6B4 + byteArg1 * 0xc;
+		b[0] = 0xd;
+		b[1] = byteArg2;
+		b[3] = byteArg3;
+		b[2] = entityId;
+		*(int16_t *)(b + 8) = posX;
+		*(int16_t *)(b + 0xa) = posY;
+		break;
+	case 0x72:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextScriptShort(&posX);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		entityId = scriptIdToEntityId(byteArg1);
+		&entityId;
+		if (entityId != 0xff) {
+			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b[0] = 0xe;
+			b[1] = byteArg1;
+			b[2] = byteArg2;
+			*(int16_t *)(b + 4) = posX;
+			b[3] = byteArg3;
+		}
+		break;
+	case 0x73:
+		MAIN_func_801062F8(0xff);
+		pollNextScriptUByte(&byteArg1);
+		pollNextScriptShort(&posX);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		entityId = scriptIdToEntityId(byteArg1);
+		&entityId;
+		if (entityId != 0xff) {
+			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b[0] = 0xf;
+			b[1] = byteArg1;
+			b[2] = byteArg2;
+			*(int16_t *)(b + 4) = posX;
+			b[3] = byteArg3;
+		}
+		break;
+	case 0x74:
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		spawnItem(byteArg1, posX, posY);
+		break;
+	case 0x75:
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptShorts(&posZ, &posW);
+		pollNextScriptUShort(&triggerId);
+		spawnChest(posX, posY, posZ, posW, byteArg1, triggerId);
+		break;
+	case 0x76:
+		pollNextScriptUByte(&byteArg1);
+		spawnBoulder();
+		break;
+	case 0x77:
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		moveBoulder(posX, posY);
+		longjmp(SCRIPT_JMP_BUF, 2);
+	case 0x78:
+		pollNextScriptUByte(&byteArg1);
+		removeObject(0xfb6, 0);
+		break;
+	case 0x79:
+		pollNextScriptUByte(&byteArg1);
+		scriptUnloadModel(byteArg1);
+		break;
+	case 0x7a:
+		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
+		byteArg1 = readPStat(byteArg1);
+		writePStat(byteArg2, byteArg1);
+		break;
+	case 0x7b:
+		pollNextScriptUByte(&byteArg1);
+		entry.smth[0] = 4;
+		entry.smth[1] = byteArg1;
+		pushScriptStack(&entry);
+		writePStat(0, MAIN_D_80134FE7);
+		break;
+	case 0x7c:
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		setRectImpassible(posX, posY, byteArg2,
+				  byteArg3);
+		break;
+	case 0x7d:
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptShorts(&posX, &posY);
+		pollNextTwoScriptShorts(&posZ, &posW);
+		spawnSpriteAtLocation(posX, posY, posZ, posW, byteArg1);
+		break;
+	case 0x7e:
+		pollNextScriptUByte(&byteArg1);
+		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
+		spawnSpriteAtEntity(byteArg1, byteArg2, byteArg3);
+		break;
+	}
+script_end:
+	longjmp(SCRIPT_JMP_BUF, 1);
+}
+
+
+
+void setMapHeadActive(void)
+{
+	uint8_t *scriptPtr;
+	int32_t off;
+
+	scriptPtr = MAPHEAD_DATA_PTR;
+	off = *(int16_t *)scriptPtr;
+	CURRENT_SCRIPT_PTR = scriptPtr;
+	MAIN_D_80134FDC = scriptPtr + (off & 0xffff) - 2;
+}
+
+int32_t tickMoveCameraTo(int32_t x, int32_t y, uint8_t speed);
+int32_t tickMoveCameraToEntity(uint32_t scriptId, uint8_t speed);
+int32_t tickMoveObjectTo(uint32_t scriptId1, uint32_t scriptId2,
+			 int32_t angle, int32_t targetX, int32_t targetY);
+
+extern uint8_t MAIN_D_80134FE4;
+extern int8_t TALKED_TO_ENTITY;
+extern uint8_t MAIN_D_80134FE9;
+extern int32_t MAIN_D_80134FF0;
+extern uint8_t MAPHEAD_DATA[];
+extern uint8_t SCRIPT_HEADER[];
+extern uint8_t SCRIPT_DATA[];
+extern ScriptState SCRIPT_STATE;
+extern uint8_t TEXT_BUFFERS[];
+extern uint8_t *SCRIPT_HEADER_PTR;
+extern uint8_t *SCRIPT_DATA_PTR;
+extern char MAIN_D_80130374[];
+extern char MAIN_D_80130388[];
+
+void initializeScripts(void)
+{
+	MAPHEAD_DATA_PTR = MAPHEAD_DATA;
+	SCRIPT_HEADER_PTR = SCRIPT_HEADER;
+	SCRIPT_DATA_PTR = SCRIPT_DATA;
+	SCRIPT_STATE_PTR = &SCRIPT_STATE;
+	TEXT_BUFFERS_PTR = TEXT_BUFFERS;
+
+	readFile(MAIN_D_80130374, MAPHEAD_DATA_PTR);
+	readFileSection(MAIN_D_80130388, SCRIPT_HEADER_PTR, 0, 0x2000);
+	memset((void *)SCRIPT_STATE_PTR, 0, sizeof(*SCRIPT_STATE_PTR));
+
+	CURRENT_SCRIPT_ID = 0xffff;
+	ACTIVE_MAP_SCRIPT = 0xffff;
+	MERIT = 0;
+	MAIN_D_80134FC6 = 0;
+	MAIN_D_80134FC8 = 0;
+	MAIN_D_80134FCA = 0;
+	MAIN_D_80134FCC = 0;
+	TOURNAMENTS_LOST = 0;
+	MAIN_D_80134FD0 = 0;
+	MAIN_D_80134FD2 = -0x270f;
+	MAIN_D_80134FD4 = -0x270f;
+	MAIN_D_80134FD6 = -0x270f;
+
+	initialKeyInputs();
+	dailyPStatTrigger();
+	initializeLoadedNPCModels();
+}
+
+void initializeLoadedNPCModels(void)
+{
+	int32_t i;
+
+	for (i = 0; i < 8; i++) {
+		LOADED_DIGIMON_MODELS[i] = -1;
+	}
+}
+
+void runMapHeadScript(int32_t section)
+{
+	callScriptSection(0, section, 1);
+	tickScript();
+}
+
+void callScriptSection(int32_t scriptId, int32_t section, int32_t param)
+{
+	int32_t i;
+
+	CURRENT_SCRIPT_PTR = getScript(scriptId);
+	MAIN_D_80134FDC =
+		getScriptSection(CURRENT_SCRIPT_PTR,
+					    section);
+	MAIN_D_80134FE0 = param;
+	MAIN_D_80134FE4 = section;
+	MAIN_D_80134FE5 = 0;
+	MAIN_D_80134FE6 = 0xfd;
+	MAIN_D_80134FE7 = readPStat(0);
+	SOME_SCRIPT_SYNC_BIT = 1;
+	ACTIVE_INSTRUCTION = 0;
+	MAIN_D_80134FE9 = 0;
+	MAIN_D_80134FEC = 0;
+	MAIN_D_80134FF0 = 0;
+	IS_SCRIPT_PAUSED = 0;
+	MAIN_D_80134F9C = TALKED_TO_ENTITY;
+	for (i = 0; i < 0x16; i++) {
+		((ScriptCameraMovement *)MAIN_D_801BE6B4)[i].type = 0xff;
+	}
+
+	MAIN_func_8010020C();
+}
+
+void tickScriptedMovement(int32_t slot)
+{
+	ScriptCameraMovement *movement =
+		&((ScriptCameraMovement *)MAIN_D_801BE6B4)[slot];
+	int32_t done;
+
+	switch (movement->type) {
+	case 0:
+		done = tickLookAtEntity(movement->entityId, movement->target);
+		break;
+	case 1:
+		done = tickEntitySetRotation(movement->entityId,
+					     movement->posX);
+		break;
+	case 2:
+		done = tickEntityWalkTo((uint8_t)movement->entityId, 0xff,
+					movement->posX, movement->posY, 0);
+		break;
+	case 3:
+		done = tickEntityWalkTo((uint8_t)movement->entityId, movement->target,
+					0, 0, 0);
+		break;
+	case 4:
+		done = tickEntityWalkTo((uint8_t)movement->entityId, 0xff,
+					movement->posX, movement->posY, 1);
+		break;
+	case 5:
+		done = tickEntityWalkTo((uint8_t)movement->entityId, movement->target,
+					0, 0, 1);
+		break;
+	case 6:
+		done = tickMoveCameraTo(movement->posX,
+					movement->posY,
+					movement->speed);
+		break;
+	case 7:
+		done = tickMoveCameraToEntity(movement->entityId,
+					      movement->speed);
+		break;
+	case 8:
+		done = tickEntityMoveTo(movement->entityId, 0xff,
+					movement->posX, movement->posY,
+					movement->speed, 0);
+		break;
+	case 9:
+		done = tickEntityMoveTo(movement->entityId, movement->target,
+					0, 0, movement->speed, 0);
+		break;
+	case 10:
+		done = tickEntityMoveTo(movement->entityId, 0xff,
+					movement->posX, movement->posY,
+					movement->speed, 1);
+		break;
+	case 0xb:
+		done = tickEntityMoveTo(movement->entityId, movement->target,
+					0, 0, movement->speed, 1);
+		break;
+	case 0xc:
+		{
+			int32_t instanceId;
+			int32_t target;
+
+			instanceId = movement->entityId;
+			target = movement->target;
+
+			done = tickRotateDoor(instanceId, target);
+		}
+		break;
+	case 0xd:
+		done = tickMoveObjectTo(movement->entityId,
+					((slot & 0xff) - 0xc) & 0xff,
+					(int8_t)movement->target,
+					movement->targetX, movement->targetY);
+		break;
+	case 0xe:
+		done = tickEntityMoveToAxis(movement->entityId,
+					    movement->posX,
+					    movement->target,
+					    movement->speed, 0);
+		break;
+	case 0xf:
+		done = tickEntityMoveToAxis(movement->entityId,
+					    movement->posX,
+					    movement->target,
+					    movement->speed, 1);
+		break;
+	}
+
+	if (done != 0) {
+		if (slot < 10 && movement->type < 8) {
+			if (slot == 0) {
+				startAnimationTamer(0);
+			} else if (slot == 1) {
+				startPartnerAnimation(0);
+			} else if (slot < 10) {
+				startNPCAnimation(movement->entityId, 0);
+			}
+		}
+
+		movement->type = 0xff;
+	}
+}

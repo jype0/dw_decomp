@@ -114,7 +114,9 @@ def main():
     units = []
     for file in expected_objects:
         processed_path = _determine_categories(file, config)
-        base_path = "build/src/" + re.sub(r"\\", r"/", processed_path[1]).removesuffix(".s.o").removesuffix(".c.o") + ".c.o"
+        unit_name = re.sub(r"\\", r"/", processed_path[1]).removesuffix(".s.o").removesuffix(".c.o")
+        base_path = config.get("base_path_overrides", {}).get(
+            unit_name, "build/src/" + unit_name + ".c.o")
         
         # Create mappings for clone/disambiguation symbol suffixes in base object
         # (disabled as objdiff report doesn't appear to support symbol mappings right now)
@@ -122,7 +124,7 @@ def main():
         symbol_mappings = {}
 
         unit = Unit(
-            re.sub(r"\\", r"/", processed_path[1]).removesuffix(".s.o").removesuffix(".c.o"),
+            unit_name,
             base_path if Path(base_path).exists() else None,
             re.sub(r"\\", r"/", str(file)),
             processed_path[0],

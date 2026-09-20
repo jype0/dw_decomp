@@ -67,6 +67,9 @@ categories:
 expected_paths:
   asm: expected/asm
 
+base_path_overrides:
+  main/script_ops_tail: build/src/main/script_ops.c.o
+
 ignored_files:
   - main/psyq
 

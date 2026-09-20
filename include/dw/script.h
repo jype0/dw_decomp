@@ -73,7 +73,7 @@ extern uint8_t ACTIVE_BGM_FONT;
 extern uint8_t *TEXT_BUFFERS_PTR;
 extern uint8_t *MAIN_D_80134FDC;
 extern uint8_t *MAPHEAD_DATA_PTR;
-extern int32_t CURRENT_SCRIPT_PTR;
+extern uint8_t *CURRENT_SCRIPT_PTR;
 extern int32_t LOADED_DIGIMON_MODELS[];
 extern ItemMenuBox *MAIN_D_80134F68;
 extern ItemMenuBox *MAIN_D_80134F6C;
