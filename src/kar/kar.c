@@ -20,6 +20,27 @@
 
 #include "common.h"
 
+typedef struct {
+	int16_t start;
+	int16_t count;
+} KarRingObject;
+/* Starts and counts are four bytes apart in this interleaved table. */
+typedef union {
+	KarRingObject ring[4];
+	int16_t starts[8];
+	struct {
+		int16_t firstStart;
+		int16_t counts[7];
+	} countView;
+} KarRingObjects;
+typedef struct {
+	int8_t ring[4];
+} KarRingFlags;
+
+extern int8_t MAIN_D_80134A48[4];
+extern uint8_t MAIN_D_80135257;
+void setMapObjectsFlag(int32_t start, int32_t count, int32_t flag);
+
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
 extern GsOT GS_ORDERING_TABLE[];
@@ -94,6 +115,9 @@ void KAR_beginThrow(void);
 
 int32_t tickMoveCameraTo(int16_t x, int16_t z, int32_t speed);
 void uploadMapTileImages();
+void moveCameraByDiff(VECTOR *from, VECTOR *to);
+extern int32_t MAIN_D_80135224;
+extern uint32_t MAIN_D_80135228;
 
 static void *kar_functions[] = {
 	KAR_renderSprite,
@@ -449,13 +473,22 @@ KarZones KAR_D_8005B438 = {
 	},
 };
 
-int16_t KAR_D_8005B450[8] = {
-	0x0019, 0x0001, 0x0013, 0x0004, 0x0010, 0x0003, 0x000d, 0x0003,
+KarRingObjects KAR_D_8005B450 = {
+	{
+		{0x0019, 0x0001},
+		{0x0013, 0x0004},
+		{0x0010, 0x0003},
+		{0x000d, 0x0003},
+	},
 };
 
-int16_t KAR_D_8005B460[12] = {
-	0x0000, 0x06b6, 0x0091, 0x0000, 0x06b6, 0x0177, 0xfe70, 0x090e,
-	0x00cd, 0x0190, 0x090e, 0x00cd,
+KarZones KAR_D_8005B460 = {
+	{
+		{0x0000, 0x06b6, 0x0091},
+		{0x0000, 0x06b6, 0x0177},
+		{0xfe70, 0x090e, 0x00cd},
+		{0x0190, 0x090e, 0x00cd},
+	},
 };
 
 KarSprite KAR_D_8005B478 = {
@@ -973,8 +1006,6 @@ void KAR_tick(void)
 	KAR_checkStonesStopped();
 }
 
-INCLUDE_ASM("asm/kar/nonmatchings/kar", KAR_tickMatchState);
-
 void KAR_renderAimArrow(void)
 {
 	MATRIX m;
@@ -1262,7 +1293,89 @@ void KAR_handleAimScroll(void)
 	}
 }
 
-INCLUDE_ASM("asm/kar/nonmatchings/kar", KAR_updateRingMarkers);
+void KAR_updateRingMarkers(void)
+{
+	KarRingObjects objects;
+	KarRingFlags flags;
+	KarZones zones;
+	int32_t stoneIndex;
+	int32_t p;
+	int32_t byteOffset;
+	int32_t zoneIndex;
+	KarStone *stone;
+	int8_t mask;
+
+	objects = KAR_D_8005B450;
+	flags = *(KarRingFlags *)MAIN_D_80134A48;
+	zones = KAR_D_8005B460;
+	if (MAIN_D_80135244 == 0xB) {
+		MAIN_D_80135257 = 0;
+		for (p = 0; p < 2; p++) {
+			p = p;
+			stone = KAR_D_8005B5A0[p].row.stones;
+			for (stoneIndex = 0; stoneIndex < 5; stoneIndex++, stone++) {
+				if ((stone->state > 0) && (stone->speed > 0)) {
+					for (zoneIndex = 0; zoneIndex < 4; zoneIndex++) {
+						int32_t distance;
+
+						/* This never-null guard preserves the compiler's loop weighting. */
+						if (!objects.ring) {
+						}
+						mask = (MAIN_D_80135257 >> zoneIndex) & 1;
+						if (mask == 0) {
+							distance = KAR_distance(stone->pos.vx + zones.ring[zoneIndex].dx,
+							                        stone->pos.vz + zones.ring[zoneIndex].dz);
+							if (distance < zones.ring[zoneIndex].radius) {
+								mask = 1;
+								mask <<= (int8_t)zoneIndex;
+								MAIN_D_80135257 |= (int8_t)mask;
+								zoneIndex = 4;
+							}
+						}
+					}
+				}
+			}
+		}
+		for (p = 0, byteOffset = 0; p < 4; p++, byteOffset += 4) {
+			if ((MAIN_D_80135257 >> p) & 1) {
+				flags.ring[p] = 1;
+			}
+			setMapObjectsFlag(*(int16_t *)((uint8_t *)&objects.starts + byteOffset),
+			                  *(int16_t *)((uint8_t *)&objects.countView.counts + byteOffset), flags.ring[p] ^ 1);
+			/* Preserve the output loop's weighting as well. */
+			if (!objects.ring) {
+			}
+		}
+	}
+	if (MAIN_D_80135244 == 0xD) {
+		KarStone *current;
+		int32_t changed;
+		int8_t ringIndex;
+
+		current = KAR_D_800639C0[MAIN_D_80135256];
+		changed = current->ring != current->prevRing;
+		if ((changed != 0) && (current->state < 0x65)) {
+			ringIndex = current->ring & 0xF;
+			if (ringIndex != 0) {
+				flags.ring[ringIndex - 1] = 1;
+			}
+		}
+		{
+			for (stoneIndex = 0; stoneIndex < 4; stoneIndex++) {
+				setMapObjectsFlag(objects.ring[stoneIndex].start, objects.ring[stoneIndex].count,
+				                  flags.ring[stoneIndex] ^ 1);
+			}
+		}
+	}
+	if ((MAIN_D_80135244 != 0xD) && (MAIN_D_80135244 != 0xB)) {
+		int32_t outputIndex;
+
+		for (outputIndex = 0; outputIndex < 4; outputIndex++) {
+			setMapObjectsFlag(objects.ring[outputIndex].start, objects.ring[outputIndex].count,
+			                  flags.ring[outputIndex] ^ 1);
+		}
+	}
+}
 
 void KAR_checkStonesStopped(void)
 {
@@ -2241,15 +2354,15 @@ int32_t KAR_chooseOpponentShot(void)
 			}
 
 			if (KAR_D_8005B5A0[1].row.unk4 == 6) {
-				switch (((int8_t *)KAR_D_80063918)[0]) {
+				switch (KAR_D_80063914.stone.type) {
 				case 0:
 				case 1:
 				case 2:
-					if ((((int8_t *)KAR_D_80063924)[0] == 3) || (((int8_t *)KAR_D_80063924)[0] == 0)) {
+					if ((KAR_D_80063914.stone.ring == 3) || (KAR_D_80063914.stone.ring == 0)) {
 						angle = ratan2(-0x8fc - pz, -0x190 - px);
 						KAR_findClearShotAngle(-0x190, -0x8fc);
 						KAR_setOpponentShot(1, angle, -0x190, -0x8fc);
-					} else if (KAR_D_800638F4[8] < 0) {
+					} else if (KAR_D_80063914.stone.state < 0) {
 						angle = ratan2(-0x6a4 - pz, -px);
 						if ((KAR_D_8005B5A0[1].row.thrown % 2) != 0) {
 							angle += rand() % 100;
@@ -2263,11 +2376,11 @@ int32_t KAR_chooseOpponentShot(void)
 						if (angle == clear) {
 							KAR_setOpponentShot(1, angle, -0x190, -0x8fc);
 						} else {
-							angle = ratan2(KAR_D_800639B0[2] - pz, KAR_D_800639B0[0] - px);
-							KAR_setOpponentShot(0, angle, (int16_t)KAR_D_800639B0[0], (int16_t)KAR_D_800639B0[2]);
+							angle = ratan2(KAR_D_80063914.stone.pos.vz - pz, KAR_D_80063914.stone.pos.vx - px);
+							KAR_setOpponentShot(0, angle, (int16_t)KAR_D_80063914.stone.pos.vx, (int16_t)KAR_D_80063914.stone.pos.vz);
 						}
 					} else {
-						angle = KAR_aimBankShot((KarStone *)&KAR_D_800638F4[8], 0x190, -0x8fc);
+						angle = KAR_aimBankShot(&KAR_D_80063914.stone, 0x190, -0x8fc);
 						KAR_setOpponentShot(0, angle, 0x190, -0x8fc);
 						KAR_D_8005B5A0[1].row.unk2 = 0x960;
 					}
@@ -2423,7 +2536,7 @@ int32_t KAR_aimAtRandomStone(void)
 	int16_t pz;
 
 	stone = KAR_D_8005B5A0[0].row.stones;
-	if (KAR_D_800638F4[8] < 0) {
+	if (KAR_D_80063914.stone.state < 0) {
 		return ratan2(-0xc1c, -0x190);
 	}
 
@@ -2533,4 +2646,407 @@ void KAR_renderSprite(KarSprite *sp)
 	setXYWH(p, sp->x, sp->y, sp->w, sp->h);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 0xa, p++);
 	GsSetWorkBase((PACKET *)p);
+}
+
+/* Definition order preserves compiler scheduling; kar_functions preserves link order. */
+void KAR_tickMatchState(void)
+{
+	Entity **entities;
+	int8_t player;
+	int8_t prompt;
+	int32_t j;
+	int32_t i;
+	KarStone *stone;
+	int32_t limit;
+	int32_t mapWidth;
+	int32_t result;
+	int32_t stoneIndex;
+	int32_t targetAngle;
+	int32_t cameraY;
+
+	player = (MAIN_D_8013523C != 0) ? MAIN_D_80135248 : 0;
+	switch (MAIN_D_80135244) {
+	case 0:
+		MAIN_D_80135252 = 0;
+		entities = ENTITY_TABLE;
+		ENTITY_TABLE[0]->posData->location.vx = -0x190;
+		ENTITY_TABLE[0]->posData->location.vz = 0x578;
+		ENTITY_TABLE[0]->posData->rotation.vy = 0;
+		entities[MAIN_D_80135248]->posData->location.vx = 0x190;
+		entities[MAIN_D_80135248]->posData->location.vz = 0x578;
+		entities[MAIN_D_80135248]->posData->rotation.vy = 0;
+		startAnimation(ENTITY_TABLE[0], 0);
+		startAnimation(ENTITY_TABLE[MAIN_D_80135248], 0);
+		MAIN_D_80135244 = 1;
+		clearTextArea();
+		MAIN_D_80135250 = 0;
+		break;
+	case 1:
+		prompt = KAR_tickYesNoPrompt();
+		if (prompt == 1) {
+			MAIN_D_80135244 = 3;
+			MAIN_D_80135250 = 0;
+		} else if (prompt == 2) {
+			clearTextArea();
+			MAIN_D_80135244 = 2;
+			MAIN_D_80135250 = 0;
+			KAR_setupMatch(1);
+		}
+		break;
+	case 3:
+		if (MAIN_D_80135220 >= 0x30) {
+			if ((uint16_t)(MAIN_D_80135252 += 6) >= 0x169) {
+				MAIN_D_80135252 = 0;
+				MAIN_D_80135244 = 5;
+			}
+		}
+		break;
+	case 2:
+		if ((uint16_t)(MAIN_D_80135252 += 6) >= 0x169) {
+			MAIN_D_80135252 = 0;
+			MAIN_D_80135244 = 4;
+		}
+		break;
+	case 4:
+		MAIN_D_80135250 = 1;
+		MAIN_D_80135244 = 5;
+		KAR_D_8005B5A0[0].row.unk4 = rand() % 5;
+		KAR_D_8005B5A0[0].row.unk2 = 0x7D0;
+		KAR_D_8005B5A0[0].row.stones[KAR_D_8005B5A0[0].row.unk4].angle = ratan2(-0xC1C, 0x190);
+		break;
+	case 5:
+		if ((MAIN_D_8013523C != 0) || (MAIN_D_80135250 != 0)) {
+			if (KAR_tickHintBox(0) != 0) {
+				break;
+			}
+			if (MAIN_D_80135252++ >= 0x10) {
+				MAIN_D_80135252 -= 0xF;
+				if (MAIN_D_8013523A == KAR_D_8005B5A0[MAIN_D_8013523C].row.unk4) {
+					KAR_D_8005B5A0[2].row.stones[4] =
+						KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A];
+					KAR_D_8005B5A0[2].row.stones[4].state = -0x65;
+					KAR_beginAiming();
+					MAIN_D_80135252 = 0;
+					if (MAIN_D_80135250 != 0) {
+						MAIN_D_80135250 = 1;
+					}
+				}
+				if (KAR_D_8005B5A0[MAIN_D_8013523C].row.unk4 > MAIN_D_8013523A) {
+					KAR_selectNextStone();
+				}
+			}
+		} else {
+			if ((POLLED_INPUT & 0x40) && !(POLLED_INPUT_PREVIOUS & 0x40)) {
+				KAR_beginAiming();
+			} else if ((POLLED_INPUT & 0x1000) && !(POLLED_INPUT_PREVIOUS & 0x1000)) {
+				KAR_selectPreviousStone();
+			} else if ((POLLED_INPUT & 0x4000) && !(POLLED_INPUT_PREVIOUS & 0x4000)) {
+				KAR_selectNextStone();
+			}
+		}
+		MAIN_D_80135254 = 0;
+		break;
+	case 6:
+		if ((MAIN_D_8013523C != 0) || (MAIN_D_80135250 != 0)) {
+			targetAngle = KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].angle;
+			if (KAR_tickHintBox(1) != 0) {
+				if ((POLLED_INPUT & 0x2000) && (MAIN_D_8013524C < -0x18F)) {
+					if (MAIN_D_80135254 > 0) {
+						MAIN_D_80135254++;
+					} else {
+						MAIN_D_80135254 = 1;
+					}
+					KAR_turnAimLeft(MAIN_D_80135254);
+				} else if ((POLLED_INPUT & 0x8000) && (MAIN_D_8013524C >= -0x5B6)) {
+					if (MAIN_D_80135254 < 0) {
+						MAIN_D_80135254--;
+					} else {
+						MAIN_D_80135254 = -1;
+					}
+					KAR_turnAimRight(MAIN_D_80135254);
+				} else if (!(POLLED_INPUT & 0x8000) && !(POLLED_INPUT & 0x2000)) {
+					MAIN_D_80135254 = 0;
+					break;
+				} else {
+					break;
+				}
+			}
+			if ((MAIN_D_8013524C + 0xA >= targetAngle) &&
+			    (targetAngle >= MAIN_D_8013524C - 0xA)) {
+				KAR_beginThrow();
+				if (MAIN_D_80135250 != 0) {
+					MAIN_D_80135250 = 1;
+				}
+			} else if (MAIN_D_8013524C < targetAngle) {
+				KAR_turnAimLeft(0xA);
+			} else {
+				KAR_turnAimRight(-0xA);
+			}
+		} else {
+			if ((POLLED_INPUT & 0x40) && !(POLLED_INPUT_PREVIOUS & 0x40)) {
+				KAR_beginThrow();
+			}
+			if ((POLLED_INPUT & 0x2000) && (MAIN_D_8013524C < -0x18F)) {
+				if (MAIN_D_80135254 > 0) {
+					MAIN_D_80135254++;
+				} else {
+					MAIN_D_80135254 = 1;
+				}
+				KAR_turnAimLeft(MAIN_D_80135254);
+			}
+			if ((POLLED_INPUT & 0x8000) && (MAIN_D_8013524C >= -0x5B6)) {
+				if (MAIN_D_80135254 < 0) {
+					MAIN_D_80135254--;
+				} else {
+					MAIN_D_80135254 = -1;
+				}
+				KAR_turnAimRight(MAIN_D_80135254);
+			}
+			if (!(POLLED_INPUT & 0x8000) && !(POLLED_INPUT & 0x2000)) {
+				MAIN_D_80135254 = 0;
+			}
+		}
+		break;
+	case 7:
+		result = tickMoveCameraTo(
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos.vx,
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos.vz, 0x14);
+		cameraY = CAMERA_Y[0];
+		MAIN_D_80135224 = result;
+		if (((cameraY = cameraY % 0x80) == 0) || (cameraY >= 0x6A)) {
+			mapWidth = MAP_WIDTH[0];
+			limit = MAP_TILE_Y;
+			uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + limit * mapWidth);
+		}
+		if (MAIN_D_80135224 == 1) {
+			MAIN_D_80135244 = 8;
+		}
+		MAIN_D_80135254 = 0;
+		break;
+	case 8:
+		cameraY = MAIN_D_8013523E += 0x64;
+		if (cameraY >= 0xBB8) {
+			MAIN_D_80135244 = 6;
+			MAIN_D_8013523E = 0;
+			ENTITY_TABLE[0]->posData->location.vx = -0x190;
+			ENTITY_TABLE[0]->posData->location.vz = 0x578;
+			ENTITY_TABLE[MAIN_D_80135248]->posData->location.vx = 0x190;
+			ENTITY_TABLE[MAIN_D_80135248]->posData->location.vz = 0x578;
+			if (MAIN_D_8013523C == 0) {
+				startAnimation(ENTITY_TABLE[0], 0);
+			} else {
+				startAnimation(ENTITY_TABLE[MAIN_D_80135248], 0);
+			}
+		} else if ((MAIN_D_8013523C != 0) || (MAIN_D_80135250 != 0)) {
+			if (KAR_tickHintBox(2) != 0) {
+				if ((mapWidth = KAR_D_8005B5A0[MAIN_D_8013523C].row.unk2) <=
+				    MAIN_D_8013523E) {
+					MAIN_D_8013523E = mapWidth;
+				}
+			} else if (KAR_D_8005B5A0[1].row.unk2 <= MAIN_D_8013523E) {
+				MAIN_D_80135244 = 9;
+				KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].selectPhase =
+					ENTITY_TABLE[MAIN_D_80135248]->posData->rotation.vy;
+				if (MAIN_D_80135250 != 0) {
+					MAIN_D_80135250 = 1;
+				}
+			}
+		} else if ((POLLED_INPUT & 0x40) && !(POLLED_INPUT_PREVIOUS & 0x40)) {
+			MAIN_D_80135244 = 9;
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].angle =
+				MAIN_D_8013524C;
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].selectPhase =
+				TAMER_ENTITY.entity.posData->rotation.vy;
+		}
+		break;
+	case 9:
+		if (MAIN_D_8013523C == 0) {
+			startAnimation(ENTITY_TABLE[0], 0x25);
+		} else if (MAIN_D_80135248 == 2) {
+			startAnimation(ENTITY_TABLE[MAIN_D_80135248], 0x1E);
+		} else {
+			startAnimation(ENTITY_TABLE[MAIN_D_80135248], 0x20);
+		}
+		KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].speed =
+			MAIN_D_8013523E + 0x258;
+		MAIN_D_80135244 = 0xA;
+		MAIN_D_80135252 = 0;
+		MAIN_D_80135228 = playSound2(8, 0);
+		KAR_D_800638F4 = KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos;
+		break;
+	case 0xA:
+		if (MAIN_D_80135252++ >= 3) {
+			MAIN_D_80135252 = 0;
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].state = 1;
+			KAR_D_800638F4 =
+				KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos;
+			MAIN_D_80135244 = 0xB;
+		}
+		break;
+	case 0xB:
+		KAR_D_80063904 = KAR_D_800638F4;
+		KAR_D_800638F4 =
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos;
+		moveCameraByDiff(&KAR_D_80063904, &KAR_D_800638F4);
+		break;
+	case 0xC:
+		stopSoundMask(MAIN_D_80135228);
+		KAR_classifyStoneRings();
+		KAR_D_8005B5A0[MAIN_D_8013523C].row.thrown++;
+		MAIN_D_80135244 = 0xD;
+		for (i = 0; i < 2; i++) {
+			stone = KAR_D_8005B5A0[i].row.stones;
+			KAR_D_8005B5A0[i].row.thrown = 0;
+			for (j = 0; j < 5; j++, stone++) {
+				if (stone->state != -1) {
+					KAR_D_8005B5A0[i].row.thrown++;
+				}
+			}
+		}
+		break;
+	case 0xD:
+		if ((int8_t)KAR_tickScoreTally() != 0) {
+			if (MAIN_D_80135250 != 0) {
+				MAIN_D_80135244 = 0xE;
+			} else {
+				MAIN_D_80135244 = 0xF;
+			}
+		}
+		break;
+	case 0xE:
+		result = tickMoveCameraTo(0, -0x6A4, 0xA);
+		cameraY = CAMERA_Y[0];
+		MAIN_D_80135224 = result;
+		if (((cameraY = cameraY % 0x80) == 0) || (cameraY >= 0x6A)) {
+			mapWidth = MAP_WIDTH[0];
+			limit = MAP_TILE_Y;
+			uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + limit * mapWidth);
+		}
+		if (MAIN_D_80135224 == 1) {
+			MAIN_D_80135244 = 0xF;
+		}
+		break;
+	case 0xF:
+		if (KAR_tickHintBox(3) == 0) {
+			TAMER_ENTITY.entity.posData->location.vx = -0x190;
+			TAMER_ENTITY.entity.posData->location.vz = 0x578;
+			ENTITY_TABLE[MAIN_D_80135248]->posData->location.vx = 0x190;
+			ENTITY_TABLE[MAIN_D_80135248]->posData->location.vz = 0x578;
+			startAnimation(ENTITY_TABLE[0], 0);
+			startAnimation(ENTITY_TABLE[MAIN_D_80135248], 0);
+			if (MAIN_D_8013523C == 0) {
+				KAR_D_80063914.stone =
+					KAR_D_8005B5A0[0].row.stones[MAIN_D_8013523A];
+			}
+			if (MAIN_D_80135250 != 0) {
+				result = tickMoveCameraTo(ENTITY_TABLE[player]->posData->location.vx,
+				                          ENTITY_TABLE[player]->posData->location.vz, 0x14);
+				cameraY = CAMERA_Y[0];
+				MAIN_D_80135224 = result;
+				if (((cameraY = cameraY % 0x80) == 0) || (cameraY >= 0x6A)) {
+					mapWidth = MAP_WIDTH[0];
+					limit = MAP_TILE_Y;
+					uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + limit * mapWidth);
+				}
+				if (MAIN_D_80135224 == 1) {
+					ENTITY_TABLE[player]->posData->rotation.vy = 0;
+					MAIN_D_80135250 = 0;
+					MAIN_D_80135244 = 3;
+					KAR_setupMatch(0);
+					MAIN_D_80135252 = 0;
+				}
+			} else {
+				if (KAR_D_8005B5A0[0].row.thrown == KAR_D_8005B5A0[1].row.thrown) {
+					if (KAR_D_8005B5A0[0].row.thrown == 5) {
+						MAIN_D_8013523C = 1;
+					} else if (KAR_D_8005B5A0[0].row.score < KAR_D_8005B5A0[1].row.score) {
+						MAIN_D_8013523C = 0;
+					} else {
+						MAIN_D_8013523C = 1;
+					}
+				} else if (KAR_D_8005B5A0[0].row.thrown < KAR_D_8005B5A0[1].row.thrown) {
+					MAIN_D_8013523C = 0;
+				} else {
+					MAIN_D_8013523C = 1;
+				}
+				for (stoneIndex = 0; stoneIndex < 5; stoneIndex++) {
+					if (KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[stoneIndex].state == -1) {
+						MAIN_D_8013523A = stoneIndex;
+						break;
+					}
+				}
+				MAIN_D_80135252 = 0;
+				MAIN_D_8013523E = 0;
+				MAIN_D_80135244 = 0x10;
+			}
+		}
+		break;
+	case 0x10:
+		result = tickMoveCameraTo(ENTITY_TABLE[player]->posData->location.vx,
+		                          ENTITY_TABLE[player]->posData->location.vz, 0x14);
+		cameraY = CAMERA_Y[0];
+		MAIN_D_80135224 = result;
+		if (((cameraY = cameraY % 0x80) == 0) || (cameraY >= 0x6A)) {
+			/* Keep the value copy for the retail multiply register allocation. */
+			mapWidth = MAP_WIDTH[0];
+			limit = mapWidth;
+			mapWidth = MAP_TILE_Y;
+			uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + mapWidth * limit);
+		}
+		if (MAIN_D_80135224 == 1) {
+			if ((KAR_D_8005B5A0[0].row.thrown >= 5) && (KAR_D_8005B5A0[1].row.thrown >= 5)) {
+				MAIN_D_80135250 = 1;
+				clearTextArea();
+				MAIN_D_80135244 = 0x13;
+				if (KAR_D_8005B5A0[0].row.score > KAR_D_8005B5A0[1].row.score) {
+					playSound2(8, 7);
+					MAIN_D_80135252 = 8;
+				} else {
+					playSound2(8, 8);
+					MAIN_D_80135252 = 7;
+				}
+			} else if (MAIN_D_8013523C != 0) {
+				MAIN_D_80135244 = 0x11;
+			} else {
+				MAIN_D_80135244 = 5;
+			}
+		}
+		break;
+	case 0x11:
+		KAR_chooseOpponentShot();
+		MAIN_D_80135244 = 0x13;
+		MAIN_D_80135250 = 1;
+		MAIN_D_80135252 = 0;
+		MAIN_D_8013523E = 0;
+		if (KAR_D_8005B5A0[0].row.score > KAR_D_8005B5A0[1].row.score) {
+			MAIN_D_80135252 = 5;
+		} else if (KAR_D_8005B5A0[0].row.score == KAR_D_8005B5A0[1].row.score) {
+			MAIN_D_80135252 = 6;
+		} else {
+			MAIN_D_80135252 = 4;
+		}
+		break;
+	case 0x12:
+		if (UI_BOX_DATA[0].state == 1) {
+			MAIN_D_80135244 = 0x13;
+		}
+		break;
+	case 0x13:
+		if (KAR_tickHintBox((int8_t)MAIN_D_80135252) == 0) {
+			MAIN_D_80135250 = 0;
+			if (MAIN_D_80135252 >= 7) {
+				KAR_finishMatch();
+			} else {
+				MAIN_D_80135244 = 5;
+				MAIN_D_80135252 = 0;
+				MAIN_D_8013523E = 0;
+			}
+		}
+		break;
+	case 0x14:
+		MAIN_D_80135252 = 0;
+		MAIN_D_8013523E = 0;
+		KAR_finishMatch();
+		break;
+	}
 }

@@ -45,6 +45,12 @@ typedef struct {
 	VECTOR pos;
 } KarStone;
 
+/* Preserve the overlay initial bytes while exposing the copied stone. */
+typedef union {
+	uint32_t raw[43];
+	KarStone stone;
+} KarStoneRaw;
+
 typedef struct {
 	int8_t score;
 	int8_t thrown;
@@ -177,10 +183,9 @@ extern u_long KAR_D_8005BFCC[];
 extern GsOT_TAG KAR_D_800637CC[];
 extern GsOT_TAG KAR_D_8006384C[];
 extern GsOT KAR_D_800638CC[];
-extern int32_t KAR_D_800638F4[];
-extern uint8_t KAR_D_80063918[];
-extern uint8_t KAR_D_80063924[];
-extern int32_t KAR_D_800639B0[];
+extern VECTOR KAR_D_800638F4;
+extern VECTOR KAR_D_80063904;
+extern KarStoneRaw KAR_D_80063914;
 extern KarStone *KAR_D_800639C0[];
 
 void checkCurlingMap(int32_t mapId);
