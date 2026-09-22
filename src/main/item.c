@@ -161,8 +161,6 @@ void handleEvoItems(int16_t item)
 	setPartnerState(0xd);
 }
 
-INCLUDE_ASM("asm/main/nonmatchings/item", handleFood);
-
 void handleStatusItems(int32_t itemId)
 {
 	int32_t cured;
@@ -677,6 +675,258 @@ void removeTamerItem(void)
 		removeObject(0x194, 0);
 		TAMER_ITEM.worldItem.type = 0xff;
 	}
+}
+
+void handleFood(int16_t itemId)
+{
+	int16_t energy;
+	int16_t happiness;
+	int16_t weight;
+	int16_t tiredness;
+	int16_t sicknessChance;
+	int16_t healedHP;
+	int16_t healedMP;
+	int16_t addedHP;
+	int16_t addedMP;
+	int16_t trainDuration;
+	int16_t discipline;
+	int16_t lifetime;
+	int16_t addedOffense;
+	int16_t addedDefense;
+	int16_t addedSpeed;
+	int16_t addedBrain;
+	int16_t trainFlag;
+	int16_t trainValue;
+	int16_t zero;
+	int32_t effect;
+
+	/* The shared zero preserves the ROM's signed-short initialization. */
+	lifetime = 0;
+	energy = tiredness = happiness = weight = discipline = zero = 0;
+	addedBrain = 0;
+	addedHP = addedMP = healedHP = healedMP = zero = 0;
+	addedSpeed = zero = 0;
+	addedDefense = zero = 0;
+	addedOffense = zero = 0;
+	trainValue = zero = 0;
+	sicknessChance = 0;
+	trainDuration = zero = 0;
+	trainFlag = zero = 0;
+
+	switch (itemId) {
+	case 0x26:
+		energy = 12;
+		weight = 1;
+		break;
+	case 0x27:
+		energy = 24;
+		weight = 2;
+		break;
+	case 0x28:
+		energy = 35;
+		tiredness = 5;
+		happiness = 3;
+		weight = 3;
+		break;
+	case 0x29:
+		energy = 10;
+		trainFlag = 0x29;
+		trainValue = 12;
+		trainDuration = 6;
+		weight = -2;
+		break;
+	case 0x2a:
+		energy = 15;
+		trainFlag = 0x16;
+		trainValue = 12;
+		trainDuration = 6;
+		weight = 3;
+		break;
+	case 0x2b:
+		energy = 9;
+		tiredness = 50;
+		weight = 1;
+		break;
+	case 0x2c:
+		energy = 12;
+		weight = 1;
+		break;
+	case 0x2d:
+		energy = 19;
+		discipline = 50;
+		weight = 2;
+		break;
+	case 0x2e:
+		energy = 38;
+		effect = 10;
+		addedOffense = effect;
+		addedDefense = effect;
+		addedSpeed = effect;
+		addedBrain = effect;
+		addedMP = addedHP = 100;
+		weight = 4;
+		break;
+	case 0x2f:
+		energy = 22;
+		trainFlag = 0x3f;
+		trainValue = 15;
+		trainDuration = 6;
+		weight = 2;
+		break;
+	case 0x30:
+		energy = 30;
+		happiness = 50;
+		weight = 3;
+		break;
+	case 0x31:
+		energy = 25;
+		effect = 20;
+		tiredness = effect;
+		happiness = effect;
+		discipline = effect;
+		weight = 2;
+		break;
+	case 0x32:
+		energy = 40;
+		weight = 4;
+		break;
+	case 0x33:
+		energy = 100;
+		weight = 10;
+		break;
+	case 0x34:
+		energy = 20;
+		healedHP = 9999;
+		weight = 2;
+		break;
+	case 0x35:
+		energy = 16;
+		healedMP = 9999;
+		weight = 2;
+		break;
+	case 0x36:
+		energy = 33;
+		weight = -5;
+		break;
+	case 0x37:
+		energy = 24;
+		healedMP = healedHP = 1000;
+		weight = 2;
+		break;
+	case 0x38:
+		addedOffense = energy = 20;
+		weight = 2;
+		break;
+	case 0x39:
+		addedDefense = energy = 20;
+		weight = 2;
+		break;
+	case 0x3a:
+		addedSpeed = energy = 20;
+		weight = 2;
+		break;
+	case 0x3b:
+		addedBrain = energy = 20;
+		weight = 2;
+		break;
+	case 0x3c:
+		energy = 20;
+		addedHP = 200;
+		weight = 2;
+		break;
+	case 0x3d:
+		energy = 20;
+		addedMP = 200;
+		weight = 2;
+		break;
+	case 0x3e:
+		energy = 8;
+		weight = 1;
+		break;
+	case 0x3f:
+		energy = 12;
+		weight = 1;
+		break;
+	case 0x40:
+		energy = 22;
+		weight = 2;
+		break;
+	case 0x41:
+		energy = 27;
+		effect = 1;
+		addedOffense = effect;
+		addedDefense = effect;
+		addedSpeed = effect;
+		addedBrain = effect;
+		addedMP = addedHP = 10;
+		weight = -2;
+		break;
+	case 0x42:
+		energy = 49;
+		weight = 5;
+		break;
+	case 0x43:
+		energy = 35;
+		healedMP = healedHP = 9999;
+		lifetime = 3;
+		sicknessChance = 20;
+		weight = 4;
+		break;
+	case 0x44:
+		energy = 30;
+		sicknessChance = 100;
+		weight = 2;
+		break;
+	case 0x45:
+		energy = 15;
+		effect = 30;
+		happiness = effect;
+		tiredness = effect;
+		sicknessChance = effect;
+		weight = 1;
+		break;
+	case 0x46:
+		energy = 50;
+		effect = 50;
+		happiness = effect;
+		tiredness = effect;
+		lifetime = 20;
+		sicknessChance = 5;
+		weight = 3;
+		break;
+	case 0x79:
+		healedMP = 1000;
+		break;
+	case 0x7a:
+		energy = 32;
+		healedHP = 1000;
+		sicknessChance = 20;
+		break;
+	}
+
+	if (itemId == RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].favoriteFood) {
+		energy = energy * 14 / 10;
+		happiness += 2;
+	}
+	addEnergy(energy);
+	reduceTiredness(tiredness);
+	addHappiness(happiness);
+	addDiscipline(discipline);
+	addWeight(weight);
+	decreasePoopLevel();
+	setTrainingBoost(trainFlag, trainValue, trainDuration);
+	handleItemSickness(sicknessChance);
+	PARTNER_PARA.remainingLifetime += lifetime;
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.base.hp, addedHP, 9999);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.base.mp, addedMP, 9999);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.current.currentHP, healedHP,
+	             PARTNER_ENTITY.digimonEntity.stats.base.hp);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.current.currentMP, healedMP,
+	             PARTNER_ENTITY.digimonEntity.stats.base.mp);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.base.off, addedOffense, 999);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.base.def, addedDefense, 999);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.base.speed, addedSpeed, 999);
+	addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.base.brain, addedBrain, 999);
 }
 
 // clang-format off
