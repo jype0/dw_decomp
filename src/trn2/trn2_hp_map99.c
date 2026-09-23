@@ -22,6 +22,22 @@ static void *trn2_hp_map99_functions[] = {
 	TRN2_tickHpTrainingMap99,
 };
 
+int16_t MAIN_D_801353B4;
+int16_t MAIN_D_801353B6;
+int16_t MAIN_D_801353B8;
+int16_t MAIN_D_801353BA;
+int8_t MAIN_D_801353BC;
+int8_t MAIN_D_801353BD;
+
+static void *trn2_hp_map99_sbss_order[] = {
+	&MAIN_D_801353BD,
+	&MAIN_D_801353BC,
+	&MAIN_D_801353BA,
+	&MAIN_D_801353B8,
+	&MAIN_D_801353B6,
+	&MAIN_D_801353B4,
+};
+
 void TRN2_tickHpTrainingMap99(int32_t instanceId)
 {
 	int32_t r;

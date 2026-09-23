@@ -49,6 +49,27 @@ static void *trn2_hud_functions[] = {
 	TRN2_calculateTrainingMultiplier,
 };
 
+/* "所持金" (money held) */
+char MAIN_D_80134BE0[] = "\x8f\x8a\x8e\x9d\x8b\xe0";
+
+uint16_t MAIN_D_801353CE;
+int16_t MAIN_D_801353D0;
+int16_t MAIN_D_801353D2;
+int32_t MAIN_D_801353D4;
+int8_t MAIN_D_801353D8[6];
+int16_t MAIN_D_801353DE;
+int16_t MAIN_D_801353E0[4];
+
+static void *trn2_hud_sbss_order[] = {
+	&MAIN_D_801353E0,
+	&MAIN_D_801353DE,
+	&MAIN_D_801353D8,
+	&MAIN_D_801353D4,
+	&MAIN_D_801353D2,
+	&MAIN_D_801353D0,
+	&MAIN_D_801353CE,
+};
+
 // clang-format off
 int8_t TRN2_D_8008DAA8[3][13] = {
 	{ 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x1, 0x3, 0x5, 0x2, 0x4, 0x6 },

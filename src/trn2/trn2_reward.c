@@ -31,6 +31,14 @@ static void *trn2_reward_functions[] = {
 	TRN2_tickSpeedTraining,
 };
 
+uint32_t MAIN_D_801353C8;
+int16_t MAIN_D_801353CC;
+
+static void *trn2_reward_sbss_order[] = {
+	&MAIN_D_801353CC,
+	&MAIN_D_801353C8,
+};
+
 void TRN2_tickSpeedTraining(int32_t instanceId)
 {
 	int32_t r;

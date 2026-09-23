@@ -26,6 +26,18 @@ static void *trn2_def_map99_functions[] = {
 	TRN2_tickDefenseTrainingMap99,
 };
 
+int16_t MAIN_D_801353BE;
+int16_t MAIN_D_801353C0;
+int16_t MAIN_D_801353C2;
+int16_t MAIN_D_801353C4;
+
+static void *trn2_def_map99_sbss_order[] = {
+	&MAIN_D_801353C4,
+	&MAIN_D_801353C2,
+	&MAIN_D_801353C0,
+	&MAIN_D_801353BE,
+};
+
 void TRN2_tickDefenseTrainingMap99(int32_t instanceId)
 {
 	int32_t r;

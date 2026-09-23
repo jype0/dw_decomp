@@ -154,7 +154,6 @@ MAIN_SRC := \
 	src/main/tamer.c \
 	src/main/toilet_data.c \
 	src/main/tournament.c \
-	src/main/trn2.c \
 	src/main/ui.c \
 	src/main/utils.c \
 	src/main/utils2.c \

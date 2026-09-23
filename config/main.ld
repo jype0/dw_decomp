@@ -613,7 +613,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/trn/trn_slots.c.o(.sdata.*);
         . = ALIGN(., 4);
-        KEEP(build/src/main/trn2.c.o(.sdata.*));
+        build/src/trn2/trn2_hud.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        build/src/trn2/trn2_slots.c.o(.sdata.*);
         . = ALIGN(., 4);
         build/src/murd/murd.c.o(.sdata.*);
         . = ALIGN(., 4);
@@ -682,7 +684,11 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/dget/dget.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/src/main/trn2.c.o(.sbss.*);
+        build/src/trn2/trn2_hp_map99.c.o(.sbss.*);
+        build/src/trn2/trn2_def_map99.c.o(.sbss.*);
+        build/src/trn2/trn2_off.c.o(.sbss.*);
+        build/src/trn2/trn2_reward.c.o(.sbss.*);
+        build/src/trn2/trn2_hud.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/murd/murd.c.o(.sbss.*);
         . = ALIGN(., 4);
