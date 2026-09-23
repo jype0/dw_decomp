@@ -10,25 +10,7 @@
 void MAIN_func_800FF900(VECTOR *v);
 int32_t isTriggerSet(uint16_t trigger);
 
-int8_t MAIN_D_80134958[6] = { 1, 2, 3, 4, 5, -1 };
-int8_t MAIN_D_80134960[7] = { 0, 1, 2, 3, 4, 5, -1 };
-int8_t MAIN_D_80134968[3] = { 4, 5, -1 };
-int8_t MAIN_D_8013496C[5] = { 2, 3, 4, 5, -1 };
-int16_t MAIN_D_80134974[4] = { -95, -64, 0, 0 };
-SVECTOR MAIN_D_8013497C = { 28, 0, 2, 0 };
-SVECTOR MAIN_D_80134984 = { 0, 93, 0, 0 };
-SVECTOR MAIN_D_8013498C = { 28, 0, 2, 0 };
-SVECTOR MAIN_D_80134994 = { 0, 17, 0, 0 };
-int8_t MAIN_D_8013499C[8] = { 1, 2, 3, 4, 5, 4, 3, -1 };
-uint8_t MAIN_D_801349A4[8] = { 39, 40, 41, 40, 39, 45, 44, 45 };
-uint8_t MAIN_D_801349AC[4] = { 33, 34, 33, 35 };
-uint8_t MAIN_D_801349B0[6] = { 41, 42, 40, 44, 43, 45 };
-uint8_t MAIN_D_801349B8[6] = { 34, 36, 34, 35, 37, 35 };
-SVECTOR MAIN_D_801349C0 = { 1024, 1024, 0, 0 };
-SVECTOR MAIN_D_801349C8 = { 1, 19, -48, 0 };
-SVECTOR MAIN_D_801349D0 = { 0 };
-char MAIN_D_801349D8[] = "Hooked!";
-int32_t MAIN_D_801349E0 = 2;
+extern int32_t MAIN_D_801349E0;
 
 int32_t getBestFishingRod(void)
 {

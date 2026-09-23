@@ -73,9 +73,6 @@ extern char FISH_MSG_STUCK_LINE2[];
 extern char FISH_MSG_BAG_FULL_LINE1[];
 extern char FISH_MSG_BAG_FULL_LINE2[];
 extern char FISH_MSG_IT_GOT_STUCK[];
-extern int16_t MAIN_D_801351DC[3];
-extern int16_t MAIN_D_801351DE;
-extern int16_t MAIN_D_801351E0;
 extern int16_t DRAW_OFFSET_LIMIT_Y_MIN;
 extern int16_t DRAW_OFFSET_LIMIT_Y_MAX;
 extern int16_t DRAW_OFFSET_LIMIT_X_MIN;
@@ -88,7 +85,6 @@ extern MATRIX FISH_ROD_SEGMENT_MATRIX[];
 extern DVECTOR FISH_D_8007A890[];
 extern SVECTOR FISH_SEADRAMON_HISTORY[];
 extern SVECTOR FISH_D_8007A56C[];
-extern int32_t MAIN_D_801351D8;
 extern int8_t PARTNER_STATE;
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern int32_t VIEWPORT_DISTANCE;
@@ -330,6 +326,29 @@ static void *fish_functions[] = {
 	FISH_panCameraToTamer,
 	FISH_panCameraTo,
 };
+
+int8_t MAIN_D_80134958[6] = { 1, 2, 3, 4, 5, -1 };
+int8_t MAIN_D_80134960[7] = { 0, 1, 2, 3, 4, 5, -1 };
+int8_t MAIN_D_80134968[3] = { 4, 5, -1 };
+int8_t MAIN_D_8013496C[5] = { 2, 3, 4, 5, -1 };
+int16_t MAIN_D_80134974[4] = { -95, -64, 0, 0 };
+SVECTOR MAIN_D_8013497C = { 28, 0, 2, 0 };
+SVECTOR MAIN_D_80134984 = { 0, 93, 0, 0 };
+SVECTOR MAIN_D_8013498C = { 28, 0, 2, 0 };
+SVECTOR MAIN_D_80134994 = { 0, 17, 0, 0 };
+int8_t MAIN_D_8013499C[8] = { 1, 2, 3, 4, 5, 4, 3, -1 };
+uint8_t MAIN_D_801349A4[8] = { 39, 40, 41, 40, 39, 45, 44, 45 };
+uint8_t MAIN_D_801349AC[4] = { 33, 34, 33, 35 };
+uint8_t MAIN_D_801349B0[6] = { 41, 42, 40, 44, 43, 45 };
+uint8_t MAIN_D_801349B8[6] = { 34, 36, 34, 35, 37, 35 };
+SVECTOR MAIN_D_801349C0 = { 1024, 1024, 0, 0 };
+SVECTOR MAIN_D_801349C8 = { 1, 19, -48, 0 };
+SVECTOR MAIN_D_801349D0 = { 0 };
+char MAIN_D_801349D8[] = "Hooked!";
+int32_t MAIN_D_801349E0 = 2;
+
+int32_t MAIN_D_801351D8;
+int16_t MAIN_D_801351DC[3];
 
 // clang-format off
 FishBaitChance FISH_BAIT_CHANCES[6] = {
@@ -4861,7 +4880,7 @@ void FISH_scrollCameraTo(int32_t x, int32_t y)
 	int32_t dy;
 	int32_t near;
 
-	if (MAIN_D_801351E0 == 0) {
+	if (MAIN_D_801351DC[2] == 0) {
 		return;
 	}
 
@@ -4899,9 +4918,9 @@ void FISH_applySavedCameraScroll(void)
 void FISH_enableCameraControl(void)
 {
 	FISH_applySavedCameraScroll();
-	MAIN_D_801351E0 = 1;
+	MAIN_D_801351DC[2] = 1;
 	MAIN_D_801351DC[0] = -DRAWING_OFFSET_X + 0xa0;
-	MAIN_D_801351DE = -DRAWING_OFFSET_Y + 0x78;
+	MAIN_D_801351DC[1] = -DRAWING_OFFSET_Y + 0x78;
 }
 
 void FISH_unloadModel(TMDFileLoadingData *model)

@@ -227,7 +227,7 @@ segments:
       - [0xA4800, .sdata, std/std_main]
       - [0xA48C0, .sdata, std/std_hud]
       - [0xA48E4, .sdata, std/std_effect]
-      - [0xA4958, .sdata, fish]
+      - [0xA4958, .sdata, fish/fish]
       - [0xA49E4, .sdata, evl/evl]
       - [0xA4A08, .sdata, kar/kar]
       - [0xA4A50, .sdata, vs]
