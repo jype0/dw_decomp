@@ -511,6 +511,11 @@ $(BUILDDIR)/%.s.o: %.s
 C_ASM_OBJ := $(patsubst $(BUILDDIR)/src/%.c.o,$(BUILDDIR)/$(ASM_DIR)/%.s.o,$(filter %.c.o,$(OBJ)))
 $(C_ASM_OBJ): ASFLAGS += -Wa,--defsym,LOCAL_JLABELS=1
 
+# Add a C file's small data in the main executable to its objdiff target
+c_sdata_asm = $(wildcard $(1:$(BUILDDIR)/$(ASM_DIR)/%.s.o=$(ASM_DIR)/main/data/%.sdata.s))
+$(foreach o,$(C_ASM_OBJ),$(foreach s,$(call c_sdata_asm,$(o)),$(eval $(o): $(s))))
+$(foreach o,$(C_ASM_OBJ),$(foreach s,$(call c_sdata_asm,$(o)),$(eval $(o): ASFLAGS += -Wa,$(s))))
+
 $(MAIN_SBSS) &: config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_bss.py $^ $(BUILDDIR)/generated/
