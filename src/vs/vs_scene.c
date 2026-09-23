@@ -51,54 +51,22 @@ typedef struct {
 	uint8_t tpage;
 } VsTextPiece;
 
-typedef struct {
-	int16_t timer;
-	int8_t phase;
-	int8_t side;
-} CameraChase;
-
-extern uint8_t MAIN_D_80135258[2];
-extern uint8_t MAIN_D_8013525A[2];
-extern uint8_t MAIN_D_80135260;
-extern int16_t MAIN_D_8013525C;
-extern int16_t MAIN_D_8013525E;
-extern uint8_t MAIN_D_80135261;
-extern uint8_t MAIN_D_80135262;
-extern int32_t MAIN_D_80135268;
 extern GsVIEW2 MAIN_D_801B1B98;
 extern int32_t MAIN_D_801B1BBC[];
-extern char **MAIN_D_80135298;
-extern int8_t MAIN_D_8013529C;
 extern SVECTOR MAIN_D_801B1C0C[];
 extern VECTOR MAIN_D_801B1C14;
 extern GsRVIEW2 GS_VIEWPOINT;
-extern uint8_t MAIN_D_80135288;
-extern int32_t MAIN_D_801352A8;
 extern int32_t VIEWPORT_DISTANCE;
 extern int16_t MAIN_D_80134D66;
-extern int32_t MAIN_D_8013528C;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern GsF_LIGHT LIGHT_DATA[];
 extern int32_t ACTIVE_FRAMEBUFFER;
-extern int16_t MAIN_D_801352A4;
-extern char *MAIN_D_8013526C;
-extern char *MAIN_D_80135270;
-extern int16_t MAIN_D_80135278;
-extern int16_t MAIN_D_8013527A;
-extern uint8_t MAIN_D_80135259;
-extern uint8_t MAIN_D_8013525B;
-extern int16_t MAIN_D_80135264;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
-extern uint8_t MAIN_D_80135274;
 extern char MAIN_D_80124C54[];
 extern char TAMER_MODEL_BUFFER[];
-extern void *MAIN_D_801352A0;
 extern int8_t MAP_COLLISION_DATA[];
-extern int16_t MAIN_D_80135294;
-extern int32_t MAIN_D_80135284;
 extern MATRIX MAIN_D_801B1BC0;
-extern int8_t MAIN_D_801352A7;
 
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t MAIN_func_800DA63C(int32_t count, int32_t t, int32_t *keys, int32_t *values, int32_t *slopes);
@@ -246,6 +214,76 @@ static void *vs_scene_functions[] = {
 	VS_addInputObjects,
 	VS_loadVSAssets,
 	VS_resetMatchState,
+};
+
+char MAIN_D_80134A50[] = "Win";
+char MAIN_D_80134A54[] = "Lose";
+uint8_t MAIN_D_80134A5C[4] = { 3, 4, 2, 0 };
+uint8_t MAIN_D_80134A60[4] = { 4, 1, 1, 0 };
+SVECTOR MAIN_D_80134A64 = { 0 };
+SVECTOR MAIN_D_80134A6C = { 0, -1592, 0, 0 };
+SVECTOR MAIN_D_80134A74 = { 0 };
+SVECTOR MAIN_D_80134A7C = { 0, -1592, 0, 0 };
+SVECTOR MAIN_D_80134A84 = { 0 };
+SVECTOR MAIN_D_80134A8C = { 0 };
+SVECTOR MAIN_D_80134A94 = { 0 };
+SVECTOR MAIN_D_80134A9C = { 0 };
+SVECTOR MAIN_D_80134AA4 = { 0 };
+SVECTOR MAIN_D_80134AAC = { -227, 1479, 0, 0 };
+SVECTOR MAIN_D_80134AB4 = { 0 };
+
+uint8_t MAIN_D_80135258[2];
+uint8_t MAIN_D_8013525A[2];
+int16_t MAIN_D_8013525C;
+int16_t MAIN_D_8013525E;
+uint8_t MAIN_D_80135260;
+uint8_t MAIN_D_80135261;
+uint8_t MAIN_D_80135262;
+int16_t MAIN_D_80135264;
+int32_t MAIN_D_80135268;
+char *MAIN_D_8013526C;
+char *MAIN_D_80135270;
+uint8_t MAIN_D_80135274;
+int16_t MAIN_D_80135278[2];
+int16_t MAIN_D_8013527C[2];
+int16_t MAIN_D_80135280[2];
+int32_t MAIN_D_80135284;
+uint8_t MAIN_D_80135288;
+int32_t MAIN_D_8013528C;
+int32_t MAIN_D_80135290;
+int16_t MAIN_D_80135294;
+char **MAIN_D_80135298;
+int8_t MAIN_D_8013529C;
+void *MAIN_D_801352A0;
+CameraChase MAIN_D_801352A4;
+int32_t MAIN_D_801352A8;
+
+static void *vs_scene_sbss_order[] = {
+	&MAIN_D_801352A8,
+	&MAIN_D_801352A4,
+	&MAIN_D_801352A0,
+	&MAIN_D_8013529C,
+	&MAIN_D_80135298,
+	&MAIN_D_80135294,
+	&MAIN_D_80135290,
+	&MAIN_D_8013528C,
+	&MAIN_D_80135288,
+	&MAIN_D_80135284,
+	&MAIN_D_80135280,
+	&MAIN_D_8013527C,
+	&MAIN_D_80135278,
+	&MAIN_D_80135274,
+	&MAIN_D_80135270,
+	&MAIN_D_8013526C,
+	&MAIN_D_80135268,
+	&MAIN_D_80135264,
+	&MAIN_D_80135262,
+	&MAIN_D_80135261,
+	&MAIN_D_80135260,
+	&MAIN_D_8013525E,
+	&MAIN_D_8013525C,
+	&MAIN_D_8013525A,
+	&MAIN_D_80135258,
 };
 
 // clang-format off
@@ -1146,19 +1184,19 @@ void VS_initializeVS(void)
 			VS_D_80071690[0][MAIN_D_80135264] = 1;
 			VS_D_8007169C[1][MAIN_D_80135264] = 1;
 			MAIN_D_80135258[0]++;
-			MAIN_D_8013525B++;
+			MAIN_D_8013525A[1]++;
 		}
 		if (result == -1) {
 			VS_D_80071690[1][MAIN_D_80135264] = 1;
 			VS_D_8007169C[0][MAIN_D_80135264] = 1;
-			MAIN_D_80135259++;
+			MAIN_D_80135258[1]++;
 			MAIN_D_8013525A[0]++;
 		}
 		if (result == 2) {
 			VS_D_8007169C[0][MAIN_D_80135264] = 1;
 			VS_D_8007169C[1][MAIN_D_80135264] = 1;
 			MAIN_D_8013525A[0]++;
-			MAIN_D_8013525B++;
+			MAIN_D_8013525A[1]++;
 		}
 		ENTITY_TABLE[1]->isOnScreen = 0;
 		ENTITY_TABLE[2]->isOnScreen = 0;
@@ -1174,8 +1212,8 @@ void VS_resetMatchState(void)
 	int32_t i;
 	int32_t j;
 
-	MAIN_D_80135259 = 0;
-	MAIN_D_8013525B = 0;
+	MAIN_D_80135258[1] = 0;
+	MAIN_D_8013525A[1] = 0;
 	MAIN_D_8013525C = 0;
 	MAIN_D_8013525E = 0;
 	MAIN_D_80135260 = 0;
@@ -1287,7 +1325,7 @@ void VS_loadFighterEntities(uint8_t slot)
 	stats->base.mp = card1->mp;
 	stats->current.currentHP = card1->hp;
 	stats->current.currentMP = card1->mp;
-	MAIN_D_80135278 = card1->weight;
+	MAIN_D_80135278[0] = card1->weight;
 	stats->base.moves[0] = card1->moves[0];
 	stats->base.moves[1] = card1->moves[1];
 	stats->base.moves[2] = card1->moves[2];
@@ -1303,7 +1341,7 @@ void VS_loadFighterEntities(uint8_t slot)
 	stats->base.mp = card2->mp;
 	stats->current.currentHP = card2->hp;
 	stats->current.currentMP = card2->mp;
-	MAIN_D_8013527A = card2->weight;
+	MAIN_D_80135278[1] = card2->weight;
 	stats->base.moves[0] = card2->moves[0];
 	stats->base.moves[1] = card2->moves[1];
 	stats->base.moves[2] = card2->moves[2];
@@ -1681,15 +1719,15 @@ void VS_playVersusIntroSequence(void)
 	fadeFromBlack(3);
 	i = 3;
 	if (MAIN_D_80135264 == VS_D_800716A8[11] - 1) {
-		if (MAIN_D_80135258[0] > MAIN_D_80135259) {
+		if (MAIN_D_80135258[0] > MAIN_D_80135258[1]) {
 			VS_addResultModelScene(ENTITY_TABLE[1]);
 			VS_setVersusModelSceneTimer(0x3c);
 		}
-		if (MAIN_D_80135259 > MAIN_D_80135258[0]) {
+		if (MAIN_D_80135258[1] > MAIN_D_80135258[0]) {
 			VS_addResultModelScene(ENTITY_TABLE[2]);
 			VS_setVersusModelSceneTimer(0x3c);
 		}
-		if (MAIN_D_80135258[0] == MAIN_D_80135259) {
+		if (MAIN_D_80135258[0] == MAIN_D_80135258[1]) {
 			VS_loadVersusSceneModel();
 			VS_addVersusModelScene();
 			VS_setVersusModelSceneTimer(-10);
@@ -1708,10 +1746,10 @@ void VS_playVersusIntroSequence(void)
 	MAIN_D_80135262 = 0;
 	removeObject(0x19d, 0);
 	if (MAIN_D_80135264 == VS_D_800716A8[11] - 1) {
-		if (MAIN_D_80135258[0] != MAIN_D_80135259) {
+		if (MAIN_D_80135258[0] != MAIN_D_80135258[1]) {
 			VS_removeResultModelScene();
 		}
-		if (MAIN_D_80135258[0] == MAIN_D_80135259) {
+		if (MAIN_D_80135258[0] == MAIN_D_80135258[1]) {
 			VS_removeVersusModelScene();
 		}
 	}
@@ -2387,8 +2425,8 @@ void VS_tickCameraChase(void)
 	int32_t slot;
 	int32_t i;
 
-	cc = (CameraChase *)&MAIN_D_801352A4;
-	if (MAIN_D_801352A4 < 0x14) {
+	cc = &MAIN_D_801352A4;
+	if (MAIN_D_801352A4.timer < 0x14) {
 		return;
 	}
 	if (cc->timer < 0x14) {
@@ -2452,13 +2490,13 @@ void VS_startCameraChase(Entity *entity, int32_t dx, int32_t side)
 	VS_D_80071744.vz = VS_D_80071754.vz;
 	startAnimation(entity, 0x21);
 	MAIN_D_80135268 = 9;
-	((CameraChase *)&MAIN_D_801352A4)->timer = 0;
-	((CameraChase *)&MAIN_D_801352A4)->phase = 0;
-	((CameraChase *)&MAIN_D_801352A4)->side = side;
+	MAIN_D_801352A4.timer = 0;
+	MAIN_D_801352A4.phase = 0;
+	MAIN_D_801352A4.side = side;
 	addObject(0x1aa, 0, (TickFunction)VS_tickCameraChase, NULL);
 	off = MAIN_D_80134A74;
 	rot = MAIN_D_80134A7C;
-	if (MAIN_D_801352A7 == 0) {
+	if (MAIN_D_801352A4.side == 0) {
 		rot.vy = -0x638;
 	} else {
 		rot.vy = 0x638;

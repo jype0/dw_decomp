@@ -47,10 +47,6 @@ extern int32_t MAIN_D_80135268;
 extern char **MAIN_D_80135298;
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
-extern char MAIN_D_80134ACC[];
-extern char MAIN_D_80134AD0[];
-extern char MAIN_D_80134AD8[];
-extern char MAIN_D_80134AE0[];
 extern char VS_D_80070720[];
 extern char VS_D_8007072C[];
 extern char VS_D_80070738[];
@@ -166,6 +162,15 @@ static void *vs_main_functions[] = {
 	VS_applyBuffMove,
 	VS_getAttackTech,
 };
+
+uint8_t MAIN_D_80134ABC[4] = { 50, 20, 5, 0 };
+uint8_t MAIN_D_80134AC0[4] = { 50, 20, 10, 0 };
+uint8_t MAIN_D_80134AC4[4] = { 10, 5, 0, 0 };
+int8_t MAIN_D_80134AC8[2] = { -1, -1 };
+char MAIN_D_80134ACC[] = "Run";
+char MAIN_D_80134AD0[] = "Attack";
+char MAIN_D_80134AD8[] = "Auto";
+char MAIN_D_80134AE0[] = "Change";
 
 // clang-format off
 char *VS_D_80070744[8] = {

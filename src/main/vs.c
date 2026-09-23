@@ -49,7 +49,6 @@ typedef struct {
 	uint8_t y;
 } VsUISprite;
 
-extern char VS_D_80070B1C[];
 extern int16_t MAIN_D_8013527C[2];
 extern char MAIN_D_80134500[5];
 extern char MAIN_D_80134508[5];
@@ -60,7 +59,7 @@ extern int16_t MAIN_D_80134F26;
 extern uint8_t MAIN_D_80134F28;
 extern int16_t MAIN_D_80134F2A;
 extern int16_t MAIN_D_80134F2C;
-extern int16_t MAIN_D_801352A4;
+extern CameraChase MAIN_D_801352A4;
 extern int32_t MAIN_D_80134F20;
 extern int16_t MAIN_D_801B1C70[];
 extern int16_t MAIN_D_801B1C72[];
@@ -84,7 +83,6 @@ extern uint8_t MAIN_D_80134F3C;
 extern int16_t MAIN_D_80135294;
 extern int32_t MAIN_D_80135268;
 extern uint8_t MAIN_D_8013529C;
-extern int16_t MAIN_D_8013527E;
 extern uint8_t MAIN_D_80135288;
 extern int16_t MAIN_D_80135278[2];
 extern uint8_t MAIN_D_80134E78[2];
@@ -326,54 +324,6 @@ static void *vs_functions[] = {
 	VS__placePlayer1,
 };
 
-char MAIN_D_80134A50[] = "Win";
-char MAIN_D_80134A54[] = "Lose";
-uint8_t MAIN_D_80134A5C[4] = { 3, 4, 2, 0 };
-uint8_t MAIN_D_80134A60[4] = { 4, 1, 1, 0 };
-SVECTOR MAIN_D_80134A64 = { 0 };
-SVECTOR MAIN_D_80134A6C = { 0, -1592, 0, 0 };
-SVECTOR MAIN_D_80134A74 = { 0 };
-SVECTOR MAIN_D_80134A7C = { 0, -1592, 0, 0 };
-SVECTOR MAIN_D_80134A84 = { 0 };
-SVECTOR MAIN_D_80134A8C = { 0 };
-SVECTOR MAIN_D_80134A94 = { 0 };
-SVECTOR MAIN_D_80134A9C = { 0 };
-SVECTOR MAIN_D_80134AA4 = { 0 };
-SVECTOR MAIN_D_80134AAC = { -227, 1479, 0, 0 };
-SVECTOR MAIN_D_80134AB4 = { 0 };
-uint8_t MAIN_D_80134ABC[4] = { 50, 20, 5, 0 };
-uint8_t MAIN_D_80134AC0[4] = { 50, 20, 10, 0 };
-uint8_t MAIN_D_80134AC4[4] = { 10, 5, 0, 0 };
-int8_t MAIN_D_80134AC8[2] = { -1, -1 };
-char MAIN_D_80134ACC[] = "Run";
-char MAIN_D_80134AD0[] = "Attack";
-char MAIN_D_80134AD8[] = "Auto";
-char MAIN_D_80134AE0[] = "Change";
-uint8_t MAIN_D_80134AE8[5] = { 0, 11, 25, 39, 50 };
-uint8_t MAIN_D_80134AF0[5] = { 11, 14, 14, 11, 11 };
-uint8_t MAIN_D_80134AF8[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-uint8_t MAIN_D_80134B00[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
-uint8_t MAIN_D_80134B08[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-char *MAIN_D_80134B10 = VS_D_80070B1C;
-int16_t MAIN_D_80134B14[4] = { -273, -86, 94, 272 };
-char MAIN_D_80134B1C[] = "%d\n";
-int8_t MAIN_D_80134B20[4] = { 1, 0, -1, 0 };
-int8_t MAIN_D_80134B24[4] = { 0, 1, 0, -1 };
-int8_t MAIN_D_80134B28[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
-int8_t MAIN_D_80134B30[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
-int8_t MAIN_D_80134B38[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
-int32_t MAIN_D_80134B40 = 0x808080;
-uint8_t MAIN_D_80134B44[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
-int8_t MAIN_D_80134B4C[6] = { 0, 16, 32, 48, 64, 80 };
-SVECTOR MAIN_D_80134B54 = { 0 };
-int16_t MAIN_D_80134B5C[3] = { 0, 1, 2 };
-SVECTOR MAIN_D_80134B64 = { 0 };
-RGB8 MAIN_D_80134B6C = { 0xcc, 0xa8, 0x28 };
-SVECTOR MAIN_D_80134B70 = { 0, -50, -50, 0 };
-SVECTOR MAIN_D_80134B78 = { 0, -50, 50, 0 };
-SVECTOR MAIN_D_80134B80 = { 0, 50, -50, 0 };
-SVECTOR MAIN_D_80134B88 = { 0, 50, 50, 0 };
-
 // clang-format off
 int16_t MAIN_D_8012F42C[6] = {
 	0x270f, 0x270f, 0x03e7, 0x03e7, 0x03e7, 0x03e7,
@@ -580,13 +530,13 @@ void VS__addIntroText(Entity *entity, int32_t id)
 
 void VS__func_800F1DB8(Entity *entity)
 {
-	if (MAIN_D_801352A4 != -1) {
+	if (MAIN_D_801352A4.timer != -1) {
 		entity->posData->location = VS_D_80071744;
 		entity->anim.locX = VS_D_80071744.vx << 15;
 		entity->anim.locY = VS_D_80071744.vy << 15;
 		entity->anim.locZ = VS_D_80071744.vz << 15;
 		startAnimation(entity, 0x21);
-		MAIN_D_801352A4 = -1;
+		MAIN_D_801352A4.timer = -1;
 	}
 }
 
@@ -843,9 +793,9 @@ void VS__tickIntroName(int32_t id)
 	}
 
 	if (len == MAIN_D_80134F26 && MAIN_D_80134F2E == 3) {
-		if (MAIN_D_801352A4 == 0) {
+		if (MAIN_D_801352A4.timer == 0) {
 			startAnimation(ENTITY_TABLE[id], 0x23);
-			MAIN_D_801352A4 = 20;
+			MAIN_D_801352A4.timer = 20;
 		}
 
 		if (MAIN_D_80134F2C >= -71) {
@@ -1231,7 +1181,7 @@ int32_t VS__checkEndCondition(void)
 		}
 
 		MAIN_D_80135280[0] = MAIN_D_8013527C[0] - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[0]])->stats.current.currentHP;
-		MAIN_D_80135280[1] = MAIN_D_8013527E - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats.current.currentHP;
+		MAIN_D_80135280[1] = MAIN_D_8013527C[1] - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats.current.currentHP;
 		COMBAT_DATA_PTR->fighter[0].hpDamageBuffer = 0;
 		COMBAT_DATA_PTR->fighter[1].hpDamageBuffer = 0;
 

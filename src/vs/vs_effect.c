@@ -52,14 +52,7 @@ typedef struct {
 
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
-extern int32_t MAIN_D_801352F4;
-extern char *MAIN_D_801352F8;
-extern int32_t MAIN_D_801352FC;
-extern char *MAIN_D_80135300;
-extern int32_t MAIN_D_801352EC;
-extern int32_t MAIN_D_801352F0;
 extern int8_t *MAIN_D_80139B24[];
-extern int32_t MAIN_D_801352E4;
 extern int32_t MAIN_D_80139AD0[][2];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t VIEWPORT_DISTANCE;
@@ -68,7 +61,6 @@ extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
-extern int32_t MAIN_D_801352E8;
 
 void MAIN_func_80092B60(POLY_FT4 *prim);
 void MAIN_func_80092C18(PACKET *prim, RECT *rect);
@@ -525,6 +517,44 @@ static void *vs_effect_functions[] = {
 	VS_renderEFEEngine,
 	VS_tickEFEEngine,
 	VS_initializeParticleEmitters,
+};
+
+char MAIN_D_80134B1C[] = "%d\n";
+int8_t MAIN_D_80134B20[4] = { 1, 0, -1, 0 };
+int8_t MAIN_D_80134B24[4] = { 0, 1, 0, -1 };
+int8_t MAIN_D_80134B28[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
+int8_t MAIN_D_80134B30[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
+int8_t MAIN_D_80134B38[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
+int32_t MAIN_D_80134B40 = 0x808080;
+uint8_t MAIN_D_80134B44[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
+int8_t MAIN_D_80134B4C[6] = { 0, 16, 32, 48, 64, 80 };
+SVECTOR MAIN_D_80134B54 = { 0 };
+int16_t MAIN_D_80134B5C[3] = { 0, 1, 2 };
+SVECTOR MAIN_D_80134B64 = { 0 };
+RGB8 MAIN_D_80134B6C = { 0xcc, 0xa8, 0x28 };
+SVECTOR MAIN_D_80134B70 = { 0, -50, -50, 0 };
+SVECTOR MAIN_D_80134B78 = { 0, -50, 50, 0 };
+SVECTOR MAIN_D_80134B80 = { 0, 50, -50, 0 };
+SVECTOR MAIN_D_80134B88 = { 0, 50, 50, 0 };
+
+int32_t MAIN_D_801352E4;
+int32_t MAIN_D_801352E8;
+int32_t MAIN_D_801352EC;
+int32_t MAIN_D_801352F0;
+int32_t MAIN_D_801352F4;
+char *MAIN_D_801352F8;
+int32_t MAIN_D_801352FC;
+char *MAIN_D_80135300;
+
+static void *vs_effect_sbss_order[] = {
+	&MAIN_D_80135300,
+	&MAIN_D_801352FC,
+	&MAIN_D_801352F8,
+	&MAIN_D_801352F4,
+	&MAIN_D_801352F0,
+	&MAIN_D_801352EC,
+	&MAIN_D_801352E8,
+	&MAIN_D_801352E4,
 };
 
 // clang-format off

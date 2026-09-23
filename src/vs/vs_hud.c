@@ -16,32 +16,12 @@
 #define VS_TMD_BUFFER	((uint8_t *)0x80038000)
 
 extern int16_t MAIN_D_80135090[2];
-extern uint8_t MAIN_D_801352C4;
 extern int8_t GAME_STATE;
-extern int16_t MAIN_D_801352E0;
-extern uint8_t MAIN_D_801352E2;
-extern int32_t MAIN_D_801352C8;
-extern int16_t MAIN_D_801352AC[2];
-extern int16_t MAIN_D_801352B0[2];
-extern uint8_t MAIN_D_801352B4[2];
-extern uint8_t MAIN_D_801352B6[2];
-extern uint8_t MAIN_D_801352B8[2];
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern uint8_t MAIN_D_801352CC[2];
-extern uint8_t MAIN_D_801352CE[2];
-extern uint8_t MAIN_D_801352D0[2];
-extern uint8_t MAIN_D_801352D2[2];
-extern uint8_t MAIN_D_801352D4[2];
-extern uint8_t MAIN_D_801352D6[2];
-extern uint8_t MAIN_D_801352D8[2];
-extern uint8_t MAIN_D_801352DA[2];
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
-extern uint8_t *VS_DRAW_TMD;
 extern uint8_t VS_D_80070764[][10];
-extern int16_t MAIN_D_801352BC[2];
-extern int16_t MAIN_D_801352C0[2];
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern char MAIN_D_801A8B98[];
@@ -120,6 +100,50 @@ static void *vs_hud_functions[] = {
 	VS_renderCommandMenu,
 	VS_tickCommandMenu,
 	VS_addCommandMenu,
+};
+
+int16_t MAIN_D_801352AC[2];
+int16_t MAIN_D_801352B0[2];
+uint8_t MAIN_D_801352B4[2];
+uint8_t MAIN_D_801352B6[2];
+uint8_t MAIN_D_801352B8[2];
+int16_t MAIN_D_801352BC[2];
+int16_t MAIN_D_801352C0[2];
+uint8_t MAIN_D_801352C4;
+int32_t MAIN_D_801352C8;
+uint8_t MAIN_D_801352CC[2];
+uint8_t MAIN_D_801352CE[2];
+uint8_t MAIN_D_801352D0[2];
+uint8_t MAIN_D_801352D2[2];
+uint8_t MAIN_D_801352D4[2];
+uint8_t MAIN_D_801352D6[2];
+uint8_t MAIN_D_801352D8[2];
+uint8_t MAIN_D_801352DA[2];
+uint8_t *VS_DRAW_TMD;
+int16_t MAIN_D_801352E0;
+uint8_t MAIN_D_801352E2;
+
+static void *vs_hud_sbss_order[] = {
+	&MAIN_D_801352E2,
+	&MAIN_D_801352E0,
+	&VS_DRAW_TMD,
+	&MAIN_D_801352DA,
+	&MAIN_D_801352D8,
+	&MAIN_D_801352D6,
+	&MAIN_D_801352D4,
+	&MAIN_D_801352D2,
+	&MAIN_D_801352D0,
+	&MAIN_D_801352CE,
+	&MAIN_D_801352CC,
+	&MAIN_D_801352C8,
+	&MAIN_D_801352C4,
+	&MAIN_D_801352C0,
+	&MAIN_D_801352BC,
+	&MAIN_D_801352B8,
+	&MAIN_D_801352B6,
+	&MAIN_D_801352B4,
+	&MAIN_D_801352B0,
+	&MAIN_D_801352AC,
 };
 
 // clang-format off
@@ -324,6 +348,14 @@ uint8_t VS_D_80070B10[2][5] = {
 };
 
 char VS_D_80070B1C[] = "\\STDDAT\\DRAW.TMD";
+
+uint8_t MAIN_D_80134AE8[5] = { 0, 11, 25, 39, 50 };
+uint8_t MAIN_D_80134AF0[5] = { 11, 14, 14, 11, 11 };
+uint8_t MAIN_D_80134AF8[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t MAIN_D_80134B00[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
+uint8_t MAIN_D_80134B08[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+char *MAIN_D_80134B10 = VS_D_80070B1C;
+int16_t MAIN_D_80134B14[4] = { -273, -86, 94, 272 };
 
 char VS_D_80070B30[20] = "\\STDDAT\\1P2PWIN.TMD";
 // clang-format on

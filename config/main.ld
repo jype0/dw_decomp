@@ -617,7 +617,13 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/kar/kar.c.o(.sdata.*);
         . = ALIGN(., 4);
-        KEEP(build/src/main/vs.c.o(.sdata.*));
+        build/src/vs/vs_scene.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        build/src/vs/vs_main.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        build/src/vs/vs_hud.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        build/src/vs/vs_effect.c.o(.sdata.*);
         . = ALIGN(., 4);
         build/src/doo2/doo2.c.o(.sdata.*);
         . = ALIGN(., 4);
@@ -704,7 +710,11 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/kar/kar.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/build/generated/unk_0x80135258.sbss.s.o(.sbss.*);
+        build/src/vs/vs_scene.c.o(.sbss.*);
+        . = ALIGN(., 4);
+        build/src/vs/vs_hud.c.o(.sbss.*);
+        . = ALIGN(., 4);
+        build/src/vs/vs_effect.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/mov/mov.c.o(.sbss.*);
         . = ALIGN(., 4);
