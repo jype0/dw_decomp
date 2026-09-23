@@ -674,7 +674,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/trn.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/build/generated/unk_0x801353A8.sbss.s.o(.sbss.*);
+        build/src/dget/dget.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/main/trn2.c.o(.sbss.*);
         . = ALIGN(., 4);
