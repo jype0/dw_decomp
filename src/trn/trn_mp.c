@@ -25,6 +25,22 @@ static void *trn_mp_functions[] = {
 	TRN_setupMpTraining,
 };
 
+int16_t MAIN_D_80135372;
+int16_t MAIN_D_80135374;
+int16_t MAIN_D_80135376;
+int16_t MAIN_D_80135378;
+int16_t MAIN_D_8013537A;
+int16_t MAIN_D_8013537C;
+
+static void *trn_mp_sbss_order[] = {
+	&MAIN_D_8013537C,
+	&MAIN_D_8013537A,
+	&MAIN_D_80135378,
+	&MAIN_D_80135376,
+	&MAIN_D_80135374,
+	&MAIN_D_80135372,
+};
+
 void TRN_tickMpTraining(int32_t instanceId)
 {
 	SVECTOR svec;

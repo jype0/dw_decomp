@@ -30,6 +30,8 @@ static void *trn_off_functions[] = {
 	TRN_setupOffenseTraining,
 };
 
+int16_t MAIN_D_8013537E;
+
 void TRN_setupOffenseTraining(int32_t arg)
 {
 	switch (arg) {

@@ -27,6 +27,24 @@ static void *trn_def_functions[] = {
 	TRN_setupDefenseTraining,
 };
 
+int16_t MAIN_D_80135380;
+uint32_t MAIN_D_80135384;
+int32_t MAIN_D_80135388;
+uint16_t MAIN_D_8013538C;
+int16_t MAIN_D_8013538E;
+int16_t MAIN_D_80135390;
+uint8_t MAIN_D_80135392;
+
+static void *trn_def_sbss_order[] = {
+	&MAIN_D_80135392,
+	&MAIN_D_80135390,
+	&MAIN_D_8013538E,
+	&MAIN_D_8013538C,
+	&MAIN_D_80135388,
+	&MAIN_D_80135384,
+	&MAIN_D_80135380,
+};
+
 static void trn_def__garbage__(void)
 {
 	int32_t v0;

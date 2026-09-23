@@ -609,7 +609,9 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/dooa/dooa.c.o(.sdata.*);
         . = ALIGN(., 4);
-        KEEP(build/src/main/trn.c.o(.sdata.*));
+        build/src/trn/trn_hud.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        build/src/trn/trn_slots.c.o(.sdata.*);
         . = ALIGN(., 4);
         KEEP(build/src/main/trn2.c.o(.sdata.*));
         . = ALIGN(., 4);
@@ -672,7 +674,11 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/dooa/dooa.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/src/main/trn.c.o(.sbss.*);
+        build/src/trn/trn_hp.c.o(.sbss.*);
+        build/src/trn/trn_mp.c.o(.sbss.*);
+        build/src/trn/trn_off.c.o(.sbss.*);
+        build/src/trn/trn_def.c.o(.sbss.*);
+        build/src/trn/trn_hud.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/dget/dget.c.o(.sbss.*);
         . = ALIGN(., 4);
