@@ -605,7 +605,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/src/main/fish.c.o(.sdata.*));
         . = ALIGN(., 4);
-        KEEP(build/src/main/evl.c.o(.sdata.*));
+        build/src/evl/evl.c.o(.sdata.*);
         . = ALIGN(., 4);
         build/src/kar/kar.c.o(.sdata.*);
         . = ALIGN(., 4);
@@ -685,6 +685,8 @@ SECTIONS
         build/src/std/std_effect.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/build/generated/unk_0x801351D8.sbss.s.o(.sbss.*);
+        . = ALIGN(., 4);
+        build/src/evl/evl.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/kar/kar.c.o(.sbss.*);
         . = ALIGN(., 4);

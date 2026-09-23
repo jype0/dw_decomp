@@ -23,6 +23,8 @@
 
 #include "common.h"
 
+#define EVL_MMD_BUFFER	((uint8_t *)0x80020000)
+
 typedef struct {
 	int16_t timer;
 	int16_t primCount;
@@ -40,12 +42,7 @@ typedef struct {
 	int16_t vz;
 } EvlModelVertex;
 
-extern int32_t MAIN_D_8013520C;
-extern uint8_t *MAIN_D_80135210;
-extern EvlModelVertex *MAIN_D_80135214;
-extern int16_t MAIN_D_80135218[3];
 extern int8_t HAS_USED_EVOITEM;
-extern char *MAIN_D_80135208;
 extern int8_t EVL_D_80068938[];
 extern EvlParticle EVL_D_80068944[100];
 extern int16_t EVL_D_80063F3C[];
@@ -63,20 +60,12 @@ extern GsRVIEW2 EVL_D_800688E8;
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
-extern int32_t MAIN_D_801351E4;
-extern int32_t MAIN_D_801351E8;
-extern int32_t MAIN_D_801351EC;
-extern int32_t MAIN_D_801351F8;
 extern SVECTOR MAIN_D_801349F8;
 extern SVECTOR MAIN_D_80134A00;
 extern GsRVIEW2 EVL_D_80068918;
 extern int16_t EVL_D_800679E4[];
-extern int32_t MAIN_D_801351FC;
-extern int32_t MAIN_D_80135200;
-extern int32_t MAIN_D_80135204;
 extern RGB8 MAIN_D_801349E8;
 extern SVECTOR MAIN_D_801349EC;
-extern SVECTOR MAIN_D_801351F0;
 extern uint8_t CURRENT_SCREEN;
 extern uint8_t *MAIN_D_801349E4;
 extern VECTOR EVL_D_80068908;
@@ -166,6 +155,43 @@ static void *evl_functions[] = {
 	EVL_storeClutBank1,
 	EVL_storeClutBank0,
 	EVL_storeDigimonClut,
+};
+
+uint8_t *MAIN_D_801349E4 = EVL_MMD_BUFFER;
+RGB8 MAIN_D_801349E8 = { 0x0a, 0xff, 0x0a };
+SVECTOR MAIN_D_801349EC = { 0 };
+int8_t MAIN_D_801349F4 = 1;
+SVECTOR MAIN_D_801349F8 = { 0 };
+SVECTOR MAIN_D_80134A00 = { 0 };
+
+int32_t MAIN_D_801351E4;
+int32_t MAIN_D_801351E8;
+int32_t MAIN_D_801351EC;
+SVECTOR MAIN_D_801351F0;
+int32_t MAIN_D_801351F8;
+int32_t MAIN_D_801351FC;
+int32_t MAIN_D_80135200;
+int32_t MAIN_D_80135204;
+char *MAIN_D_80135208;
+int32_t MAIN_D_8013520C;
+uint8_t *MAIN_D_80135210;
+EvlModelVertex *MAIN_D_80135214;
+int16_t MAIN_D_80135218[3];
+
+static void *evl_sbss_order[] = {
+	&MAIN_D_80135218,
+	&MAIN_D_80135214,
+	&MAIN_D_80135210,
+	&MAIN_D_8013520C,
+	&MAIN_D_80135208,
+	&MAIN_D_80135204,
+	&MAIN_D_80135200,
+	&MAIN_D_801351FC,
+	&MAIN_D_801351F8,
+	&MAIN_D_801351F0,
+	&MAIN_D_801351EC,
+	&MAIN_D_801351E8,
+	&MAIN_D_801351E4,
 };
 
 // clang-format off
