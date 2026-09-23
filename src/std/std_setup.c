@@ -27,7 +27,6 @@
 #define STD_STUN_MODEL		((char *)0x80054d00)
 #define STD_BUFF_MODEL		((TMDModel *)0x80055328)
 
-extern int32_t MAIN_D_801350EC;
 extern void *MAIN_D_80135130;
 extern int8_t GAME_STATE;
 extern int32_t VIEWPORT_DISTANCE;
@@ -38,14 +37,9 @@ extern int32_t MAIN_D_801B1BBC[];
 extern GsF_LIGHT LIGHT_DATA[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t ACTIVE_FRAMEBUFFER;
-extern uint8_t MAIN_D_801350F8;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
-extern int16_t MAIN_D_801350E4;
-extern int32_t MAIN_D_801350F0;
 extern uint8_t CURRENT_SCREEN;
-extern Entity *MAIN_D_801350E8;
-extern int32_t MAIN_D_801350F4;
 extern char *STD_D_8007A338[];
 extern char *STD_D_8007A304[];
 extern char *STD_D_8007A358[];
@@ -124,6 +118,24 @@ static void *std_setup_functions[] = {
 	STD_func_80057510,
 	STD_func_80056E2C,
 	STD_func_80056CA8,
+};
+
+StdArenaCfg MAIN_D_801347FC = { { 3, 4 }, { 4, 1 } };
+
+int16_t MAIN_D_801350E4;
+Entity *MAIN_D_801350E8;
+int32_t MAIN_D_801350EC;
+int32_t MAIN_D_801350F0;
+int32_t MAIN_D_801350F4;
+uint8_t MAIN_D_801350F8;
+
+static void *std_setup_sbss_order[] = {
+	&MAIN_D_801350F8,
+	&MAIN_D_801350F4,
+	&MAIN_D_801350F0,
+	&MAIN_D_801350EC,
+	&MAIN_D_801350E8,
+	&MAIN_D_801350E4,
 };
 
 // clang-format off

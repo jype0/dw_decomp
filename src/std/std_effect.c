@@ -57,14 +57,7 @@ typedef struct {
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern int32_t MAIN_D_801351D0;
-extern int32_t MAIN_D_801351C8;
-extern char *MAIN_D_801351D4;
-extern char *MAIN_D_801351CC;
 extern int32_t MAIN_D_80139AD0[][2];
-extern int32_t MAIN_D_801351B8;
-extern int32_t MAIN_D_801351C0;
-extern int32_t MAIN_D_801351C4;
 extern int8_t *MAIN_D_80139B24[];
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t MAIN_D_801350F4;
@@ -79,7 +72,6 @@ extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
-extern int32_t MAIN_D_801351BC;
 
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void setMapLayerEnabled(int32_t enabled);
@@ -577,6 +569,44 @@ static void *std_effect_functions[] = {
 	STD_renderVersusModelScene2,
 	STD_func_8006BFD4,
 	STD_func_8006BFB4,
+};
+
+char MAIN_D_801348E4[] = "%d\n";
+int8_t MAIN_D_801348E8[4] = { 1, 0, -1, 0 };
+int8_t MAIN_D_801348EC[4] = { 0, 1, 0, -1 };
+int8_t MAIN_D_801348F0[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
+int8_t MAIN_D_801348F8[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
+int8_t MAIN_D_80134900[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
+int32_t MAIN_D_80134908 = 0x808080;
+uint8_t MAIN_D_8013490C[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
+int8_t MAIN_D_80134914[6] = { 0, 16, 32, 48, 64, 80 };
+SVECTOR MAIN_D_8013491C = { 0 };
+int16_t MAIN_D_80134924[3] = { 0, 1, 2 };
+SVECTOR MAIN_D_8013492C = { 0 };
+RGB8 MAIN_D_80134934 = { 0xcc, 0xa8, 0x28 };
+SVECTOR MAIN_D_80134938 = { 0, -50, -50, 0 };
+SVECTOR MAIN_D_80134940 = { 0, -50, 50, 0 };
+SVECTOR MAIN_D_80134948 = { 0, 50, -50, 0 };
+SVECTOR MAIN_D_80134950 = { 0, 50, 50, 0 };
+
+int32_t MAIN_D_801351B8;
+int32_t MAIN_D_801351BC;
+int32_t MAIN_D_801351C0;
+int32_t MAIN_D_801351C4;
+int32_t MAIN_D_801351C8;
+char *MAIN_D_801351CC;
+int32_t MAIN_D_801351D0;
+char *MAIN_D_801351D4;
+
+static void *std_effect_sbss_order[] = {
+	&MAIN_D_801351D4,
+	&MAIN_D_801351D0,
+	&MAIN_D_801351CC,
+	&MAIN_D_801351C8,
+	&MAIN_D_801351C4,
+	&MAIN_D_801351C0,
+	&MAIN_D_801351BC,
+	&MAIN_D_801351B8,
 };
 
 // clang-format off

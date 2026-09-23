@@ -69,7 +69,8 @@ MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134E50.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E68.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E90.sbss.s \
-	$(BUILDDIR)/generated/unk_0x80135078.sbss.s
+	$(BUILDDIR)/generated/unk_0x80135078.sbss.s \
+	$(BUILDDIR)/generated/unk_0x801351D8.sbss.s
 
 MAIN_BSS := \
 	$(BUILDDIR)/generated/libapi.bss.s \
@@ -150,7 +151,6 @@ MAIN_SRC := \
 	src/main/sjis.c \
 	src/main/sound.c \
 	src/main/sound_async.c \
-	src/main/std.c \
 	src/main/tamer.c \
 	src/main/toilet_data.c \
 	src/main/tournament.c \

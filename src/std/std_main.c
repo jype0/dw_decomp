@@ -50,97 +50,41 @@ extern int16_t ENEMY_COUNT;
 extern int16_t MAIN_D_80134D66;
 extern Entity *MAIN_D_80134D60;
 extern int32_t MAIN_D_80134D74;
-extern int32_t MAIN_D_80135118;
-extern int32_t MAIN_D_80135174;
 extern uint8_t *GENERAL_BUFFER_PTR;
-extern int16_t MAIN_D_8013511C;
 extern int8_t GAME_STATE;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern int32_t MAIN_D_80135160;
 extern uint8_t MAIN_D_80125F70[][7];
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
 extern PACKET GS_WORK_BASES[];
 extern char DRAW_OFFSETS[];
-extern uint8_t MAIN_D_80135184[2];
-extern uint8_t MAIN_D_80135186[2];
-extern int8_t MAIN_D_8013518A[2];
 extern int32_t MAIN_D_801350EC;
-extern char **MAIN_D_80135128;
-extern uint8_t MAIN_D_8013512C;
 extern SVECTOR MAIN_D_801B1C0C[];
 extern VECTOR MAIN_D_801B1C14;
 extern GsRVIEW2 GS_VIEWPOINT;
-extern uint8_t MAIN_D_80135110;
-extern int32_t MAIN_D_80135148;
 extern int32_t VIEWPORT_DISTANCE;
-extern int16_t MAIN_D_8013517C[2];
-extern int32_t MAIN_D_80135178;
-extern int32_t MAIN_D_80135134;
-extern uint8_t MAIN_D_80135164;
-extern uint8_t MAIN_D_80135165;
-extern uint8_t MAIN_D_80135166;
-extern uint8_t MAIN_D_80135167;
 extern Entity *MAIN_D_801350E8;
 extern uint8_t CURRENT_SCREEN;
-extern uint8_t MAIN_D_8013514C;
 extern char MAIN_D_80124C24[];
 extern char MAIN_D_80124C54[];
-extern int16_t MAIN_D_80135144;
-extern int32_t MAIN_D_80135114;
 extern int32_t COMBAT_AREA_CENTER_X;
 extern int32_t COMBAT_AREA_CENTER_Y;
 extern uint8_t MAIN_D_801350F8;
 extern GsVIEW2 MAIN_D_801B1B98;
 extern int32_t MAIN_D_801B1BBC[];
-extern uint8_t MAIN_D_8013513C;
-extern int16_t MAIN_D_80135138;
-extern int16_t MAIN_D_8013513A;
-extern int16_t MAIN_D_8013513E;
-extern int16_t MAIN_D_80135140;
-extern uint8_t MAIN_D_80135142;
-extern int16_t MAIN_D_80135100;
-extern int16_t MAIN_D_80135102;
-extern int32_t MAIN_D_80135124;
-extern int32_t MAIN_D_80135120;
 extern int32_t MAIN_D_80134D7C[2];
 extern int32_t MAIN_D_80134D84;
-extern uint8_t MAIN_D_80135172;
-extern int32_t MAIN_D_8013516C;
 extern char *MOVE_NAMES[];
-extern int16_t MAIN_D_801350FC;
-extern int16_t MAIN_D_801350FE;
-extern int16_t MAIN_D_80135180[2];
-extern uint8_t MAIN_D_80135188[2];
-extern int32_t MAIN_D_80135108;
-extern int32_t MAIN_D_8013510C;
 extern MATRIX MAIN_D_801B1BC0;
-extern int8_t MAIN_D_80135147;
-extern uint8_t MAIN_D_8013514D;
-extern uint8_t MAIN_D_80135158[4];
-extern uint8_t MAIN_D_8013515C;
-extern uint8_t MAIN_D_8013515D;
 extern int16_t MAIN_D_801350E4;
-extern uint8_t MAIN_D_80135150[8];
-extern uint8_t MAIN_D_80135151[7];
-extern uint8_t MAIN_D_80135159;
-extern uint8_t MAIN_D_8013515A;
-extern uint8_t MAIN_D_8013515B;
-extern int16_t MAIN_D_80135170;
-extern uint8_t MAIN_D_80135168;
-extern int32_t MAIN_D_80135104;
 extern int8_t MAIN_D_80134D64;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
-extern char MAIN_D_80134894[];
-extern char MAIN_D_80134898[];
-extern char MAIN_D_801348A0[];
-extern char MAIN_D_801348A8[];
 
 void STD_initializeBattleStartText(void);
 void STD_func_8006A044(void);
@@ -593,6 +537,137 @@ static void *std_main_functions[] = {
 	STD_func_8005858C,
 	STD_func_80058504,
 	STD_func_80058494,
+};
+
+uint8_t MAIN_D_80134800[4] = { 64, 44, 38, 32 };
+uint8_t MAIN_D_80134804[4] = { 16, 7, 3, 0 };
+/* HP */
+char STD_STR_HP[] = "ＨＰ";
+/* MP */
+char STD_STR_MP[] = "ＭＰ";
+SVECTOR MAIN_D_80134818 = { 0 };
+SVECTOR MAIN_D_80134820 = { 0, -1592, 0, 0 };
+SVECTOR MAIN_D_80134828 = { 0 };
+SVECTOR MAIN_D_80134830 = { 0, -1592, 0, 0 };
+SVECTOR MAIN_D_80134838 = { 0 };
+SVECTOR MAIN_D_80134840 = { 0 };
+SVECTOR MAIN_D_80134848 = { 0 };
+SVECTOR MAIN_D_80134850 = { 0 };
+SVECTOR MAIN_D_80134858 = { 0 };
+SVECTOR MAIN_D_80134860 = { -227, 1479, 0, 0 };
+SVECTOR MAIN_D_80134868 = { 0 };
+int16_t MAIN_D_80134870[4] = { 0, 1024, 2048, 3072 };
+/* Dealt */
+char STD_STR_ATAETA[] = "与えた";
+uint8_t MAIN_D_80134880[5] = { 2, 3, 4, 5, 6 };
+uint8_t MAIN_D_80134888[4] = { 50, 20, 5, 0 };
+uint8_t MAIN_D_8013488C[4] = { 50, 20, 10, 0 };
+uint8_t MAIN_D_80134890[4] = { 10, 5, 0, 0 };
+char MAIN_D_80134894[] = "Run";
+char MAIN_D_80134898[] = "Attack";
+char MAIN_D_801348A0[] = "Auto";
+char MAIN_D_801348A8[] = "Change";
+uint8_t MAIN_D_801348B0[5] = { 0, 11, 25, 39, 50 };
+uint8_t MAIN_D_801348B8[5] = { 11, 14, 14, 11, 11 };
+
+int16_t MAIN_D_801350FC;
+int16_t MAIN_D_801350FE;
+int16_t MAIN_D_80135100;
+int16_t MAIN_D_80135102;
+int32_t MAIN_D_80135104;
+int32_t MAIN_D_80135108;
+int32_t MAIN_D_8013510C;
+uint8_t MAIN_D_80135110;
+int32_t MAIN_D_80135114;
+int32_t MAIN_D_80135118;
+int16_t MAIN_D_8013511C;
+int32_t MAIN_D_80135120;
+int32_t MAIN_D_80135124;
+char **MAIN_D_80135128;
+uint8_t MAIN_D_8013512C;
+void *MAIN_D_80135130;
+int32_t MAIN_D_80135134;
+int16_t MAIN_D_80135138;
+int16_t MAIN_D_8013513A;
+uint8_t MAIN_D_8013513C;
+int16_t MAIN_D_8013513E;
+int16_t MAIN_D_80135140;
+uint8_t MAIN_D_80135142;
+CameraChase MAIN_D_80135144;
+int32_t MAIN_D_80135148;
+uint8_t MAIN_D_8013514C;
+uint8_t MAIN_D_8013514D;
+uint8_t MAIN_D_80135150[8];
+uint8_t MAIN_D_80135158[4];
+uint8_t MAIN_D_8013515C;
+uint8_t MAIN_D_8013515D;
+int32_t MAIN_D_80135160;
+uint8_t MAIN_D_80135164;
+uint8_t MAIN_D_80135165;
+uint8_t MAIN_D_80135166;
+uint8_t MAIN_D_80135167;
+uint8_t MAIN_D_80135168;
+int32_t MAIN_D_8013516C;
+int16_t MAIN_D_80135170;
+uint8_t MAIN_D_80135172;
+int32_t MAIN_D_80135174;
+int32_t MAIN_D_80135178;
+int16_t MAIN_D_8013517C[2];
+int16_t MAIN_D_80135180[2];
+uint8_t MAIN_D_80135184[2];
+uint8_t MAIN_D_80135186[2];
+uint8_t MAIN_D_80135188[2];
+int8_t MAIN_D_8013518A[2];
+
+static void *std_main_sbss_order[] = {
+	&MAIN_D_8013518A,
+	&MAIN_D_80135188,
+	&MAIN_D_80135186,
+	&MAIN_D_80135184,
+	&MAIN_D_80135180,
+	&MAIN_D_8013517C,
+	&MAIN_D_80135178,
+	&MAIN_D_80135174,
+	&MAIN_D_80135172,
+	&MAIN_D_80135170,
+	&MAIN_D_8013516C,
+	&MAIN_D_80135168,
+	&MAIN_D_80135167,
+	&MAIN_D_80135166,
+	&MAIN_D_80135165,
+	&MAIN_D_80135164,
+	&MAIN_D_80135160,
+	&MAIN_D_8013515D,
+	&MAIN_D_8013515C,
+	&MAIN_D_80135158,
+	&MAIN_D_80135150,
+	&MAIN_D_8013514D,
+	&MAIN_D_8013514C,
+	&MAIN_D_80135148,
+	&MAIN_D_80135144,
+	&MAIN_D_80135142,
+	&MAIN_D_80135140,
+	&MAIN_D_8013513E,
+	&MAIN_D_8013513C,
+	&MAIN_D_8013513A,
+	&MAIN_D_80135138,
+	&MAIN_D_80135134,
+	&MAIN_D_80135130,
+	&MAIN_D_8013512C,
+	&MAIN_D_80135128,
+	&MAIN_D_80135124,
+	&MAIN_D_80135120,
+	&MAIN_D_8013511C,
+	&MAIN_D_80135118,
+	&MAIN_D_80135114,
+	&MAIN_D_80135110,
+	&MAIN_D_8013510C,
+	&MAIN_D_80135108,
+	&MAIN_D_80135104,
+	&MAIN_D_80135102,
+	&MAIN_D_80135100,
+	&MAIN_D_801350FE,
+	&MAIN_D_801350FC,
 };
 
 // clang-format off
@@ -1412,13 +1487,13 @@ void STD_func_80058684(Entity *entity, int32_t id)
 
 void STD_func_800587F0(Entity *entity)
 {
-	if (MAIN_D_80135144 != -1) {
+	if (MAIN_D_80135144.timer != -1) {
 		entity->posData->location = STD_D_8007B6F4;
 		entity->anim.locX = STD_D_8007B6F4.vx << 15;
 		entity->anim.locY = STD_D_8007B6F4.vy << 15;
 		entity->anim.locZ = STD_D_8007B6F4.vz << 15;
 		startAnimation(entity, 0x21);
-		MAIN_D_80135144 = -1;
+		MAIN_D_80135144.timer = -1;
 	}
 }
 
@@ -1793,9 +1868,9 @@ void STD_func_80059524(int32_t id)
 	}
 
 	if (len == MAIN_D_8013513A && MAIN_D_80135142 == 3) {
-		if (MAIN_D_80135144 == 0) {
+		if (MAIN_D_80135144.timer == 0) {
 			startAnimation(ENTITY_TABLE[id], 0x23);
-			MAIN_D_80135144 = 20;
+			MAIN_D_80135144.timer = 20;
 		}
 
 		if (MAIN_D_80135140 >= -71) {
@@ -2358,8 +2433,8 @@ void STD_tickCameraChase(void)
 	int32_t slot;
 	int32_t i;
 
-	cc = (CameraChase *)&MAIN_D_80135144;
-	if (MAIN_D_80135144 < 0x14) {
+	cc = &MAIN_D_80135144;
+	if (MAIN_D_80135144.timer < 0x14) {
 		return;
 	}
 	if (cc->timer < 0x14) {
@@ -2423,13 +2498,13 @@ void STD_startCameraChase(Entity *entity, int32_t dx, int32_t side)
 	STD_D_8007B6F4.vz = STD_D_8007B704.vz;
 	startAnimation(entity, 0x21);
 	MAIN_D_801350EC = 9;
-	((CameraChase *)&MAIN_D_80135144)->timer = 0;
-	((CameraChase *)&MAIN_D_80135144)->phase = 0;
-	((CameraChase *)&MAIN_D_80135144)->side = side;
+	MAIN_D_80135144.timer = 0;
+	MAIN_D_80135144.phase = 0;
+	MAIN_D_80135144.side = side;
 	addObject(0x1aa, 0, (TickFunction)STD_tickCameraChase, NULL);
 	off = MAIN_D_80134828;
 	rot = MAIN_D_80134830;
-	if (MAIN_D_80135147 == 0) {
+	if (MAIN_D_80135144.side == 0) {
 		rot.vy = -0x638;
 	} else {
 		rot.vy = 0x638;
@@ -3222,7 +3297,7 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 	for (i = 0, j = 0; i < 4; i++, j += 2) {
 		r = random(100);
 		k = j;
-		if (r < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[j]].level - 3][DIGIMON_DATA[MAIN_D_80135151[j]].level - 3]) {
+		if (r < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[j]].level - 3][DIGIMON_DATA[(MAIN_D_80135150 + 1)[j]].level - 3]) {
 			MAIN_D_80135158[i] = k;
 		} else {
 			MAIN_D_80135158[i] = k + 1;
@@ -3231,27 +3306,27 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 
 	if (MAIN_D_8013514D < 4) {
 		if (MAIN_D_8013514D < 2) {
-			MAIN_D_8013515C = MAIN_D_80135159;
+			MAIN_D_8013515C = MAIN_D_80135158[1];
 		} else {
 			MAIN_D_8013515C = MAIN_D_80135158[0];
 		}
 		r = random(100);
-		if (r < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[MAIN_D_8013515A]].level - 3][DIGIMON_DATA[MAIN_D_80135150[MAIN_D_8013515B]].level - 3]) {
-			MAIN_D_8013515D = MAIN_D_8013515A;
+		if (r < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[2]]].level - 3][DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[3]]].level - 3]) {
+			MAIN_D_8013515D = MAIN_D_80135158[2];
 		} else {
-			MAIN_D_8013515D = MAIN_D_8013515B;
+			MAIN_D_8013515D = MAIN_D_80135158[3];
 		}
 	} else {
 		r = random(100);
-		if (r < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[0]]].level - 3][DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135159]].level - 3]) {
+		if (r < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[0]]].level - 3][DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[1]]].level - 3]) {
 			MAIN_D_8013515C = MAIN_D_80135158[0];
 		} else {
-			MAIN_D_8013515C = MAIN_D_80135159;
+			MAIN_D_8013515C = MAIN_D_80135158[1];
 		}
 		if (MAIN_D_8013514D < 6) {
-			MAIN_D_8013515D = MAIN_D_8013515B;
+			MAIN_D_8013515D = MAIN_D_80135158[3];
 		} else {
-			MAIN_D_8013515D = MAIN_D_8013515A;
+			MAIN_D_8013515D = MAIN_D_80135158[2];
 		}
 	}
 
@@ -3263,7 +3338,7 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 
 	switch (MAIN_D_8013514D / 2) {
 	case 0:
-		out[1] = MAIN_D_80135150[MAIN_D_80135159];
+		out[1] = MAIN_D_80135150[MAIN_D_80135158[1]];
 		out[2] = MAIN_D_80135150[MAIN_D_8013515D];
 		break;
 	case 1:
@@ -3271,11 +3346,11 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 		out[2] = MAIN_D_80135150[MAIN_D_8013515D];
 		break;
 	case 2:
-		out[1] = MAIN_D_80135150[MAIN_D_8013515B];
+		out[1] = MAIN_D_80135150[MAIN_D_80135158[3]];
 		out[2] = MAIN_D_80135150[MAIN_D_8013515C];
 		break;
 	case 3:
-		out[1] = MAIN_D_80135150[MAIN_D_8013515A];
+		out[1] = MAIN_D_80135150[MAIN_D_80135158[2]];
 		out[2] = MAIN_D_80135150[MAIN_D_8013515C];
 		break;
 	}

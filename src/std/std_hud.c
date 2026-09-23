@@ -38,28 +38,13 @@ typedef struct {
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern int16_t MAIN_D_8013518C[2];
-extern int32_t MAIN_D_80135194;
-extern uint8_t MAIN_D_80135190;
-extern int16_t MAIN_D_801351A4;
-extern uint8_t MAIN_D_801351B4;
 extern uint8_t MAIN_D_80134D64;
 extern int8_t GAME_STATE;
-extern uint8_t MAIN_D_80135198[2];
-extern uint8_t MAIN_D_8013519A[2];
-extern uint8_t MAIN_D_8013519C[2];
-extern uint8_t MAIN_D_8013519E[2];
-extern uint8_t MAIN_D_801351A0[2];
-extern uint8_t MAIN_D_801351A2[2];
-extern int16_t MAIN_D_8013518E;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
-extern uint8_t *STD_DRAW_TMD;
 extern uint8_t CURRENT_SCREEN;
-extern int32_t MAIN_D_801351AC;
 extern int32_t MAIN_D_801350F0;
-extern uint8_t *STD_DAI_TMD;
 
 void STD_func_8006B1F0(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx);
 void STD_func_8006B6F4(void);
@@ -136,6 +121,38 @@ static void *std_hud_functions[] = {
 	STD_renderFinisherChargeup,
 	STD_tickFinisherChargeup,
 	STD_func_80069134,
+};
+
+int16_t MAIN_D_8013518C[2];
+uint8_t MAIN_D_80135190;
+int32_t MAIN_D_80135194;
+uint8_t MAIN_D_80135198[2];
+uint8_t MAIN_D_8013519A[2];
+uint8_t MAIN_D_8013519C[2];
+uint8_t MAIN_D_8013519E[2];
+uint8_t MAIN_D_801351A0[2];
+uint8_t MAIN_D_801351A2[2];
+int16_t MAIN_D_801351A4;
+uint8_t *STD_DRAW_TMD;
+int32_t MAIN_D_801351AC;
+uint8_t *STD_DAI_TMD;
+uint8_t MAIN_D_801351B4;
+
+static void *std_hud_sbss_order[] = {
+	&MAIN_D_801351B4,
+	&STD_DAI_TMD,
+	&MAIN_D_801351AC,
+	&STD_DRAW_TMD,
+	&MAIN_D_801351A4,
+	&MAIN_D_801351A2,
+	&MAIN_D_801351A0,
+	&MAIN_D_8013519E,
+	&MAIN_D_8013519C,
+	&MAIN_D_8013519A,
+	&MAIN_D_80135198,
+	&MAIN_D_80135194,
+	&MAIN_D_80135190,
+	&MAIN_D_8013518C,
 };
 
 // clang-format off
@@ -349,6 +366,12 @@ int16_t STD_D_8007AA8C[18] = {
 
 char STD_D_8007AAB0[] = "\\STDDAT\\DRAW.TMD";
 
+uint8_t MAIN_D_801348C0[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t MAIN_D_801348C8[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
+uint8_t MAIN_D_801348D0[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+char *MAIN_D_801348D8 = STD_D_8007AAB0;
+int16_t MAIN_D_801348DC[4] = { -273, -86, 94, 272 };
+
 char STD_D_8007AAC4[] = "\\STDDAT\\WIN_LOSE.TMD";
 
 char STD_D_8007AADC[] = "\\STDDAT\\CHAMP.TMD";
@@ -370,7 +393,7 @@ void STD_func_80069134(int16_t tech)
 	COMBAT_DATA_PTR->player.currentCommand[0] = 3;
 	COMBAT_DATA_PTR->player.bufferedCommand[0] = 3;
 	MAIN_D_8013518C[0] = -0x8c;
-	MAIN_D_8013518E = -0x4a;
+	MAIN_D_8013518C[1] = -0x4a;
 	addObject(0x19a, 0, (TickFunction)STD_tickFinisherChargeup, (RenderFunction)STD_renderFinisherChargeup);
 }
 
