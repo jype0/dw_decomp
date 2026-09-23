@@ -562,7 +562,6 @@ void EAB_tickParticle(int32_t id)
 	}
 }
 
-#if 0
 void EAB_renderParticle(int32_t id)
 {
 	SVECTOR corners[4];
@@ -608,9 +607,6 @@ void EAB_renderParticle(int32_t id)
 
 	GsSetWorkBase((PACKET *)prim);
 }
-#else
-INCLUDE_ASM("asm/eab/nonmatchings/eab", EAB_renderParticle);
-#endif
 
 void EAB_startBuildup(Entity *entity)
 {

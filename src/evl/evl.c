@@ -5,6 +5,7 @@
 #include <libgte.h>
 
 #include <dw/anim.h>
+#include <dw/btl.h>
 #include <dw/efe.h>
 #include <dw/file_queue.h>
 #include <dw/entity.h>
@@ -1087,7 +1088,56 @@ void EVL_tickParticle(int32_t id)
 	}
 }
 
-INCLUDE_ASM("asm/evl/nonmatchings/evl", EVL_renderParticle);
+void EVL_renderParticle(int32_t id)
+{
+	SVECTOR corners[4];
+	DVECTOR screen[4];
+	int32_t depth[4];
+	EvlParticle *e;
+	LINE_F2 *prim;
+	int32_t size;
+	int32_t d;
+	int32_t i;
+	int32_t j;
+
+	e = &EVL_D_80068944[id];
+	size = lerp(8, 0x9c4, 0, 0x56, e->timer);
+	corners[0].vx = e->pos.vx + size;
+	corners[0].vz = e->pos.vz + size;
+	corners[1].vx = e->pos.vx + size;
+	corners[1].vz = e->pos.vz - size;
+	corners[2].vx = e->pos.vx - size;
+	corners[2].vz = e->pos.vz - size;
+	corners[3].vx = e->pos.vx - size;
+	corners[3].vz = e->pos.vz + size;
+	corners[0].vy = corners[1].vy = corners[2].vy = corners[3].vy = e->pos.vy;
+
+	for (i = 0; i < 4; i++) {
+		depth[i] = worldPosToScreenPos(&corners[i], &screen[i]) >> 4;
+	}
+
+	prim = (LINE_F2 *)GsGetWorkBase();
+	for (i = 0; i < 4; i++) {
+		d = depth[i];
+		if ((d > 0x20) && (d < 0x1000)) {
+			j = (i + 1) % 4;
+			d = depth[j];
+			if ((d > 0x20) && (d < 0x1000)) {
+				SetLineF2(prim);
+				prim->r0 = lerp(e->r, 0, 0, 0x56, e->timer);
+				prim->g0 = lerp(e->g, 0, 0, 0x56, e->timer);
+				prim->b0 = lerp(e->b, 0, 0, 0x56, e->timer);
+				prim->x0 = screen[i].vx;
+				prim->y0 = screen[i].vy;
+				prim->x1 = screen[j].vx;
+				prim->y1 = screen[j].vy;
+				AddPrim(ACTIVE_ORDERING_TABLE->org + 0xfa1, prim++);
+			}
+		}
+	}
+
+	GsSetWorkBase((PACKET *)prim);
+}
 
 void EVL_renderSparkStreak(int32_t id)
 {
