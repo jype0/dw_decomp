@@ -605,7 +605,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/src/main/vs.c.o(.sdata.*));
         . = ALIGN(., 4);
-        KEEP(build/src/main/doo2.c.o(.sdata.*));
+        build/src/doo2/doo2.c.o(.sdata.*);
         . = ALIGN(., 4);
         build/src/dooa/dooa.c.o(.sdata.*);
         . = ALIGN(., 4);
@@ -668,7 +668,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/mov/mov.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/src/main/doo2.c.o(.sbss.*);
+        build/src/doo2/doo2.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/dooa/dooa.c.o(.sbss.*);
         . = ALIGN(., 4);
