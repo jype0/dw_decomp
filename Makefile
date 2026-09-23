@@ -138,7 +138,6 @@ MAIN_SRC := \
 	src/main/math.c \
 	src/main/model.c \
 	src/main/mov.c \
-	src/main/murd.c \
 	src/main/overworld.c \
 	src/main/overworld_card_text.c \
 	src/main/overworld_evochart_detail.c \
