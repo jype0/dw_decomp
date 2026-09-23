@@ -607,7 +607,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/src/main/doo2.c.o(.sdata.*));
         . = ALIGN(., 4);
-        KEEP(build/src/main/dooa.c.o(.sdata.*));
+        build/src/dooa/dooa.c.o(.sdata.*);
         . = ALIGN(., 4);
         KEEP(build/src/main/trn.c.o(.sdata.*));
         . = ALIGN(., 4);
@@ -670,7 +670,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/main/doo2.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/build/generated/unk_0x80135324.sbss.s.o(.sbss.*);
+        build/src/dooa/dooa.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/main/trn.c.o(.sbss.*);
         . = ALIGN(., 4);

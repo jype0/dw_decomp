@@ -70,7 +70,6 @@ MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134E68.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E90.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80135078.sbss.s \
-	$(BUILDDIR)/generated/unk_0x80135324.sbss.s \
 	$(BUILDDIR)/generated/unk_0x801353A8.sbss.s
 
 MAIN_BSS := \
@@ -109,7 +108,6 @@ MAIN_SRC := \
 	src/main/butterfly.c \
 	src/main/clock.c \
 	src/main/doo2.c \
-	src/main/dooa.c \
 	src/main/door_mapdata.c \
 	src/main/efe.c \
 	src/main/efe_table.c \
