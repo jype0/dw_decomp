@@ -38,7 +38,6 @@ typedef struct {
 } KarRingFlags;
 
 extern int8_t MAIN_D_80134A48[4];
-extern uint8_t MAIN_D_80135257;
 void setMapObjectsFlag(int32_t start, int32_t count, int32_t flag);
 
 extern int32_t ACTIVE_FRAMEBUFFER;
@@ -116,8 +115,6 @@ void KAR_beginThrow(void);
 int32_t tickMoveCameraTo(int16_t x, int16_t z, int32_t speed);
 void uploadMapTileImages();
 void moveCameraByDiff(VECTOR *from, VECTOR *to);
-extern int32_t MAIN_D_80135224;
-extern uint32_t MAIN_D_80135228;
 
 static void *kar_functions[] = {
 	KAR_renderSprite,
@@ -177,6 +174,52 @@ static void *kar_functions[] = {
 	KAR_initializeOrderingTables,
 };
 
+uint8_t MAIN_D_80135220;
+int32_t MAIN_D_80135224;
+uint32_t MAIN_D_80135228;
+uint8_t MAIN_D_8013522C;
+int8_t MAIN_D_8013522D;
+int8_t MAIN_D_8013522E;
+int32_t MAIN_D_80135230;
+int32_t MAIN_D_80135234;
+uint16_t MAIN_D_80135238;
+int16_t MAIN_D_8013523A;
+int8_t MAIN_D_8013523C;
+int16_t MAIN_D_8013523E;
+u_long *MAIN_D_80135240;
+int32_t MAIN_D_80135244;
+uint8_t MAIN_D_80135248;
+int32_t MAIN_D_8013524C;
+int8_t MAIN_D_80135250;
+uint16_t MAIN_D_80135252;
+int16_t MAIN_D_80135254;
+int8_t MAIN_D_80135256;
+uint8_t MAIN_D_80135257;
+
+static void *kar_sbss_order[] = {
+	&MAIN_D_80135257,
+	&MAIN_D_80135256,
+	&MAIN_D_80135254,
+	&MAIN_D_80135252,
+	&MAIN_D_80135250,
+	&MAIN_D_8013524C,
+	&MAIN_D_80135248,
+	&MAIN_D_80135244,
+	&MAIN_D_80135240,
+	&MAIN_D_8013523E,
+	&MAIN_D_8013523C,
+	&MAIN_D_8013523A,
+	&MAIN_D_80135238,
+	&MAIN_D_80135234,
+	&MAIN_D_80135230,
+	&MAIN_D_8013522E,
+	&MAIN_D_8013522D,
+	&MAIN_D_8013522C,
+	&MAIN_D_80135228,
+	&MAIN_D_80135224,
+	&MAIN_D_80135220,
+};
+
 // clang-format off
 KarModelIds KAR_D_8005AB80 = { { 0x00000002, 0x00000001, 0x00000000 } };
 
@@ -192,6 +235,19 @@ KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
 char KAR_D_8005ABA4[20] = "\\ETCDAT\\KARRING.TMD";
 
 char KAR_D_8005ABB8[] = "Start GameExplain Game";
+
+KarWeightTbl MAIN_D_80134A08 = { { 30, 25, 35, 30 } };
+RECT MAIN_D_80134A10 = { -130, 42, 262, 59 };
+RECT MAIN_D_80134A18 = { 75, -5, 10, 10 };
+KarStrPair MAIN_D_80134A20 = { { KAR_D_8005ABB8, NULL } };
+RECT MAIN_D_80134A28 = { -130, 42, 262, 59 };
+RECT MAIN_D_80134A30 = { 0, 0, 10, 10 };
+char MAIN_D_80134A38[] = " ";
+char MAIN_D_80134A3C[8] = "I win!";
+KarTallyValues MAIN_D_80134A44 = { { 2, 1, -2, 2 } };
+int8_t MAIN_D_80134A48[4] = { 0 };
+KarPeggedModelIds MAIN_D_80134A4C = { { 11, 10, 9 } };
+int8_t MAIN_D_80134A4F = -1;
 
 char KAR_D_8005ABD0[] = " Penguinmon ";
 

@@ -70,7 +70,8 @@ MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134E68.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E90.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80135078.sbss.s \
-	$(BUILDDIR)/generated/unk_0x801351D8.sbss.s
+	$(BUILDDIR)/generated/unk_0x801351D8.sbss.s \
+	$(BUILDDIR)/generated/unk_0x80135258.sbss.s
 
 MAIN_BSS := \
 	$(BUILDDIR)/generated/libapi.bss.s \

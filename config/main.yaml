@@ -229,7 +229,7 @@ segments:
       - [0xA48E4, .sdata, std/std_effect]
       - [0xA4958, .sdata, fish]
       - [0xA49E4, .sdata, evl]
-      - [0xA4A08, .sdata, kar]
+      - [0xA4A08, .sdata, kar/kar]
       - [0xA4A50, .sdata, vs]
       - [0xA4B90, .sdata, doo2/doo2]
       - [0xA4BAC, .sdata, dooa/dooa]
