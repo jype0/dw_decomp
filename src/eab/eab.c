@@ -7,6 +7,7 @@
 #include <dw/eab.h>
 #include <dw/entity.h>
 #include <dw/graphics.h>
+#include <dw/main.h>
 #include <dw/math.h>
 #include <dw/model.h>
 #include <dw/sound.h>
@@ -20,7 +21,6 @@ typedef struct {
 	Entity *entity;
 } EabHudState;
 
-extern EabHudState MAIN_D_801353F0;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t *EFE_DATA_STACK;
 
@@ -84,6 +84,15 @@ static void *eab_functions[] = {
 };
 
 // clang-format off
+char *BOSS_EFE_TMD = (char *)BOSS_EFE_TMD_BUFFER;
+SVECTOR MAIN_D_80134C2C = { 0, 0x800, 0, 0 };
+SVECTOR MAIN_D_80134C34 = { 0, 0x800, 0, 0 };
+RGB8 MAIN_D_80134C3C = { 0x0a, 0xff, 0x0a };
+SVECTOR MAIN_D_80134C40 = { 0 };
+uint8_t MAIN_D_80134C48 = 1;
+
+EabHudState MAIN_D_801353F0;
+
 VECTOR EAB_D_800616DC = { 0x0000003c, 0x0000003c, 0x0000003c, 0x00000000 };
 
 VECTOR EAB_D_800616EC = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };

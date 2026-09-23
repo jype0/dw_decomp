@@ -617,7 +617,7 @@ SECTIONS
         . = ALIGN(., 4);
         KEEP(build/src/main/endi.c.o(.sdata.*));
         . = ALIGN(., 4);
-        KEEP(build/src/main/eab.c.o(.sdata.*));
+        build/src/eab/eab.c.o(.sdata.*);
         . = ALIGN(., 4);
         main_SDATA_END = .;
         main_SDATA_SIZE = ABSOLUTE(main_SDATA_END - main_SDATA_START);
@@ -680,7 +680,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/murd/murd.c.o(.sbss.*);
         . = ALIGN(., 4);
-        build/build/generated/unk_0x801353F0.sbss.s.o(.sbss.*);
+        build/src/eab/eab.c.o(.sbss.*);
         . = ALIGN(., 4);
         main_SBSS_END = .;
         main_SBSS_SIZE = ABSOLUTE(main_SBSS_END - main_SBSS_START);
