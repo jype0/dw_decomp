@@ -113,7 +113,6 @@ MAIN_SRC := \
 	src/main/door_mapdata.c \
 	src/main/efe.c \
 	src/main/efe_table.c \
-	src/main/endi.c \
 	src/main/entity_text.c \
 	src/main/evl.c \
 	src/main/evolution.c \
@@ -135,7 +134,6 @@ MAIN_SRC := \
 	src/main/map_object.c \
 	src/main/math.c \
 	src/main/model.c \
-	src/main/mov.c \
 	src/main/overworld.c \
 	src/main/overworld_card_text.c \
 	src/main/overworld_evochart_detail.c \

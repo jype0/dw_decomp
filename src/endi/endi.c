@@ -5,6 +5,7 @@
 #include <dw/endi.h>
 #include <dw/entity.h>
 #include <dw/graphics.h>
+#include <dw/main.h>
 #include <dw/model.h>
 #include <dw/params.h>
 #include <dw/sound.h>
@@ -56,6 +57,10 @@ static void ENDI_stopParticles(void);
 static void ENDI_clearParticles(void);
 static void ENDI_renderParticles(int32_t objectId);
 static void ENDI_tickEndingParticles(int32_t objectId);
+
+u_long *ENDI_FADE_CLUT_BUFFER = (u_long *)GENERAL_BUFFER;
+u_long *ENDI_CLUT_BUFFER = (u_long *)(GENERAL_BUFFER + 0x304);
+RGB8 ENDI_PARTICLE_COLOR = { 0x80, 0x80, 0x80 };
 
 static EndiParticle ENDI_PARTICLES[NUM_ENDI_PARTICLES] = {
 	{

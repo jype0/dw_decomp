@@ -615,7 +615,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/src/murd/murd.c.o(.sdata.*);
         . = ALIGN(., 4);
-        KEEP(build/src/main/endi.c.o(.sdata.*));
+        build/src/endi/endi.c.o(.sdata.*);
         . = ALIGN(., 4);
         build/src/eab/eab.c.o(.sdata.*);
         . = ALIGN(., 4);
@@ -666,7 +666,7 @@ SECTIONS
         . = ALIGN(., 4);
         build/build/generated/unk_0x80135078.sbss.s.o(.sbss.*);
         . = ALIGN(., 4);
-        build/src/main/mov.c.o(.sbss.*);
+        build/src/mov/mov.c.o(.sbss.*);
         . = ALIGN(., 4);
         build/src/main/doo2.c.o(.sbss.*);
         . = ALIGN(., 4);
