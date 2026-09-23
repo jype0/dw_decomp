@@ -7,14 +7,15 @@
 #include <dw/script.h>
 #include <dw/world_object.h>
 
-extern char BTL_STR_SHOUT_RUN[];
-extern char BTL_STR_SHOUT_ATTACK[];
-extern char BTL_STR_SHOUT_CHANGE[];
 extern BtlCommandShout BTL_COMMAND_SHOUT;
 
 int16_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 void BTL_removeCommandShout(void);
 void BTL_renderCommandShout(void);
+
+char BTL_STR_SHOUT_RUN[] = "Run!";
+char BTL_STR_SHOUT_ATTACK[] = "Attack!";
+char BTL_STR_SHOUT_CHANGE[] = "Change!";
 
 const char BTL_STR_SHOUT_YOUR_CALL[] = "Your Call!";
 const char BTL_STR_SHOUT_MODERATE[] = "Moderate!";

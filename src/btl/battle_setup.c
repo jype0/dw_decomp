@@ -26,6 +26,19 @@ void tickPartnerCollision(void);
 void playSound(int32_t soundId, uint32_t flag);
 void MAIN_func_800D3ADC(void);
 
+int16_t MAIN_D_801346D8[4] = { 0, 1024, 2048, 3072 };
+uint8_t MAIN_D_801346E0[5] = { 3, 4, 5, 7, 8 };
+
+uint8_t MAIN_D_80135078;
+int32_t MAIN_D_8013507C;
+int32_t MAIN_D_80135080;
+
+static void *battle_setup_sbss_order[] = {
+	&MAIN_D_80135080,
+	&MAIN_D_8013507C,
+	&MAIN_D_80135078,
+};
+
 void BTL_initializeCombat(void)
 {
 	int32_t i;

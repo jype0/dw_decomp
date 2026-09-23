@@ -307,6 +307,12 @@ static void *battle_main_functions[] = {
 	BTL_tickPartnerAI,
 };
 
+uint8_t MAIN_D_801346E8[4] = { 70, 40, 30, 0 };
+uint8_t MAIN_D_801346EC[4] = { 50, 20, 5, 0 };
+uint8_t MAIN_D_801346F0[4] = { 50, 20, 10, 0 };
+uint8_t MAIN_D_801346F4[4] = { 10, 5, 0, 0 };
+int8_t MAIN_D_801346F8 = -1;
+
 void BTL_tickPartnerAI(void)
 {
 	int16_t enemies[4];

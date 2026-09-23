@@ -56,15 +56,9 @@ typedef struct {
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
-extern int32_t MAIN_D_801350DC;
-extern int32_t MAIN_D_801350D4;
-extern char *MAIN_D_801350E0;
 extern char *MAIN_D_80139B24[];
-extern char *MAIN_D_801350D8;
 extern int32_t MAIN_D_80139AD0[][2];
 extern int32_t VIEWPORT_DISTANCE;
-extern int32_t MAIN_D_801350CC;
-extern int32_t MAIN_D_801350D0;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
 extern uint8_t *BUFF_MODEL[];
@@ -570,6 +564,43 @@ static void *battle_effect_functions[] = {
 	BTL_renderEFEEngine,
 	BTL_tickEFEEngine,
 	BTL_initializeParticleEmitters,
+};
+
+char MAIN_D_8013477C[] = "%d\n";
+int8_t MAIN_D_80134780[4] = { 1, 0, -1, 0 };
+int8_t MAIN_D_80134784[4] = { 0, 1, 0, -1 };
+int8_t MAIN_D_80134788[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
+int8_t MAIN_D_80134790[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
+int8_t MAIN_D_80134798[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
+int32_t MAIN_D_801347A0 = 0x808080;
+uint8_t MAIN_D_801347A4[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
+int8_t MAIN_D_801347AC[6] = { 0, 16, 32, 48, 64, 80 };
+SVECTOR MAIN_D_801347B4 = { 0 };
+int16_t MAIN_D_801347BC[3] = { 0, 1, 2 };
+SVECTOR MAIN_D_801347C4 = { 0 };
+RGB8 MAIN_D_801347CC = { 0xcc, 0xa8, 0x28 };
+SVECTOR MAIN_D_801347D0 = { 0, -50, -50, 0 };
+SVECTOR MAIN_D_801347D8 = { 0, -50, 50, 0 };
+SVECTOR MAIN_D_801347E0 = { 0, 50, -50, 0 };
+SVECTOR MAIN_D_801347E8 = { 0, 50, 50, 0 };
+uint8_t MAIN_D_801347F0[4] = { 180, 100, 235, 180 };
+uint8_t MAIN_D_801347F4[4] = { 20, 20, 150, 180 };
+uint8_t MAIN_D_801347F8[4] = { 255, 255, 220, 180 };
+
+int32_t MAIN_D_801350CC;
+int32_t MAIN_D_801350D0;
+int32_t MAIN_D_801350D4;
+char *MAIN_D_801350D8;
+int32_t MAIN_D_801350DC;
+char *MAIN_D_801350E0;
+
+static void *battle_effect_sbss_order[] = {
+	&MAIN_D_801350E0,
+	&MAIN_D_801350DC,
+	&MAIN_D_801350D8,
+	&MAIN_D_801350D4,
+	&MAIN_D_801350D0,
+	&MAIN_D_801350CC,
 };
 
 // clang-format off
