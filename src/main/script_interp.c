@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include <libcd.h>
+#include <libetc.h>
 
 #include <dw/clock.h>
 #include <dw/doo2.h>
@@ -20,6 +21,7 @@
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/tamer.h>
+#include <dw/text.h>
 #include <dw/tournament.h>
 #include <dw/trigger.h>
 #include <dw/trn.h>
@@ -44,17 +46,17 @@ typedef struct {
 	TextBoxData box[6];
 } TextBoxTable;
 
-extern uint8_t MAIN_D_80134FE4;
-extern uint8_t MAIN_D_80134FE9;
-extern int32_t MAIN_D_80134FF0;
+extern uint8_t SCRIPT_SECTION;
+extern uint8_t SCRIPT_MAP_CHANGE;
+extern int32_t SCRIPT_HAS_CONTROL;
 extern uint8_t MAIN_D_801BE6B5[];
 extern uint8_t MAIN_D_801BE6B6[];
 extern uint8_t *SCRIPT_HEADER_PTR;
 extern uint8_t *SCRIPT_DATA_PTR;
-extern char MAIN_D_80130388[];
+extern char SCRIPT_FILE_PATH[];
 extern int8_t MAIN_STATE;
 extern int16_t SCRIPT_MAP_CHANGE_STATE;
-extern uint8_t MAIN_D_801BE6B4[];
+extern uint8_t SCRIPT_MOVEMENTS[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern SelectionBoxUVData MAIN_D_8013460C;
 extern SelectionBoxUVData MAIN_D_80134614;
@@ -66,57 +68,57 @@ extern SelectionBoxOffsetData MAIN_D_8013463C;
 extern SelectionBoxOffsetData MAIN_D_80134644;
 extern SelectionBoxOffsetData MAIN_D_8013464C;
 extern SelectionBoxOffsetData MAIN_D_80134654;
-extern int16_t MAIN_D_8013078C[];
-extern uint8_t MAIN_D_80135007;
+extern int16_t NAMING_LABEL_LAYOUT[];
+extern uint8_t ACTIVE_BGM_VARIANT;
 extern uint8_t MAIN_D_80134F82;
 extern uint16_t MAIN_D_801307A0[10];
-extern char MAIN_D_801345F4[4];
-extern uint8_t MAIN_D_80130438[];
-extern uint8_t MAIN_D_80130444[];
-extern uint8_t MAIN_D_801303B8[];
-extern uint8_t MAIN_D_80134F8F;
-extern uint8_t MAIN_D_80134F90;
-extern int32_t MAIN_D_8012FFC4[];
+extern char NAMING_PREVIEW_PREFIX[4];
+extern uint8_t TRADE_WANTED_ITEMS[];
+extern uint8_t TRADE_GIVEN_ITEMS[];
+extern uint8_t JUKEBOX_TRACKS[];
+extern uint8_t JUKEBOX_PLAYING;
+extern uint8_t ITEM_KEEPER_SIDE;
+extern int32_t CARD_PRICES[];
 extern uint16_t MAIN_D_80134608[2];
 extern uint8_t MAIN_D_80134F81;
 extern uint32_t POLLED_INPUT;
-extern RECT MAIN_D_801302BC[];
-extern char MAIN_D_80130394[];
-extern char MAIN_D_801303A8[];
+extern RECT ITEM_MENU_POPUP_ORIGINS[];
+extern char PATH_ETCHI_BOSS_EFE_TMD[];
+extern char PATH_ETCHI_OP_TIM[];
 extern uint8_t PREVIOUS_SCREEN;
 extern uint8_t PREVIOUS_EXIT;
 extern uint8_t CURRENT_EXIT;
-extern uint8_t MAIN_D_801BE738[];
+extern uint8_t SCRIPT_DOOR_MOVEMENT[];
 extern int8_t TALKED_TO_ENTITY;
 extern uint8_t MAPHEAD_DATA[];
 extern uint8_t SCRIPT_HEADER[];
 extern uint8_t SCRIPT_DATA[];
 extern ScriptState SCRIPT_STATE;
 extern uint8_t TEXT_BUFFERS[];
-extern char MAIN_D_80130374[];
-extern BoxLabel MAIN_D_801307B4;
-extern BoxLabel MAIN_D_801307C0;
-extern TextBoxTable MAIN_D_801BE80C;
-extern char MAIN_D_801307CC[];
-extern char **MAIN_D_80130774[];
+extern char MAPHEAD_FILE_PATH[];
+extern BoxLabel ITEM_KEEPER_HAND_LABEL;
+extern BoxLabel ITEM_KEEPER_STORED_LABEL;
+extern TextBoxTable TEXT_BOX_TABLE;
+extern char TRADE_HEADER_LABELS[];
+extern char **NAMING_CHAR_PAGES[];
 extern char MAIN_D_801B1D26[];
-extern char MAIN_D_801345F8[5];
-extern char MAIN_D_80134600[8];
-extern int16_t MAIN_D_801302FC[];
+extern char NAMING_TITLE[5];
+extern char NAMING_BUTTON_LABELS[8];
+extern int16_t ITEM_MENU_CURSOR_WIDTHS[];
 extern uint8_t *CURRENT_SCRIPT_PTR;
 
 void unsetCameraFollowPlayer(void);
 int32_t MAIN_func_800D8E64(int32_t param_1, int32_t param_2, int32_t param_3);
 int32_t tickRemoveMist(void);
-int32_t MAIN_func_801138B0(void);
-int32_t MAIN_func_80113A20(void);
+int32_t tickSaveMachine(void);
+int32_t tickGameClearSave(void);
 int32_t isTrainingComplete(void);
 void setCameraFollowPlayer(void);
 void setFoodTimer(int32_t type);
 void setActiveAnim(int32_t state);
-void MAIN_func_800FD7D8(uint8_t boxId, int32_t idx, int16_t x, int16_t y);
-void MAIN_func_800FD8D4(ItemMenuBox *box);
-void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
+void renderItemMenuHeader(uint8_t boxId, int32_t idx, int16_t x, int16_t y);
+void renderItemMenuScrollbar(ItemMenuBox *box);
+void renderItemMenuRows(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
 void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h, int32_t layer);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t h);
 int32_t random(int32_t limit);
@@ -124,57 +126,57 @@ void *allocateArray(uint32_t size);
 void freeArray(uint32_t *array);
 uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used);
 void terminateString(uint8_t *str, int32_t flag);
-void drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
+void drawTextRow(uint8_t *str, int16_t x, int16_t y, int32_t flag);
 int32_t hasMove(int32_t moveId);
 void learnMove(int32_t moveId);
 void unloadDigimonModel(int32_t a0);
-void MAIN_func_800FF310(ItemMenuBox *box);
+void itemMenuSelectFirst(ItemMenuBox *box);
 int32_t isXPressedAfterDialogue(void);
 int32_t isKeyDown(int32_t mask);
-int32_t MAIN_func_800FCFB8(RECT *origin);
-int32_t MAIN_func_800FD244(RECT *origin);
-ItemMenuBox *MAIN_func_800FCC40(void);
-int32_t MAIN_func_800FD61C(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
-void MAIN_func_800FD3DC(ItemMenuBox *box, int32_t startRow, int32_t style);
-void MAIN_func_800FD4E8(ItemMenuBox *box, int32_t startRow, int32_t style);
-void MAIN_func_800FF2A8(ItemMenuBox *box);
-int32_t MAIN_func_800FCF88(ItemMenuBox *box);
-void MAIN_func_800FD428(ItemMenuBox *box, int32_t style);
-void MAIN_func_800FD534(ItemMenuBox *box, int32_t style);
+int32_t openQuantityBox(RECT *origin);
+int32_t openItemConfirmBox(RECT *origin);
+ItemMenuBox *getActiveItemMenu(void);
+int32_t openItemDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
+void itemMenuJumpToFirst(ItemMenuBox *box, int32_t startRow, int32_t style);
+void itemMenuJumpToLast(ItemMenuBox *box, int32_t startRow, int32_t style);
+void itemMenuSelectLast(ItemMenuBox *box);
+int32_t tickItemMenuPageFlip(ItemMenuBox *box);
+void itemMenuCursorUp(ItemMenuBox *box, int32_t style);
+void itemMenuCursorDown(ItemMenuBox *box, int32_t style);
 void unloadDigimonModel(int32_t digimonType);
 void loadNPCModel(int32_t modelId);
-void MAIN_func_80108EB4(ItemMenuBox *box, int8_t flag);
-void MAIN_func_801097F4(void);
-void MAIN_func_801099E8(void);
-void MAIN_func_80107E6C(void);
-void MAIN_func_80108090(void);
-void MAIN_func_801094F0(void);
-void MAIN_func_801096E8(void);
+void renderItemKeeperBox(ItemMenuBox *box, int8_t flag);
+void tickTradeMenu(void);
+void renderTradeMenuBox(void);
+void tickCardMenu(void);
+void renderCardMenuBox(void);
+void tickTransportMenu(void);
+void renderTransportMenuBox(void);
 void updateNamingPreview(void);
-void MAIN_func_80108C88(int32_t itemId);
-void MAIN_func_80108DC0(int32_t a0);
-void MAIN_func_801091DC(void);
-void MAIN_func_801093E4(void);
+void itemKeeperFocusStored(int32_t itemId);
+void itemKeeperFocusHand(int32_t a0);
+void tickJukeboxMenu(void);
+void renderJukeboxMenuBox(void);
 void tickNamingBox(void);
 void renderNamingBox(void);
-void MAIN_func_8010A79C(void);
-int32_t MAIN_func_80106730(int32_t op, int32_t lhs, int32_t rhs);
+void layoutNamingBox(void);
+int32_t scriptCompareSigned(int32_t op, int32_t lhs, int32_t rhs);
 void updateBGM(void);
 void forceUpdateBGM(void);
 void pollNextScriptTwoUShort(uint16_t *out1, uint16_t *out2);
-void MAIN_func_80108334(void);
-void MAIN_func_80108604(void);
-void MAIN_func_80108610(int32_t boxIndex);
-void MAIN_func_801086D4(void);
-int32_t MAIN_func_801086E0(void);
-int32_t MAIN_func_80108890(void);
-int32_t MAIN_func_80108A98(void);
-void MAIN_func_80109BBC(void);
+void tickItemKeeperMenu(void);
+void renderItemKeeperStoredBox(void);
+void layoutItemKeeperList(int32_t boxIndex);
+void renderItemKeeperHandBox(void);
+int32_t itemKeeperMoveOne(void);
+int32_t itemKeeperMoveTen(void);
+int32_t itemKeeperMoveAll(void);
+void layoutTradeList(void);
 void namingDeleteLast(void);
 void terminateNamingBuffer(void);
 void namingSelectionLeft(int16_t col, int16_t row, int32_t specialIdx);
 void namingSelectionRight(int16_t col, int16_t row, int32_t specialIdx);
-int32_t MAIN_func_80108230(void);
+int32_t pickMeritCard(void);
 void namingSelectionUp(int16_t column, int16_t row);
 void namingSelectionDown(int16_t column, int16_t row);
 void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
@@ -204,14 +206,22 @@ int32_t tickMoveObjectTo(uint32_t scriptId1, uint32_t scriptId2, int32_t angle, 
 void initializeScripts(void);
 void initializeLoadedNPCModels(void);
 void runMapHeadScript(int32_t section);
-void MAIN_func_800FF338(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
+void renderRaisedFrame(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
 void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void GsSortBoxFill(GsBOXF *bp, GsOT *otp, u_short pri);
 void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w);
 void drawString(char *str, int32_t x, int32_t y);
-int32_t MAIN_func_800FE650(uint8_t boxId);
+int32_t flipMenuPage(uint8_t boxId);
 void MAIN_func_800D634C(int32_t param_1, int32_t param_2);
+
+/*
+ * NAMING_CURSOR is row * 5 + column in the grid of characters, or one of the
+ * buttons under it.
+ */
+#define NAMING_ON_BUTTON	0x8000
+#define NAMING_BUTTON_BACK	0x8000
+#define NAMING_BUTTON_OK	0x8001
 
 static void *script_interp_text_order[] = {
 	renderNamingUnderscore,
@@ -224,7 +234,7 @@ static void *script_interp_text_order[] = {
 	terminateNamingBuffer,
 	namingDeleteLast,
 	updateNamingPreview,
-	MAIN_func_8010A79C,
+	layoutNamingBox,
 	renderNamingBox,
 	tickNamingBox,
 	setupNameDisplayBox,
@@ -232,43 +242,43 @@ static void *script_interp_text_order[] = {
 	showNewgameSelection,
 	showNewgameDialogue,
 	setupNewGameDialogueBox,
-	MAIN_func_80109BBC,
-	MAIN_func_801099E8,
-	MAIN_func_801097F4,
-	MAIN_func_801096E8,
-	MAIN_func_801094F0,
-	MAIN_func_801093E4,
-	MAIN_func_801091DC,
-	MAIN_func_80108EB4,
-	MAIN_func_80108DC0,
-	MAIN_func_80108C88,
-	MAIN_func_80108A98,
-	MAIN_func_80108890,
-	MAIN_func_801086E0,
-	MAIN_func_801086D4,
-	MAIN_func_80108610,
-	MAIN_func_80108604,
-	MAIN_func_80108334,
-	MAIN_func_80108230,
-	MAIN_func_80108090,
-	MAIN_func_80107E6C,
-	MAIN_func_80107DFC,
-	MAIN_func_80107D54,
-	MAIN_func_80107C4C,
-	MAIN_func_80107B98,
-	MAIN_func_80107AB8,
-	MAIN_func_801078F4,
-	MAIN_func_80107784,
-	MAIN_func_80107660,
-	MAIN_func_80107444,
-	MAIN_func_801072C4,
-	MAIN_func_80107200,
-	MAIN_func_80107110,
-	MAIN_func_80107000,
+	layoutTradeList,
+	renderTradeMenuBox,
+	tickTradeMenu,
+	renderTransportMenuBox,
+	tickTransportMenu,
+	renderJukeboxMenuBox,
+	tickJukeboxMenu,
+	renderItemKeeperBox,
+	itemKeeperFocusHand,
+	itemKeeperFocusStored,
+	itemKeeperMoveAll,
+	itemKeeperMoveTen,
+	itemKeeperMoveOne,
+	renderItemKeeperHandBox,
+	layoutItemKeeperList,
+	renderItemKeeperStoredBox,
+	tickItemKeeperMenu,
+	pickMeritCard,
+	renderCardMenuBox,
+	tickCardMenu,
+	markTradeDone,
+	openTradeMenuBox,
+	fillTradeLists,
+	openTransportMenuBox,
+	fillTransportList,
+	openJukeboxMenuBox,
+	fillJukeboxList,
+	openItemKeeperBoxes,
+	fillItemKeeperLists,
+	fillMeritItemList,
+	fillOwnedCardList,
+	openCardMenuBox,
+	fillCardShopList,
 	showCardTextbox,
 	rollCard,
-	MAIN_func_80106D28,
-	MAIN_func_80106D1C,
+	fillLostItemList,
+	scriptHasMove,
 	getTriggerOffset,
 	pollNextScriptTwoUShort,
 	scriptUnloadModel,
@@ -278,14 +288,14 @@ static void *script_interp_text_order[] = {
 	pollNextTwoScriptShorts,
 	pollNextScriptShort,
 	scriptLoadModel,
-	MAIN_func_8010692C,
+	minutesToDate,
 	pollNextInt,
-	dateToSeconds,
+	dateToMinutes,
 	setCardAmount,
 	getCardAmount,
 	scriptLearnMove,
 	skipOneReadInteger,
-	MAIN_func_80106730,
+	scriptCompareSigned,
 	scriptCompareValues,
 	pollNextTwoScriptBytes,
 	pollNextScriptUShort,
@@ -301,7 +311,7 @@ static void *script_interp_text_order[] = {
 	skipOneReadTwoShort,
 	writePStat,
 	isTriggerSet,
-	MAIN_func_801062F8,
+	beginScriptEvent,
 	readPStat,
 	getScriptSection,
 	getScript,
@@ -313,10 +323,10 @@ static void *script_interp_text_order[] = {
 	tickScriptedMovement,
 	handleMusicOverride,
 	scriptStartAnimation,
-	MAIN_func_80105464,
+	scriptStartWalkAnimation,
 	MAIN_func_801053EC,
 	scriptUpdateEnergyBoundaries,
-	MAIN_func_801050C0,
+	scriptConditionBlock,
 	returnFromScriptFile,
 	returnFromScriptFile,
 	setMapHeadActive,
@@ -339,46 +349,47 @@ int32_t tickScript(void)
 		return 1;
 	}
 
-	MAIN_func_80100258(0);
+	tickTextboxes(0);
 	tickScriptedMovements();
-	if (MAIN_D_80134FE9 == 0x4b) {
+	if (SCRIPT_MAP_CHANGE == 0x4b) {
 		if (MAIN_func_800D8E64((int16_t)MAIN_D_80134FF8,
 		                       (int16_t)SELECTION_MENU_STATE,
 		                       MAIN_D_80134FA0)) {
-			MAIN_D_80134FF0 = 0;
-			MAIN_func_801062F8(0xff);
-			MAIN_D_80134FE9 = 0;
+			SCRIPT_HAS_CONTROL = 0;
+			beginScriptEvent(SPEAKER_NONE);
+			SCRIPT_MAP_CHANGE = 0;
 		}
 	}
 
 	switch (ACTIVE_INSTRUCTION) {
-	case 0x67:
-		if (MAIN_D_80134FFC == 0) {
+	case SCRIPT_OP_WAIT:
+		if (SCRIPT_WAIT_TIMER == 0) {
 			ACTIVE_INSTRUCTION = 0;
 		}
 		break;
-	case 0x64:
+	case SCRIPT_OP_BUILTIN:
+		/* The routine is picked by MAIN_D_80134FF8. */
 		switch (MAIN_D_80134FF8) {
 		case 3:
 		case 4:
 		case 5:
-		case 12:
-		case 13:
-		case 15:
-		case 16:
+		case SCRIPT_BUILTIN_TAKE_ONE_ITEM:
+		case SCRIPT_BUILTIN_TAKE_ALL_OF_ITEM:
+		case SCRIPT_BUILTIN_OPEN_MONEY_BOX:
+		case SCRIPT_BUILTIN_CLOSE_MONEY_BOX:
 		case 17:
-		case 19:
-		case 20:
-		case 21:
-		case 25:
+		case SCRIPT_BUILTIN_SET_DIRT_CART:
+		case SCRIPT_BUILTIN_SHRINK_DIRT_PILE:
+		case SCRIPT_BUILTIN_RESET_MAP_OBJECT_ANIM:
+		case SCRIPT_BUILTIN_SET_TIME_SPEED:
 		case 26:
 		case 27:
-		case 28:
-		case 30:
-		case 31:
+		case SCRIPT_BUILTIN_MOOD_BUBBLE:
+		case SCRIPT_BUILTIN_CLEAR_PRICE:
+		case SCRIPT_BUILTIN_PRICE_FROM_TEXT_ARGS:
 		case 33:
 		case 34:
-		case 35:
+		case SCRIPT_BUILTIN_LOAD_SHOP:
 		case 36:
 		case 38:
 		case 39:
@@ -393,97 +404,97 @@ int32_t tickScript(void)
 		case 51:
 		case 52:
 		case 55:
-		case 56:
+		case SCRIPT_BUILTIN_PRICE_TO_TEXT_ARGS:
 			goto done;
-		case 0:
-			MAIN_func_800FCB3C();
+		case SCRIPT_BUILTIN_PICK_ITEM:
+			tickPickItemMenu();
 			break;
-		case 1:
-			MAIN_func_8010BC10();
+		case SCRIPT_BUILTIN_MERIT_SHOP:
+			tickMeritShop();
 			break;
-		case 8:
+		case SCRIPT_BUILTIN_SHOP:
 			if (!isTriggerSet(TRIGGER_3)) {
-				MAIN_func_800FC508();
+				tickItemShop();
 			} else {
-				MAIN_func_8010B648();
+				tickLostItemShop();
 			}
 			break;
-		case 14:
+		case SCRIPT_BUILTIN_CARD_SHOP:
 			if (!isTriggerSet(TRIGGER_3)) {
 				if (!isTriggerSet(TRIGGER_4)) {
 					rollCardPack();
 				} else {
-					MAIN_func_8010B9D8();
+					tickCardShop();
 				}
 			} else {
-				MAIN_func_8010BB0C();
+				tickCardSellShop();
 			}
 			break;
-		case 11:
-			MAIN_func_8010BF68();
+		case SCRIPT_BUILTIN_ITEM_KEEPER:
+			tickItemKeeper();
 			break;
-		case 2:
-			MAIN_func_8010C4B0();
+		case SCRIPT_BUILTIN_COLLECTOR_TRADE:
+			tickCollectorTrade();
 			break;
-		case 9:
+		case SCRIPT_BUILTIN_JUKEBOX:
 			openJukebox();
 			break;
-		case 10:
-			MAIN_func_8010C28C();
+		case SCRIPT_BUILTIN_TRANSPORT:
+			tickTransport();
 			break;
-		case 7:
+		case SCRIPT_BUILTIN_TRAINING:
 			if (isTrainingComplete()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 18:
+		case SCRIPT_BUILTIN_TOURNAMENT_SCHEDULE:
 			initTournamentSchedule();
 			break;
-		case 6:
+		case SCRIPT_BUILTIN_TOURNAMENT:
 			scriptStartTournament();
 			break;
-		case 22:
+		case SCRIPT_BUILTIN_TOURNAMENT_MEDAL:
 			scriptCheckTournamentMedal();
 			break;
-		case 23:
-			if (tickOpenChestTray(readPStat(0xfe))) {
+		case SCRIPT_BUILTIN_OPEN_CHEST_TRAY:
+			if (tickOpenChestTray(readPStat(PSTAT_BUILTIN_ARG))) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 24:
-			if (tickCloseChestTray(readPStat(0xfe))) {
+		case SCRIPT_BUILTIN_CLOSE_CHEST_TRAY:
+			if (tickCloseChestTray(readPStat(PSTAT_BUILTIN_ARG))) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 29:
+		case SCRIPT_BUILTIN_EGG_BOX:
 			if (DOO2_tickEggInput()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 37:
+		case SCRIPT_BUILTIN_REMOVE_MIST:
 			if (tickRemoveMist()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 47:
+		case SCRIPT_BUILTIN_FORGET_MOVES:
 			lostAllLives();
 			break;
-		case 48:
-			if (MAIN_func_801138B0()) {
+		case SCRIPT_BUILTIN_SAVE_MACHINE:
+			if (tickSaveMachine()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 54:
-			if (MAIN_func_80113A20()) {
+		case SCRIPT_BUILTIN_GAME_CLEAR_SAVE:
+			if (tickGameClearSave()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 50:
+		case SCRIPT_BUILTIN_ANGEMON_PEDESTAL:
 			if (moveAngemonPedestal()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
-		case 32:
+		case SCRIPT_BUILTIN_NAMING:
 			if (newGameStateMachine()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
@@ -500,8 +511,8 @@ done:
 			break;
 		}
 		break;
-	case 0x4a:
-		if ((entityId = MAIN_D_80134FA4) == 0x19) {
+	case SCRIPT_OP_WAIT_MOVEMENT:
+		if ((entityId = SCRIPT_WAIT_MOVEMENT_SLOT) == 0x19) {
 			if (MAIN_func_800DF7F8()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
@@ -514,7 +525,7 @@ done:
 				for (i = 0, offset = 0;
 				     i < 0x16;
 				     ++i, offset += 0xc) {
-					if (MAIN_D_801BE6B4[offset] != 0xff) {
+					if (SCRIPT_MOVEMENTS[offset] != 0xff) {
 						goto found;
 					}
 				}
@@ -522,18 +533,18 @@ done:
 found:;
 			}
 		} else {
-			if (MAIN_D_801BE6B4[entityId * 0xc] == 0xff) {
+			if (SCRIPT_MOVEMENTS[entityId * 0xc] == 0xff) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 		}
 		break;
-	case 0x10:
-	case 0x1a:
+	case SCRIPT_OP_CHOICE:
+	case SCRIPT_OP_TEXT:
 	case 0xff:
 		break;
 	}
 
-	if (MAIN_D_80134FE9) {
+	if (SCRIPT_MAP_CHANGE) {
 		return IS_SCRIPT_PAUSED;
 	}
 
@@ -543,7 +554,7 @@ found:;
 setjmp_retry:
 	ret = setjmp(SCRIPT_JMP_BUF);
 	if (ret == 0) {
-		op = *MAIN_D_80134FDC++;
+		op = *SCRIPT_PC++;
 		if (op >= 0xfb && op < 0x100) {
 			scriptInstructionFBtoFF(op);
 		} else if (op >= 0x10 && op < 0x28) {
@@ -566,18 +577,18 @@ setjmp_retry:
 		}
 
 		if (ret == 3) {
-			MAIN_func_8010064C();
-			writePStat(0, MAIN_D_80134FE7);
-			MAIN_D_80134FE9 = 0x4b;
+			closeAllTextboxes();
+			writePStat(0, SCRIPT_SAVED_TIME_SPEED);
+			SCRIPT_MAP_CHANGE = 0x4b;
 			SCRIPT_MAP_CHANGE_STATE = 0;
 			return IS_SCRIPT_PAUSED;
 		}
 	}
 
 	if (IS_SCRIPT_PAUSED) {
-		MAIN_func_8010064C();
-		writePStat(0, MAIN_D_80134FE7);
-		if (MAIN_D_80134FF0 == 1) {
+		closeAllTextboxes();
+		writePStat(0, SCRIPT_SAVED_TIME_SPEED);
+		if (SCRIPT_HAS_CONTROL == 1) {
 			setMovementEnabled(-1, 0);
 			setCameraFollowPlayer();
 			startGameTime();
@@ -601,7 +612,7 @@ uint8_t *getScript(int32_t mapId)
 
 	ACTIVE_MAP_SCRIPT = mapId;
 	table = (uint32_t *)SCRIPT_HEADER_PTR;
-	readFileSection(MAIN_D_80130388, SCRIPT_DATA_PTR, table[mapId],
+	readFileSection(SCRIPT_FILE_PATH, SCRIPT_DATA_PTR, table[mapId],
 	                table[mapId + 1] - table[mapId]);
 
 	return SCRIPT_DATA_PTR;
@@ -635,90 +646,91 @@ void scriptInstruction10to27(int32_t op)
 	int32_t newValue;
 
 	switch (op) {
-	case 0x10:
-		MAIN_D_80135000 = 1;
+	case SCRIPT_OP_CHOICE:
+		DIALOGUE_BOX_MODE = 1;
 		scriptShowSelection();
 		longjmp(SCRIPT_JMP_BUF, 2);
 		break;
-	case 0x13:
+	case SCRIPT_OP_CALL:
 		skipOneReadOneUShort(&shortArg);
-		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptPtr = SCRIPT_PC;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
 		entry.smth[0] = 1;
 		pushScriptStack(&entry);
-		MAIN_D_80134FDC =
+		SCRIPT_PC =
 			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
-	case 0x14:
+	case SCRIPT_OP_CALL_SCRIPT:
 		skipOneReadTwoShort(&shortArg, &offset);
-		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptPtr = SCRIPT_PC;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
 		entry.smth[0] = 1;
 		pushScriptStack(&entry);
 		CURRENT_SCRIPT_PTR = getScript(shortArg);
-		MAIN_D_80134FDC = getScriptSection(
+		SCRIPT_PC = getScriptSection(
 			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
 		break;
-	case 0x15:
-		MAIN_D_80134FDC++;
+	case SCRIPT_OP_RETURN:
+		SCRIPT_PC++;
 		popScriptStack(&entry);
 		CURRENT_SCRIPT_PTR = getScript(entry.scriptId);
-		MAIN_D_80134FDC = (uint8_t *)entry.scriptPtr;
+		SCRIPT_PC = (uint8_t *)entry.scriptPtr;
 		break;
-	case 0x16:
+	case SCRIPT_OP_JUMP:
 		skipOneReadOneUShort(&shortArg);
-		MAIN_D_80134FDC =
+		SCRIPT_PC =
 			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
-	case 0x17:
+	case SCRIPT_OP_JUMP_SCRIPT:
 		skipOneReadTwoShort(&shortArg, &offset);
 		CURRENT_SCRIPT_PTR = getScript(shortArg);
-		MAIN_D_80134FDC = getScriptSection(
+		SCRIPT_PC = getScriptSection(
 			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
 		break;
-	case 0x18:
+	case SCRIPT_OP_SWITCH:
 		pollOneUByteOneUShort(&pstat, &shortArg);
 		value = readPStat(pstat);
 		if (value >= shortArg) {
 			value = (shortArg - 1) & 0xff;
 		}
-		shortArg = *(uint16_t *)(MAIN_D_80134FDC + (value << 1));
-		MAIN_D_80134FDC =
+		shortArg = *(uint16_t *)(SCRIPT_PC + (value << 1));
+		SCRIPT_PC =
 			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
-	case 0x19:
-		MAIN_D_80134FDC++;
-		MAIN_func_801050C0();
+	case SCRIPT_OP_CONDITION:
+		SCRIPT_PC++;
+		scriptConditionBlock();
 		break;
-	case 0x1a:
-		MAIN_D_80134FDC++;
-		if (MAIN_D_80135000 == 2) {
-			showTextbox(0, 0xff);
+	case SCRIPT_OP_TEXT:
+		SCRIPT_PC++;
+		if (DIALOGUE_BOX_MODE == 2) {
+			showTextbox(0, SPEAKER_NONE);
 		} else {
-			showTextbox(0, MAIN_D_80134FE6);
+			showTextbox(0, DIALOGUE_SPEAKER);
 		}
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x1b:
+	case SCRIPT_OP_SPEAKER:
 		pollNextScriptUByte(&pstat);
-		MAIN_D_80135000 = 0;
+		DIALOGUE_BOX_MODE = 0;
+		/* Reopen the box even if the speaker is the same. */
 		if (UI_BOX_DATA[0].state != 1) {
-			MAIN_D_80134FE6 = pstat - 1;
+			DIALOGUE_SPEAKER = pstat - 1;
 		}
 		setDialogueOwner(pstat);
 		break;
-	case 0x1c:
+	case SCRIPT_OP_SET_TRIGGER:
 		skipOneReadOneUShort(&shortArg);
 		setTrigger(shortArg);
 		break;
-	case 0x1d:
+	case SCRIPT_OP_UNSET_TRIGGER:
 		skipOneReadOneUShort(&shortArg);
 		unsetTrigger(shortArg);
 		break;
-	case 0x1e:
+	case SCRIPT_OP_SET_PSTAT:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		writePStat(pstat, value);
 		break;
-	case 0x1f:
+	case SCRIPT_OP_ADD_PSTAT:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		newValue = readPStat(pstat) + value;
 		if (newValue >= 0x100) {
@@ -726,7 +738,7 @@ void scriptInstruction10to27(int32_t op)
 		}
 		writePStat(pstat, newValue);
 		break;
-	case 0x20:
+	case SCRIPT_OP_SUB_PSTAT:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		newValue = readPStat(pstat) - value;
 		if (newValue < 0) {
@@ -734,36 +746,36 @@ void scriptInstruction10to27(int32_t op)
 		}
 		writePStat(pstat, newValue);
 		break;
-	case 0x21:
+	case SCRIPT_OP_GET_MAP:
 		pollNextScriptUByte(&pstat);
 		writePStat(pstat, CURRENT_MAP_ID);
 		break;
-	case 0x22:
+	case SCRIPT_OP_GET_PARTNER_TYPE:
 		pollNextScriptUByte(&pstat);
 		value = PARTNER_ENTITY.digimonEntity.entity.type;
 		writePStat(pstat, value);
 		break;
-	case 0x23:
+	case SCRIPT_OP_SET_INVENTORY_SIZE:
 		pollNextScriptUByte(&pstat);
 		setInventorySize(pstat);
 		break;
-	case 0x24:
+	case SCRIPT_OP_RANDOM:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		writePStat(pstat, random(value + 1));
 		break;
-	case 0x25:
+	case SCRIPT_OP_GET_DATE:
 		pollNextScriptUByte(&pstat);
 		writePStat(pstat, YEAR);
 		writePStat((pstat + 1) & 0xff, DAY);
 		writePStat((pstat + 2) & 0xff, HOUR);
 		writePStat((pstat + 3) & 0xff, MINUTE);
 		break;
-	case 0x26:
-		MAIN_func_801062F8(0xff);
-		MAIN_D_80135000 = 2;
+	case SCRIPT_OP_SIZED_TEXTBOX:
+		beginScriptEvent(SPEAKER_NONE);
+		DIALOGUE_BOX_MODE = 2;
 		scriptSetTextboxSize();
 		break;
-	case 0x27:
+	case SCRIPT_OP_CLOSE_TEXTBOX:
 		pollNextScriptUByte(&pstat);
 		closeBox(pstat);
 		longjmp(SCRIPT_JMP_BUF, 2);
@@ -792,7 +804,7 @@ void MAIN_func_801053EC(void)
 
 	switch (state) {
 	case 0:
-		MAIN_D_80134FA0 = (MAIN_D_80134FE0 != 0) ^ 1;
+		MAIN_D_80134FA0 = (SCRIPT_FROM_TALK != 0) ^ 1;
 		break;
 	case 1:
 		MAIN_D_80134FA0 = 1;
@@ -805,7 +817,7 @@ void MAIN_func_801053EC(void)
 	writePStat(6, 0);
 }
 
-void MAIN_func_80105464(uint8_t actorId, int32_t animationId)
+void scriptStartWalkAnimation(uint8_t actorId, int32_t animationId)
 {
 	if (actorId == 0xfd) {
 		startAnimationTamer((int16_t)(animationId + 2));
@@ -833,7 +845,18 @@ void scriptStartAnimation(uint8_t actorId, int32_t animationId)
 	}
 }
 
-void MAIN_func_801050C0(void)
+/*
+ * Script instruction 0x19: a list of two-byte entries and their arguments,
+ * ended by another 0x19. Bits 3-5 of an entry pick what it does:
+ * 0: test trigger u16 (bit 0 clear: set, set: not set)
+ * 1: compare pstat u8 with u8 (bits 0-2: ==, !=, >=, <=, >, <)
+ * 2: jump to u16 if the result so far is true
+ * 3: jump to u16 if the result so far is false
+ * 4: one of the scriptTest*() functions, which read their own arguments
+ * Bit 7 ands the test with the result so far, bit 6 ors it. With no jump
+ * taken, the script goes on after the block.
+ */
+void scriptConditionBlock(void)
 {
 	uint8_t condOp;
 	uint32_t one;
@@ -846,7 +869,7 @@ void MAIN_func_801050C0(void)
 	result = 0;
 	for (;;) {
 		pollNextScriptUByte(&condOp);
-		MAIN_D_80134FDC++;
+		SCRIPT_PC++;
 		if (condOp == 0x19) {
 			longjmp(SCRIPT_JMP_BUF, 1);
 		}
@@ -873,7 +896,7 @@ void MAIN_func_801050C0(void)
 			if (result != 1) {
 				continue;
 			}
-			MAIN_D_80134FDC =
+			SCRIPT_PC =
 				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
 			                    shortArg);
 			longjmp(SCRIPT_JMP_BUF, 1);
@@ -883,29 +906,29 @@ void MAIN_func_801050C0(void)
 				continue;
 			}
 
-			MAIN_D_80134FDC =
+			SCRIPT_PC =
 				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
 			                    shortArg);
 			longjmp(SCRIPT_JMP_BUF, 1);
 		case (4 << 3):
 			switch (condOp & 7) {
 			case 0:
-				cond = MAIN_func_801022FC();
+				cond = scriptTestStat();
 				break;
 			case 1:
-				cond = MAIN_func_801024CC();
+				cond = scriptTestCardAmount();
 				break;
 			case 2:
-				cond = MAIN_func_80102514();
+				cond = scriptTestHasMove();
 				break;
 			case 3:
-				cond = MAIN_func_80102564();
+				cond = scriptTestPartnerCondition();
 				break;
 			case 4:
-				cond = MAIN_func_801025E8();
+				cond = scriptTestItemCount();
 				break;
 			case 5:
-				cond = MAIN_func_80102630();
+				cond = scriptTestMoney();
 				break;
 			}
 			break;
@@ -947,7 +970,7 @@ int32_t scriptCompareValues(uint8_t op, uint32_t lhs, uint32_t rhs)
 	}
 }
 
-int32_t MAIN_func_80106730(int32_t op, int32_t lhs, int32_t rhs)
+int32_t scriptCompareSigned(int32_t op, int32_t lhs, int32_t rhs)
 {
 	switch (op & 7) {
 	case 0:
@@ -976,18 +999,18 @@ static void scriptInstruction28to3F__garbage__(int32_t op)
 	int32_t newValue;
 
 	switch (op) {
-	case 0x10:
-		MAIN_D_80135000 = 1;
+	case SCRIPT_OP_CHOICE:
+		DIALOGUE_BOX_MODE = 1;
 		scriptShowSelection();
 		longjmp(SCRIPT_JMP_BUF, 2);
 		break;
-	case 0x13:
+	case SCRIPT_OP_CALL:
 		skipOneReadOneUShort(&shortArg);
-		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptPtr = SCRIPT_PC;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
 		entry.smth[0] = 1;
 		pushScriptStack(&entry);
-		MAIN_D_80134FDC = (uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		SCRIPT_PC = (uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
 	}
 }
@@ -1006,7 +1029,7 @@ void scriptInstruction28to3F(int32_t op)
 	uint32_t sec;
 
 	switch (op) {
-	case 0x28:
+	case SCRIPT_OP_GIVE_ITEM:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		if (giveItem(byteArg1, byteArg2) != 0) {
 			unsetTrigger(0);
@@ -1014,35 +1037,35 @@ void scriptInstruction28to3F(int32_t op)
 			setTrigger(0);
 		}
 		break;
-	case 0x29:
+	case SCRIPT_OP_TAKE_ITEM:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		removeItem(byteArg1, byteArg2);
 		break;
-	case 0x2a:
+	case SCRIPT_OP_ADD_MONEY:
 		skipOneReadInteger(&intArg);
 		MONEY += intArg;
 		if (MONEY >= 0xf4240) {
 			MONEY = 0xf423f;
 		}
 		break;
-	case 0x2b:
+	case SCRIPT_OP_SUB_MONEY:
 		skipOneReadInteger(&intArg);
 		MONEY -= intArg;
 		if (MONEY < 0) {
 			MONEY = 0;
 		}
 		break;
-	case 0x2c:
+	case SCRIPT_OP_COMPARE_DATE:
 		scriptCompareDate();
 		break;
-	case 0x2d:
+	case SCRIPT_OP_LEARN_MOVE:
 		pollNextScriptUByte(&byteArg1);
 		scriptLearnMove(byteArg1);
 		break;
-	case 0x2e:
+	case SCRIPT_OP_NOP_2E:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x2f:
+	case SCRIPT_OP_GIVE_CARD:
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = getCardAmount(byteArg1);
 		if (byteArg2 < 9) {
@@ -1050,7 +1073,7 @@ void scriptInstruction28to3F(int32_t op)
 			setCardAmount(byteArg1, byteArg2);
 		}
 		break;
-	case 0x30:
+	case SCRIPT_OP_TAKE_CARD:
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = getCardAmount(byteArg1);
 		if (byteArg2 != 0) {
@@ -1058,59 +1081,60 @@ void scriptInstruction28to3F(int32_t op)
 			setCardAmount(byteArg1, byteArg2);
 		}
 		break;
-	case 0x31:
+	case SCRIPT_OP_SET_MERIT:
 		skipOneReadOneUShort(&value);
 		MERIT = value;
 		if (MERIT >= 0x2710) {
 			MERIT = 0x270f;
 		}
 		break;
-	case 0x32:
+	case SCRIPT_OP_ADD_MERIT:
 		skipOneReadOneUShort(&value);
 		MERIT += value;
 		if (MERIT >= 0x2710) {
 			MERIT = 0x270f;
 		}
 		break;
-	case 0x33:
+	case SCRIPT_OP_SUB_MERIT:
 		skipOneReadOneUShort(&value);
 		MERIT = -value;
 		if (MERIT < 0) {
 			MERIT = 0;
 		}
 		break;
-	case 0x34:
+	case SCRIPT_OP_SET_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
 		value32 = value;
 		*statPtr = enforceStatsLimits(byteArg1, (int16_t)value32);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
-		if (byteArg1 == 0x15) {
-			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
+			TAMER_ENTITY.tamerLevel = STAT_TAMER_LEVEL_VALUE;
 		}
-		if (byteArg1 == 0x16) {
-			PARTNER_ENTITY.lives = MAIN_D_80135004;
+		if (byteArg1 == SCRIPT_STAT_LIVES) {
+			PARTNER_ENTITY.lives = STAT_LIVES_VALUE;
 		}
 		break;
-	case 0x35:
+	case SCRIPT_OP_ADD_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
 		value32 = value;
 		*statPtr += value32;
 		*statPtr = enforceStatsLimits(byteArg1, *statPtr);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
-		if (byteArg1 == 0x15) {
-			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
+			TAMER_ENTITY.tamerLevel = STAT_TAMER_LEVEL_VALUE;
 		}
-		if (byteArg1 == 0x16) {
-			PARTNER_ENTITY.lives = MAIN_D_80135004;
+		if (byteArg1 == SCRIPT_STAT_LIVES) {
+			PARTNER_ENTITY.lives = STAT_LIVES_VALUE;
 		}
 		break;
-	case 0x36:
+	case SCRIPT_OP_SUB_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
 		intArg = *statPtr - (int16_t)value;
-		if (byteArg1 != 9) {
+		/* Only happiness goes below 0, down to -100. */
+		if (byteArg1 != SCRIPT_STAT_HAPPINESS) {
 			if (intArg < 0) {
 				intArg = 0;
 			}
@@ -1121,22 +1145,22 @@ void scriptInstruction28to3F(int32_t op)
 		}
 		*statPtr = intArg;
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
-		if (byteArg1 == 0x15) {
-			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
+			TAMER_ENTITY.tamerLevel = STAT_TAMER_LEVEL_VALUE;
 		}
-		if (byteArg1 == 0x16) {
-			PARTNER_ENTITY.lives = MAIN_D_80135004;
+		if (byteArg1 == SCRIPT_STAT_LIVES) {
+			PARTNER_ENTITY.lives = STAT_LIVES_VALUE;
 		}
 		break;
-	case 0x37:
+	case SCRIPT_OP_WAIT_UNTIL_DATE:
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = readPStat(byteArg1);
 		day = readPStat((byteArg1 + 1) & 0xff);
 		hour = readPStat((byteArg1 + 2) & 0xff);
 		minute = readPStat((byteArg1 + 3) & 0xff);
-		sec = dateToSeconds(byteArg2, day, hour, minute);
+		sec = dateToMinutes(byteArg2, day, hour, minute);
 		{
-			uint32_t cur_sec = dateToSeconds(YEAR, DAY & 0xff,
+			uint32_t cur_sec = dateToMinutes(YEAR, DAY & 0xff,
 			                                 HOUR & 0xff, MINUTE & 0xff);
 			if (cur_sec < sec) {
 				skipHours((sec - cur_sec) / 60);
@@ -1154,15 +1178,15 @@ void scriptInstruction28to3F(int32_t op)
 			}
 		}
 		break;
-	case 0x38:
-	case 0x39:
+	case SCRIPT_OP_ADD_TO_DATE:
+	case SCRIPT_OP_SUB_FROM_DATE:
 		pollNextScriptUByte(&byteArg1);
 		pollNextInt(&intArg);
 		byteArg2 = readPStat(byteArg1);
 		day = readPStat((byteArg1 + 1) & 0xff);
 		hour = readPStat((byteArg1 + 2) & 0xff);
 		minute = readPStat((byteArg1 + 3) & 0xff);
-		sec = dateToSeconds(byteArg2, day, hour, minute);
+		sec = dateToMinutes(byteArg2, day, hour, minute);
 		if (op == 0x38) {
 			intArg = sec + intArg;
 		} else {
@@ -1171,22 +1195,22 @@ void scriptInstruction28to3F(int32_t op)
 				intArg = 0;
 			}
 		}
-		MAIN_func_8010692C(intArg, &byteArg2, &day, &hour, &minute);
+		minutesToDate(intArg, &byteArg2, &day, &hour, &minute);
 		writePStat(byteArg1, byteArg2);
 		writePStat((byteArg1 + 1) & 0xff, day);
 		writePStat((byteArg1 + 2) & 0xff, hour);
 		writePStat((byteArg1 + 3) & 0xff, minute);
 		break;
-	case 0x3a:
-	case 0x3b:
-	case 0x3c:
+	case SCRIPT_OP_NOP_3A:
+	case SCRIPT_OP_NOP_3B:
+	case SCRIPT_OP_NOP_3C:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		break;
-	case 0x3d:
-	case 0x3e:
+	case SCRIPT_OP_NOP_3D:
+	case SCRIPT_OP_NOP_3E:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x3f:
+	case SCRIPT_OP_GET_DIGIMON_TYPE:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		byteArg1 = readPStat(byteArg1);
 		byteArg1 = DIGIMON_DATA[byteArg1].type;
@@ -1209,29 +1233,29 @@ void scriptInstruction46to58(int32_t op)
 	uint8_t *b;
 
 	switch (op) {
-	case 0x46:
+	case SCRIPT_OP_LOAD_MODEL:
 		pollNextScriptUByte(&byteArg1);
 		scriptLoadModel(byteArg1);
 		break;
-	case 0x47:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_SPAWN_DIGIMON:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		scriptSetDigimon(byteArg1, byteArg2, byteArg3);
 		break;
-	case 0x48:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_REMOVE_DIGIMON:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		scriptUnloadEntity(byteArg1);
 		break;
-	case 0x49:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_DIGIMON_ROUTINE:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		callDigimonRoutine(byteArg1);
 		break;
-	case 0x4a:
+	case SCRIPT_OP_WAIT_MOVEMENT:
 		pollNextScriptUByte(&byteArg1);
-		ACTIVE_INSTRUCTION = 0x4a;
+		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT_MOVEMENT;
 		if (byteArg1 == 0xff) {
 			goto wait_for_entity_end;
 		}
@@ -1298,10 +1322,10 @@ void scriptInstruction46to58(int32_t op)
 		}
 		byteArg1 = scriptIdToEntityId(byteArg1);
 wait_for_entity_end:
-		MAIN_D_80134FA4 = byteArg1;
+		SCRIPT_WAIT_MOVEMENT_SLOT = byteArg1;
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x4b:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_CHANGE_SCREEN:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		MAIN_D_80134FF8 = byteArg1;
@@ -1311,129 +1335,129 @@ wait_for_entity_end:
 		entry.smth[1] = byteArg3;
 		pushScriptStack(&entry);
 		longjmp(SCRIPT_JMP_BUF, 3);
-	case 0x4c:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_LOOK_AT:
+		beginScriptEvent(SPEAKER_NONE);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b = SCRIPT_MOVEMENTS + entityId * 0xc;
 		b[0] = 0;
 		b[1] = byteArg1;
 		b[2] = byteArg2;
 		break;
-	case 0x4d:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_SET_ROTATION:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b = SCRIPT_MOVEMENTS + entityId * 0xc;
 		b[0] = 1;
 		b[1] = byteArg1;
 		*(int16_t *)(b + 4) = posX;
 		break;
-	case 0x4e:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_WALK_TO:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_func_80105464(byteArg1, byteArg2);
+		scriptStartWalkAnimation(byteArg1, byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b = SCRIPT_MOVEMENTS + entityId * 0xc;
 		b[0] = 2;
 		b[1] = byteArg1;
 		*(int16_t *)(b + 4) = posX;
 		*(int16_t *)(b + 6) = posY;
 		break;
-	case 0x4f:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_CAMERA_TO:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
-		b = (uint8_t *)&MAIN_D_801BE72C;
+		b = (uint8_t *)&SCRIPT_CAMERA_MOVEMENT;
 		b[0] = 6;
 		*(int16_t *)(b + 4) = posX;
 		*(int16_t *)(b + 6) = posY;
 		b[3] = byteArg1;
 		break;
-	case 0x50:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_CAMERA_TO_ENTITY:
+		beginScriptEvent(SPEAKER_NONE);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
-		b = (uint8_t *)&MAIN_D_801BE72C;
+		b = (uint8_t *)&SCRIPT_CAMERA_MOVEMENT;
 		b[0] = 7;
 		b[1] = byteArg1;
 		b[3] = byteArg2;
 		break;
-	case 0x51:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_WALK_TO_ENTITY:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_func_80105464(byteArg1, byteArg2);
+		scriptStartWalkAnimation(byteArg1, byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b = SCRIPT_MOVEMENTS + entityId * 0xc;
 		b[0] = 3;
 		b[1] = byteArg1;
 		b[2] = byteArg3;
 		break;
-	case 0x52:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_WALK_TO_CAMERA:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_func_80105464(byteArg1, byteArg2);
+		scriptStartWalkAnimation(byteArg1, byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b = SCRIPT_MOVEMENTS + entityId * 0xc;
 		b[0] = 4;
 		b[1] = byteArg1;
 		*(int16_t *)(b + 4) = posX;
 		*(int16_t *)(b + 6) = posY;
 		break;
-	case 0x53:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_WALK_TO_ENTITY_CAMERA:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_func_80105464(byteArg1, byteArg2);
+		scriptStartWalkAnimation(byteArg1, byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
+		b = SCRIPT_MOVEMENTS + entityId * 0xc;
 		b[0] = 5;
 		b[1] = byteArg1;
 		b[2] = byteArg3;
 		break;
-	case 0x54:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_RESET_ORIGIN:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		resetEntityOrigin(byteArg1);
 		break;
-	case 0x55:
-		MAIN_D_80134FDC++;
-		pollNextTwoScriptShorts(&MAIN_D_80134FD2, &MAIN_D_80134FD4);
-		pollNextScriptShort(&MAIN_D_80134FD6);
+	case SCRIPT_OP_TEXTBOX_ORIGIN:
+		SCRIPT_PC++;
+		pollNextTwoScriptShorts(&TEXTBOX_ORIGIN_X, &TEXTBOX_ORIGIN_Y);
+		pollNextScriptShort(&TEXTBOX_ORIGIN_Z);
 		break;
-	case 0x56:
+	case SCRIPT_OP_ANIMATE:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		scriptStartAnimation(byteArg1, byteArg2);
 		break;
-	case 0x57:
+	case SCRIPT_OP_SET_MAP_OBJECT:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		setMapObjectsFlag(byteArg1, 1, byteArg2);
 		break;
-	case 0x58:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_CHANGE_SCREEN_PSTAT:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		MAIN_D_80134FF8 = readPStat(byteArg1);
 		SELECTION_MENU_STATE = readPStat((byteArg1 + 1) & 0xff);
@@ -1453,25 +1477,25 @@ void scriptInstruction5Ato5F(int32_t op)
 	uint8_t byteArg2;
 
 	switch (op) {
-	case 0x5a:
+	case SCRIPT_OP_PLAY_SOUND:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		playSound(byteArg1, byteArg2);
 		break;
-	case 0x5b:
+	case SCRIPT_OP_NOP_5B:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x5c:
+	case SCRIPT_OP_NOP_5C:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x5d:
+	case SCRIPT_OP_PLAY_BGM:
 		pollNextScriptUByte(&byteArg1);
 		playBGM(byteArg1);
 		break;
-	case 0x5e:
+	case SCRIPT_OP_STOP_BGM:
 		pollNextScriptUByte(&byteArg1);
 		resetBGM();
 		break;
-	case 0x5f:
+	case SCRIPT_OP_NOP_5F:
 		pollNextScriptUByte(&byteArg1);
 		break;
 	}
@@ -1547,32 +1571,32 @@ void scriptInstruction64to7E(int32_t op)
 	uint8_t *b;
 
 	switch (op) {
-	case 0x64:
+	case SCRIPT_OP_BUILTIN:
 		pollNextScriptUByte(&byteArg1);
 		MAIN_D_80134FF8 = byteArg1;
 		switch (byteArg1) {
-		case 0x16:
+		case SCRIPT_BUILTIN_TOURNAMENT_MEDAL:
 			if (checkTournamentMedalConditions() == -1) {
 				break;
 			}
 			/* fall through */
-		case 0x00:
-		case 0x01:
-		case 0x02:
-		case 0x06:
-		case 0x08:
-		case 0x09:
-		case 0x0a:
-		case 0x0b:
-		case 0x0e:
-		case 0x12:
-		case 0x2f:
-			ACTIVE_INSTRUCTION = 0x64;
+		case SCRIPT_BUILTIN_PICK_ITEM:
+		case SCRIPT_BUILTIN_MERIT_SHOP:
+		case SCRIPT_BUILTIN_COLLECTOR_TRADE:
+		case SCRIPT_BUILTIN_TOURNAMENT:
+		case SCRIPT_BUILTIN_SHOP:
+		case SCRIPT_BUILTIN_JUKEBOX:
+		case SCRIPT_BUILTIN_TRANSPORT:
+		case SCRIPT_BUILTIN_ITEM_KEEPER:
+		case SCRIPT_BUILTIN_CARD_SHOP:
+		case SCRIPT_BUILTIN_TOURNAMENT_SCHEDULE:
+		case SCRIPT_BUILTIN_FORGET_MOVES:
+			ACTIVE_INSTRUCTION = SCRIPT_OP_BUILTIN;
 			SELECTION_MENU_STATE = 0;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x07:
-			byteArg1 = readPStat(0xfe);
+		case SCRIPT_BUILTIN_TRAINING:
+			byteArg1 = readPStat(PSTAT_BUILTIN_ARG);
 			if ((CURRENT_MAP_ID == 0x6b) ||
 			    (CURRENT_MAP_ID == 0x6c) ||
 			    (CURRENT_MAP_ID == 0xa5) ||
@@ -1616,51 +1640,51 @@ void scriptInstruction64to7E(int32_t op)
 					break;
 				}
 			}
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_BUILTIN;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 			break;
-		case 0x0c:
-			byteArg1 = readPStat(0xfe);
+		case SCRIPT_BUILTIN_TAKE_ONE_ITEM:
+			byteArg1 = readPStat(PSTAT_BUILTIN_ARG);
 			if (byteArg1 != 0xff) {
 				removeItem(byteArg1, 1);
 			}
 			break;
-		case 0x0d:
-			byteArg1 = readPStat(0xfe);
+		case SCRIPT_BUILTIN_TAKE_ALL_OF_ITEM:
+			byteArg1 = readPStat(PSTAT_BUILTIN_ARG);
 			if (byteArg1 != 0xff) {
 				removeItem(byteArg1, 0x63);
 			}
 			break;
-		case 0x0f:
-			MAIN_func_800FC968(1);
+		case SCRIPT_BUILTIN_OPEN_MONEY_BOX:
+			openMoneyBox(1);
 			break;
-		case 0x10:
+		case SCRIPT_BUILTIN_CLOSE_MONEY_BOX:
 			triggerBoxCloseFlag(2);
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x13:
-			byteArg1 = readPStat(0xfe);
+		case SCRIPT_BUILTIN_SET_DIRT_CART:
+			byteArg1 = readPStat(PSTAT_BUILTIN_ARG);
 			setDirtCartModel(byteArg1);
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x14:
+		case SCRIPT_BUILTIN_SHRINK_DIRT_PILE:
 			decreaseDirtPileSize();
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x15:
+		case SCRIPT_BUILTIN_RESET_MAP_OBJECT_ANIM:
 			byteArg1 = readPStat(0xf7);
 			byteArg2 = readPStat(0xf8);
 			resetMapObjectAnimation(byteArg1, byteArg2);
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x1d:
+		case SCRIPT_BUILTIN_EGG_BOX:
 			DOO2_openEggBox();
 			/* fall through */
-		case 0x17:
-		case 0x18:
-		case 0x32:
-			ACTIVE_INSTRUCTION = 0x64;
+		case SCRIPT_BUILTIN_OPEN_CHEST_TRAY:
+		case SCRIPT_BUILTIN_CLOSE_CHEST_TRAY:
+		case SCRIPT_BUILTIN_ANGEMON_PEDESTAL:
+			ACTIVE_INSTRUCTION = SCRIPT_OP_BUILTIN;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x19:
-			MAIN_D_80134FE7 = readPStat(0xfe);
+		case SCRIPT_BUILTIN_SET_TIME_SPEED:
+			SCRIPT_SAVED_TIME_SPEED = readPStat(PSTAT_BUILTIN_ARG);
 			break;
 		case 0x1a:
 			loadDirtCartModel();
@@ -1668,24 +1692,24 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x1b:
 			loadDirtPileModel();
 			break;
-		case 0x1c:
+		case SCRIPT_BUILTIN_MOOD_BUBBLE:
 			createMonochromonMoodBubble();
 			break;
-		case 0x1e:
-			MAIN_D_8013500C = 0;
+		case SCRIPT_BUILTIN_CLEAR_PRICE:
+			SCRIPT_PRICE = 0;
 			break;
-		case 0x1f: {
-			int32_t hi = readPStat(0xf3) << 8;
-			int32_t lo = readPStat(0xf4);
+		case SCRIPT_BUILTIN_PRICE_FROM_TEXT_ARGS: {
+			int32_t hi = readPStat(PSTAT_TEXT_ARG_1) << 8;
+			int32_t lo = readPStat(PSTAT_TEXT_ARG_2);
 			posX = lo + hi;
-			MAIN_D_8013500C += posX;
+			SCRIPT_PRICE += posX;
 		} break;
-		case 0x38:
-			writePStat(0xf3, (MAIN_D_8013500C / 256) & 0xff);
-			writePStat(0xf4, MAIN_D_8013500C & 0xff);
+		case SCRIPT_BUILTIN_PRICE_TO_TEXT_ARGS:
+			writePStat(PSTAT_TEXT_ARG_1, (SCRIPT_PRICE / 256) & 0xff);
+			writePStat(PSTAT_TEXT_ARG_2, SCRIPT_PRICE & 0xff);
 			break;
-		case 0x20:
-			initializeNamingBuffer(readPStat(0xfe));
+		case SCRIPT_BUILTIN_NAMING:
+			initializeNamingBuffer(readPStat(PSTAT_BUILTIN_ARG));
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x21:
 			setTrigger(0x25);
@@ -1704,8 +1728,8 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x22:
 			createMeramonShake();
 			break;
-		case 0x23:
-			MAIN_func_800FF9AC();
+		case SCRIPT_BUILTIN_LOAD_SHOP:
+			loadShopLibrary();
 			break;
 		case 0x24:
 			readMapTFS(CURRENT_MAP_ID);
@@ -1713,23 +1737,23 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x27:
 			MAIN_func_800D9360(CURRENT_MAP_ID);
 			break;
-		case 0x30:
+		case SCRIPT_BUILTIN_SAVE_MACHINE:
 			openSaveMachine();
 			/* fall through */
-		case 0x25:
-			ACTIVE_INSTRUCTION = 0x64;
+		case SCRIPT_BUILTIN_REMOVE_MIST:
+			ACTIVE_INSTRUCTION = SCRIPT_OP_BUILTIN;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
-		case 0x36:
+		case SCRIPT_BUILTIN_GAME_CLEAR_SAVE:
 			gameClearSave();
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_BUILTIN;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x26:
 			createNinjamonEffect();
 			break;
 		case 0x33:
-			addFileReadRequestPath(MAIN_D_80130394,
+			addFileReadRequestPath(PATH_ETCHI_BOSS_EFE_TMD,
 			                       BOSS_EFE_TMD_BUFFER, 0, 0,
 			                       0);
 			loadDynamicLibrary(EAB_REL, 0, 0, 0, 0);
@@ -1737,7 +1761,7 @@ void scriptInstruction64to7E(int32_t op)
 			loadMapSounds2(0x15);
 			break;
 		case 0x34:
-			loadTextureFile(MAIN_D_801303A8, 0, 0);
+			loadTextureFile(PATH_ETCHI_OP_TIM, 0, 0);
 			loadDynamicLibrary(ENDI_REL, 0, 1, 0, 0);
 			loadMapSounds2(0x14);
 			break;
@@ -1750,34 +1774,34 @@ void scriptInstruction64to7E(int32_t op)
 			isSoundLoaded(0, 8);
 			setTamerState(0x10);
 			SOME_SCRIPT_SYNC_BIT = 0;
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_BUILTIN;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 			break;
 		case 0x37:
-			setLoopCountToOne(readPStat(0xfe));
+			setLoopCountToOne(readPStat(PSTAT_BUILTIN_ARG));
 			longjmp(SCRIPT_JMP_BUF, 2);
 			break;
 		case 0x29:
 			spawnGearbox();
 			break;
 		case 0x2a: {
-			int8_t pstat = readPStat(0xfe);
+			int8_t pstat = readPStat(PSTAT_BUILTIN_ARG);
 			somethingToyTown(pstat);
 		} break;
 		case 0x2b:
 			spawnToyTownBoxes();
 			break;
 		case 0x2c: {
-			int8_t value = readPStat(0xfe);
+			int8_t value = readPStat(PSTAT_BUILTIN_ARG);
 			openToyTownBox(value);
 		} break;
 		case 0x2d: {
-			int16_t value = readPStat(0xfe);
+			int16_t value = readPStat(PSTAT_BUILTIN_ARG);
 			fadeToWhite(value);
 		} break;
 		case 0x2e: {
-			int16_t value = readPStat(0xfe);
+			int16_t value = readPStat(PSTAT_BUILTIN_ARG);
 			fadeFromWhite(value);
 		} break;
 		case 0x31:
@@ -1790,18 +1814,18 @@ void scriptInstruction64to7E(int32_t op)
 			goto script_end;
 		}
 		break;
-	case 0x65:
+	case SCRIPT_OP_CURE_CONDITION:
 		pollNextScriptUByte(&byteArg1);
 		PARTNER_PARA.condition &= ~byteArg1;
 		break;
-	case 0x66:
+	case SCRIPT_OP_BATTLE:
 		pollNextScriptUByte(&byteArg1);
-		if (MAIN_D_80134FC8 < 0x270f) {
-			MAIN_D_80134FC8++;
+		if (BATTLES_FOUGHT < 0x270f) {
+			BATTLES_FOUGHT++;
 		}
-		byteArg1 = readPStat(0xfa);
+		byteArg1 = readPStat(PSTAT_BATTLE_SET_ENEMIES);
 		if (byteArg1 != 0) {
-			for (byteArg1 = 0xfb; byteArg1 < 0xfe; byteArg1++) {
+			for (byteArg1 = PSTAT_BATTLE_ENEMY_1; byteArg1 < PSTAT_BATTLE_ENEMY_3 + 1; byteArg1++) {
 				byteArg2 = readPStat(byteArg1);
 				if (byteArg2 != 0xff) {
 					byteArg2 =
@@ -1814,8 +1838,8 @@ void scriptInstruction64to7E(int32_t op)
 		{
 			int16_t outcome;
 
-			outcome = startBattle(MAIN_D_80134F9C);
-			writePStat(0xff, outcome);
+			outcome = startBattle(SCRIPT_TALKED_ENTITY);
+			writePStat(PSTAT_RESULT, outcome);
 			if (outcome == -1) {
 				handleItemLoss();
 				PARTNER_ENTITY.lives -= 1;
@@ -1823,12 +1847,12 @@ void scriptInstruction64to7E(int32_t op)
 					PARTNER_PARA.remainingLifetime = 0;
 				}
 				CURRENT_SCRIPT_PTR = getScript(0);
-				MAIN_D_80134FDC = getScriptSection((uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, 0x4de);
+				SCRIPT_PC = getScriptSection((uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, 0x4de);
 				break;
 			}
 			if (outcome == 0) {
-				if (MAIN_D_80134FCA < 0x270f) {
-					MAIN_D_80134FCA++;
+				if (BATTLES_WON < 0x270f) {
+					BATTLES_WON++;
 				}
 				MAIN_D_80134FA0 = 0;
 				MAIN_D_80134FF8 = PREVIOUS_SCREEN;
@@ -1842,33 +1866,33 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		if (isTriggerSet(1) != 0) {
 			setMovementEnabled(-1, 1);
-			MAIN_func_8010020C();
+			resetTextboxes();
 			break;
 		}
 
-		b = (uint8_t *)&MAIN_D_801BE72C;
+		b = (uint8_t *)&SCRIPT_CAMERA_MOVEMENT;
 		b[0] = 7;
 		b[1] = 0xfd;
 		b[3] = 0xa;
 
-		ACTIVE_INSTRUCTION = 0x4a;
-		MAIN_D_80134FA4 = 0xa;
-		MAIN_func_8010020C();
+		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT_MOVEMENT;
+		SCRIPT_WAIT_MOVEMENT_SLOT = 0xa;
+		resetTextboxes();
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x67:
-		skipOneReadOneUShort(&MAIN_D_80134FFC);
-		ACTIVE_INSTRUCTION = 0x67;
+	case SCRIPT_OP_WAIT:
+		skipOneReadOneUShort(&SCRIPT_WAIT_TIMER);
+		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT;
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x68:
+	case SCRIPT_OP_TEXT_ADVANCE:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
-		MAIN_D_80134FE5 = byteArg1;
+		TEXT_ADVANCE_MODE = byteArg1;
 		if (byteArg1 != 2) {
 			break;
 		}
-		MAIN_D_80135010 = byteArg2;
+		TEXT_AUTO_ADVANCE_TIMER = byteArg2;
 		break;
-	case 0x69:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_HURT_PARTNER:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		{
 			int32_t damage;
@@ -1889,7 +1913,7 @@ void scriptInstruction64to7E(int32_t op)
 			              0);
 		}
 		break;
-	case 0x6a:
+	case SCRIPT_OP_SET_AUTOTALK:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		byteArg1 = scriptIdToEntityId(byteArg1);
 		if (byteArg1 == 0xff || byteArg1 < 2) {
@@ -1897,17 +1921,17 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		NPC_ENTITIES[byteArg1 - 2].autotalk = byteArg2;
 		break;
-	case 0x6b:
+	case SCRIPT_OP_NOP_6B:
 		break;
-	case 0x6c:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_TO:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b = SCRIPT_MOVEMENTS + entityId * 0xc;
 			b[0] = 8;
 			b[1] = byteArg1;
 			b[3] = byteArg2;
@@ -1915,29 +1939,29 @@ void scriptInstruction64to7E(int32_t op)
 			*(int16_t *)(b + 6) = posY;
 		}
 		break;
-	case 0x6d:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_TO_ENTITY:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b = SCRIPT_MOVEMENTS + entityId * 0xc;
 			b[0] = 9;
 			b[1] = byteArg1;
 			b[2] = byteArg2;
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x6e:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_TO_CAMERA:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b = SCRIPT_MOVEMENTS + entityId * 0xc;
 			b[0] = 0xb;
 			b[1] = byteArg1;
 			b[3] = byteArg2;
@@ -1945,36 +1969,36 @@ void scriptInstruction64to7E(int32_t op)
 			*(int16_t *)(b + 6) = posY;
 		}
 		break;
-	case 0x6f:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_TO_ENTITY_CAMERA:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b = SCRIPT_MOVEMENTS + entityId * 0xc;
 			b[0] = 0xb;
 			b[1] = byteArg1;
 			b[2] = byteArg2;
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x70:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_ROTATE_DOOR:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_D_801BE738[0] = 0xc;
-		MAIN_D_801BE738[1] = byteArg1;
-		MAIN_D_801BE738[2] = byteArg3;
+		SCRIPT_DOOR_MOVEMENT[0] = 0xc;
+		SCRIPT_DOOR_MOVEMENT[1] = byteArg1;
+		SCRIPT_DOOR_MOVEMENT[2] = byteArg3;
 		break;
-	case 0x71:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_OBJECT:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		pollNextTwoScriptBytes(&entityId, &padByte);
 		pollNextTwoScriptShorts(&posX, &posY);
 		byteArg1 += 0xc;
-		b = MAIN_D_801BE6B4 + byteArg1 * 0xc;
+		b = SCRIPT_MOVEMENTS + byteArg1 * 0xc;
 		b[0] = 0xd;
 		b[1] = byteArg2;
 		b[3] = byteArg3;
@@ -1982,15 +2006,15 @@ void scriptInstruction64to7E(int32_t op)
 		*(int16_t *)(b + 8) = posX;
 		*(int16_t *)(b + 0xa) = posY;
 		break;
-	case 0x72:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_ALONG_AXIS:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b = SCRIPT_MOVEMENTS + entityId * 0xc;
 			b[0] = 0xe;
 			b[1] = byteArg1;
 			b[2] = byteArg2;
@@ -1998,15 +2022,15 @@ void scriptInstruction64to7E(int32_t op)
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x73:
-		MAIN_func_801062F8(0xff);
+	case SCRIPT_OP_MOVE_ALONG_AXIS_CAMERA:
+		beginScriptEvent(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
+			b = SCRIPT_MOVEMENTS + entityId * 0xc;
 			b[0] = 0xf;
 			b[1] = byteArg1;
 			b[2] = byteArg2;
@@ -2014,61 +2038,61 @@ void scriptInstruction64to7E(int32_t op)
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x74:
+	case SCRIPT_OP_SPAWN_ITEM:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		spawnItem(byteArg1, posX, posY);
 		break;
-	case 0x75:
+	case SCRIPT_OP_SPAWN_CHEST:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptShorts(&posZ, &posW);
 		pollNextScriptUShort(&triggerId);
 		spawnChest(posX, posY, posZ, posW, byteArg1, triggerId);
 		break;
-	case 0x76:
+	case SCRIPT_OP_SPAWN_BOULDER:
 		pollNextScriptUByte(&byteArg1);
 		spawnBoulder();
 		break;
-	case 0x77:
+	case SCRIPT_OP_MOVE_BOULDER:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		moveBoulder(posX, posY);
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x78:
+	case SCRIPT_OP_REMOVE_BOULDER:
 		pollNextScriptUByte(&byteArg1);
 		removeObject(0xfb6, 0);
 		break;
-	case 0x79:
+	case SCRIPT_OP_UNLOAD_MODEL:
 		pollNextScriptUByte(&byteArg1);
 		scriptUnloadModel(byteArg1);
 		break;
-	case 0x7a:
+	case SCRIPT_OP_COPY_PSTAT:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		byteArg1 = readPStat(byteArg1);
 		writePStat(byteArg2, byteArg1);
 		break;
-	case 0x7b:
+	case SCRIPT_OP_RETURN_SECTION:
 		pollNextScriptUByte(&byteArg1);
 		entry.smth[0] = 4;
 		entry.smth[1] = byteArg1;
 		pushScriptStack(&entry);
-		writePStat(0, MAIN_D_80134FE7);
+		writePStat(0, SCRIPT_SAVED_TIME_SPEED);
 		break;
-	case 0x7c:
+	case SCRIPT_OP_SET_IMPASSABLE:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		setRectImpassible(posX, posY, byteArg2,
 		                  byteArg3);
 		break;
-	case 0x7d:
+	case SCRIPT_OP_SPAWN_SPRITE:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptShorts(&posZ, &posW);
 		spawnSpriteAtLocation(posX, posY, posZ, posW, byteArg1);
 		break;
-	case 0x7e:
+	case SCRIPT_OP_SPAWN_SPRITE_AT:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		spawnSpriteAtEntity(byteArg1, byteArg2, byteArg3);
@@ -2086,7 +2110,7 @@ void setMapHeadActive(void)
 	scriptPtr = MAPHEAD_DATA_PTR;
 	off = *(int16_t *)scriptPtr;
 	CURRENT_SCRIPT_PTR = scriptPtr;
-	MAIN_D_80134FDC = scriptPtr + (off & 0xffff) - 2;
+	SCRIPT_PC = scriptPtr + (off & 0xffff) - 2;
 }
 
 void initializeScripts(void)
@@ -2097,22 +2121,22 @@ void initializeScripts(void)
 	SCRIPT_STATE_PTR = &SCRIPT_STATE;
 	TEXT_BUFFERS_PTR = TEXT_BUFFERS;
 
-	readFile(MAIN_D_80130374, MAPHEAD_DATA_PTR);
-	readFileSection(MAIN_D_80130388, SCRIPT_HEADER_PTR, 0, 0x2000);
+	readFile(MAPHEAD_FILE_PATH, MAPHEAD_DATA_PTR);
+	readFileSection(SCRIPT_FILE_PATH, SCRIPT_HEADER_PTR, 0, 0x2000);
 	memset((void *)SCRIPT_STATE_PTR, 0, sizeof(*SCRIPT_STATE_PTR));
 
 	CURRENT_SCRIPT_ID = 0xffff;
 	ACTIVE_MAP_SCRIPT = 0xffff;
 	MERIT = 0;
-	MAIN_D_80134FC6 = 0;
-	MAIN_D_80134FC8 = 0;
-	MAIN_D_80134FCA = 0;
-	MAIN_D_80134FCC = 0;
-	TOURNAMENTS_LOST = 0;
-	MAIN_D_80134FD0 = 0;
-	MAIN_D_80134FD2 = -0x270f;
-	MAIN_D_80134FD4 = -0x270f;
-	MAIN_D_80134FD6 = -0x270f;
+	SCRIPT_STACK_DEPTH = 0;
+	BATTLES_FOUGHT = 0;
+	BATTLES_WON = 0;
+	TOURNAMENT_TITLES = 0;
+	TOURNAMENT_WINS = 0;
+	TOURNAMENT_LOSSES = 0;
+	TEXTBOX_ORIGIN_X = -0x270f;
+	TEXTBOX_ORIGIN_Y = -0x270f;
+	TEXTBOX_ORIGIN_Z = -0x270f;
 
 	initialKeyInputs();
 	dailyPStatTrigger();
@@ -2134,36 +2158,40 @@ void runMapHeadScript(int32_t section)
 	tickScript();
 }
 
+/*
+ * Starts section of script scriptId: the section of an NPC's script id when
+ * the player talks to it (param 1), or of a trigger tile or event (param 0).
+ */
 void callScriptSection(int32_t scriptId, int32_t section, int32_t param)
 {
 	int32_t i;
 
 	CURRENT_SCRIPT_PTR = getScript(scriptId);
-	MAIN_D_80134FDC =
+	SCRIPT_PC =
 		getScriptSection((uint8_t *)(int32_t)CURRENT_SCRIPT_PTR,
 	                         section);
-	MAIN_D_80134FE0 = param;
-	MAIN_D_80134FE4 = section;
-	MAIN_D_80134FE5 = 0;
-	MAIN_D_80134FE6 = 0xfd;
-	MAIN_D_80134FE7 = readPStat(0);
+	SCRIPT_FROM_TALK = param;
+	SCRIPT_SECTION = section;
+	TEXT_ADVANCE_MODE = 0;
+	DIALOGUE_SPEAKER = SPEAKER_PLAYER;
+	SCRIPT_SAVED_TIME_SPEED = readPStat(0);
 	SOME_SCRIPT_SYNC_BIT = 1;
 	ACTIVE_INSTRUCTION = 0;
-	MAIN_D_80134FE9 = 0;
-	MAIN_D_80134FEC = 0;
-	MAIN_D_80134FF0 = 0;
+	SCRIPT_MAP_CHANGE = 0;
+	SCRIPT_WARPING = 0;
+	SCRIPT_HAS_CONTROL = 0;
 	IS_SCRIPT_PAUSED = 0;
-	MAIN_D_80134F9C = TALKED_TO_ENTITY;
+	SCRIPT_TALKED_ENTITY = TALKED_TO_ENTITY;
 	for (i = 0; i < 0x16; i++) {
-		((ScriptCameraMovement *)MAIN_D_801BE6B4)[i].type = 0xff;
+		((ScriptCameraMovement *)SCRIPT_MOVEMENTS)[i].type = 0xff;
 	}
 
-	MAIN_func_8010020C();
+	resetTextboxes();
 }
 
 void tickScriptedMovement(int32_t slot)
 {
-	ScriptCameraMovement *movement = &((ScriptCameraMovement *)MAIN_D_801BE6B4)[slot];
+	ScriptCameraMovement *movement = &((ScriptCameraMovement *)SCRIPT_MOVEMENTS)[slot];
 	int32_t done;
 
 	switch (movement->type) {
@@ -2265,9 +2293,9 @@ void pushScriptStack(StackEntry *entry)
 {
 	StackEntry *stackTop;
 
-	stackTop = &SCRIPT_STATE_PTR->stack[MAIN_D_80134FC6];
+	stackTop = &SCRIPT_STATE_PTR->stack[SCRIPT_STACK_DEPTH];
 	*stackTop = *entry;
-	++MAIN_D_80134FC6;
+	++SCRIPT_STACK_DEPTH;
 }
 
 void resetBGM(void)
@@ -2281,9 +2309,9 @@ int32_t popScriptStack(StackEntry *out)
 	StackEntry *stackTop;
 	StackEntry entry;
 
-	if (MAIN_D_80134FC6 != 0) {
-		--MAIN_D_80134FC6;
-		stackTop = &SCRIPT_STATE_PTR->stack[MAIN_D_80134FC6];
+	if (SCRIPT_STACK_DEPTH != 0) {
+		--SCRIPT_STACK_DEPTH;
+		stackTop = &SCRIPT_STATE_PTR->stack[SCRIPT_STACK_DEPTH];
 		entry = *stackTop;
 	} else {
 		entry.smth[0] = 0;
@@ -2294,20 +2322,20 @@ int32_t popScriptStack(StackEntry *out)
 
 void skipOneReadOneUShort(uint16_t *out)
 {
-	MAIN_D_80134FDC++;
+	SCRIPT_PC++;
 	pollNextScriptUShort(out);
 }
 
 void pollNextScriptUByte(uint8_t *out)
 {
-	*out = *MAIN_D_80134FDC;
-	MAIN_D_80134FDC++;
+	*out = *SCRIPT_PC;
+	SCRIPT_PC++;
 }
 
 void pollNextScriptUShort(uint16_t *out)
 {
-	*out = *(uint16_t *)MAIN_D_80134FDC;
-	MAIN_D_80134FDC += 2;
+	*out = *(uint16_t *)SCRIPT_PC;
+	SCRIPT_PC += 2;
 }
 
 void pollOneUByteOneUShort(uint8_t *outByte, uint16_t *outShort)
@@ -2318,7 +2346,7 @@ void pollOneUByteOneUShort(uint8_t *outByte, uint16_t *outShort)
 
 void skipOneReadTwoShort(uint16_t *out1, uint16_t *out2)
 {
-	MAIN_D_80134FDC++;
+	SCRIPT_PC++;
 	pollNextScriptUShort(out1);
 	pollNextScriptUShort(out2);
 }
@@ -2343,7 +2371,7 @@ void unsetTrigger(uint16_t trigger)
 
 void skipOnePollTwoScriptBytes(uint8_t *out1, uint8_t *out2)
 {
-	MAIN_D_80134FDC++;
+	SCRIPT_PC++;
 	pollNextScriptUByte(out1);
 	pollNextScriptUByte(out2);
 }
@@ -2367,7 +2395,8 @@ void scriptLearnMove(int32_t moveId)
 	learnMove((int16_t)moveId);
 }
 
-int32_t MAIN_func_80107000(void)
+/* Lists the six cards on sale today, see dailyPStatTrigger(). */
+int32_t fillCardShopList(void)
 {
 	uint8_t *buf;
 	uint8_t any;
@@ -2382,7 +2411,7 @@ int32_t MAIN_func_80107000(void)
 		id = SCRIPT_STATE_PTR->smth[i];
 		*buf++ = id;
 		if (id != 0xff) {
-			if ((MAIN_D_8012FFC4[CARD_DATA[id].spriteId] <= MONEY) &&
+			if ((CARD_PRICES[CARD_DATA[id].spriteId] <= MONEY) &&
 			    ((uint32_t)getCardAmount(id) < 9)) {
 				*buf++ = 1;
 			} else {
@@ -2403,7 +2432,7 @@ void showCardTextbox(void)
 	int32_t cardId;
 	uint8_t amount;
 
-	cardId = readPStat(PSTAT_249) & 0xff;
+	cardId = readPStat(PSTAT_SELECTED) & 0xff;
 	amount = getCardAmount(cardId);
 	if (amount == 0) {
 		if (CARD_DATA[cardId].spriteId == 0) {
@@ -2424,11 +2453,11 @@ void showCardTextbox(void)
 		setCardAmount(cardId, amount);
 	}
 
-	writePStat(PSTAT_249, CARD_DATA[cardId].digimonId);
-	showMapHeadTextbox(line, 0xfd, 0, 0x4d3);
+	writePStat(PSTAT_SELECTED, CARD_DATA[cardId].digimonId);
+	showMapHeadTextbox(line, SPEAKER_PLAYER, 0, MAPHEAD_TEXT_CARD_SHOP);
 }
 
-int32_t MAIN_func_80107200(void)
+int32_t fillOwnedCardList(void)
 {
 	uint8_t *buf;
 	uint8_t any;
@@ -2485,7 +2514,7 @@ int32_t setCardAmount(int32_t cardId, int32_t value)
 	}
 }
 
-uint32_t dateToSeconds(uint32_t years, uint32_t days, uint32_t hours,
+uint32_t dateToMinutes(uint32_t years, uint32_t days, uint32_t hours,
                        uint32_t minutes)
 {
 	minutes += hours * 60;
@@ -2510,7 +2539,7 @@ void pollNextInt(int32_t *out)
 	*out = lo + (hi << 16);
 }
 
-void MAIN_func_8010692C(uint32_t totalMinutes, uint8_t *outYear,
+void minutesToDate(uint32_t totalMinutes, uint8_t *outYear,
                         uint8_t *outDay, uint8_t *outHour, uint8_t *outMinute)
 {
 	if (totalMinutes >= (255 * 43200)) {
@@ -2540,8 +2569,8 @@ void scriptLoadModel(int32_t modelId)
 
 void pollNextScriptShort(int16_t *out)
 {
-	*out = *(int16_t *)MAIN_D_80134FDC;
-	MAIN_D_80134FDC += 2;
+	*out = *(int16_t *)SCRIPT_PC;
+	SCRIPT_PC += 2;
 }
 
 void pollNextTwoScriptShorts(int16_t *out1, int16_t *out2)
@@ -2563,7 +2592,7 @@ void playBGM(int16_t bgmId)
 
 	handleMusicOverride(&font, &variant);
 	ACTIVE_BGM_FONT = font;
-	MAIN_D_80135007 = variant;
+	ACTIVE_BGM_VARIANT = variant;
 	stopBGM();
 	playMusic(font, variant);
 }
@@ -2580,9 +2609,9 @@ void updateBGM(void)
 	}
 
 	handleMusicOverride(&font, &variant);
-	if (ACTIVE_BGM_FONT != font || MAIN_D_80135007 != variant) {
+	if (ACTIVE_BGM_FONT != font || ACTIVE_BGM_VARIANT != variant) {
 		ACTIVE_BGM_FONT = font;
-		MAIN_D_80135007 = variant;
+		ACTIVE_BGM_VARIANT = variant;
 		stopBGM();
 		playMusic(font, variant);
 	}
@@ -2601,7 +2630,7 @@ void forceUpdateBGM(void)
 
 	handleMusicOverride(&font, &variant);
 	ACTIVE_BGM_FONT = font;
-	MAIN_D_80135007 = variant;
+	ACTIVE_BGM_VARIANT = variant;
 	stopBGM();
 	playMusic(font, variant);
 }
@@ -2634,12 +2663,12 @@ void getTriggerOffset(int32_t trigger, uint8_t **outPtr, uint8_t *outMask)
 	}
 }
 
-int32_t MAIN_func_80106D1C(int32_t moveId)
+int32_t scriptHasMove(int32_t moveId)
 {
 	return hasMove((int16_t)moveId);
 }
 
-int32_t MAIN_func_80106D28(void)
+int32_t fillLostItemList(void)
 {
 	uint8_t *buf;
 	uint32_t i;
@@ -2654,7 +2683,7 @@ int32_t MAIN_func_80106D28(void)
 		count = SCRIPT_STATE_PTR->smth[idx];
 		if (count != 0) {
 			MAIN_D_80134F68->itemCount++;
-			itemId = MAIN_D_8012FE78[i];
+			itemId = LOST_ITEM_IDS[i];
 			*buf++ = itemId;
 			if (ITEM_PARA[itemId].value <= MONEY) {
 				count = (count | 0x80) & 0xff;
@@ -2708,7 +2737,7 @@ uint8_t rollCard(void)
 	return i;
 }
 
-void MAIN_func_80107110(void)
+void openCardMenuBox(void)
 {
 	RECT rect;
 	RECT origin;
@@ -2716,25 +2745,25 @@ void MAIN_func_80107110(void)
 	int32_t boxId;
 	RECT *src;
 
-	if (MAIN_D_80135011 == 4) {
+	if (ITEM_MENU_MODE == ITEM_MENU_SELL_CARD) {
 		boxId = 0xfd;
 	} else {
-		boxId = readPStat(PSTAT_254) & 0xff;
+		boxId = readPStat(PSTAT_BUILTIN_ARG) & 0xff;
 	}
 
 	setupBoxOrigin(boxId, &origin);
-	result = MAIN_func_800FCC40();
-	src = &((RECT *)MAIN_D_8013027C)[MAIN_D_80135011];
+	result = getActiveItemMenu();
+	src = &((RECT *)ITEM_MENU_RECTS)[ITEM_MENU_MODE];
 	setRECT(&rect, src->x, src->y, src->w, src->h);
-	createTextbox(1, 0xf1, &rect, &origin, MAIN_func_80107E6C,
-	              MAIN_func_80108090);
+	createTextbox(1, 0xf1, &rect, &origin, tickCardMenu,
+	              renderCardMenuBox);
 	registerTextbox(1, 9, 6, 1, 0);
-	MAIN_func_800FCC98(result, 1, 9);
-	MAIN_func_800FCCFC(result, 9, 1);
-	MAIN_D_8013500C = 0;
+	openItemMenu(result, 1, 9);
+	layoutItemMenu(result, 9, 1);
+	SCRIPT_PRICE = 0;
 }
 
-int32_t MAIN_func_801072C4(void)
+int32_t fillMeritItemList(void)
 {
 	uint8_t hasFreeSlot;
 	uint8_t *out;
@@ -2791,7 +2820,7 @@ next:;
 	return any;
 }
 
-void MAIN_func_80107444(void)
+void fillItemKeeperLists(void)
 {
 	uint8_t hasFreeSlot;
 	uint8_t *counts;
@@ -2863,29 +2892,30 @@ next:;
 	}
 }
 
-void MAIN_func_80107660(void)
+void openItemKeeperBoxes(void)
 {
 	RECT rect;
 	RECT origin;
 	int32_t boxId;
 
-	boxId = readPStat(PSTAT_254);
+	boxId = readPStat(PSTAT_BUILTIN_ARG);
 	setupBoxOrigin(boxId, &origin);
 	setRECT(&rect, -152, -98, 148, 127);
-	createTextbox(1, 0xe1, &rect, &origin, MAIN_func_80108334,
-	              MAIN_func_80108604);
+	createTextbox(1, 0xe1, &rect, &origin, tickItemKeeperMenu,
+	              renderItemKeeperStoredBox);
 	registerTextbox(1, 9, 6, 1, 1);
-	MAIN_func_800FCC98(MAIN_D_80134F68, 1, 0xa);
-	MAIN_func_80108610(0);
-	setupBoxOrigin(0xfd, &origin);
+	openItemMenu(MAIN_D_80134F68, 1, 0xa);
+	layoutItemKeeperList(0);
+	setupBoxOrigin(SPEAKER_PLAYER, &origin);
 	setRECT(&rect, 0, -98, 148, 127);
-	createTextbox(2, 0xe1, &rect, &origin, 0, MAIN_func_801086D4);
+	createTextbox(2, 0xe1, &rect, &origin, 0, renderItemKeeperHandBox);
 	registerTextbox(2, 9, 6, 1, 2);
-	MAIN_func_800FCC98(MAIN_D_80134F6C, 2, 0xa);
-	MAIN_func_80108610(1);
+	openItemMenu(MAIN_D_80134F6C, 2, 0xa);
+	layoutItemKeeperList(1);
 }
 
-void MAIN_func_80107784(void)
+/* Lists the tracks, the last one only after trigger 50, and finds the one playing. */
+void fillJukeboxList(void)
 {
 	uint8_t *buf;
 	int32_t unlocked;
@@ -2913,23 +2943,23 @@ void MAIN_func_80107784(void)
 	     i < MAIN_D_80134F68->itemCount;
 	     i++, offset += 2) {
 		track = MAIN_D_80134F68->buf[offset];
-		b = MAIN_D_801303B8[track * 2];
+		b = JUKEBOX_TRACKS[track * 2];
 		if (b == ACTIVE_BGM_FONT) {
-			b = MAIN_D_801303B8[track * 2 + 1];
-			if (b == MAIN_D_80135007) {
-				writePStat(PSTAT_249, i);
-				MAIN_D_80134F8F = i;
+			b = JUKEBOX_TRACKS[track * 2 + 1];
+			if (b == ACTIVE_BGM_VARIANT) {
+				writePStat(PSTAT_SELECTED, i);
+				JUKEBOX_PLAYING = i;
 				return;
 			}
 		}
 	}
 
-	writePStat(PSTAT_249, 0xff);
-	MAIN_D_80134F8F = 0xff;
+	writePStat(PSTAT_SELECTED, 0xff);
+	JUKEBOX_PLAYING = 0xff;
 	stopBGM();
 }
 
-void MAIN_func_801078F4(void)
+void openJukeboxMenuBox(void)
 {
 	RECT rect;
 	RECT origin;
@@ -2942,16 +2972,16 @@ void MAIN_func_801078F4(void)
 	int32_t count;
 	int32_t row;
 
-	setupBoxOrigin(readPStat(0xfe), &origin);
+	setupBoxOrigin(readPStat(PSTAT_BUILTIN_ARG), &origin);
 	setRECT(&rect, -0x47, -0x62, 0xde, 0x81);
-	createTextbox(1, 0xf1, &rect, &origin, MAIN_func_801091DC, MAIN_func_801093E4);
+	createTextbox(1, 0xf1, &rect, &origin, tickJukeboxMenu, renderJukeboxMenuBox);
 	registerTextbox(1, 9, 6, 1, 0);
 
 	if (MAIN_D_80134F68->isOpen == 0) {
 		MAIN_D_80134F68->isOpen = 1;
 		MAIN_D_80134F68->boxId = 1;
 
-		item = readPStat(0xf9);
+		item = readPStat(PSTAT_SELECTED);
 		box = MAIN_D_80134F68;
 		menu = box;
 		count = menu->itemCount;
@@ -2983,10 +3013,10 @@ found:
 		}
 	}
 
-	MAIN_func_800FCCFC(MAIN_D_80134F68, 9, 2);
+	layoutItemMenu(MAIN_D_80134F68, 9, 2);
 }
 
-void MAIN_func_80107AB8(void)
+void fillTransportList(void)
 {
 	uint8_t *buf;
 	uint8_t i;
@@ -2994,9 +3024,9 @@ void MAIN_func_80107AB8(void)
 	buf = MAIN_D_80134F68->buf;
 	MAIN_D_80134F68->itemCount = 0;
 	for (i = 0; i < 6; i++) {
-		if (isTriggerSet(MAIN_D_8013024C[i].trigger) != 0) {
+		if (isTriggerSet(TRANSPORT_DESTINATIONS[i].trigger) != 0) {
 			MAIN_D_80134F68->itemCount++;
-			if (MAIN_D_8013024C[i].cost <= MONEY) {
+			if (TRANSPORT_DESTINATIONS[i].cost <= MONEY) {
 				*buf++ = i | 0x80;
 				buf++;
 			} else {
@@ -3007,24 +3037,28 @@ void MAIN_func_80107AB8(void)
 	}
 }
 
-void MAIN_func_80107B98(void)
+void openTransportMenuBox(void)
 {
 	RECT rect;
 	RECT origin;
 	int32_t boxId;
 
-	boxId = readPStat(PSTAT_254);
+	boxId = readPStat(PSTAT_BUILTIN_ARG);
 	setupBoxOrigin(boxId, &origin);
 	setRECT(&rect, -71, -100, 222, 129);
-	createTextbox(1, 0xf1, &rect, &origin, MAIN_func_801094F0,
-	              MAIN_func_801096E8);
+	createTextbox(1, 0xf1, &rect, &origin, tickTransportMenu,
+	              renderTransportMenuBox);
 	registerTextbox(1, 9, 6, 1, 0);
-	MAIN_func_800FCC98(MAIN_D_80134F68, 1, 9);
-	MAIN_func_800FCCFC(MAIN_D_80134F68, 9, 3);
-	MAIN_D_8013500C = 0;
+	openItemMenu(MAIN_D_80134F68, 1, 9);
+	layoutItemMenu(MAIN_D_80134F68, 9, 3);
+	SCRIPT_PRICE = 0;
 }
 
-void MAIN_func_80107C4C(void)
+/*
+ * Lists the three trades of set pstat 249 of TRADE_WANTED_ITEMS. Here
+ * ITEM_MENU_MODE holds the index of the first trade, not a mode.
+ */
+void fillTradeLists(void)
 {
 	uint8_t *buf;
 	uint8_t *buf2;
@@ -3033,15 +3067,15 @@ void MAIN_func_80107C4C(void)
 	uint8_t idx;
 	int32_t item;
 
-	MAIN_D_80135011 = readPStat(PSTAT_249) * 3;
-	idx = MAIN_D_80135011;
+	ITEM_MENU_MODE = readPStat(PSTAT_SELECTED) * 3;
+	idx = ITEM_MENU_MODE;
 	buf = MAIN_D_80134F68->buf;
 	MAIN_D_80134F68->itemCount = 3;
 	buf2 = MAIN_D_80134F6C->buf;
 	MAIN_D_80134F6C->itemCount = 3;
 	i = 0;
 	while (i < 3) {
-		item = MAIN_D_80130438[idx];
+		item = TRADE_WANTED_ITEMS[idx];
 		save = idx;
 		if (getItemCount(item) != 0) {
 			*buf++ = item | 0x80;
@@ -3050,53 +3084,54 @@ void MAIN_func_80107C4C(void)
 			*buf++ = item;
 			buf++;
 		}
-		*buf2++ = MAIN_D_80130444[save];
+		*buf2++ = TRADE_GIVEN_ITEMS[save];
 		buf2++;
 		i++;
 		idx++;
 	}
 }
 
-void MAIN_func_80107D54(void)
+void openTradeMenuBox(void)
 {
 	RECT rect;
 	RECT origin;
 	int32_t boxId;
 
-	boxId = readPStat(PSTAT_254);
+	boxId = readPStat(PSTAT_BUILTIN_ARG);
 	setupBoxOrigin(boxId, &origin);
 	setRECT(&rect, -88, -80, 223, 83);
-	createTextbox(1, 0xe1, &rect, &origin, MAIN_func_801097F4,
-	              MAIN_func_801099E8);
+	createTextbox(1, 0xe1, &rect, &origin, tickTradeMenu,
+	              renderTradeMenuBox);
 	registerTextbox(1, 9, 4, 1, 0);
-	MAIN_func_800FCC98(MAIN_D_80134F68, 1, 0xa);
-	MAIN_func_80109BBC();
+	openItemMenu(MAIN_D_80134F68, 1, 0xa);
+	layoutTradeList();
 }
 
-void MAIN_func_80107DFC(void)
+/* Sets the trigger of the selected trade, and trigger 14 once all are done. */
+void markTradeDone(void)
 {
 	ItemMenuBox *box = MAIN_D_80134F68;
 	int32_t trigger;
 
-	trigger = box->topRow + box->cursor + MAIN_D_80135011 + 5;
+	trigger = box->topRow + box->cursor + ITEM_MENU_MODE + TRIGGER_TRADE_DONE;
 	setTrigger(trigger);
-	for (trigger = 5; trigger < 0xe; trigger++) {
+	for (trigger = TRIGGER_TRADE_DONE; trigger < TRIGGER_ALL_TRADES_DONE; trigger++) {
 		if (isTriggerSet(trigger) == 0) {
 			return;
 		}
 	}
 
-	setTrigger(0xe);
+	setTrigger(TRIGGER_ALL_TRADES_DONE);
 }
 
-void MAIN_func_80107E6C(void)
+void tickCardMenu(void)
 {
 	ItemMenuBox *box;
 	RECT rect;
 	RECT *src;
 
-	box = MAIN_func_800FCC40();
-	if (MAIN_func_800FCF88(box) != 0) {
+	box = getActiveItemMenu();
+	if (tickItemMenuPageFlip(box) != 0) {
 		return;
 	}
 
@@ -3112,44 +3147,44 @@ void MAIN_func_80107E6C(void)
 		return;
 	}
 
-	if (MAIN_D_8013500C != 0) {
+	if (SCRIPT_PRICE != 0) {
 		return;
 	}
 
-	if (isKeyDown(0x40)) {
-		src = &MAIN_D_801302BC[MAIN_D_80135011];
-		if (MAIN_D_80135011 == 3) {
+	if (isKeyDown(PADRdown)) {
+		src = &ITEM_MENU_POPUP_ORIGINS[ITEM_MENU_MODE];
+		if (ITEM_MENU_MODE == ITEM_MENU_BUY_CARD) {
 			setRECT(&rect, src->x, src->y, src->w, src->h);
-			MAIN_func_800FD244(&rect);
-		} else if (MAIN_D_80135011 == 6) {
-			MAIN_func_80108230();
+			openItemConfirmBox(&rect);
+		} else if (ITEM_MENU_MODE == ITEM_MENU_MERIT_CARD) {
+			pickMeritCard();
 		} else {
 			setRECT(&rect, src->x, src->y, src->w, src->h);
-			MAIN_func_800FCFB8(&rect);
+			openQuantityBox(&rect);
 		}
-	} else if (isKeyDown(0x10)) {
-		if (MAIN_D_80135011 != 6) {
+	} else if (isKeyDown(PADRup)) {
+		if (ITEM_MENU_MODE != ITEM_MENU_MERIT_CARD) {
 			SELECTION_MENU_STATE = 4;
 		} else {
 			SELECTION_MENU_STATE = 0xa;
 		}
 		playSound(0, 4);
-	} else if (isKeyDown(0x1000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD3DC(box, 9, 1);
+	} else if (isKeyDown(PADLup)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuJumpToFirst(box, 9, 1);
 		} else {
-			MAIN_func_800FD428(box, 1);
+			itemMenuCursorUp(box, 1);
 		}
-	} else if (isKeyDown(0x4000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD4E8(box, 9, 1);
+	} else if (isKeyDown(PADLdown)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuJumpToLast(box, 9, 1);
 		} else {
-			MAIN_func_800FD534(box, 1);
+			itemMenuCursorDown(box, 1);
 		}
 	}
 }
 
-void MAIN_func_80108090(void)
+void renderCardMenuBox(void)
 {
 	int16_t bx;
 	int16_t by;
@@ -3158,41 +3193,41 @@ void MAIN_func_80108090(void)
 
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
-	MAIN_func_800FD7D8(1, 0, bx + 8, by + 5);
-	if (MAIN_D_80135011 != 6) {
-		MAIN_func_800FD7D8(1, 1, bx + 0x80, by + 5);
-		if (MAIN_D_80135011 == 4) {
-			MAIN_func_800FD7D8(1, 3, bx + 0xb6, by + 5);
+	renderItemMenuHeader(1, 0, bx + 8, by + 5);
+	if (ITEM_MENU_MODE != ITEM_MENU_MERIT_CARD) {
+		renderItemMenuHeader(1, 1, bx + 0x80, by + 5);
+		if (ITEM_MENU_MODE == ITEM_MENU_SELL_CARD) {
+			renderItemMenuHeader(1, 3, bx + 0xb6, by + 5);
 		}
 	} else {
-		MAIN_func_800FD7D8(1, 3, bx + 0x80, by + 5);
+		renderItemMenuHeader(1, 3, bx + 0x80, by + 5);
 	}
-	box = MAIN_func_800FCC40();
-	MAIN_func_800FD8D4(box);
+	box = getActiveItemMenu();
+	renderItemMenuScrollbar(box);
 	cy = by + box->cursor * 0x12 + 0x11;
 draw:
-	renderSelectionCursor(bx + 5, cy, MAIN_D_801302FC[MAIN_D_80135011], 0x12, 5);
-	MAIN_func_800FDC5C(box, bx + 0x1a, by + 0x13, bx + 8, by + 0x12, 1);
+	renderSelectionCursor(bx + 5, cy, ITEM_MENU_CURSOR_WIDTHS[ITEM_MENU_MODE], 0x12, 5);
+	renderItemMenuRows(box, bx + 0x1a, by + 0x13, bx + 8, by + 0x12, 1);
 }
 
-int32_t MAIN_func_80108230(void)
+int32_t pickMeritCard(void)
 {
 	ItemMenuBox *box;
 	int32_t off;
 	int32_t idx;
 	uint8_t kind;
 
-	box = MAIN_func_800FCC40();
+	box = getActiveItemMenu();
 	off = (box->topRow + box->cursor) * 2;
-	MAIN_D_80134F78 = box->buf[off];
+	SELECTED_ITEM = box->buf[off];
 
-	if (MAIN_D_80134F78 != 0xff) {
+	if (SELECTED_ITEM != 0xff) {
 		kind = box->buf[off + 1];
 		if (kind != 0) {
-			idx = MAIN_D_80134F78 * 4;
-			MAIN_D_8013500C = *(int16_t *)((uint8_t *)&CARD_DATA[0].unk2 + idx);
-			kind = ((uint8_t *)&CARD_DATA[0].spriteId)[MAIN_D_80134F78 * 4] + 7;
-			showMapHeadTextbox(kind, readPStat(0xfe), 0, 0x4d4);
+			idx = SELECTED_ITEM * 4;
+			SCRIPT_PRICE = *(int16_t *)((uint8_t *)&CARD_DATA[0].unk2 + idx);
+			kind = ((uint8_t *)&CARD_DATA[0].spriteId)[SELECTED_ITEM * 4] + 7;
+			showMapHeadTextbox(kind, readPStat(PSTAT_BUILTIN_ARG), 0, MAPHEAD_TEXT_MERIT_SHOP);
 			SELECTION_MENU_STATE = 1;
 			SCRIPT_STATE_4 = 7;
 			SCRIPT_STATE_3 = 1;
@@ -3207,15 +3242,19 @@ int32_t MAIN_func_80108230(void)
 	return 0;
 }
 
-void MAIN_func_80108334(void)
+/*
+ * Left and right pick the list (ITEM_KEEPER_SIDE), cross moves one item to
+ * the other list, circle ten and square all of them.
+ */
+void tickItemKeeperMenu(void)
 {
 	ItemMenuBox *box;
 	RECT rect;
 	int32_t a;
 	int32_t b;
 
-	a = MAIN_func_800FCF88(MAIN_D_80134F68);
-	b = MAIN_func_800FCF88(MAIN_D_80134F6C);
+	a = tickItemMenuPageFlip(MAIN_D_80134F68);
+	b = tickItemMenuPageFlip(MAIN_D_80134F6C);
 	if (a == 1) {
 		return;
 	}
@@ -3244,86 +3283,90 @@ void MAIN_func_80108334(void)
 		return;
 	}
 
-	if (MAIN_D_80134F90 == 0) {
+	if (ITEM_KEEPER_SIDE == 0) {
 		box = MAIN_D_80134F68;
 	} else {
 		box = MAIN_D_80134F6C;
 	}
 
-	if (isKeyDown(0x10)) {
+	if (isKeyDown(PADRup)) {
 		SELECTION_MENU_STATE = 6;
 		playSound(0, 4);
-	} else if (isKeyDown(0x8000)) {
-		MAIN_D_80134F90 = 0;
+	} else if (isKeyDown(PADLleft)) {
+		ITEM_KEEPER_SIDE = 0;
 		playSound(0, 2);
-	} else if (isKeyDown(0x2000)) {
-		MAIN_D_80134F90 = 1;
+	} else if (isKeyDown(PADLright)) {
+		ITEM_KEEPER_SIDE = 1;
 		playSound(0, 2);
 	} else if (box->itemCount != 0) {
-		if (isKeyDown(0x40)) {
-			MAIN_func_801086E0();
+		if (isKeyDown(PADRdown)) {
+			itemKeeperMoveOne();
 			playSound(0, 3);
-		} else if (isKeyDown(0x20)) {
-			MAIN_func_80108890();
+		} else if (isKeyDown(PADRright)) {
+			itemKeeperMoveTen();
 			playSound(0, 3);
-		} else if (isKeyDown(0x80)) {
-			MAIN_func_80108A98();
+		} else if (isKeyDown(PADRleft)) {
+			itemKeeperMoveAll();
 			playSound(0, 3);
-		} else if (isKeyDown(0x1000)) {
-			if (POLLED_INPUT & 8) {
-				MAIN_func_800FF310(box);
-				MAIN_func_80108610(MAIN_D_80134F90);
+		} else if (isKeyDown(PADLup)) {
+			if (POLLED_INPUT & PADR1) {
+				itemMenuSelectFirst(box);
+				layoutItemKeeperList(ITEM_KEEPER_SIDE);
 			} else {
-				MAIN_func_800FD428(box, 0);
+				itemMenuCursorUp(box, 0);
 			}
-		} else if (isKeyDown(0x4000)) {
-			if (POLLED_INPUT & 8) {
-				MAIN_func_800FF2A8(box);
-				MAIN_func_80108610(MAIN_D_80134F90);
+		} else if (isKeyDown(PADLdown)) {
+			if (POLLED_INPUT & PADR1) {
+				itemMenuSelectLast(box);
+				layoutItemKeeperList(ITEM_KEEPER_SIDE);
 			} else {
-				MAIN_func_800FD534(box, 0);
+				itemMenuCursorDown(box, 0);
 			}
-		} else if (isKeyDown(0x800)) {
+		} else if (isKeyDown(PADstart)) {
 			setRECT(&rect, 5, 0x20, 0x80, 0x12);
-			MAIN_func_800FD61C(box, &rect,
-			                   (uint8_t)(MAIN_D_80134F90 + 1));
+			openItemDescriptionBox(box, &rect,
+			                   (uint8_t)(ITEM_KEEPER_SIDE + 1));
 			playSound(0, 3);
 		}
 	}
 }
 
-void MAIN_func_80108604(void)
+void renderItemKeeperStoredBox(void)
 {
-	MAIN_func_80108EB4(MAIN_D_80134F68, 0);
+	renderItemKeeperBox(MAIN_D_80134F68, 0);
 }
 
-void MAIN_func_80108610(int32_t boxIndex)
+/* Lays out the title and the rows of the stored (0) or carried (1) items. */
+void layoutItemKeeperList(int32_t boxIndex)
 {
 	int32_t value;
 
 	if (boxIndex == 0) {
-		showMapHeadTextbox(4, 0xff, 1, 0x4d5);
+		/* "Items Stored" */
+		showMapHeadTextbox(4, SPEAKER_NONE, 1, MAPHEAD_TEXT_ITEM_KEEPER);
+		/* Keep the title on the first row and add the list after it. */
 		TEXT_BOX_DATA[1].writeCount--;
-		value = 0xd;
+		value = TEXT_NEWLINE;
 		TEXT_BUFFERS_PTR[0x246] = value;
 		TEXT_BUFFERS_PTR[0x3c6] = value;
-		MAIN_func_800FCCFC(MAIN_D_80134F68, 0xa, 0);
+		layoutItemMenu(MAIN_D_80134F68, 0xa, 0);
 	} else {
-		showMapHeadTextbox(5, 0xff, 2, 0x4d5);
+		/* "Items in Hand" */
+		showMapHeadTextbox(5, SPEAKER_NONE, 2, MAPHEAD_TEXT_ITEM_KEEPER);
 		TEXT_BOX_DATA[2].writeCount--;
-		value = 0xd;
+		value = TEXT_NEWLINE;
 		TEXT_BUFFERS_PTR[0x266] = value;
 		TEXT_BUFFERS_PTR[0x3e6] = value;
-		MAIN_func_800FCCFC(MAIN_D_80134F6C, 0xa, 0);
+		layoutItemMenu(MAIN_D_80134F6C, 0xa, 0);
 	}
 }
 
-void MAIN_func_801086D4(void)
+void renderItemKeeperHandBox(void)
 {
-	MAIN_func_80108EB4(MAIN_D_80134F6C, 1);
+	renderItemKeeperBox(MAIN_D_80134F6C, 1);
 }
 
-int32_t MAIN_func_801086E0(void)
+int32_t itemKeeperMoveOne(void)
 {
 	ItemMenuBox *box;
 	int32_t off;
@@ -3332,7 +3375,7 @@ int32_t MAIN_func_801086E0(void)
 	int32_t item;
 	uint8_t *p;
 
-	if (MAIN_D_80134F90 == 0) {
+	if (ITEM_KEEPER_SIDE == 0) {
 		box = MAIN_D_80134F68;
 		off = (box->topRow + box->cursor) * 2;
 		buf = box->buf;
@@ -3354,9 +3397,9 @@ int32_t MAIN_func_801086E0(void)
 		p = (uint8_t *)((uint32_t)item + (uint32_t)SCRIPT_STATE_PTR);
 		p[0x54] -= 1;
 		giveItem(item, 1);
-		MAIN_func_80107444();
-		MAIN_func_80108C88(item);
-		MAIN_func_80108DC0(item);
+		fillItemKeeperLists();
+		itemKeeperFocusStored(item);
+		itemKeeperFocusHand(item);
 
 		return 1;
 	}
@@ -3382,14 +3425,14 @@ int32_t MAIN_func_801086E0(void)
 	removeItem(item, 1);
 	p = (uint8_t *)((uint32_t)item + (uint32_t)SCRIPT_STATE_PTR);
 	p[0x54] += 1;
-	MAIN_func_80107444();
-	MAIN_func_80108DC0(item);
-	MAIN_func_80108C88(item);
+	fillItemKeeperLists();
+	itemKeeperFocusHand(item);
+	itemKeeperFocusStored(item);
 
 	return 1;
 }
 
-int32_t MAIN_func_80108890(void)
+int32_t itemKeeperMoveTen(void)
 {
 	ItemMenuBox *box;
 	uint8_t *buf;
@@ -3400,7 +3443,7 @@ int32_t MAIN_func_80108890(void)
 	uint8_t flags;
 	uint8_t *p;
 
-	if (MAIN_D_80134F90 == 0) {
+	if (ITEM_KEEPER_SIDE == 0) {
 		box = MAIN_D_80134F68;
 		off = (box->topRow + box->cursor) * 2;
 		buf = box->buf;
@@ -3430,9 +3473,9 @@ int32_t MAIN_func_80108890(void)
 		p = (uint8_t *)((uint32_t)item + (uint32_t)SCRIPT_STATE_PTR);
 		p[0x54] -= 0xa;
 		giveItem(item, 0xa);
-		MAIN_func_80107444();
-		MAIN_func_80108C88(item);
-		MAIN_func_80108DC0(item);
+		fillItemKeeperLists();
+		itemKeeperFocusStored(item);
+		itemKeeperFocusHand(item);
 
 		return 1;
 	}
@@ -3468,14 +3511,14 @@ int32_t MAIN_func_80108890(void)
 	removeItem(item, 0xa);
 	p = (uint8_t *)((uint32_t)item2 + (uint32_t)SCRIPT_STATE_PTR);
 	p[0x54] += 0xa;
-	MAIN_func_80107444();
-	MAIN_func_80108DC0(item);
-	MAIN_func_80108C88(item);
+	fillItemKeeperLists();
+	itemKeeperFocusHand(item);
+	itemKeeperFocusStored(item);
 
 	return 1;
 }
 
-int32_t MAIN_func_80108A98(void)
+int32_t itemKeeperMoveAll(void)
 {
 	ItemMenuBox *box;
 	uint8_t *p;
@@ -3487,7 +3530,7 @@ int32_t MAIN_func_80108A98(void)
 	uint8_t amount;
 	uint8_t cap;
 
-	if (MAIN_D_80134F90 == 0) {
+	if (ITEM_KEEPER_SIDE == 0) {
 		box = MAIN_D_80134F68;
 		off = (box->topRow + box->cursor) * 2;
 		buf = box->buf;
@@ -3514,9 +3557,9 @@ int32_t MAIN_func_80108A98(void)
 		p = (uint8_t *)((uint32_t)item + (uint32_t)SCRIPT_STATE_PTR);
 		p[0x54] = (uint32_t)p[0x54] - amount;
 		giveItem(item, amount);
-		MAIN_func_80107444();
-		MAIN_func_80108C88(item);
-		MAIN_func_80108DC0(item);
+		fillItemKeeperLists();
+		itemKeeperFocusStored(item);
+		itemKeeperFocusHand(item);
 
 		return 1;
 	}
@@ -3549,14 +3592,15 @@ int32_t MAIN_func_80108A98(void)
 	removeItem(item, amount);
 	p = (uint8_t *)((uint32_t)item2 + (uint32_t)SCRIPT_STATE_PTR);
 	p[0x54] = (uint32_t)p[0x54] + amount;
-	MAIN_func_80107444();
-	MAIN_func_80108DC0(item);
-	MAIN_func_80108C88(item);
+	fillItemKeeperLists();
+	itemKeeperFocusHand(item);
+	itemKeeperFocusStored(item);
 
 	return 1;
 }
 
-void MAIN_func_80108C88(int32_t itemId)
+/* Keeps the cursor of the stored list on itemId after moving it. */
+void itemKeeperFocusStored(int32_t itemId)
 {
 	int32_t i;
 	int32_t top;
@@ -3608,10 +3652,11 @@ found:
 		MAIN_D_80134F68->cursor = visible - 1;
 	}
 end:
-	MAIN_func_80108610(0);
+	layoutItemKeeperList(0);
 }
 
-void MAIN_func_80108DC0(int32_t item)
+/* Keeps the cursor of the carried list on item after moving it. */
+void itemKeeperFocusHand(int32_t item)
 {
 	int32_t i;
 	ItemMenuBox *box;
@@ -3650,10 +3695,10 @@ void MAIN_func_80108DC0(int32_t item)
 	}
 
 done:
-	MAIN_func_80108610(1);
+	layoutItemKeeperList(1);
 }
 
-void MAIN_func_80108EB4(ItemMenuBox *box, int8_t flag)
+void renderItemKeeperBox(ItemMenuBox *box, int8_t flag)
 {
 	GsBOXF rect;
 	int32_t x;
@@ -3668,19 +3713,19 @@ void MAIN_func_80108EB4(ItemMenuBox *box, int8_t flag)
 	TextBoxData *tbox;
 
 	boxId = box->boxId;
-	label1 = MAIN_D_801307B4;
-	label2 = MAIN_D_801307C0;
+	label1 = ITEM_KEEPER_HAND_LABEL;
+	label2 = ITEM_KEEPER_STORED_LABEL;
 	bx = UI_BOX_DATA[boxId].finalPos.x;
 	by = UI_BOX_DATA[boxId].finalPos.y;
-	MAIN_func_800FF338(boxId, 4, 0x15, 0x67, 0xb);
-	MAIN_func_800FD7D8(boxId, 0, bx + 8, by + 0x17);
-	MAIN_func_800FF338(boxId, 0x6b, 0x15, 0x25, 0xb);
-	MAIN_func_800FD7D8(boxId, 3, bx + 0x6e, by + 0x17);
-	MAIN_func_800FD8D4(box);
+	renderRaisedFrame(boxId, 4, 0x15, 0x67, 0xb);
+	renderItemMenuHeader(boxId, 0, bx + 8, by + 0x17);
+	renderRaisedFrame(boxId, 0x6b, 0x15, 0x25, 0xb);
+	renderItemMenuHeader(boxId, 3, bx + 0x6e, by + 0x17);
+	renderItemMenuScrollbar(box);
 	y = by + box->cursor * 0x12 + 0x21;
 draw:
 	renderSelectionCursor(bx + 5, y, 0x80, 0x12, 6 - boxId);
-	tbox = &MAIN_D_801BE80C.box[boxId];
+	tbox = &TEXT_BOX_TABLE.box[boxId];
 	getVRAMModeCoords(tbox->vramMode, &x, &clut);
 	y = 0x6c;
 	y += tbox->backPage * tbox->vramRows * 12;
@@ -3692,7 +3737,7 @@ draw:
 		color = 0x3c;
 	}
 	renderString(0, bx + 0x2d, by + 7, color, 0xc, x, y, 6 - boxId, 1);
-	if (MAIN_D_80134F90 == boxId - 1) {
+	if (ITEM_KEEPER_SIDE == boxId - 1) {
 		rect.attribute = 0x40000000;
 		rect.g = 0x80;
 		rect.r = 0x80;
@@ -3703,15 +3748,15 @@ draw:
 		rect.h = 0x12;
 		GsSortBoxFill(&rect, ACTIVE_ORDERING_TABLE, (uint16_t)(6 - boxId));
 	}
-	MAIN_func_800FDC5C(box, bx + 8, by + 0x24, 0, 0, 2);
+	renderItemMenuRows(box, bx + 8, by + 0x24, 0, 0, 2);
 }
 
-void MAIN_func_801091DC(void)
+void tickJukeboxMenu(void)
 {
 	int32_t cur;
 	int32_t offset;
 
-	if (MAIN_func_800FCF88(MAIN_D_80134F68) != 0) {
+	if (tickItemMenuPageFlip(MAIN_D_80134F68) != 0) {
 		return;
 	}
 
@@ -3727,44 +3772,45 @@ void MAIN_func_801091DC(void)
 		return;
 	}
 
-	cur = readPStat(PSTAT_249) & 0xff;
-	if (cur != MAIN_D_80134F8F) {
-		MAIN_D_80134F8F = cur;
+	cur = readPStat(PSTAT_SELECTED) & 0xff;
+	if (cur != JUKEBOX_PLAYING) {
+		JUKEBOX_PLAYING = cur;
 		stopBGM();
 		offset = cur * 2;
-		playMusic(MAIN_D_801303B8[offset],
-		          MAIN_D_801303B8[offset + 1]);
+		playMusic(JUKEBOX_TRACKS[offset],
+		          JUKEBOX_TRACKS[offset + 1]);
 	}
 
-	if (isKeyDown(0x40)) {
-		writePStat(PSTAT_249,
+	if (isKeyDown(PADRdown)) {
+		writePStat(PSTAT_SELECTED,
 		           MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow +
 		                                 MAIN_D_80134F68->cursor) *
 		                                2]);
-		showMapHeadTextbox(2, readPStat(PSTAT_254), 0, 0x4d6);
+		/* "<bgm>, right?" */
+		showMapHeadTextbox(2, readPStat(PSTAT_BUILTIN_ARG), 0, MAPHEAD_TEXT_SERVICES);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
-		MAIN_func_800FCCFC(MAIN_D_80134F68, 9, 2);
+		layoutItemMenu(MAIN_D_80134F68, 9, 2);
 		playSound(0, 3);
-	} else if (isKeyDown(0x10)) {
+	} else if (isKeyDown(PADRup)) {
 		SELECTION_MENU_STATE = 4;
 		playSound(0, 4);
-	} else if (isKeyDown(0x1000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD3DC(MAIN_D_80134F68, 9, 2);
+	} else if (isKeyDown(PADLup)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuJumpToFirst(MAIN_D_80134F68, 9, 2);
 		} else {
-			MAIN_func_800FD428(MAIN_D_80134F68, 2);
+			itemMenuCursorUp(MAIN_D_80134F68, 2);
 		}
-	} else if (isKeyDown(0x4000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD4E8(MAIN_D_80134F68, 9, 2);
+	} else if (isKeyDown(PADLdown)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuJumpToLast(MAIN_D_80134F68, 9, 2);
 		} else {
-			MAIN_func_800FD534(MAIN_D_80134F68, 2);
+			itemMenuCursorDown(MAIN_D_80134F68, 2);
 		}
 	}
 }
 
-void MAIN_func_801093E4(void)
+void renderJukeboxMenuBox(void)
 {
 	int16_t bx;
 	int16_t by;
@@ -3772,20 +3818,20 @@ void MAIN_func_801093E4(void)
 
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
-	MAIN_func_800FD7D8(1, 4, bx + 8, by + 5);
-	MAIN_func_800FD7D8(1, 5, bx + 0x26, by + 5);
-	MAIN_func_800FD8D4(MAIN_D_80134F68);
+	renderItemMenuHeader(1, 4, bx + 8, by + 5);
+	renderItemMenuHeader(1, 5, bx + 0x26, by + 5);
+	renderItemMenuScrollbar(MAIN_D_80134F68);
 	cy = by + MAIN_D_80134F68->cursor * 0x12 + 0x11;
 draw:
 	renderSelectionCursor(bx + 5, cy, 0xca, 0x12, 5);
-	MAIN_func_800FDC5C(MAIN_D_80134F68, bx + 8, by + 0x13, 0, 0, 2);
+	renderItemMenuRows(MAIN_D_80134F68, bx + 8, by + 0x13, 0, 0, 2);
 }
 
-void MAIN_func_801094F0(void)
+void tickTransportMenu(void)
 {
 	uint8_t item;
 
-	if (MAIN_func_800FCF88(MAIN_D_80134F68) != 0) {
+	if (tickItemMenuPageFlip(MAIN_D_80134F68) != 0) {
 		return;
 	}
 
@@ -3801,17 +3847,18 @@ void MAIN_func_801094F0(void)
 		return;
 	}
 
-	if (MAIN_D_8013500C != 0) {
+	if (SCRIPT_PRICE != 0) {
 		return;
 	}
 
-	if (isKeyDown(0x40)) {
+	if (isKeyDown(PADRdown)) {
 		item = MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow +
 		                             MAIN_D_80134F68->cursor) *
 		                            2];
 		if ((item & 0x80) != 0) {
-			showMapHeadTextbox(6, readPStat(PSTAT_254), 0, 0x4d6);
-			MAIN_D_8013500C = MAIN_D_8013024C[item & 0x7f].cost;
+			/* "Are you sure? Once you go, / I can't take you back." */
+			showMapHeadTextbox(6, readPStat(PSTAT_BUILTIN_ARG), 0, MAPHEAD_TEXT_SERVICES);
+			SCRIPT_PRICE = TRANSPORT_DESTINATIONS[item & 0x7f].cost;
 			SELECTION_MENU_STATE = 1;
 			SCRIPT_STATE_4 = 4;
 			SCRIPT_STATE_3 = 1;
@@ -3819,25 +3866,25 @@ void MAIN_func_801094F0(void)
 		} else {
 			playSound(0, 0xb);
 		}
-	} else if (isKeyDown(0x10)) {
+	} else if (isKeyDown(PADRup)) {
 		SELECTION_MENU_STATE = 6;
 		playSound(0, 4);
-	} else if (isKeyDown(0x1000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD3DC(MAIN_D_80134F68, 9, 3);
+	} else if (isKeyDown(PADLup)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuJumpToFirst(MAIN_D_80134F68, 9, 3);
 		} else {
-			MAIN_func_800FD428(MAIN_D_80134F68, 3);
+			itemMenuCursorUp(MAIN_D_80134F68, 3);
 		}
-	} else if (isKeyDown(0x4000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD4E8(MAIN_D_80134F68, 9, 3);
+	} else if (isKeyDown(PADLdown)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuJumpToLast(MAIN_D_80134F68, 9, 3);
 		} else {
-			MAIN_func_800FD534(MAIN_D_80134F68, 3);
+			itemMenuCursorDown(MAIN_D_80134F68, 3);
 		}
 	}
 }
 
-void MAIN_func_801096E8(void)
+void renderTransportMenuBox(void)
 {
 	int16_t bx;
 	int16_t by;
@@ -3845,20 +3892,20 @@ void MAIN_func_801096E8(void)
 
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
-	MAIN_func_800FD7D8(1, 6, bx + 8, by + 5);
-	MAIN_func_800FD7D8(1, 2, bx + 0xa2, by + 5);
-	MAIN_func_800FD8D4(MAIN_D_80134F68);
+	renderItemMenuHeader(1, 6, bx + 8, by + 5);
+	renderItemMenuHeader(1, 2, bx + 0xa2, by + 5);
+	renderItemMenuScrollbar(MAIN_D_80134F68);
 	cy = by + MAIN_D_80134F68->cursor * 0x12 + 0x11;
 draw:
 	renderSelectionCursor(bx + 5, cy, 0xca, 0x12, 5);
-	MAIN_func_800FDC5C(MAIN_D_80134F68, bx + 8, by + 0x13, 0, 0, 2);
+	renderItemMenuRows(MAIN_D_80134F68, bx + 8, by + 0x13, 0, 0, 2);
 }
 
-void MAIN_func_801097F4(void)
+void tickTradeMenu(void)
 {
 	uint8_t item;
 
-	if (MAIN_func_800FCF88(MAIN_D_80134F68) != 0) {
+	if (tickItemMenuPageFlip(MAIN_D_80134F68) != 0) {
 		return;
 	}
 
@@ -3874,17 +3921,18 @@ void MAIN_func_801097F4(void)
 		return;
 	}
 
-	if (readPStat(PSTAT_249) != 0xff) {
+	if (readPStat(PSTAT_SELECTED) != 0xff) {
 		return;
 	}
 
-	if (isKeyDown(0x40)) {
+	if (isKeyDown(PADRdown)) {
 		item = MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow +
 		                             MAIN_D_80134F68->cursor) *
 		                            2];
 		if ((item & 0x80) != 0) {
-			writePStat(PSTAT_249, (item & 0x7f));
-			showMapHeadTextbox(0xb, readPStat(PSTAT_254), 0, 0x4d6);
+			writePStat(PSTAT_SELECTED, (item & 0x7f));
+			/* "You'll really give me <item>?" */
+			showMapHeadTextbox(0xb, readPStat(PSTAT_BUILTIN_ARG), 0, MAPHEAD_TEXT_SERVICES);
 			SELECTION_MENU_STATE = 1;
 			SCRIPT_STATE_4 = 4;
 			SCRIPT_STATE_3 = 1;
@@ -3892,27 +3940,27 @@ void MAIN_func_801097F4(void)
 		} else {
 			playSound(0, 0xb);
 		}
-	} else if (isKeyDown(0x10)) {
+	} else if (isKeyDown(PADRup)) {
 		SELECTION_MENU_STATE = 6;
 		playSound(0, 4);
-	} else if (isKeyDown(0x1000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FF310(MAIN_D_80134F68);
-			MAIN_func_80109BBC();
+	} else if (isKeyDown(PADLup)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuSelectFirst(MAIN_D_80134F68);
+			layoutTradeList();
 		} else {
-			MAIN_func_800FD428(MAIN_D_80134F68, 4);
+			itemMenuCursorUp(MAIN_D_80134F68, 4);
 		}
-	} else if (isKeyDown(0x4000)) {
-		if (POLLED_INPUT & 8) {
-			MAIN_func_800FF2A8(MAIN_D_80134F68);
-			MAIN_func_80109BBC();
+	} else if (isKeyDown(PADLdown)) {
+		if (POLLED_INPUT & PADR1) {
+			itemMenuSelectLast(MAIN_D_80134F68);
+			layoutTradeList();
 		} else {
-			MAIN_func_800FD534(MAIN_D_80134F68, 4);
+			itemMenuCursorDown(MAIN_D_80134F68, 4);
 		}
 	}
 }
 
-void MAIN_func_801099E8(void)
+void renderTradeMenuBox(void)
 {
 	uint32_t x;
 	int32_t clut;
@@ -3926,28 +3974,30 @@ void MAIN_func_801099E8(void)
 	id = MAIN_D_80134F68->boxId;
 	by = UI_BOX_DATA[1].finalPos.y;
 	renderHorizontalLine(1, 4, 0x15, 0xd7);
-	box = &MAIN_D_801BE80C.box[id];
+	box = &TEXT_BOX_TABLE.box[id];
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	y = 0x6c;
 	y += box->backPage * box->vramRows * 12;
-	drawString(MAIN_D_801307CC, x, y);
+	drawString(TRADE_HEADER_LABELS, x, y);
 	renderString(0, bx + 0x14, by + 5, 0x42, 0xc, x, y, 5, 1);
 	renderString(0, bx + 0x7a, by + 5, 0x4e, 0xc, x + 0x42, y, 5, 1);
 	y = by + MAIN_D_80134F68->cursor * 0x12 + 0x19;
 draw:
 	renderSelectionCursor(bx + 5, y, 0xd4, 0x12, 5);
-	MAIN_func_800FDC5C(MAIN_D_80134F68, bx + 8, by + 0x1b, 0, 0, 2);
+	renderItemMenuRows(MAIN_D_80134F68, bx + 8, by + 0x1b, 0, 0, 2);
 }
 
-void MAIN_func_80109BBC(void)
+void layoutTradeList(void)
 {
-	showMapHeadTextbox(0xf, 0xff, 1, 0x4d6);
+	/* "I want You have" */
+	showMapHeadTextbox(0xf, SPEAKER_NONE, 1, MAPHEAD_TEXT_SERVICES);
 
+	/* Keep the title on the first row and add the list after it. */
 	--TEXT_BOX_DATA[1].writeCount;
-	TEXT_BUFFERS_PTR[0x254] = 0xd;
-	TEXT_BUFFERS_PTR[0x354] = 0xd;
+	TEXT_BUFFERS_PTR[0x254] = TEXT_NEWLINE;
+	TEXT_BUFFERS_PTR[0x354] = TEXT_NEWLINE;
 
-	MAIN_func_800FCCFC(MAIN_D_80134F68, 0xa, 4);
+	layoutItemMenu(MAIN_D_80134F68, 0xa, 4);
 }
 
 void setupNewGameDialogueBox(void)
@@ -3957,7 +4007,7 @@ void setupNewGameDialogueBox(void)
 	RECT rect1;
 	int16_t screenPos[2];
 
-	MAIN_D_80134F98 = 0;
+	TEXT_MONOSPACE = 0;
 	for (i = 2; i < 10; i++) {
 		Entity *ent = ENTITY_TABLE[i];
 		if (ent->type == 0x75) {
@@ -3974,7 +4024,7 @@ void setupNewGameDialogueBox(void)
 
 void showNewgameDialogue(int32_t textId, int16_t nextState)
 {
-	showMapHeadTextbox(textId, 0xfe, 0, 0x4d6);
+	showMapHeadTextbox(textId, SPEAKER_NARRATOR, 0, MAPHEAD_TEXT_SERVICES);
 
 	SELECTION_MENU_STATE = 1;
 	SCRIPT_STATE_4 = nextState;
@@ -3985,7 +4035,7 @@ void showNewgameSelection(int32_t textId, int16_t nextState)
 {
 	int32_t sel = 0;
 
-	showMapheadSelection(textId, 0xfe, 2, &sel, 0x4d6);
+	showMapheadSelection(textId, SPEAKER_NARRATOR, 2, &sel, MAPHEAD_TEXT_SERVICES);
 
 	SELECTION_MENU_STATE = 1;
 	SCRIPT_STATE_4 = nextState;
@@ -4000,8 +4050,8 @@ void setupNameSelectorBox(void)
 	RECT rect1;
 	int16_t screenPos[2];
 
-	MAIN_D_80134F98 = 1;
-	if ((MAIN_D_80134F8E & 2) == 0) {
+	TEXT_MONOSPACE = 1;
+	if ((NAMING_FLAGS & NAMING_FROM_SCRIPT) == 0) {
 		flags = 0xc1;
 	} else {
 		flags = 0xe1;
@@ -4021,8 +4071,8 @@ void setupNameSelectorBox(void)
 	registerTextbox(1, 1, 7, 1, 0);
 
 	MAIN_D_80134F81 = 0;
-	MAIN_D_80134F8C = 0;
-	MAIN_func_8010A79C();
+	NAMING_CURSOR = 0;
+	layoutNamingBox();
 }
 
 void setupNameDisplayBox(void)
@@ -4033,7 +4083,7 @@ void setupNameDisplayBox(void)
 	RECT rect1;
 	int16_t screenPos[2];
 
-	if ((MAIN_D_80134F8E & 2) == 0) {
+	if ((NAMING_FLAGS & NAMING_FROM_SCRIPT) == 0) {
 		flags = 0xc1;
 	} else {
 		flags = 0xe1;
@@ -4051,7 +4101,7 @@ void setupNameDisplayBox(void)
 	createTextbox(2, flags, &rect2, &rect1, 0, renderNameDisplayBox);
 	registerTextbox(2, 0, 1, 0, 0);
 
-	MAIN_D_80134F82 = strlen(MAIN_D_801B1D1C) >> 1;
+	MAIN_D_80134F82 = strlen(NAMING_BUFFER) >> 1;
 	if (MAIN_D_80134F82 == 6) {
 		--MAIN_D_80134F82;
 	}
@@ -4059,6 +4109,10 @@ void setupNameDisplayBox(void)
 	updateNamingPreview();
 }
 
+/*
+ * Square clears the name, triangle deletes a character, circle and start jump
+ * to the buttons, and cross types the character under the cursor.
+ */
 void tickNamingBox(void)
 {
 	int16_t row;
@@ -4072,7 +4126,7 @@ void tickNamingBox(void)
 	int16_t idx;
 	uint8_t n;
 
-	if (MAIN_func_800FE650(1) != 0) {
+	if (flipMenuPage(1) != 0) {
 		return;
 	}
 	if (UI_BOX_DATA[1].state != 1) {
@@ -4084,28 +4138,29 @@ void tickNamingBox(void)
 	if (isXPressedAfterDialogue() == 0) {
 		return;
 	}
-	row = MAIN_D_80134F8C / 5;
-	col = MAIN_D_80134F8C % 5;
-	special = MAIN_D_80134F8C & 0x7fff;
-	if (isKeyDown(0x80)) {
-		MAIN_D_801B1D1C[0] = 0;
+	row = NAMING_CURSOR / 5;
+	col = NAMING_CURSOR % 5;
+	special = NAMING_CURSOR & 0x7fff;
+	if (isKeyDown(PADRleft)) {
+		NAMING_BUFFER[0] = 0;
 		MAIN_D_80134F82 = 0;
 		updateNamingPreview();
 		playSound(0, 3);
 		return;
 	}
-	if (isKeyDown(0x40)) {
-		if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if (isKeyDown(PADRdown)) {
+		if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
 			if (row < 9) {
-				rows = MAIN_D_80130774[MAIN_D_80134F81 * 2];
+				rows = NAMING_CHAR_PAGES[MAIN_D_80134F81 * 2];
 			} else {
 				row -= 9;
-				rows = MAIN_D_80130774[MAIN_D_80134F81 * 2 + 1];
+				rows = NAMING_CHAR_PAGES[MAIN_D_80134F81 * 2 + 1];
 			}
 			str = rows[row];
 			col *= 2;
 			hi = str[col + 0];
 			lo = str[col + 1];
+			/* A name cannot start with a space. */
 			if (hi == 0x81 && lo == 0x40 && MAIN_D_80134F82 == 0) {
 				playSound(0, 0xb);
 				return;
@@ -4113,25 +4168,26 @@ void tickNamingBox(void)
 			n = MAIN_D_80134F82;
 			idx = n * 2;
 			pos = idx;
-			MAIN_D_801B1D1C[idx] = hi;
-			MAIN_D_801B1D1C[pos + 1] = lo;
-			MAIN_D_801B1D1C[pos + 2] = 0;
+			NAMING_BUFFER[idx] = hi;
+			NAMING_BUFFER[pos + 1] = lo;
+			NAMING_BUFFER[pos + 2] = 0;
 			if (n != 5) {
 				MAIN_D_80134F82++;
 			}
 			updateNamingPreview();
 			if (MAIN_D_801B1D26[0] != 0 && MAIN_D_80134F82 == 5) {
-				MAIN_D_80134F8C = 0x8001;
+				NAMING_CURSOR = NAMING_BUTTON_OK;
 			}
 			playSound(0, 3);
 			return;
 		}
+		/* special is 0 for Back and 1 for OK. */
 		if (special != 1) {
 			if (special == 0) {
 				namingDeleteLast();
 			}
 		} else {
-			if (MAIN_D_801B1D1C[0] == 0) {
+			if (NAMING_BUFFER[0] == 0) {
 				playSound(0, 0xb);
 				return;
 			}
@@ -4139,21 +4195,21 @@ void tickNamingBox(void)
 			playSound(0, 3);
 			SELECTION_MENU_STATE = 0x15;
 		}
-	} else if (isKeyDown(0x20)) {
-		MAIN_D_80134F8C = 0x8000;
+	} else if (isKeyDown(PADRright)) {
+		NAMING_CURSOR = NAMING_BUTTON_BACK;
 		playSound(0, 2);
-	} else if (isKeyDown(0x10)) {
+	} else if (isKeyDown(PADRup)) {
 		namingDeleteLast();
-	} else if (isKeyDown(0x800)) {
-		MAIN_D_80134F8C = 0x8001;
+	} else if (isKeyDown(PADstart)) {
+		NAMING_CURSOR = NAMING_BUTTON_OK;
 		playSound(0, 2);
-	} else if (isKeyDown(0x8000)) {
+	} else if (isKeyDown(PADLleft)) {
 		namingSelectionLeft(col, row, (int16_t)special);
-	} else if (isKeyDown(0x2000)) {
+	} else if (isKeyDown(PADLright)) {
 		namingSelectionRight(col, row, (int16_t)special);
-	} else if (isKeyDown(0x1000)) {
+	} else if (isKeyDown(PADLup)) {
 		namingSelectionUp(col, row);
-	} else if (isKeyDown(0x4000)) {
+	} else if (isKeyDown(PADLdown)) {
 		namingSelectionDown(col, row);
 	}
 }
@@ -4180,12 +4236,12 @@ void renderNamingBox(void)
 	box = &TEXT_BOX_DATA[1];
 	texY = box->backPage * box->vramRows * 12;
 	texY += box->vramRow * 12;
-	lbl = MAIN_D_8013078C;
+	lbl = NAMING_LABEL_LAYOUT;
 	for (j = 0; j < 3; j++, lbl += 3) {
 		renderString(0, bx + lbl[0], by + lbl[1], lbl[2], 12, texX, texY, 5, 1);
 		texX += lbl[2];
 	}
-	if (MAIN_D_801B1D1C[0] == 0) {
+	if (NAMING_BUFFER[0] == 0) {
 		ty = 0xd;
 	} else {
 		ty = 0;
@@ -4214,7 +4270,8 @@ void renderNamingBox(void)
 	}
 }
 
-void MAIN_func_8010A79C(void)
+/* Lays out the title, the buttons and the current page of characters. */
+void layoutNamingBox(void)
 {
 	TextBoxData *box;
 	uint8_t *buf;
@@ -4228,20 +4285,20 @@ void MAIN_func_8010A79C(void)
 	buf = TEXT_BUFFERS_PTR + box->vramRow * 64;
 	buf = (uint8_t *)((uint32_t)buf + (box->backPage ^ 1) * box->vramRows * 64);
 	line = buf;
-	*buf++ = 1;
-	*buf++ = 7;
-	strcpy(buf, MAIN_D_801345F8);
-	buf += strlen(MAIN_D_801345F8);
-	*buf++ = 1;
-	*buf++ = 1;
-	strcpy(buf, MAIN_D_80134600);
-	buf += strlen(MAIN_D_80134600);
-	*buf++ = 0xd;
+	*buf++ = TEXT_COLOR;
+	*buf++ = TEXT_COLOR_YELLOW;
+	strcpy(buf, NAMING_TITLE);
+	buf += strlen(NAMING_TITLE);
+	*buf++ = TEXT_COLOR;
+	*buf++ = TEXT_COLOR_WHITE;
+	strcpy(buf, NAMING_BUTTON_LABELS);
+	buf += strlen(NAMING_BUTTON_LABELS);
+	*buf++ = TEXT_NEWLINE;
 	*buf++ = 0;
 	line += 0x40;
 	page = MAIN_D_80134F81 * 2;
 	for (row = 0; row < 2; row++) {
-		table = MAIN_D_80130774[page + row];
+		table = NAMING_CHAR_PAGES[page + row];
 		for (j = 0; j < 9; j += 3) {
 			buf = line + row * 0xc0 + (j / 3) * 64;
 			strcpy(buf, table[j]);
@@ -4250,7 +4307,7 @@ void MAIN_func_8010A79C(void)
 			buf += strlen(table[j + 1]);
 			strcpy(buf, table[j + 2]);
 			buf += strlen(table[j + 2]);
-			*buf++ = 0xd;
+			*buf++ = TEXT_NEWLINE;
 			*buf++ = 0;
 		}
 	}
@@ -4260,39 +4317,40 @@ void MAIN_func_8010A79C(void)
 	box->writeCount++;
 }
 
+/* Draws the name typed so far, padded to six characters. */
 void updateNamingPreview(void)
 {
 	uint8_t *out;
 	int32_t len;
 
 	out = TEXT_BUFFERS_PTR;
-	*out++ = 1;
-	*out++ = 1;
+	*out++ = TEXT_COLOR;
+	*out++ = TEXT_COLOR_WHITE;
 
-	if ((MAIN_D_80134F8E & 1) == 0) {
-		strcpy(out, MAIN_D_801345F4);
-		out += strlen(MAIN_D_801345F4);
+	if ((NAMING_FLAGS & NAMING_PARTNER) == 0) {
+		strcpy(out, NAMING_PREVIEW_PREFIX);
+		out += strlen(NAMING_PREVIEW_PREFIX);
 	} else {
-		strcpy(out, MAIN_D_801345F4 + 1);
-		out += strlen(((int32_t)MAIN_D_801345F4 + 1));
+		strcpy(out, NAMING_PREVIEW_PREFIX + 1);
+		out += strlen(((int32_t)NAMING_PREVIEW_PREFIX + 1));
 	}
 
-	strcpy(out, MAIN_D_801B1D1C);
-	len = strlen(MAIN_D_801B1D1C);
+	strcpy(out, NAMING_BUFFER);
+	len = strlen(NAMING_BUFFER);
 	out += len;
 	out = padWithSpaces(out, 6, len);
 	terminateString(out, 1);
-	drawString2(TEXT_BUFFERS_PTR, 0, 0, 1);
+	drawTextRow(TEXT_BUFFERS_PTR, 0, 0, 1);
 }
 
 void namingDeleteLast(void)
 {
-	if (MAIN_D_801B1D1C[0] != 0) {
+	if (NAMING_BUFFER[0] != 0) {
 		if (MAIN_D_80134F82 == 0) {
-			MAIN_D_801B1D1C[0] = 0;
+			NAMING_BUFFER[0] = 0;
 		} else {
 			MAIN_D_80134F82--;
-			MAIN_D_801B1D1C[MAIN_D_80134F82 * 2] = 0;
+			NAMING_BUFFER[MAIN_D_80134F82 * 2] = 0;
 		}
 
 		updateNamingPreview();
@@ -4309,7 +4367,7 @@ void terminateNamingBuffer(void)
 	pos = 0;
 	scan = 2;
 	while (pos < 0xc) {
-		if (MAIN_D_801B1D1C[scan] == 0) {
+		if (NAMING_BUFFER[scan] == 0) {
 			break;
 		}
 
@@ -4323,12 +4381,12 @@ void terminateNamingBuffer(void)
 		uint8_t hiByte;
 		uint8_t loByte;
 
-		hiByte = MAIN_D_801B1D1C[pos];
+		hiByte = NAMING_BUFFER[pos];
 		if (hiByte != 0x81) {
 			break;
 		}
 
-		loByte = MAIN_D_801B1D1C[lowPos];
+		loByte = NAMING_BUFFER[lowPos];
 		if (loByte != 0x40) {
 			break;
 		}
@@ -4337,18 +4395,18 @@ void terminateNamingBuffer(void)
 		lowPos -= 2;
 	}
 
-	MAIN_D_801B1D1C[pos + 2] = 0;
+	NAMING_BUFFER[pos + 2] = 0;
 }
 
 void namingSelectionLeft(int16_t col, int16_t row, int32_t specialIdx)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
 		if (row < 9) {
 			if (col == 0) {
-				MAIN_D_80134F8C = MAIN_D_801307A0[row];
+				NAMING_CURSOR = MAIN_D_801307A0[row];
 			} else {
 				--col;
-				MAIN_D_80134F8C = col + (row * 5);
+				NAMING_CURSOR = col + (row * 5);
 			}
 		} else {
 			if (col == 0) {
@@ -4358,10 +4416,10 @@ void namingSelectionLeft(int16_t col, int16_t row, int32_t specialIdx)
 				--col;
 			}
 
-			MAIN_D_80134F8C = col + (row * 5);
+			NAMING_CURSOR = col + (row * 5);
 		}
 	} else {
-		MAIN_D_80134F8C = MAIN_D_80134608[specialIdx] + 0x31;
+		NAMING_CURSOR = MAIN_D_80134608[specialIdx] + 0x31;
 	}
 
 	playSound(0, 2);
@@ -4369,7 +4427,7 @@ void namingSelectionLeft(int16_t col, int16_t row, int32_t specialIdx)
 
 void namingSelectionRight(int16_t col, int16_t row, int32_t specialIdx)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
 		if (row < 9) {
 			if (col == 4) {
 				row += 9;
@@ -4378,15 +4436,15 @@ void namingSelectionRight(int16_t col, int16_t row, int32_t specialIdx)
 				++col;
 			}
 
-			MAIN_D_80134F8C = col + (row * 5);
+			NAMING_CURSOR = col + (row * 5);
 		} else if (col == 4) {
-			MAIN_D_80134F8C = MAIN_D_801307A0[row - 9];
+			NAMING_CURSOR = MAIN_D_801307A0[row - 9];
 		} else {
 			++col;
-			MAIN_D_80134F8C = col + (row * 5);
+			NAMING_CURSOR = col + (row * 5);
 		}
 	} else {
-		MAIN_D_80134F8C = MAIN_D_80134608[specialIdx];
+		NAMING_CURSOR = MAIN_D_80134608[specialIdx];
 	}
 
 	playSound(0, 2);
@@ -4394,7 +4452,7 @@ void namingSelectionRight(int16_t col, int16_t row, int32_t specialIdx)
 
 void namingSelectionUp(int16_t column, int16_t row)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
 		if (row < 9) {
 			if (row == 0) {
 				row = 8;
@@ -4407,11 +4465,11 @@ void namingSelectionUp(int16_t column, int16_t row)
 			--row;
 		}
 
-		MAIN_D_80134F8C = column + row * 5;
-	} else if (MAIN_D_80134F8C == 0x8000) {
-		MAIN_D_80134F8C = 0x8001;
+		NAMING_CURSOR = column + row * 5;
+	} else if (NAMING_CURSOR == NAMING_BUTTON_BACK) {
+		NAMING_CURSOR = NAMING_BUTTON_OK;
 	} else {
-		--MAIN_D_80134F8C;
+		--NAMING_CURSOR;
 	}
 
 	playSound(0, 2);
@@ -4419,7 +4477,7 @@ void namingSelectionUp(int16_t column, int16_t row)
 
 void namingSelectionDown(int16_t column, int16_t row)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
 		if (row < 9) {
 			if (row == 8) {
 				row = 0;
@@ -4432,11 +4490,11 @@ void namingSelectionDown(int16_t column, int16_t row)
 			++row;
 		}
 
-		MAIN_D_80134F8C = column + row * 5;
-	} else if (MAIN_D_80134F8C == 0x8001) {
-		MAIN_D_80134F8C = 0x8000;
+		NAMING_CURSOR = column + row * 5;
+	} else if (NAMING_CURSOR == NAMING_BUTTON_OK) {
+		NAMING_CURSOR = NAMING_BUTTON_BACK;
 	} else {
-		++MAIN_D_80134F8C;
+		++NAMING_CURSOR;
 	}
 
 	playSound(0, 2);
@@ -4482,8 +4540,8 @@ void renderSelectionBox(void)
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
 
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
-		sel = MAIN_D_80134F8C;
+	if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
+		sel = NAMING_CURSOR;
 		baseY = sel / 5;
 		baseX = sel % 5;
 
@@ -4495,10 +4553,10 @@ void renderSelectionBox(void)
 			baseY = (by + ((baseY - 9) * 14)) + 2;
 		}
 	} else {
-		sel = MAIN_D_80134F8C;
+		sel = NAMING_CURSOR;
 		idx = ((sel & 0x7fff) * 3) + 3;
-		baseX = (bx + MAIN_D_8013078C[idx]) - 4;
-		baseY = (by + (&MAIN_D_8013078C[1])[idx]) - 4;
+		baseX = (bx + NAMING_LABEL_LAYOUT[idx]) - 4;
+		baseY = (by + (&NAMING_LABEL_LAYOUT[1])[idx]) - 4;
 	}
 
 	tag = &ACTIVE_ORDERING_TABLE->org[5];
@@ -4508,7 +4566,7 @@ void renderSelectionBox(void)
 		SetPolyFT4(prim);
 		setUV4(prim, u0.data[i], v0.data[i], u1.data[i], v0.data[i], u0.data[i], v1.data[i], u1.data[i], v1.data[i]);
 
-		if ((MAIN_D_80134F8C & 0x8000) == 0) {
+		if ((NAMING_CURSOR & NAMING_ON_BUTTON) == 0) {
 			setPosDataPolyFT4(prim, baseX + xOffset.data[i],
 			                  baseY + yOffset.data[i], width.data[i],
 			                  height.data[i]);
@@ -4539,7 +4597,7 @@ void renderNameDisplayBox(void)
 	y = UI_BOX_DATA[2].finalPos.y;
 	sx = x + 7;
 	y6 = y + 6;
-	if ((MAIN_D_80134F8E & 1) == 0) {
+	if ((NAMING_FLAGS & NAMING_PARTNER) == 0) {
 		v = 0x48;
 	} else {
 		v = 0x54;
@@ -4585,18 +4643,18 @@ void returnFromScriptFile(void)
 		if (type == 3) {
 			readMapTFS(CURRENT_MAP_ID);
 			MAIN_func_800D634C(CURRENT_MAP_ID, 0);
-			MAIN_D_80134FEC = 0;
+			SCRIPT_WARPING = 0;
 			script = getScript(CURRENT_SCRIPT_ID);
 			section = getScriptSection(script, 0xfe);
 			if (section != 0) {
 				CURRENT_SCRIPT_PTR = script;
-				MAIN_D_80134FDC = section;
+				SCRIPT_PC = section;
 				longjmp(SCRIPT_JMP_BUF, 1);
 			}
 		} else if (type == 4) {
 			if (entry.smth[1] != 0xff) {
 				CURRENT_SCRIPT_PTR = getScript(CURRENT_SCRIPT_ID);
-				MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, entry.smth[1]);
+				SCRIPT_PC = getScriptSection(CURRENT_SCRIPT_PTR, entry.smth[1]);
 			} else {
 				setMapHeadActive();
 			}
@@ -4612,14 +4670,19 @@ uint8_t readPStat(int32_t index)
 	return SCRIPT_STATE_PTR->pstats[index];
 }
 
-void MAIN_func_801062F8(int32_t owner)
+/*
+ * Called when a script starts talking or moving things: the first time, it
+ * stops the player and the clock and turns the NPC that was talked to and the
+ * player to face each other. It also stops owner, if it is an NPC.
+ */
+void beginScriptEvent(int32_t owner)
 {
 	int32_t entityId;
 	uint8_t speaker;
 	int32_t idx;
 
-	if (MAIN_D_80134FF0 == 0) {
-		MAIN_D_80134FF0 = 1;
+	if (SCRIPT_HAS_CONTROL == 0) {
+		SCRIPT_HAS_CONTROL = 1;
 		setMovementEnabled(0, 1);
 		setMovementEnabled(1, 1);
 		unsetCameraFollowPlayer();
@@ -4627,15 +4690,15 @@ void MAIN_func_801062F8(int32_t owner)
 		clearTextArea();
 		stopGameTime();
 
-		if (MAIN_D_80134FE0 != 0 && isTriggerSet(TRIGGER_44) == 0) {
-			entityId = scriptIdToEntityId(MAIN_D_80134FE4) & 0xff;
+		if (SCRIPT_FROM_TALK != 0 && isTriggerSet(TRIGGER_44) == 0) {
+			entityId = scriptIdToEntityId(SCRIPT_SECTION) & 0xff;
 			if (entityId != 0xff) {
-				MAIN_D_801BE6B4[entityId * 0xc] = 0;
+				SCRIPT_MOVEMENTS[entityId * 0xc] = 0;
 				idx = entityId * 0xc;
-				speaker = MAIN_D_80134FE4;
+				speaker = SCRIPT_SECTION;
 				MAIN_D_801BE6B5[idx] = speaker;
 				MAIN_D_801BE6B6[idx] = 0xfd;
-				MAIN_D_801BE6B4[0] = 0;
+				SCRIPT_MOVEMENTS[0] = 0;
 				MAIN_D_801BE6B5[0] = 0xfd;
 				MAIN_D_801BE6B6[0] = speaker;
 			}
@@ -4644,7 +4707,7 @@ void MAIN_func_801062F8(int32_t owner)
 
 	unsetTrigger(TRIGGER_44);
 
-	if ((uint32_t)owner < 0xc8) {
+	if ((uint32_t)owner < SPEAKER_SPECIAL) {
 		owner = scriptIdToEntityId(owner) & 0xff;
 		if (owner != 0xff) {
 			setMovementEnabled(owner, 1);

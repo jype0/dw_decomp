@@ -52,6 +52,23 @@ make compare
 make objdiff
 ```
 
+## Text encoding
+
+Source files are UTF-8. The game stores text as Shift JIS, so the build runs
+every C file through `tools/sjis_escape.py`, which rewrites the non-ASCII
+characters in string and character literals as CP932 escapes before mwcc
+compiles them. Write Japanese text and symbols such as `△` directly in
+literals.
+
+The format of dialogue text (control codes, speakers, colors) is described in
+`include/dw/text.h`. `tools/maphead_text.py` prints the messages that the
+engine shows from `SCN/MAPHEAD.SCN` (shops, the new game questions...), for
+example `tools/maphead_text.py 0x4d6 16`. `tools/dump_dialogue.py` prints the
+dialogue of the map scripts in `SCN/DG.SCN`, following their code the way the
+script interpreter does, for example `tools/dump_dialogue.py 3`. With
+`--actions` it prints every instruction of the scripts, using the opcodes
+documented in `include/dw/script.h`.
+
 ## Links
 
 Symbols and reverse engineering is based on work by SydMontague:  

@@ -3574,7 +3574,7 @@ void STD_getVectorEulerAngles(void)
 
 void STD_printDebugValue(void)
 {
-	printf(MAIN_D_801348E4, EFE_POP1(int32_t));
+	printf(STD_NUMBER_FORMAT, EFE_POP1(int32_t));
 }
 
 void STD_getRandomInRange(void)

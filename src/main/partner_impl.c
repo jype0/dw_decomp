@@ -37,8 +37,8 @@ extern int32_t IS_NATURAL_DEATH;
 extern int8_t ITEM_SCOLD_FLAG;
 extern int16_t STATUS_UI_OFFSET_X;
 
-char MAIN_D_801225A0[] = "is Sick!";
-char MAIN_D_801225AC[16] = "\\ETCNA\\UNTI.TMD";
+char PARTNER_TEXT_IS_SICK[] = "is Sick!";
+char PATH_ETCNA_UNTI_TMD[16] = "\\ETCNA\\UNTI.TMD";
 RaiseData RAISE_DATA[66] = {
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },
 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 670, 200, -2270 },
@@ -351,7 +351,7 @@ void initializePoop(void)
 	char *buf;
 
 	buf = (char *)MAIN_D_80137C00;
-	readFile(MAIN_D_801225AC, buf);
+	readFile(PATH_ETCNA_UNTI_TMD, buf);
 
 	GsMapModelingData((unsigned long *)&buf[4]);
 	GsLinkObject4((unsigned long)&buf[0xc], &POOP_OBJECT, 0);
@@ -1810,7 +1810,7 @@ void tickSicknessMechanics(void)
 		drawString(PARTNER_ENTITY.name, 0, 120);
 		nameLength = strlen(PARTNER_ENTITY.name) / 2;
 		setTextColor(1);
-		drawString(MAIN_D_801225A0, nameLength * 12, 120);
+		drawString(PARTNER_TEXT_IS_SICK, nameLength * 12, 120);
 	}
 
 	if ((PARTNER_PARA.sicknessTimer >= 12) && (PARTNER_STATE != 8) &&

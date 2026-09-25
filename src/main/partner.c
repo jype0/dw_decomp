@@ -1163,7 +1163,7 @@ void callDigimonRoutine(int32_t routine)
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 10:
-		EVOLUTION_TARGET = readPStat(PSTAT_254);
+		EVOLUTION_TARGET = readPStat(PSTAT_BUILTIN_ARG);
 		setPartnerState(13);
 		SOME_SCRIPT_SYNC_BIT = 0;
 	default:

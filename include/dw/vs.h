@@ -15,8 +15,8 @@ typedef struct {
 	void (*handler)(void);
 } VsEfeSubOpcode;
 
-extern char MAIN_D_80134A50[4];
-extern char MAIN_D_80134A54[5];
+extern char VS_TEXT_WIN[4];
+extern char VS_TEXT_LOSE[5];
 extern uint8_t MAIN_D_80134A5C[4];
 extern uint8_t MAIN_D_80134A60[4];
 extern SVECTOR MAIN_D_80134A64;
@@ -41,7 +41,7 @@ extern uint8_t MAIN_D_80134B00[8];
 extern uint8_t MAIN_D_80134B08[8];
 extern char *MAIN_D_80134B10;
 extern int16_t MAIN_D_80134B14[4];
-extern char MAIN_D_80134B1C[4];
+extern char VS_NUMBER_FORMAT[4];
 extern int8_t MAIN_D_80134B20[4];
 extern int8_t MAIN_D_80134B24[4];
 extern int8_t MAIN_D_80134B28[8];

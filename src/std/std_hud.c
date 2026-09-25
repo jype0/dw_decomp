@@ -347,15 +347,15 @@ int16_t STD_D_8007AA8C[18] = {
 	0x0140, 0x0000,
 };
 
-char STD_D_8007AAB0[] = "\\STDDAT\\DRAW.TMD";
+char STD_PATH_STDDAT_DRAW_TMD[] = "\\STDDAT\\DRAW.TMD";
 
-char STD_D_8007AAC4[] = "\\STDDAT\\WIN_LOSE.TMD";
+char STD_PATH_STDDAT_WIN_LOSE_TMD[] = "\\STDDAT\\WIN_LOSE.TMD";
 
-char STD_D_8007AADC[] = "\\STDDAT\\CHAMP.TMD";
+char STD_PATH_STDDAT_CHAMP_TMD[] = "\\STDDAT\\CHAMP.TMD";
 
-char STD_D_8007AAF0[] = "\\STDDAT\\B_DAI.TMD";
+char STD_PATH_STDDAT_B_DAI_TMD[] = "\\STDDAT\\B_DAI.TMD";
 
-char STD_D_8007AB04[] = "\\STDDAT\\T_DAI.TMD";
+char STD_PATH_STDDAT_T_DAI_TMD[] = "\\STDDAT\\T_DAI.TMD";
 // clang-format on
 
 void STD_func_80069134(int16_t tech)
@@ -1212,7 +1212,7 @@ void STD_func_8006B6F4(void)
 	STD_D_8007B714[1].length = 5;
 	STD_D_8007B714[1].org = STD_D_8007B7BC;
 	buf = (uint32_t)STD_D_8007CD28;
-	readFile(STD_D_8007AAC4, (void *)buf);
+	readFile(STD_PATH_STDDAT_WIN_LOSE_TMD, (void *)buf);
 	GsMapModelingData((u_long *)(buf + 4));
 	for (i = 0; i < 8; i++) {
 		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007F528[i].data.obj, i);
@@ -1252,7 +1252,7 @@ void STD_func_8006BA18(void)
 	}
 
 	buf = buf = STD_D_8007CD28;
-	readFile(STD_D_8007AADC, (uint8_t *)buf);
+	readFile(STD_PATH_STDDAT_CHAMP_TMD, (uint8_t *)buf);
 	MAIN_D_801350F0 = 0;
 	GsMapModelingData((u_long *)(buf + 4));
 
@@ -1307,9 +1307,9 @@ void STD_func_8006BA18(void)
 
 	STD_DAI_TMD = STD_TMD_BUFFER;
 	if (CURRENT_SCREEN == 0x6a) {
-		readFile(STD_D_8007AAF0, STD_DAI_TMD);
+		readFile(STD_PATH_STDDAT_B_DAI_TMD, STD_DAI_TMD);
 	} else {
-		readFile(STD_D_8007AB04, STD_DAI_TMD);
+		readFile(STD_PATH_STDDAT_T_DAI_TMD, STD_DAI_TMD);
 	}
 	GsMapModelingData((u_long *)(STD_DAI_TMD + 4));
 	GsLinkObject4((u_long)(STD_DAI_TMD + 0xc), &STD_D_8007F528[0].data.obj, 0);

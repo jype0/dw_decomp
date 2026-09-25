@@ -29,26 +29,26 @@
 #include <dw/ui.h>
 #include <dw/utils.h>
 
-char MAIN_D_80122D68[] = "I can't hold anymore.";
-char MAIN_D_80122D80[] = "Hey! It's empty!";
-char MAIN_D_80122D94[] = "Tamer level went up!!!";
-char MAIN_D_80122DAC[] = "Tamer level went down!!!";
-char MAIN_D_80122DC8[] = "Congratulations!";
-char MAIN_D_80122DDC[24] = "To recognize your great";
-char MAIN_D_80122DF4[] = "recors, they sent a Medal!";
+char TAMER_TEXT_I_CANT_HOLD_ANYMORE[] = "I can't hold anymore.";
+char TAMER_TEXT_HEY_ITS_EMPTY[] = "Hey! It's empty!";
+char TAMER_TEXT_TAMER_LEVEL_WENT_UP[] = "Tamer level went up!!!";
+char TAMER_TEXT_TAMER_LEVEL_WENT_DOWN[] = "Tamer level went down!!!";
+char TAMER_TEXT_CONGRATULATIONS[] = "Congratulations!";
+char TAMER_TEXT_TO_RECOGNIZE_YOUR_GREAT[24] = "To recognize your great";
+char TAMER_TEXT_RECORS_THEY_SENT_A_MEDAL[] = "recors, they sent a Medal!";
 
 static void *tamer_data_order[] = {
-	MAIN_D_80122DF4,
-	MAIN_D_80122DDC,
-	MAIN_D_80122DC8,
-	MAIN_D_80122DAC,
-	MAIN_D_80122D94,
-	MAIN_D_80122D80,
-	MAIN_D_80122D68,
+	TAMER_TEXT_RECORS_THEY_SENT_A_MEDAL,
+	TAMER_TEXT_TO_RECOGNIZE_YOUR_GREAT,
+	TAMER_TEXT_CONGRATULATIONS,
+	TAMER_TEXT_TAMER_LEVEL_WENT_DOWN,
+	TAMER_TEXT_TAMER_LEVEL_WENT_UP,
+	TAMER_TEXT_HEY_ITS_EMPTY,
+	TAMER_TEXT_I_CANT_HOLD_ANYMORE,
 };
 
 RECT MAIN_D_801341F4 = {0, 12, 256, 200};
-char MAIN_D_801341FC[] = "Woah!";
+char TAMER_TEXT_WOAH[] = "Woah!";
 RECT MAIN_D_80134204 = {0, 12, 256, 200};
 RECT MAIN_D_8013420C = {0, 12, 256, 200};
 
@@ -142,7 +142,7 @@ void changeMap(uint8_t mapId, uint8_t exitId);
 void addMapNameObject(uint8_t mapId);
 void renderString(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t,
                   int32_t, int32_t, int32_t);
-void renderUIBox(int32_t id);
+void renderTextboxNextArrow(int32_t id);
 void setMapLayerEnabled(int32_t enabled);
 int32_t isSoundLoaded(int32_t isAsync, int32_t soundId);
 void playSound(int32_t vabId, uint32_t note);
@@ -761,7 +761,7 @@ void renderItemPickupTextbox(int32_t instanceId)
 		renderString(0, 0xffffff83, 0x39, 0x90, 0xc, 0, 0x18, 5, 0);
 	}
 
-	renderUIBox(1);
+	renderTextboxNextArrow(1);
 	++TEXTBOX_OPEN_TIMER;
 }
 
@@ -1272,7 +1272,7 @@ int32_t isTrainingComplete(void)
 void renderAwardSomethingTextbox(int32_t instanceId)
 {
 	renderString(0, 0xffffff83, 0x2d, 0xf0, 0x24, 0, 0x78, 5, 0);
-	renderUIBox(1);
+	renderTextboxNextArrow(1);
 	++TEXTBOX_OPEN_TIMER;
 }
 
@@ -1333,7 +1333,7 @@ void tickPickupItem(void)
 		drawString(DIGIMON_DATA[0].name, 0, 0xc);
 		drawString(ITEM_PARA[DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type].name,
 		           0, 0x18);
-		drawString(MAIN_D_801341FC, 0, 0x24);
+		drawString(TAMER_TEXT_WOAH, 0, 0x24);
 		INTERACTED_CHEST_STATE = 0;
 		TAKE_ITEM_FRAME_COUNT = 0;
 		TAMER_SUBSTATE = 1;
@@ -1363,7 +1363,7 @@ void tickPickupItem(void)
 			}
 			available = giveItem(DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type & 0xff, 0);
 			if (available == 0) {
-				drawString(MAIN_D_80122D68, 0, 0x18);
+				drawString(TAMER_TEXT_I_CANT_HOLD_ANYMORE, 0, 0x18);
 				INTERACTED_CHEST_STATE = 1;
 				TAKE_ITEM_FRAME_COUNT = 0;
 				TAMER_SUBSTATE = 3;
@@ -1427,10 +1427,10 @@ void tickTakeChest(void)
 		if (CHEST_ARRAY[INTERACTED_CHEST].isTaken == DW_FALSE) {
 			drawString(ITEM_PARA[CHEST_ARRAY[INTERACTED_CHEST].item].name,
 			           0, 0x18);
-			drawString(MAIN_D_801341FC, 0, 0x24);
+			drawString(TAMER_TEXT_WOAH, 0, 0x24);
 			INTERACTED_CHEST_STATE = 0;
 		} else {
-			drawString(MAIN_D_80122D80, 0, 0x18);
+			drawString(TAMER_TEXT_HEY_ITS_EMPTY, 0, 0x18);
 			INTERACTED_CHEST_STATE = 2;
 		}
 		TAMER_SUBSTATE = 1;
@@ -1468,7 +1468,7 @@ void tickTakeChest(void)
 			TAKE_ITEM_FRAME_COUNT = 0;
 			available = giveItem(RECEIVED_ITEM_TYPE, 0);
 			if (available == 0) {
-				drawString(MAIN_D_80122D68, 0, 0x18);
+				drawString(TAMER_TEXT_I_CANT_HOLD_ANYMORE, 0, 0x18);
 				INTERACTED_CHEST_STATE = 1;
 				TAMER_SUBSTATE = 3;
 			} else {
@@ -1684,10 +1684,10 @@ void tickAwardSomething(void)
 			clearTextArea();
 			if (LEVELS_INCREASED == 1) {
 				setTextColor(7);
-				drawString(MAIN_D_80122D94, 0, 0x78);
+				drawString(TAMER_TEXT_TAMER_LEVEL_WENT_UP, 0, 0x78);
 			} else {
 				setTextColor(3);
-				drawString(MAIN_D_80122DAC, 0, 0x78);
+				drawString(TAMER_TEXT_TAMER_LEVEL_WENT_DOWN, 0, 0x78);
 			}
 			setTextColor(1);
 			TAMER_SUBSTATE = 4;
@@ -1698,15 +1698,15 @@ void tickAwardSomething(void)
 	case 1:
 		clearTextArea();
 		setTextColor(7);
-		drawString(MAIN_D_80122DC8, 0, 0x78);
+		drawString(TAMER_TEXT_CONGRATULATIONS, 0, 0x78);
 		TAMER_SUBSTATE = 2;
 		break;
 	case 2:
-		drawString(MAIN_D_80122DDC, 0, 0x84);
+		drawString(TAMER_TEXT_TO_RECOGNIZE_YOUR_GREAT, 0, 0x84);
 		TAMER_SUBSTATE = 3;
 		break;
 	case 3:
-		drawString(MAIN_D_80122DF4, 0, 0x90);
+		drawString(TAMER_TEXT_RECORS_THEY_SENT_A_MEDAL, 0, 0x90);
 		setTextColor(1);
 		TAMER_SUBSTATE = 4;
 		break;

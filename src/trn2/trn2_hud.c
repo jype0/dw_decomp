@@ -18,8 +18,8 @@ extern int16_t STATS_GAINS[6];
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern char MAIN_D_80124C0C[];
-extern char MAIN_D_80124C54[];
+extern char STAT_LABELS[];
+extern char FULLWIDTH_DIGITS[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
 void worldPosToScreenPos(TrainingSpot *item, SVECTOR *out);
@@ -328,12 +328,12 @@ void TRN2_createPostTrainingStatsBox(void)
 		row = i * 2;
 
 		if (i < 3) {
-			drawString(&MAIN_D_80124C0C[row * 12], 0, y * 2);
-			drawString(&MAIN_D_80124C0C[(row + 1) * 12], 0, (row + 1) * 12);
+			drawString(&STAT_LABELS[row * 12], 0, y * 2);
+			drawString(&STAT_LABELS[(row + 1) * 12], 0, (row + 1) * 12);
 		}
 		if (i == 3) {
-			drawString(MAIN_D_80134BE0, 0, 84);
-			drawString(MAIN_D_80124C54, 0, 240);
+			drawString(TRN2_TEXT_MONEY_JP, 0, 84);
+			drawString(FULLWIDTH_DIGITS, 0, 240);
 		}
 		DrawSync(0);
 	}

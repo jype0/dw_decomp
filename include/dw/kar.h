@@ -161,7 +161,7 @@ extern KarSprite KAR_D_8005B558;
 extern KarSprite KAR_D_8005B478;
 extern KarSprite KAR_D_8005B56C;
 extern uint8_t MAIN_D_80135220;
-extern char KAR_D_8005ABA4[];
+extern char KAR_PATH_ETCDAT_KARRING_TMD[];
 extern u_long *MAIN_D_80135240;
 extern int32_t MAIN_D_80135244;
 extern uint8_t MAIN_D_80135248;
@@ -176,7 +176,7 @@ extern int8_t MAIN_D_8013522D;
 extern int8_t MAIN_D_8013522E;
 extern int32_t MAIN_D_80135230;
 extern int32_t MAIN_D_80135234;
-extern char KAR_D_8005ABB8[];
+extern char KAR_TEXT_START_GAMEEXPLAIN_GAME[];
 
 extern KarStoneRowRaw KAR_D_8005B5A0[];
 extern u_long KAR_D_8005BFCC[];

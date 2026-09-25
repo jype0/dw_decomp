@@ -833,4 +833,22 @@
 #define TRIGGER_TENTOMON_BEATEN		TRIGGER_311
 #define TRIGGER_WARUSEADRAMON_BEATEN	TRIGGER_312
 
+/* Flags that the engine itself reads or sets. */
+#define TRIGGER_GIVE_ITEM_FAILED	TRIGGER_0	/* by SCRIPT_OP_GIVE_ITEM */
+#define TRIGGER_KEEP_FACING		TRIGGER_44	/* the next talk doesn't turn the NPC */
+#define TRIGGER_CHOICE_CANT_CANCEL	TRIGGER_49	/* triangle doesn't leave a choice */
+
+/* Ranges: the first trigger, + an index. */
+#define TRIGGER_TRADE_DONE		TRIGGER_5	/* + trade, 9 of them */
+#define TRIGGER_ALL_TRADES_DONE		TRIGGER_14
+#define TRIGGER_CUP_WON			TRIGGER_15	/* + cup, 22 of them */
+/*
+ * Set when a Digimon is beaten or joins the city. Tournaments pick their
+ * rivals among them, and the prosperity points count the ones in the city.
+ */
+#define TRIGGER_DIGIMON_MET		TRIGGER_200	/* + digimon, 112 of them */
+#define TRIGGER_MEDAL			TRIGGER_364	/* + medal, 19 of them */
+#define TRIGGER_ITEM_IN_SHOPS		TRIGGER_384	/* + item, 128 of them */
+#define TRIGGER_DIGIMON_RAISED		TRIGGER_512	/* + digimon, 63 of them */
+
 #endif

@@ -70,19 +70,19 @@ int8_t TRAINING_ANIM_IDS[67][2] = {
 	{ 0x2e, 0xa }, { 0x2e, 0xa }, { 0x2e, 0xa },
 };
 
-char TRN_D_8008F0D8[] = "Give it all you got!";
+char TRN_TEXT_GIVE_IT_ALL_YOU_GOT[] = "Give it all you got!";
 
-char TRN_D_8008F0F0[] = "Take it easy!";
+char TRN_TEXT_TAKE_IT_EASY[] = "Take it easy!";
 
-char TRN_D_8008F100[] = "Get back!";
+char TRN_TEXT_GET_BACK[] = "Get back!";
 
-char TRN_D_8008F10C[] = "Change target!";
+char TRN_TEXT_CHANGE_TARGET[] = "Change target!";
 
-char TRN_D_8008F11C[] = "Hang in there!";
+char TRN_TEXT_HANG_IN_THERE[] = "Hang in there!";
 
-char TRN_D_8008F12C[20] = "Technique mastered.";
+char TRN_TEXT_TECHNIQUE_MASTERED[20] = "Technique mastered.";
 
-char TRN_D_8008F140[12] = "New orders!";
+char TRN_TEXT_NEW_ORDERS[12] = "New orders!";
 
 uint8_t TRN_D_8008F14C[56] = {
 	0x2, 0x5, 0x0, 0x4, 0x3, 0x1, 0x6, 0x7,
@@ -105,7 +105,7 @@ int8_t TRN_D_8008F184[8][3] = {
 	{ 0xa, 0x5, 0x0 },
 };
 
-char TRN_D_8008F19C[] = "was mastered!";
+char TRN_TEXT_WAS_MASTERED[] = "was mastered!";
 // clang-format on
 
 void TRN_saveTrainingStartTime(void)
@@ -530,39 +530,39 @@ void TRN_awardBrainsTrainingGains(int32_t a, int32_t b, int32_t c)
 	y = 0x84;
 	if ((base < 0x64) && (brains >= 0x64)) {
 		setTextColor(7);
-		drawString(TRN_D_8008F0D8, 0, 0x78);
+		drawString(TRN_TEXT_GIVE_IT_ALL_YOU_GOT, 0, 0x78);
 		shown = 1;
 	}
 
 	if ((base < 0xc8) && (brains >= 0xc8)) {
 		setTextColor(7);
-		drawString(TRN_D_8008F0F0, 0, 0x78);
+		drawString(TRN_TEXT_TAKE_IT_EASY, 0, 0x78);
 		shown = 1;
 	}
 
 	if ((base < 0x12c) && (brains >= 0x12c)) {
 		setTextColor(7);
-		drawString(TRN_D_8008F100, 0, 0x78);
-		drawString(TRN_D_8008F10C, 0, 0x84);
+		drawString(TRN_TEXT_GET_BACK, 0, 0x78);
+		drawString(TRN_TEXT_CHANGE_TARGET, 0, 0x84);
 		shown = 1;
 		y = 0x94;
 	}
 
 	if ((base < 0x190) && (brains >= 0x190)) {
 		setTextColor(7);
-		drawString(TRN_D_8008F11C, 0, 0x78);
+		drawString(TRN_TEXT_HANG_IN_THERE, 0, 0x78);
 		shown = 1;
 	}
 
 	if ((base < 0x1f4) && (brains >= 0x1f4)) {
 		setTextColor(7);
-		drawString(TRN_D_8008F12C, 0, 0x78);
+		drawString(TRN_TEXT_TECHNIQUE_MASTERED, 0, 0x78);
 		shown = 1;
 	}
 
 	if (shown == 1) {
 		setTextColor(1);
-		drawString(TRN_D_8008F140, 0, y);
+		drawString(TRN_TEXT_NEW_ORDERS, 0, y);
 		createMenuBox(2, -0x58, 0x12, 0xb0, 0x30, 2, 0, TRN_renderNewOrdersBox);
 		MAIN_D_80135388 = 1;
 	} else if (((base < 0x96) && (brains >= 0x96)) || ((base < 0xfa) && (brains >= 0xfa)) || ((base < 0x15e) && (brains >= 0x15e)) || ((base < 0x1c2) && (brains >= 0x1c2)) || ((base < 0x226) && (brains >= 0x226)) || ((base < 0x28a) && (brains >= 0x28a)) || ((base < 0x2ee) && (brains >= 0x2ee)) || ((base < 0x320) && (brains >= 0x320)) || ((base < 0x352) && (brains >= 0x352)) || ((base < 0x384) && (brains >= 0x384)) || ((base < 0x3b6) && (brains >= 0x3b6)) || (brains == 999)) {
@@ -836,7 +836,7 @@ int32_t TRN_tryLearnMove(int32_t type)
 		learnMove(move);
 		drawString(MOVE_NAMES[move], 0, 0x78);
 		MAIN_D_80135392 = strlen(MOVE_NAMES[move]);
-		drawString(TRN_D_8008F19C, 0, 0x84);
+		drawString(TRN_TEXT_WAS_MASTERED, 0, 0x84);
 		createMenuBox(2, -0x58, 0x12, 0xb0, 0x23, 2, 0, TRN_renderMoveLearnedBox);
 		MAIN_D_80135388 = 1;
 		return 1;

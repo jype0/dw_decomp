@@ -3116,7 +3116,7 @@ void VS_getVectorEulerAngles(void)
 
 void VS_printDebugValue(void)
 {
-	printf(MAIN_D_80134B1C, EFE_POP1(int32_t));
+	printf(VS_NUMBER_FORMAT, EFE_POP1(int32_t));
 }
 
 void VS_getRandomInRange(void)

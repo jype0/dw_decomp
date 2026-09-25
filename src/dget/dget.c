@@ -7,6 +7,7 @@
 #include <dw/entity.h>
 #include <dw/font.h>
 #include <dw/pstat.h>
+#include <dw/text.h>
 #include <dw/tournament.h>
 #include <dw/trigger.h>
 #include <dw/ui.h>
@@ -21,7 +22,7 @@ extern int32_t MAIN_D_801353B0;
 extern uint8_t ACTIVE_INSTRUCTION;
 extern uint8_t SCRIPT_STATE_3;
 extern uint16_t SCRIPT_STATE_4;
-extern uint8_t *MAIN_D_80134FDC;
+extern uint8_t *SCRIPT_PC;
 extern uint8_t ACTIVE_INSTRUCTION;
 
 uint8_t readPStat(uint32_t address);
@@ -144,13 +145,14 @@ void buildScheduleLabels(void)
 	RECT rect1;
 	RECT rect2;
 
-	stat = readPStat(PSTAT_254);
+	stat = readPStat(PSTAT_BUILTIN_ARG);
 	setupBoxOrigin(stat, &rect2);
 
 	setRECT(&rect1, -54, -98, 108, 20);
 	createTextbox(1, 0xe1, &rect1, &rect2, 0, renderTournamentTextbox);
 	registerTextbox(1, 8, 2, 0, 0);
-	showMapHeadTextbox(1, 0xff, 1, 0x4d8);
+	/* "Tournament Schedule" */
+	showMapHeadTextbox(1, SPEAKER_NONE, 1, MAPHEAD_TEXT_SYSTEM);
 
 	TEXT_BUFFERS_PTR[0x210] = 0xd;
 
@@ -188,7 +190,7 @@ void buildScheduleEntries(void)
 	TOURNAMENT_SELECTED_ROW = 0;
 	TOURNAMENT_SELECTED_COLUMN = 0;
 
-	stat = readPStat(PSTAT_254);
+	stat = readPStat(PSTAT_BUILTIN_ARG);
 	setupBoxOrigin(stat, &rect2);
 
 	setRECT(&rect1, -0x82, -0x3e, 0x104, 0x7c);
@@ -245,7 +247,7 @@ void buildScheduleEntries(void)
 	++textBox->writeCount;
 }
 
-extern void MAIN_func_80101EF8(int32_t, int32_t);
+extern void showTextboxFinalPage(int32_t, int32_t);
 
 static void initTournamentInfo__garbage__(void)
 {
@@ -293,7 +295,7 @@ void initTournamentInfo(int32_t arg)
 	MAIN_D_801353B0 = arg;
 	if (arg != 0) {
 		boxId = 0xe1;
-		stat = readPStat(PSTAT_254);
+		stat = readPStat(PSTAT_BUILTIN_ARG);
 		setupBoxOrigin(stat, &rect2);
 		yOff = -0x4f;
 		slot = 8;
@@ -313,15 +315,15 @@ void initTournamentInfo(int32_t arg)
 		      renderTournamentInfo);
 	registerTextbox(3, slot, 7, 0, 0);
 
-	saved = MAIN_D_80134FDC;
+	saved = SCRIPT_PC;
 	entryPtr = TOURNAMENT_ARRAY + TOURNAMENT_SELECTED_COLUMN * 6;
 	entry = entryPtr[TOURNAMENT_SELECTED_ROW];
 	entry &= 0x3f;
 	jumpTable = getCupDataJumpTable(10, entry);
-	MAIN_D_80134FDC = getCupDataJumpTableEntry(jumpTable, 0) + 2;
-	MAIN_func_80101EF8(3, 0xff);
+	SCRIPT_PC = getCupDataJumpTableEntry(jumpTable, 0) + 2;
+	showTextboxFinalPage(3, 0xff);
 	ACTIVE_INSTRUCTION = 0x64;
-	MAIN_D_80134FDC = saved;
+	SCRIPT_PC = saved;
 }
 
 int32_t tournamentCheckFair(uint8_t value)
@@ -374,13 +376,13 @@ int32_t isTournamentEnabled(uint8_t tournament)
 	trigger = *triggerPtr;
 	if (trigger < 0xfeu) {
 		while ((trigger = *triggerPtr++) < 0xfe) {
-			triggered = isTriggerSet(trigger + TRIGGER_OGRE_FORTRESS_OPENED);
+			triggered = isTriggerSet(trigger + TRIGGER_DIGIMON_MET);
 			if (triggered != 0) {
 				++triggerCount;
 			}
 		}
 	} else {
-		for (trigIdx = TRIGGER_OGRE_FORTRESS_OPENED;
+		for (trigIdx = TRIGGER_DIGIMON_MET;
 		     trigIdx < TRIGGER_WARUSEADRAMON_BEATEN;
 		     ++trigIdx) {
 			triggered = isTriggerSet(trigIdx);
@@ -404,7 +406,7 @@ int32_t isTournamentEnabled(uint8_t tournament)
 		triggerPtr = (uint8_t *)getScriptSection(scriptEntry, 0xb) + 2;
 		triggerCount = 0;
 		while ((trigger = *triggerPtr++) < 0xfe) {
-			triggered = isTriggerSet(trigger + TRIGGER_OGRE_FORTRESS_OPENED);
+			triggered = isTriggerSet(trigger + TRIGGER_DIGIMON_MET);
 			if (triggered != 0) {
 				++triggerCount;
 			}
@@ -417,7 +419,7 @@ int32_t isTournamentEnabled(uint8_t tournament)
 		triggerPtr = getCupDataJumpTableEntry(scriptEntry, 4) + 2;
 		triggerCount = 0;
 		while ((trigger = *triggerPtr++) <= reqType) {
-			triggered = isTriggerSet(trigger + TRIGGER_OGRE_FORTRESS_OPENED);
+			triggered = isTriggerSet(trigger + TRIGGER_DIGIMON_MET);
 			if (triggered != 0) {
 				++triggerCount;
 			}
@@ -681,12 +683,14 @@ void initTournamentSchedule(void)
 			initTournamentInfo(1);
 			triggered = tournamentCheckFair(value);
 			if (triggered != 0) {
-				stat = readPStat(PSTAT_254);
-				showMapHeadTextbox(3, stat, 0, 0x4d8);
+				stat = readPStat(PSTAT_BUILTIN_ARG);
+				/* "<partner>is going to / enter - <cup>-? / Are you sure?" */
+				showMapHeadTextbox(3, stat, 0, MAPHEAD_TEXT_SYSTEM);
 				setTrigger(TRIGGER_TOURNAMENT_OVERLEVELED);
 			} else {
-				stat = readPStat(PSTAT_254);
-				showMapHeadTextbox(2, stat, 0, 0x4d8);
+				stat = readPStat(PSTAT_BUILTIN_ARG);
+				/* "Do you want to enter? / - <cup>- ?" */
+				showMapHeadTextbox(2, stat, 0, MAPHEAD_TEXT_SYSTEM);
 				unsetTrigger(TRIGGER_TOURNAMENT_OVERLEVELED);
 			}
 			SELECTION_MENU_STATE = 2;
@@ -695,7 +699,8 @@ void initTournamentSchedule(void)
 		}
 		break;
 	case 4:
-		showMapheadSelection(4, 0xfd, 2, &selectionResult, 0x4d8);
+		/* "Enter / Don't enter" */
+		showMapheadSelection(4, SPEAKER_PLAYER, 2, &selectionResult, MAPHEAD_TEXT_SYSTEM);
 		SELECTION_MENU_STATE = 2;
 		SCRIPT_STATE_4 = 5;
 		SCRIPT_STATE_3 = 2;

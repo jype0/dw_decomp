@@ -194,39 +194,39 @@ void writePStat(int32_t index, uint8_t value);
 void VS__initializeVSMode(char *namesP1, char *namesP2);
 void renderMainMenuBackground(void);
 
-void MAIN_func_8010D034();
+void renderTitleMenuView();
 void renderText(POLY_FT4 *prim, int32_t x, int32_t y, uint8_t u, int32_t v,
 		int32_t w, int32_t h, int32_t textColor);
 void renderMenuBox(int32_t x, int32_t y, int16_t w, int16_t h);
-void MAIN_func_8010D3E0();
-void MAIN_func_8010D554();
-void MAIN_func_8010D694(void);
-void MAIN_func_8010D70C();
+void renderStartSlotView();
+void renderSlotChoiceView();
+void renderMemcardBusyView(void);
+void renderNoMemcardWarningView();
 void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y);
-void MAIN_func_8010DA44();
+void renderSaveSlotListView();
 void renderContinueSaveSelection();
-void MAIN_func_8010DEBC(void);
-void MAIN_func_8010DFAC();
-void MAIN_func_8010E0C8(void);
-void MAIN_func_8010E16C();
-void MAIN_func_8010E350();
-void MAIN_func_8010E4B8();
-void MAIN_func_8010E638(void);
-void MAIN_func_8010E73C();
-void MAIN_func_8010E8C0(void);
-void MAIN_func_8010E938(void);
-void MAIN_func_8010EA1C(void);
+void renderFormatPromptView(void);
+void renderMemcardErrorView();
+void renderSleepMenuView(void);
+void renderSaveConfirmView();
+void renderInsertBattleCardView();
+void renderRegistrationStatsView();
+void renderRegistrationSlotView(void);
+void renderRegistrationConfirmView();
+void renderCannotRegisterView(void);
+void renderSavePromptView(void);
+void renderInTrainingView(void);
 void drawMainMenuStrings();
 void drawSaveSlotText(int32_t slot, int32_t row);
-char *MAIN_func_8010FB7C(int32_t value, char *buf, int32_t digits);
-void MAIN_func_8010FBB0();
+char *formatNumber(int32_t value, char *buf, int32_t digits);
+void drawMoveName();
 void drawRegisteredBattleSlots(int32_t slot);
 void updateMemoryCardState();
 void tickMainMenu(void);
-int32_t MAIN_func_8011239C(MenuCursor *cursor, int32_t which);
+int32_t tickMenuCursor(MenuCursor *cursor, int32_t which);
 int32_t MAIN_func_80112524(int32_t menu);
 void setMemoryCardReadError(int32_t id, int32_t returnMenu);
-int32_t MAIN_func_801125A8(int32_t chan, int32_t mode);
+int32_t probeMemoryCard(int32_t chan, int32_t mode);
 int32_t countUsedMemoryCardBlocks(int32_t channel, int32_t returnMenu);
 int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots, int32_t unused);
 int32_t MAIN_func_8011296C(MenuCursor *cursor, int32_t which);
@@ -238,22 +238,22 @@ void writeSavegame(uint8_t *sv);
 int32_t MAIN_func_8011341C(uint8_t *p);
 void renderMainMenu();
 void registerBattleData();
-void MAIN_func_801136C8(MenuHighlight *b);
+void renderMenuHighlight(MenuHighlight *b);
 int32_t createByteSum(uint8_t *data, int32_t len);
 void openSaveMachine(void);
-int32_t MAIN_func_801138B0(void);
+int32_t tickSaveMachine(void);
 void awardMachinedramonData();
 void gameClearSave();
-int32_t MAIN_func_80113A20(void);
+int32_t tickGameClearSave(void);
 
 void *main_menu_order_anchor[] = {
-	MAIN_func_80113A20,
+	tickGameClearSave,
 	gameClearSave,
 	awardMachinedramonData,
-	MAIN_func_801138B0,
+	tickSaveMachine,
 	openSaveMachine,
 	createByteSum,
-	MAIN_func_801136C8,
+	renderMenuHighlight,
 	registerBattleData,
 	renderMainMenu,
 	MAIN_func_8011341C,
@@ -265,249 +265,235 @@ void *main_menu_order_anchor[] = {
 	MAIN_func_8011296C,
 	loadSaveSlotData,
 	countUsedMemoryCardBlocks,
-	MAIN_func_801125A8,
+	probeMemoryCard,
 	setMemoryCardReadError,
 	MAIN_func_80112524,
-	MAIN_func_8011239C,
+	tickMenuCursor,
 	tickMainMenu,
 	updateMemoryCardState,
 	drawRegisteredBattleSlots,
-	MAIN_func_8010FBB0,
-	MAIN_func_8010FB7C,
+	drawMoveName,
+	formatNumber,
 	drawSaveSlotText,
 	drawMainMenuStrings,
-	MAIN_func_8010EA1C,
-	MAIN_func_8010E938,
-	MAIN_func_8010E8C0,
-	MAIN_func_8010E73C,
-	MAIN_func_8010E638,
-	MAIN_func_8010E4B8,
-	MAIN_func_8010E350,
-	MAIN_func_8010E16C,
-	MAIN_func_8010E0C8,
-	MAIN_func_8010DFAC,
-	MAIN_func_8010DEBC,
+	renderInTrainingView,
+	renderSavePromptView,
+	renderCannotRegisterView,
+	renderRegistrationConfirmView,
+	renderRegistrationSlotView,
+	renderRegistrationStatsView,
+	renderInsertBattleCardView,
+	renderSaveConfirmView,
+	renderSleepMenuView,
+	renderMemcardErrorView,
+	renderFormatPromptView,
 	renderContinueSaveSelection,
-	MAIN_func_8010DA44,
+	renderSaveSlotListView,
 	renderSaveSlotBox,
-	MAIN_func_8010D70C,
-	MAIN_func_8010D694,
-	MAIN_func_8010D554,
-	MAIN_func_8010D3E0,
+	renderNoMemcardWarningView,
+	renderMemcardBusyView,
+	renderSlotChoiceView,
+	renderStartSlotView,
 	renderMenuBox,
 	renderText,
-	MAIN_func_8010D034,
+	renderTitleMenuView,
 };
 
 // clang-format off
-char MAIN_D_80134660[2] = {
-	0x00, 0x00,
-};
+char EMPTY_STRING[2] = "";
 
-uint16_t MAIN_D_80134662 = 0x0032;
+/* "2", drawn over the "1" of "START SLOT 1" and the like. */
+uint16_t SLOT_2_DIGIT = 0x0032;
 
-char MAIN_D_80134664[] = "YesNo";
+char YES_NO_LABEL[] = "YesNo";
 
-char MAIN_D_8013466C[] = "Yes No";
+char YES_NO_LABEL_SPACED[] = "Yes No";
 
-char MAIN_D_80134674[] = {
-	0x82, 0x51, 0x00,
-};
+char MAIN_MENU_TEXT_2_FULLWIDTH[] = "２";
 
-char MAIN_D_80134678[] = {
-	0x82, 0xc9, 0x00,
-};
+char MAIN_MENU_TEXT_PARTICLE_NI_JP[] = "に";
 
-char MAIN_D_8013467C[] = {
-	0x82, 0xaa, 0x00,
-};
+char MAIN_MENU_TEXT_PARTICLE_GA_JP[] = "が";
 
-char MAIN_D_80134680[] = {
-	0x82, 0xf0, 0x00,
-};
+char MAIN_MENU_TEXT_PARTICLE_WO_JP[] = "を";
 
-char MAIN_D_80134684[] = "Name";
+char MAIN_MENU_TEXT_NAME[] = "Name";
 
-char MAIN_D_8013468C[8] = "Digimon";
+char MAIN_MENU_TEXT_DIGIMON[8] = "Digimon";
 
-char MAIN_D_80134694[] = "HP";
+char MAIN_MENU_TEXT_HP[] = "HP";
 
-char MAIN_D_80134698[] = "MP";
+char MAIN_MENU_TEXT_MP[] = "MP";
 
-char MAIN_D_8013469C[8] = "Offense";
+char MAIN_MENU_TEXT_OFFENSE[8] = "Offense";
 
-char MAIN_D_801346A4[8] = "Defense";
+char MAIN_MENU_TEXT_DEFENSE[8] = "Defense";
 
-char MAIN_D_801346AC[4] = "Yes";
+char MAIN_MENU_TEXT_YES[4] = "Yes";
 
-char MAIN_D_801346B0[] = "No";
+char MAIN_MENU_TEXT_NO[] = "No";
 
-char MAIN_D_801346B4[] = " ";
+char MAIN_MENU_TEXT_SPACE[] = " ";
 
-char MAIN_D_801346B8[] = " is in";
+char MAIN_MENU_TEXT_IS_IN[] = " is in";
 
-char MAIN_D_801346C0[4] = {
-	0x2e, 0x00, 0x2a, 0x00,
-};
+/* A dot drawn in the list of registered battles, and the Memory Card wildcard. */
+char MAIN_MENU_DOT_AND_WILDCARD[2][2] = { ".", "*" };
 
-char MAIN_D_801346C4[] = "Player";
+char MAIN_MENU_TEXT_PLAYER[] = "Player";
 
-char MAIN_D_801346CC[] = "%i";
+char NUMBER_FORMAT[] = "%i";
 
 struct DIRENTRY *MEMCARD_DIRENTRIES = (struct DIRENTRY *)(TEXTURE_BUFFER + 0x5c00);
 
 uint8_t *VS_SAVE_DATA = TEXTURE_BUFFER + 0x4800;
 
-char MAIN_D_80131008[] = "NEW GAME";
+char MENU_ITEM_NEW_GAME[] = "NEW GAME";
 
-char MAIN_D_80131014[] = "CONTINUE GAME";
+char MENU_ITEM_CONTINUE_GAME[] = "CONTINUE GAME";
 
-char MAIN_D_80131024[12] = "DELETE GAME";
+char MENU_ITEM_DELETE_GAME[12] = "DELETE GAME";
 
-char MAIN_D_80131030[12] = "BATTLE MODE";
+char MENU_ITEM_BATTLE_MODE[12] = "BATTLE MODE";
 
-char MAIN_D_8013103C[] = "START SLOT 1";
+char MENU_ITEM_START_SLOT_1[] = "START SLOT 1";
 
-char MAIN_D_8013104C[16] = "CONTINUE SLOT 1";
+char MENU_ITEM_CONTINUE_SLOT_1[16] = "CONTINUE SLOT 1";
 
-char MAIN_D_8013105C[] = "ERASE SLOT 1";
+char MENU_ITEM_ERASE_SLOT_1[] = "ERASE SLOT 1";
 
-char MAIN_D_8013106C[] = "NO MEMORY CARD";
+char MENU_ITEM_NO_MEMORY_CARD[] = "NO MEMORY CARD";
 
-char MAIN_D_8013107C[] = "SAVE SURING GAME";
+char MENU_ITEM_SAVE_DURING_GAME[] = "SAVE SURING GAME";
 
-char MAIN_D_80131090[20] = "BATTLE REGISTRATION";
+char MENU_ITEM_BATTLE_REGISTRATION[20] = "BATTLE REGISTRATION";
 
-char MAIN_D_801310A4[] = "SPECIAL ITEM";
+char MENU_ITEM_SPECIAL_ITEM[] = "SPECIAL ITEM";
 
-char MAIN_D_801310B4[] = "Checking Memory Card";
+char MEMCARD_TEXT_CHECKING_MEMORY_CARD[] = "Checking Memory Card";
 
-char MAIN_D_801310CC[] = "Saving data file";
+char MEMCARD_TEXT_SAVING_DATA_FILE[] = "Saving data file";
 
-char MAIN_D_801310E0[] = "Loading data file";
+char MEMCARD_TEXT_LOADING_DATA_FILE[] = "Loading data file";
 
-char MAIN_D_801310F4[] = "Copying data file";
+char MEMCARD_TEXT_COPYING_DATA_FILE[] = "Copying data file";
 
-char MAIN_D_80131108[] = "Deleting data file";
+char MEMCARD_TEXT_DELETING_DATA_FILE[] = "Deleting data file";
 
-char MAIN_D_8013111C[] = "Formatting Memory Card";
+char MEMCARD_TEXT_FORMATTING_MEMORY_CARD[] = "Formatting Memory Card";
 
-char MAIN_D_80131134[] = "Not Inserted";
+char MEMCARD_ERROR_NOT_INSERTED[] = "Not Inserted";
 
-char MAIN_D_80131144[] = "Data Error";
+char MEMCARD_ERROR_DATA_ERROR[] = "Data Error";
 
-char MAIN_D_80131150[24] = "Do Not Insert or Remove";
+char MEMCARD_ERROR_DO_NOT_INSERT_OR_REMOVE[24] = "Do Not Insert or Remove";
 
-char MAIN_D_80131168[] = "Not Formatted";
+char MEMCARD_ERROR_NOT_FORMATTED[] = "Not Formatted";
 
-char MAIN_D_80131178[20] = "File Does Not Exist";
+char MEMCARD_ERROR_FILE_DOES_NOT_EXIST[20] = "File Does Not Exist";
 
-char MAIN_D_8013118C[] = "No Open Block";
+char MEMCARD_ERROR_NO_OPEN_BLOCK[] = "No Open Block";
 
-char MAIN_D_8013119C[] = "Digimon Not Registered";
+char MEMCARD_ERROR_DIGIMON_NOT_REGISTERED[] = "Digimon Not Registered";
 
-char MAIN_D_801311B4[] = "Item Full";
+char MEMCARD_ERROR_ITEM_FULL[] = "Item Full";
 
-char MAIN_D_801311C0[20] = "Item Already Exists";
+char MEMCARD_ERROR_ITEM_ALREADY_EXISTS[20] = "Item Already Exists";
 
-char MAIN_D_801311D4[] = "Record new adventure?";
+char QUESTION_RECORD_NEW_ADVENTURE[] = "Record new adventure?";
 
-char MAIN_D_801311EC[20] = "Continue adventure?";
+char QUESTION_CONTINUE_ADVENTURE[20] = "Continue adventure?";
 
-char MAIN_D_80131200[] = "Delete adventure in?";
+char QUESTION_DELETE_ADVENTURE_IN[] = "Delete adventure in?";
 
-char MAIN_D_80131218[] = "Read record?";
+char QUESTION_READ_RECORD[] = "Read record?";
 
-char MAIN_D_80131228[] = "Add Item?";
+char QUESTION_ADD_ITEM[] = "Add Item?";
 
-char MAIN_D_80131234[] = "Start Game";
+char MENU_ITEM_START_GAME[] = "Start Game";
 
-char MAIN_D_80131240[] = "Memory Card Battle";
+char MENU_ITEM_MEMORY_CARD_BATTLE[] = "Memory Card Battle";
 
-char MAIN_D_80131254[] = "Battle Try Out";
+char MENU_ITEM_BATTLE_TRY_OUT[] = "Battle Try Out";
 
-char MAIN_D_80131264[20] = "Special Item Record";
+char MENU_ITEM_SPECIAL_ITEM_RECORD[20] = "Special Item Record";
 
-char MAIN_D_80131278[] = "Don't remove or insert";
+char MAIN_MENU_TEXT_DONT_REMOVE_OR_INSERT[] = "Don't remove or insert";
 
-char MAIN_D_80131290[] = "a Memory Card.";
+char MAIN_MENU_TEXT_A_MEMORY_CARD[] = "a Memory Card.";
 
-char MAIN_D_801312A0[] = "YOU WON'T BE ABLE TO";
+char MAIN_MENU_TEXT_YOU_WONT_BE_ABLE_TO[] = "YOU WON'T BE ABLE TO";
 
-char MAIN_D_801312B8[] = "SAVE TO A MEMORY CARD";
+char MAIN_MENU_TEXT_SAVE_TO_A_MEMORY_CARD[] = "SAVE TO A MEMORY CARD";
 
-char MAIN_D_801312D0[] = "EVEN IF YOU INSERT";
+char MAIN_MENU_TEXT_EVEN_IF_YOU_INSERT[] = "EVEN IF YOU INSERT";
 
-char MAIN_D_801312E4[] = "ONE DURING GAMEPLAY.";
+char MAIN_MENU_TEXT_ONE_DURING_GAMEPLAY[] = "ONE DURING GAMEPLAY.";
 
-char MAIN_D_801312FC[] = "Memory Card in Slot 1 is";
+char MAIN_MENU_TEXT_MEMORY_CARD_IN_SLOT_1[] = "Memory Card in Slot 1 is";
 
-char MAIN_D_80131318[] = "not formatted.";
+char MAIN_MENU_TEXT_NOT_FORMATTED[] = "not formatted.";
 
-char MAIN_D_80131328[] = "Do you want to format?";
+char MAIN_MENU_TEXT_DO_YOU_WANT_TO_FORMAT[] = "Do you want to format?";
 
-char MAIN_D_80131340[] = "Not used";
+char MAIN_MENU_TEXT_NOT_USED[] = "Not used";
 
-char MAIN_D_8013134C[] = {
-	0x83, 0x58, 0x83, 0x8d, 0x83, 0x62, 0x83, 0x67,
-	0x82, 0x50, 0x82, 0xcc, 0x83, 0x81, 0x83, 0x82,
-	0x83, 0x8a, 0x81, 0x5b, 0x83, 0x4a, 0x81, 0x5b,
-	0x83, 0x68, 0x82, 0xc9, 0x00,
-};
+/* "To the Memory Card in slot 1": the start of a Japanese error left in the game. */
+char MAIN_MENU_TEXT_SLOT_1_MEMORY_CARD_JP[] = "スロット１のメモリーカードに";
 
-char MAIN_D_8013136C[12] = "Go to sleep";
+char MAIN_MENU_TEXT_GO_TO_SLEEP[12] = "Go to sleep";
 
-char MAIN_D_80131378[] = "Save and go to sleep";
+char MAIN_MENU_TEXT_SAVE_AND_GO_TO_SLEEP[] = "Save and go to sleep";
 
-char MAIN_D_80131390[] = "Data file will be overwritten";
+char MAIN_MENU_TEXT_DATA_FILE_WILL_BE_OVERWRITTEN[] = "Data file will be overwritten";
 
-char MAIN_D_801313B0[] = "Do you want to save data file?";
+char MAIN_MENU_TEXT_DO_YOU_WANT_TO_SAVE[] = "Do you want to save data file?";
 
-char MAIN_D_801313D0[] = "There was an error";
+char MAIN_MENU_TEXT_THERE_WAS_AN_ERROR[] = "There was an error";
 
-char MAIN_D_801313E4[28] = "Please insert a Memory Card";
+char MAIN_MENU_TEXT_PLEASE_INSERT_A_MEMORY_CARD[28] = "Please insert a Memory Card";
 
-char MAIN_D_80131400[] = "which contains Competition";
+char MAIN_MENU_TEXT_WHICH_CONTAINS_COMPETITION[] = "which contains Competition";
 
-char MAIN_D_8013141C[] = "Data for Player 1 in Slot 1 ";
+char MAIN_MENU_TEXT_DATA_FOR_PLAYER_1_IN[] = "Data for Player 1 in Slot 1 ";
 
-char MAIN_D_8013143C[12] = "Technique 1";
+char MAIN_MENU_TEXT_TECHNIQUE_1[12] = "Technique 1";
 
-char MAIN_D_80131448[12] = "Technique 2";
+char MAIN_MENU_TEXT_TECHNIQUE_2[12] = "Technique 2";
 
-char MAIN_D_80131454[12] = "Technique 3";
+char MAIN_MENU_TEXT_TECHNIQUE_3[12] = "Technique 3";
 
-char MAIN_D_80131460[] = "Do you want to register?";
+char MAIN_MENU_TEXT_DO_YOU_WANT_TO_REGISTER[] = "Do you want to register?";
 
-char MAIN_D_8013147C[] = "Select registration slot";
+char MAIN_MENU_TEXT_SELECT_REGISTRATION_SLOT[] = "Select registration slot";
 
-char MAIN_D_80131498[24] = "Do you want to register";
+char MAIN_MENU_TEXT_DO_YOU_WANT_TO_REGISTER_2[24] = "Do you want to register";
 
-char MAIN_D_801314B0[24] = "The Competition Digimon";
+char MAIN_MENU_TEXT_THE_COMPETITION_DIGIMON[24] = "The Competition Digimon";
 
-char MAIN_D_801314C8[] = "data will be saved during";
+char MAIN_MENU_TEXT_DATA_WILL_BE_SAVED_DURING[] = "data will be saved during";
 
-char MAIN_D_801314E4[] = "the registration process";
+char MAIN_MENU_TEXT_THE_REGISTRATION_PROCESS[] = "the registration process";
 
-char MAIN_D_80131500[] = "Since you started the game";
+char MAIN_MENU_TEXT_SINCE_YOU_STARTED_THE_GAME[] = "Since you started the game";
 
-char MAIN_D_8013151C[28] = "without using a Memory Card";
+char MAIN_MENU_TEXT_WITHOUT_USING_A_MEMORY_CARD[28] = "without using a Memory Card";
 
-char MAIN_D_80131538[20] = "you cannot register";
+char MAIN_MENU_TEXT_YOU_CANNOT_REGISTER[20] = "you cannot register";
 
-char MAIN_D_8013154C[28] = "Competition Battle Digimon.";
+char MAIN_MENU_TEXT_COMPETITION_BATTLE_DIGIMON[28] = "Competition Battle Digimon.";
 
-char MAIN_D_80131568[] = "Do you want to save?";
+char MAIN_MENU_TEXT_DO_YOU_WANT_TO_SAVE_2[] = "Do you want to save?";
 
-char MAIN_D_80131580[] = "training, Memory Card cannot";
+char MAIN_MENU_TEXT_TRAINING_MEMORY_CARD_CANNOT[] = "training, Memory Card cannot";
 
-char MAIN_D_801315A0[] = "be registered for Competition";
+char MAIN_MENU_TEXT_BE_REGISTERED_FOR_COMPETITION[] = "be registered for Competition";
 
-char MAIN_D_801315C0[] = "Please Insert";
+char MAIN_MENU_TEXT_PLEASE_INSERT[] = "Please Insert";
 
-char MAIN_D_801315D0[28] = "Memory Card with saved data";
+char MAIN_MENU_TEXT_MEMORY_CARD_WITH_SAVED_DATA[28] = "Memory Card with saved data";
 
-char MAIN_D_801315EC[] = "in Slot 1";
+char MAIN_MENU_TEXT_IN_SLOT_1[] = "in Slot 1";
 
 InventoryTable MAIN_D_801315F8 = {
 	{
@@ -534,27 +520,28 @@ CVECTOR MAIN_D_80131638[4] = {
 	{ 0xc0, 0x40, 0x40, 0x00 },
 };
 
-int8_t MAIN_D_80131648[16] = {
-	0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-	0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46,
+int8_t HEX_DIGITS[16] = "0123456789ABCDEF";
+
+char SLOT_NUMBER_STRINGS[16][6] = {
+	" 0",
+	" 1",
+	" 2",
+	" 3",
+	" 4",
+	" 5",
+	" 6",
+	" 7 ",
+	" 8 ",
+	" 9",
+	"10",
+	"11",
+	"12",
+	"13",
+	"14",
+	"15",
 };
 
-char MAIN_D_80131658[96] = {
-	0x20, 0x30, 0x00, 0x00, 0x00, 0x00, 0x20, 0x31,
-	0x00, 0x00, 0x00, 0x00, 0x20, 0x32, 0x00, 0x00,
-	0x00, 0x00, 0x20, 0x33, 0x00, 0x00, 0x00, 0x00,
-	0x20, 0x34, 0x00, 0x00, 0x00, 0x00, 0x20, 0x35,
-	0x00, 0x00, 0x00, 0x00, 0x20, 0x36, 0x00, 0x00,
-	0x00, 0x00, 0x20, 0x37, 0x20, 0x00, 0x00, 0x00,
-	0x20, 0x38, 0x20, 0x00, 0x00, 0x00, 0x20, 0x39,
-	0x00, 0x00, 0x00, 0x00, 0x31, 0x30, 0x00, 0x00,
-	0x00, 0x00, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00,
-	0x31, 0x32, 0x00, 0x00, 0x00, 0x00, 0x31, 0x33,
-	0x00, 0x00, 0x00, 0x00, 0x31, 0x34, 0x00, 0x00,
-	0x00, 0x00, 0x31, 0x35, 0x00, 0x00, 0x00, 0x00,
-};
-
-MenuHighlight MAIN_D_801316B8[22] = {
+MenuHighlight MENU_HIGHLIGHTS[22] = {
 	{
 		0x00,
 		{ 0x04, 0x00, 0x00, 0x00, 0x00 },
@@ -755,7 +742,8 @@ MenuHighlight MAIN_D_801316B8[22] = {
 	},
 };
 
-int8_t MAIN_D_80131818[80] = {
+/* The view that drawMainMenuStrings() lays out for each menu, or -1. */
+int8_t MENU_VIEWS[80] = {
 	0x00, 0x09, 0x05, 0x0a, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0x01, 0x05, 0x05, 0x05, 0x07, 0x08,
 	0x05, 0x05, 0xff, 0x06, 0x02, 0x05, 0x05, 0x07,
@@ -768,71 +756,66 @@ int8_t MAIN_D_80131818[80] = {
 	0xff, 0x15, 0x05, 0x05, 0x07, 0x08, 0x05, 0x05,
 };
 
-char *MAIN_D_80131868[4] = {
-	MAIN_D_80131008,
-	MAIN_D_80131014,
-	MAIN_D_80131024,
-	MAIN_D_80131030,
+char *TITLE_MENU_ITEMS[4] = {
+	MENU_ITEM_NEW_GAME,
+	MENU_ITEM_CONTINUE_GAME,
+	MENU_ITEM_DELETE_GAME,
+	MENU_ITEM_BATTLE_MODE,
 };
 
-char *MAIN_D_80131878[8] = {
-	MAIN_D_8013103C,
-	MAIN_D_8013104C,
-	MAIN_D_8013105C,
-	MAIN_D_8013106C,
-	MAIN_D_8013107C,
-	MAIN_D_80131030,
-	MAIN_D_80131090,
-	MAIN_D_801310A4,
+char *SLOT_ACTION_TITLES[8] = {
+	MENU_ITEM_START_SLOT_1,
+	MENU_ITEM_CONTINUE_SLOT_1,
+	MENU_ITEM_ERASE_SLOT_1,
+	MENU_ITEM_NO_MEMORY_CARD,
+	MENU_ITEM_SAVE_DURING_GAME,
+	MENU_ITEM_BATTLE_MODE,
+	MENU_ITEM_BATTLE_REGISTRATION,
+	MENU_ITEM_SPECIAL_ITEM,
 };
 
-char *MAIN_D_80131898[6] = {
-	MAIN_D_801310B4,
-	MAIN_D_801310CC,
-	MAIN_D_801310E0,
-	MAIN_D_801310F4,
-	MAIN_D_80131108,
-	MAIN_D_8013111C,
+char *MEMCARD_OPERATION_TEXT[6] = {
+	MEMCARD_TEXT_CHECKING_MEMORY_CARD,
+	MEMCARD_TEXT_SAVING_DATA_FILE,
+	MEMCARD_TEXT_LOADING_DATA_FILE,
+	MEMCARD_TEXT_COPYING_DATA_FILE,
+	MEMCARD_TEXT_DELETING_DATA_FILE,
+	MEMCARD_TEXT_FORMATTING_MEMORY_CARD,
 };
 
-char *MAIN_D_801318B0[11] = {
-	MAIN_D_80134660,
-	MAIN_D_80131134,
-	MAIN_D_80131144,
-	MAIN_D_80131150,
-	MAIN_D_80131168,
-	MAIN_D_80131178,
-	MAIN_D_80134660,
-	MAIN_D_8013118C,
-	MAIN_D_8013119C,
-	MAIN_D_801311B4,
-	MAIN_D_801311C0,
+char *MEMCARD_ERROR_TEXT[11] = {
+	EMPTY_STRING,
+	MEMCARD_ERROR_NOT_INSERTED,
+	MEMCARD_ERROR_DATA_ERROR,
+	MEMCARD_ERROR_DO_NOT_INSERT_OR_REMOVE,
+	MEMCARD_ERROR_NOT_FORMATTED,
+	MEMCARD_ERROR_FILE_DOES_NOT_EXIST,
+	EMPTY_STRING,
+	MEMCARD_ERROR_NO_OPEN_BLOCK,
+	MEMCARD_ERROR_DIGIMON_NOT_REGISTERED,
+	MEMCARD_ERROR_ITEM_FULL,
+	MEMCARD_ERROR_ITEM_ALREADY_EXISTS,
 };
 
-char *MAIN_D_801318DC[8] = {
-	MAIN_D_801311D4,
-	MAIN_D_801311EC,
-	MAIN_D_80131200,
-	MAIN_D_80134660,
-	MAIN_D_80134660,
-	MAIN_D_80131218,
-	MAIN_D_80134660,
-	MAIN_D_80131228,
+char *SLOT_ACTION_QUESTIONS[8] = {
+	QUESTION_RECORD_NEW_ADVENTURE,
+	QUESTION_CONTINUE_ADVENTURE,
+	QUESTION_DELETE_ADVENTURE_IN,
+	EMPTY_STRING,
+	EMPTY_STRING,
+	QUESTION_READ_RECORD,
+	EMPTY_STRING,
+	QUESTION_ADD_ITEM,
 };
 
-char *MAIN_D_801318FC[4] = {
-	MAIN_D_80131234,
-	MAIN_D_80131240,
-	MAIN_D_80131254,
-	MAIN_D_80131264,
+char *BATTLE_MODE_ITEMS[4] = {
+	MENU_ITEM_START_GAME,
+	MENU_ITEM_MEMORY_CARD_BATTLE,
+	MENU_ITEM_BATTLE_TRY_OUT,
+	MENU_ITEM_SPECIAL_ITEM_RECORD,
 };
 
-char MAIN_D_8013190C[32] = {
-	0x42, 0x41, 0x53, 0x4c, 0x55, 0x53, 0x2d, 0x30,
-	0x31, 0x30, 0x33, 0x32, 0x44, 0x4d, 0x52, 0x2a,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
+char MEMCARD_FILENAME[32] = "BASLUS-01032DMR*";
 
 uint8_t MAIN_D_8013192C[32] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1889,7 +1872,7 @@ uint8_t MAIN_D_80132F2C[2560] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-char MAIN_D_8013392C[68] = "Digimon";
+char MAIN_MENU_TEXT_DIGIMON_2[68] = "Digimon";
 
 uint8_t MAIN_D_80133970[32] = {
 	0x00, 0x00, 0x5f, 0x57, 0x7a, 0x3a, 0x75, 0x15,
@@ -1999,7 +1982,7 @@ void renderMenuBox(int32_t x, int32_t y, int16_t w, int16_t h)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void MAIN_func_8010D3E0(void)
+void renderStartSlotView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2019,7 +2002,7 @@ void MAIN_func_8010D3E0(void)
 	renderMenuBox(0x41, 0x32, 0xBE, 0x2E);
 }
 
-void MAIN_func_8010D554(void)
+void renderSlotChoiceView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2038,7 +2021,7 @@ void MAIN_func_8010D554(void)
 	renderMenuBox(0x3C, 0x32, 0xB7, 0x22);
 }
 
-void MAIN_func_8010D694(void)
+void renderMemcardBusyView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2048,7 +2031,7 @@ void MAIN_func_8010D694(void)
 	renderMenuBox(0x36, 0x32, 0xD4, 0x2E);
 }
 
-void MAIN_func_8010D70C(void)
+void renderNoMemcardWarningView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2092,7 +2075,7 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 	renderMenuBox(x, y, 0xE0, 0x24);
 }
 
-void MAIN_func_8010DA44(void)
+void renderSaveSlotListView(void)
 {
 	POLY_FT4 *ft4;
 	int32_t page;
@@ -2104,11 +2087,11 @@ void MAIN_func_8010DA44(void)
 	GsSetWorkBase((PACKET *)ft4);
 	renderMenuBox(0x30, 0x13, 0xE0, 0x16);
 
-	if (SAVE_SLOT_SCROLL_TENTHS < (MAIN_D_801316B8[7].pad[2] * 10)) {
+	if (SAVE_SLOT_SCROLL_TENTHS < (MENU_HIGHLIGHTS[7].pad[2] * 10)) {
 		SAVE_SLOT_SCROLL_TENTHS += 2;
 	}
 
-	if ((MAIN_D_801316B8[7].pad[2] * 10) < SAVE_SLOT_SCROLL_TENTHS) {
+	if ((MENU_HIGHLIGHTS[7].pad[2] * 10) < SAVE_SLOT_SCROLL_TENTHS) {
 		SAVE_SLOT_SCROLL_TENTHS -= 2;
 	}
 
@@ -2163,7 +2146,7 @@ void renderContinueSaveSelection(void)
 	renderMenuBox(0x30, 0x6F, 0xE0, 0x16);
 }
 
-void MAIN_func_8010DEBC(void)
+void renderFormatPromptView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2176,7 +2159,7 @@ void MAIN_func_8010DEBC(void)
 	renderMenuBox(0x42, 0x60, 0x38, 0x22);
 }
 
-void MAIN_func_8010DFAC(void)
+void renderMemcardErrorView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2194,7 +2177,7 @@ void MAIN_func_8010DFAC(void)
 	renderMenuBox(0x36, 0x32, 0xD4, 0x16);
 }
 
-void MAIN_func_8010E0C8(void)
+void renderSleepMenuView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2205,7 +2188,7 @@ void MAIN_func_8010E0C8(void)
 	renderMenuBox(0x6C, 0x65, 0x68, 0x26);
 }
 
-void MAIN_func_8010E16C(void)
+void renderSaveConfirmView(void)
 {
 	POLY_FT4 *cur;
 	int32_t mask;
@@ -2238,7 +2221,7 @@ void MAIN_func_8010E16C(void)
 	}
 }
 
-void MAIN_func_8010E350(void)
+void renderInsertBattleCardView(void)
 {
 	POLY_FT4 *cur;
 	int32_t mask;
@@ -2265,7 +2248,7 @@ void MAIN_func_8010E350(void)
 	renderMenuBox(0x3C, 0x60, 0x38, 0x22);
 }
 
-void MAIN_func_8010E4B8(void)
+void renderRegistrationStatsView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2282,7 +2265,7 @@ void MAIN_func_8010E4B8(void)
 	renderMenuBox(0x3C, 0xBE, 0x38, 0x22);
 }
 
-void MAIN_func_8010E638(void)
+void renderRegistrationSlotView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2296,7 +2279,7 @@ void MAIN_func_8010E638(void)
 	renderMenuBox(0x3C, 0xB4, 0xD4, 0x16);
 }
 
-void MAIN_func_8010E73C(void)
+void renderRegistrationConfirmView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2313,7 +2296,7 @@ void MAIN_func_8010E73C(void)
 	renderMenuBox(0x3C, 0x78, 0xD4, 0x2E);
 }
 
-void MAIN_func_8010E8C0(void)
+void renderCannotRegisterView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2323,7 +2306,7 @@ void MAIN_func_8010E8C0(void)
 	renderMenuBox(0x18, 0x40, 0x110, 0x3A);
 }
 
-void MAIN_func_8010E938(void)
+void renderSavePromptView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2336,7 +2319,7 @@ void MAIN_func_8010E938(void)
 	renderMenuBox(0x3C, 0x52, 0x38, 0x22);
 }
 
-void MAIN_func_8010EA1C(void)
+void renderInTrainingView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2358,76 +2341,76 @@ void drawMainMenuStrings(int32_t menu)
 	if (menu == -1) {
 		return;
 	}
-	view = MAIN_D_80131818[menu];
+	view = MENU_VIEWS[menu];
 	if (view == -1) {
 		return;
 	}
-	MAIN_D_801316B8[view].pos = MAIN_D_801316B8[view].pad[1];
-	MAIN_D_801316B8[view].pad[2] = 0;
+	MENU_HIGHLIGHTS[view].pos = MENU_HIGHLIGHTS[view].pad[1];
+	MENU_HIGHLIGHTS[view].pad[2] = 0;
 	SAVE_SLOT_SCROLL_TENTHS = 0;
 	MEMORY_CARD_CHANGED_MASK = 0;
 	clearTextArea();
 	switch (view) {
 	case 0:
-		drawString(MAIN_D_80131868[0], 0, 0);
-		drawString(MAIN_D_80131868[1], 0, 0xC);
+		drawString(TITLE_MENU_ITEMS[0], 0, 0);
+		drawString(TITLE_MENU_ITEMS[1], 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131868[2], 0, 0x18);
-		drawString(MAIN_D_80131868[3], 0, 0x24);
+		drawString(TITLE_MENU_ITEMS[2], 0, 0x18);
+		drawString(TITLE_MENU_ITEMS[3], 0, 0x24);
 		break;
 	case 1:
-		drawString(MAIN_D_80131878[0], 0, 0);
+		drawString(SLOT_ACTION_TITLES[0], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[0], 0, 0xC);
-		drawString((char *)&MAIN_D_80134662, 0x76, 0xC);
+		drawString(SLOT_ACTION_TITLES[0], 0, 0xC);
+		drawString((char *)&SLOT_2_DIGIT, 0x76, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[3], 0, 0x18);
+		drawString(SLOT_ACTION_TITLES[3], 0, 0x18);
 		break;
 	case 2:
-		drawString(MAIN_D_80131878[1], 0, 0);
+		drawString(SLOT_ACTION_TITLES[1], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[1], 0, 0xC);
-		drawString((char *)&MAIN_D_80134662, 0x9A, 0xC);
+		drawString(SLOT_ACTION_TITLES[1], 0, 0xC);
+		drawString((char *)&SLOT_2_DIGIT, 0x9A, 0xC);
 		MAIN_D_80135054 = 1;
 		break;
 	case 4:
-		drawString(MAIN_D_80131878[2], 0, 0);
+		drawString(SLOT_ACTION_TITLES[2], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[2], 0, 0xC);
-		drawString((char *)&MAIN_D_80134662, 0x76, 0xC);
+		drawString(SLOT_ACTION_TITLES[2], 0, 0xC);
+		drawString((char *)&SLOT_2_DIGIT, 0x76, 0xC);
 		MAIN_D_80135054 = 2;
 		break;
 	case 5:
-		drawString(MAIN_D_80131898[MEMORY_CARD_OPERATION], 0, 0);
+		drawString(MEMCARD_OPERATION_TEXT[MEMORY_CARD_OPERATION], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131278, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_DONT_REMOVE_OR_INSERT, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131290, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_A_MEMORY_CARD, 0, 0x18);
 		break;
 	case 6:
-		drawString(MAIN_D_80131878[3], 0, 0);
+		drawString(SLOT_ACTION_TITLES[3], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_801312A0, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_YOU_WONT_BE_ABLE_TO, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_801312B8, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_SAVE_TO_A_MEMORY_CARD, 0, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_801312D0, 0, 0x24);
+		drawString(MAIN_MENU_TEXT_EVEN_IF_YOU_INSERT, 0, 0x24);
 		DrawSync(0);
-		drawString(MAIN_D_801312E4, 0, 0x30);
+		drawString(MAIN_MENU_TEXT_ONE_DURING_GAMEPLAY, 0, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_80134664, 0, 0xF0);
+		drawString(YES_NO_LABEL, 0, 0xF0);
 		break;
 	case 7:
-		drawString(MAIN_D_80131878[MAIN_MENU_ACTION], 0, 0);
+		drawString(SLOT_ACTION_TITLES[MAIN_MENU_ACTION], 0, 0);
 		DrawSync(0);
 		if (MAIN_MENU_ACTION == 0 || MAIN_MENU_ACTION == 1 ||
 		    MAIN_MENU_ACTION == 2) {
 			if (MEMORY_CARD_ID != 0) {
 				if (MAIN_D_80135054 == 1) {
-					drawString((char *)&MAIN_D_80134662, 0x9A, 0);
+					drawString((char *)&SLOT_2_DIGIT, 0x9A, 0);
 				}
 				if (MAIN_D_80135054 == 2) {
-					drawString((char *)&MAIN_D_80134662, 0x76, 0);
+					drawString((char *)&SLOT_2_DIGIT, 0x76, 0);
 				}
 			}
 		}
@@ -2436,35 +2419,35 @@ void drawMainMenuStrings(int32_t menu)
 		}
 		break;
 	case 9:
-		drawString(MAIN_D_801312FC, 0, 0);
+		drawString(MAIN_MENU_TEXT_MEMORY_CARD_IN_SLOT_1, 0, 0);
 		DrawSync(0);
 		if (MEMORY_CARD_ID != 0) {
-			drawString((char *)&MAIN_D_80134662, 0x76, 0);
+			drawString((char *)&SLOT_2_DIGIT, 0x76, 0);
 		}
 		DrawSync(0);
-		drawString(MAIN_D_80131318, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_NOT_FORMATTED, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131328, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_DO_YOU_WANT_TO_FORMAT, 0, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_8013466C, 0, 0xF0);
+		drawString(YES_NO_LABEL_SPACED, 0, 0xF0);
 		break;
 	case 8:
-		drawString(MAIN_D_80131878[MAIN_MENU_ACTION], 0, 0);
+		drawString(SLOT_ACTION_TITLES[MAIN_MENU_ACTION], 0, 0);
 		if (MAIN_MENU_ACTION == 0 || MAIN_MENU_ACTION == 1 ||
 		    MAIN_MENU_ACTION == 2) {
 			if (MEMORY_CARD_ID != 0) {
 				if (MAIN_D_80135054 == 1) {
-					drawString((char *)&MAIN_D_80134662, 0x9A, 0);
+					drawString((char *)&SLOT_2_DIGIT, 0x9A, 0);
 				}
 				if (MAIN_D_80135054 == 2) {
-					drawString((char *)&MAIN_D_80134662, 0x76, 0);
+					drawString((char *)&SLOT_2_DIGIT, 0x76, 0);
 				}
 			}
 		}
 		DrawSync(0);
-		drawString(MAIN_D_80131340, 0x90, 0);
+		drawString(MAIN_MENU_TEXT_NOT_USED, 0x90, 0);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[(MEMORY_CARD_SLOT + 1) * 6], 0, 0xC);
+		drawString(SLOT_NUMBER_STRINGS[MEMORY_CARD_SLOT + 1], 0, 0xC);
 		DrawSync(0);
 		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 4, 0x18, 0xC);
 		DrawSync(0);
@@ -2472,180 +2455,180 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 0x2C, 0, 0x18);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[(MEMORY_CARD_SLOT + 1) * 6], 0, 0x30);
+		drawString(SLOT_NUMBER_STRINGS[MEMORY_CARD_SLOT + 1], 0, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_801318DC[MAIN_MENU_ACTION], 0x18, 0x30);
+		drawString(SLOT_ACTION_QUESTIONS[MAIN_MENU_ACTION], 0x18, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_8013466C, 0, 0xF0);
+		drawString(YES_NO_LABEL_SPACED, 0, 0xF0);
 		if (MAIN_MENU_ACTION == 2) {
-			MAIN_D_801316B8[view].pos = 1;
+			MENU_HIGHLIGHTS[view].pos = 1;
 		}
 		break;
 	case 10:
-		drawString(MAIN_D_8013134C, 0, 0);
+		drawString(MAIN_MENU_TEXT_SLOT_1_MEMORY_CARD_JP, 0, 0);
 		DrawSync(0);
 		if (MEMORY_CARD_ID != 0) {
-			drawString(MAIN_D_80134674, 0x30, 0);
+			drawString(MAIN_MENU_TEXT_2_FULLWIDTH, 0x30, 0);
 		}
 		if (MEMORY_CARD_ERROR == 1) {
-			drawString(MAIN_D_80134678, 0x3C, 0);
+			drawString(MAIN_MENU_TEXT_PARTICLE_NI_JP, 0x3C, 0);
 		}
 		if (MEMORY_CARD_ERROR == 1 || MEMORY_CARD_ERROR == 4) {
-			drawString(MAIN_D_8013467C, 0x9C, 0);
+			drawString(MAIN_MENU_TEXT_PARTICLE_GA_JP, 0x9C, 0);
 		}
 		if (MEMORY_CARD_ERROR == 3) {
-			drawString(MAIN_D_80134680, 0x9C, 0);
+			drawString(MAIN_MENU_TEXT_PARTICLE_WO_JP, 0x9C, 0);
 		}
 		DrawSync(0);
-		drawString(MAIN_D_801318B0[MEMORY_CARD_ERROR], 0, 0xC);
+		drawString(MEMCARD_ERROR_TEXT[MEMORY_CARD_ERROR], 0, 0xC);
 		break;
 	case 11:
-		drawString(MAIN_D_8013136C, 0, 0);
-		drawString(MAIN_D_80131378, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_GO_TO_SLEEP, 0, 0);
+		drawString(MAIN_MENU_TEXT_SAVE_AND_GO_TO_SLEEP, 0, 0xC);
 		break;
 	case 12:
-		drawString(MAIN_D_80131390, 0, 0);
+		drawString(MAIN_MENU_TEXT_DATA_FILE_WILL_BE_OVERWRITTEN, 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_801313B0, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_DO_YOU_WANT_TO_SAVE, 0, 0xC);
 		DrawSync(0);
 		if (MEMORY_CARD_ERROR != -1) {
-			drawString(MAIN_D_801313D0, 0, 0x24);
+			drawString(MAIN_MENU_TEXT_THERE_WAS_AN_ERROR, 0, 0x24);
 			DrawSync(0);
 			if (MEMORY_CARD_ID != 0) {
-				drawString(&MAIN_D_80134660, 0x30, 0x24);
+				drawString(&EMPTY_STRING, 0x30, 0x24);
 			}
 			if (MEMORY_CARD_ERROR == 1) {
-				drawString(&MAIN_D_80134660, 0x3C, 0x24);
+				drawString(&EMPTY_STRING, 0x3C, 0x24);
 			}
 			if (MEMORY_CARD_ERROR == 1 || MEMORY_CARD_ERROR == 4) {
-				drawString(&MAIN_D_80134660, 0x9C, 0x24);
+				drawString(&EMPTY_STRING, 0x9C, 0x24);
 			}
 			if (MEMORY_CARD_ERROR == 3) {
-				drawString(&MAIN_D_80134660, 0x9C, 0x24);
+				drawString(&EMPTY_STRING, 0x9C, 0x24);
 			}
 			DrawSync(0);
-			drawString(MAIN_D_801318B0[MEMORY_CARD_ERROR], 0, 0x30);
+			drawString(MEMCARD_ERROR_TEXT[MEMORY_CARD_ERROR], 0, 0x30);
 			DrawSync(0);
 		}
-		drawString(MAIN_D_80134664, 0, 0xF0);
+		drawString(YES_NO_LABEL, 0, 0xF0);
 		break;
 	case 13:
-		drawString(MAIN_D_80131878[5], 0, 0);
+		drawString(SLOT_ACTION_TITLES[5], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_801313E4, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_PLEASE_INSERT_A_MEMORY_CARD, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131400, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_WHICH_CONTAINS_COMPETITION, 0, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_8013141C, 0, 0x24);
+		drawString(MAIN_MENU_TEXT_DATA_FOR_PLAYER_1_IN, 0, 0x24);
 		DrawSync(0);
-		drawString(MAIN_D_80134664, 0, 0xF0);
+		drawString(YES_NO_LABEL, 0, 0xF0);
 		if (VS_PLAYER_INDEX == 1) {
-			drawString((char *)&MAIN_D_80134662, 0x76, 0x24);
-			drawString((char *)&MAIN_D_80134662, 0xB4, 0x24);
+			drawString((char *)&SLOT_2_DIGIT, 0x76, 0x24);
+			drawString((char *)&SLOT_2_DIGIT, 0xB4, 0x24);
 		}
 		break;
 	case 14:
-		drawString(MAIN_D_80131878[6], 0, 0);
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80134684, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_NAME, 0, 0xC);
 		drawString(PARTNER_ENTITY.name, 0x64, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_8013468C, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_DIGIMON, 0, 0x18);
 		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x64, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_80134694, 0, 0x24);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
+		drawString(MAIN_MENU_TEXT_HP, 0, 0x24);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
 		DrawSync(0);
-		drawString(MAIN_D_80134698, 0, 0x30);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
+		drawString(MAIN_MENU_TEXT_MP, 0, 0x30);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_8013469C, 0, 0x3C);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
+		drawString(MAIN_MENU_TEXT_OFFENSE, 0, 0x3C);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
 		DrawSync(0);
-		drawString(MAIN_D_801346A4, 0, 0x48);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
+		drawString(MAIN_MENU_TEXT_DEFENSE, 0, 0x48);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
 		DrawSync(0);
-		drawString(MAIN_D_8013143C, 0, 0x54);
-		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x64, 0x54);
+		drawString(MAIN_MENU_TEXT_TECHNIQUE_1, 0, 0x54);
+		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x64, 0x54);
 		DrawSync(0);
-		drawString(MAIN_D_80131448, 0, 0x60);
-		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[1], 0x64, 0x60);
+		drawString(MAIN_MENU_TEXT_TECHNIQUE_2, 0, 0x60);
+		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[1], 0x64, 0x60);
 		DrawSync(0);
-		drawString(MAIN_D_80131454, 0, 0x6C);
-		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[2], 0x64, 0x6C);
+		drawString(MAIN_MENU_TEXT_TECHNIQUE_3, 0, 0x6C);
+		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[2], 0x64, 0x6C);
 		DrawSync(0);
-		drawString(MAIN_D_80131460, 0, 0x78);
-		drawString(MAIN_D_801346AC, 0, 0x84);
-		drawString(MAIN_D_801346B0, 0, 0x90);
+		drawString(MAIN_MENU_TEXT_DO_YOU_WANT_TO_REGISTER, 0, 0x78);
+		drawString(MAIN_MENU_TEXT_YES, 0, 0x84);
+		drawString(MAIN_MENU_TEXT_NO, 0, 0x90);
 		break;
 	case 15:
-		drawString(MAIN_D_80131878[6], 0, 0);
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
 		drawRegisteredBattleSlots(0);
-		drawString(MAIN_D_8013147C, 0, 0x84);
+		drawString(MAIN_MENU_TEXT_SELECT_REGISTRATION_SLOT, 0, 0x84);
 		break;
 	case 16:
-		drawString(MAIN_D_80131878[6], 0, 0);
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
-		strcpy(buf, MAIN_D_80131498);
+		strcpy(buf, MAIN_MENU_TEXT_DO_YOU_WANT_TO_REGISTER_2);
 		drawString(buf, 0, 0xC);
 		DrawSync(0);
 		strcpy(buf, PARTNER_ENTITY.name);
 		drawString(buf, 0, 0x18);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[((BATTLE_REGISTRATION_SLOT + 1) / 10) * 6] + 2, 0, 0xC);
+		drawString(&SLOT_NUMBER_STRINGS[(BATTLE_REGISTRATION_SLOT + 1) / 10][2], 0, 0xC);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[((BATTLE_REGISTRATION_SLOT + 1) % 10) * 6] + 2, 0xC, 0xC);
+		drawString(&SLOT_NUMBER_STRINGS[(BATTLE_REGISTRATION_SLOT + 1) % 10][2], 0xC, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_801346AC, 0, 0x24);
+		drawString(MAIN_MENU_TEXT_YES, 0, 0x24);
 		DrawSync(0);
-		drawString(MAIN_D_801346B0, 0, 0x30);
+		drawString(MAIN_MENU_TEXT_NO, 0, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_801314B0, 0, 0x3C);
+		drawString(MAIN_MENU_TEXT_THE_COMPETITION_DIGIMON, 0, 0x3C);
 		DrawSync(0);
-		drawString(MAIN_D_801314C8, 0, 0x48);
-		drawString(MAIN_D_801314E4, 0, 0x54);
+		drawString(MAIN_MENU_TEXT_DATA_WILL_BE_SAVED_DURING, 0, 0x48);
+		drawString(MAIN_MENU_TEXT_THE_REGISTRATION_PROCESS, 0, 0x54);
 		break;
 	case 17:
-		drawString(MAIN_D_80131500, 0, 0);
+		drawString(MAIN_MENU_TEXT_SINCE_YOU_STARTED_THE_GAME, 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_8013151C, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_WITHOUT_USING_A_MEMORY_CARD, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131538, 0, 0x18);
-		drawString(MAIN_D_8013154C, 0, 0x24);
+		drawString(MAIN_MENU_TEXT_YOU_CANNOT_REGISTER, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_COMPETITION_BATTLE_DIGIMON, 0, 0x24);
 		break;
 	case 18:
-		drawString(MAIN_D_80131568, 0, 0);
+		drawString(MAIN_MENU_TEXT_DO_YOU_WANT_TO_SAVE_2, 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_8013466C, 0, 0xC);
+		drawString(YES_NO_LABEL_SPACED, 0, 0xC);
 		break;
 	case 19:
 		strcpy(buf, PARTNER_ENTITY.name);
-		strcat(buf, MAIN_D_801346B4);
+		strcat(buf, MAIN_MENU_TEXT_SPACE);
 		strcat(buf, DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name);
-		strcat(buf, MAIN_D_801346B8);
+		strcat(buf, MAIN_MENU_TEXT_IS_IN);
 		drawString(buf, 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131580, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_TRAINING_MEMORY_CARD_CANNOT, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_801315A0, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_BE_REGISTERED_FOR_COMPETITION, 0, 0x18);
 		break;
 	case 20:
-		drawString(MAIN_D_801318FC[0], 0, 0);
+		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_801318FC[1], 0, 0xC);
+		drawString(BATTLE_MODE_ITEMS[1], 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_801318FC[2], 0, 0x18);
-		drawString(MAIN_D_801318FC[3], 0, 0x24);
+		drawString(BATTLE_MODE_ITEMS[2], 0, 0x18);
+		drawString(BATTLE_MODE_ITEMS[3], 0, 0x24);
 		break;
 	case 21:
-		drawString(MAIN_D_801315C0, 0, 0);
+		drawString(MAIN_MENU_TEXT_PLEASE_INSERT, 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_801315D0, 0, 0xC);
+		drawString(MAIN_MENU_TEXT_MEMORY_CARD_WITH_SAVED_DATA, 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_801315EC, 0, 0x18);
+		drawString(MAIN_MENU_TEXT_IN_SLOT_1, 0, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_80134664, 0, 0x24);
+		drawString(YES_NO_LABEL, 0, 0x24);
 		break;
 	}
 }
@@ -2658,7 +2641,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 		row *= 0x18;
 		setRECT(&area, 0, row + 0xC, 0xE0, 0x18);
 		clearTextSubArea(&area);
-		drawString(&MAIN_D_80131658[(slot + 1) * 6], 0, row + 0xC);
+		drawString(SLOT_NUMBER_STRINGS[slot + 1], 0, row + 0xC);
 		drawString(&MAIN_D_801BF768[slot * 0x44] + 4, 0x18, row + 0xC);
 		DrawSync(0);
 		drawString(&MAIN_D_801BF768[slot * 0x44] + 0x18, 0x6C, row + 0xC);
@@ -2668,20 +2651,22 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 	}
 }
 
-char *MAIN_func_8010FB7C(int32_t value, char *buf, int32_t digits)
+/* Writes value in decimal to buf; digits is not used. */
+char *formatNumber(int32_t value, char *buf, int32_t digits)
 {
-	sprintf(buf, MAIN_D_801346CC, value);
+	sprintf(buf, NUMBER_FORMAT, value);
 	return buf;
 }
 
-void MAIN_func_8010FBB0(int32_t type, int32_t anim, int32_t color, int32_t pos)
+/* Draws the name of the move that animation anim of Digimon type uses. */
+void drawMoveName(int32_t type, int32_t anim, int32_t x, int32_t y)
 {
 	int16_t move;
 
 	if (anim >= 0x2E && anim < 0x3E) {
 		move = DIGIMON_DATA[type].moves[anim - 0x2E];
 		if (move >= 0 && move < 0x79) {
-			drawString(MOVE_NAMES[move], color, pos);
+			drawString(MOVE_NAMES[move], x, y);
 		}
 	}
 }
@@ -2701,14 +2686,14 @@ void drawRegisteredBattleSlots(int32_t slot)
 	currentSlot = slot + (i = 0);
 	y = 0xC;
 	while (i < 10) {
-		drawString(&MAIN_D_80131658[((currentSlot + 1) / 10) * 6] + 2, 0, y);
-		drawString(&MAIN_D_80131658[((currentSlot + 1) % 10) * 6] + 2, 0xC, y);
+		drawString(&SLOT_NUMBER_STRINGS[(currentSlot + 1) / 10][2], 0, y);
+		drawString(&SLOT_NUMBER_STRINGS[(currentSlot + 1) % 10][2], 0xC, y);
 		if ((type = (&MAIN_D_80131B2C[0x51C])[currentSlot * 0x40]) != 0) {
 			drawString((char *)&MAIN_D_8013192C[currentSlot * 0x40] + 0x70E, 0x1E, y);
 			drawString(DIGIMON_DATA[type].name, 0x6C, y);
 		} else {
 			setTextColor(9);
-			drawString(MAIN_D_801346C0, 0x1E, y);
+			drawString(MAIN_MENU_DOT_AND_WILDCARD[0], 0x1E, y);
 			setTextColor(1);
 		}
 		DrawSync(0);
@@ -2792,7 +2777,7 @@ void tickMainMenu(void)
 	switch (CURRENT_MENU) {
 	case 0:
 		/* Keep this assignment in the call to retain retail CodeWarrior argument scheduling. */
-		input = MAIN_func_8011239C(cursor = (MenuCursor *)MAIN_D_801316B8, 1);
+		input = tickMenuCursor(cursor = (MenuCursor *)MENU_HIGHLIGHTS, 1);
 		switch (input) {
 		case 1:
 			switch (cursor->pos) {
@@ -2825,8 +2810,8 @@ void tickMainMenu(void)
 		break;
 
 	case 1:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[9];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[9];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -2885,8 +2870,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0xA:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[1];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[1];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			switch (cursor->pos) {
@@ -2923,7 +2908,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = MAIN_func_801125A8(MEMORY_CARD_ID, result);
+			result = probeMemoryCard(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
 				TARGET_MENU = 0xD;
@@ -2945,15 +2930,15 @@ void tickMainMenu(void)
 			if (MEMORY_CARD_USED_BLOCKS >= 0xF) {
 				setMemoryCardReadError(7, 0);
 			} else {
-				MAIN_D_8013190C[0xF] = 0x3F;
-				loadSaveSlotData(MEMORY_CARD_ID, MAIN_D_8013190C,
+				MEMCARD_FILENAME[0xF] = 0x3F;
+				loadSaveSlotData(MEMORY_CARD_ID, MEMCARD_FILENAME,
 						 (SaveSlotPreview *)MAIN_D_801BF768, 0);
 			}
 		}
 		break;
 
 	case 0xE:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
@@ -2970,8 +2955,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0xF:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
+		input = tickMenuCursor(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -2990,8 +2975,8 @@ void tickMainMenu(void)
 
 	case 0x10:
 		if ((MAIN_MENU_TICKS >= 3) && MemCardSync(1, (unsigned long *)&command, (unsigned long *)&result)) {
-			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
-			input = MemCardCreateFile(MEMORY_CARD_ID, MAIN_D_8013190C, 1);
+			MEMCARD_FILENAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+			input = MemCardCreateFile(MEMORY_CARD_ID, MEMCARD_FILENAME, 1);
 			switch (input) {
 			case 0:
 				TARGET_MENU = 0x11;
@@ -3021,10 +3006,10 @@ void tickMainMenu(void)
 		memcpy(MAIN_D_80131A2C, MAIN_D_80133A10, 0x80);
 		memcpy(MAIN_D_80131AAC, MAIN_D_80133A90, 0x80);
 		initializeDefaultSavegame();
-		asciiToShiftJIS((uint8_t *)MAIN_D_8013392C,
+		asciiToShiftJIS((uint8_t *)MAIN_MENU_TEXT_DIGIMON_2,
 				(uint16_t *)(MAIN_D_8013192C + 4));
 		_strncpy((char *)MAIN_D_8013192C + 0xC,
-			 MAIN_D_80131658 + (MEMORY_CARD_SLOT + 1) * 6, 4);
+			 SLOT_NUMBER_STRINGS[MEMORY_CARD_SLOT + 1], 4);
 		_strncpy((char *)MAIN_D_8013192C + 0x12,
 			 (char *)MAIN_D_80131B2C + 0x467, 0xD);
 		_strncpy(MAIN_D_8013194C,
@@ -3034,7 +3019,7 @@ void tickMainMenu(void)
 		((SavegamePayload *)MAIN_D_80131B2C)->checksum = createSavegameChecksum(0);
 		*(SavegamePayload *)MAIN_D_80132A2C =
 			*(SavegamePayload *)MAIN_D_80131B2C;
-		input = MemCardWriteFile(MEMORY_CARD_ID, MAIN_D_8013190C,
+		input = MemCardWriteFile(MEMORY_CARD_ID, MEMCARD_FILENAME,
 					 (long *)MAIN_D_8013192C, 0, 0x2000);
 		if (input != 1) {
 			setMemoryCardReadError(0, 0);
@@ -3050,8 +3035,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x13:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[MAIN_D_80131818[CURRENT_MENU]];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[MENU_VIEWS[CURRENT_MENU]];
+		input = tickMenuCursor(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -3070,8 +3055,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x14:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[2];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[2];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			switch (cursor->pos) {
@@ -3105,7 +3090,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = MAIN_func_801125A8(MEMORY_CARD_ID, result);
+			result = probeMemoryCard(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x16;
 			} else {
@@ -3116,13 +3101,13 @@ void tickMainMenu(void)
 
 	case 0x16:
 		TARGET_MENU = 0x17;
-		MAIN_D_8013190C[0xF] = 0x3F;
-		loadSaveSlotData(MEMORY_CARD_ID, MAIN_D_8013190C,
+		MEMCARD_FILENAME[0xF] = 0x3F;
+		loadSaveSlotData(MEMORY_CARD_ID, MEMCARD_FILENAME,
 				 (SaveSlotPreview *)MAIN_D_801BF768, 0);
 		break;
 
 	case 0x17:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
@@ -3139,8 +3124,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x18:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
+		input = tickMenuCursor(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -3160,8 +3145,8 @@ void tickMainMenu(void)
 	case 0x19:
 		if (MAIN_MENU_TICKS >= 3) {
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
-			input = MemCardReadFile(MEMORY_CARD_ID, MAIN_D_8013190C,
+			MEMCARD_FILENAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+			input = MemCardReadFile(MEMORY_CARD_ID, MEMCARD_FILENAME,
 					    (long *)MAIN_D_8013192C, 0, 0x2000);
 			if (input != 1) {
 				setMemoryCardReadError(0, 0);
@@ -3189,8 +3174,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x1E:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[4];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[4];
+		input = tickMenuCursor(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				switch (cursor->pos) {
@@ -3226,7 +3211,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = MAIN_func_801125A8(MEMORY_CARD_ID, result);
+			result = probeMemoryCard(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x20;
 			} else {
@@ -3237,13 +3222,13 @@ void tickMainMenu(void)
 
 	case 0x20:
 		TARGET_MENU = 0x21;
-		MAIN_D_8013190C[0xF] = 0x3F;
-		loadSaveSlotData(MEMORY_CARD_ID, MAIN_D_8013190C,
+		MEMCARD_FILENAME[0xF] = 0x3F;
+		loadSaveSlotData(MEMORY_CARD_ID, MEMCARD_FILENAME,
 				 (SaveSlotPreview *)MAIN_D_801BF768, 0);
 		break;
 
 	case 0x21:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
@@ -3260,8 +3245,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x22:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
+		input = tickMenuCursor(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -3280,8 +3265,8 @@ void tickMainMenu(void)
 
 	case 0x23:
 		if ((MAIN_MENU_TICKS >= 3) && MemCardSync(1, (unsigned long *)&command, (unsigned long *)&result)) {
-			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
-			input = MemCardDeleteFile(MEMORY_CARD_ID, MAIN_D_8013190C);
+			MEMCARD_FILENAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+			input = MemCardDeleteFile(MEMORY_CARD_ID, MEMCARD_FILENAME);
 			if (input == 0) {
 				TARGET_MENU = 0x1F;
 				MEMORY_CARD_OPERATION = 0;
@@ -3292,8 +3277,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x28:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[11];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[11];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3341,8 +3326,8 @@ void tickMainMenu(void)
 
 	case 0x2A:
 		MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-		MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
-		input = MemCardGetDirentry(MEMORY_CARD_ID, MAIN_D_8013190C,
+		MEMCARD_FILENAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+		input = MemCardGetDirentry(MEMORY_CARD_ID, MEMCARD_FILENAME,
 					MEMCARD_DIRENTRIES, (long *)&count, 0, 1);
 		MEMORY_CARD_ERROR = -1;
 		switch (input) {
@@ -3377,10 +3362,10 @@ void tickMainMenu(void)
 			memcpy(MAIN_D_80131A2C, MAIN_D_80133A10, 0x80);
 			memcpy(MAIN_D_80131AAC, MAIN_D_80133A90, 0x80);
 			writeSavegame(MAIN_D_80131B2C);
-			asciiToShiftJIS((uint8_t *)MAIN_D_8013392C,
+			asciiToShiftJIS((uint8_t *)MAIN_MENU_TEXT_DIGIMON_2,
 				(uint16_t *)(MAIN_D_8013192C + 4));
 			_strncpy((char *)MAIN_D_8013192C + 0xC,
-				 MAIN_D_80131658 + (MEMORY_CARD_SLOT + 1) * 6, 4);
+				 SLOT_NUMBER_STRINGS[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy((char *)MAIN_D_8013192C + 0x12,
 				 (char *)MAIN_D_80131B2C + 0x467, 0xD);
 			_strncpy(MAIN_D_8013194C,
@@ -3390,7 +3375,7 @@ void tickMainMenu(void)
 			((SavegamePayload *)MAIN_D_80131B2C)->checksum = createSavegameChecksum(0);
 			*(SavegamePayload *)MAIN_D_80132A2C =
 				*(SavegamePayload *)MAIN_D_80131B2C;
-			input = MemCardWriteFile(MEMORY_CARD_ID, MAIN_D_8013190C,
+			input = MemCardWriteFile(MEMORY_CARD_ID, MEMCARD_FILENAME,
 						 (long *)MAIN_D_8013192C, 0, 0x2000);
 			if (input != 1) {
 				setMemoryCardReadError(0, 0x28);
@@ -3405,8 +3390,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x30:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[12];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[12];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3432,7 +3417,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = MAIN_func_801125A8(MEMORY_CARD_ID, result);
+			result = probeMemoryCard(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
 				mask = MEMORY_CARD_ID == 0x10 ? 0x10 : 1;
@@ -3459,8 +3444,8 @@ void tickMainMenu(void)
 		} else {
 			MEMORY_CARD_ID = 0x10;
 		}
-		cursor = (MenuCursor *)&MAIN_D_801316B8[13];
-		input = MAIN_func_8011239C(cursor,
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[13];
+		input = tickMenuCursor(cursor,
 					   VS_PLAYER_INDEX == 0 ? 1 : 2);
 		switch (input) {
 		case 1:
@@ -3488,15 +3473,15 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = MAIN_func_801125A8(MEMORY_CARD_ID, result);
+			result = probeMemoryCard(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x34;
 			} else {
 				setMemoryCardReadError(result, 0x32);
 				break;
 			}
-			MAIN_D_8013190C[0xF] = 0x3F;
-			if (loadSaveSlotData(MEMORY_CARD_ID, MAIN_D_8013190C,
+			MEMCARD_FILENAME[0xF] = 0x3F;
+			if (loadSaveSlotData(MEMORY_CARD_ID, MEMCARD_FILENAME,
 					     (SaveSlotPreview *)MAIN_D_801BF768,
 					     0x32) != 0) {
 				TARGET_MENU = 0x34;
@@ -3505,7 +3490,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x34:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor,
 					   VS_PLAYER_INDEX == 0 ? 1 : 2);
 		slot = cursor->pos + cursor->scroll;
@@ -3523,8 +3508,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x35:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
-		input = MAIN_func_8011239C(cursor,
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
+		input = tickMenuCursor(cursor,
 					   VS_PLAYER_INDEX == 0 ? 1 : 2);
 		if (input != 2) {
 			if (input == 1) {
@@ -3545,8 +3530,8 @@ void tickMainMenu(void)
 	case 0x36:
 		if (MAIN_MENU_TICKS >= 3) {
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
-			input = MemCardReadFile(MEMORY_CARD_ID, MAIN_D_8013190C,
+			MEMCARD_FILENAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+			input = MemCardReadFile(MEMORY_CARD_ID, MEMCARD_FILENAME,
 					    (long *)MAIN_D_8013192C, 0, 0x2000);
 			if (input != 1) {
 				setMemoryCardReadError(0, 0x32);
@@ -3601,8 +3586,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x3C:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[14];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[14];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3620,9 +3605,9 @@ void tickMainMenu(void)
 		break;
 
 	case 0x3D:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[15];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[15];
 		oldScroll = cursor->scroll;
-		input = MAIN_func_8011239C(cursor, 1);
+		input = tickMenuCursor(cursor, 1);
 		if (oldScroll != cursor->scroll) {
 			drawRegisteredBattleSlots(cursor->scroll);
 		}
@@ -3637,8 +3622,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x3E:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[16];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[16];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3686,8 +3671,8 @@ void tickMainMenu(void)
 
 	case 0x40:
 		MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-		MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
-		input = MemCardGetDirentry(MEMORY_CARD_ID, MAIN_D_8013190C,
+		MEMCARD_FILENAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+		input = MemCardGetDirentry(MEMORY_CARD_ID, MEMCARD_FILENAME,
 					MEMCARD_DIRENTRIES, (long *)&count, 0, 1);
 		MEMORY_CARD_ERROR = -1;
 		switch (input) {
@@ -3722,10 +3707,10 @@ void tickMainMenu(void)
 			memcpy(MAIN_D_80131A2C, MAIN_D_80133A10, 0x80);
 			memcpy(MAIN_D_80131AAC, MAIN_D_80133A90, 0x80);
 			writeSavegame(MAIN_D_80131B2C);
-			asciiToShiftJIS((uint8_t *)MAIN_D_8013392C,
+			asciiToShiftJIS((uint8_t *)MAIN_MENU_TEXT_DIGIMON_2,
 				(uint16_t *)(MAIN_D_8013192C + 4));
 			_strncpy((char *)MAIN_D_8013192C + 0xC,
-				 MAIN_D_80131658 + (MEMORY_CARD_SLOT + 1) * 6, 4);
+				 SLOT_NUMBER_STRINGS[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy((char *)MAIN_D_8013192C + 0x12,
 				 (char *)MAIN_D_80131B2C + 0x467, 0xD);
 			_strncpy(MAIN_D_8013194C,
@@ -3735,7 +3720,7 @@ void tickMainMenu(void)
 			((SavegamePayload *)MAIN_D_80131B2C)->checksum = createSavegameChecksum(0);
 			*(SavegamePayload *)MAIN_D_80132A2C =
 				*(SavegamePayload *)MAIN_D_80131B2C;
-			input = MemCardWriteFile(MEMORY_CARD_ID, MAIN_D_8013190C,
+			input = MemCardWriteFile(MEMORY_CARD_ID, MEMCARD_FILENAME,
 						 (long *)MAIN_D_8013192C, 0, 0x2000);
 			if (input != 1) {
 				setMemoryCardReadError(0, SAVE_RETRY_RETURN_MENU);
@@ -3750,8 +3735,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x42:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[12];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[12];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3777,7 +3762,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = MAIN_func_801125A8(MEMORY_CARD_ID, result);
+			result = probeMemoryCard(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
 				mask = MEMORY_CARD_ID == 0x10 ? 0x10 : 1;
@@ -3809,8 +3794,8 @@ void tickMainMenu(void)
 		break;
 
 	case 0x45:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[18];
-		input = MAIN_func_8011239C(cursor, 1);
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[18];
+		input = tickMenuCursor(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3835,7 +3820,11 @@ void tickMainMenu(void)
 	}
 }
 
-int32_t MAIN_func_8011239C(MenuCursor *cursor, int32_t which)
+/*
+ * Moves the cursor with up and down, from pad 1 (which bit 0) and pad 2
+ * (bit 1). Returns 1 for cross, 2 for triangle and 0 otherwise.
+ */
+int32_t tickMenuCursor(MenuCursor *cursor, int32_t which)
 {
 	int32_t input;
 	int32_t lo;
@@ -3910,7 +3899,7 @@ void setMemoryCardReadError(int32_t id, int32_t returnMenu)
 	MEMORY_CARD_RETURN_MENU = returnMenu;
 }
 
-int32_t MAIN_func_801125A8(int32_t chan, int32_t mode)
+int32_t probeMemoryCard(int32_t chan, int32_t mode)
 {
 	unsigned long cmd;
 	unsigned long result;
@@ -3938,7 +3927,7 @@ int32_t countUsedMemoryCardBlocks(int32_t channel, int32_t returnMenu)
 	int32_t status;
 
 	MemCardSync(0, &cmd, &result);
-	status = MemCardGetDirentry(channel, MAIN_D_801346C0 + 2, MEMCARD_DIRENTRIES,
+	status = MemCardGetDirentry(channel, MAIN_MENU_DOT_AND_WILDCARD[1], MEMCARD_DIRENTRIES,
 			&fileCount, 0, 15);
 	/* Keep the success block after both errors for the retail branch layout. */
 	if (status == -1)
@@ -4085,8 +4074,8 @@ void initializeDefaultSavegame(void)
 	savegame->currentScreen = 0xCC;
 	savegame->currentExit = 9;
 	savegame->partnerType = 0x72;
-	strcpy(savegame->playerName, MAIN_D_801346C4);
-	strcpy(savegame->digimonName, MAIN_D_8013468C);
+	strcpy(savegame->playerName, MAIN_MENU_TEXT_PLAYER);
+	strcpy(savegame->digimonName, MAIN_MENU_TEXT_DIGIMON);
 
 	for (i = 0; i < 100; i++) {
 		savegame->worldPoop[i].map = 0xFF;
@@ -4199,11 +4188,11 @@ void loadSavegame(uint8_t *sv)
 	SAVE_CURRENT_EXIT[0] = savegame->currentExit;
 	SAVE_PREVIOUS_EXIT[0] = savegame->previousExit;
 	MERIT = savegame->meritData[0];
-	MAIN_D_80134FC8 = savegame->meritData[1];
-	MAIN_D_80134FCA = savegame->meritData[2];
-	MAIN_D_80134FCC = savegame->meritData[3];
-	TOURNAMENTS_LOST = savegame->meritData[4];
-	MAIN_D_80134FD0 = savegame->meritData[5];
+	BATTLES_FOUGHT = savegame->meritData[1];
+	BATTLES_WON = savegame->meritData[2];
+	TOURNAMENT_TITLES = savegame->meritData[3];
+	TOURNAMENT_WINS = savegame->meritData[4];
+	TOURNAMENT_LOSSES = savegame->meritData[5];
 	memcpy(SCRIPT_STATE_PTR, savegame->scriptState, 0x17C);
 	MAIN_STATE = savegame->mainState;
 	memcpy(SAVE_TAMER_WAYPOINT_X, savegame->tamerWaypointX, 0x1E);
@@ -4261,11 +4250,11 @@ void writeSavegame(uint8_t *sv)
 	savegame->currentExit = CURRENT_EXIT;
 	savegame->previousExit = PREVIOUS_EXIT;
 	savegame->meritData[0] = MERIT;
-	savegame->meritData[1] = MAIN_D_80134FC8;
-	savegame->meritData[2] = MAIN_D_80134FCA;
-	savegame->meritData[3] = MAIN_D_80134FCC;
-	savegame->meritData[4] = TOURNAMENTS_LOST;
-	savegame->meritData[5] = MAIN_D_80134FD0;
+	savegame->meritData[1] = BATTLES_FOUGHT;
+	savegame->meritData[2] = BATTLES_WON;
+	savegame->meritData[3] = TOURNAMENT_TITLES;
+	savegame->meritData[4] = TOURNAMENT_WINS;
+	savegame->meritData[5] = TOURNAMENT_LOSSES;
 	memcpy(savegame->scriptState, SCRIPT_STATE_PTR, 0x17C);
 	memcpy(savegame->tamerWaypointX, TAMER_WAYPOINT_X, 0x1E);
 	memcpy(savegame->tamerWaypointY, TAMER_WAYPOINT_Y, 0x1E);
@@ -4299,70 +4288,74 @@ int32_t MAIN_func_8011341C(uint8_t *p)
 	return count;
 }
 
+/*
+ * Draws the boxes of the current menu view, showing pieces of the text that
+ * drawMainMenuStrings() drew for it, and the highlight of the selected row.
+ */
 void renderMainMenu(void)
 {
 	int8_t menu;
 
 	if (CURRENT_MENU >= 0) {
-		menu = MAIN_D_80131818[CURRENT_MENU];
+		menu = MENU_VIEWS[CURRENT_MENU];
 		if (menu != -1) {
-			MAIN_func_801136C8(&MAIN_D_801316B8[menu]);
+			renderMenuHighlight(&MENU_HIGHLIGHTS[menu]);
 		}
 		switch (menu) {
 		case 0:
-			MAIN_func_8010D034();
+			renderTitleMenuView();
 			break;
 		case 1:
-			MAIN_func_8010D3E0();
+			renderStartSlotView();
 			break;
 		case 2:
 		case 4:
-			MAIN_func_8010D554();
+			renderSlotChoiceView();
 			break;
 		case 5:
-			MAIN_func_8010D694();
+			renderMemcardBusyView();
 			break;
 		case 6:
-			MAIN_func_8010D70C();
+			renderNoMemcardWarningView();
 			break;
 		case 7:
-			MAIN_func_8010DA44();
+			renderSaveSlotListView();
 			break;
 		case 8:
 			renderContinueSaveSelection();
 			break;
 		case 9:
-			MAIN_func_8010DEBC();
+			renderFormatPromptView();
 			break;
 		case 10:
-			MAIN_func_8010DFAC();
+			renderMemcardErrorView();
 			break;
 		case 11:
-			MAIN_func_8010E0C8();
+			renderSleepMenuView();
 			break;
 		case 12:
-			MAIN_func_8010E16C();
+			renderSaveConfirmView();
 			break;
 		case 13:
-			MAIN_func_8010E350();
+			renderInsertBattleCardView();
 			break;
 		case 14:
-			MAIN_func_8010E4B8();
+			renderRegistrationStatsView();
 			break;
 		case 15:
-			MAIN_func_8010E638();
+			renderRegistrationSlotView();
 			break;
 		case 16:
-			MAIN_func_8010E73C();
+			renderRegistrationConfirmView();
 			break;
 		case 17:
-			MAIN_func_8010E8C0();
+			renderCannotRegisterView();
 			break;
 		case 18:
-			MAIN_func_8010E938();
+			renderSavePromptView();
 			break;
 		case 19:
-			MAIN_func_8010EA1C();
+			renderInTrainingView();
 			break;
 		}
 	}
@@ -4385,7 +4378,8 @@ void registerBattleData(void)
 	memcpy((char *)rec + 0x1D, PARTNER_ENTITY.digimonEntity.stats.base.moves, 3);
 }
 
-void MAIN_func_801136C8(MenuHighlight *b)
+/* Draws the yellow frame around row b->pos of a menu. */
+void renderMenuHighlight(MenuHighlight *b)
 {
 	LINE_F3 *prim;
 	int32_t x;
@@ -4426,7 +4420,7 @@ void openSaveMachine(void)
 	}
 }
 
-int32_t MAIN_func_801138B0(void)
+int32_t tickSaveMachine(void)
 {
 	tickMainMenu();
 	renderMainMenu();
@@ -4469,7 +4463,7 @@ void gameClearSave(void)
 	}
 }
 
-int32_t MAIN_func_80113A20(void)
+int32_t tickGameClearSave(void)
 {
 	tickMainMenu();
 	renderMainMenu();
@@ -4480,7 +4474,7 @@ int32_t MAIN_func_80113A20(void)
 	return 0;
 }
 
-void MAIN_func_8010D034(void)
+void renderTitleMenuView(void)
 {
 	POLY_FT4 *cur;
 

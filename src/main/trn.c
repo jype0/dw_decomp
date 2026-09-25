@@ -3,8 +3,8 @@
 #include <dw/trn.h>
 #include <dw/types.h>
 
-/* "所持金" (money held) */
-char MAIN_D_80134BC0[] = "\x8f\x8a\x8e\x9d\x8b\xe0";
+/* money held */
+char TRN_TEXT_MONEY_JP[] = "所持金";
 RECT MAIN_D_80134BC8 = { -82, -87, 164, 90 };
 RECT MAIN_D_80134BD0 = { -8, -8, 16, 16 };
 RECT MAIN_D_80134BD8 = { -8, -8, 16, 16 };

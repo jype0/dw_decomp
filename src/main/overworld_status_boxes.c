@@ -28,10 +28,10 @@ extern int32_t VIEWPORT_DISTANCE;
 extern GsF_LIGHT LIGHT_DATA[3];
 void startAnimation(Entity *entity, int32_t animId);
 void tickAnimation(Entity *entity);
-extern char *MAIN_D_801247B8[];
-extern char MAIN_D_80124C24[];
-extern char MAIN_D_80124C30[];
-extern char MAIN_D_80124C54[];
+extern char *STATUS_VIEW_LABELS[];
+extern char STAT_LABEL_OFF[];
+extern char STAT_LABELS_DEF[];
+extern char FULLWIDTH_DIGITS[];
 extern RECT MAIN_D_801342E0;
 extern int8_t MENU_SUB_STATE;
 
@@ -350,9 +350,9 @@ int32_t drawDigimonStatsStrings(void)
 	switch (MENU_SUB_STATE) {
 	case 0:
 		clearTextSubArea(&rect);
-		drawString(MAIN_D_80124C54, 0, 0xf0);
-		drawString(MAIN_D_80124C24, 0, 0x24);
-		drawString(MAIN_D_80124C30, 0x24, 0x24);
+		drawString(FULLWIDTH_DIGITS, 0, 0xf0);
+		drawString(STAT_LABEL_OFF, 0, 0x24);
+		drawString(STAT_LABELS_DEF, 0x24, 0x24);
 		MENU_SUB_STATE = 1;
 		break;
 	case 1:
@@ -361,11 +361,11 @@ int32_t drawDigimonStatsStrings(void)
 		MENU_SUB_STATE = 2;
 		break;
 	case 2:
-		drawString(MAIN_D_801247B8[1], 0, 0x30);
+		drawString(STATUS_VIEW_LABELS[1], 0, 0x30);
 		MENU_SUB_STATE = 3;
 		break;
 	case 3:
-		drawString(MAIN_D_801247B8[2], 0, 0x18);
+		drawString(STATUS_VIEW_LABELS[2], 0, 0x18);
 
 		return 1;
 	}

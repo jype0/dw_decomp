@@ -672,17 +672,17 @@ uint8_t BTL_D_8007372C[12] = {
 	0x3c, 0x7c, 0x3c, 0x00,
 };
 
-const char BTL_D_80072EF8[32] = "Listens to #C1! #W";
-const char BTL_D_80072F18[] = "#R#C1dropped #C7";
-const char BTL_D_80072F2C[] = "#C1#R was injured #W";
-const char BTL_D_80072F44[20] = "#C7set technique #R";
-const char BTL_D_80072F58[] = "#C7Put up with it! #R";
-const char BTL_D_80072F70[32] = "#C7Move away!#RChange target!#R";
-const char BTL_D_80072F90[] = "#C7Keep it down!#R";
-const char BTL_D_80072FA4[] = "#C7Go all the way!#R";
-const char BTL_D_80072FBC[] = "#C1MP Consumption Bonus!";
-const char BTL_D_80072FD8[] = "reduced by";
-const char BTL_D_80072FE4[16] = "#R#C1learned!#W";
+const char BTL_COMMAND_LEARNED_TEXT[32] = "Listens to #C1! #W";
+const char BTL_DROPPED_TEXT[] = "#R#C1dropped #C7";
+const char BTL_INJURED_TEXT[] = "#C1#R was injured #W";
+const char BTL_COMMAND_SET_TECHNIQUE[20] = "#C7set technique #R";
+const char BTL_COMMAND_PUT_UP_WITH_IT[] = "#C7Put up with it! #R";
+const char BTL_COMMAND_MOVE_AWAY[32] = "#C7Move away!#RChange target!#R";
+const char BTL_COMMAND_KEEP_IT_DOWN[] = "#C7Keep it down!#R";
+const char BTL_COMMAND_GO_ALL_THE_WAY[] = "#C7Go all the way!#R";
+const char BTL_MP_BONUS_TEXT[] = "#C1MP Consumption Bonus!";
+const char BTL_MP_BONUS_REDUCED_BY[] = "reduced by";
+const char BTL_LEARNED_TEXT[16] = "#R#C1learned!#W";
 
 const MATRIX BTL_D_80072FF4 = {
 	{
@@ -3392,7 +3392,7 @@ void BTL_getVectorEulerAngles(void)
 
 void BTL_printDebugValue(void)
 {
-	printf(MAIN_D_8013477C, EFE_POP1(int32_t));
+	printf(BTL_NUMBER_FORMAT, EFE_POP1(int32_t));
 }
 
 void BTL_getRandomInRange(void)

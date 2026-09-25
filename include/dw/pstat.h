@@ -265,4 +265,20 @@
 #define PSTAT_TOURNAMENT_DIGIMON	PSTAT_4
 #define PSTAT_SUKAMON_BACKUP_DIGIMON	PSTAT_5
 
+/*
+ * Pstats with a fixed use. Scripts pass arguments to the builtins and to
+ * battles in them, and read results back.
+ */
+#define PSTAT_TEXT_ARG_1		PSTAT_243	/* values that texts show */
+#define PSTAT_TEXT_ARG_2		PSTAT_244
+#define PSTAT_TRANSPORT_MAP		PSTAT_247
+#define PSTAT_TRANSPORT_EXIT		PSTAT_248
+#define PSTAT_SELECTED			PSTAT_249	/* the card, track, item... picked */
+#define PSTAT_BATTLE_SET_ENEMIES	PSTAT_250	/* use the enemies below */
+#define PSTAT_BATTLE_ENEMY_1		PSTAT_251	/* script ids, 0xFF for none */
+#define PSTAT_BATTLE_ENEMY_2		PSTAT_252
+#define PSTAT_BATTLE_ENEMY_3		PSTAT_253
+#define PSTAT_BUILTIN_ARG		PSTAT_254	/* the NPC of a shop, a training... */
+#define PSTAT_RESULT			PSTAT_255	/* of builtins and battles */
+
 #endif

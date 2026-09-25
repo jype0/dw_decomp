@@ -119,12 +119,12 @@ uint8_t MAIN_D_8012341C[16] = {
 	0x80, 0x80, 0x80, 0x80, 0x79, 0x73, 0x6c, 0x66,
 	0x60, 0x59, 0x53, 0x4c, 0x46, 0x40, 0x00, 0x00,
 };
-char MAIN_D_8012342C[16] = "ETCHI\\EFEDAT.EFE";
+char PATH_ETCHI_EFEDAT_EFE[16] = "ETCHI\\EFEDAT.EFE";
 uint32_t MAIN_D_8012343C[4] = {0};
 
 static void *efe_data_order[] = {
 	MAIN_D_8012343C,
-	MAIN_D_8012342C,
+	PATH_ETCHI_EFEDAT_EFE,
 	MAIN_D_8012341C,
 	MAIN_D_80123400,
 	MAIN_D_801233DC,
@@ -226,7 +226,7 @@ uint8_t MAIN_D_8013421C[4] = {
 	0x40, 0x00, 0x00, 0x00,
 };
 
-char MAIN_D_80134220[] = ";1";
+char EFE_FILE_VERSION_SUFFIX[] = ";1";
 // clang-format on
 
 static void createParticleFX__garbage__(void)
@@ -973,8 +973,8 @@ void findEFEDATFile(void)
 	}
 	mode = 0x80;
 	name[0] = 0x5C;
-	strcpy(&name[1], MAIN_D_8012342C);
-	strcat(name, MAIN_D_80134220);
+	strcpy(&name[1], PATH_ETCHI_EFEDAT_EFE);
+	strcat(name, EFE_FILE_VERSION_SUFFIX);
 	while ((int32_t)CdSearchFile(&file, name) == -1) {
 	}
 	CdControl(0xE, &mode, 0);

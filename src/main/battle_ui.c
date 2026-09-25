@@ -54,26 +54,26 @@ void renderBitBox(uint8_t layer);
 void renderFinalBalance(int32_t layer);
 void resetStatsAfterCombat();
 void createPostBattleStatsBox();
-void MAIN_func_800EE088();
-void MAIN_func_800EE1FC(uint8_t depth);
-void MAIN_func_800EE7B4(int32_t id);
+void tickPostBattleStatsBox();
+void renderPostBattleStatsBox(uint8_t depth);
+void closeBattleEndBox(int32_t id);
 
 extern uint8_t MOVE_LEARN_CHANCES[58][3];
 extern int16_t ENEMY_COUNT;
 extern int32_t MAIN_D_80134D70;
-extern uint16_t MAIN_D_80134E90;
-extern int32_t MAIN_D_80134E9C;
+extern uint16_t BATTLE_BITS_LEFT;
+extern int32_t BATTLE_END_SKIP;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern POLY_FT4 BIT_BOX;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern int16_t STATS_GAINS[6];
-extern int16_t MAIN_D_80134EA0;
+extern int16_t STATS_GAIN_DELAY;
 extern int8_t BTL_END_BOX_TEXTBUFFER[];
 extern int8_t HAS_STAT_GAIN[6];
-extern char MAIN_D_80124C0C[];
-extern char MAIN_D_80124C54[];
+extern char STAT_LABELS[];
+extern char FULLWIDTH_DIGITS[];
 extern uint8_t GAME_STATE;
 extern uint8_t CURRENT_SCREEN;
 
@@ -81,9 +81,9 @@ int8_t STAT_GAIN_FACTORS[4] = { 10, 12, 16, 0 };
 char BITS_LABEL[] = "Bits";
 
 static void *battle_ui_functions[] = {
-	MAIN_func_800EE7B4,
-	MAIN_func_800EE1FC,
-	MAIN_func_800EE088,
+	closeBattleEndBox,
+	renderPostBattleStatsBox,
+	tickPostBattleStatsBox,
 	createPostBattleStatsBox,
 	resetStatsAfterCombat,
 	renderFinalBalance,
@@ -281,9 +281,9 @@ void handleBattleEndBox(void)
 
 	initBitBox();
 
-	MAIN_D_80134E90 = 0;
+	BATTLE_BITS_LEFT = 0;
 	for (i = 1; i <= ENEMY_COUNT; i++) {
-		MAIN_D_80134E90 += NPC_ENTITIES[COMBAT_DATA_PTR->player.entityIds[i] - 2].bits;
+		BATTLE_BITS_LEFT += NPC_ENTITIES[COMBAT_DATA_PTR->player.entityIds[i] - 2].bits;
 	}
 
 	battleStatsGainsAndDrops(droppedItems);
@@ -341,7 +341,7 @@ void handleBattleEndBox(void)
 			}
 		}
 
-		if ((i == 6) && (MAIN_D_80134EA0 == 0)) {
+		if ((i == 6) && (STATS_GAIN_DELAY == 0)) {
 			done = 1;
 		}
 
@@ -360,14 +360,14 @@ void handleBattleEndBox(void)
 	}
 
 	while (1) {
-		if (MAIN_D_80134E90 == 0) {
+		if (BATTLE_BITS_LEFT == 0) {
 			break;
 		}
 
 		BTL_battleTickFrame();
 	}
 
-	MAIN_D_80134E9C = 0;
+	BATTLE_END_SKIP = 0;
 
 	while (1) {
 		if (BTL_isEndBoxTextFinished()) {
@@ -389,11 +389,12 @@ void handleBattleEndBox(void)
 	}
 
 	resetStatsAfterCombat();
-	MAIN_func_800EE7B4(0);
-	MAIN_func_800EE7B4(1);
-	MAIN_func_800EE7B4(2);
+	closeBattleEndBox(0);
+	closeBattleEndBox(1);
+	closeBattleEndBox(2);
 }
 
+/* Counts the bits won into MONEY; cross or triangle adds them all at once. */
 void tickBitBox(int32_t instanceId)
 {
 	int32_t bits;
@@ -402,7 +403,7 @@ void tickBitBox(int32_t instanceId)
 		return;
 	}
 
-	if ((bits = MAIN_D_80134E90) == 0) {
+	if ((bits = BATTLE_BITS_LEFT) == 0) {
 		BTL_tickBattleEndText(instanceId, bits);
 		return;
 	}
@@ -410,16 +411,16 @@ void tickBitBox(int32_t instanceId)
 	if ((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) {
 		if (!(POLLED_INPUT_PREVIOUS & 0x40) &&
 		    !(POLLED_INPUT_PREVIOUS & 0x10)) {
-			MAIN_D_80134E9C = 1;
+			BATTLE_END_SKIP = 1;
 		}
 	}
 
-	if (MAIN_D_80134E9C == 1) {
-		MAIN_D_80134E90 = 0;
+	if (BATTLE_END_SKIP == 1) {
+		BATTLE_BITS_LEFT = 0;
 		MONEY += bits;
 	} else {
 		playSound(0, 0x16);
-		--MAIN_D_80134E90;
+		--BATTLE_BITS_LEFT;
 		MONEY += 1;
 	}
 
@@ -427,14 +428,14 @@ void tickBitBox(int32_t instanceId)
 		MONEY = 999999;
 	}
 
-	if (MAIN_D_80134E90 == 0) {
+	if (BATTLE_BITS_LEFT == 0) {
 		playSound(0, 0x17);
 	}
 }
 
 void renderBitBox(uint8_t layer)
 {
-	renderNumber(2, -18, 28, 5, MAIN_D_80134E90, 6 - layer);
+	renderNumber(2, -18, 28, 5, BATTLE_BITS_LEFT, 6 - layer);
 
 	setXYWH(&BIT_BOX, 52, 28, 24, 12);
 	GsSortPoly(&BIT_BOX, ACTIVE_ORDERING_TABLE, 6 - layer);
@@ -483,7 +484,7 @@ void createPostBattleStatsBox(void)
 	RECT finalPos;
 	RECT startPos;
 
-	MAIN_D_80134E9C = 0;
+	BATTLE_END_SKIP = 0;
 	clearTextArea();
 
 	for (i = 0; i < 6; i++) {
@@ -498,35 +499,36 @@ void createPostBattleStatsBox(void)
 		row = i * 2;
 
 		if (i < 3) {
-			drawString(&MAIN_D_80124C0C[row * 12], 0, y * 2);
-			drawString(&MAIN_D_80124C0C[(row + 1) * 12], 0, (row + 1) * 12);
+			drawString(&STAT_LABELS[row * 12], 0, y * 2);
+			drawString(&STAT_LABELS[(row + 1) * 12], 0, (row + 1) * 12);
 		}
 
 		if (i == 3) {
-			drawString(MAIN_D_80124C54, 0, 240);
+			drawString(FULLWIDTH_DIGITS, 0, 240);
 		}
 
 		DrawSync(0);
 	}
 
-	MAIN_D_80134EA0 = 100;
+	STATS_GAIN_DELAY = 100;
 
 	setRECT(&finalPos, -88, -78, 176, 96);
 
 	getEntityScreenPos(ENTITY_TABLE[1], 1, screenPos);
 
 	setRECT(&startPos, screenPos[0] - 5, screenPos[1] - 5, 10, 10);
-	createAnimatedUIBox(0, 0, 2, &finalPos, &startPos, MAIN_func_800EE088,
-			    (RenderFunction)MAIN_func_800EE1FC);
+	createAnimatedUIBox(0, 0, 2, &finalPos, &startPos, tickPostBattleStatsBox,
+			    (RenderFunction)renderPostBattleStatsBox);
 }
 
-void MAIN_func_800EE088(void)
+/* Cross or triangle adds the remaining stat gains at once. */
+void tickPostBattleStatsBox(void)
 {
 	int32_t i;
 	int16_t gain;
 
-	if (MAIN_D_80134EA0 > 0) {
-		MAIN_D_80134EA0--;
+	if (STATS_GAIN_DELAY > 0) {
+		STATS_GAIN_DELAY--;
 	}
 
 	for (i = 0; i < 6; i++) {
@@ -538,11 +540,11 @@ void MAIN_func_800EE088(void)
 	if ((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) {
 		if (!(POLLED_INPUT_PREVIOUS & 0x40) &&
 		    !(POLLED_INPUT_PREVIOUS & 0x10)) {
-			MAIN_D_80134E9C = 1;
+			BATTLE_END_SKIP = 1;
 		}
 	}
 
-	if (MAIN_D_80134E9C != 1) {
+	if (BATTLE_END_SKIP != 1) {
 		return;
 	}
 
@@ -567,10 +569,11 @@ void MAIN_func_800EE088(void)
 		}
 	}
 
-	MAIN_D_80134EA0 = 0;
+	STATS_GAIN_DELAY = 0;
 }
 
-void MAIN_func_800EE1FC(uint8_t depth)
+/* Draws the stats with their bars and the gains still being counted in. */
+void renderPostBattleStatsBox(uint8_t depth)
 {
 	RECT *box = &UI_BOX_DATA[0].finalPos;
 	GsBOXF rect;
@@ -585,7 +588,7 @@ void MAIN_func_800EE1FC(uint8_t depth)
 			continue;
 		}
 
-		if ((MAIN_D_80134EA0 == 0) &&
+		if ((STATS_GAIN_DELAY == 0) &&
 		    (STATS_GAINS[i] > 0) &&
 		    (first == 1)) {
 			playSound(0, 0x16);
@@ -691,7 +694,7 @@ void MAIN_func_800EE1FC(uint8_t depth)
 	}
 }
 
-void MAIN_func_800EE7B4(int32_t id)
+void closeBattleEndBox(int32_t id)
 {
 	if (UI_BOX_DATA[id].state != 0) {
 		removeAnimatedUIBox(id, NULL);

@@ -15,7 +15,7 @@ extern int16_t TRN_D_8008F368[];
 extern int16_t TRN_D_8008F388[];
 extern SlotMachine TRN_SLOT_MACHINE;
 
-extern char MAIN_D_80134BC0[7];
+extern char TRN_TEXT_MONEY_JP[7];
 extern RECT MAIN_D_80134BC8;
 extern RECT MAIN_D_80134BD0;
 extern RECT MAIN_D_80134BD8;

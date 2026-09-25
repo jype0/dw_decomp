@@ -323,9 +323,9 @@ uint8_t VS_D_80070B10[2][5] = {
 	{ 0x02, 0x03, 0x04, 0x05, 0x06 },
 };
 
-char VS_D_80070B1C[] = "\\STDDAT\\DRAW.TMD";
+char VS_PATH_STDDAT_DRAW_TMD[] = "\\STDDAT\\DRAW.TMD";
 
-char VS_D_80070B30[20] = "\\STDDAT\\1P2PWIN.TMD";
+char VS_PATH_STDDAT_1P2PWIN_TMD[20] = "\\STDDAT\\1P2PWIN.TMD";
 // clang-format on
 
 void VS_addCommandMenu(uint8_t index)
@@ -1305,7 +1305,7 @@ void VS_loadStageModels(void)
 	VS_D_80071764[1].length = 5;
 	VS_D_80071764[1].org = VS_D_8007180C;
 	buf = (uint32_t)MAIN_D_801A8B98;
-	readFile(VS_D_80070B30, (void *)buf);
+	readFile(VS_PATH_STDDAT_1P2PWIN_TMD, (void *)buf);
 	GsMapModelingData((u_long *)(buf + 4));
 	for (i = 0; i < 7; i++) {
 		GsLinkObject4((u_long)(buf + 0xc), &VS_D_80072A50[i].data.obj, i);

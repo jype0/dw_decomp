@@ -275,7 +275,7 @@ extern uint8_t MAIN_D_801349B8[6];
 extern SVECTOR MAIN_D_801349C0;
 extern SVECTOR MAIN_D_801349C8;
 extern SVECTOR MAIN_D_801349D0;
-extern char MAIN_D_801349D8[8];
+extern char FISH_TEXT_HOOKED[8];
 
 int32_t getBestFishingRod(void);
 int32_t hasFoodItem(void);

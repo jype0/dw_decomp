@@ -56,7 +56,7 @@ typedef struct {
 } StdUnkBAF4;
 
 extern int16_t STD_D_8007AA40[];
-extern char STD_D_8007AAB0[];
+extern char STD_PATH_STDDAT_DRAW_TMD[];
 extern int32_t STD_D_8007AA10[];
 
 extern GsOT_TAG STD_D_8007B664[];
@@ -112,8 +112,8 @@ extern SVECTOR STD_D_8007FE24[];
 extern StdArenaCfg MAIN_D_801347FC;
 extern uint8_t MAIN_D_80134800[4];
 extern uint8_t MAIN_D_80134804[4];
-extern char MAIN_D_80134808[5];
-extern char MAIN_D_80134810[5];
+extern char STD_TEXT_HP_FULLWIDTH[5];
+extern char STD_TEXT_MP_FULLWIDTH[5];
 extern SVECTOR MAIN_D_80134818;
 extern SVECTOR MAIN_D_80134820;
 extern SVECTOR MAIN_D_80134828;
@@ -126,7 +126,7 @@ extern SVECTOR MAIN_D_80134858;
 extern SVECTOR MAIN_D_80134860;
 extern SVECTOR MAIN_D_80134868;
 extern int16_t MAIN_D_80134870[4];
-extern char MAIN_D_80134878[7];
+extern char STD_TEXT_DEALT_JP[7];
 extern uint8_t MAIN_D_80134880[5];
 extern uint8_t MAIN_D_80134888[4];
 extern uint8_t MAIN_D_8013488C[4];
@@ -138,7 +138,7 @@ extern uint8_t MAIN_D_801348C8[8];
 extern uint8_t MAIN_D_801348D0[8];
 extern char *MAIN_D_801348D8;
 extern int16_t MAIN_D_801348DC[4];
-extern char MAIN_D_801348E4[4];
+extern char STD_NUMBER_FORMAT[4];
 extern int8_t MAIN_D_801348E8[4];
 extern int8_t MAIN_D_801348EC[4];
 extern int8_t MAIN_D_801348F0[8];

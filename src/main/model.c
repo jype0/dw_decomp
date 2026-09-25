@@ -95,731 +95,371 @@ int16_t WIREFRAME_COLOR_MIN = 0x0037;
 
 int16_t WIREFRAME_COLOR_MAX = 0x00ff;
 
-char MAIN_D_80133B44[] = {
-	0x42, 0x4f, 0x59, 0x53, 0x00,
-};
-
-char MAIN_D_80133B4C[] = {
-	0x42, 0x4f, 0x54, 0x41, 0x00,
-};
-
-char MAIN_D_80133B54[] = {
-	0x4b, 0x4f, 0x52, 0x4f, 0x00,
-};
-
-char MAIN_D_80133B5C[] = {
-	0x41, 0x47, 0x55, 0x4d, 0x00,
-};
-
-char MAIN_D_80133B64[] = {
-	0x42, 0x45, 0x54, 0x41, 0x00,
-};
-
-char MAIN_D_80133B6C[] = {
-	0x47, 0x52, 0x45, 0x59, 0x00,
-};
-
-char MAIN_D_80133B74[] = {
-	0x44, 0x45, 0x56, 0x49, 0x00,
-};
-
-char MAIN_D_80133B7C[] = {
-	0x41, 0x49, 0x52, 0x44, 0x00,
-};
-
-char MAIN_D_80133B84[] = {
-	0x54, 0x59, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133B8C[] = {
-	0x4d, 0x45, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133B94[] = {
-	0x53, 0x45, 0x41, 0x44, 0x00,
-};
-
-char MAIN_D_80133B9C[] = {
-	0x4e, 0x55, 0x4d, 0x45, 0x00,
-};
-
-char MAIN_D_80133BA4[] = {
-	0x4d, 0x54, 0x47, 0x52, 0x00,
-};
-
-char MAIN_D_80133BAC[] = {
-	0x4d, 0x41, 0x4d, 0x45, 0x00,
-};
-
-char MAIN_D_80133BB4[] = {
-	0x4d, 0x4f, 0x4e, 0x5a, 0x00,
-};
-
-char MAIN_D_80133BBC[] = {
-	0x50, 0x55, 0x4e, 0x49, 0x00,
-};
-
-char MAIN_D_80133BC4[] = {
-	0x54, 0x55, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80133BCC[] = {
-	0x47, 0x41, 0x42, 0x55, 0x00,
-};
-
-char MAIN_D_80133BD4[] = {
-	0x45, 0x4c, 0x45, 0x43, 0x00,
-};
-
-char MAIN_D_80133BDC[] = {
-	0x4b, 0x41, 0x42, 0x55, 0x00,
-};
-
-char MAIN_D_80133BE4[] = {
-	0x41, 0x4e, 0x47, 0x45, 0x00,
-};
-
-char MAIN_D_80133BEC[] = {
-	0x42, 0x49, 0x52, 0x44, 0x00,
-};
-
-char MAIN_D_80133BF4[] = {
-	0x47, 0x41, 0x52, 0x55, 0x00,
-};
-
-char MAIN_D_80133BFC[] = {
-	0x59, 0x55, 0x4b, 0x49, 0x00,
-};
-
-char MAIN_D_80133C04[] = {
-	0x48, 0x4f, 0x45, 0x45, 0x00,
-};
-
-char MAIN_D_80133C0C[] = {
-	0x56, 0x45, 0x47, 0x49, 0x00,
-};
-
-char MAIN_D_80133C14[] = {
-	0x53, 0x4b, 0x55, 0x4c, 0x00,
-};
-
-char MAIN_D_80133C1C[] = {
-	0x4d, 0x54, 0x4d, 0x41, 0x00,
-};
-
-char MAIN_D_80133C24[] = {
-	0x56, 0x45, 0x44, 0x41, 0x00,
-};
-
-char MAIN_D_80133C2C[] = {
-	0x50, 0x4f, 0x59, 0x4f, 0x00,
-};
-
-char MAIN_D_80133C34[] = {
-	0x54, 0x4f, 0x4b, 0x4f, 0x00,
-};
-
-char MAIN_D_80133C3C[] = {
-	0x50, 0x41, 0x54, 0x41, 0x00,
-};
-
-char MAIN_D_80133C44[] = {
-	0x4b, 0x55, 0x4e, 0x45, 0x00,
-};
-
-char MAIN_D_80133C4C[] = {
-	0x55, 0x4e, 0x49, 0x4d, 0x00,
-};
-
-char MAIN_D_80133C54[] = {
-	0x4f, 0x47, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133C5C[] = {
-	0x53, 0x48, 0x45, 0x4c, 0x00,
-};
-
-char MAIN_D_80133C64[] = {
-	0x43, 0x45, 0x4e, 0x54, 0x00,
-};
-
-char MAIN_D_80133C6C[] = {
-	0x42, 0x41, 0x4b, 0x45, 0x00,
-};
-
-char MAIN_D_80133C74[] = {
-	0x44, 0x4f, 0x52, 0x49, 0x00,
-};
-
-char MAIN_D_80133C7C[] = {
-	0x53, 0x43, 0x55, 0x4d, 0x00,
-};
-
-char MAIN_D_80133C84[] = {
-	0x41, 0x4e, 0x44, 0x52, 0x00,
-};
-
-char MAIN_D_80133C8C[] = {
-	0x47, 0x49, 0x52, 0x4f, 0x00,
-};
-
-char MAIN_D_80133C94[] = {
-	0x45, 0x54, 0x45, 0x4d, 0x00,
-};
-
-char MAIN_D_80133C9C[] = {
-	0x59, 0x55, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133CA4[] = {
-	0x54, 0x41, 0x4e, 0x45, 0x00,
-};
-
-char MAIN_D_80133CAC[] = {
-	0x50, 0x49, 0x59, 0x4f, 0x00,
-};
-
-char MAIN_D_80133CB4[] = {
-	0x50, 0x41, 0x4c, 0x4d, 0x00,
-};
-
-char MAIN_D_80133CBC[] = {
-	0x4d, 0x4f, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80133CC4[] = {
-	0x4c, 0x45, 0x4f, 0x4d, 0x00,
-};
-
-char MAIN_D_80133CCC[] = {
-	0x53, 0x49, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133CD4[] = {
-	0x43, 0x4f, 0x43, 0x41, 0x00,
-};
-
-char MAIN_D_80133CDC[] = {
-	0x4b, 0x55, 0x57, 0x41, 0x00,
-};
-
-char MAIN_D_80133CE4[] = {
-	0x4d, 0x4f, 0x4a, 0x41, 0x00,
-};
-
-char MAIN_D_80133CEC[] = {
-	0x4e, 0x41, 0x4e, 0x49, 0x00,
-};
-
-char MAIN_D_80133CF4[] = {
-	0x4d, 0x47, 0x44, 0x52, 0x00,
-};
-
-char MAIN_D_80133CFC[] = {
-	0x50, 0x49, 0x43, 0x43, 0x00,
-};
-
-char MAIN_D_80133D04[] = {
-	0x44, 0x49, 0x47, 0x49, 0x00,
-};
-
-char MAIN_D_80133D0C[] = {
-	0x50, 0x45, 0x4e, 0x4d, 0x00,
-};
-
-char MAIN_D_80133D14[] = {
-	0x49, 0x47, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133D1C[] = {
-	0x48, 0x4f, 0x55, 0x4f, 0x00,
-};
-
-char MAIN_D_80133D24[] = {
-	0x48, 0x4b, 0x41, 0x42, 0x00,
-};
-
-char MAIN_D_80133D2C[] = {
-	0x4d, 0x47, 0x53, 0x44, 0x00,
-};
-
-char MAIN_D_80133D34[] = {
-	0x77, 0x45, 0x41, 0x47, 0x00,
-};
-
-char MAIN_D_80133D3C[] = {
-	0x50, 0x41, 0x4e, 0x4a, 0x00,
-};
-
-char MAIN_D_80133D44[] = {
-	0x47, 0x47, 0x44, 0x52, 0x00,
-};
-
-char MAIN_D_80133D4C[] = {
-	0x4d, 0x54, 0x45, 0x54, 0x00,
-};
-
-char MAIN_D_80133D54[] = {
-	0x56, 0x41, 0x4e, 0x44, 0x00,
-};
-
-char MAIN_D_80133D5C[] = {
-	0x59, 0x41, 0x4e, 0x4d, 0x00,
-};
-
-char MAIN_D_80133D64[] = {
-	0x47, 0x4f, 0x54, 0x55, 0x00,
-};
-
-char MAIN_D_80133D6C[] = {
-	0x46, 0x4c, 0x41, 0x52, 0x00,
-};
-
-char MAIN_D_80133D74[] = {
-	0x57, 0x41, 0x52, 0x55, 0x00,
-};
-
-char MAIN_D_80133D7C[] = {
-	0x59, 0x4b, 0x41, 0x47, 0x00,
-};
-
-char MAIN_D_80133D84[] = {
-	0x48, 0x59, 0x4f, 0x47, 0x00,
-};
-
-char MAIN_D_80133D8C[] = {
-	0x50, 0x43, 0x53, 0x43, 0x00,
-};
-
-char MAIN_D_80133D94[] = {
-	0x44, 0x4f, 0x4b, 0x55, 0x00,
-};
-
-char MAIN_D_80133D9C[] = {
-	0x53, 0x49, 0x4d, 0x41, 0x00,
-};
-
-char MAIN_D_80133DA4[] = {
-	0x54, 0x41, 0x4e, 0x4b, 0x00,
-};
-
-char MAIN_D_80133DAC[] = {
-	0x52, 0x45, 0x44, 0x56, 0x00,
-};
-
-char MAIN_D_80133DB4[] = {
-	0x4a, 0x4d, 0x4f, 0x4a, 0x00,
-};
-
-char MAIN_D_80133DBC[] = {
-	0x4e, 0x49, 0x53, 0x45, 0x00,
-};
-
-char MAIN_D_80133DC4[] = {
-	0x47, 0x4f, 0x42, 0x52, 0x00,
-};
-
-char MAIN_D_80133DCC[] = {
-	0x54, 0x55, 0x54, 0x49, 0x00,
-};
-
-char MAIN_D_80133DD4[] = {
-	0x50, 0x53, 0x59, 0x43, 0x00,
-};
-
-char MAIN_D_80133DDC[] = {
-	0x4d, 0x4f, 0x44, 0x4f, 0x00,
-};
-
-char MAIN_D_80133DE4[] = {
-	0x54, 0x4f, 0x59, 0x41, 0x00,
-};
-
-char MAIN_D_80133DEC[] = {
-	0x50, 0x49, 0x44, 0x44, 0x00,
-};
-
-char MAIN_D_80133DF4[] = {
-	0x41, 0x52, 0x55, 0x52, 0x00,
-};
-
-char MAIN_D_80133DFC[] = {
-	0x47, 0x45, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133E04[] = {
-	0x56, 0x41, 0x52, 0x4d, 0x00,
-};
-
-char MAIN_D_80133E0C[] = {
-	0x46, 0x55, 0x47, 0x41, 0x00,
-};
-
-char MAIN_D_80133E14[] = {
-	0x54, 0x4b, 0x4b, 0x41, 0x00,
-};
-
-char MAIN_D_80133E1C[] = {
-	0x4d, 0x52, 0x49, 0x53, 0x00,
-};
-
-char MAIN_D_80133E24[] = {
-	0x47, 0x41, 0x52, 0x44, 0x00,
-};
-
-char MAIN_D_80133E2C[] = {
-	0x4d, 0x43, 0x48, 0x4f, 0x00,
-};
-
-char MAIN_D_80133E34[] = {
-	0x49, 0x43, 0x45, 0x4d, 0x00,
-};
-
-char MAIN_D_80133E3C[] = {
-	0x41, 0x4b, 0x41, 0x54, 0x00,
-};
-
-char MAIN_D_80133E44[] = {
-	0x54, 0x55, 0x4b, 0x41, 0x00,
-};
-
-char MAIN_D_80133E4C[] = {
-	0x53, 0x48, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133E54[] = {
-	0x43, 0x4c, 0x45, 0x41, 0x00,
-};
-
-char MAIN_D_80133E5C[] = {
-	0x5a, 0x41, 0x53, 0x53, 0x00,
-};
-
-char MAIN_D_80133E64[] = {
-	0x49, 0x43, 0x44, 0x56, 0x00,
-};
-
-char MAIN_D_80133E6C[] = {
-	0x44, 0x4b, 0x52, 0x5a, 0x00,
-};
-
-char MAIN_D_80133E74[] = {
-	0x53, 0x4e, 0x44, 0x59, 0x00,
-};
-
-char MAIN_D_80133E7C[] = {
-	0x53, 0x4e, 0x47, 0x42, 0x00,
-};
-
-char MAIN_D_80133E84[] = {
-	0x42, 0x4c, 0x4d, 0x52, 0x00,
-};
-
-char MAIN_D_80133E8C[] = {
-	0x47, 0x52, 0x55, 0x52, 0x00,
-};
-
-char MAIN_D_80133E94[] = {
-	0x53, 0x41, 0x42, 0x44, 0x00,
-};
-
-char MAIN_D_80133E9C[] = {
-	0x53, 0x4f, 0x55, 0x4c, 0x00,
-};
-
-char MAIN_D_80133EA4[] = {
-	0x47, 0x4f, 0x4c, 0x45, 0x00,
-};
-
-char MAIN_D_80133EAC[] = {
-	0x4f, 0x54, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133EB4[] = {
-	0x47, 0x45, 0x43, 0x4f, 0x00,
-};
-
-char MAIN_D_80133EBC[] = {
-	0x54, 0x45, 0x4e, 0x54, 0x00,
-};
-
-char MAIN_D_80133EC4[] = {
-	0x57, 0x52, 0x53, 0x45, 0x00,
-};
-
-char MAIN_D_80133ECC[] = {
-	0x49, 0x4e, 0x53, 0x45, 0x00,
-};
-
-char MAIN_D_80133ED4[] = {
-	0x74, 0x41, 0x4b, 0x41, 0x00,
-};
-
-char MAIN_D_80133EDC[] = {
-	0x4d, 0x55, 0x47, 0x45, 0x00,
-};
-
-char MAIN_D_80133EE4[] = {
-	0x41, 0x4e, 0x4c, 0x47, 0x00,
-};
-
-char MAIN_D_80133EEC[] = {
-	0x4a, 0x49, 0x4a, 0x49, 0x00,
-};
-
-char MAIN_D_80133EF4[] = {
-	0x54, 0x45, 0x4e, 0x53, 0x00,
-};
-
-char MAIN_D_80133EFC[] = {
-	0x54, 0x4f, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80133F04[] = {
-	0x53, 0x43, 0x55, 0x44, 0x00,
-};
-
-char MAIN_D_80133F0C[] = {
-	0x4a, 0x55, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133F14[] = {
-	0x48, 0x41, 0x47, 0x55, 0x00,
-};
-
-char MAIN_D_80133F1C[] = {
-	0x42, 0x52, 0x49, 0x4b, 0x00,
-};
-
-char MAIN_D_80133F24[] = {
-	0x54, 0x49, 0x52, 0x53, 0x00,
-};
-
-char MAIN_D_80133F2C[] = {
-	0x45, 0x47, 0x4f, 0x42, 0x00,
-};
-
-char MAIN_D_80133F34[] = {
-	0x42, 0x52, 0x41, 0x4b, 0x00,
-};
-
-char MAIN_D_80133F3C[] = {
-	0x50, 0x55, 0x54, 0x49, 0x00,
-};
-
-char MAIN_D_80133F44[] = {
-	0x45, 0x42, 0x45, 0x54, 0x00,
-};
-
-char MAIN_D_80133F4C[] = {
-	0x45, 0x47, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133F54[] = {
-	0x45, 0x44, 0x45, 0x56, 0x00,
-};
-
-char MAIN_D_80133F5C[] = {
-	0x45, 0x41, 0x49, 0x52, 0x00,
-};
-
-char MAIN_D_80133F64[] = {
-	0x45, 0x54, 0x59, 0x52, 0x00,
-};
-
-char MAIN_D_80133F6C[] = {
-	0x45, 0x4d, 0x45, 0x52, 0x00,
-};
-
-char MAIN_D_80133F74[] = {
-	0x45, 0x53, 0x45, 0x41, 0x00,
-};
-
-char MAIN_D_80133F7C[] = {
-	0x45, 0x4e, 0x55, 0x4d, 0x00,
-};
-
-char MAIN_D_80133F84[] = {
-	0x45, 0x4d, 0x54, 0x47, 0x00,
-};
-
-char MAIN_D_80133F8C[] = {
-	0x45, 0x4d, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133F94[] = {
-	0x45, 0x4d, 0x4f, 0x4e, 0x00,
-};
-
-char MAIN_D_80133F9C[] = {
-	0x45, 0x47, 0x41, 0x42, 0x00,
-};
-
-char MAIN_D_80133FA4[] = {
-	0x45, 0x45, 0x4c, 0x45, 0x00,
-};
-
-char MAIN_D_80133FAC[] = {
-	0x45, 0x4b, 0x41, 0x42, 0x00,
-};
-
-char MAIN_D_80133FB4[] = {
-	0x45, 0x41, 0x4e, 0x47, 0x00,
-};
-
-char MAIN_D_80133FBC[] = {
-	0x45, 0x42, 0x49, 0x52, 0x00,
-};
-
-char MAIN_D_80133FC4[] = {
-	0x45, 0x47, 0x41, 0x52, 0x00,
-};
-
-char MAIN_D_80133FCC[] = {
-	0x45, 0x59, 0x55, 0x4b, 0x00,
-};
-
-char MAIN_D_80133FD4[] = {
-	0x45, 0x48, 0x4f, 0x45, 0x00,
-};
-
-char MAIN_D_80133FDC[] = {
-	0x45, 0x56, 0x45, 0x47, 0x00,
-};
-
-char MAIN_D_80133FE4[] = {
-	0x45, 0x53, 0x4b, 0x55, 0x00,
-};
-
-char MAIN_D_80133FEC[] = {
-	0x45, 0x4d, 0x54, 0x4d, 0x00,
-};
-
-char MAIN_D_80133FF4[] = {
-	0x45, 0x56, 0x45, 0x44, 0x00,
-};
-
-char MAIN_D_80133FFC[] = {
-	0x45, 0x50, 0x41, 0x54, 0x00,
-};
-
-char MAIN_D_80134004[] = {
-	0x45, 0x4b, 0x55, 0x4e, 0x00,
-};
-
-char MAIN_D_8013400C[] = {
-	0x45, 0x55, 0x4e, 0x49, 0x00,
-};
-
-char MAIN_D_80134014[] = {
-	0x45, 0x4f, 0x47, 0x52, 0x00,
-};
-
-char MAIN_D_8013401C[] = {
-	0x45, 0x53, 0x48, 0x45, 0x00,
-};
+char DIGIMON_FILE_BOYS[] = "BOYS";
 
-char MAIN_D_80134024[] = {
-	0x45, 0x43, 0x45, 0x4e, 0x00,
-};
+char DIGIMON_FILE_BOTA[] = "BOTA";
 
-char MAIN_D_8013402C[] = {
-	0x45, 0x42, 0x41, 0x4b, 0x00,
-};
+char DIGIMON_FILE_KORO[] = "KORO";
 
-char MAIN_D_80134034[] = {
-	0x45, 0x44, 0x4f, 0x52, 0x00,
-};
+char DIGIMON_FILE_AGUM[] = "AGUM";
 
-char MAIN_D_8013403C[] = {
-	0x45, 0x53, 0x43, 0x55, 0x00,
-};
+char DIGIMON_FILE_BETA[] = "BETA";
 
-char MAIN_D_80134044[] = {
-	0x45, 0x41, 0x4e, 0x44, 0x00,
-};
+char DIGIMON_FILE_GREY[] = "GREY";
 
-char MAIN_D_8013404C[] = {
-	0x45, 0x47, 0x49, 0x52, 0x00,
-};
+char DIGIMON_FILE_DEVI[] = "DEVI";
 
-char MAIN_D_80134054[] = {
-	0x45, 0x45, 0x54, 0x45, 0x00,
-};
+char DIGIMON_FILE_AIRD[] = "AIRD";
 
-char MAIN_D_8013405C[] = {
-	0x45, 0x50, 0x49, 0x59, 0x00,
-};
+char DIGIMON_FILE_TYRA[] = "TYRA";
 
-char MAIN_D_80134064[] = {
-	0x45, 0x50, 0x41, 0x4c, 0x00,
-};
+char DIGIMON_FILE_MERA[] = "MERA";
 
-char MAIN_D_8013406C[] = {
-	0x45, 0x4d, 0x4e, 0x4f, 0x00,
-};
+char DIGIMON_FILE_SEAD[] = "SEAD";
 
-char MAIN_D_80134074[] = {
-	0x45, 0x4c, 0x45, 0x4f, 0x00,
-};
+char DIGIMON_FILE_NUME[] = "NUME";
 
-char MAIN_D_8013407C[] = {
-	0x45, 0x53, 0x49, 0x52, 0x00,
-};
+char DIGIMON_FILE_MTGR[] = "MTGR";
 
-char MAIN_D_80134084[] = {
-	0x45, 0x43, 0x4f, 0x43, 0x00,
-};
+char DIGIMON_FILE_MAME[] = "MAME";
 
-char MAIN_D_8013408C[] = {
-	0x45, 0x4b, 0x55, 0x57, 0x00,
-};
+char DIGIMON_FILE_MONZ[] = "MONZ";
 
-char MAIN_D_80134094[] = {
-	0x45, 0x4d, 0x4f, 0x4a, 0x00,
-};
+char DIGIMON_FILE_PUNI[] = "PUNI";
 
-char MAIN_D_8013409C[] = {
-	0x45, 0x4e, 0x41, 0x4e, 0x00,
-};
+char DIGIMON_FILE_TUNO[] = "TUNO";
 
-char MAIN_D_801340A4[] = {
-	0x45, 0x4d, 0x47, 0x44, 0x00,
-};
+char DIGIMON_FILE_GABU[] = "GABU";
 
-char MAIN_D_801340AC[] = {
-	0x45, 0x50, 0x49, 0x43, 0x00,
-};
+char DIGIMON_FILE_ELEC[] = "ELEC";
 
-char MAIN_D_801340B4[] = {
-	0x45, 0x44, 0x49, 0x47, 0x00,
-};
+char DIGIMON_FILE_KABU[] = "KABU";
 
-char MAIN_D_801340BC[] = {
-	0x45, 0x49, 0x47, 0x41, 0x00,
-};
+char DIGIMON_FILE_ANGE[] = "ANGE";
 
-char MAIN_D_801340C4[] = {
-	0x45, 0x50, 0x45, 0x4e, 0x00,
-};
+char DIGIMON_FILE_BIRD[] = "BIRD";
 
-char MAIN_D_801340CC[] = {
-	0x45, 0x56, 0x41, 0x4e, 0x00,
-};
+char DIGIMON_FILE_GARU[] = "GARU";
 
-char MAIN_D_801340D4[] = {
-	0x43, 0x45, 0x47, 0x52, 0x00,
-};
+char DIGIMON_FILE_YUKI[] = "YUKI";
 
-char MAIN_D_801340DC[] = {
-	0x43, 0x45, 0x4d, 0x47, 0x00,
-};
+char DIGIMON_FILE_HOEE[] = "HOEE";
 
-char MAIN_D_801340E4[] = ".MMD";
+char DIGIMON_FILE_VEGI[] = "VEGI";
 
-char MAIN_D_801340EC[] = ".TMD";
+char DIGIMON_FILE_SKUL[] = "SKUL";
 
-char MAIN_D_801340F4[] = ".MTN";
+char DIGIMON_FILE_MTMA[] = "MTMA";
+
+char DIGIMON_FILE_VEDA[] = "VEDA";
+
+char DIGIMON_FILE_POYO[] = "POYO";
+
+char DIGIMON_FILE_TOKO[] = "TOKO";
+
+char DIGIMON_FILE_PATA[] = "PATA";
+
+char DIGIMON_FILE_KUNE[] = "KUNE";
+
+char DIGIMON_FILE_UNIM[] = "UNIM";
+
+char DIGIMON_FILE_OGRE[] = "OGRE";
+
+char DIGIMON_FILE_SHEL[] = "SHEL";
+
+char DIGIMON_FILE_CENT[] = "CENT";
+
+char DIGIMON_FILE_BAKE[] = "BAKE";
+
+char DIGIMON_FILE_DORI[] = "DORI";
+
+char DIGIMON_FILE_SCUM[] = "SCUM";
+
+char DIGIMON_FILE_ANDR[] = "ANDR";
+
+char DIGIMON_FILE_GIRO[] = "GIRO";
+
+char DIGIMON_FILE_ETEM[] = "ETEM";
+
+char DIGIMON_FILE_YURA[] = "YURA";
+
+char DIGIMON_FILE_TANE[] = "TANE";
+
+char DIGIMON_FILE_PIYO[] = "PIYO";
+
+char DIGIMON_FILE_PALM[] = "PALM";
+
+char DIGIMON_FILE_MONO[] = "MONO";
+
+char DIGIMON_FILE_LEOM[] = "LEOM";
+
+char DIGIMON_FILE_SIRA[] = "SIRA";
+
+char DIGIMON_FILE_COCA[] = "COCA";
+
+char DIGIMON_FILE_KUWA[] = "KUWA";
+
+char DIGIMON_FILE_MOJA[] = "MOJA";
+
+char DIGIMON_FILE_NANI[] = "NANI";
+
+char DIGIMON_FILE_MGDR[] = "MGDR";
+
+char DIGIMON_FILE_PICC[] = "PICC";
+
+char DIGIMON_FILE_DIGI[] = "DIGI";
+
+char DIGIMON_FILE_PENM[] = "PENM";
+
+char DIGIMON_FILE_IGAM[] = "IGAM";
+
+char DIGIMON_FILE_HOUO[] = "HOUO";
+
+char DIGIMON_FILE_HKAB[] = "HKAB";
+
+char DIGIMON_FILE_MGSD[] = "MGSD";
+
+char DIGIMON_FILE_WEAG[] = "wEAG";
+
+char DIGIMON_FILE_PANJ[] = "PANJ";
+
+char DIGIMON_FILE_GGDR[] = "GGDR";
+
+char DIGIMON_FILE_MTET[] = "MTET";
+
+char DIGIMON_FILE_VAND[] = "VAND";
+
+char DIGIMON_FILE_YANM[] = "YANM";
+
+char DIGIMON_FILE_GOTU[] = "GOTU";
+
+char DIGIMON_FILE_FLAR[] = "FLAR";
+
+char DIGIMON_FILE_WARU[] = "WARU";
+
+char DIGIMON_FILE_YKAG[] = "YKAG";
+
+char DIGIMON_FILE_HYOG[] = "HYOG";
+
+char DIGIMON_FILE_PCSC[] = "PCSC";
+
+char DIGIMON_FILE_DOKU[] = "DOKU";
+
+char DIGIMON_FILE_SIMA[] = "SIMA";
+
+char DIGIMON_FILE_TANK[] = "TANK";
+
+char DIGIMON_FILE_REDV[] = "REDV";
+
+char DIGIMON_FILE_JMOJ[] = "JMOJ";
+
+char DIGIMON_FILE_NISE[] = "NISE";
+
+char DIGIMON_FILE_GOBR[] = "GOBR";
+
+char DIGIMON_FILE_TUTI[] = "TUTI";
+
+char DIGIMON_FILE_PSYC[] = "PSYC";
+
+char DIGIMON_FILE_MODO[] = "MODO";
+
+char DIGIMON_FILE_TOYA[] = "TOYA";
+
+char DIGIMON_FILE_PIDD[] = "PIDD";
+
+char DIGIMON_FILE_ARUR[] = "ARUR";
+
+char DIGIMON_FILE_GERE[] = "GERE";
+
+char DIGIMON_FILE_VARM[] = "VARM";
+
+char DIGIMON_FILE_FUGA[] = "FUGA";
+
+char DIGIMON_FILE_TKKA[] = "TKKA";
+
+char DIGIMON_FILE_MRIS[] = "MRIS";
+
+char DIGIMON_FILE_GARD[] = "GARD";
+
+char DIGIMON_FILE_MCHO[] = "MCHO";
+
+char DIGIMON_FILE_ICEM[] = "ICEM";
+
+char DIGIMON_FILE_AKAT[] = "AKAT";
+
+char DIGIMON_FILE_TUKA[] = "TUKA";
+
+char DIGIMON_FILE_SHAM[] = "SHAM";
+
+char DIGIMON_FILE_CLEA[] = "CLEA";
+
+char DIGIMON_FILE_ZASS[] = "ZASS";
+
+char DIGIMON_FILE_ICDV[] = "ICDV";
+
+char DIGIMON_FILE_DKRZ[] = "DKRZ";
+
+char DIGIMON_FILE_SNDY[] = "SNDY";
+
+char DIGIMON_FILE_SNGB[] = "SNGB";
+
+char DIGIMON_FILE_BLMR[] = "BLMR";
+
+char DIGIMON_FILE_GRUR[] = "GRUR";
+
+char DIGIMON_FILE_SABD[] = "SABD";
+
+char DIGIMON_FILE_SOUL[] = "SOUL";
+
+char DIGIMON_FILE_GOLE[] = "GOLE";
+
+char DIGIMON_FILE_OTAM[] = "OTAM";
+
+char DIGIMON_FILE_GECO[] = "GECO";
+
+char DIGIMON_FILE_TENT[] = "TENT";
+
+char DIGIMON_FILE_WRSE[] = "WRSE";
+
+char DIGIMON_FILE_INSE[] = "INSE";
+
+char DIGIMON_FILE_TAKA[] = "tAKA";
+
+char DIGIMON_FILE_MUGE[] = "MUGE";
+
+char DIGIMON_FILE_ANLG[] = "ANLG";
+
+char DIGIMON_FILE_JIJI[] = "JIJI";
+
+char DIGIMON_FILE_TENS[] = "TENS";
+
+char DIGIMON_FILE_TONO[] = "TONO";
+
+char DIGIMON_FILE_SCUD[] = "SCUD";
+
+char DIGIMON_FILE_JURE[] = "JURE";
+
+char DIGIMON_FILE_HAGU[] = "HAGU";
+
+char DIGIMON_FILE_BRIK[] = "BRIK";
+
+char DIGIMON_FILE_TIRS[] = "TIRS";
+
+char DIGIMON_FILE_EGOB[] = "EGOB";
+
+char DIGIMON_FILE_BRAK[] = "BRAK";
+
+char DIGIMON_FILE_PUTI[] = "PUTI";
+
+char DIGIMON_FILE_EBET[] = "EBET";
+
+char DIGIMON_FILE_EGRE[] = "EGRE";
+
+char DIGIMON_FILE_EDEV[] = "EDEV";
+
+char DIGIMON_FILE_EAIR[] = "EAIR";
+
+char DIGIMON_FILE_ETYR[] = "ETYR";
+
+char DIGIMON_FILE_EMER[] = "EMER";
+
+char DIGIMON_FILE_ESEA[] = "ESEA";
+
+char DIGIMON_FILE_ENUM[] = "ENUM";
+
+char DIGIMON_FILE_EMTG[] = "EMTG";
+
+char DIGIMON_FILE_EMAM[] = "EMAM";
+
+char DIGIMON_FILE_EMON[] = "EMON";
+
+char DIGIMON_FILE_EGAB[] = "EGAB";
+
+char DIGIMON_FILE_EELE[] = "EELE";
+
+char DIGIMON_FILE_EKAB[] = "EKAB";
+
+char DIGIMON_FILE_EANG[] = "EANG";
+
+char DIGIMON_FILE_EBIR[] = "EBIR";
+
+char DIGIMON_FILE_EGAR[] = "EGAR";
+
+char DIGIMON_FILE_EYUK[] = "EYUK";
+
+char DIGIMON_FILE_EHOE[] = "EHOE";
+
+char DIGIMON_FILE_EVEG[] = "EVEG";
+
+char DIGIMON_FILE_ESKU[] = "ESKU";
+
+char DIGIMON_FILE_EMTM[] = "EMTM";
+
+char DIGIMON_FILE_EVED[] = "EVED";
+
+char DIGIMON_FILE_EPAT[] = "EPAT";
+
+char DIGIMON_FILE_EKUN[] = "EKUN";
+
+char DIGIMON_FILE_EUNI[] = "EUNI";
+
+char DIGIMON_FILE_EOGR[] = "EOGR";
+
+char DIGIMON_FILE_ESHE[] = "ESHE";
+
+char DIGIMON_FILE_ECEN[] = "ECEN";
+
+char DIGIMON_FILE_EBAK[] = "EBAK";
+
+char DIGIMON_FILE_EDOR[] = "EDOR";
+
+char DIGIMON_FILE_ESCU[] = "ESCU";
+
+char DIGIMON_FILE_EAND[] = "EAND";
+
+char DIGIMON_FILE_EGIR[] = "EGIR";
+
+char DIGIMON_FILE_EETE[] = "EETE";
+
+char DIGIMON_FILE_EPIY[] = "EPIY";
+
+char DIGIMON_FILE_EPAL[] = "EPAL";
+
+char DIGIMON_FILE_EMNO[] = "EMNO";
+
+char DIGIMON_FILE_ELEO[] = "ELEO";
+
+char DIGIMON_FILE_ESIR[] = "ESIR";
+
+char DIGIMON_FILE_ECOC[] = "ECOC";
+
+char DIGIMON_FILE_EKUW[] = "EKUW";
+
+char DIGIMON_FILE_EMOJ[] = "EMOJ";
+
+char DIGIMON_FILE_ENAN[] = "ENAN";
+
+char DIGIMON_FILE_EMGD[] = "EMGD";
+
+char DIGIMON_FILE_EPIC[] = "EPIC";
+
+char DIGIMON_FILE_EDIG[] = "EDIG";
+
+char DIGIMON_FILE_EIGA[] = "EIGA";
+
+char DIGIMON_FILE_EPEN[] = "EPEN";
+
+char DIGIMON_FILE_EVAN[] = "EVAN";
+
+char DIGIMON_FILE_CEGR[] = "CEGR";
+
+char DIGIMON_FILE_CEMG[] = "CEMG";
+
+char FILE_EXT_MMD[] = ".MMD";
+
+char FILE_EXT_TMD[] = ".TMD";
+
+char FILE_EXT_MTN[] = ".MTN";
 
 SkeletonBone MAIN_D_8011C170[17] = {
 	{ 0xff, 0xff },
@@ -2868,196 +2508,196 @@ int8_t WIREFRAME_RNG_TABLE[16] = {
 	0x0e, 0x07, 0x0c, 0x0f, 0x05, 0x02, 0x09, 0x00,
 };
 
-char MAIN_D_8011D190[] = "ALLTIM.TIM";
+char PATH_ALLTIM_TIM[] = "ALLTIM.TIM";
 
 char *PTR_DIGIMON_FILE_NAMES[180] = {
-	MAIN_D_80133B44,
-	MAIN_D_80133B4C,
-	MAIN_D_80133B54,
-	MAIN_D_80133B5C,
-	MAIN_D_80133B64,
-	MAIN_D_80133B6C,
-	MAIN_D_80133B74,
-	MAIN_D_80133B7C,
-	MAIN_D_80133B84,
-	MAIN_D_80133B8C,
-	MAIN_D_80133B94,
-	MAIN_D_80133B9C,
-	MAIN_D_80133BA4,
-	MAIN_D_80133BAC,
-	MAIN_D_80133BB4,
-	MAIN_D_80133BBC,
-	MAIN_D_80133BC4,
-	MAIN_D_80133BCC,
-	MAIN_D_80133BD4,
-	MAIN_D_80133BDC,
-	MAIN_D_80133BE4,
-	MAIN_D_80133BEC,
-	MAIN_D_80133BF4,
-	MAIN_D_80133BFC,
-	MAIN_D_80133C04,
-	MAIN_D_80133C0C,
-	MAIN_D_80133C14,
-	MAIN_D_80133C1C,
-	MAIN_D_80133C24,
-	MAIN_D_80133C2C,
-	MAIN_D_80133C34,
-	MAIN_D_80133C3C,
-	MAIN_D_80133C44,
-	MAIN_D_80133C4C,
-	MAIN_D_80133C54,
-	MAIN_D_80133C5C,
-	MAIN_D_80133C64,
-	MAIN_D_80133C6C,
-	MAIN_D_80133C74,
-	MAIN_D_80133C7C,
-	MAIN_D_80133C84,
-	MAIN_D_80133C8C,
-	MAIN_D_80133C94,
-	MAIN_D_80133C9C,
-	MAIN_D_80133CA4,
-	MAIN_D_80133CAC,
-	MAIN_D_80133CB4,
-	MAIN_D_80133CBC,
-	MAIN_D_80133CC4,
-	MAIN_D_80133CCC,
-	MAIN_D_80133CD4,
-	MAIN_D_80133CDC,
-	MAIN_D_80133CE4,
-	MAIN_D_80133CEC,
-	MAIN_D_80133CF4,
-	MAIN_D_80133CFC,
-	MAIN_D_80133D04,
-	MAIN_D_80133D0C,
-	MAIN_D_80133D14,
-	MAIN_D_80133D1C,
-	MAIN_D_80133D24,
-	MAIN_D_80133D2C,
-	MAIN_D_80133D34,
-	MAIN_D_80133D3C,
-	MAIN_D_80133D44,
-	MAIN_D_80133D4C,
-	MAIN_D_80133D54,
-	MAIN_D_80133D5C,
-	MAIN_D_80133D64,
-	MAIN_D_80133D6C,
-	MAIN_D_80133D74,
-	MAIN_D_80133D7C,
-	MAIN_D_80133D84,
-	MAIN_D_80133D8C,
-	MAIN_D_80133D94,
-	MAIN_D_80133D9C,
-	MAIN_D_80133DA4,
-	MAIN_D_80133DAC,
-	MAIN_D_80133DB4,
-	MAIN_D_80133DBC,
-	MAIN_D_80133DC4,
-	MAIN_D_80133DCC,
-	MAIN_D_80133DD4,
-	MAIN_D_80133DDC,
-	MAIN_D_80133DE4,
-	MAIN_D_80133DEC,
-	MAIN_D_80133DF4,
-	MAIN_D_80133DFC,
-	MAIN_D_80133E04,
-	MAIN_D_80133E0C,
-	MAIN_D_80133E14,
-	MAIN_D_80133E1C,
-	MAIN_D_80133E24,
-	MAIN_D_80133E2C,
-	MAIN_D_80133E34,
-	MAIN_D_80133E3C,
-	MAIN_D_80133E44,
-	MAIN_D_80133E4C,
-	MAIN_D_80133E54,
-	MAIN_D_80133E5C,
-	MAIN_D_80133E64,
-	MAIN_D_80133E6C,
-	MAIN_D_80133E74,
-	MAIN_D_80133E7C,
-	MAIN_D_80133E84,
-	MAIN_D_80133E8C,
-	MAIN_D_80133E94,
-	MAIN_D_80133E9C,
-	MAIN_D_80133EA4,
-	MAIN_D_80133EAC,
-	MAIN_D_80133EB4,
-	MAIN_D_80133EBC,
-	MAIN_D_80133EC4,
-	MAIN_D_80133ECC,
-	MAIN_D_80133ED4,
-	MAIN_D_80133EDC,
-	MAIN_D_80133EE4,
-	MAIN_D_80133EEC,
-	MAIN_D_80133EF4,
-	MAIN_D_80133EFC,
-	MAIN_D_80133F04,
-	MAIN_D_80133F0C,
-	MAIN_D_80133F14,
-	MAIN_D_80133F1C,
-	MAIN_D_80133F24,
-	MAIN_D_80133F2C,
-	MAIN_D_80133F34,
-	MAIN_D_80133F3C,
-	MAIN_D_80133F44,
-	MAIN_D_80133F4C,
-	MAIN_D_80133F54,
-	MAIN_D_80133F5C,
-	MAIN_D_80133F64,
-	MAIN_D_80133F6C,
-	MAIN_D_80133F74,
-	MAIN_D_80133F7C,
-	MAIN_D_80133F84,
-	MAIN_D_80133F8C,
-	MAIN_D_80133F94,
-	MAIN_D_80133F9C,
-	MAIN_D_80133FA4,
-	MAIN_D_80133FAC,
-	MAIN_D_80133FB4,
-	MAIN_D_80133FBC,
-	MAIN_D_80133FC4,
-	MAIN_D_80133FCC,
-	MAIN_D_80133FD4,
-	MAIN_D_80133FDC,
-	MAIN_D_80133FE4,
-	MAIN_D_80133FEC,
-	MAIN_D_80133FF4,
-	MAIN_D_80133FFC,
-	MAIN_D_80134004,
-	MAIN_D_8013400C,
-	MAIN_D_80134014,
-	MAIN_D_8013401C,
-	MAIN_D_80134024,
-	MAIN_D_8013402C,
-	MAIN_D_80134034,
-	MAIN_D_8013403C,
-	MAIN_D_80134044,
-	MAIN_D_8013404C,
-	MAIN_D_80134054,
-	MAIN_D_8013405C,
-	MAIN_D_80134064,
-	MAIN_D_8013406C,
-	MAIN_D_80134074,
-	MAIN_D_8013407C,
-	MAIN_D_80134084,
-	MAIN_D_8013408C,
-	MAIN_D_80134094,
-	MAIN_D_8013409C,
-	MAIN_D_801340A4,
-	MAIN_D_801340AC,
-	MAIN_D_801340B4,
-	MAIN_D_801340BC,
-	MAIN_D_801340C4,
-	MAIN_D_801340CC,
-	MAIN_D_801340D4,
-	MAIN_D_801340DC,
+	DIGIMON_FILE_BOYS,
+	DIGIMON_FILE_BOTA,
+	DIGIMON_FILE_KORO,
+	DIGIMON_FILE_AGUM,
+	DIGIMON_FILE_BETA,
+	DIGIMON_FILE_GREY,
+	DIGIMON_FILE_DEVI,
+	DIGIMON_FILE_AIRD,
+	DIGIMON_FILE_TYRA,
+	DIGIMON_FILE_MERA,
+	DIGIMON_FILE_SEAD,
+	DIGIMON_FILE_NUME,
+	DIGIMON_FILE_MTGR,
+	DIGIMON_FILE_MAME,
+	DIGIMON_FILE_MONZ,
+	DIGIMON_FILE_PUNI,
+	DIGIMON_FILE_TUNO,
+	DIGIMON_FILE_GABU,
+	DIGIMON_FILE_ELEC,
+	DIGIMON_FILE_KABU,
+	DIGIMON_FILE_ANGE,
+	DIGIMON_FILE_BIRD,
+	DIGIMON_FILE_GARU,
+	DIGIMON_FILE_YUKI,
+	DIGIMON_FILE_HOEE,
+	DIGIMON_FILE_VEGI,
+	DIGIMON_FILE_SKUL,
+	DIGIMON_FILE_MTMA,
+	DIGIMON_FILE_VEDA,
+	DIGIMON_FILE_POYO,
+	DIGIMON_FILE_TOKO,
+	DIGIMON_FILE_PATA,
+	DIGIMON_FILE_KUNE,
+	DIGIMON_FILE_UNIM,
+	DIGIMON_FILE_OGRE,
+	DIGIMON_FILE_SHEL,
+	DIGIMON_FILE_CENT,
+	DIGIMON_FILE_BAKE,
+	DIGIMON_FILE_DORI,
+	DIGIMON_FILE_SCUM,
+	DIGIMON_FILE_ANDR,
+	DIGIMON_FILE_GIRO,
+	DIGIMON_FILE_ETEM,
+	DIGIMON_FILE_YURA,
+	DIGIMON_FILE_TANE,
+	DIGIMON_FILE_PIYO,
+	DIGIMON_FILE_PALM,
+	DIGIMON_FILE_MONO,
+	DIGIMON_FILE_LEOM,
+	DIGIMON_FILE_SIRA,
+	DIGIMON_FILE_COCA,
+	DIGIMON_FILE_KUWA,
+	DIGIMON_FILE_MOJA,
+	DIGIMON_FILE_NANI,
+	DIGIMON_FILE_MGDR,
+	DIGIMON_FILE_PICC,
+	DIGIMON_FILE_DIGI,
+	DIGIMON_FILE_PENM,
+	DIGIMON_FILE_IGAM,
+	DIGIMON_FILE_HOUO,
+	DIGIMON_FILE_HKAB,
+	DIGIMON_FILE_MGSD,
+	DIGIMON_FILE_WEAG,
+	DIGIMON_FILE_PANJ,
+	DIGIMON_FILE_GGDR,
+	DIGIMON_FILE_MTET,
+	DIGIMON_FILE_VAND,
+	DIGIMON_FILE_YANM,
+	DIGIMON_FILE_GOTU,
+	DIGIMON_FILE_FLAR,
+	DIGIMON_FILE_WARU,
+	DIGIMON_FILE_YKAG,
+	DIGIMON_FILE_HYOG,
+	DIGIMON_FILE_PCSC,
+	DIGIMON_FILE_DOKU,
+	DIGIMON_FILE_SIMA,
+	DIGIMON_FILE_TANK,
+	DIGIMON_FILE_REDV,
+	DIGIMON_FILE_JMOJ,
+	DIGIMON_FILE_NISE,
+	DIGIMON_FILE_GOBR,
+	DIGIMON_FILE_TUTI,
+	DIGIMON_FILE_PSYC,
+	DIGIMON_FILE_MODO,
+	DIGIMON_FILE_TOYA,
+	DIGIMON_FILE_PIDD,
+	DIGIMON_FILE_ARUR,
+	DIGIMON_FILE_GERE,
+	DIGIMON_FILE_VARM,
+	DIGIMON_FILE_FUGA,
+	DIGIMON_FILE_TKKA,
+	DIGIMON_FILE_MRIS,
+	DIGIMON_FILE_GARD,
+	DIGIMON_FILE_MCHO,
+	DIGIMON_FILE_ICEM,
+	DIGIMON_FILE_AKAT,
+	DIGIMON_FILE_TUKA,
+	DIGIMON_FILE_SHAM,
+	DIGIMON_FILE_CLEA,
+	DIGIMON_FILE_ZASS,
+	DIGIMON_FILE_ICDV,
+	DIGIMON_FILE_DKRZ,
+	DIGIMON_FILE_SNDY,
+	DIGIMON_FILE_SNGB,
+	DIGIMON_FILE_BLMR,
+	DIGIMON_FILE_GRUR,
+	DIGIMON_FILE_SABD,
+	DIGIMON_FILE_SOUL,
+	DIGIMON_FILE_GOLE,
+	DIGIMON_FILE_OTAM,
+	DIGIMON_FILE_GECO,
+	DIGIMON_FILE_TENT,
+	DIGIMON_FILE_WRSE,
+	DIGIMON_FILE_INSE,
+	DIGIMON_FILE_TAKA,
+	DIGIMON_FILE_MUGE,
+	DIGIMON_FILE_ANLG,
+	DIGIMON_FILE_JIJI,
+	DIGIMON_FILE_TENS,
+	DIGIMON_FILE_TONO,
+	DIGIMON_FILE_SCUD,
+	DIGIMON_FILE_JURE,
+	DIGIMON_FILE_HAGU,
+	DIGIMON_FILE_BRIK,
+	DIGIMON_FILE_TIRS,
+	DIGIMON_FILE_EGOB,
+	DIGIMON_FILE_BRAK,
+	DIGIMON_FILE_PUTI,
+	DIGIMON_FILE_EBET,
+	DIGIMON_FILE_EGRE,
+	DIGIMON_FILE_EDEV,
+	DIGIMON_FILE_EAIR,
+	DIGIMON_FILE_ETYR,
+	DIGIMON_FILE_EMER,
+	DIGIMON_FILE_ESEA,
+	DIGIMON_FILE_ENUM,
+	DIGIMON_FILE_EMTG,
+	DIGIMON_FILE_EMAM,
+	DIGIMON_FILE_EMON,
+	DIGIMON_FILE_EGAB,
+	DIGIMON_FILE_EELE,
+	DIGIMON_FILE_EKAB,
+	DIGIMON_FILE_EANG,
+	DIGIMON_FILE_EBIR,
+	DIGIMON_FILE_EGAR,
+	DIGIMON_FILE_EYUK,
+	DIGIMON_FILE_EHOE,
+	DIGIMON_FILE_EVEG,
+	DIGIMON_FILE_ESKU,
+	DIGIMON_FILE_EMTM,
+	DIGIMON_FILE_EVED,
+	DIGIMON_FILE_EPAT,
+	DIGIMON_FILE_EKUN,
+	DIGIMON_FILE_EUNI,
+	DIGIMON_FILE_EOGR,
+	DIGIMON_FILE_ESHE,
+	DIGIMON_FILE_ECEN,
+	DIGIMON_FILE_EBAK,
+	DIGIMON_FILE_EDOR,
+	DIGIMON_FILE_ESCU,
+	DIGIMON_FILE_EAND,
+	DIGIMON_FILE_EGIR,
+	DIGIMON_FILE_EETE,
+	DIGIMON_FILE_EPIY,
+	DIGIMON_FILE_EPAL,
+	DIGIMON_FILE_EMNO,
+	DIGIMON_FILE_ELEO,
+	DIGIMON_FILE_ESIR,
+	DIGIMON_FILE_ECOC,
+	DIGIMON_FILE_EKUW,
+	DIGIMON_FILE_EMOJ,
+	DIGIMON_FILE_ENAN,
+	DIGIMON_FILE_EMGD,
+	DIGIMON_FILE_EPIC,
+	DIGIMON_FILE_EDIG,
+	DIGIMON_FILE_EIGA,
+	DIGIMON_FILE_EPEN,
+	DIGIMON_FILE_EVAN,
+	DIGIMON_FILE_CEGR,
+	DIGIMON_FILE_CEMG,
 };
 
-char MAIN_D_8011D46C[12] = "CHDAT\\TMD0\\";
+char PATH_CHDAT_TMD0[12] = "CHDAT\\TMD0\\";
 
-char MAIN_D_8011D478[12] = "CHDAT\\MTN0\\";
+char PATH_CHDAT_MTN0[12] = "CHDAT\\MTN0\\";
 
-char MAIN_D_8011D484[12] = "CHDAT\\MMD0\\";
+char PATH_CHDAT_MMD0[12] = "CHDAT\\MMD0\\";
 // clang-format on
 
 static inline int8_t *model_s8ptr(uint8_t *arg0)
@@ -3504,7 +3144,7 @@ void loadDigimonTexture(int32_t digiType, char *path,
 	char fileName[32];
 
 	strrchr(path, '\\');
-	strcpy(fileName, MAIN_D_8011D190);
+	strcpy(fileName, PATH_ALLTIM_TIM);
 
 	buffer = malloc3(0x4800);
 
@@ -3615,8 +3255,8 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 		m->modelId = k;
 		name = PTR_DIGIMON_FILE_NAMES[digiType];
 		loadDigimonTexture(digiType, name, m);
-		concatStrings(path, MAIN_D_8011D484, name);
-		concatStrings(path, path, MAIN_D_801340E4);
+		concatStrings(path, PATH_CHDAT_MMD0, name);
+		concatStrings(path, path, FILE_EXT_MMD);
 		path[9] = digiType / 30 + '0';
 		size = lookupFileSize(path);
 		m->mmdPtr = malloc3((size + 0x7FF) & ~0x7FF);
@@ -3652,8 +3292,8 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 	}
 	name = PTR_DIGIMON_FILE_NAMES[digiType];
 	loadDigimonTexture(digiType, name, m);
-	concatStrings(path, MAIN_D_8011D484, name);
-	concatStrings(path, path, MAIN_D_801340E4);
+	concatStrings(path, PATH_CHDAT_MMD0, name);
+	concatStrings(path, path, FILE_EXT_MMD);
 	path[9] = digiType / 30 + '0';
 	readFile(path, m->mmdPtr);
 	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[0]);
@@ -3842,7 +3482,7 @@ uint8_t *loadMMDAsync(int32_t digimonType, int32_t entityType, uint8_t *buffer,
 		return 0;
 	}
 	name = PTR_DIGIMON_FILE_NAMES[digimonType];
-	strcpy(tim, MAIN_D_8011D190);
+	strcpy(tim, PATH_ALLTIM_TIM);
 	align = (int32_t)buffer & 3;
 	if (align != 0) {
 		buffer += 4 - align;
@@ -3851,8 +3491,8 @@ uint8_t *loadMMDAsync(int32_t digimonType, int32_t entityType, uint8_t *buffer,
 	modelData->imagePtr = buffer;
 	modelData->imageSize = 0x4800;
 	buffer += modelData->imageSize;
-	concatStrings(path, MAIN_D_8011D484, name);
-	concatStrings(path, path, MAIN_D_801340E4);
+	concatStrings(path, PATH_CHDAT_MMD0, name);
+	concatStrings(path, path, FILE_EXT_MMD);
 	path[9] = digimonType / 30 + '0';
 	align = (int32_t)buffer & 3;
 	if (align != 0) {
@@ -3905,8 +3545,8 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 		m->modelId = k;
 		name = PTR_DIGIMON_FILE_NAMES[digimonType];
 		loadDigimonTexture(digimonType, name, m);
-		concatStrings(path, MAIN_D_8011D46C, name);
-		concatStrings(path, path, MAIN_D_801340EC);
+		concatStrings(path, PATH_CHDAT_TMD0, name);
+		concatStrings(path, path, FILE_EXT_TMD);
 		path[9] = digit = digimonType / 30 + '0';
 		size = lookupFileSize(path);
 		m->modelPtr = malloc3((size + 0x7FF) & ~0x7FF);
@@ -3914,8 +3554,8 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 		GsMapModelingData((u_long *)m->modelPtr + 1);
 		updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 		                     m->clutPage - 0x7A00);
-		concatStrings(path, MAIN_D_8011D478, name);
-		concatStrings(path, path, MAIN_D_801340F4);
+		concatStrings(path, PATH_CHDAT_MTN0, name);
+		concatStrings(path, path, FILE_EXT_MTN);
 		path[9] = digit;
 		size = lookupFileSize(path);
 		m->animTablePtr = malloc3((size + 0x7FF) & ~0x7FF);

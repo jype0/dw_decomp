@@ -490,14 +490,18 @@ $(EXE): $(ELF) $(OVERLAY:%=$(BUILDDIR)/%_REL.BIN)
 
 -include $(DEP)
 
+# Sources are UTF-8, but text is stored as Shift JIS. sjis_escape.py rewrites
+# the non-ASCII characters in literals as CP932 escapes before mwcc sees them.
+#
 # objdiff only merges .rodata.*/.data.*/.sdata.* sections under the plain name
 # when there are at least two of them. The expected objects also contain an
 # empty plain section, so add one here too, or a file with a single symbol in
 # one of them is never compared. The empty sections are discarded at link time.
-$(BUILDDIR)/%.c.o: %.c
+$(BUILDDIR)/%.c.o: %.c tools/sjis_escape.py
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(DEPFLAGS) $<
-	$(METROWRAP) -o $@ $(METROWRAP_FLAGS) $(MWCCWRAP_FLAGS) $(CPPFLAGS) $<
+	$(PYTHON) tools/sjis_escape.py $< $(@:.o=)
+	$(METROWRAP) -o $@ $(METROWRAP_FLAGS) $(MWCCWRAP_FLAGS) $(CPPFLAGS) $(@:.o=)
 	@$(OBJCOPY) --add-section .rodata=/dev/null \
 				--set-section-flags .rodata=alloc,load,readonly,data \
 				--add-section .data=/dev/null \

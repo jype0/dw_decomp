@@ -17,35 +17,35 @@
 #include <dw/sjis.h>
 #include <dw/swap.h>
 
-extern char MAIN_D_80134714[];
-extern char MAIN_D_80134718[];
-extern char MAIN_D_80134720[];
-extern int16_t MAIN_D_8013509C;
-extern uint8_t *MAIN_D_801350A4;
-extern uint16_t MAIN_D_801350A8;
-extern uint16_t MAIN_D_801350AA;
-extern uint16_t MAIN_D_801350AC;
+extern char COMMAND_NAME_RUN[];
+extern char COMMAND_NAME_ATTACK[];
+extern char COMMAND_NAME_CHANGE[];
+extern int16_t END_TEXT_RECT;
+extern uint8_t *END_TEXT_CURSOR;
+extern uint16_t END_TEXT_PEN_X;
+extern uint16_t END_TEXT_PEN_Y;
+extern uint16_t END_TEXT_SCROLL_Y;
 extern int16_t MAIN_D_80135090[2];
 extern int32_t MAIN_D_801350C0;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern uint8_t MAIN_D_801350BC;
 extern StatsGains STATS_GAINS;
-extern char BTL_D_80072EF8[];
-extern char BTL_D_80072F18[];
-extern char BTL_D_80072F2C[];
-extern char BTL_D_80072F44[];
-extern char BTL_D_80072F58[];
-extern char BTL_D_80072F70[];
-extern char BTL_D_80072F90[];
-extern char BTL_D_80072FA4[];
-extern char BTL_D_80072FBC[];
-extern char BTL_D_80072FD8[];
-extern char BTL_D_80072FE4[];
+extern char BTL_COMMAND_LEARNED_TEXT[];
+extern char BTL_COMMAND_SET_TECHNIQUE[];
+extern char BTL_COMMAND_PUT_UP_WITH_IT[];
+extern char BTL_COMMAND_MOVE_AWAY[];
+extern char BTL_COMMAND_KEEP_IT_DOWN[];
+extern char BTL_COMMAND_GO_ALL_THE_WAY[];
+extern char BTL_MP_BONUS_TEXT[];
+extern char BTL_MP_BONUS_REDUCED_BY[];
+extern char BTL_DROPPED_TEXT[];
 extern MATRIX BTL_D_80072FF4;
-extern int16_t MAIN_D_8013509E;
-extern int16_t MAIN_D_801350A0;
-extern int16_t MAIN_D_801350A2;
+extern char BTL_LEARNED_TEXT[];
+extern char BTL_INJURED_TEXT[];
+extern int16_t END_TEXT_RECT_Y;
+extern int16_t END_TEXT_RECT_W;
+extern int16_t END_TEXT_RECT_H;
 extern uint8_t MAIN_D_801350C4;
 extern uint8_t MAIN_D_801350C5;
 extern uint8_t MAIN_D_801350C6;
@@ -71,7 +71,7 @@ void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t 
 void BTL_drawBattleEndText(int32_t a);
 void BTL_renderBattleStartTextBurst(void);
 void BTL_scrollBattleEndText(void);
-void BTL_appendItemDroppedText(int32_t *p);
+void BTL_appendItemDroppedText(Entity *entity);
 void BTL_appendInjuredText(char *name);
 void BTL_appendCommandLearnedText(void);
 void BTL_appendMPBonusText(void);
@@ -129,19 +129,19 @@ static void *battle_hud_functions[] = {
 };
 
 // clang-format off
-const char BTL_D_80072E04[] = "Your Call";
-const char BTL_D_80072E10[] = "Moderate";
-const char BTL_D_80072E1C[] = "Distance";
-const char BTL_D_80072E28[] = "Defensive";
+const char BTL_TEXT_YOUR_CALL[] = "Your Call";
+const char BTL_TEXT_MODERATE[] = "Moderate";
+const char BTL_TEXT_DISTANCE[] = "Distance";
+const char BTL_TEXT_DEFENSIVE[] = "Defensive";
 
 const char *BTL_D_80072E34[8] = {
-	MAIN_D_80134714,
-	MAIN_D_80134718,
-	BTL_D_80072E04,
-	BTL_D_80072E10,
-	BTL_D_80072E1C,
-	BTL_D_80072E28,
-	MAIN_D_80134720,
+	COMMAND_NAME_RUN,
+	COMMAND_NAME_ATTACK,
+	BTL_TEXT_YOUR_CALL,
+	BTL_TEXT_MODERATE,
+	BTL_TEXT_DISTANCE,
+	BTL_TEXT_DEFENSIVE,
+	COMMAND_NAME_CHANGE,
 	NULL,
 };
 
@@ -468,42 +468,54 @@ void BTL_removeDeathCountdown(void)
 	}
 }
 
-void BTL_initializeBattleEndText(int16_t arg0, int16_t arg1, RECT *arg2)
+/*
+ * The text shown under the bits after a battle: dropped items, injuries,
+ * new commands and moves. The BTL_append*Text() functions add messages to
+ * BTL_END_BOX_TEXTBUFFER, which is then typed into the text area from row
+ * vramY on and shown visibleRows rows at a time in rect.
+ */
+void BTL_initializeBattleEndText(int16_t vramY, int16_t visibleRows, RECT *rect)
 {
-	MAIN_D_80135098 = 0;
-	*(RECT *)&MAIN_D_8013509C = *arg2;
-	MAIN_D_801350A4 = (uint8_t *)BTL_END_BOX_TEXTBUFFER;
-	MAIN_D_801350A8 = 0;
-	MAIN_D_801350AA = arg0;
-	MAIN_D_801350AC = arg0;
-	MAIN_D_801350AE = 0;
-	MAIN_D_801350B0 = 0;
-	MAIN_D_801350B2 = 0;
+	END_TEXT_TYPING = 0;
+	*(RECT *)&END_TEXT_RECT = *rect;
+	END_TEXT_CURSOR = (uint8_t *)BTL_END_BOX_TEXTBUFFER;
+	END_TEXT_PEN_X = 0;
+	END_TEXT_PEN_Y = vramY;
+	END_TEXT_SCROLL_Y = vramY;
+	END_TEXT_ROWS_SHOWN = 0;
+	END_TEXT_TOTAL_ROWS = 0;
+	END_TEXT_ROWS_DRAWN = 0;
 	BTL_END_BOX_TEXTBUFFER[0] = 0;
-	MAIN_D_801350B4 = arg1;
-	MAIN_D_801350B6 = 0x3c;
-	MAIN_D_801350B8 = 0x3c;
+	END_TEXT_VISIBLE_ROWS = visibleRows;
+	END_TEXT_WAIT_FRAMES = 0x3c;
+	END_TEXT_WAIT_TIMER = 0x3c;
 }
 
-void BTL_appendItemDroppedText(int32_t *p)
+/* "<Digimon> / dropped <item>" */
+void BTL_appendItemDroppedText(Entity *entity)
 {
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134740);
-	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_DATA[p[0]].name);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F18);
+	strcat(BTL_END_BOX_TEXTBUFFER, END_TEXT_YELLOW);
+	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_DATA[entity->type].name);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_DROPPED_TEXT);
 	strcat(BTL_END_BOX_TEXTBUFFER,
-	       ITEM_PARA[DIGIMON_DATA[p[0]].dropItem].name);
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134744);
-	MAIN_D_801350B0 += 2;
+	       ITEM_PARA[DIGIMON_DATA[entity->type].dropItem].name);
+	strcat(BTL_END_BOX_TEXTBUFFER, END_TEXT_WHITE_WAIT);
+	END_TEXT_TOTAL_ROWS += 2;
 }
 
+/* "<name> / was injured" */
 void BTL_appendInjuredText(char *name)
 {
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134740);
+	strcat(BTL_END_BOX_TEXTBUFFER, END_TEXT_YELLOW);
 	strcat(BTL_END_BOX_TEXTBUFFER, name);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F2C);
-	MAIN_D_801350B0 += 2;
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_INJURED_TEXT);
+	END_TEXT_TOTAL_ROWS += 2;
 }
 
+/*
+ * Brains unlock a new command at 100, 200, 300, 400 and 500:
+ * "<command> / Listens to !"
+ */
 void BTL_appendCommandLearnedText(void)
 {
 	int16_t old;
@@ -511,43 +523,47 @@ void BTL_appendCommandLearnedText(void)
 
 	total = INITIAL_COMBAT_STATS[0].brains + STATS_GAINS.brains;
 	old = INITIAL_COMBAT_STATS[0].brains;
-	if (total < 0x64) {
+	if (total < 100) {
 		return;
 	}
 
-	if (total >= 0x1f4) {
-		if (old < 0x1f4) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F44);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+	if (total >= 500) {
+		if (old < 500) {
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_SET_TECHNIQUE);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_LEARNED_TEXT);
+			END_TEXT_TOTAL_ROWS += 2;
 		}
-	} else if (total >= 0x190) {
-		if (old < 0x190) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F58);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+	} else if (total >= 400) {
+		if (old < 400) {
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_PUT_UP_WITH_IT);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_LEARNED_TEXT);
+			END_TEXT_TOTAL_ROWS += 2;
 		}
-	} else if (total >= 0x12c) {
-		if (old < 0x12c) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F70);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 3;
+	} else if (total >= 300) {
+		if (old < 300) {
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_MOVE_AWAY);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_LEARNED_TEXT);
+			END_TEXT_TOTAL_ROWS += 3;
 		}
-	} else if (total >= 0xc8) {
-		if (old < 0xc8) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F90);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+	} else if (total >= 200) {
+		if (old < 200) {
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_KEEP_IT_DOWN);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_LEARNED_TEXT);
+			END_TEXT_TOTAL_ROWS += 2;
 		}
 	} else {
-		if (old < 0x64) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FA4);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+		if (old < 100) {
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_GO_ALL_THE_WAY);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_COMMAND_LEARNED_TEXT);
+			END_TEXT_TOTAL_ROWS += 2;
 		}
 	}
 }
 
+/*
+ * Brains of 700, 800, 900 and 999 cut the MP cost of moves by 5, 10, 15 and
+ * 20%: "MP Consumption Bonus!reduced by<n>%!"
+ */
 void BTL_appendMPBonusText(void)
 {
 	char buf[8];
@@ -556,26 +572,26 @@ void BTL_appendMPBonusText(void)
 
 	total = INITIAL_COMBAT_STATS[0].brains + STATS_GAINS.brains;
 	old = INITIAL_COMBAT_STATS[0].brains;
-	if (total < 0x2bc) {
+	if (total < 700) {
 		return;
 	}
 
 	buf[0] = 0;
-	if (total >= 0x3e7) {
-		if (old < 0x3e7) {
-			strcpy(buf, MAIN_D_8013474C);
+	if (total >= 999) {
+		if (old < 999) {
+			strcpy(buf, MP_BONUS_20);
 		}
-	} else if (total >= 0x384) {
-		if (old < 0x384) {
-			strcpy(buf, MAIN_D_80134750);
+	} else if (total >= 900) {
+		if (old < 900) {
+			strcpy(buf, MP_BONUS_15);
 		}
-	} else if (total >= 0x320) {
-		if (old < 0x320) {
-			strcpy(buf, MAIN_D_80134754);
+	} else if (total >= 800) {
+		if (old < 800) {
+			strcpy(buf, MP_BONUS_10);
 		}
 	} else {
-		if (old < 0x2bc) {
-			strcpy(buf, MAIN_D_80134758);
+		if (old < 700) {
+			strcpy(buf, MP_BONUS_5);
 		}
 	}
 
@@ -583,106 +599,117 @@ void BTL_appendMPBonusText(void)
 		return;
 	}
 
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FBC);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FD8);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_MP_BONUS_TEXT);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_MP_BONUS_REDUCED_BY);
 	strcat(BTL_END_BOX_TEXTBUFFER, buf);
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_8013475C);
-	MAIN_D_801350B0 += 4;
+	strcat(BTL_END_BOX_TEXTBUFFER, MP_BONUS_SUFFIX);
+	END_TEXT_TOTAL_ROWS += 4;
 }
 
+/* "<move> / learned!" */
 void BTL_appendMoveLearnedText(int32_t move)
 {
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134740);
+	strcat(BTL_END_BOX_TEXTBUFFER, END_TEXT_YELLOW);
 	strcat(BTL_END_BOX_TEXTBUFFER, MOVE_NAMES[move]);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FE4);
-	MAIN_D_801350B0 += 2;
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_LEARNED_TEXT);
+	END_TEXT_TOTAL_ROWS += 2;
 }
 
+/*
+ * Types the next character of BTL_END_BOX_TEXTBUFFER. The text is ASCII with
+ * "#C<n>" to set color n, "#R" to start a row and "#W" to start a row and
+ * wait for the player. It also stops at a '0', a character the MP bonus text
+ * has in "10" and "20".
+ */
 void BTL_drawBattleEndText(int32_t flag)
 {
 	uint8_t c;
 	uint16_t w;
 
 	while (flag) {
-		if (*MAIN_D_801350A4 == '#') {
-			MAIN_D_801350A4++;
-			switch (*MAIN_D_801350A4) {
+		if (*END_TEXT_CURSOR == '#') {
+			END_TEXT_CURSOR++;
+			switch (*END_TEXT_CURSOR) {
 			case 'C':
-				MAIN_D_801350A4++;
-				setTextColor(*MAIN_D_801350A4);
-				MAIN_D_801350A4++;
+				END_TEXT_CURSOR++;
+				setTextColor(*END_TEXT_CURSOR);
+				END_TEXT_CURSOR++;
 				break;
 			case 'W':
-				MAIN_D_801350B8 = MAIN_D_801350B6;
+				END_TEXT_WAIT_TIMER = END_TEXT_WAIT_FRAMES;
 				/* fall through */
 			case 'R':
-				MAIN_D_801350A8 = 0;
-				MAIN_D_801350A4++;
-				MAIN_D_801350AA += 0xc;
-				MAIN_D_801350AE++;
-				MAIN_D_801350B2++;
+				END_TEXT_PEN_X = 0;
+				END_TEXT_CURSOR++;
+				END_TEXT_PEN_Y += 0xc;
+				END_TEXT_ROWS_SHOWN++;
+				END_TEXT_ROWS_DRAWN++;
 				return;
 			}
 			continue;
 		}
-		c = *MAIN_D_801350A4;
+		c = *END_TEXT_CURSOR;
 		if (c == '0') {
 			return;
 		}
-		w = drawGlyph(swapShortBytes(convertAsciiToJis(c)), MAIN_D_801350A8, MAIN_D_801350AA);
-		MAIN_D_801350A8 += w;
-		MAIN_D_801350A4++;
+		w = drawGlyph(swapShortBytes(convertAsciiToJis(c)), END_TEXT_PEN_X, END_TEXT_PEN_Y);
+		END_TEXT_PEN_X += w;
+		END_TEXT_CURSOR++;
 		return;
 	}
 }
 
 void BTL_scrollBattleEndText(void)
 {
-	MAIN_D_801350AC += 0xc;
-	MAIN_D_801350AE--;
+	END_TEXT_SCROLL_Y += 0xc;
+	END_TEXT_ROWS_SHOWN--;
 }
 
+/*
+ * Cross or triangle skips a wait, or starts typing again. When the visible
+ * rows are full, the text scrolls up a row once the wait is over.
+ */
 void BTL_tickBattleEndText(void)
 {
-	if (MAIN_D_801350B8 != 0) {
-		MAIN_D_801350B8 -= 1;
+	if (END_TEXT_WAIT_TIMER != 0) {
+		END_TEXT_WAIT_TIMER -= 1;
 	}
 
 	if (BTL_END_BOX_TEXTBUFFER[0] == 0) {
 		if (((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) && (POLLED_INPUT != POLLED_INPUT_PREVIOUS)) {
-			MAIN_D_801350B8 = 0;
+			END_TEXT_WAIT_TIMER = 0;
 		}
 		return;
 	}
 
-	if (MAIN_D_801350AE == MAIN_D_801350B4) {
-		if (MAIN_D_801350B8 == 0) {
+	if (END_TEXT_ROWS_SHOWN == END_TEXT_VISIBLE_ROWS) {
+		if (END_TEXT_WAIT_TIMER == 0) {
 			BTL_scrollBattleEndText();
 		}
 	} else {
-		BTL_drawBattleEndText(MAIN_D_80135098);
-		if (MAIN_D_801350B8 != 0) {
-			MAIN_D_80135098 = 0;
+		BTL_drawBattleEndText(END_TEXT_TYPING);
+		if (END_TEXT_WAIT_TIMER != 0) {
+			END_TEXT_TYPING = 0;
 		}
 	}
 
 	if (((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) && (POLLED_INPUT != POLLED_INPUT_PREVIOUS)) {
-		if (MAIN_D_801350B8 != 0) {
-			MAIN_D_801350B8 = 0;
+		if (END_TEXT_WAIT_TIMER != 0) {
+			END_TEXT_WAIT_TIMER = 0;
 		} else {
-			MAIN_D_80135098 = 1;
+			END_TEXT_TYPING = 1;
 		}
 	}
 }
 
 void BTL_renderBattleEndText(int32_t n)
 {
-	renderString(0, MAIN_D_8013509C, MAIN_D_8013509E, MAIN_D_801350A0, MAIN_D_801350A2, 0, MAIN_D_801350AC, 6 - n, 0);
+	renderString(0, END_TEXT_RECT, END_TEXT_RECT_Y, END_TEXT_RECT_W, END_TEXT_RECT_H, 0, END_TEXT_SCROLL_Y, 6 - n, 0);
 }
 
 int32_t BTL_isEndBoxTextFinished(void)
 {
-	if ((MAIN_D_801350B8 == 0) && (MAIN_D_801350B0 == MAIN_D_801350B2)) {
+	if ((END_TEXT_WAIT_TIMER == 0) && (END_TEXT_TOTAL_ROWS == END_TEXT_ROWS_DRAWN)) {
 		return 1;
 	}
 

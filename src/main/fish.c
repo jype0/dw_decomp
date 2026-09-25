@@ -27,7 +27,7 @@ uint8_t MAIN_D_801349B8[6] = { 34, 36, 34, 35, 37, 35 };
 SVECTOR MAIN_D_801349C0 = { 1024, 1024, 0, 0 };
 SVECTOR MAIN_D_801349C8 = { 1, 19, -48, 0 };
 SVECTOR MAIN_D_801349D0 = { 0 };
-char MAIN_D_801349D8[] = "Hooked!";
+char FISH_TEXT_HOOKED[] = "Hooked!";
 int32_t MAIN_D_801349E0 = 2;
 
 int32_t getBestFishingRod(void)

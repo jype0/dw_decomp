@@ -88,8 +88,8 @@ extern uint8_t MAIN_D_80135167;
 extern Entity *MAIN_D_801350E8;
 extern uint8_t CURRENT_SCREEN;
 extern uint8_t MAIN_D_8013514C;
-extern char MAIN_D_80124C24[];
-extern char MAIN_D_80124C54[];
+extern char STAT_LABEL_OFF[];
+extern char FULLWIDTH_DIGITS[];
 extern int16_t MAIN_D_80135144;
 extern int32_t MAIN_D_80135114;
 extern int32_t COMBAT_AREA_CENTER_X;
@@ -137,10 +137,10 @@ extern int8_t MAIN_D_80134D64;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
-extern char MAIN_D_80134894[];
-extern char MAIN_D_80134898[];
-extern char MAIN_D_801348A0[];
-extern char MAIN_D_801348A8[];
+extern char STD_TEXT_RUN[];
+extern char STD_TEXT_ATTACK[];
+extern char STD_TEXT_AUTO[];
+extern char STD_TEXT_CHANGE[];
 
 void STD_initializeBattleStartText(void);
 void STD_func_8006A044(void);
@@ -1047,31 +1047,31 @@ uint8_t STD_D_80079CBC[112][14] = {
 	},
 };
 
-char STD_D_8007A2DC[] = "\\STDDAT\\T_TOGI.TMD";
+char STD_PATH_STDDAT_T_TOGI_TMD[] = "\\STDDAT\\T_TOGI.TMD";
 
-char STD_D_8007A2F0[] = "\\STDDAT\\B_TOGI.TMD";
+char STD_PATH_STDDAT_B_TOGI_TMD[] = "\\STDDAT\\B_TOGI.TMD";
 
 char *STD_D_8007A304[3] = {
-	STD_D_8007A2DC,
-	STD_D_8007A2F0,
+	STD_PATH_STDDAT_T_TOGI_TMD,
+	STD_PATH_STDDAT_B_TOGI_TMD,
 	(void *)0x00000000,
 };
 
-char STD_D_8007A310[] = "\\STDDAT\\T_TOGI.TIM";
+char STD_PATH_STDDAT_T_TOGI_TIM[] = "\\STDDAT\\T_TOGI.TIM";
 
-char STD_D_8007A324[] = "\\STDDAT\\B_TOGI.TIM";
+char STD_PATH_STDDAT_B_TOGI_TIM[] = "\\STDDAT\\B_TOGI.TIM";
 
 char *STD_D_8007A338[3] = {
-	STD_D_8007A310,
-	STD_D_8007A324,
+	STD_PATH_STDDAT_T_TOGI_TIM,
+	STD_PATH_STDDAT_B_TOGI_TIM,
 	(void *)0x00000000,
 };
 
-char STD_D_8007A344[] = "\\STDDAT\\B_TOGI.ATR";
+char STD_PATH_STDDAT_B_TOGI_ATR[] = "\\STDDAT\\B_TOGI.ATR";
 
 char *STD_D_8007A358[3] = {
-	STD_D_8007A344,
-	STD_D_8007A344,
+	STD_PATH_STDDAT_B_TOGI_ATR,
+	STD_PATH_STDDAT_B_TOGI_ATR,
 	(void *)0x00000000,
 };
 
@@ -1243,25 +1243,22 @@ StdSrcA598 STD_D_8007A598[8] = {
 	},
 };
 
-char STD_D_8007A658[] = {
-	0x83, 0x5f, 0x83, 0x81, 0x81, 0x5b, 0x83, 0x57,
-	0x00,
-};
+char STD_TEXT_DAMAGE_JP[] = "ダメージ";
 
-char STD_D_8007A664[] = "Moderate";
+char STD_TEXT_MODERATE[] = "Moderate";
 
-char STD_D_8007A670[] = "Distance";
+char STD_TEXT_DISTANCE[] = "Distance";
 
-char STD_D_8007A67C[] = "Defensive";
+char STD_TEXT_DEFENSIVE[] = "Defensive";
 
 char *STD_D_8007A688[8] = {
-	MAIN_D_80134894,
-	MAIN_D_80134898,
-	MAIN_D_801348A0,
-	STD_D_8007A664,
-	STD_D_8007A670,
-	STD_D_8007A67C,
-	MAIN_D_801348A8,
+	STD_TEXT_RUN,
+	STD_TEXT_ATTACK,
+	STD_TEXT_AUTO,
+	STD_TEXT_MODERATE,
+	STD_TEXT_DISTANCE,
+	STD_TEXT_DEFENSIVE,
+	STD_TEXT_CHANGE,
 	(void *)0x00000000,
 };
 
@@ -1357,15 +1354,15 @@ void STD_func_8005858C(void)
 	char *text;
 
 	clearTextArea();
-	drawString(MAIN_D_80134808, 0, 0);
-	drawString(MAIN_D_80134810, 0, 12);
+	drawString(STD_TEXT_HP_FULLWIDTH, 0, 0);
+	drawString(STD_TEXT_MP_FULLWIDTH, 0, 12);
 
-	for (i = 2, y = 24, text = MAIN_D_80124C24; i < 6; ++i, text += 12, y += 12) {
+	for (i = 2, y = 24, text = STAT_LABEL_OFF; i < 6; ++i, text += 12, y += 12) {
 		drawString(text, 0, y);
 		DrawSync(0);
 	}
 
-	drawString(MAIN_D_80124C54, 0, 0xf0);
+	drawString(FULLWIDTH_DIGITS, 0, 0xf0);
 }
 
 void STD_func_80058684(Entity *entity, int32_t id)
@@ -4465,8 +4462,8 @@ void STD_func_80060EBC(void)
 	char *name;
 
 	clearTextArea();
-	drawString(MAIN_D_80134878, 6, 0);
-	drawString(STD_D_8007A658, 0, 12);
+	drawString(STD_TEXT_DEALT_JP, 6, 0);
+	drawString(STD_TEXT_DAMAGE_JP, 0, 12);
 	name = PARTNER_ENTITY.name;
 	drawString(name, (120 - strlen(name) * 6) / 2, 24);
 	drawString(DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type].name, (120 - strlen(DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type].name) * 6) / 2, 36);

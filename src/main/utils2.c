@@ -10,10 +10,12 @@
 #include <dw/math.h>
 #include <dw/mov.h>
 #include <dw/params.h>
+#include <dw/pstat.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/std.h>
 #include <dw/tournament.h>
+#include <dw/trigger.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
 
@@ -56,7 +58,7 @@ void setEntityTextDigit(POLY_FT4* poly, int32_t x, int32_t y);
 void MAIN_func_800E642C(void);
 void renderSmallNumber(int32_t color, int32_t n, int32_t x, int16_t y,
 		       int16_t value, int32_t layer);
-void MAIN_func_800E5724(int32_t color, int32_t n, int32_t x, int16_t y,
+void renderEntityTextNumber(int32_t color, int32_t n, int32_t x, int16_t y,
 			int16_t value, int32_t layer);
 int32_t hasMove(int32_t move);
 void learnMove(int32_t move);
@@ -66,11 +68,11 @@ void handlePause(void);
 void renderPauseBox(int32_t instanceId);
 void setPosDataPolyFT4(POLY_FT4 *prim, int16_t posX, int16_t posY, int16_t width, int16_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width, int16_t height);
-void MAIN_func_800E60E0(int16_t x, int16_t y, int16_t u, int32_t otOffset);
+void renderSmallIcon(int16_t x, int16_t y, int16_t u, int32_t otOffset);
 
 extern MapLightUpdateData MAP_LIGHT_UPDATE_DATA[];
-extern char *MAIN_D_8012BA8C[];
-extern void *MAIN_D_8012B96C[];
+extern char *OVERLAY_FILE_NAMES[];
+extern void *OVERLAY_LOAD_ADDRESSES[];
 extern uint8_t MAIN_D_80127BDC[];
 extern uint8_t MAP_LAYER_ENABLED;
 extern RGB8 TEXT_COLORS[];
@@ -78,9 +80,9 @@ extern uint32_t MAIN_D_80134E70;
 extern uint32_t MAIN_D_80134E74;
 extern uint8_t MAIN_D_80134E78[2];
 extern int32_t MAIN_D_80134E7C;
-extern char MAIN_D_80134430;
+extern char TEXT_PAUSE;
 
-void MAIN_func_800E5724(int32_t color, int32_t n, int32_t x, int16_t y,
+void renderEntityTextNumber(int32_t color, int32_t n, int32_t x, int16_t y,
 			int16_t value, int32_t layer)
 {
 	POLY_FT4 *prim;
@@ -265,7 +267,7 @@ void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY)
 	entityLookAtLocation(entity, &loc);
 }
 
-void MAIN_func_800E60E0(int16_t x, int16_t y, int16_t u, int32_t otOffset)
+void renderSmallIcon(int16_t x, int16_t y, int16_t u, int32_t otOffset)
 {
 	POLY_FT4 *prim;
 
@@ -293,10 +295,10 @@ void loadDynamicLibrary(Overlay lib, uint8_t *isComplete, dw_bool isAsync,
 	uint8_t *nv;
 
 	if (!isAsync) {
-		readFile(MAIN_D_8012BA8C[lib - 1], (nv = MAIN_D_8012B96C[lib - 1]));
+		readFile(OVERLAY_FILE_NAMES[lib - 1], (nv = OVERLAY_LOAD_ADDRESSES[lib - 1]));
 	} else {
-		addFileReadRequestPath(MAIN_D_8012BA8C[lib - 1],
-				       (nv = MAIN_D_8012B96C[lib - 1]), isComplete,
+		addFileReadRequestPath(OVERLAY_FILE_NAMES[lib - 1],
+				       (nv = OVERLAY_LOAD_ADDRESSES[lib - 1]), isComplete,
 				       (FileRequestCallback)callback, param);
 	}
 }
@@ -363,7 +365,7 @@ void createPauseBox(void)
 	RECT pos;
 
 	if (MAIN_D_80134E7C != 1) {
-		drawString(&MAIN_D_80134430, 0x78, 0xF0);
+		drawString(&TEXT_PAUSE, 0x78, 0xF0);
 		setRECT(&pos, -0x1A, -0xE, 0x38, 0x18);
 		createStaticUIBox(5, 1, 0, &pos, NULL, renderPauseBox);
 		MAIN_D_80134E7C = 1;
@@ -496,7 +498,7 @@ void startTournament(void)
 	int16_t expected;
 	int32_t trig;
 
-	id = readPStat(3);
+	id = readPStat(PSTAT_TOURNAMENT_ID);
 	t.cup = id;
 	pool = (uint8_t *)allocateArray(0x70);
 	w = pool;
@@ -506,7 +508,7 @@ void startTournament(void)
 	if (c < 0xfe) {
 		if (id != 0x16) {
 			while ((c = *p++) < 0xfe) {
-				if (isTriggerSet(c + 200) != 0) {
+				if (isTriggerSet(c + TRIGGER_DIGIMON_MET) != 0) {
 					*w++ = c;
 					count++;
 				}
@@ -569,22 +571,22 @@ void startTournament(void)
 	loadDynamicLibrary(STD_REL, &t.isComplete, 0, NULL, NULL);
 	result = STD_func_800579D8(&t.cup);
 	MAIN_thunk_func_800D92EC();
-	unsetTrigger(0x25);
-	id = readPStat(3);
+	unsetTrigger(TRIGGER_TOURNAMENT_REGISTERED);
+	id = readPStat(PSTAT_TOURNAMENT_ID);
 	if (id != 5) {
 		expected = 3;
 	} else {
 		expected = 2;
 	}
 	if (result == expected) {
-		MAIN_D_80134FCC++;
-		MAIN_D_80134FCC = enforceStatsLimits(0x11, MAIN_D_80134FCC);
-		setTrigger(id + 15);
+		TOURNAMENT_TITLES++;
+		TOURNAMENT_TITLES = enforceStatsLimits(SCRIPT_STAT_TOURNAMENT_TITLES, TOURNAMENT_TITLES);
+		setTrigger(id + TRIGGER_CUP_WON);
 	} else {
-		MAIN_D_80134FD0++;
+		TOURNAMENT_LOSSES++;
 	}
-	TOURNAMENTS_LOST += result;
-	TOURNAMENTS_LOST = enforceStatsLimits(0x12, TOURNAMENTS_LOST);
-	MAIN_D_80134FD0 = enforceStatsLimits(0x13, MAIN_D_80134FD0);
-	writePStat(0xff, result);
+	TOURNAMENT_WINS += result;
+	TOURNAMENT_WINS = enforceStatsLimits(SCRIPT_STAT_TOURNAMENT_WINS, TOURNAMENT_WINS);
+	TOURNAMENT_LOSSES = enforceStatsLimits(SCRIPT_STAT_TOURNAMENT_LOSSES, TOURNAMENT_LOSSES);
+	writePStat(PSTAT_RESULT, result);
 }

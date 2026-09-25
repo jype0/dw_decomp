@@ -91,7 +91,7 @@ extern int16_t MAIN_D_80135264;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern uint8_t MAIN_D_80135274;
-extern char MAIN_D_80124C54[];
+extern char FULLWIDTH_DIGITS[];
 extern char TAMER_MODEL_BUFFER[];
 extern void *MAIN_D_801352A0;
 extern int8_t MAP_COLLISION_DATA[];
@@ -516,9 +516,9 @@ VsTextPiece VS_D_8006FA6C[21] = {
 	},
 };
 
-char VS_D_8006FB94[] = "\\STDDAT\\STDTIM.BIN";
+char VS_PATH_STDDAT_STDTIM_BIN[] = "\\STDDAT\\STDTIM.BIN";
 
-char VS_D_8006FBA8[] = "\\STDDAT\\16TAISEN.TIM";
+char VS_PATH_STDDAT_16TAISEN_TIM[] = "\\STDDAT\\16TAISEN.TIM";
 
 uint16_t VS_D_8006FBC0[216] = {
 	0x82a0, 0x82a2, 0x82a4, 0x82a6, 0x82a8, 0x82a9, 0x82ab, 0x82ad,
@@ -1047,38 +1047,38 @@ uint8_t VS_D_8006FF20[116][14] = {
 	},
 };
 
-char VS_D_80070578[] = "\\STDDAT\\T_TOGI.TMD";
+char VS_PATH_STDDAT_T_TOGI_TMD[] = "\\STDDAT\\T_TOGI.TMD";
 
-char VS_D_8007058C[] = "\\STDDAT\\B_TOGI.TMD";
+char VS_PATH_STDDAT_B_TOGI_TMD[] = "\\STDDAT\\B_TOGI.TMD";
 
-char VS_D_800705A0[] = "\\STDDAT\\E_TOGI.TMD";
+char VS_PATH_STDDAT_E_TOGI_TMD[] = "\\STDDAT\\E_TOGI.TMD";
 
 char *VS_D_800705B4[3] = {
-	VS_D_80070578,
-	VS_D_8007058C,
-	VS_D_800705A0,
+	VS_PATH_STDDAT_T_TOGI_TMD,
+	VS_PATH_STDDAT_B_TOGI_TMD,
+	VS_PATH_STDDAT_E_TOGI_TMD,
 };
 
-char VS_D_800705C0[] = "\\STDDAT\\T_TOGI.TIM";
+char VS_PATH_STDDAT_T_TOGI_TIM[] = "\\STDDAT\\T_TOGI.TIM";
 
-char VS_D_800705D4[] = "\\STDDAT\\B_TOGI.TIM";
+char VS_PATH_STDDAT_B_TOGI_TIM[] = "\\STDDAT\\B_TOGI.TIM";
 
-char VS_D_800705E8[] = "\\STDDAT\\E_TOGI.TIM";
+char VS_PATH_STDDAT_E_TOGI_TIM[] = "\\STDDAT\\E_TOGI.TIM";
 
 char *VS_D_800705FC[3] = {
-	VS_D_800705C0,
-	VS_D_800705D4,
-	VS_D_800705E8,
+	VS_PATH_STDDAT_T_TOGI_TIM,
+	VS_PATH_STDDAT_B_TOGI_TIM,
+	VS_PATH_STDDAT_E_TOGI_TIM,
 };
 
-char VS_D_80070608[] = "\\STDDAT\\B_TOGI.ATR";
+char VS_PATH_STDDAT_B_TOGI_ATR[] = "\\STDDAT\\B_TOGI.ATR";
 
-char VS_D_8007061C[] = "\\STDDAT\\E_TOGI.ATR";
+char VS_PATH_STDDAT_E_TOGI_ATR[] = "\\STDDAT\\E_TOGI.ATR";
 
 char *VS_D_80070630[3] = {
-	VS_D_80070608,
-	VS_D_80070608,
-	VS_D_8007061C,
+	VS_PATH_STDDAT_B_TOGI_ATR,
+	VS_PATH_STDDAT_B_TOGI_ATR,
+	VS_PATH_STDDAT_E_TOGI_ATR,
 };
 
 CameraPreset VS_D_8007063C[9] = {
@@ -1107,11 +1107,11 @@ int32_t VS_D_800706C8[22] = {
 	0x00000000, 0x00000000,
 };
 
-char VS_D_80070720[] = "Moderate";
+char VS_TEXT_MODERATE[] = "Moderate";
 
-char VS_D_8007072C[] = "Distance";
+char VS_TEXT_DISTANCE[] = "Distance";
 
-char VS_D_80070738[] = "Defensive";
+char VS_TEXT_DEFENSIVE[] = "Defensive";
 // clang-format on
 
 void VS_initializeVS(void)
@@ -1223,8 +1223,8 @@ void VS_loadVSAssets(int32_t arena)
 	VS_initializeConfusionEffect(VS_CONFUSION_MODEL);
 	VS_initializeStunEffect(VS_STUN_MODEL);
 	initializeBuffModel(VS_BUFF_MODEL);
-	VS_loadTIMToVRAM(VS_D_8006FB94);
-	loadTIMFile(VS_D_8006FBA8, GENERAL_BUFFER);
+	VS_loadTIMToVRAM(VS_PATH_STDDAT_STDTIM_BIN);
+	loadTIMFile(VS_PATH_STDDAT_16TAISEN_TIM, GENERAL_BUFFER);
 }
 
 void VS_addInputObjects(void)
@@ -1675,9 +1675,9 @@ void VS_playVersusIntroSequence(void)
 	int32_t i;
 
 	clearTextArea();
-	drawString(MAIN_D_80134A50, 0, 0);
-	drawString(MAIN_D_80134A54, 0, 0xc);
-	drawString(MAIN_D_80124C54, 0, 0xf0);
+	drawString(VS_TEXT_WIN, 0, 0);
+	drawString(VS_TEXT_LOSE, 0, 0xc);
+	drawString(FULLWIDTH_DIGITS, 0, 0xf0);
 	fadeFromBlack(3);
 	i = 3;
 	if (MAIN_D_80135264 == VS_D_800716A8[11] - 1) {

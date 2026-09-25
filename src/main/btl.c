@@ -11,6 +11,7 @@
 #include <dw/main.h>
 #include <dw/math.h>
 #include <dw/params.h>
+#include <dw/pstat.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/sound_async.h>
@@ -95,23 +96,23 @@ int8_t MAIN_D_801346F8 = -1;
 char BTL_STR_SHOUT_RUN[] = "Run!";
 char BTL_STR_SHOUT_ATTACK[] = "Attack!";
 char BTL_STR_SHOUT_CHANGE[] = "Change!";
-char MAIN_D_80134714[] = "Run";
-char MAIN_D_80134718[] = "Attack";
-char MAIN_D_80134720[] = "Change";
+char COMMAND_NAME_RUN[] = "Run";
+char COMMAND_NAME_ATTACK[] = "Attack";
+char COMMAND_NAME_CHANGE[] = "Change";
 uint8_t MAIN_D_80134728[5] = { 0, 11, 25, 39, 50 };
 uint8_t MAIN_D_80134730[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
 uint8_t MAIN_D_80134738[8] = { 0x50, 0x68, 0x58, 0x68, 0xa8, 0x90, 0x90, 0x80 };
-char MAIN_D_80134740[] = "#C7";
-char MAIN_D_80134744[] = "#C1#W";
-char MAIN_D_8013474C[] = "20";
-char MAIN_D_80134750[] = "15";
-char MAIN_D_80134754[] = "10";
-char MAIN_D_80134758[] = "5";
-char MAIN_D_8013475C[] = "%!#W";
+char END_TEXT_YELLOW[] = "#C7";
+char END_TEXT_WHITE_WAIT[] = "#C1#W";
+char MP_BONUS_20[] = "20";
+char MP_BONUS_15[] = "15";
+char MP_BONUS_10[] = "10";
+char MP_BONUS_5[] = "5";
+char MP_BONUS_SUFFIX[] = "%!#W";
 uint8_t MAIN_D_80134764[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
 uint8_t MAIN_D_8013476C[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
 uint8_t MAIN_D_80134774[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-char MAIN_D_8013477C[] = "%d\n";
+char BTL_NUMBER_FORMAT[] = "%d\n";
 int8_t MAIN_D_80134780[4] = { 1, 0, -1, 0 };
 int8_t MAIN_D_80134784[4] = { 0, 1, 0, -1 };
 int8_t MAIN_D_80134788[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
@@ -255,7 +256,7 @@ int32_t handleBattleStart(int32_t id)
 	COMBAT_DATA_PTR->player.unk4 = 0;
 	count = 0;
 	MAIN_D_80134D7C[0] = isTriggerSet(1);
-	IS_PREDEFINED_BATTLE = readPStat(0xfa);
+	IS_PREDEFINED_BATTLE = readPStat(PSTAT_BATTLE_SET_ENEMIES);
 	if (IS_PREDEFINED_BATTLE == 1) {
 		for (i = 0; i < 3; i++) {
 			slots[i] = readPStat((i + 0xfb) & 0xff);
