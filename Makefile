@@ -21,7 +21,7 @@ SPLAT := $(PYTHON) -m splat split
 MWCCWRAP ?= bin/mwccwrap/mwccwrap.exe
 MWCCWRAP_FLAGS ?= -dll "bin/cc_mips/cc_mips_40.dll"
 MWCCWRAP_FLAGS += -O4 -sdata 8 -Werror -requireprotos -gccincludes \
-		  -lang c -Cpp_exceptions off -RTTI off
+		  -lang c -Cpp_exceptions off -RTTI off -multibyteaware
 
 export MWCIncludes =
 
@@ -32,7 +32,8 @@ METROWRAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
 METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections \
 		 --elf-flags 0x00001001 \
 		 --as-march r3000 \
-		 --macro-inc-path include/macro.inc
+		 --macro-inc-path include/macro.inc \
+		 --target-encoding shift_jis
 
 OBJDIFF ?= bin/objdiff-cli-linux-x86_64
 
