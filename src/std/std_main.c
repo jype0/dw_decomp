@@ -1243,10 +1243,8 @@ StdSrcA598 STD_D_8007A598[8] = {
 	},
 };
 
-char STD_D_8007A658[] = {
-	0x83, 0x5f, 0x83, 0x81, 0x81, 0x5b, 0x83, 0x57,
-	0x00,
-};
+/* Damage */
+char STD_STR_DAMEEJI[] = "ダメージ";
 
 char STD_D_8007A664[] = "Moderate";
 
@@ -1357,8 +1355,8 @@ void STD_func_8005858C(void)
 	char *text;
 
 	clearTextArea();
-	drawString(MAIN_D_80134808, 0, 0);
-	drawString(MAIN_D_80134810, 0, 12);
+	drawString(STD_STR_HP, 0, 0);
+	drawString(STD_STR_MP, 0, 12);
 
 	for (i = 2, y = 24, text = MAIN_D_80124C24; i < 6; ++i, text += 12, y += 12) {
 		drawString(text, 0, y);
@@ -4465,8 +4463,8 @@ void STD_func_80060EBC(void)
 	char *name;
 
 	clearTextArea();
-	drawString(MAIN_D_80134878, 6, 0);
-	drawString(STD_D_8007A658, 0, 12);
+	drawString(STD_STR_ATAETA, 6, 0);
+	drawString(STD_STR_DAMEEJI, 0, 12);
 	name = PARTNER_ENTITY.name;
 	drawString(name, (120 - strlen(name) * 6) / 2, 24);
 	drawString(DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type].name, (120 - strlen(DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type].name) * 6) / 2, 36);
