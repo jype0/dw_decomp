@@ -392,10 +392,8 @@ RGB8 MAIN_D_8012F438[10] = {
 	{ 0x00, 0x00, 0x00 },
 };
 
-char MAIN_D_8012F458[] = {
-	0x83, 0x5f, 0x83, 0x81, 0x81, 0x5b, 0x83, 0x57,
-	0x00,
-};
+/* Damage */
+char STR_DAMEEJI[] = "ダメージ";
 
 char MAIN_D_8012F464[] = "\\ETCDAT\\ETCTIM.BIN";
 
@@ -438,8 +436,8 @@ uint8_t MAIN_D_8012F578[12] = {
 	0x62, 0x6c, 0x7a, 0x84,
 };
 
-/* "ソウビナシ" (not equipped) */
-char MAIN_D_8012F584[] = "\x83\x5c\x83\x45\x83\x72\x83\x69\x83\x56";
+/* Not equipped */
+char STR_SOUBINASHI[] = "ソウビナシ";
 
 VsListPanel MAIN_D_8012F590[12] = {
 	{ 0x0000, 0x01e8, 0x00, 0x00, 0x96, 0xd7, 0x06, 0x00, 0x00 },
@@ -1805,7 +1803,7 @@ void VS__func_800F4F9C(void)
 
 	clearTextArea();
 	drawString(MAIN_D_80134518, 6, 0);
-	drawString(MAIN_D_8012F458, 0, 12);
+	drawString(STR_DAMEEJI, 0, 12);
 	drawString(name1 + 14, (120 - strlen(name1 + 14) * 6) / 2, 24);
 	drawString(name2 + 14, (120 - strlen(name2 + 14) * 6) / 2, 36);
 	DrawSync(0);
@@ -3571,7 +3569,7 @@ void VS__func_800F87E0(id)
 		rec = (uint8_t *)(names + (st + baseIdx)[i] * 64);
 		for (j = 0; j < 3; j++) {
 			if ((rec + j)[0x1d] == 0xff) {
-				strcpy(buf, MAIN_D_8012F584);
+				strcpy(buf, STR_SOUBINASHI);
 				text = (uint16_t *)buf;
 			} else {
 				text = (uint16_t *)MOVE_NAMES[DIGIMON_DATA[rec[0x1c]]
