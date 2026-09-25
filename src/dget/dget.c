@@ -7,6 +7,7 @@
 #include <dw/entity.h>
 #include <dw/font.h>
 #include <dw/pstat.h>
+#include <dw/text.h>
 #include <dw/tournament.h>
 #include <dw/trigger.h>
 #include <dw/ui.h>

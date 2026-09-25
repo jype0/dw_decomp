@@ -20,6 +20,7 @@
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/tamer.h>
+#include <dw/text.h>
 #include <dw/tournament.h>
 #include <dw/trigger.h>
 #include <dw/trn.h>
@@ -346,7 +347,7 @@ int32_t tickScript(void)
 		                       (int16_t)SELECTION_MENU_STATE,
 		                       MAIN_D_80134FA0)) {
 			MAIN_D_80134FF0 = 0;
-			MAIN_func_801062F8(0xff);
+			MAIN_func_801062F8(SPEAKER_NONE);
 			MAIN_D_80134FE9 = 0;
 		}
 	}
@@ -693,7 +694,7 @@ void scriptInstruction10to27(int32_t op)
 	case 0x1a:
 		MAIN_D_80134FDC++;
 		if (MAIN_D_80135000 == 2) {
-			showTextbox(0, 0xff);
+			showTextbox(0, SPEAKER_NONE);
 		} else {
 			showTextbox(0, MAIN_D_80134FE6);
 		}
@@ -759,7 +760,7 @@ void scriptInstruction10to27(int32_t op)
 		writePStat((pstat + 3) & 0xff, MINUTE);
 		break;
 	case 0x26:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		MAIN_D_80135000 = 2;
 		scriptSetTextboxSize();
 		break;
@@ -1214,18 +1215,18 @@ void scriptInstruction46to58(int32_t op)
 		scriptLoadModel(byteArg1);
 		break;
 	case 0x47:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		scriptSetDigimon(byteArg1, byteArg2, byteArg3);
 		break;
 	case 0x48:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		scriptUnloadEntity(byteArg1);
 		break;
 	case 0x49:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		callDigimonRoutine(byteArg1);
 		break;
@@ -1301,7 +1302,7 @@ wait_for_entity_end:
 		MAIN_D_80134FA4 = byteArg1;
 		longjmp(SCRIPT_JMP_BUF, 2);
 	case 0x4b:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		MAIN_D_80134FF8 = byteArg1;
@@ -1312,7 +1313,7 @@ wait_for_entity_end:
 		pushScriptStack(&entry);
 		longjmp(SCRIPT_JMP_BUF, 3);
 	case 0x4c:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
 		if (entityId == 0xff) {
@@ -1324,7 +1325,7 @@ wait_for_entity_end:
 		b[2] = byteArg2;
 		break;
 	case 0x4d:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
 		entityId = scriptIdToEntityId(byteArg1);
@@ -1337,7 +1338,7 @@ wait_for_entity_end:
 		*(int16_t *)(b + 4) = posX;
 		break;
 	case 0x4e:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1353,7 +1354,7 @@ wait_for_entity_end:
 		*(int16_t *)(b + 6) = posY;
 		break;
 	case 0x4f:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		b = (uint8_t *)&MAIN_D_801BE72C;
@@ -1363,7 +1364,7 @@ wait_for_entity_end:
 		b[3] = byteArg1;
 		break;
 	case 0x50:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		b = (uint8_t *)&MAIN_D_801BE72C;
 		b[0] = 7;
@@ -1371,7 +1372,7 @@ wait_for_entity_end:
 		b[3] = byteArg2;
 		break;
 	case 0x51:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		MAIN_func_80105464(byteArg1, byteArg2);
@@ -1385,7 +1386,7 @@ wait_for_entity_end:
 		b[2] = byteArg3;
 		break;
 	case 0x52:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1401,7 +1402,7 @@ wait_for_entity_end:
 		*(int16_t *)(b + 6) = posY;
 		break;
 	case 0x53:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		MAIN_func_80105464(byteArg1, byteArg2);
@@ -1415,7 +1416,7 @@ wait_for_entity_end:
 		b[2] = byteArg3;
 		break;
 	case 0x54:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		resetEntityOrigin(byteArg1);
 		break;
@@ -1433,7 +1434,7 @@ wait_for_entity_end:
 		setMapObjectsFlag(byteArg1, 1, byteArg2);
 		break;
 	case 0x58:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		MAIN_D_80134FF8 = readPStat(byteArg1);
 		SELECTION_MENU_STATE = readPStat((byteArg1 + 1) & 0xff);
@@ -1868,7 +1869,7 @@ void scriptInstruction64to7E(int32_t op)
 		MAIN_D_80135010 = byteArg2;
 		break;
 	case 0x69:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		{
 			int32_t damage;
@@ -1900,7 +1901,7 @@ void scriptInstruction64to7E(int32_t op)
 	case 0x6b:
 		break;
 	case 0x6c:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1916,7 +1917,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		break;
 	case 0x6d:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
@@ -1930,7 +1931,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		break;
 	case 0x6e:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1946,7 +1947,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		break;
 	case 0x6f:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		entityId = scriptIdToEntityId(byteArg1);
@@ -1960,7 +1961,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		break;
 	case 0x70:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		MAIN_D_801BE738[0] = 0xc;
@@ -1968,7 +1969,7 @@ void scriptInstruction64to7E(int32_t op)
 		MAIN_D_801BE738[2] = byteArg3;
 		break;
 	case 0x71:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		pollNextTwoScriptBytes(&entityId, &padByte);
@@ -1983,7 +1984,7 @@ void scriptInstruction64to7E(int32_t op)
 		*(int16_t *)(b + 0xa) = posY;
 		break;
 	case 0x72:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1999,7 +2000,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		break;
 	case 0x73:
-		MAIN_func_801062F8(0xff);
+		MAIN_func_801062F8(SPEAKER_NONE);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -2145,7 +2146,7 @@ void callScriptSection(int32_t scriptId, int32_t section, int32_t param)
 	MAIN_D_80134FE0 = param;
 	MAIN_D_80134FE4 = section;
 	MAIN_D_80134FE5 = 0;
-	MAIN_D_80134FE6 = 0xfd;
+	MAIN_D_80134FE6 = SPEAKER_PLAYER;
 	MAIN_D_80134FE7 = readPStat(0);
 	SOME_SCRIPT_SYNC_BIT = 1;
 	ACTIVE_INSTRUCTION = 0;
@@ -2877,7 +2878,7 @@ void MAIN_func_80107660(void)
 	registerTextbox(1, 9, 6, 1, 1);
 	MAIN_func_800FCC98(MAIN_D_80134F68, 1, 0xa);
 	MAIN_func_80108610(0);
-	setupBoxOrigin(0xfd, &origin);
+	setupBoxOrigin(SPEAKER_PLAYER, &origin);
 	setRECT(&rect, 0, -98, 148, 127);
 	createTextbox(2, 0xe1, &rect, &origin, 0, MAIN_func_801086D4);
 	registerTextbox(2, 9, 6, 1, 2);
@@ -3304,14 +3305,14 @@ void MAIN_func_80108610(int32_t boxIndex)
 	if (boxIndex == 0) {
 		showMapHeadTextbox(4, 0xff, 1, 0x4d5);
 		TEXT_BOX_DATA[1].writeCount--;
-		value = 0xd;
+		value = TEXT_NEWLINE;
 		TEXT_BUFFERS_PTR[0x246] = value;
 		TEXT_BUFFERS_PTR[0x3c6] = value;
 		MAIN_func_800FCCFC(MAIN_D_80134F68, 0xa, 0);
 	} else {
 		showMapHeadTextbox(5, 0xff, 2, 0x4d5);
 		TEXT_BOX_DATA[2].writeCount--;
-		value = 0xd;
+		value = TEXT_NEWLINE;
 		TEXT_BUFFERS_PTR[0x266] = value;
 		TEXT_BUFFERS_PTR[0x3e6] = value;
 		MAIN_func_800FCCFC(MAIN_D_80134F6C, 0xa, 0);
@@ -3944,8 +3945,8 @@ void MAIN_func_80109BBC(void)
 	showMapHeadTextbox(0xf, 0xff, 1, 0x4d6);
 
 	--TEXT_BOX_DATA[1].writeCount;
-	TEXT_BUFFERS_PTR[0x254] = 0xd;
-	TEXT_BUFFERS_PTR[0x354] = 0xd;
+	TEXT_BUFFERS_PTR[0x254] = TEXT_NEWLINE;
+	TEXT_BUFFERS_PTR[0x354] = TEXT_NEWLINE;
 
 	MAIN_func_800FCCFC(MAIN_D_80134F68, 0xa, 4);
 }
@@ -4228,15 +4229,15 @@ void MAIN_func_8010A79C(void)
 	buf = TEXT_BUFFERS_PTR + box->vramRow * 64;
 	buf = (uint8_t *)((uint32_t)buf + (box->backPage ^ 1) * box->vramRows * 64);
 	line = buf;
-	*buf++ = 1;
-	*buf++ = 7;
+	*buf++ = TEXT_COLOR;
+	*buf++ = TEXT_COLOR_YELLOW;
 	strcpy(buf, MAIN_D_801345F8);
 	buf += strlen(MAIN_D_801345F8);
-	*buf++ = 1;
-	*buf++ = 1;
+	*buf++ = TEXT_COLOR;
+	*buf++ = TEXT_COLOR_WHITE;
 	strcpy(buf, MAIN_D_80134600);
 	buf += strlen(MAIN_D_80134600);
-	*buf++ = 0xd;
+	*buf++ = TEXT_NEWLINE;
 	*buf++ = 0;
 	line += 0x40;
 	page = MAIN_D_80134F81 * 2;
@@ -4250,7 +4251,7 @@ void MAIN_func_8010A79C(void)
 			buf += strlen(table[j + 1]);
 			strcpy(buf, table[j + 2]);
 			buf += strlen(table[j + 2]);
-			*buf++ = 0xd;
+			*buf++ = TEXT_NEWLINE;
 			*buf++ = 0;
 		}
 	}
@@ -4266,8 +4267,8 @@ void updateNamingPreview(void)
 	int32_t len;
 
 	out = TEXT_BUFFERS_PTR;
-	*out++ = 1;
-	*out++ = 1;
+	*out++ = TEXT_COLOR;
+	*out++ = TEXT_COLOR_WHITE;
 
 	if ((MAIN_D_80134F8E & 1) == 0) {
 		strcpy(out, MAIN_D_801345F4);
@@ -4644,7 +4645,7 @@ void MAIN_func_801062F8(int32_t owner)
 
 	unsetTrigger(TRIGGER_44);
 
-	if ((uint32_t)owner < 0xc8) {
+	if ((uint32_t)owner < SPEAKER_SPECIAL) {
 		owner = scriptIdToEntityId(owner) & 0xff;
 		if (owner != 0xff) {
 			setMovementEnabled(owner, 1);

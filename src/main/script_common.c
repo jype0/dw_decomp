@@ -12,6 +12,7 @@
 #include <dw/sjis.h>
 #include <dw/sound.h>
 #include <dw/tamer.h>
+#include <dw/text.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
 
@@ -1453,13 +1454,13 @@ void MAIN_func_800FB700(void)
 		out += strlen(name);
 	}
 
-	*out++ = 0x18;
+	*out++ = TEXT_COLUMN_96;
 	*out++ = 0;
 	out = intToStringSJIS(out, MAIN_D_80134F7C, 5, 0);
-	*out++ = 0x19;
+	*out++ = TEXT_COLUMN_156;
 	*out++ = 0;
 	out = intToStringSJIS(out, MAIN_D_80134F81, 2, 0);
-	*out++ = 0x1a;
+	*out++ = TEXT_COLUMN_180;
 	*out++ = 0;
 
 	total = MAIN_D_80134F7C * MAIN_D_80134F81;
@@ -1570,7 +1571,7 @@ void MAIN_func_800FBC00(void)
 		}
 
 		saved = ACTIVE_INSTRUCTION;
-		showShopkeeperTextbox(line, 0xff, 2);
+		showShopkeeperTextbox(line, SPEAKER_NONE, 2);
 		ACTIVE_INSTRUCTION = saved;
 	}
 }
@@ -1975,8 +1976,8 @@ void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	int32_t len;
 
 	out = MAIN_func_800FF444((uint8_t *)box, row);
-	*out++ = 1;
-	*out++ = 7;
+	*out++ = TEXT_COLOR;
+	*out++ = TEXT_COLOR_YELLOW;
 
 	row0 = row;
 	row0 = row0;
@@ -1992,12 +1993,12 @@ void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	idx = (box->topRow + row0) * 2;
 	item = MAIN_D_80134F68->buf[idx];
-	*out++ = 1;
+	*out++ = TEXT_COLOR;
 
 	if ((item & 0x80) != 0) {
-		*out++ = 1;
+		*out++ = TEXT_COLOR_WHITE;
 	} else {
-		*out++ = 3;
+		*out++ = TEXT_COLOR_RED;
 	}
 
 	item = (uint8_t)(item & 0x7f);
@@ -2005,10 +2006,10 @@ void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	len = strlen(ITEM_PARA[item].name);
 	out += len;
 	out = padWithSpaces(out, 8, len);
-	*out++ = 0xf;
+	*out++ = TEXT_HALF_SPACE;
 	*out++ = 0;
-	*out++ = 1;
-	*out++ = 1;
+	*out++ = TEXT_COLOR;
+	*out++ = TEXT_COLOR_WHITE;
 
 	item = MAIN_D_80134F6C->buf[idx];
 	strcpy((char *)out, ITEM_PARA[item].name);
@@ -2842,7 +2843,7 @@ void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
 {
 	uint8_t *savedCursor;
 
-	if (boxId == 0 && owner != 0xfe) {
+	if (boxId == 0 && owner != SPEAKER_NARRATOR) {
 		setDialogueOwner(owner);
 	}
 
@@ -2854,8 +2855,8 @@ void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
 		MAIN_D_80134FDC = resolveMapHeadEntry(section, idx);
 	}
 
-	if (owner == 0xfe) {
-		owner = 0xff;
+	if (owner == SPEAKER_NARRATOR) {
+		owner = SPEAKER_NONE;
 	}
 
 	MAIN_func_80101EF8(boxId, owner);
@@ -2990,28 +2991,28 @@ void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	amount = box->buf[idx + 1];
 
 	if (type != 0xff) {
-		*out++ = 1;
+		*out++ = TEXT_COLOR;
 		if (MAIN_D_80135011 == 0 || MAIN_D_80135011 == 7) {
 			if (amount != 0) {
-				*out++ = 1;
+				*out++ = TEXT_COLOR_WHITE;
 			} else {
-				*out++ = 3;
+				*out++ = TEXT_COLOR_RED;
 			}
 		} else {
 			if ((amount & 0x80) != 0) {
-				*out++ = 1;
+				*out++ = TEXT_COLOR_WHITE;
 			} else {
-				*out++ = 3;
+				*out++ = TEXT_COLOR_RED;
 			}
 		}
 
 		strcpy(out, name = ITEM_PARA[type].name);
 		out += strlen(name);
-		*out++ = 0xf;
+		*out++ = TEXT_HALF_SPACE;
 		*out++ = 0;
 
 		if (MAIN_D_80135011 != 5) {
-			*out++ = 0x16;
+			*out++ = TEXT_COLUMN_105_ALT;
 			*out++ = 0;
 			if (MAIN_D_80135011 != 7) {
 				value = ITEM_PARA[type].value;
@@ -3023,7 +3024,7 @@ void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
 							*out++ = 0x81;
 							*out++ = 0x7c;
 						}
-						*out++ = 0xf;
+						*out++ = TEXT_HALF_SPACE;
 						*out++ = 0;
 						goto amountPart;
 					}
@@ -3033,7 +3034,7 @@ void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			}
 
 			out = intToStringSJIS(out, value, 4, 0);
-			*out++ = 0xf;
+			*out++ = TEXT_HALF_SPACE;
 			*out++ = 0;
 		}
 amountPart:
@@ -3042,7 +3043,7 @@ amountPart:
 		}
 		if ((MAIN_D_80135011 != 0) && (MAIN_D_80135011 != 7) &&
 		    (MAIN_D_80135011 != 1)) {
-			*out++ = 0x1c;
+			*out++ = TEXT_COLUMN_100;
 			*out++ = 0;
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
 		}
@@ -3066,26 +3067,26 @@ void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	amount = box->buf[idx + 1];
 
 	if (type != 0xff) {
-		*out++ = 1;
+		*out++ = TEXT_COLOR;
 		if (MAIN_D_80135011 == 3) {
 			if (amount != 0) {
 				if (getCardAmount(type) == 0) {
-					*out++ = 7;
+					*out++ = TEXT_COLOR_YELLOW;
 				} else {
-					*out++ = 1;
+					*out++ = TEXT_COLOR_WHITE;
 				}
 			} else {
-				*out++ = 3;
+				*out++ = TEXT_COLOR_RED;
 			}
 		} else {
-			*out++ = 1;
+			*out++ = TEXT_COLOR_WHITE;
 		}
 
 		strcpy(out, name = DIGIMON_DATA[CARD_DATA[type].digimonId].name);
 		out += strlen(name);
-		*out++ = 0x17;
+		*out++ = TEXT_COLUMN_105;
 		*out++ = 0;
-		*out++ = 0xf;
+		*out++ = TEXT_HALF_SPACE;
 		*out++ = 0;
 		value = MAIN_D_8012FFC4[CARD_DATA[type].spriteId];
 
@@ -3094,7 +3095,7 @@ void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		} else {
 			if (MAIN_D_80135011 != 6) {
 				out = intToStringSJIS(out, value >> 1, 4, 0);
-				*out++ = 0xf;
+				*out++ = TEXT_HALF_SPACE;
 				*out++ = 0;
 			}
 			out = intToStringSJIS(out, amount, 2, 0);
@@ -3112,16 +3113,16 @@ void MAIN_func_800FEC30(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	out = MAIN_func_800FF444((uint8_t *)box, row);
 	type = box->buf[(box->topRow + row) * 2];
-	*out++ = 1;
+	*out++ = TEXT_COLOR;
 
 	if (type == readPStat(0xf9)) {
 		*out++ = 6;
 	} else {
-		*out++ = 1;
+		*out++ = TEXT_COLOR_WHITE;
 	}
 
 	out = intToStringSJIS(out, type + 1, 2, 0);
-	*out++ = 0xf;
+	*out++ = TEXT_HALF_SPACE;
 	*out++ = 0;
 	strcpy(out, MAIN_D_8012FEC8[type]);
 	len = strlen(MAIN_D_8012FEC8[type]);
@@ -3139,12 +3140,12 @@ void MAIN_func_800FED64(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	out = MAIN_func_800FF444((uint8_t *)box, row);
 	raw = box->buf[(box->topRow + row) * 2];
-	*out++ = 1;
+	*out++ = TEXT_COLOR;
 
 	if ((raw & 0x80) != 0) {
-		*out++ = 1;
+		*out++ = TEXT_COLOR_WHITE;
 	} else {
-		*out++ = 3;
+		*out++ = TEXT_COLOR_RED;
 	}
 
 	raw &= 0x7f;
@@ -3153,9 +3154,9 @@ void MAIN_func_800FED64(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	len = strlen(MAP_NAME_PTR[nameId]);
 	out += len;
 	out = padWithSpaces(out, 0xc, len);
-	*out++ = 0xf;
+	*out++ = TEXT_HALF_SPACE;
 	*out++ = 0;
-	*out++ = 0x1b;
+	*out++ = TEXT_COLUMN_160;
 	*out++ = 0;
 	out = intToStringSJIS(out, MAIN_D_8013024C[raw].cost, 4, 0);
 	terminateString(out, isLast);
@@ -3265,14 +3266,14 @@ uint8_t *MAIN_func_800FF444(uint8_t *data, int32_t index)
 
 void terminateString(uint8_t *str, int32_t flag)
 {
-	*str++ = 1;
-	*str++ = 1;
+	*str++ = TEXT_COLOR;
+	*str++ = TEXT_COLOR_WHITE;
 
 	if (flag != 0) {
-		*str++ = 0;
+		*str++ = TEXT_END;
 		*str = 0;
 	} else {
-		*str++ = 0xd;
+		*str++ = TEXT_NEWLINE;
 		*str = 0;
 	}
 }
@@ -3321,11 +3322,11 @@ void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
 	uint8_t *saved;
 	uint16_t rows;
 
-	if (owner != 0xfe) {
+	if (owner != SPEAKER_NARRATOR) {
 		setDialogueOwner(owner);
 	} else {
-		MAIN_D_80134FE6 = 0xff;
-		owner = 0xfd;
+		MAIN_D_80134FE6 = SPEAKER_NONE;
+		owner = SPEAKER_PLAYER;
 	}
 
 	saved = MAIN_D_80134FDC;
@@ -3344,7 +3345,7 @@ void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
 	}
 
 	MAIN_D_801BE956[0] = MAIN_func_80101EF8(0, MAIN_D_80134FE6);
-	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
+	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * TEXT_GLYPH_WIDTH + 2;
 
 	if (owner != 0xff) {
 		MAIN_D_801BE954[0] = 0xd;
@@ -3691,7 +3692,7 @@ void MAIN_func_800FFFF0(void)
 
 	if (UI_BOX_DATA[0].state == 1) {
 		while (TEXT_BOX_DATA[0].pageReady == 0) {
-			showTextbox(0, 0xff);
+			showTextbox(0, SPEAKER_NONE);
 		}
 
 		ACTIVE_INSTRUCTION = 0;
@@ -3947,19 +3948,19 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 	for (;;) {
 		ch = *str++;
 		switch (ch) {
-		case 0:
+		case TEXT_END:
 			return 1;
-		case 3:
+		case TEXT_SKIP_3:
 			str += 3;
 			break;
-		case 2:
+		case TEXT_SKIP_1:
 			str++;
 			break;
-		case 1:
+		case TEXT_COLOR:
 			ch = *str++;
 			setTextColor(ch);
 			break;
-		case 0xc:
+		case TEXT_TAB_8:
 			str++;
 			rem = pos / 12 % 8;
 			save = pos;
@@ -3970,49 +3971,49 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 				pos = save + rem;
 			}
 			break;
-		case 0x16:
+		case TEXT_COLUMN_105_ALT:
 			str++;
 			setRECT(&rect, x + pos - 6, y, 0x69, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0x69;
 			break;
-		case 0x17:
+		case TEXT_COLUMN_105:
 			str++;
 			setRECT(&rect, x + pos, y, 0x69, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0x69;
 			break;
-		case 0x1b:
+		case TEXT_COLUMN_160:
 			str++;
 			setRECT(&rect, x + pos, y, 0xa0, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0xa0;
 			break;
-		case 0x1c:
+		case TEXT_COLUMN_100:
 			str++;
 			setRECT(&rect, x + pos, y, 0x64, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0x64;
 			break;
-		case 0x18:
+		case TEXT_COLUMN_96:
 			str++;
 			setRECT(&rect, x + pos, y, 0x60, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0x60;
 			break;
-		case 0x19:
+		case TEXT_COLUMN_156:
 			str++;
 			setRECT(&rect, x + pos, y, 0x9c, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0x9c;
 			break;
-		case 0x1a:
+		case TEXT_COLUMN_180:
 			str++;
 			setRECT(&rect, x + pos, y, 0xb4, 0xc);
 			clearTextSubArea(&rect);
 			pos = 0xb4;
 			break;
-		case 0xe:
+		case TEXT_TAB_11:
 			str++;
 			rem = pos / 12 % 0xb;
 			save = pos;
@@ -4023,13 +4024,13 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 				pos = save + rem;
 			}
 			break;
-		case 0xf:
+		case TEXT_HALF_SPACE:
 			str++;
 			setRECT(&rect, x + pos, y, 6, 0xc);
 			clearTextSubArea(&rect);
 			pos += 6;
 			break;
-		case 0xd:
+		case TEXT_NEWLINE:
 			return 0;
 		default:
 			if (isAsciiEncoded((char *)&ch) != 0) {
@@ -4168,7 +4169,7 @@ int32_t setupBoxOrigin(int32_t ownerId, RECT *origin)
 {
 	int16_t pos[2];
 
-	if (ownerId == 0xff) {
+	if (ownerId == SPEAKER_NONE) {
 		return 0;
 	}
 
@@ -4272,7 +4273,7 @@ void scriptShowSelection(void)
 	MAIN_D_801BE948[0] = (int32_t)MAIN_D_80134FDC;
 	MAIN_D_80134FDC += (optionCount + 1) * 2;
 	MAIN_D_801BE956[0] = showTextbox(0, MAIN_D_80134FE6);
-	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
+	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * TEXT_GLYPH_WIDTH + 2;
 	height = MAIN_D_801BE956[0];
 
 	if (height > 0xf0) {
@@ -4282,7 +4283,7 @@ void scriptShowSelection(void)
 	MAIN_D_80134FDC += 2;
 	MAIN_D_801BE94C[0] = (int32_t)MAIN_D_80134FDC;
 
-	if (MAIN_D_80134FE6 != 0xff) {
+	if (MAIN_D_80134FE6 != SPEAKER_NONE) {
 		MAIN_D_801BE954[0] = 0xd;
 	} else {
 		MAIN_D_801BE954[0] = 0;
@@ -4302,7 +4303,7 @@ static void showTextbox__garbage__(void)
 	int16_t posY;
 	ScriptCameraMovement *slot;
 
-	MAIN_func_801062F8(0xff);
+	MAIN_func_801062F8(SPEAKER_NONE);
 	pollNextScriptUByte(&moveSlot);
 	pollNextTwoScriptBytes(&objectId, &speed);
 	pollNextTwoScriptBytes(&targetId, &pad);
@@ -4340,22 +4341,22 @@ uint32_t showTextbox(int32_t boxId, uint32_t speakerId)
 	out = base;
 	col = maxCol = 0;
 	row = 0;
-	if (speakerId != 0xff) {
-		*out++ = 1;
-		if (speakerId == 0xfd) {
-			*out++ = 6;
-		} else if (speakerId == 0xfc) {
-			*out++ = 0xa;
-		} else if (speakerId >= 0xc8) {
-			*out++ = 5;
+	if (speakerId != SPEAKER_NONE) {
+		*out++ = TEXT_COLOR;
+		if (speakerId == SPEAKER_PLAYER) {
+			*out++ = TEXT_COLOR_LIGHT_BLUE;
+		} else if (speakerId == SPEAKER_PARTNER) {
+			*out++ = TEXT_COLOR_ORANGE;
+		} else if (speakerId >= SPEAKER_SPECIAL) {
+			*out++ = TEXT_COLOR_GREEN;
 		} else {
-			*out++ = 7;
+			*out++ = TEXT_COLOR_YELLOW;
 		}
 		out += getSpeakerName(speakerId, out);
-		*out++ = 1;
-		*out++ = 1;
-		*out++ = 0xd;
-		*out = 0;
+		*out++ = TEXT_COLOR;
+		*out++ = TEXT_COLOR_WHITE;
+		*out++ = TEXT_NEWLINE;
+		*out = TEXT_END;
 		row++;
 		out = base + (row << 6);
 	}
@@ -4364,18 +4365,18 @@ top: {
 	ctrl = *MAIN_D_80134FDC++;
 	{
 		switch (ctrl) {
-		case 3:
+		case TEXT_SKIP_3:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
 			*out++ = *MAIN_D_80134FDC++;
 			*out++ = *MAIN_D_80134FDC++;
 			goto top;
-		case 4:
+		case TEXT_PSTAT_NUMBER:
 			ctrl = *MAIN_D_80134FDC++;
 			ctrl = readPStat(ctrl);
 			out = intToStringSJIS(out, ctrl, 3, 1);
 			goto top;
-		case 5:
+		case TEXT_PLAYER_NAME:
 			MAIN_D_80134FDC++;
 			lines = getSpeakerName(0xfd, out);
 			out += lines;
@@ -4383,7 +4384,7 @@ top: {
 			              0xffff)) &
 			      0xffff;
 			goto top;
-		case 6:
+		case TEXT_PARTNER_NAME:
 			MAIN_D_80134FDC++;
 			lines = getSpeakerName(0xfc, out);
 			out += lines;
@@ -4391,7 +4392,7 @@ top: {
 			              0xffff)) &
 			      0xffff;
 			goto top;
-		case 7:
+		case TEXT_DIGIMON_NAME:
 			ctrl = *MAIN_D_80134FDC++;
 			{
 				ctrl = readPStat(ctrl);
@@ -4405,7 +4406,7 @@ top: {
 				      0xffff;
 			}
 			goto top;
-		case 8:
+		case TEXT_MOVE_NAME:
 			ctrl = *MAIN_D_80134FDC++;
 			{
 				ctrl = readPStat(ctrl);
@@ -4417,7 +4418,7 @@ top: {
 				      0xffff;
 			}
 			goto top;
-		case 9:
+		case TEXT_ITEM_NAME:
 			ctrl = *MAIN_D_80134FDC++;
 			{
 				ctrl = readPStat(ctrl);
@@ -4431,31 +4432,31 @@ top: {
 				      0xffff;
 			}
 			goto top;
-		case 10:
+		case TEXT_MONEY:
 			MAIN_D_80134FDC++;
 			out = intToStringSJIS(out, MONEY, 6, 0);
 			goto top;
-		case 11:
+		case TEXT_MERIT:
 			MAIN_D_80134FDC++;
 			out = intToStringSJIS(out, MERIT, 4, 0);
 			goto top;
-		case 16:
+		case TEXT_PRICE:
 			MAIN_D_80134FDC++;
 			out = intToStringSJIS(out, MAIN_D_8013500C, 5, 1);
 			goto top;
-		case 19:
+		case TEXT_TOURNAMENTS_WON:
 			MAIN_D_80134FDC++;
 			out = intToStringSJIS(out, MAIN_D_80134FCC, 3, 1);
 			goto top;
-		case 20:
+		case TEXT_TOURNAMENT_WINS:
 			MAIN_D_80134FDC++;
 			out = intToStringSJIS(out, TOURNAMENTS_LOST, 3, 1);
 			goto top;
-		case 21:
+		case TEXT_TOURNAMENTS_LOST:
 			MAIN_D_80134FDC++;
 			out = intToStringSJIS(out, MAIN_D_80134FD0, 3, 1);
 			goto top;
-		case 17:
+		case TEXT_BGM_NAME:
 			ctrl = *MAIN_D_80134FDC++;
 			{
 				ctrl = readPStat(ctrl);
@@ -4466,7 +4467,7 @@ top: {
 				col = (col + ((lines >> 1) & 0xffff)) & 0xffff;
 			}
 			goto top;
-		case 18:
+		case TEXT_CUP_NAME:
 			ctrl = *MAIN_D_80134FDC++;
 			{
 				ctrl = readPStat(ctrl);
@@ -4477,15 +4478,15 @@ top: {
 				col = (col + ((lines >> 1) & 0xffff)) & 0xffff;
 			}
 			goto top;
-		case 12:
+		case TEXT_TAB_8:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
 			goto top;
-		case 14:
+		case TEXT_TAB_11:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
 			goto top;
-		case 13:
+		case TEXT_NEWLINE:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
 			if (maxCol < col) {
@@ -4504,17 +4505,17 @@ top: {
 				entry->pageReady = 1;
 				goto done;
 			}
-			rowOffset += 0x40;
+			rowOffset += TEXT_ROW_SIZE;
 			row++;
 			lines = rowOffset;
 			out = base + lines;
 			goto top;
-		case 1:
-		case 2:
+		case TEXT_COLOR:
+		case TEXT_SKIP_1:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
 			goto top;
-		case 15:
+		case TEXT_HALF_SPACE:
 		default:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
@@ -4566,7 +4567,7 @@ int32_t MAIN_func_80101EF8(int32_t boxId, int32_t speakerId)
 
 int32_t getSpeakerName(int32_t speakerId, uint8_t *buf)
 {
-	if (speakerId == 0xff) {
+	if (speakerId == SPEAKER_NONE) {
 		return 0;
 	}
 
@@ -4575,19 +4576,19 @@ int32_t getSpeakerName(int32_t speakerId, uint8_t *buf)
 		goto digimon;
 	}
 
-	if (speakerId == 0xfc) {
+	if (speakerId == SPEAKER_PARTNER) {
 		strcpy((char *)buf, PARTNER_ENTITY.name);
 
 		return strlen(PARTNER_ENTITY.name);
 	}
 
-	if ((uint32_t)speakerId < 0xc8) {
+	if ((uint32_t)speakerId < SPEAKER_SPECIAL) {
 		speakerId = scriptIdToEntityId(speakerId) & 0xff;
 		speakerId = ENTITY_TABLE[speakerId]->type & 0xff;
 		goto digimon;
 	}
 
-	speakerId = (speakerId - 0xc8) & 0xff;
+	speakerId = (speakerId - SPEAKER_SPECIAL) & 0xff;
 	strcpy((char *)buf, MAIN_D_8013035C[speakerId]);
 
 	return strlen(MAIN_D_8013035C[speakerId]);
@@ -4608,19 +4609,19 @@ uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t fl
 	int32_t lo;
 
 	divs = MAIN_D_80130344;
-	base = 0x824f;
+	base = SJIS_DIGIT_ZERO;
 	started = 0;
 	while (digits != 0) {
 		c = value / divs.v[digits - 1];
 		c = base + c;
 		value = value % divs.v[digits - 1];
 		if (digits != 1) {
-			if (c == 0x824f) {
+			if (c == SJIS_DIGIT_ZERO) {
 				if (started == 0) {
 					if (flag != 0) {
 						goto skip;
 					}
-					c = 0x8140;
+					c = SJIS_SPACE;
 				}
 			} else {
 				started = 1;
@@ -4641,11 +4642,11 @@ int32_t scriptIdToEntityId(int32_t scriptId)
 {
 	uint8_t i;
 
-	if (scriptId == 0xfd) {
+	if (scriptId == SPEAKER_PLAYER) {
 		return 0;
 	}
 
-	if (scriptId == 0xfc) {
+	if (scriptId == SPEAKER_PARTNER) {
 		return 1;
 	}
 
