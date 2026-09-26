@@ -2167,7 +2167,7 @@ void createShopBitBox(int32_t showBits)
 }
 
 void showShopkeeperSelection(int32_t idx, int32_t owner, int32_t boxId,
-                        int32_t *outSelection)
+                             int32_t *outSelection)
 {
 	showMapheadSelection(idx, owner, boxId, outSelection, 0xff);
 }
