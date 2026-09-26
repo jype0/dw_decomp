@@ -56,15 +56,9 @@ typedef struct {
 extern DigimonEntity *MAIN_D_80134EF4;
 extern DigimonEntity *MAIN_D_80134EF8;
 extern int16_t MAIN_D_80134CDC;
-extern int32_t MAIN_D_801350DC;
-extern int32_t MAIN_D_801350D4;
-extern char *MAIN_D_801350E0;
 extern char *MAIN_D_80139B24[];
-extern char *MAIN_D_801350D8;
 extern int32_t MAIN_D_80139AD0[][2];
 extern int32_t VIEWPORT_DISTANCE;
-extern int32_t MAIN_D_801350CC;
-extern int32_t MAIN_D_801350D0;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
 extern uint8_t *BUFF_MODEL[];
@@ -572,6 +566,43 @@ static void *battle_effect_functions[] = {
 	BTL_initializeParticleEmitters,
 };
 
+char MAIN_D_8013477C[] = "%d\n";
+int8_t MAIN_D_80134780[4] = { 1, 0, -1, 0 };
+int8_t MAIN_D_80134784[4] = { 0, 1, 0, -1 };
+int8_t MAIN_D_80134788[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
+int8_t MAIN_D_80134790[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
+int8_t MAIN_D_80134798[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
+int32_t MAIN_D_801347A0 = 0x808080;
+uint8_t MAIN_D_801347A4[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
+int8_t MAIN_D_801347AC[6] = { 0, 16, 32, 48, 64, 80 };
+SVECTOR MAIN_D_801347B4 = { 0 };
+int16_t MAIN_D_801347BC[3] = { 0, 1, 2 };
+SVECTOR MAIN_D_801347C4 = { 0 };
+RGB8 MAIN_D_801347CC = { 0xcc, 0xa8, 0x28 };
+SVECTOR MAIN_D_801347D0 = { 0, -50, -50, 0 };
+SVECTOR MAIN_D_801347D8 = { 0, -50, 50, 0 };
+SVECTOR MAIN_D_801347E0 = { 0, 50, -50, 0 };
+SVECTOR MAIN_D_801347E8 = { 0, 50, 50, 0 };
+uint8_t MAIN_D_801347F0[4] = { 180, 100, 235, 180 };
+uint8_t MAIN_D_801347F4[4] = { 20, 20, 150, 180 };
+uint8_t MAIN_D_801347F8[4] = { 255, 255, 220, 180 };
+
+int32_t MAIN_D_801350CC;
+int32_t MAIN_D_801350D0;
+int32_t MAIN_D_801350D4;
+char *MAIN_D_801350D8;
+int32_t MAIN_D_801350DC;
+char *MAIN_D_801350E0;
+
+static void *battle_effect_sbss_order[] = {
+	&MAIN_D_801350E0,
+	&MAIN_D_801350DC,
+	&MAIN_D_801350D8,
+	&MAIN_D_801350D4,
+	&MAIN_D_801350D0,
+	&MAIN_D_801350CC,
+};
+
 // clang-format off
 void (*BTL_jtbl_80073604[18])(void) = {
 	BTL_loadEFEImmediate,
@@ -672,17 +703,17 @@ uint8_t BTL_D_8007372C[12] = {
 	0x3c, 0x7c, 0x3c, 0x00,
 };
 
-const char BTL_D_80072EF8[32] = "Listens to #C1! #W";
-const char BTL_D_80072F18[] = "#R#C1dropped #C7";
-const char BTL_D_80072F2C[] = "#C1#R was injured #W";
-const char BTL_D_80072F44[20] = "#C7set technique #R";
-const char BTL_D_80072F58[] = "#C7Put up with it! #R";
-const char BTL_D_80072F70[32] = "#C7Move away!#RChange target!#R";
-const char BTL_D_80072F90[] = "#C7Keep it down!#R";
-const char BTL_D_80072FA4[] = "#C7Go all the way!#R";
-const char BTL_D_80072FBC[] = "#C1MP Consumption Bonus!";
-const char BTL_D_80072FD8[] = "reduced by";
-const char BTL_D_80072FE4[16] = "#R#C1learned!#W";
+const char BTL_STR_LISTENS_TO[32] = "Listens to #C1! #W";
+const char BTL_STR_DROPPED[] = "#R#C1dropped #C7";
+const char BTL_STR_WAS_INJURED[] = "#C1#R was injured #W";
+const char BTL_STR_SET_TECHNIQUE[20] = "#C7set technique #R";
+const char BTL_STR_PUT_UP_WITH_IT[] = "#C7Put up with it! #R";
+const char BTL_STR_MOVE_AWAY_CHANGE_TARGET[32] = "#C7Move away!#RChange target!#R";
+const char BTL_STR_KEEP_IT_DOWN[] = "#C7Keep it down!#R";
+const char BTL_STR_GO_ALL_THE_WAY[] = "#C7Go all the way!#R";
+const char BTL_STR_MP_CONSUMPTION_BONUS[] = "#C1MP Consumption Bonus!";
+const char BTL_STR_REDUCED_BY[] = "reduced by";
+const char BTL_STR_LEARNED[16] = "#R#C1learned!#W";
 
 const MATRIX BTL_D_80072FF4 = {
 	{

@@ -5,14 +5,6 @@
 #include <dw/combat.h>
 #include <dw/world_object.h>
 
-extern int16_t MAIN_D_80135084;
-extern int16_t MAIN_D_80135086;
-extern uint8_t MAIN_D_80135088;
-extern uint8_t MAIN_D_80135089;
-extern uint8_t MAIN_D_8013508C;
-extern uint8_t MAIN_D_8013508A;
-extern uint8_t MAIN_D_8013508B;
-
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY, int32_t width, int32_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uPos, int32_t vPos, int32_t width, int32_t height);
 void BTL_tickCommandMenu(void);
@@ -24,6 +16,24 @@ void BTL_removeCommandMenu(void);
  * it gets modified.
  */
 const BtlCommandShout BTL_COMMAND_SHOUT = { -1, 0, 0, 0 };
+
+int16_t MAIN_D_80135084;
+int16_t MAIN_D_80135086;
+uint8_t MAIN_D_80135088;
+uint8_t MAIN_D_80135089;
+uint8_t MAIN_D_8013508A;
+uint8_t MAIN_D_8013508B;
+uint8_t MAIN_D_8013508C;
+
+static void *command_menu_sbss_order[] = {
+	&MAIN_D_8013508C,
+	&MAIN_D_8013508B,
+	&MAIN_D_8013508A,
+	&MAIN_D_80135089,
+	&MAIN_D_80135088,
+	&MAIN_D_80135086,
+	&MAIN_D_80135084,
+};
 
 void BTL_initializeCommandMenu(void)
 {

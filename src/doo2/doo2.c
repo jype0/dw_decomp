@@ -81,6 +81,23 @@ static void *doo2_functions[] = {
 	DOO2_setScratchTop,
 };
 
+RECT MAIN_D_80134B90 = { -84, -70, 168, 80 };
+RECT MAIN_D_80134B98 = { -8, -8, 16, 16 };
+Doo2EggIcons EGG_ICONS = { { 0, 2, 3, 1 } };
+RECT MAIN_D_80134BA4 = { -8, -8, 16, 16 };
+
+int32_t MAIN_D_80135310;
+uint8_t *MAIN_D_80135314;
+Doo2ModelVertex *MAIN_D_80135318;
+int16_t MAIN_D_8013531C[3];
+
+static void *doo2_sbss_order[] = {
+	&MAIN_D_8013531C,
+	&MAIN_D_80135318,
+	&MAIN_D_80135314,
+	&MAIN_D_80135310,
+};
+
 Doo2ShardParams DOO2_SHARD_PARAMS = {
 	0,
 	0,

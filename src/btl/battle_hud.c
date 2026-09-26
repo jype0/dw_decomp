@@ -17,43 +17,21 @@
 #include <dw/sjis.h>
 #include <dw/swap.h>
 
-extern char MAIN_D_80134714[];
-extern char MAIN_D_80134718[];
-extern char MAIN_D_80134720[];
-extern int16_t MAIN_D_8013509C;
-extern uint8_t *MAIN_D_801350A4;
-extern uint16_t MAIN_D_801350A8;
-extern uint16_t MAIN_D_801350AA;
-extern uint16_t MAIN_D_801350AC;
-extern int16_t MAIN_D_80135090[2];
-extern int32_t MAIN_D_801350C0;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
-extern uint8_t MAIN_D_801350BC;
 extern StatsGains STATS_GAINS;
-extern char BTL_D_80072EF8[];
-extern char BTL_D_80072F18[];
-extern char BTL_D_80072F2C[];
-extern char BTL_D_80072F44[];
-extern char BTL_D_80072F58[];
-extern char BTL_D_80072F70[];
-extern char BTL_D_80072F90[];
-extern char BTL_D_80072FA4[];
-extern char BTL_D_80072FBC[];
-extern char BTL_D_80072FD8[];
-extern char BTL_D_80072FE4[];
+extern char BTL_STR_LISTENS_TO[];
+extern char BTL_STR_DROPPED[];
+extern char BTL_STR_WAS_INJURED[];
+extern char BTL_STR_SET_TECHNIQUE[];
+extern char BTL_STR_PUT_UP_WITH_IT[];
+extern char BTL_STR_MOVE_AWAY_CHANGE_TARGET[];
+extern char BTL_STR_KEEP_IT_DOWN[];
+extern char BTL_STR_GO_ALL_THE_WAY[];
+extern char BTL_STR_MP_CONSUMPTION_BONUS[];
+extern char BTL_STR_REDUCED_BY[];
+extern char BTL_STR_LEARNED[];
 extern MATRIX BTL_D_80072FF4;
-extern int16_t MAIN_D_8013509E;
-extern int16_t MAIN_D_801350A0;
-extern int16_t MAIN_D_801350A2;
-extern uint8_t MAIN_D_801350C4;
-extern uint8_t MAIN_D_801350C5;
-extern uint8_t MAIN_D_801350C6;
-extern uint8_t MAIN_D_801350C7;
-extern uint8_t MAIN_D_801350C8;
-extern uint8_t MAIN_D_801350C9;
-extern uint8_t MAIN_D_801350CA;
-extern uint8_t MAIN_D_801350CB;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 int16_t entityGetTechFromAnim(Entity *entity, int32_t anim);
@@ -128,20 +106,96 @@ static void *battle_hud_functions[] = {
 	BTL_drawHoveredCommandName,
 };
 
+char BTL_STR_COMMAND_RUN[] = "Run";
+char BTL_STR_COMMAND_ATTACK[] = "Attack";
+char BTL_STR_COMMAND_CHANGE[] = "Change";
+uint8_t MAIN_D_80134728[5] = { 0, 11, 25, 39, 50 };
+uint8_t MAIN_D_80134730[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
+uint8_t MAIN_D_80134738[4] = { 0x50, 0x68, 0x58, 0x68 };
+uint8_t MAIN_D_8013473C[4] = { 0xa8, 0x90, 0x90, 0x80 };
+char BTL_STR_YELLOW[] = "#C7";
+char BTL_STR_WHITE_WAIT[] = "#C1#W";
+char BTL_STR_MP_BONUS_20[] = "20";
+char BTL_STR_MP_BONUS_15[] = "15";
+char BTL_STR_MP_BONUS_10[] = "10";
+char BTL_STR_MP_BONUS_5[] = "5";
+char BTL_STR_MP_BONUS_PERCENT[] = "%!#W";
+uint8_t MAIN_D_80134764[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t MAIN_D_8013476C[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
+uint8_t MAIN_D_80134774[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+
+int16_t MAIN_D_80135090[2];
+int8_t MAIN_D_80135094;
+int32_t BATTLE_END_TYPING;
+int16_t BATTLE_END_POS_X;
+int16_t BATTLE_END_POS_Z;
+int16_t BATTLE_END_WIDTH;
+int16_t BATTLE_END_HEIGHT;
+uint8_t *BATTLE_END_CURSOR;
+uint16_t BATTLE_END_PEN_X;
+uint16_t BATTLE_END_PEN_Y;
+uint16_t BATTLE_END_V;
+int16_t BATTLE_END_ROWS_SHOWN;
+int16_t BATTLE_END_BOX_LINE_COUNT;
+int16_t BATTLE_END_ROWS_DRAWN;
+int16_t BATTLE_END_VISIBLE_ROWS;
+int16_t BATTLE_END_WAIT_FRAMES;
+int16_t BATTLE_END_WAIT_TIMER[2];
+uint8_t MAIN_D_801350BC;
+int32_t MAIN_D_801350C0;
+uint8_t MAIN_D_801350C4;
+uint8_t MAIN_D_801350C5;
+uint8_t MAIN_D_801350C6;
+uint8_t MAIN_D_801350C7;
+uint8_t MAIN_D_801350C8;
+uint8_t MAIN_D_801350C9;
+uint8_t MAIN_D_801350CA;
+uint8_t MAIN_D_801350CB;
+
+static void *battle_hud_sbss_order[] = {
+	&MAIN_D_801350CB,
+	&MAIN_D_801350CA,
+	&MAIN_D_801350C9,
+	&MAIN_D_801350C8,
+	&MAIN_D_801350C7,
+	&MAIN_D_801350C6,
+	&MAIN_D_801350C5,
+	&MAIN_D_801350C4,
+	&MAIN_D_801350C0,
+	&MAIN_D_801350BC,
+	&BATTLE_END_WAIT_TIMER,
+	&BATTLE_END_WAIT_FRAMES,
+	&BATTLE_END_VISIBLE_ROWS,
+	&BATTLE_END_ROWS_DRAWN,
+	&BATTLE_END_BOX_LINE_COUNT,
+	&BATTLE_END_ROWS_SHOWN,
+	&BATTLE_END_V,
+	&BATTLE_END_PEN_Y,
+	&BATTLE_END_PEN_X,
+	&BATTLE_END_CURSOR,
+	&BATTLE_END_HEIGHT,
+	&BATTLE_END_WIDTH,
+	&BATTLE_END_POS_Z,
+	&BATTLE_END_POS_X,
+	&BATTLE_END_TYPING,
+	&MAIN_D_80135094,
+	&MAIN_D_80135090,
+};
+
 // clang-format off
-const char BTL_D_80072E04[] = "Your Call";
-const char BTL_D_80072E10[] = "Moderate";
-const char BTL_D_80072E1C[] = "Distance";
-const char BTL_D_80072E28[] = "Defensive";
+const char BTL_STR_COMMAND_YOUR_CALL[] = "Your Call";
+const char BTL_STR_COMMAND_MODERATE[] = "Moderate";
+const char BTL_STR_COMMAND_DISTANCE[] = "Distance";
+const char BTL_STR_COMMAND_DEFENSIVE[] = "Defensive";
 
 const char *BTL_D_80072E34[8] = {
-	MAIN_D_80134714,
-	MAIN_D_80134718,
-	BTL_D_80072E04,
-	BTL_D_80072E10,
-	BTL_D_80072E1C,
-	BTL_D_80072E28,
-	MAIN_D_80134720,
+	BTL_STR_COMMAND_RUN,
+	BTL_STR_COMMAND_ATTACK,
+	BTL_STR_COMMAND_YOUR_CALL,
+	BTL_STR_COMMAND_MODERATE,
+	BTL_STR_COMMAND_DISTANCE,
+	BTL_STR_COMMAND_DEFENSIVE,
+	BTL_STR_COMMAND_CHANGE,
 	NULL,
 };
 
@@ -401,8 +455,8 @@ void BTL_tickDeathCountdown(void)
 			BTL_D_80073E78.data.step++;
 			frame = (BTL_D_80073E78.data.timer + 0x1d) / 30;
 			if (frame < 5) {
-				spin->u = (MAIN_D_80134730 + frame)[7];
-				vpos = (MAIN_D_80134730 + frame)[0xb];
+				spin->u = (MAIN_D_80134738 - 1)[frame];
+				vpos = (MAIN_D_8013473C - 1)[frame];
 			} else {
 				spin->u = 0x58;
 				vpos = 0x80;
@@ -470,38 +524,38 @@ void BTL_removeDeathCountdown(void)
 
 void BTL_initializeBattleEndText(int16_t arg0, int16_t arg1, RECT *arg2)
 {
-	MAIN_D_80135098 = 0;
-	*(RECT *)&MAIN_D_8013509C = *arg2;
-	MAIN_D_801350A4 = (uint8_t *)BTL_END_BOX_TEXTBUFFER;
-	MAIN_D_801350A8 = 0;
-	MAIN_D_801350AA = arg0;
-	MAIN_D_801350AC = arg0;
-	MAIN_D_801350AE = 0;
-	MAIN_D_801350B0 = 0;
-	MAIN_D_801350B2 = 0;
+	BATTLE_END_TYPING = 0;
+	*(RECT *)&BATTLE_END_POS_X = *arg2;
+	BATTLE_END_CURSOR = (uint8_t *)BTL_END_BOX_TEXTBUFFER;
+	BATTLE_END_PEN_X = 0;
+	BATTLE_END_PEN_Y = arg0;
+	BATTLE_END_V = arg0;
+	BATTLE_END_ROWS_SHOWN = 0;
+	BATTLE_END_BOX_LINE_COUNT = 0;
+	BATTLE_END_ROWS_DRAWN = 0;
 	BTL_END_BOX_TEXTBUFFER[0] = 0;
-	MAIN_D_801350B4 = arg1;
-	MAIN_D_801350B6 = 0x3c;
-	MAIN_D_801350B8 = 0x3c;
+	BATTLE_END_VISIBLE_ROWS = arg1;
+	BATTLE_END_WAIT_FRAMES = 0x3c;
+	BATTLE_END_WAIT_TIMER[0] = 0x3c;
 }
 
 void BTL_appendItemDroppedText(int32_t *p)
 {
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134740);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_YELLOW);
 	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_DATA[p[0]].name);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F18);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_DROPPED);
 	strcat(BTL_END_BOX_TEXTBUFFER,
 	       ITEM_PARA[DIGIMON_DATA[p[0]].dropItem].name);
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134744);
-	MAIN_D_801350B0 += 2;
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_WHITE_WAIT);
+	BATTLE_END_BOX_LINE_COUNT += 2;
 }
 
 void BTL_appendInjuredText(char *name)
 {
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134740);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_YELLOW);
 	strcat(BTL_END_BOX_TEXTBUFFER, name);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F2C);
-	MAIN_D_801350B0 += 2;
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_WAS_INJURED);
+	BATTLE_END_BOX_LINE_COUNT += 2;
 }
 
 void BTL_appendCommandLearnedText(void)
@@ -517,33 +571,33 @@ void BTL_appendCommandLearnedText(void)
 
 	if (total >= 0x1f4) {
 		if (old < 0x1f4) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F44);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_SET_TECHNIQUE);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_LISTENS_TO);
+			BATTLE_END_BOX_LINE_COUNT += 2;
 		}
 	} else if (total >= 0x190) {
 		if (old < 0x190) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F58);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_PUT_UP_WITH_IT);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_LISTENS_TO);
+			BATTLE_END_BOX_LINE_COUNT += 2;
 		}
 	} else if (total >= 0x12c) {
 		if (old < 0x12c) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F70);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 3;
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_MOVE_AWAY_CHANGE_TARGET);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_LISTENS_TO);
+			BATTLE_END_BOX_LINE_COUNT += 3;
 		}
 	} else if (total >= 0xc8) {
 		if (old < 0xc8) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072F90);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_KEEP_IT_DOWN);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_LISTENS_TO);
+			BATTLE_END_BOX_LINE_COUNT += 2;
 		}
 	} else {
 		if (old < 0x64) {
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FA4);
-			strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072EF8);
-			MAIN_D_801350B0 += 2;
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_GO_ALL_THE_WAY);
+			strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_LISTENS_TO);
+			BATTLE_END_BOX_LINE_COUNT += 2;
 		}
 	}
 }
@@ -563,19 +617,19 @@ void BTL_appendMPBonusText(void)
 	buf[0] = 0;
 	if (total >= 0x3e7) {
 		if (old < 0x3e7) {
-			strcpy(buf, MAIN_D_8013474C);
+			strcpy(buf, BTL_STR_MP_BONUS_20);
 		}
 	} else if (total >= 0x384) {
 		if (old < 0x384) {
-			strcpy(buf, MAIN_D_80134750);
+			strcpy(buf, BTL_STR_MP_BONUS_15);
 		}
 	} else if (total >= 0x320) {
 		if (old < 0x320) {
-			strcpy(buf, MAIN_D_80134754);
+			strcpy(buf, BTL_STR_MP_BONUS_10);
 		}
 	} else {
 		if (old < 0x2bc) {
-			strcpy(buf, MAIN_D_80134758);
+			strcpy(buf, BTL_STR_MP_BONUS_5);
 		}
 	}
 
@@ -583,19 +637,19 @@ void BTL_appendMPBonusText(void)
 		return;
 	}
 
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FBC);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FD8);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_MP_CONSUMPTION_BONUS);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_REDUCED_BY);
 	strcat(BTL_END_BOX_TEXTBUFFER, buf);
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_8013475C);
-	MAIN_D_801350B0 += 4;
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_MP_BONUS_PERCENT);
+	BATTLE_END_BOX_LINE_COUNT += 4;
 }
 
 void BTL_appendMoveLearnedText(int32_t move)
 {
-	strcat(BTL_END_BOX_TEXTBUFFER, MAIN_D_80134740);
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_YELLOW);
 	strcat(BTL_END_BOX_TEXTBUFFER, MOVE_NAMES[move]);
-	strcat(BTL_END_BOX_TEXTBUFFER, BTL_D_80072FE4);
-	MAIN_D_801350B0 += 2;
+	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_LEARNED);
+	BATTLE_END_BOX_LINE_COUNT += 2;
 }
 
 void BTL_drawBattleEndText(int32_t flag)
@@ -604,85 +658,85 @@ void BTL_drawBattleEndText(int32_t flag)
 	uint16_t w;
 
 	while (flag) {
-		if (*MAIN_D_801350A4 == '#') {
-			MAIN_D_801350A4++;
-			switch (*MAIN_D_801350A4) {
+		if (*BATTLE_END_CURSOR == '#') {
+			BATTLE_END_CURSOR++;
+			switch (*BATTLE_END_CURSOR) {
 			case 'C':
-				MAIN_D_801350A4++;
-				setTextColor(*MAIN_D_801350A4);
-				MAIN_D_801350A4++;
+				BATTLE_END_CURSOR++;
+				setTextColor(*BATTLE_END_CURSOR);
+				BATTLE_END_CURSOR++;
 				break;
 			case 'W':
-				MAIN_D_801350B8 = MAIN_D_801350B6;
+				BATTLE_END_WAIT_TIMER[0] = BATTLE_END_WAIT_FRAMES;
 				/* fall through */
 			case 'R':
-				MAIN_D_801350A8 = 0;
-				MAIN_D_801350A4++;
-				MAIN_D_801350AA += 0xc;
-				MAIN_D_801350AE++;
-				MAIN_D_801350B2++;
+				BATTLE_END_PEN_X = 0;
+				BATTLE_END_CURSOR++;
+				BATTLE_END_PEN_Y += 0xc;
+				BATTLE_END_ROWS_SHOWN++;
+				BATTLE_END_ROWS_DRAWN++;
 				return;
 			}
 			continue;
 		}
-		c = *MAIN_D_801350A4;
+		c = *BATTLE_END_CURSOR;
 		if (c == '0') {
 			return;
 		}
-		w = drawGlyph(swapShortBytes(convertAsciiToJis(c)), MAIN_D_801350A8, MAIN_D_801350AA);
-		MAIN_D_801350A8 += w;
-		MAIN_D_801350A4++;
+		w = drawGlyph(swapShortBytes(convertAsciiToJis(c)), BATTLE_END_PEN_X, BATTLE_END_PEN_Y);
+		BATTLE_END_PEN_X += w;
+		BATTLE_END_CURSOR++;
 		return;
 	}
 }
 
 void BTL_scrollBattleEndText(void)
 {
-	MAIN_D_801350AC += 0xc;
-	MAIN_D_801350AE--;
+	BATTLE_END_V += 0xc;
+	BATTLE_END_ROWS_SHOWN--;
 }
 
 void BTL_tickBattleEndText(void)
 {
-	if (MAIN_D_801350B8 != 0) {
-		MAIN_D_801350B8 -= 1;
+	if (BATTLE_END_WAIT_TIMER[0] != 0) {
+		BATTLE_END_WAIT_TIMER[0] -= 1;
 	}
 
 	if (BTL_END_BOX_TEXTBUFFER[0] == 0) {
 		if (((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) && (POLLED_INPUT != POLLED_INPUT_PREVIOUS)) {
-			MAIN_D_801350B8 = 0;
+			BATTLE_END_WAIT_TIMER[0] = 0;
 		}
 		return;
 	}
 
-	if (MAIN_D_801350AE == MAIN_D_801350B4) {
-		if (MAIN_D_801350B8 == 0) {
+	if (BATTLE_END_ROWS_SHOWN == BATTLE_END_VISIBLE_ROWS) {
+		if (BATTLE_END_WAIT_TIMER[0] == 0) {
 			BTL_scrollBattleEndText();
 		}
 	} else {
-		BTL_drawBattleEndText(MAIN_D_80135098);
-		if (MAIN_D_801350B8 != 0) {
-			MAIN_D_80135098 = 0;
+		BTL_drawBattleEndText(BATTLE_END_TYPING);
+		if (BATTLE_END_WAIT_TIMER[0] != 0) {
+			BATTLE_END_TYPING = 0;
 		}
 	}
 
 	if (((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) && (POLLED_INPUT != POLLED_INPUT_PREVIOUS)) {
-		if (MAIN_D_801350B8 != 0) {
-			MAIN_D_801350B8 = 0;
+		if (BATTLE_END_WAIT_TIMER[0] != 0) {
+			BATTLE_END_WAIT_TIMER[0] = 0;
 		} else {
-			MAIN_D_80135098 = 1;
+			BATTLE_END_TYPING = 1;
 		}
 	}
 }
 
 void BTL_renderBattleEndText(int32_t n)
 {
-	renderString(0, MAIN_D_8013509C, MAIN_D_8013509E, MAIN_D_801350A0, MAIN_D_801350A2, 0, MAIN_D_801350AC, 6 - n, 0);
+	renderString(0, BATTLE_END_POS_X, BATTLE_END_POS_Z, BATTLE_END_WIDTH, BATTLE_END_HEIGHT, 0, BATTLE_END_V, 6 - n, 0);
 }
 
 int32_t BTL_isEndBoxTextFinished(void)
 {
-	if ((MAIN_D_801350B8 == 0) && (MAIN_D_801350B0 == MAIN_D_801350B2)) {
+	if ((BATTLE_END_WAIT_TIMER[0] == 0) && (BATTLE_END_BOX_LINE_COUNT == BATTLE_END_ROWS_DRAWN)) {
 		return 1;
 	}
 

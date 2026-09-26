@@ -300,9 +300,7 @@ void *main_menu_order_anchor[] = {
 };
 
 // clang-format off
-char MAIN_D_80134660[2] = {
-	0x00, 0x00,
-};
+char MAIN_D_80134660[2] = "";
 
 uint16_t MAIN_D_80134662 = 0x0032;
 
@@ -346,9 +344,7 @@ char MAIN_D_801346B4[] = " ";
 
 char MAIN_D_801346B8[] = " is in";
 
-char MAIN_D_801346C0[4] = {
-	0x2e, 0x00, 0x2a, 0x00,
-};
+char MAIN_D_801346C0[2][2] = { ".", "*" };
 
 char MAIN_D_801346C4[] = "Player";
 
@@ -534,24 +530,25 @@ CVECTOR MAIN_D_80131638[4] = {
 	{ 0xc0, 0x40, 0x40, 0x00 },
 };
 
-int8_t MAIN_D_80131648[16] = {
-	0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-	0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46,
-};
+int8_t MAIN_D_80131648[16] = "0123456789ABCDEF";
 
-char MAIN_D_80131658[96] = {
-	0x20, 0x30, 0x00, 0x00, 0x00, 0x00, 0x20, 0x31,
-	0x00, 0x00, 0x00, 0x00, 0x20, 0x32, 0x00, 0x00,
-	0x00, 0x00, 0x20, 0x33, 0x00, 0x00, 0x00, 0x00,
-	0x20, 0x34, 0x00, 0x00, 0x00, 0x00, 0x20, 0x35,
-	0x00, 0x00, 0x00, 0x00, 0x20, 0x36, 0x00, 0x00,
-	0x00, 0x00, 0x20, 0x37, 0x20, 0x00, 0x00, 0x00,
-	0x20, 0x38, 0x20, 0x00, 0x00, 0x00, 0x20, 0x39,
-	0x00, 0x00, 0x00, 0x00, 0x31, 0x30, 0x00, 0x00,
-	0x00, 0x00, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00,
-	0x31, 0x32, 0x00, 0x00, 0x00, 0x00, 0x31, 0x33,
-	0x00, 0x00, 0x00, 0x00, 0x31, 0x34, 0x00, 0x00,
-	0x00, 0x00, 0x31, 0x35, 0x00, 0x00, 0x00, 0x00,
+char MAIN_D_80131658[16][6] = {
+	" 0",
+	" 1",
+	" 2",
+	" 3",
+	" 4",
+	" 5",
+	" 6",
+	" 7 ",
+	" 8 ",
+	" 9",
+	"10",
+	"11",
+	"12",
+	"13",
+	"14",
+	"15",
 };
 
 MenuHighlight MAIN_D_801316B8[22] = {
@@ -827,12 +824,7 @@ char *MAIN_D_801318FC[4] = {
 	MAIN_D_80131264,
 };
 
-char MAIN_D_8013190C[32] = {
-	0x42, 0x41, 0x53, 0x4c, 0x55, 0x53, 0x2d, 0x30,
-	0x31, 0x30, 0x33, 0x32, 0x44, 0x4d, 0x52, 0x2a,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
+char MAIN_D_8013190C[32] = "BASLUS-01032DMR*";
 
 uint8_t MAIN_D_8013192C[32] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2464,7 +2456,7 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_80131340, 0x90, 0);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[(MEMORY_CARD_SLOT + 1) * 6], 0, 0xC);
+		drawString(MAIN_D_80131658[MEMORY_CARD_SLOT + 1], 0, 0xC);
 		DrawSync(0);
 		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 4, 0x18, 0xC);
 		DrawSync(0);
@@ -2472,7 +2464,7 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(&MAIN_D_801BF768[MEMORY_CARD_SLOT * 0x44] + 0x2C, 0, 0x18);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[(MEMORY_CARD_SLOT + 1) * 6], 0, 0x30);
+		drawString(MAIN_D_80131658[MEMORY_CARD_SLOT + 1], 0, 0x30);
 		DrawSync(0);
 		drawString(MAIN_D_801318DC[MAIN_MENU_ACTION], 0x18, 0x30);
 		DrawSync(0);
@@ -2593,9 +2585,9 @@ void drawMainMenuStrings(int32_t menu)
 		strcpy(buf, PARTNER_ENTITY.name);
 		drawString(buf, 0, 0x18);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[((BATTLE_REGISTRATION_SLOT + 1) / 10) * 6] + 2, 0, 0xC);
+		drawString(&MAIN_D_80131658[(BATTLE_REGISTRATION_SLOT + 1) / 10][2], 0, 0xC);
 		DrawSync(0);
-		drawString(&MAIN_D_80131658[((BATTLE_REGISTRATION_SLOT + 1) % 10) * 6] + 2, 0xC, 0xC);
+		drawString(&MAIN_D_80131658[(BATTLE_REGISTRATION_SLOT + 1) % 10][2], 0xC, 0xC);
 		DrawSync(0);
 		drawString(MAIN_D_801346AC, 0, 0x24);
 		DrawSync(0);
@@ -2658,7 +2650,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 		row *= 0x18;
 		setRECT(&area, 0, row + 0xC, 0xE0, 0x18);
 		clearTextSubArea(&area);
-		drawString(&MAIN_D_80131658[(slot + 1) * 6], 0, row + 0xC);
+		drawString(MAIN_D_80131658[slot + 1], 0, row + 0xC);
 		drawString(&MAIN_D_801BF768[slot * 0x44] + 4, 0x18, row + 0xC);
 		DrawSync(0);
 		drawString(&MAIN_D_801BF768[slot * 0x44] + 0x18, 0x6C, row + 0xC);
@@ -2701,14 +2693,14 @@ void drawRegisteredBattleSlots(int32_t slot)
 	currentSlot = slot + (i = 0);
 	y = 0xC;
 	while (i < 10) {
-		drawString(&MAIN_D_80131658[((currentSlot + 1) / 10) * 6] + 2, 0, y);
-		drawString(&MAIN_D_80131658[((currentSlot + 1) % 10) * 6] + 2, 0xC, y);
+		drawString(&MAIN_D_80131658[(currentSlot + 1) / 10][2], 0, y);
+		drawString(&MAIN_D_80131658[(currentSlot + 1) % 10][2], 0xC, y);
 		if ((type = (&MAIN_D_80131B2C[0x51C])[currentSlot * 0x40]) != 0) {
 			drawString((char *)&MAIN_D_8013192C[currentSlot * 0x40] + 0x70E, 0x1E, y);
 			drawString(DIGIMON_DATA[type].name, 0x6C, y);
 		} else {
 			setTextColor(9);
-			drawString(MAIN_D_801346C0, 0x1E, y);
+			drawString(MAIN_D_801346C0[0], 0x1E, y);
 			setTextColor(1);
 		}
 		DrawSync(0);
@@ -3024,7 +3016,7 @@ void tickMainMenu(void)
 		asciiToShiftJIS((uint8_t *)MAIN_D_8013392C,
 				(uint16_t *)(MAIN_D_8013192C + 4));
 		_strncpy((char *)MAIN_D_8013192C + 0xC,
-			 MAIN_D_80131658 + (MEMORY_CARD_SLOT + 1) * 6, 4);
+			 MAIN_D_80131658[MEMORY_CARD_SLOT + 1], 4);
 		_strncpy((char *)MAIN_D_8013192C + 0x12,
 			 (char *)MAIN_D_80131B2C + 0x467, 0xD);
 		_strncpy(MAIN_D_8013194C,
@@ -3380,7 +3372,7 @@ void tickMainMenu(void)
 			asciiToShiftJIS((uint8_t *)MAIN_D_8013392C,
 				(uint16_t *)(MAIN_D_8013192C + 4));
 			_strncpy((char *)MAIN_D_8013192C + 0xC,
-				 MAIN_D_80131658 + (MEMORY_CARD_SLOT + 1) * 6, 4);
+				 MAIN_D_80131658[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy((char *)MAIN_D_8013192C + 0x12,
 				 (char *)MAIN_D_80131B2C + 0x467, 0xD);
 			_strncpy(MAIN_D_8013194C,
@@ -3725,7 +3717,7 @@ void tickMainMenu(void)
 			asciiToShiftJIS((uint8_t *)MAIN_D_8013392C,
 				(uint16_t *)(MAIN_D_8013192C + 4));
 			_strncpy((char *)MAIN_D_8013192C + 0xC,
-				 MAIN_D_80131658 + (MEMORY_CARD_SLOT + 1) * 6, 4);
+				 MAIN_D_80131658[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy((char *)MAIN_D_8013192C + 0x12,
 				 (char *)MAIN_D_80131B2C + 0x467, 0xD);
 			_strncpy(MAIN_D_8013194C,
@@ -3938,7 +3930,7 @@ int32_t countUsedMemoryCardBlocks(int32_t channel, int32_t returnMenu)
 	int32_t status;
 
 	MemCardSync(0, &cmd, &result);
-	status = MemCardGetDirentry(channel, MAIN_D_801346C0 + 2, MEMCARD_DIRENTRIES,
+	status = MemCardGetDirentry(channel, MAIN_D_801346C0[1], MEMCARD_DIRENTRIES,
 			&fileCount, 0, 15);
 	/* Keep the success block after both errors for the retail branch layout. */
 	if (status == -1)

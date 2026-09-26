@@ -1,7 +1,7 @@
 /*
  *	_psstart.c	- Startup Routine for the Sony PlayStation
  *
- *	Copyright © 1996 metrowerks inc. All Rights Reserved.
+ *	Copyright (c) 1996 metrowerks inc. All Rights Reserved.
  *
  */
  

@@ -9,8 +9,6 @@
 
 #include "common.h"
 
-#define EVL_MMD_BUFFER	((uint8_t *)0x80020000)
-
 extern int8_t EVL_LOADING_COMPLETE;
 
 void stopBGM(void);
@@ -18,13 +16,6 @@ void stopSound(void);
 void loadMapSounds2();
 void isSoundLoaded();
 void loadVLALL();
-
-uint8_t *MAIN_D_801349E4 = EVL_MMD_BUFFER;
-RGB8 MAIN_D_801349E8 = { 0x0a, 0xff, 0x0a };
-SVECTOR MAIN_D_801349EC = { 0 };
-int8_t MAIN_D_801349F4 = 1;
-SVECTOR MAIN_D_801349F8 = { 0 };
-SVECTOR MAIN_D_80134A00 = { 0 };
 
 void* evl_functions[] = {
 	evoSequenceAlwaysTrue,

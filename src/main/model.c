@@ -95,725 +95,365 @@ int16_t WIREFRAME_COLOR_MIN = 0x0037;
 
 int16_t WIREFRAME_COLOR_MAX = 0x00ff;
 
-char MAIN_D_80133B44[] = {
-	0x42, 0x4f, 0x59, 0x53, 0x00,
-};
-
-char MAIN_D_80133B4C[] = {
-	0x42, 0x4f, 0x54, 0x41, 0x00,
-};
-
-char MAIN_D_80133B54[] = {
-	0x4b, 0x4f, 0x52, 0x4f, 0x00,
-};
-
-char MAIN_D_80133B5C[] = {
-	0x41, 0x47, 0x55, 0x4d, 0x00,
-};
-
-char MAIN_D_80133B64[] = {
-	0x42, 0x45, 0x54, 0x41, 0x00,
-};
-
-char MAIN_D_80133B6C[] = {
-	0x47, 0x52, 0x45, 0x59, 0x00,
-};
-
-char MAIN_D_80133B74[] = {
-	0x44, 0x45, 0x56, 0x49, 0x00,
-};
-
-char MAIN_D_80133B7C[] = {
-	0x41, 0x49, 0x52, 0x44, 0x00,
-};
-
-char MAIN_D_80133B84[] = {
-	0x54, 0x59, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133B8C[] = {
-	0x4d, 0x45, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133B94[] = {
-	0x53, 0x45, 0x41, 0x44, 0x00,
-};
-
-char MAIN_D_80133B9C[] = {
-	0x4e, 0x55, 0x4d, 0x45, 0x00,
-};
-
-char MAIN_D_80133BA4[] = {
-	0x4d, 0x54, 0x47, 0x52, 0x00,
-};
-
-char MAIN_D_80133BAC[] = {
-	0x4d, 0x41, 0x4d, 0x45, 0x00,
-};
-
-char MAIN_D_80133BB4[] = {
-	0x4d, 0x4f, 0x4e, 0x5a, 0x00,
-};
-
-char MAIN_D_80133BBC[] = {
-	0x50, 0x55, 0x4e, 0x49, 0x00,
-};
-
-char MAIN_D_80133BC4[] = {
-	0x54, 0x55, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80133BCC[] = {
-	0x47, 0x41, 0x42, 0x55, 0x00,
-};
-
-char MAIN_D_80133BD4[] = {
-	0x45, 0x4c, 0x45, 0x43, 0x00,
-};
-
-char MAIN_D_80133BDC[] = {
-	0x4b, 0x41, 0x42, 0x55, 0x00,
-};
-
-char MAIN_D_80133BE4[] = {
-	0x41, 0x4e, 0x47, 0x45, 0x00,
-};
-
-char MAIN_D_80133BEC[] = {
-	0x42, 0x49, 0x52, 0x44, 0x00,
-};
-
-char MAIN_D_80133BF4[] = {
-	0x47, 0x41, 0x52, 0x55, 0x00,
-};
-
-char MAIN_D_80133BFC[] = {
-	0x59, 0x55, 0x4b, 0x49, 0x00,
-};
-
-char MAIN_D_80133C04[] = {
-	0x48, 0x4f, 0x45, 0x45, 0x00,
-};
-
-char MAIN_D_80133C0C[] = {
-	0x56, 0x45, 0x47, 0x49, 0x00,
-};
-
-char MAIN_D_80133C14[] = {
-	0x53, 0x4b, 0x55, 0x4c, 0x00,
-};
-
-char MAIN_D_80133C1C[] = {
-	0x4d, 0x54, 0x4d, 0x41, 0x00,
-};
-
-char MAIN_D_80133C24[] = {
-	0x56, 0x45, 0x44, 0x41, 0x00,
-};
-
-char MAIN_D_80133C2C[] = {
-	0x50, 0x4f, 0x59, 0x4f, 0x00,
-};
-
-char MAIN_D_80133C34[] = {
-	0x54, 0x4f, 0x4b, 0x4f, 0x00,
-};
-
-char MAIN_D_80133C3C[] = {
-	0x50, 0x41, 0x54, 0x41, 0x00,
-};
-
-char MAIN_D_80133C44[] = {
-	0x4b, 0x55, 0x4e, 0x45, 0x00,
-};
-
-char MAIN_D_80133C4C[] = {
-	0x55, 0x4e, 0x49, 0x4d, 0x00,
-};
-
-char MAIN_D_80133C54[] = {
-	0x4f, 0x47, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133C5C[] = {
-	0x53, 0x48, 0x45, 0x4c, 0x00,
-};
-
-char MAIN_D_80133C64[] = {
-	0x43, 0x45, 0x4e, 0x54, 0x00,
-};
-
-char MAIN_D_80133C6C[] = {
-	0x42, 0x41, 0x4b, 0x45, 0x00,
-};
-
-char MAIN_D_80133C74[] = {
-	0x44, 0x4f, 0x52, 0x49, 0x00,
-};
-
-char MAIN_D_80133C7C[] = {
-	0x53, 0x43, 0x55, 0x4d, 0x00,
-};
-
-char MAIN_D_80133C84[] = {
-	0x41, 0x4e, 0x44, 0x52, 0x00,
-};
-
-char MAIN_D_80133C8C[] = {
-	0x47, 0x49, 0x52, 0x4f, 0x00,
-};
-
-char MAIN_D_80133C94[] = {
-	0x45, 0x54, 0x45, 0x4d, 0x00,
-};
-
-char MAIN_D_80133C9C[] = {
-	0x59, 0x55, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133CA4[] = {
-	0x54, 0x41, 0x4e, 0x45, 0x00,
-};
-
-char MAIN_D_80133CAC[] = {
-	0x50, 0x49, 0x59, 0x4f, 0x00,
-};
-
-char MAIN_D_80133CB4[] = {
-	0x50, 0x41, 0x4c, 0x4d, 0x00,
-};
-
-char MAIN_D_80133CBC[] = {
-	0x4d, 0x4f, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80133CC4[] = {
-	0x4c, 0x45, 0x4f, 0x4d, 0x00,
-};
-
-char MAIN_D_80133CCC[] = {
-	0x53, 0x49, 0x52, 0x41, 0x00,
-};
-
-char MAIN_D_80133CD4[] = {
-	0x43, 0x4f, 0x43, 0x41, 0x00,
-};
-
-char MAIN_D_80133CDC[] = {
-	0x4b, 0x55, 0x57, 0x41, 0x00,
-};
-
-char MAIN_D_80133CE4[] = {
-	0x4d, 0x4f, 0x4a, 0x41, 0x00,
-};
-
-char MAIN_D_80133CEC[] = {
-	0x4e, 0x41, 0x4e, 0x49, 0x00,
-};
-
-char MAIN_D_80133CF4[] = {
-	0x4d, 0x47, 0x44, 0x52, 0x00,
-};
-
-char MAIN_D_80133CFC[] = {
-	0x50, 0x49, 0x43, 0x43, 0x00,
-};
-
-char MAIN_D_80133D04[] = {
-	0x44, 0x49, 0x47, 0x49, 0x00,
-};
-
-char MAIN_D_80133D0C[] = {
-	0x50, 0x45, 0x4e, 0x4d, 0x00,
-};
-
-char MAIN_D_80133D14[] = {
-	0x49, 0x47, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133D1C[] = {
-	0x48, 0x4f, 0x55, 0x4f, 0x00,
-};
-
-char MAIN_D_80133D24[] = {
-	0x48, 0x4b, 0x41, 0x42, 0x00,
-};
-
-char MAIN_D_80133D2C[] = {
-	0x4d, 0x47, 0x53, 0x44, 0x00,
-};
-
-char MAIN_D_80133D34[] = {
-	0x77, 0x45, 0x41, 0x47, 0x00,
-};
-
-char MAIN_D_80133D3C[] = {
-	0x50, 0x41, 0x4e, 0x4a, 0x00,
-};
-
-char MAIN_D_80133D44[] = {
-	0x47, 0x47, 0x44, 0x52, 0x00,
-};
-
-char MAIN_D_80133D4C[] = {
-	0x4d, 0x54, 0x45, 0x54, 0x00,
-};
-
-char MAIN_D_80133D54[] = {
-	0x56, 0x41, 0x4e, 0x44, 0x00,
-};
-
-char MAIN_D_80133D5C[] = {
-	0x59, 0x41, 0x4e, 0x4d, 0x00,
-};
-
-char MAIN_D_80133D64[] = {
-	0x47, 0x4f, 0x54, 0x55, 0x00,
-};
-
-char MAIN_D_80133D6C[] = {
-	0x46, 0x4c, 0x41, 0x52, 0x00,
-};
-
-char MAIN_D_80133D74[] = {
-	0x57, 0x41, 0x52, 0x55, 0x00,
-};
-
-char MAIN_D_80133D7C[] = {
-	0x59, 0x4b, 0x41, 0x47, 0x00,
-};
-
-char MAIN_D_80133D84[] = {
-	0x48, 0x59, 0x4f, 0x47, 0x00,
-};
-
-char MAIN_D_80133D8C[] = {
-	0x50, 0x43, 0x53, 0x43, 0x00,
-};
-
-char MAIN_D_80133D94[] = {
-	0x44, 0x4f, 0x4b, 0x55, 0x00,
-};
-
-char MAIN_D_80133D9C[] = {
-	0x53, 0x49, 0x4d, 0x41, 0x00,
-};
-
-char MAIN_D_80133DA4[] = {
-	0x54, 0x41, 0x4e, 0x4b, 0x00,
-};
-
-char MAIN_D_80133DAC[] = {
-	0x52, 0x45, 0x44, 0x56, 0x00,
-};
-
-char MAIN_D_80133DB4[] = {
-	0x4a, 0x4d, 0x4f, 0x4a, 0x00,
-};
-
-char MAIN_D_80133DBC[] = {
-	0x4e, 0x49, 0x53, 0x45, 0x00,
-};
-
-char MAIN_D_80133DC4[] = {
-	0x47, 0x4f, 0x42, 0x52, 0x00,
-};
-
-char MAIN_D_80133DCC[] = {
-	0x54, 0x55, 0x54, 0x49, 0x00,
-};
-
-char MAIN_D_80133DD4[] = {
-	0x50, 0x53, 0x59, 0x43, 0x00,
-};
-
-char MAIN_D_80133DDC[] = {
-	0x4d, 0x4f, 0x44, 0x4f, 0x00,
-};
-
-char MAIN_D_80133DE4[] = {
-	0x54, 0x4f, 0x59, 0x41, 0x00,
-};
-
-char MAIN_D_80133DEC[] = {
-	0x50, 0x49, 0x44, 0x44, 0x00,
-};
-
-char MAIN_D_80133DF4[] = {
-	0x41, 0x52, 0x55, 0x52, 0x00,
-};
-
-char MAIN_D_80133DFC[] = {
-	0x47, 0x45, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133E04[] = {
-	0x56, 0x41, 0x52, 0x4d, 0x00,
-};
-
-char MAIN_D_80133E0C[] = {
-	0x46, 0x55, 0x47, 0x41, 0x00,
-};
-
-char MAIN_D_80133E14[] = {
-	0x54, 0x4b, 0x4b, 0x41, 0x00,
-};
-
-char MAIN_D_80133E1C[] = {
-	0x4d, 0x52, 0x49, 0x53, 0x00,
-};
-
-char MAIN_D_80133E24[] = {
-	0x47, 0x41, 0x52, 0x44, 0x00,
-};
-
-char MAIN_D_80133E2C[] = {
-	0x4d, 0x43, 0x48, 0x4f, 0x00,
-};
-
-char MAIN_D_80133E34[] = {
-	0x49, 0x43, 0x45, 0x4d, 0x00,
-};
-
-char MAIN_D_80133E3C[] = {
-	0x41, 0x4b, 0x41, 0x54, 0x00,
-};
-
-char MAIN_D_80133E44[] = {
-	0x54, 0x55, 0x4b, 0x41, 0x00,
-};
-
-char MAIN_D_80133E4C[] = {
-	0x53, 0x48, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133E54[] = {
-	0x43, 0x4c, 0x45, 0x41, 0x00,
-};
-
-char MAIN_D_80133E5C[] = {
-	0x5a, 0x41, 0x53, 0x53, 0x00,
-};
-
-char MAIN_D_80133E64[] = {
-	0x49, 0x43, 0x44, 0x56, 0x00,
-};
-
-char MAIN_D_80133E6C[] = {
-	0x44, 0x4b, 0x52, 0x5a, 0x00,
-};
-
-char MAIN_D_80133E74[] = {
-	0x53, 0x4e, 0x44, 0x59, 0x00,
-};
-
-char MAIN_D_80133E7C[] = {
-	0x53, 0x4e, 0x47, 0x42, 0x00,
-};
-
-char MAIN_D_80133E84[] = {
-	0x42, 0x4c, 0x4d, 0x52, 0x00,
-};
-
-char MAIN_D_80133E8C[] = {
-	0x47, 0x52, 0x55, 0x52, 0x00,
-};
-
-char MAIN_D_80133E94[] = {
-	0x53, 0x41, 0x42, 0x44, 0x00,
-};
-
-char MAIN_D_80133E9C[] = {
-	0x53, 0x4f, 0x55, 0x4c, 0x00,
-};
-
-char MAIN_D_80133EA4[] = {
-	0x47, 0x4f, 0x4c, 0x45, 0x00,
-};
-
-char MAIN_D_80133EAC[] = {
-	0x4f, 0x54, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133EB4[] = {
-	0x47, 0x45, 0x43, 0x4f, 0x00,
-};
-
-char MAIN_D_80133EBC[] = {
-	0x54, 0x45, 0x4e, 0x54, 0x00,
-};
-
-char MAIN_D_80133EC4[] = {
-	0x57, 0x52, 0x53, 0x45, 0x00,
-};
-
-char MAIN_D_80133ECC[] = {
-	0x49, 0x4e, 0x53, 0x45, 0x00,
-};
-
-char MAIN_D_80133ED4[] = {
-	0x74, 0x41, 0x4b, 0x41, 0x00,
-};
-
-char MAIN_D_80133EDC[] = {
-	0x4d, 0x55, 0x47, 0x45, 0x00,
-};
-
-char MAIN_D_80133EE4[] = {
-	0x41, 0x4e, 0x4c, 0x47, 0x00,
-};
-
-char MAIN_D_80133EEC[] = {
-	0x4a, 0x49, 0x4a, 0x49, 0x00,
-};
-
-char MAIN_D_80133EF4[] = {
-	0x54, 0x45, 0x4e, 0x53, 0x00,
-};
-
-char MAIN_D_80133EFC[] = {
-	0x54, 0x4f, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80133F04[] = {
-	0x53, 0x43, 0x55, 0x44, 0x00,
-};
-
-char MAIN_D_80133F0C[] = {
-	0x4a, 0x55, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133F14[] = {
-	0x48, 0x41, 0x47, 0x55, 0x00,
-};
-
-char MAIN_D_80133F1C[] = {
-	0x42, 0x52, 0x49, 0x4b, 0x00,
-};
-
-char MAIN_D_80133F24[] = {
-	0x54, 0x49, 0x52, 0x53, 0x00,
-};
-
-char MAIN_D_80133F2C[] = {
-	0x45, 0x47, 0x4f, 0x42, 0x00,
-};
-
-char MAIN_D_80133F34[] = {
-	0x42, 0x52, 0x41, 0x4b, 0x00,
-};
-
-char MAIN_D_80133F3C[] = {
-	0x50, 0x55, 0x54, 0x49, 0x00,
-};
-
-char MAIN_D_80133F44[] = {
-	0x45, 0x42, 0x45, 0x54, 0x00,
-};
-
-char MAIN_D_80133F4C[] = {
-	0x45, 0x47, 0x52, 0x45, 0x00,
-};
-
-char MAIN_D_80133F54[] = {
-	0x45, 0x44, 0x45, 0x56, 0x00,
-};
-
-char MAIN_D_80133F5C[] = {
-	0x45, 0x41, 0x49, 0x52, 0x00,
-};
-
-char MAIN_D_80133F64[] = {
-	0x45, 0x54, 0x59, 0x52, 0x00,
-};
-
-char MAIN_D_80133F6C[] = {
-	0x45, 0x4d, 0x45, 0x52, 0x00,
-};
-
-char MAIN_D_80133F74[] = {
-	0x45, 0x53, 0x45, 0x41, 0x00,
-};
-
-char MAIN_D_80133F7C[] = {
-	0x45, 0x4e, 0x55, 0x4d, 0x00,
-};
-
-char MAIN_D_80133F84[] = {
-	0x45, 0x4d, 0x54, 0x47, 0x00,
-};
-
-char MAIN_D_80133F8C[] = {
-	0x45, 0x4d, 0x41, 0x4d, 0x00,
-};
-
-char MAIN_D_80133F94[] = {
-	0x45, 0x4d, 0x4f, 0x4e, 0x00,
-};
-
-char MAIN_D_80133F9C[] = {
-	0x45, 0x47, 0x41, 0x42, 0x00,
-};
-
-char MAIN_D_80133FA4[] = {
-	0x45, 0x45, 0x4c, 0x45, 0x00,
-};
-
-char MAIN_D_80133FAC[] = {
-	0x45, 0x4b, 0x41, 0x42, 0x00,
-};
-
-char MAIN_D_80133FB4[] = {
-	0x45, 0x41, 0x4e, 0x47, 0x00,
-};
-
-char MAIN_D_80133FBC[] = {
-	0x45, 0x42, 0x49, 0x52, 0x00,
-};
-
-char MAIN_D_80133FC4[] = {
-	0x45, 0x47, 0x41, 0x52, 0x00,
-};
-
-char MAIN_D_80133FCC[] = {
-	0x45, 0x59, 0x55, 0x4b, 0x00,
-};
-
-char MAIN_D_80133FD4[] = {
-	0x45, 0x48, 0x4f, 0x45, 0x00,
-};
-
-char MAIN_D_80133FDC[] = {
-	0x45, 0x56, 0x45, 0x47, 0x00,
-};
-
-char MAIN_D_80133FE4[] = {
-	0x45, 0x53, 0x4b, 0x55, 0x00,
-};
-
-char MAIN_D_80133FEC[] = {
-	0x45, 0x4d, 0x54, 0x4d, 0x00,
-};
-
-char MAIN_D_80133FF4[] = {
-	0x45, 0x56, 0x45, 0x44, 0x00,
-};
-
-char MAIN_D_80133FFC[] = {
-	0x45, 0x50, 0x41, 0x54, 0x00,
-};
-
-char MAIN_D_80134004[] = {
-	0x45, 0x4b, 0x55, 0x4e, 0x00,
-};
-
-char MAIN_D_8013400C[] = {
-	0x45, 0x55, 0x4e, 0x49, 0x00,
-};
-
-char MAIN_D_80134014[] = {
-	0x45, 0x4f, 0x47, 0x52, 0x00,
-};
-
-char MAIN_D_8013401C[] = {
-	0x45, 0x53, 0x48, 0x45, 0x00,
-};
-
-char MAIN_D_80134024[] = {
-	0x45, 0x43, 0x45, 0x4e, 0x00,
-};
-
-char MAIN_D_8013402C[] = {
-	0x45, 0x42, 0x41, 0x4b, 0x00,
-};
-
-char MAIN_D_80134034[] = {
-	0x45, 0x44, 0x4f, 0x52, 0x00,
-};
-
-char MAIN_D_8013403C[] = {
-	0x45, 0x53, 0x43, 0x55, 0x00,
-};
-
-char MAIN_D_80134044[] = {
-	0x45, 0x41, 0x4e, 0x44, 0x00,
-};
-
-char MAIN_D_8013404C[] = {
-	0x45, 0x47, 0x49, 0x52, 0x00,
-};
-
-char MAIN_D_80134054[] = {
-	0x45, 0x45, 0x54, 0x45, 0x00,
-};
-
-char MAIN_D_8013405C[] = {
-	0x45, 0x50, 0x49, 0x59, 0x00,
-};
-
-char MAIN_D_80134064[] = {
-	0x45, 0x50, 0x41, 0x4c, 0x00,
-};
-
-char MAIN_D_8013406C[] = {
-	0x45, 0x4d, 0x4e, 0x4f, 0x00,
-};
-
-char MAIN_D_80134074[] = {
-	0x45, 0x4c, 0x45, 0x4f, 0x00,
-};
-
-char MAIN_D_8013407C[] = {
-	0x45, 0x53, 0x49, 0x52, 0x00,
-};
-
-char MAIN_D_80134084[] = {
-	0x45, 0x43, 0x4f, 0x43, 0x00,
-};
-
-char MAIN_D_8013408C[] = {
-	0x45, 0x4b, 0x55, 0x57, 0x00,
-};
-
-char MAIN_D_80134094[] = {
-	0x45, 0x4d, 0x4f, 0x4a, 0x00,
-};
-
-char MAIN_D_8013409C[] = {
-	0x45, 0x4e, 0x41, 0x4e, 0x00,
-};
-
-char MAIN_D_801340A4[] = {
-	0x45, 0x4d, 0x47, 0x44, 0x00,
-};
-
-char MAIN_D_801340AC[] = {
-	0x45, 0x50, 0x49, 0x43, 0x00,
-};
-
-char MAIN_D_801340B4[] = {
-	0x45, 0x44, 0x49, 0x47, 0x00,
-};
-
-char MAIN_D_801340BC[] = {
-	0x45, 0x49, 0x47, 0x41, 0x00,
-};
-
-char MAIN_D_801340C4[] = {
-	0x45, 0x50, 0x45, 0x4e, 0x00,
-};
-
-char MAIN_D_801340CC[] = {
-	0x45, 0x56, 0x41, 0x4e, 0x00,
-};
-
-char MAIN_D_801340D4[] = {
-	0x43, 0x45, 0x47, 0x52, 0x00,
-};
-
-char MAIN_D_801340DC[] = {
-	0x43, 0x45, 0x4d, 0x47, 0x00,
-};
+char MAIN_D_80133B44[] = "BOYS";
+
+char MAIN_D_80133B4C[] = "BOTA";
+
+char MAIN_D_80133B54[] = "KORO";
+
+char MAIN_D_80133B5C[] = "AGUM";
+
+char MAIN_D_80133B64[] = "BETA";
+
+char MAIN_D_80133B6C[] = "GREY";
+
+char MAIN_D_80133B74[] = "DEVI";
+
+char MAIN_D_80133B7C[] = "AIRD";
+
+char MAIN_D_80133B84[] = "TYRA";
+
+char MAIN_D_80133B8C[] = "MERA";
+
+char MAIN_D_80133B94[] = "SEAD";
+
+char MAIN_D_80133B9C[] = "NUME";
+
+char MAIN_D_80133BA4[] = "MTGR";
+
+char MAIN_D_80133BAC[] = "MAME";
+
+char MAIN_D_80133BB4[] = "MONZ";
+
+char MAIN_D_80133BBC[] = "PUNI";
+
+char MAIN_D_80133BC4[] = "TUNO";
+
+char MAIN_D_80133BCC[] = "GABU";
+
+char MAIN_D_80133BD4[] = "ELEC";
+
+char MAIN_D_80133BDC[] = "KABU";
+
+char MAIN_D_80133BE4[] = "ANGE";
+
+char MAIN_D_80133BEC[] = "BIRD";
+
+char MAIN_D_80133BF4[] = "GARU";
+
+char MAIN_D_80133BFC[] = "YUKI";
+
+char MAIN_D_80133C04[] = "HOEE";
+
+char MAIN_D_80133C0C[] = "VEGI";
+
+char MAIN_D_80133C14[] = "SKUL";
+
+char MAIN_D_80133C1C[] = "MTMA";
+
+char MAIN_D_80133C24[] = "VEDA";
+
+char MAIN_D_80133C2C[] = "POYO";
+
+char MAIN_D_80133C34[] = "TOKO";
+
+char MAIN_D_80133C3C[] = "PATA";
+
+char MAIN_D_80133C44[] = "KUNE";
+
+char MAIN_D_80133C4C[] = "UNIM";
+
+char MAIN_D_80133C54[] = "OGRE";
+
+char MAIN_D_80133C5C[] = "SHEL";
+
+char MAIN_D_80133C64[] = "CENT";
+
+char MAIN_D_80133C6C[] = "BAKE";
+
+char MAIN_D_80133C74[] = "DORI";
+
+char MAIN_D_80133C7C[] = "SCUM";
+
+char MAIN_D_80133C84[] = "ANDR";
+
+char MAIN_D_80133C8C[] = "GIRO";
+
+char MAIN_D_80133C94[] = "ETEM";
+
+char MAIN_D_80133C9C[] = "YURA";
+
+char MAIN_D_80133CA4[] = "TANE";
+
+char MAIN_D_80133CAC[] = "PIYO";
+
+char MAIN_D_80133CB4[] = "PALM";
+
+char MAIN_D_80133CBC[] = "MONO";
+
+char MAIN_D_80133CC4[] = "LEOM";
+
+char MAIN_D_80133CCC[] = "SIRA";
+
+char MAIN_D_80133CD4[] = "COCA";
+
+char MAIN_D_80133CDC[] = "KUWA";
+
+char MAIN_D_80133CE4[] = "MOJA";
+
+char MAIN_D_80133CEC[] = "NANI";
+
+char MAIN_D_80133CF4[] = "MGDR";
+
+char MAIN_D_80133CFC[] = "PICC";
+
+char MAIN_D_80133D04[] = "DIGI";
+
+char MAIN_D_80133D0C[] = "PENM";
+
+char MAIN_D_80133D14[] = "IGAM";
+
+char MAIN_D_80133D1C[] = "HOUO";
+
+char MAIN_D_80133D24[] = "HKAB";
+
+char MAIN_D_80133D2C[] = "MGSD";
+
+char MAIN_D_80133D34[] = "wEAG";
+
+char MAIN_D_80133D3C[] = "PANJ";
+
+char MAIN_D_80133D44[] = "GGDR";
+
+char MAIN_D_80133D4C[] = "MTET";
+
+char MAIN_D_80133D54[] = "VAND";
+
+char MAIN_D_80133D5C[] = "YANM";
+
+char MAIN_D_80133D64[] = "GOTU";
+
+char MAIN_D_80133D6C[] = "FLAR";
+
+char MAIN_D_80133D74[] = "WARU";
+
+char MAIN_D_80133D7C[] = "YKAG";
+
+char MAIN_D_80133D84[] = "HYOG";
+
+char MAIN_D_80133D8C[] = "PCSC";
+
+char MAIN_D_80133D94[] = "DOKU";
+
+char MAIN_D_80133D9C[] = "SIMA";
+
+char MAIN_D_80133DA4[] = "TANK";
+
+char MAIN_D_80133DAC[] = "REDV";
+
+char MAIN_D_80133DB4[] = "JMOJ";
+
+char MAIN_D_80133DBC[] = "NISE";
+
+char MAIN_D_80133DC4[] = "GOBR";
+
+char MAIN_D_80133DCC[] = "TUTI";
+
+char MAIN_D_80133DD4[] = "PSYC";
+
+char MAIN_D_80133DDC[] = "MODO";
+
+char MAIN_D_80133DE4[] = "TOYA";
+
+char MAIN_D_80133DEC[] = "PIDD";
+
+char MAIN_D_80133DF4[] = "ARUR";
+
+char MAIN_D_80133DFC[] = "GERE";
+
+char MAIN_D_80133E04[] = "VARM";
+
+char MAIN_D_80133E0C[] = "FUGA";
+
+char MAIN_D_80133E14[] = "TKKA";
+
+char MAIN_D_80133E1C[] = "MRIS";
+
+char MAIN_D_80133E24[] = "GARD";
+
+char MAIN_D_80133E2C[] = "MCHO";
+
+char MAIN_D_80133E34[] = "ICEM";
+
+char MAIN_D_80133E3C[] = "AKAT";
+
+char MAIN_D_80133E44[] = "TUKA";
+
+char MAIN_D_80133E4C[] = "SHAM";
+
+char MAIN_D_80133E54[] = "CLEA";
+
+char MAIN_D_80133E5C[] = "ZASS";
+
+char MAIN_D_80133E64[] = "ICDV";
+
+char MAIN_D_80133E6C[] = "DKRZ";
+
+char MAIN_D_80133E74[] = "SNDY";
+
+char MAIN_D_80133E7C[] = "SNGB";
+
+char MAIN_D_80133E84[] = "BLMR";
+
+char MAIN_D_80133E8C[] = "GRUR";
+
+char MAIN_D_80133E94[] = "SABD";
+
+char MAIN_D_80133E9C[] = "SOUL";
+
+char MAIN_D_80133EA4[] = "GOLE";
+
+char MAIN_D_80133EAC[] = "OTAM";
+
+char MAIN_D_80133EB4[] = "GECO";
+
+char MAIN_D_80133EBC[] = "TENT";
+
+char MAIN_D_80133EC4[] = "WRSE";
+
+char MAIN_D_80133ECC[] = "INSE";
+
+char MAIN_D_80133ED4[] = "tAKA";
+
+char MAIN_D_80133EDC[] = "MUGE";
+
+char MAIN_D_80133EE4[] = "ANLG";
+
+char MAIN_D_80133EEC[] = "JIJI";
+
+char MAIN_D_80133EF4[] = "TENS";
+
+char MAIN_D_80133EFC[] = "TONO";
+
+char MAIN_D_80133F04[] = "SCUD";
+
+char MAIN_D_80133F0C[] = "JURE";
+
+char MAIN_D_80133F14[] = "HAGU";
+
+char MAIN_D_80133F1C[] = "BRIK";
+
+char MAIN_D_80133F24[] = "TIRS";
+
+char MAIN_D_80133F2C[] = "EGOB";
+
+char MAIN_D_80133F34[] = "BRAK";
+
+char MAIN_D_80133F3C[] = "PUTI";
+
+char MAIN_D_80133F44[] = "EBET";
+
+char MAIN_D_80133F4C[] = "EGRE";
+
+char MAIN_D_80133F54[] = "EDEV";
+
+char MAIN_D_80133F5C[] = "EAIR";
+
+char MAIN_D_80133F64[] = "ETYR";
+
+char MAIN_D_80133F6C[] = "EMER";
+
+char MAIN_D_80133F74[] = "ESEA";
+
+char MAIN_D_80133F7C[] = "ENUM";
+
+char MAIN_D_80133F84[] = "EMTG";
+
+char MAIN_D_80133F8C[] = "EMAM";
+
+char MAIN_D_80133F94[] = "EMON";
+
+char MAIN_D_80133F9C[] = "EGAB";
+
+char MAIN_D_80133FA4[] = "EELE";
+
+char MAIN_D_80133FAC[] = "EKAB";
+
+char MAIN_D_80133FB4[] = "EANG";
+
+char MAIN_D_80133FBC[] = "EBIR";
+
+char MAIN_D_80133FC4[] = "EGAR";
+
+char MAIN_D_80133FCC[] = "EYUK";
+
+char MAIN_D_80133FD4[] = "EHOE";
+
+char MAIN_D_80133FDC[] = "EVEG";
+
+char MAIN_D_80133FE4[] = "ESKU";
+
+char MAIN_D_80133FEC[] = "EMTM";
+
+char MAIN_D_80133FF4[] = "EVED";
+
+char MAIN_D_80133FFC[] = "EPAT";
+
+char MAIN_D_80134004[] = "EKUN";
+
+char MAIN_D_8013400C[] = "EUNI";
+
+char MAIN_D_80134014[] = "EOGR";
+
+char MAIN_D_8013401C[] = "ESHE";
+
+char MAIN_D_80134024[] = "ECEN";
+
+char MAIN_D_8013402C[] = "EBAK";
+
+char MAIN_D_80134034[] = "EDOR";
+
+char MAIN_D_8013403C[] = "ESCU";
+
+char MAIN_D_80134044[] = "EAND";
+
+char MAIN_D_8013404C[] = "EGIR";
+
+char MAIN_D_80134054[] = "EETE";
+
+char MAIN_D_8013405C[] = "EPIY";
+
+char MAIN_D_80134064[] = "EPAL";
+
+char MAIN_D_8013406C[] = "EMNO";
+
+char MAIN_D_80134074[] = "ELEO";
+
+char MAIN_D_8013407C[] = "ESIR";
+
+char MAIN_D_80134084[] = "ECOC";
+
+char MAIN_D_8013408C[] = "EKUW";
+
+char MAIN_D_80134094[] = "EMOJ";
+
+char MAIN_D_8013409C[] = "ENAN";
+
+char MAIN_D_801340A4[] = "EMGD";
+
+char MAIN_D_801340AC[] = "EPIC";
+
+char MAIN_D_801340B4[] = "EDIG";
+
+char MAIN_D_801340BC[] = "EIGA";
+
+char MAIN_D_801340C4[] = "EPEN";
+
+char MAIN_D_801340CC[] = "EVAN";
+
+char MAIN_D_801340D4[] = "CEGR";
+
+char MAIN_D_801340DC[] = "CEMG";
 
 char MAIN_D_801340E4[] = ".MMD";
 

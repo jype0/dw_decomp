@@ -83,17 +83,17 @@ extern char MAIN_D_80134564[];
 extern char MAIN_D_8013456C[];
 extern char MAIN_D_80134574[];
 extern char MAIN_D_8013457C[];
-extern char MAIN_D_80134584[];
-extern char MAIN_D_80134588[];
-extern char MAIN_D_8013458C[];
-extern char MAIN_D_80134590[];
-extern char MAIN_D_80134594[];
-extern char MAIN_D_80134598[];
-extern char MAIN_D_8013459C[];
-extern char MAIN_D_801345A0[];
-extern char MAIN_D_801345A4[];
-extern char MAIN_D_801345A8[];
-extern char MAIN_D_801345AC[];
+extern char MAIN_D_80134584[2][2];
+extern char MAIN_D_80134588[2][2];
+extern char MAIN_D_8013458C[2][2];
+extern char MAIN_D_80134590[2][2];
+extern char MAIN_D_80134594[2][2];
+extern char MAIN_D_80134598[2][2];
+extern char MAIN_D_8013459C[2][2];
+extern char MAIN_D_801345A0[2][2];
+extern char MAIN_D_801345A4[2][2];
+extern char MAIN_D_801345A8[2][2];
+extern char MAIN_D_801345AC[2][2];
 extern char MAIN_D_801345CC[];
 extern char MAIN_D_801345D4[];
 extern char MAIN_D_801345D8[];
@@ -643,29 +643,29 @@ char *MAIN_D_801300E0[23] = {
 };
 
 char *TOURNAMENT_GRADES[23] = {
-	MAIN_D_80134584,
-	&MAIN_D_80134584[2],
-	MAIN_D_80134588,
-	&MAIN_D_80134588[2],
-	MAIN_D_8013458C,
-	&MAIN_D_8013458C[2],
-	MAIN_D_80134590,
-	&MAIN_D_80134590[2],
-	MAIN_D_80134594,
-	&MAIN_D_80134594[2],
-	MAIN_D_80134598,
-	&MAIN_D_80134598[2],
-	MAIN_D_8013459C,
-	&MAIN_D_8013459C[2],
-	MAIN_D_801345A0,
-	&MAIN_D_801345A0[2],
-	MAIN_D_801345A4,
-	&MAIN_D_801345A4[2],
-	MAIN_D_801345A8,
-	&MAIN_D_8013459C[2],
-	&MAIN_D_801345A8[2],
-	MAIN_D_801345AC,
-	&MAIN_D_801345AC[2],
+	MAIN_D_80134584[0],
+	MAIN_D_80134584[1],
+	MAIN_D_80134588[0],
+	MAIN_D_80134588[1],
+	MAIN_D_8013458C[0],
+	MAIN_D_8013458C[1],
+	MAIN_D_80134590[0],
+	MAIN_D_80134590[1],
+	MAIN_D_80134594[0],
+	MAIN_D_80134594[1],
+	MAIN_D_80134598[0],
+	MAIN_D_80134598[1],
+	MAIN_D_8013459C[0],
+	MAIN_D_8013459C[1],
+	MAIN_D_801345A0[0],
+	MAIN_D_801345A0[1],
+	MAIN_D_801345A4[0],
+	MAIN_D_801345A4[1],
+	MAIN_D_801345A8[0],
+	MAIN_D_8013459C[1],
+	MAIN_D_801345A8[1],
+	MAIN_D_801345AC[0],
+	MAIN_D_801345AC[1],
 };
 
 uint8_t TOURNAMENT_DATA[180] = {
@@ -1119,15 +1119,9 @@ uint16_t MAIN_D_801307A0[10] = {
 	0x8000, 0x0000,
 };
 
-uint8_t MAIN_D_801307B4[12] = {
-	0x49, 0x6e, 0x20, 0x68, 0x61, 0x6e, 0x64, 0x00,
-	0x00, 0x00, 0x00, 0x00,
-};
+uint8_t MAIN_D_801307B4[12] = "In hand";
 
-uint8_t MAIN_D_801307C0[12] = {
-	0x4b, 0x65, 0x65, 0x70, 0x69, 0x6e, 0x67, 0x00,
-	0x00, 0x00, 0x00, 0x00,
-};
+uint8_t MAIN_D_801307C0[12] = "Keeping";
 
 char MAIN_D_801307CC[20] = "You have Will trade";
 // clang-format on
@@ -2173,7 +2167,7 @@ void createShopBitBox(int32_t showBits)
 }
 
 void showShopkeeperSelection(int32_t idx, int32_t owner, int32_t boxId,
-                             int32_t *outSelection)
+                        int32_t *outSelection)
 {
 	showMapheadSelection(idx, owner, boxId, outSelection, 0xff);
 }

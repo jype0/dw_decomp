@@ -28,6 +28,8 @@ static void *trn2_off_functions[] = {
 	TRN2_setupOffenseTraining,
 };
 
+int16_t MAIN_D_801353C6;
+
 // clang-format off
 int8_t TRN2_D_8008DA20[67][2] = {
 	{ 0x0, 0x0 }, { 0x2e, 0xa }, { 0x2e, 0xa }, { 0x33, 0xc },

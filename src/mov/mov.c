@@ -35,6 +35,10 @@ static void *mov_functions[] = {
 	MOV_initEnvironment,
 };
 
+int32_t MOVIE_HEIGHT;
+int32_t MOVIE_WIDTH;
+int32_t MOVIE_COMPLETED;
+
 MovieEntry MOV_MOVIES[4] = {
 	{ "\\MOVIE\\OP1.STR;1", 1, 3637 },
 	{ "\\MOVIE\\OP2.STR;1", 1, 3266 },

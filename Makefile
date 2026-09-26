@@ -21,7 +21,8 @@ SPLAT := $(PYTHON) -m splat split
 MWCCWRAP ?= bin/mwccwrap/mwccwrap.exe
 MWCCWRAP_FLAGS ?= -dll "bin/cc_mips/cc_mips_40.dll"
 MWCCWRAP_FLAGS += -O4 -sdata 8 -Werror -requireprotos -gccincludes \
-		  -lang c -Cpp_exceptions off -RTTI off
+		  -lang c -Cpp_exceptions off -RTTI off -multibyteaware \
+		  -codepage 932
 
 export MWCIncludes =
 
@@ -32,7 +33,8 @@ METROWRAP_FLAGS ?= --use-wibo --wibo-path $(WIBO)
 METROWRAP_FLAGS += --mwcc-path $(MWCCWRAP) --split-sections \
 		 --elf-flags 0x00001001 \
 		 --as-march r3000 \
-		 --macro-inc-path include/macro.inc
+		 --macro-inc-path include/macro.inc \
+		 --target-encoding windows-31j
 
 OBJDIFF ?= bin/objdiff-cli-linux-x86_64
 
@@ -66,11 +68,7 @@ MAIN_SBSS := \
 	$(BUILDDIR)/generated/unk_0x80134E1C.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E50.sbss.s \
 	$(BUILDDIR)/generated/unk_0x80134E68.sbss.s \
-	$(BUILDDIR)/generated/unk_0x80134E90.sbss.s \
-	$(BUILDDIR)/generated/unk_0x80135078.sbss.s \
-	$(BUILDDIR)/generated/unk_0x80135324.sbss.s \
-	$(BUILDDIR)/generated/unk_0x801353A8.sbss.s \
-	$(BUILDDIR)/generated/unk_0x801353F0.sbss.s
+	$(BUILDDIR)/generated/unk_0x80134E90.sbss.s
 
 MAIN_BSS := \
 	$(BUILDDIR)/generated/libapi.bss.s \
@@ -107,13 +105,9 @@ MAIN_SRC := \
 	src/main/bubble.c \
 	src/main/butterfly.c \
 	src/main/clock.c \
-	src/main/doo2.c \
-	src/main/dooa.c \
 	src/main/door_mapdata.c \
-	src/main/eab.c \
 	src/main/efe.c \
 	src/main/efe_table.c \
-	src/main/endi.c \
 	src/main/entity_text.c \
 	src/main/evl.c \
 	src/main/evolution.c \
@@ -135,8 +129,6 @@ MAIN_SRC := \
 	src/main/map_object.c \
 	src/main/math.c \
 	src/main/model.c \
-	src/main/mov.c \
-	src/main/murd.c \
 	src/main/overworld.c \
 	src/main/overworld_card_text.c \
 	src/main/overworld_evochart_detail.c \
@@ -157,12 +149,9 @@ MAIN_SRC := \
 	src/main/sjis.c \
 	src/main/sound.c \
 	src/main/sound_async.c \
-	src/main/std.c \
 	src/main/tamer.c \
 	src/main/toilet_data.c \
 	src/main/tournament.c \
-	src/main/trn.c \
-	src/main/trn2.c \
 	src/main/ui.c \
 	src/main/utils.c \
 	src/main/utils2.c \
@@ -519,6 +508,11 @@ $(BUILDDIR)/%.s.o: %.s
 # Fix objdiff jump table mismatches by making jump table labels local
 C_ASM_OBJ := $(patsubst $(BUILDDIR)/src/%.c.o,$(BUILDDIR)/$(ASM_DIR)/%.s.o,$(filter %.c.o,$(OBJ)))
 $(C_ASM_OBJ): ASFLAGS += -Wa,--defsym,LOCAL_JLABELS=1
+
+# Add a C file's small data in the main executable to its objdiff target
+c_sdata_asm = $(wildcard $(1:$(BUILDDIR)/$(ASM_DIR)/%.s.o=$(ASM_DIR)/main/data/%.sdata.s))
+$(foreach o,$(C_ASM_OBJ),$(foreach s,$(call c_sdata_asm,$(o)),$(eval $(o): $(s))))
+$(foreach o,$(C_ASM_OBJ),$(foreach s,$(call c_sdata_asm,$(o)),$(eval $(o): ASFLAGS += -Wa,$(s))))
 
 $(MAIN_SBSS) &: config/sbss.yaml config/symbols.txt
 	@mkdir -p $(dir $@)

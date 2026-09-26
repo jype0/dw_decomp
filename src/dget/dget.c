@@ -17,7 +17,6 @@ extern uint16_t ACTIVE_MAP_SCRIPT;
 
 extern uint16_t SELECTION_MENU_STATE;
 
-extern int32_t MAIN_D_801353B0;
 extern uint8_t ACTIVE_INSTRUCTION;
 extern uint8_t SCRIPT_STATE_3;
 extern uint16_t SCRIPT_STATE_4;
@@ -75,6 +74,18 @@ static void *dget_functions[] = {
 	buildScheduleEntries,
 	buildScheduleLabels,
 	fillEnabledTournamentTable,
+};
+
+uint8_t *TOURNAMENT_ARRAY;
+uint8_t TOURNAMENT_SELECTED_COLUMN;
+uint8_t TOURNAMENT_SELECTED_ROW;
+int32_t MAIN_D_801353B0;
+
+static void *dget_sbss_order[] = {
+	&MAIN_D_801353B0,
+	&TOURNAMENT_SELECTED_ROW,
+	&TOURNAMENT_SELECTED_COLUMN,
+	&TOURNAMENT_ARRAY,
 };
 
 void fillEnabledTournamentTable(void)
