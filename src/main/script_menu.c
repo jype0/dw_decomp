@@ -32,7 +32,7 @@ void MAIN_func_8010B648(void)
 	switch (SELECTION_MENU_STATE) {
 	case 0: {
 		int32_t hasItems;
-		initializeItemMenuBox(&MAIN_D_80134F68, 0x9c, 6, 0xd2,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x9c, 6, 0xd2,
 		                      0x18, 6, 0x5a);
 		hasItems = MAIN_func_80106D28();
 		MAIN_D_80134F70 = 0;
@@ -54,11 +54,11 @@ void MAIN_func_8010B648(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
-		MAIN_func_800FC968(1);
+		createShopBitBox(1);
 		MAIN_func_800FCA14(3, 0xfd, 2, &MAIN_D_80134F70);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_4 = 4;
@@ -66,8 +66,8 @@ void MAIN_func_8010B648(void)
 		break;
 	case 4:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 2;
-		MAIN_func_800FCA3C();
+		ITEM_MENU_TYPE = 2;
+		createItemMenuBox();
 		showShopkeeperTextbox(8, owner, 0);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
@@ -158,7 +158,7 @@ void MAIN_func_8010B9D8(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0xc, 6, 0xb2, 0x18, 6,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0xc, 6, 0xb2, 0x18, 6,
 		                      0x5a);
 		if (MAIN_func_80107000() != 0) {
 			SELECTION_MENU_STATE = 3;
@@ -173,12 +173,12 @@ void MAIN_func_8010B9D8(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 3;
+		ITEM_MENU_TYPE = 3;
 		MAIN_func_80107110();
 		showMapHeadTextbox(0, owner, 0, 0x4d3);
 		SELECTION_MENU_STATE = 1;
@@ -198,7 +198,7 @@ void MAIN_func_8010BB0C(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0x84, 6, 0xd2, 0x18,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x84, 6, 0xd2, 0x18,
 		                      6, 0x5a);
 		MAIN_func_80107200();
 		SELECTION_MENU_STATE = 3;
@@ -207,12 +207,12 @@ void MAIN_func_8010BB0C(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 4;
+		ITEM_MENU_TYPE = 4;
 		MAIN_func_80107110();
 		showMapHeadTextbox(8, owner, 0, 0x4d3);
 		SELECTION_MENU_STATE = 1;
@@ -233,9 +233,9 @@ void MAIN_func_8010BC10(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0x84, 6, 0x9a, 0x18,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x84, 6, 0x9a, 0x18,
 		                      6, 0x5a);
-		initializeItemMenuBox(&MAIN_D_80134F6C, 0x100, 6, 0xb2, 0x18,
+		initializeItemMenuBox(&ITEM_MENU_RIGHT, 0x100, 6, 0xb2, 0x18,
 		                      6, 0x5a);
 		showMapHeadTextbox(0, owner, 0, 0x4d4);
 		SELECTION_MENU_STATE = 1;
@@ -245,13 +245,13 @@ void MAIN_func_8010BC10(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F6C);
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_RIGHT);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
 		setInputRepeatMask(0);
-		MAIN_func_800FC968(0);
+		createShopBitBox(0);
 		showMapheadSelection(1, 0xfd, 3, &selection, 0x4d4);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_4 = 4;
@@ -259,7 +259,7 @@ void MAIN_func_8010BC10(void)
 		break;
 	case 4:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 6;
+		ITEM_MENU_TYPE = 6;
 		MAIN_func_80107200();
 		MAIN_func_80107110();
 		showMapHeadTextbox(5, owner, 0, 0x4d4);
@@ -268,9 +268,9 @@ void MAIN_func_8010BC10(void)
 		break;
 	case 5:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 7;
+		ITEM_MENU_TYPE = 7;
 		MAIN_func_801072C4();
-		MAIN_func_800FCA3C();
+		createItemMenuBox();
 		showMapHeadTextbox(6, owner, 0, 0x4d4);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
@@ -294,10 +294,10 @@ void MAIN_func_8010BC10(void)
 		if (MERIT > 9999) {
 			MERIT = 9999;
 		}
-		MAIN_D_80134F84 = 1;
-		owner = getCardAmount(MAIN_D_80134F78);
+		UPDATE_SHOP_BIT_BOX = 1;
+		owner = getCardAmount(SHOP_ITEM_TYPE);
 		owner = (owner - 1u);
-		setCardAmount(MAIN_D_80134F78, owner);
+		setCardAmount(SHOP_ITEM_TYPE, owner);
 		SELECTION_MENU_STATE = 3;
 		SCRIPT_STATE_3 = 0;
 		MAIN_func_800FDFB4();
@@ -321,8 +321,8 @@ void MAIN_func_8010BC10(void)
 	case 0xc:
 		triggerBoxCloseFlag(1);
 		MERIT -= MAIN_D_8013500C;
-		MAIN_D_80134F84 = 1;
-		giveItem(MAIN_D_80134F78, 1);
+		UPDATE_SHOP_BIT_BOX = 1;
+		giveItem(SHOP_ITEM_TYPE, 1);
 		SELECTION_MENU_STATE = 3;
 		SCRIPT_STATE_3 = 0;
 		MAIN_func_800FDFB4();
@@ -337,9 +337,9 @@ void MAIN_func_8010BF68(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0x100, 5, 0x88, 0x28,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x100, 5, 0x88, 0x28,
 		                      6, 0x4a);
-		initializeItemMenuBox(&MAIN_D_80134F6C,
+		initializeItemMenuBox(&ITEM_MENU_RIGHT,
 		                      INVENTORY.size << 1, 5, 0x88, 0x28,
 		                      6, 0x4a);
 		showMapHeadTextbox(0, owner, 0, 0x4d5);
@@ -350,8 +350,8 @@ void MAIN_func_8010BF68(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F6C);
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_RIGHT);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
@@ -363,7 +363,7 @@ void MAIN_func_8010BF68(void)
 		break;
 	case 4:
 		setInputRepeatMask(0x5060);
-		MAIN_D_80135011 = 5;
+		ITEM_MENU_TYPE = 5;
 		MAIN_func_80107444();
 		MAIN_func_80107660();
 		showMapHeadTextbox(3, owner, 0, 0x4d5);
@@ -391,7 +391,7 @@ void openJukebox(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0x7e, 6, 0xd2, 0x18,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x7e, 6, 0xd2, 0x18,
 		                      6, 0x5a);
 		MAIN_func_80107784();
 		showMapHeadTextbox(3, owner, 0, 0x4d6);
@@ -402,7 +402,7 @@ void openJukebox(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		playBGM(ACTIVE_BGM_FONT);
 		readMapTFS(CURRENT_MAP_ID);
 		ACTIVE_INSTRUCTION = 0;
@@ -432,7 +432,7 @@ void MAIN_func_8010C28C(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0xc, 6, 0xd2, 0x18, 6,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0xc, 6, 0xd2, 0x18, 6,
 		                      0x5a);
 		MAIN_func_80107AB8();
 		showMapHeadTextbox(4, owner, 0, 0x4d6);
@@ -443,11 +443,11 @@ void MAIN_func_8010C28C(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
-		MAIN_func_800FC968(1);
+		createShopBitBox(1);
 		MAIN_func_80107B98();
 		setInputRepeatMask(0x5000);
 		SELECTION_MENU_STATE = 1;
@@ -465,7 +465,7 @@ void MAIN_func_8010C28C(void)
 		triggerBoxCloseFlag(2);
 		triggerBoxCloseFlag(1);
 
-		idx = MAIN_D_80134F68->buf[(MAIN_D_80134F68->topRow + MAIN_D_80134F68->cursor) * 2] & 0x7f;
+		idx = ITEM_MENU_LEFT->buf[(ITEM_MENU_LEFT->topRow + ITEM_MENU_LEFT->cursor) * 2] & 0x7f;
 		writePStat(PSTAT_247, MAIN_D_8013024C[idx].mapId);
 		writePStat(PSTAT_248, MAIN_D_8013024C[idx].unk_0x1);
 		CURRENT_SCRIPT_PTR = (int32_t)getScript(0);
@@ -493,8 +493,8 @@ void MAIN_func_8010C4B0(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 6, 3, 0, 0, 0, 0);
-		initializeItemMenuBox(&MAIN_D_80134F6C, 6, 3, 0, 0, 0, 0);
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 6, 3, 0, 0, 0, 0);
+		initializeItemMenuBox(&ITEM_MENU_RIGHT, 6, 3, 0, 0, 0, 0);
 		MAIN_func_80107C4C();
 		writePStat(PSTAT_249, 255);
 		showMapHeadTextbox(8, owner, 0, 0x4d6);
@@ -505,8 +505,8 @@ void MAIN_func_8010C4B0(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F6C);
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_RIGHT);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
@@ -528,8 +528,8 @@ void MAIN_func_8010C4B0(void)
 
 		triggerBoxCloseFlag(1);
 
-		giveResult = giveItem(MAIN_D_80134F6C->buf[(MAIN_D_80134F68->topRow +
-		                                            MAIN_D_80134F68->cursor) *
+		giveResult = giveItem(ITEM_MENU_RIGHT->buf[(ITEM_MENU_LEFT->topRow +
+		                                            ITEM_MENU_LEFT->cursor) *
 		                                           2],
 		                      1);
 		if (giveResult != 0) {

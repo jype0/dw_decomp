@@ -53,23 +53,23 @@ extern int16_t MAIN_D_80134F60;
 extern int32_t MAIN_D_80135024;
 extern int32_t MAIN_D_80135020;
 extern uint16_t MAIN_D_80135016;
-extern int32_t MAIN_D_80135018;
+extern int32_t ITEM_MENU_SUB_TEXTBOX_LINE;
 extern uint32_t POLLED_INPUT;
 extern int32_t MAIN_D_80134F94;
 extern uint16_t MAIN_D_801BE952[];
 extern uint16_t MAIN_D_801BE954[];
 extern uint16_t MAIN_D_801BE956[];
 extern BabyTypeTable MAIN_D_801345B4;
-extern int32_t MAIN_D_80134F88;
+extern int32_t BIT_BOX_SHOW_BITS;
 extern int16_t MAIN_D_801345BC[2];
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern uint16_t MAIN_D_801BE950[];
 extern int32_t MAIN_D_801BE948[];
 extern int32_t MAIN_D_801BE94C[];
-extern uint8_t MAIN_D_80134F81;
+extern uint8_t SHOP_AMOUNT;
 extern uint8_t MAIN_D_80134F82;
-extern uint8_t MAIN_D_80134F80;
-extern int32_t MAIN_D_80134F7C;
+extern uint8_t MAX_SHOP_AMOUNT;
+extern int32_t SHOP_ITEM_PRICE;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
 extern char *MAP_NAME_PTR[];
@@ -115,19 +115,19 @@ void renderMonochromonMoodBubble(int32_t instanceId);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
 int32_t worldPosToScreenPos(SVECTOR *worldPos, DVECTOR *screenPos);
 void closeTextbox(int32_t boxId, RECT *target);
-void MAIN_func_800FF0FC(ItemMenuBox *box, int32_t style);
-void MAIN_func_800FBC58(void);
-void MAIN_func_800FAB30(void);
-void MAIN_func_800FADE0(void);
-void MAIN_func_800FD534(ItemMenuBox *box, int32_t style);
-int32_t MAIN_func_800FD61C(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
+void redrawItemMenuRow(ItemMenuBox *box, int32_t style);
+void renderShopBitBox(void);
+void tickItemMenu(void);
+void renderItemMenu(void);
+void itemMenuCursorDown(ItemMenuBox *box, int32_t style);
+int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
 void MAIN_func_801000E4(void);
 int32_t shopFillBuyItemList(void);
-int32_t MAIN_func_800FAA68(void);
+int32_t fillInventoryItemList(void);
 int32_t MAIN_func_800FAFB0(void);
-void MAIN_func_800FB070(void);
-void MAIN_func_800FB0CC(void);
-void MAIN_func_800FBC00(void);
+void tickItemMenuDescriptionBox(void);
+void renderItemMenuDescriptionBox(void);
+void tickShopBitBox(void);
 uint8_t *doShopkeeperLine(int32_t idx);
 uint8_t *resolveMapHeadEntry(int32_t section, int32_t idx);
 void processInput(void);
@@ -137,14 +137,14 @@ int32_t isXPressedAfterDialogue(void);
 void *allocateArray(uint32_t size);
 void freeArray(uint32_t *array);
 uint8_t getRecycleId(uint8_t value);
-int32_t MAIN_func_800FCF88(ItemMenuBox *box);
-void MAIN_func_800FD3DC(ItemMenuBox *box, int32_t startRow, int32_t style);
-void MAIN_func_800FD428(ItemMenuBox *box, int32_t style);
-void MAIN_func_800FD4E8(ItemMenuBox *box, int32_t startRow, int32_t style);
-void MAIN_func_800FDF84(void);
-int32_t MAIN_func_800FE650(uint8_t a);
-void MAIN_func_800FF2A8(ItemMenuBox *box);
-void MAIN_func_800FF310(ItemMenuBox *box);
+int32_t isItemMenuBoxBusy(ItemMenuBox *box);
+void itemMenuCursorTop(ItemMenuBox *box, int32_t startRow, int32_t style);
+void itemMenuCursorUp(ItemMenuBox *box, int32_t style);
+void itemMenuCursorBottom(ItemMenuBox *box, int32_t startRow, int32_t style);
+void setItemMenuSubTextboxLine(void);
+int32_t flipTextboxPage(uint8_t a);
+void itemMenuSelectLast(ItemMenuBox *box);
+void itemMenuSelectFirst(ItemMenuBox *box);
 uint8_t *MAIN_func_800FF444(uint8_t *data, int32_t index);
 void terminateString(uint8_t *str, int32_t flag);
 uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used);
@@ -163,23 +163,23 @@ void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 int32_t advanceTextbox(int32_t boxId);
 void setupDialogueBox(uint8_t owner);
 int32_t MAIN_func_80101EF8(int32_t boxId, int32_t speakerId);
-void MAIN_func_800FB700(void);
-void MAIN_func_800FB8D4(void);
-void MAIN_func_800FBAA0(void);
-int32_t MAIN_func_800FCFB8(RECT *origin);
-int32_t MAIN_func_800FD244(RECT *origin);
-void MAIN_func_800FD7D8(int32_t boxId, int32_t idx, int16_t x, int16_t y);
-void MAIN_func_800FD8D4(ItemMenuBox *box);
-void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
-void MAIN_func_800FE150(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
+void layoutItemMenuAmountBox(void);
+void tickItemMenuConfirmBox(void);
+void renderItemMenuConfirmBox(void);
+int32_t createItemMenuAmountBox(RECT *origin);
+int32_t createItemMenuConfirmBox(RECT *origin);
+void renderItemMenuSprite(int32_t boxId, int32_t idx, int16_t x, int16_t y);
+void renderItemMenuScrollBar(ItemMenuBox *box);
+void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
+void renderInsetWithoutBox(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
 void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
-void MAIN_func_800FE258(int32_t spriteId, int16_t x, int16_t y, int32_t depth);
-void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void MAIN_func_800FEC30(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void MAIN_func_800FED64(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void MAIN_func_800FF338(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
+void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth);
+void layoutItemRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void layoutCardRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void layoutBgmTrackRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void layoutDestinationRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void layoutTradeRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void renderRaisedFrame(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
 int32_t MAIN_func_800FFA4C(int32_t boxId, int32_t flag);
 int32_t MAIN_func_800FFC1C(void);
 int32_t MAIN_func_800FFF24(void);
@@ -253,41 +253,41 @@ static void *script_common_text_order[] = {
 	padWithSpaces,
 	terminateString,
 	MAIN_func_800FF444,
-	MAIN_func_800FF338,
-	MAIN_func_800FF310,
-	MAIN_func_800FF2A8,
-	MAIN_func_800FF0FC,
-	MAIN_func_800FEEF0,
-	MAIN_func_800FED64,
-	MAIN_func_800FEC30,
-	MAIN_func_800FE9F0,
-	MAIN_func_800FE704,
-	MAIN_func_800FE650,
+	renderRaisedFrame,
+	itemMenuSelectFirst,
+	itemMenuSelectLast,
+	redrawItemMenuRow,
+	layoutTradeRow,
+	layoutDestinationRow,
+	layoutBgmTrackRow,
+	layoutCardRow,
+	layoutItemRow,
+	flipTextboxPage,
 	lostAllLives,
 	showMapHeadTextbox,
-	MAIN_func_800FE258,
-	MAIN_func_800FE150,
+	renderCardSprite,
+	renderInsetWithoutBox,
 	renderHorizontalLine,
 	MAIN_func_800FDFB4,
-	MAIN_func_800FDF84,
-	MAIN_func_800FDC5C,
-	MAIN_func_800FD8D4,
-	MAIN_func_800FD7D8,
-	MAIN_func_800FD61C,
-	MAIN_func_800FD534,
-	MAIN_func_800FD4E8,
-	MAIN_func_800FD428,
-	MAIN_func_800FD3DC,
-	MAIN_func_800FD244,
-	MAIN_func_800FCFB8,
-	MAIN_func_800FCF88,
-	MAIN_func_800FCCFC,
-	MAIN_func_800FCC98,
-	MAIN_func_800FCC40,
-	MAIN_func_800FCB3C,
-	MAIN_func_800FCA3C,
+	setItemMenuSubTextboxLine,
+	renderItemMenuItemList,
+	renderItemMenuScrollBar,
+	renderItemMenuSprite,
+	createItemMenuDescriptionBox,
+	itemMenuCursorDown,
+	itemMenuCursorBottom,
+	itemMenuCursorUp,
+	itemMenuCursorTop,
+	createItemMenuConfirmBox,
+	createItemMenuAmountBox,
+	isItemMenuBoxBusy,
+	layoutItemMenu,
+	openItemMenu,
+	getItemMenuFromType,
+	tickPickItemMenu,
+	createItemMenuBox,
 	MAIN_func_800FCA14,
-	MAIN_func_800FC968,
+	createShopBitBox,
 	destroyItemMenuBox,
 	showShopkeeperTextbox,
 	initializeItemMenuBox,
@@ -307,19 +307,19 @@ static void *script_common_text_order[] = {
 	renderMonochromonMoodBubble,
 	resolveMapHeadEntry,
 	doShopkeeperLine,
-	MAIN_func_800FBC58,
-	MAIN_func_800FBC00,
-	MAIN_func_800FBAA0,
-	MAIN_func_800FB8D4,
-	MAIN_func_800FB700,
+	renderShopBitBox,
+	tickShopBitBox,
+	renderItemMenuConfirmBox,
+	tickItemMenuConfirmBox,
+	layoutItemMenuAmountBox,
 	renderSellItemBox,
 	tickSellItemBox,
-	MAIN_func_800FB0CC,
-	MAIN_func_800FB070,
+	renderItemMenuDescriptionBox,
+	tickItemMenuDescriptionBox,
 	MAIN_func_800FAFB0,
-	MAIN_func_800FADE0,
-	MAIN_func_800FAB30,
-	MAIN_func_800FAA68,
+	renderItemMenu,
+	tickItemMenu,
+	fillInventoryItemList,
 	shopFillBuyItemList,
 };
 
@@ -425,7 +425,7 @@ GsSPRITE MAIN_D_8012FDC0 = {
 	0,				/* rotate */
 };
 
-MenuTextLayout MAIN_D_8012FDE4 = {
+MenuTextLayout AMOUNT_BOX_LAYOUT = {
 	{
 		0x001a, 0x0007, 0x0008, 0x004a,
 		0x001b, 0x0005, 0x0059, 0x002b,
@@ -434,7 +434,7 @@ MenuTextLayout MAIN_D_8012FDE4 = {
 	},
 };
 
-MenuTextLayout MAIN_D_8012FE04 = {
+MenuTextLayout CONFIRM_BOX_LAYOUT = {
 	{
 		0x0000, 0x0000, 0x0004, 0x0002,
 		0x0060, 0x0000, 0x000c, 0x000e,
@@ -443,7 +443,7 @@ MenuTextLayout MAIN_D_8012FE04 = {
 	},
 };
 
-BoxUVTable MAIN_D_8012FE24 = {
+BoxUVTable ITEM_MENU_HEADER_UVS = {
 	{
 		0x0200, 0x01a2, 0x0014, 0x0007,
 		0x0214, 0x01a2, 0x0014, 0x0007,
@@ -703,14 +703,14 @@ BattleEntry MAIN_D_8013024C[6] = {
 	{ 0x69, 0x00, 0x00d2, 0x000009c4 },
 };
 
-int16_t MAIN_D_8013027C[32] = {
+int16_t ITEM_MENU_POS[32] = {
 	0xffc9, 0xff9e, 0x00be, 0x0081, 0xffb9, 0xff9e, 0x00de, 0x0081,
 	0xffb9, 0xff9e, 0x00de, 0x0081, 0xffc9, 0xff9e, 0x00be, 0x0081,
 	0xffb9, 0xff9e, 0x00de, 0x0081, 0xffdc, 0xff9e, 0x00a6, 0x0081,
 	0xffdc, 0xff9e, 0x00a6, 0x0081, 0xffc9, 0xff9e, 0x00be, 0x0081,
 };
 
-RECT MAIN_D_801302BC[8] = {
+RECT ITEM_MENU_DESCRIPTION_RECTS[8] = {
 	{ 5, 17, 170, 18 },
 	{ 5, 17, 202, 18 },
 	{ 5, 17, 202, 18 },
@@ -721,7 +721,7 @@ RECT MAIN_D_801302BC[8] = {
 	{ 5, 17, 170, 18 },
 };
 
-int16_t MAIN_D_801302FC[8] = {
+int16_t SELECTION_CURSOR_WIDTHS[8] = {
 	0x00aa, 0x00ca, 0x00ca, 0x00aa, 0x00ca, 0x0092, 0x0092, 0x00aa,
 };
 
@@ -1135,10 +1135,10 @@ int32_t shopFillBuyItemList()
 	uint32_t inventorySize;
 	int32_t canBuyAnything;
 	inventorySize = INVENTORY.size;
-	itemList = MAIN_D_80134F68->buf;
+	itemList = ITEM_MENU_LEFT->buf;
 	canBuyAnything = 0;
 	hasSpace = 0;
-	MAIN_D_80134F68->itemCount = 0;
+	ITEM_MENU_LEFT->itemCount = 0;
 
 	for (slotId = 0; slotId < inventorySize; slotId++) {
 		if (INVENTORY.types.array[slotId] == 0xff) {
@@ -1153,7 +1153,7 @@ int32_t shopFillBuyItemList()
 			continue;
 		}
 
-		MAIN_D_80134F68->itemCount++;
+		ITEM_MENU_LEFT->itemCount++;
 		*itemList++ = itemId;
 
 		if (ITEM_PARA[itemId].value > MONEY) {
@@ -1195,7 +1195,7 @@ end:
 	return canBuyAnything;
 }
 
-int32_t MAIN_func_800FAA68(void)
+int32_t fillInventoryItemList(void)
 {
 	int32_t i;
 	uint8_t *buf;
@@ -1204,8 +1204,8 @@ int32_t MAIN_func_800FAA68(void)
 	int32_t amount;
 
 	result = 0;
-	buf = MAIN_D_80134F6C->buf;
-	MAIN_D_80134F6C->itemCount = 0;
+	buf = ITEM_MENU_RIGHT->buf;
+	ITEM_MENU_RIGHT->itemCount = 0;
 
 	for (i = 0; i < INVENTORY.size; i++) {
 		type = INVENTORY.types.array[i];
@@ -1220,7 +1220,7 @@ int32_t MAIN_func_800FAA68(void)
 			type = 0xff;
 		}
 
-		MAIN_D_80134F6C->itemCount++;
+		ITEM_MENU_RIGHT->itemCount++;
 		*buf++ = type;
 		*buf++ = amount;
 	}
@@ -1228,15 +1228,15 @@ int32_t MAIN_func_800FAA68(void)
 	return result;
 }
 
-void MAIN_func_800FAB30(void)
+void tickItemMenu(void)
 {
 	ItemMenuBox *box;
 	RECT rect;
 	RECT *src;
 
-	box = MAIN_func_800FCC40();
+	box = getItemMenuFromType();
 
-	if (MAIN_func_800FCF88(box) != 0) {
+	if (isItemMenuBoxBusy(box) != 0) {
 		return;
 	}
 
@@ -1261,24 +1261,24 @@ void MAIN_func_800FAB30(void)
 	}
 
 	if (isKeyDown(0x40)) {
-		src = &MAIN_D_801302BC[MAIN_D_80135011];
+		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE];
 		setRECT(&rect, src->x, src->y, src->w, src->h);
 
-		switch (MAIN_D_80135011) {
+		switch (ITEM_MENU_TYPE) {
 		default:
-			MAIN_func_800FCFB8(&rect);
+			createItemMenuAmountBox(&rect);
 			break;
 		case 7:
 			MAIN_func_800FAFB0();
 			break;
 		case 5:
-			MAIN_func_800FD244(&rect);
+			createItemMenuConfirmBox(&rect);
 			break;
 		}
 	} else if (isKeyDown(0x10)) {
-		if (MAIN_D_80135011 == 7) {
+		if (ITEM_MENU_TYPE == 7) {
 			SELECTION_MENU_STATE = 0xa;
-		} else if (MAIN_D_80135011 == 5) {
+		} else if (ITEM_MENU_TYPE == 5) {
 			if (isTriggerSet(3) != 0) {
 				writePStat(0xfe, 0xff);
 				unsetTrigger(3);
@@ -1291,20 +1291,20 @@ void MAIN_func_800FAB30(void)
 		playSound(0, 4);
 	} else if (isKeyDown(0x1000)) {
 		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD3DC(box, 9, 0);
+			itemMenuCursorTop(box, 9, 0);
 		} else {
-			MAIN_func_800FD428(box, 0);
+			itemMenuCursorUp(box, 0);
 		}
 	} else if (isKeyDown(0x4000)) {
 		if (POLLED_INPUT & 8) {
-			MAIN_func_800FD4E8(box, 9, 0);
+			itemMenuCursorBottom(box, 9, 0);
 		} else {
-			MAIN_func_800FD534(box, 0);
+			itemMenuCursorDown(box, 0);
 		}
 	} else if (isKeyDown(0x800)) {
-		src = &MAIN_D_801302BC[MAIN_D_80135011];
+		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE];
 		setRECT(&rect, src->x, src->y, src->w, src->h);
-		MAIN_func_800FD61C(box, &rect, 1);
+		createItemMenuDescriptionBox(box, &rect, 1);
 		playSound(0, 3);
 	}
 }
@@ -1314,12 +1314,12 @@ int32_t MAIN_func_800FAFB0(void)
 	ItemMenuBox *box;
 	int32_t idx;
 
-	box = MAIN_func_800FCC40();
+	box = getItemMenuFromType();
 	idx = (box->topRow + box->cursor) * 2;
-	MAIN_D_80134F78 = box->buf[idx];
+	SHOP_ITEM_TYPE = box->buf[idx];
 
-	if (MAIN_D_80134F78 != 0xff && box->buf[idx + 1] != 0) {
-		MAIN_D_8013500C = ITEM_PARA[MAIN_D_80134F78].meritValue;
+	if (SHOP_ITEM_TYPE != 0xff && box->buf[idx + 1] != 0) {
+		MAIN_D_8013500C = ITEM_PARA[SHOP_ITEM_TYPE].meritValue;
 		SELECTION_MENU_STATE = 0xb;
 		SCRIPT_STATE_3 = 0;
 		playSound(0, 3);
@@ -1331,7 +1331,7 @@ int32_t MAIN_func_800FAFB0(void)
 	return 0;
 }
 
-void MAIN_func_800FB070(void)
+void tickItemMenuDescriptionBox(void)
 {
 	if (UI_BOX_DATA[3].state != 1) {
 		return;
@@ -1349,7 +1349,7 @@ void MAIN_func_800FB070(void)
 	playSound(0, 3);
 }
 
-void MAIN_func_800FB0CC(void)
+void renderItemMenuDescriptionBox(void)
 {
 	renderString(0, (int16_t)(UI_BOX_DATA[3].finalPos.x + 6),
 	             (int16_t)(UI_BOX_DATA[3].finalPos.y + 5), 0xfc, 0xc, 0,
@@ -1369,24 +1369,24 @@ void renderSellItemBox(void)
 	int16_t sx;
 	int16_t sy;
 
-	layout = MAIN_D_8012FDE4;
+	layout = AMOUNT_BOX_LAYOUT;
 	rowPx = TEXT_BOX_DATA[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x;
 	y = UI_BOX_DATA[3].finalPos.y;
 	renderHorizontalLine(3, 4, 0x17, 0x7a);
 	renderHorizontalLine(3, 0xc, 0x3c, 0x6a);
-	MAIN_func_800FE150(3, 0x55, 0x2a, 0x1a, 0xe);
+	renderInsetWithoutBox(3, 0x55, 0x2a, 0x1a, 0xe);
 	sx = x + 8;
 	sy = y + 5;
 
-	if (MAIN_D_80135011 < 3) {
-		renderItemSprite(MAIN_D_80134F78, sx, sy, 3);
+	if (ITEM_MENU_TYPE < 3) {
+		renderItemSprite(SHOP_ITEM_TYPE, sx, sy, 3);
 	} else {
-		card = (CardData *)(MAIN_D_80134F78 * 4);
+		card = (CardData *)(SHOP_ITEM_TYPE * 4);
 		card = (CardData *)((uint32_t)card + (uint32_t)CARD_DATA);
 		sx += 2;
 		sy += 2;
-		MAIN_func_800FE258(card->spriteId, sx, sy, 3);
+		renderCardSprite(card->spriteId, sx, sy, 3);
 	}
 
 	entry = layout.v;
@@ -1401,7 +1401,7 @@ void renderSellItemBox(void)
 	}
 }
 
-void MAIN_func_800FADE0(void)
+void renderItemMenu(void)
 {
 	int16_t bx;
 	int16_t by;
@@ -1410,53 +1410,53 @@ void MAIN_func_800FADE0(void)
 
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
-	MAIN_func_800FD7D8(1, 0, bx + 8, by + 5);
-	if (MAIN_D_80135011 != 5) {
-		if (MAIN_D_80135011 != 7) {
-			MAIN_func_800FD7D8(1, 1, bx + 0x80, by + 5);
-			if (MAIN_D_80135011 != 0) {
-				MAIN_func_800FD7D8(1, 3, bx + 0xb6, by + 5);
+	renderItemMenuSprite(1, 0, bx + 8, by + 5);
+	if (ITEM_MENU_TYPE != 5) {
+		if (ITEM_MENU_TYPE != 7) {
+			renderItemMenuSprite(1, 1, bx + 0x80, by + 5);
+			if (ITEM_MENU_TYPE != 0) {
+				renderItemMenuSprite(1, 3, bx + 0xb6, by + 5);
 			}
 		} else {
-			MAIN_func_800FD7D8(1, 2, bx + 0x80, by + 5);
+			renderItemMenuSprite(1, 2, bx + 0x80, by + 5);
 		}
 	} else {
-		MAIN_func_800FD7D8(1, 3, bx + 0x80, by + 5);
+		renderItemMenuSprite(1, 3, bx + 0x80, by + 5);
 	}
-	box = MAIN_func_800FCC40();
-	MAIN_func_800FD8D4(box);
+	box = getItemMenuFromType();
+	renderItemMenuScrollBar(box);
 	cy = by + box->cursor * 0x12 + 0x11;
 draw:
-	renderSelectionCursor(bx + 5, cy, MAIN_D_801302FC[MAIN_D_80135011], 0x12, 5);
-	MAIN_func_800FDC5C(box, bx + 0x1a, by + 0x13, bx + 8, by + 0x12, 0);
+	renderSelectionCursor(bx + 5, cy, SELECTION_CURSOR_WIDTHS[ITEM_MENU_TYPE], 0x12, 5);
+	renderItemMenuItemList(box, bx + 0x1a, by + 0x13, bx + 8, by + 0x12, 0);
 }
 
-void MAIN_func_800FB700(void)
+void layoutItemMenuAmountBox(void)
 {
 	uint8_t *out;
 	char *name;
 	uint32_t total;
 
-	out = TEXT_BUFFERS_PTR + (MAIN_D_80135018 << 6);
+	out = TEXT_BUFFERS_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
 
-	if (MAIN_D_80135011 < 3) {
-		strcpy(out, ITEM_PARA[MAIN_D_80134F78].name);
-		out += strlen(ITEM_PARA[MAIN_D_80134F78].name);
+	if (ITEM_MENU_TYPE < 3) {
+		strcpy(out, ITEM_PARA[SHOP_ITEM_TYPE].name);
+		out += strlen(ITEM_PARA[SHOP_ITEM_TYPE].name);
 	} else {
-		strcpy(out, name = DIGIMON_DATA[CARD_DATA[MAIN_D_80134F78].digimonId].name);
+		strcpy(out, name = DIGIMON_DATA[CARD_DATA[SHOP_ITEM_TYPE].digimonId].name);
 		out += strlen(name);
 	}
 
 	*out++ = 0x18;
 	*out++ = 0;
-	out = intToStringSJIS(out, MAIN_D_80134F7C, 5, 0);
+	out = intToStringSJIS(out, SHOP_ITEM_PRICE, 5, 0);
 	*out++ = 0x19;
 	*out++ = 0;
-	out = intToStringSJIS(out, MAIN_D_80134F81, 2, 0);
+	out = intToStringSJIS(out, SHOP_AMOUNT, 2, 0);
 	*out++ = 0x1a;
 	*out++ = 0;
 
-	total = MAIN_D_80134F7C * MAIN_D_80134F81;
+	total = SHOP_ITEM_PRICE * SHOP_AMOUNT;
 	if (total >= 0xf4240) {
 		total = 0xf423f;
 	}
@@ -1468,7 +1468,7 @@ void MAIN_func_800FB700(void)
 	TEXT_BOX_DATA[3].writeCount++;
 }
 
-void MAIN_func_800FB8D4(void)
+void tickItemMenuConfirmBox(void)
 {
 	ItemMenuBox *box;
 	uint8_t amount;
@@ -1488,32 +1488,32 @@ void MAIN_func_800FB8D4(void)
 	}
 
 	if (isKeyDown(0x8000)) {
-		MAIN_D_80134F81 = 0;
+		SHOP_AMOUNT = 0;
 		playSound(0, 2);
 		return;
 	}
 
 	if (isKeyDown(0x2000)) {
-		MAIN_D_80134F81 = 1;
+		SHOP_AMOUNT = 1;
 		playSound(0, 2);
 		return;
 	}
 
 	if (isKeyDown(0x40)) {
 		triggerBoxCloseFlag(3);
-		if (MAIN_D_80134F81 == 0) {
-			if (MAIN_D_80135011 != 5) {
-				box = MAIN_func_800FCC40();
-				amount = getCardAmount(MAIN_D_80134F78);
+		if (SHOP_AMOUNT == 0) {
+			if (ITEM_MENU_TYPE != 5) {
+				box = getItemMenuFromType();
+				amount = getCardAmount(SHOP_ITEM_TYPE);
 				amount = amount + 1u;
-				setCardAmount(MAIN_D_80134F78, amount);
-				MONEY -= MAIN_D_8012FFC4[CARD_DATA[MAIN_D_80134F78].spriteId];
+				setCardAmount(SHOP_ITEM_TYPE, amount);
+				MONEY -= MAIN_D_8012FFC4[CARD_DATA[SHOP_ITEM_TYPE].spriteId];
 				SCRIPT_STATE_PTR->smth[box->cursor] = 0xff;
-				MAIN_D_80134F84 = 1;
+				UPDATE_SHOP_BIT_BOX = 1;
 				SELECTION_MENU_STATE = 4;
 				MAIN_func_800FDFB4();
 			} else {
-				writePStat(0xfe, MAIN_D_80134F78);
+				writePStat(0xfe, SHOP_ITEM_TYPE);
 				unsetTrigger(3);
 				SELECTION_MENU_STATE = 4;
 				playSound(0, 3);
@@ -1524,7 +1524,7 @@ void MAIN_func_800FB8D4(void)
 	}
 }
 
-void MAIN_func_800FBAA0(void)
+void renderItemMenuConfirmBox(void)
 {
 	MenuTextLayout layout;
 	int16_t *entry;
@@ -1533,7 +1533,7 @@ void MAIN_func_800FBAA0(void)
 	int16_t y;
 	int32_t i;
 
-	layout = MAIN_D_8012FE04;
+	layout = CONFIRM_BOX_LAYOUT;
 	entry = layout.v;
 	rowPx = TEXT_BOX_DATA[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x + 4;
@@ -1545,19 +1545,19 @@ void MAIN_func_800FBAA0(void)
 		i++;
 		entry += 5;
 	}
-	renderSelectionCursor(x + 8 + MAIN_D_80134F81 * 47, y + 0x12, 0x28,
+	renderSelectionCursor(x + 8 + SHOP_AMOUNT * 47, y + 0x12, 0x28,
 	                      0xe, 3);
 }
 
-void MAIN_func_800FBC00(void)
+void tickShopBitBox(void)
 {
 	int32_t line;
 	uint8_t saved;
 
-	if (MAIN_D_80134F84 != 0) {
-		MAIN_D_80134F84 = 0;
+	if (UPDATE_SHOP_BIT_BOX != 0) {
+		UPDATE_SHOP_BIT_BOX = 0;
 
-		if (MAIN_D_80134F88 != 0) {
+		if (BIT_BOX_SHOW_BITS != 0) {
 			line = 6;
 		} else {
 			line = 7;
@@ -1864,35 +1864,35 @@ void tickSellItemBox(void)
 		return;
 	}
 
-	if (MAIN_D_80134F81 != MAIN_D_80134F80 && isKeyDown(0x1000)) {
+	if (SHOP_AMOUNT != MAX_SHOP_AMOUNT && isKeyDown(0x1000)) {
 		if (POLLED_INPUT & 0x20) {
-			MAIN_D_80134F81 += 10;
-			if (MAIN_D_80134F81 > MAIN_D_80134F80) {
-				MAIN_D_80134F81 -= 10;
+			SHOP_AMOUNT += 10;
+			if (SHOP_AMOUNT > MAX_SHOP_AMOUNT) {
+				SHOP_AMOUNT -= 10;
 			}
 		} else {
-			MAIN_D_80134F81 += 1;
+			SHOP_AMOUNT += 1;
 		}
 
 		playSound(0, 2);
-		MAIN_func_800FB700();
+		layoutItemMenuAmountBox();
 
 		return;
 	}
-	if (MAIN_D_80134F81 != 1 && isKeyDown(0x4000)) {
+	if (SHOP_AMOUNT != 1 && isKeyDown(0x4000)) {
 		if (POLLED_INPUT & 0x20) {
-			q = MAIN_D_80134F81;
+			q = SHOP_AMOUNT;
 			q -= 10;
 			if (q <= 0) {
 				q += 10;
 			}
-			MAIN_D_80134F81 = q;
+			SHOP_AMOUNT = q;
 		} else {
-			MAIN_D_80134F81 -= 1;
+			SHOP_AMOUNT -= 1;
 		}
 
 		playSound(0, 2);
-		MAIN_func_800FB700();
+		layoutItemMenuAmountBox();
 
 		return;
 	}
@@ -1901,51 +1901,51 @@ void tickSellItemBox(void)
 		triggerBoxCloseFlag(3);
 		playSound(0, 4);
 	} else if (isKeyDown(0x80)) {
-		MAIN_D_80134F81 = MAIN_D_80134F80;
+		SHOP_AMOUNT = MAX_SHOP_AMOUNT;
 		playSound(0, 3);
 	} else if (isKeyDown(0x40)) {
-		if (MAIN_D_80135011 < 3) {
-			if (MAIN_D_80135011 == 1) {
-				MONEY += MAIN_D_80134F81 * MAIN_D_80134F7C;
+		if (ITEM_MENU_TYPE < 3) {
+			if (ITEM_MENU_TYPE == 1) {
+				MONEY += SHOP_AMOUNT * SHOP_ITEM_PRICE;
 				if (MONEY >= 0xf4240) {
 					MONEY = 0xf423f;
 				}
 
-				removeItem(MAIN_D_80134F78, MAIN_D_80134F81);
+				removeItem(SHOP_ITEM_TYPE, SHOP_AMOUNT);
 				owner = readPStat(0xfe);
 			} else {
-				unitPrice = MAIN_D_80134F7C;
+				unitPrice = SHOP_ITEM_PRICE;
 				savings = isPartnerBaby();
 				if (savings != 0) {
 					unitPrice = unitPrice * 90 / 100;
-					savings = MAIN_D_80134F7C;
+					savings = SHOP_ITEM_PRICE;
 					savings -= unitPrice;
 					MAIN_D_8013500C =
-						MAIN_D_80134F81 * savings;
+						SHOP_AMOUNT * savings;
 				}
 
-				qty = MAIN_D_80134F81;
+				qty = SHOP_AMOUNT;
 				MONEY -= qty * unitPrice;
-				giveItem(MAIN_D_80134F78, qty);
+				giveItem(SHOP_ITEM_TYPE, qty);
 
-				if (MAIN_D_80135011 == 2) {
-					owner = getRecycleId(MAIN_D_80134F78);
+				if (ITEM_MENU_TYPE == 2) {
+					owner = getRecycleId(SHOP_ITEM_TYPE);
 					SCRIPT_STATE_PTR->smth[owner + 6] -=
-						MAIN_D_80134F81;
+						SHOP_AMOUNT;
 				}
 
 				owner = 0xfd;
 			}
 			SELECTION_MENU_STATE = 7;
 		} else {
-			MONEY += MAIN_D_80134F81 * MAIN_D_80134F7C;
+			MONEY += SHOP_AMOUNT * SHOP_ITEM_PRICE;
 			if (MONEY >= 0xf4240) {
 				MONEY = 0xf423f;
 			}
 
-			owner = getCardAmount(MAIN_D_80134F78);
-			owner = (uint32_t)owner - MAIN_D_80134F81;
-			setCardAmount(MAIN_D_80134F78, owner);
+			owner = getCardAmount(SHOP_ITEM_TYPE);
+			owner = (uint32_t)owner - SHOP_AMOUNT;
+			setCardAmount(SHOP_ITEM_TYPE, owner);
 			owner = readPStat(0xfe);
 			SELECTION_MENU_STATE = 4;
 		}
@@ -1953,14 +1953,14 @@ void tickSellItemBox(void)
 		setupBoxOrigin(owner, &origin);
 		triggerBoxCloseFlag(3);
 		closeTextbox(3, &origin);
-		MAIN_D_80134F84 = 1;
+		UPDATE_SHOP_BIT_BOX = 1;
 		MAIN_func_800FDFB4();
 	}
 
-	MAIN_func_800FB700();
+	layoutItemMenuAmountBox();
 }
 
-void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void layoutTradeRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	int32_t idx;
@@ -1974,7 +1974,7 @@ void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	row0 = row;
 	row0 = row0;
-	idx = MAIN_D_80135011 + ((MAIN_D_80134F68->topRow + 5) + row);
+	idx = ITEM_MENU_TYPE + ((ITEM_MENU_LEFT->topRow + 5) + row);
 
 	if (isTriggerSet(idx) != 0) {
 		*out++ = 0x81;
@@ -1985,7 +1985,7 @@ void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	}
 
 	idx = (box->topRow + row0) * 2;
-	item = MAIN_D_80134F68->buf[idx];
+	item = ITEM_MENU_LEFT->buf[idx];
 	*out++ = 1;
 
 	if ((item & 0x80) != 0) {
@@ -2004,7 +2004,7 @@ void MAIN_func_800FEEF0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	*out++ = 1;
 	*out++ = 1;
 
-	item = MAIN_D_80134F6C->buf[idx];
+	item = ITEM_MENU_RIGHT->buf[idx];
 	strcpy((char *)out, ITEM_PARA[item].name);
 	out += strlen(ITEM_PARA[item].name);
 	terminateString(out, isLast);
@@ -2021,9 +2021,9 @@ void MAIN_func_800FC508(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F68, 0x100, 6, 0xb2, 0x18,
+		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x100, 6, 0xb2, 0x18,
 		                      6, 0x5a);
-		initializeItemMenuBox(&MAIN_D_80134F6C,
+		initializeItemMenuBox(&ITEM_MENU_RIGHT,
 		                      INVENTORY.size << 1, 6, 0xd2, 0x18,
 		                      6, 0x5a);
 		MAIN_D_80134F70 = 0;
@@ -2052,12 +2052,12 @@ void MAIN_func_800FC508(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F6C);
-		destroyItemMenuBox(&MAIN_D_80134F68);
+		destroyItemMenuBox(&ITEM_MENU_RIGHT);
+		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
-		MAIN_func_800FC968(1);
+		createShopBitBox(1);
 		MAIN_func_800FCA14(2, 0xfd, 3, &MAIN_D_80134F70);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_4 = 4;
@@ -2065,18 +2065,18 @@ void MAIN_func_800FC508(void)
 		break;
 	case 4:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 0;
+		ITEM_MENU_TYPE = 0;
 		shopFillBuyItemList();
-		MAIN_func_800FCA3C();
+		createItemMenuBox();
 		showShopkeeperTextbox(8, npcId, 0);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
 		break;
 	case 5:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 1;
-		MAIN_func_800FAA68();
-		MAIN_func_800FCA3C();
+		ITEM_MENU_TYPE = 1;
+		fillInventoryItemList();
+		createItemMenuBox();
 		showShopkeeperTextbox(9, npcId, 0);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
@@ -2098,7 +2098,7 @@ void MAIN_func_800FC508(void)
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 
-		if (MAIN_D_80135011 == 0 && isPartnerBaby()) {
+		if (ITEM_MENU_TYPE == 0 && isPartnerBaby()) {
 			showShopkeeperTextbox(0xd, npcId, 0);
 		} else {
 			showShopkeeperTextbox(0xa, npcId, 0);
@@ -2147,23 +2147,23 @@ void destroyItemMenuBox(ItemMenuBox **box)
 	*box = 0;
 }
 
-void MAIN_func_800FC968(int32_t showBits)
+void createShopBitBox(int32_t showBits)
 {
 	RECT rect;
 	RECT origin;
 
-	MAIN_D_80134F84 = 1;
-	MAIN_D_80134F88 = showBits;
+	UPDATE_SHOP_BIT_BOX = 1;
+	BIT_BOX_SHOW_BITS = showBits;
 	if (UI_BOX_DATA[2].state == 1) {
 		return;
 	}
 
 	setupBoxOrigin(0xfd, &origin);
 	setRECT(&rect, -0x98, -0x62, 0x52, 0x21);
-	createTextbox(2, 0xe1, &rect, &origin, MAIN_func_800FBC00,
-	              MAIN_func_800FBC58);
+	createTextbox(2, 0xe1, &rect, &origin, tickShopBitBox,
+	              renderShopBitBox);
 	registerTextbox(2, 8, 1, 0, 0);
-	MAIN_func_800FBC00();
+	tickShopBitBox();
 }
 
 void MAIN_func_800FCA14(int32_t idx, int32_t owner, int32_t boxId,
@@ -2172,7 +2172,7 @@ void MAIN_func_800FCA14(int32_t idx, int32_t owner, int32_t boxId,
 	showMapheadSelection(idx, owner, boxId, outSelection, 0xff);
 }
 
-void MAIN_func_800FCA3C(void)
+void createItemMenuBox(void)
 {
 	RECT rect;
 	RECT origin;
@@ -2180,33 +2180,33 @@ void MAIN_func_800FCA3C(void)
 	ItemMenuBox *result;
 	int16_t *dims;
 
-	if (MAIN_D_80135011 == 1 || MAIN_D_80135011 == 5) {
+	if (ITEM_MENU_TYPE == 1 || ITEM_MENU_TYPE == 5) {
 		boxId = 0xfd;
 	} else {
 		boxId = readPStat(0xfe) & 0xff;
 	}
 
 	setupBoxOrigin(boxId, &origin);
-	result = MAIN_func_800FCC40();
-	dims = (int16_t *)((uint8_t *)MAIN_D_8013027C + MAIN_D_80135011 * 8);
+	result = getItemMenuFromType();
+	dims = (int16_t *)((uint8_t *)ITEM_MENU_POS + ITEM_MENU_TYPE * 8);
 	setRECT(&rect, dims[0], dims[1], dims[2], dims[3]);
-	createTextbox(1, 0xf1, &rect, &origin, MAIN_func_800FAB30,
-	              MAIN_func_800FADE0);
+	createTextbox(1, 0xf1, &rect, &origin, tickItemMenu,
+	              renderItemMenu);
 	registerTextbox(1, 9, 6, 1, 0);
-	MAIN_func_800FCC98(result, 1, 9);
-	MAIN_func_800FCCFC(result, 9, 0);
+	openItemMenu(result, 1, 9);
+	layoutItemMenu(result, 9, 0);
 	MAIN_D_8013500C = 0;
 }
 
-void MAIN_func_800FCB3C(void)
+void tickPickItemMenu(void)
 {
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&MAIN_D_80134F6C,
+		initializeItemMenuBox(&ITEM_MENU_RIGHT,
 		                      INVENTORY.size << 1, 6, 0x9a, 0x18,
 		                      6, 0x5a);
 
-		if (MAIN_func_800FAA68()) {
+		if (fillInventoryItemList()) {
 			SELECTION_MENU_STATE = 3;
 			SCRIPT_STATE_3 = 0;
 		} else {
@@ -2219,13 +2219,13 @@ void MAIN_func_800FCB3C(void)
 	case 1:
 		break;
 	case 2:
-		destroyItemMenuBox(&MAIN_D_80134F6C);
+		destroyItemMenuBox(&ITEM_MENU_RIGHT);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
 		setInputRepeatMask(0x5000);
-		MAIN_D_80135011 = 5;
-		MAIN_func_800FCA3C();
+		ITEM_MENU_TYPE = 5;
+		createItemMenuBox();
 		SELECTION_MENU_STATE = 1;
 		break;
 	case 4:
@@ -2236,25 +2236,25 @@ void MAIN_func_800FCB3C(void)
 	}
 }
 
-ItemMenuBox *MAIN_func_800FCC40(void)
+ItemMenuBox *getItemMenuFromType(void)
 {
-	switch (MAIN_D_80135011) {
+	switch (ITEM_MENU_TYPE) {
 	case 0:
 	case 2:
 	case 3:
 	case 4:
 	case 6:
-		return MAIN_D_80134F68;
+		return ITEM_MENU_LEFT;
 	case 1:
 	case 5:
 	case 7:
-		return MAIN_D_80134F6C;
+		return ITEM_MENU_RIGHT;
 	}
 
 	return 0;
 }
 
-void MAIN_func_800FCC98(ItemMenuBox *box, int32_t boxId, int32_t startRow)
+void openItemMenu(ItemMenuBox *box, int32_t boxId, int32_t startRow)
 {
 	int32_t i;
 
@@ -2271,7 +2271,7 @@ void MAIN_func_800FCC98(ItemMenuBox *box, int32_t boxId, int32_t startRow)
 	}
 }
 
-void MAIN_func_800FCCFC(ItemMenuBox *box, int32_t startRow, int32_t style)
+void layoutItemMenu(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
 	TextBoxData *entry;
 	uint8_t *p;
@@ -2291,27 +2291,27 @@ void MAIN_func_800FCCFC(ItemMenuBox *box, int32_t startRow, int32_t style)
 		while (i < rows) {
 			if (box->itemRow[i] == last) {
 				if (style == 0) {
-					MAIN_func_800FE704(box, i, 1);
+					layoutItemRow(box, i, 1);
 				} else if (style == 1) {
-					MAIN_func_800FE9F0(box, i, 1);
+					layoutCardRow(box, i, 1);
 				} else if (style == 2) {
-					MAIN_func_800FEC30(box, i, 1);
+					layoutBgmTrackRow(box, i, 1);
 				} else if (style == 3) {
-					MAIN_func_800FED64(box, i, 1);
+					layoutDestinationRow(box, i, 1);
 				} else {
-					MAIN_func_800FEEF0(box, i, 1);
+					layoutTradeRow(box, i, 1);
 				}
 			} else {
 				if (style == 0) {
-					MAIN_func_800FE704(box, i, 0);
+					layoutItemRow(box, i, 0);
 				} else if (style == 1) {
-					MAIN_func_800FE9F0(box, i, 0);
+					layoutCardRow(box, i, 0);
 				} else if (style == 2) {
-					MAIN_func_800FEC30(box, i, 0);
+					layoutBgmTrackRow(box, i, 0);
 				} else if (style == 3) {
-					MAIN_func_800FED64(box, i, 0);
+					layoutDestinationRow(box, i, 0);
 				} else {
-					MAIN_func_800FEEF0(box, i, 0);
+					layoutTradeRow(box, i, 0);
 				}
 			}
 
@@ -2335,16 +2335,16 @@ void MAIN_func_800FCCFC(ItemMenuBox *box, int32_t startRow, int32_t style)
 	entry->writeCount++;
 }
 
-int32_t MAIN_func_800FCF88(ItemMenuBox *box)
+int32_t isItemMenuBoxBusy(ItemMenuBox *box)
 {
 	if (box == 0) {
 		return 1;
 	}
 
-	return MAIN_func_800FE650(box->boxId);
+	return flipTextboxPage(box->boxId);
 }
 
-int32_t MAIN_func_800FCFB8(RECT *origin)
+int32_t createItemMenuAmountBox(RECT *origin)
 {
 	ItemMenuBox *box;
 	RECT rect;
@@ -2354,65 +2354,65 @@ int32_t MAIN_func_800FCFB8(RECT *origin)
 	uint8_t amount;
 	uint8_t room;
 
-	box = MAIN_func_800FCC40();
+	box = getItemMenuFromType();
 	idx = (box->topRow + box->cursor) * 2;
-	MAIN_D_80134F78 = box->buf[idx];
-	if (MAIN_D_80134F78 == 0xff) {
+	SHOP_ITEM_TYPE = box->buf[idx];
+	if (SHOP_ITEM_TYPE == 0xff) {
 		goto fail;
 	}
 
-	id = MAIN_D_80134F78;
+	id = SHOP_ITEM_TYPE;
 	amount = box->buf[idx + 1];
 
-	if (MAIN_D_80135011 < 3) {
-		MAIN_D_80134F7C = ITEM_PARA[id].value;
-		if (MAIN_D_80135011 == 1) {
+	if (ITEM_MENU_TYPE < 3) {
+		SHOP_ITEM_PRICE = ITEM_PARA[id].value;
+		if (ITEM_MENU_TYPE == 1) {
 			if ((amount & 0x80) == 0) {
 				goto fail;
 			}
 
-			MAIN_D_80134F7C >>= 1;
-			MAIN_D_80134F80 = amount & 0x7f;
+			SHOP_ITEM_PRICE >>= 1;
+			MAX_SHOP_AMOUNT = amount & 0x7f;
 		} else {
-			if (MAIN_D_80135011 == 0) {
+			if (ITEM_MENU_TYPE == 0) {
 				if (amount == 0) {
 					goto fail;
 				}
-				MAIN_D_80134F80 = 0x63;
+				MAX_SHOP_AMOUNT = 0x63;
 			} else {
 				if ((amount & 0x80) == 0) {
 					goto fail;
 				}
-				MAIN_D_80134F80 = amount & 0x7f;
+				MAX_SHOP_AMOUNT = amount & 0x7f;
 			}
 
 			room = 0x63 - getItemCount(id);
-			if (room < MAIN_D_80134F80) {
-				MAIN_D_80134F80 = room;
+			if (room < MAX_SHOP_AMOUNT) {
+				MAX_SHOP_AMOUNT = room;
 			}
 
-			idx = MAIN_D_80134F7C;
-			if (MAIN_D_80134F80 * idx > MONEY) {
-				MAIN_D_80134F80 = MONEY / MAIN_D_80134F7C;
+			idx = SHOP_ITEM_PRICE;
+			if (MAX_SHOP_AMOUNT * idx > MONEY) {
+				MAX_SHOP_AMOUNT = MONEY / SHOP_ITEM_PRICE;
 			}
 		}
 	} else {
-		MAIN_D_80134F7C =
+		SHOP_ITEM_PRICE =
 			MAIN_D_8012FFC4[CARD_DATA[id].spriteId] >> 1;
-		MAIN_D_80134F80 = amount;
+		MAX_SHOP_AMOUNT = amount;
 	}
 
-	MAIN_D_80134F81 = 1;
+	SHOP_AMOUNT = 1;
 	MAIN_D_80134F82 = 1;
-	MAIN_func_800FDF84();
+	setItemMenuSubTextboxLine();
 	boxY = UI_BOX_DATA[1].finalPos.y;
 	origin->x += UI_BOX_DATA[1].finalPos.x;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x41, -0x2a, 0x82, 0x53);
 	createTextbox(3, 0xc1, &rect, origin, tickSellItemBox,
 	              renderSellItemBox);
-	registerTextbox(3, MAIN_D_80135018, 1, 0, 0);
-	MAIN_func_800FB700();
+	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
+	layoutItemMenuAmountBox();
 	playSound(0, 3);
 
 	return 1;
@@ -2422,7 +2422,7 @@ fail:
 	return 0;
 }
 
-int32_t MAIN_func_800FD244(RECT *origin)
+int32_t createItemMenuConfirmBox(RECT *origin)
 {
 	ItemMenuBox *box;
 	RECT rect;
@@ -2430,15 +2430,15 @@ int32_t MAIN_func_800FD244(RECT *origin)
 	int16_t boxY;
 	uint8_t amount;
 
-	box = MAIN_func_800FCC40();
+	box = getItemMenuFromType();
 	idx = (box->topRow + box->cursor) * 2;
-	MAIN_D_80134F78 = box->buf[idx];
-	if (MAIN_D_80134F78 == 0xff) {
+	SHOP_ITEM_TYPE = box->buf[idx];
+	if (SHOP_ITEM_TYPE == 0xff) {
 		goto fail;
 	}
 
 	amount = box->buf[idx + 1];
-	if (MAIN_D_80135011 == 5) {
+	if (ITEM_MENU_TYPE == 5) {
 		if ((amount & 0x80) == 0) {
 			goto fail;
 		}
@@ -2448,16 +2448,16 @@ int32_t MAIN_func_800FD244(RECT *origin)
 		}
 	}
 
-	MAIN_func_800FDF84();
+	setItemMenuSubTextboxLine();
 	boxY = UI_BOX_DATA[1].finalPos.y;
 	origin->x += UI_BOX_DATA[1].finalPos.x;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x38, -0x15, 0x70, 0x2a);
-	createTextbox(3, 0xc1, &rect, origin, MAIN_func_800FB8D4,
-	              MAIN_func_800FBAA0);
-	registerTextbox(3, MAIN_D_80135018, 2, 0, 0);
+	createTextbox(3, 0xc1, &rect, origin, tickItemMenuConfirmBox,
+	              renderItemMenuConfirmBox);
+	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 2, 0, 0);
 	showMapHeadTextbox(0, 0xff, 3, 0x4d8);
-	MAIN_D_80134F81 = 0;
+	SHOP_AMOUNT = 0;
 	playSound(0, 3);
 
 	return 1;
@@ -2467,13 +2467,13 @@ fail:
 	return 0;
 }
 
-void MAIN_func_800FD3DC(ItemMenuBox *box, int32_t startRow, int32_t style)
+void itemMenuCursorTop(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
-	MAIN_func_800FF310(box);
-	MAIN_func_800FCCFC(box, startRow, style);
+	itemMenuSelectFirst(box);
+	layoutItemMenu(box, startRow, style);
 }
 
-void MAIN_func_800FD428(ItemMenuBox *box, int32_t style)
+void itemMenuCursorUp(ItemMenuBox *box, int32_t style)
 {
 	int32_t j;
 	int32_t k;
@@ -2492,7 +2492,7 @@ void MAIN_func_800FD428(ItemMenuBox *box, int32_t style)
 			}
 
 			box->itemRow[0] = last;
-			MAIN_func_800FF0FC(box, style);
+			redrawItemMenuRow(box, style);
 		} else {
 			box->cursor -= 1;
 		}
@@ -2502,13 +2502,13 @@ void MAIN_func_800FD428(ItemMenuBox *box, int32_t style)
 	}
 }
 
-void MAIN_func_800FD4E8(ItemMenuBox *box, int32_t startRow, int32_t style)
+void itemMenuCursorBottom(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
-	MAIN_func_800FF2A8(box);
-	MAIN_func_800FCCFC(box, startRow, style);
+	itemMenuSelectLast(box);
+	layoutItemMenu(box, startRow, style);
 }
 
-void MAIN_func_800FD534(ItemMenuBox *box, int32_t style)
+void itemMenuCursorDown(ItemMenuBox *box, int32_t style)
 {
 	int32_t k;
 	uint8_t first;
@@ -2531,7 +2531,7 @@ void MAIN_func_800FD534(ItemMenuBox *box, int32_t style)
 			}
 
 			box->itemRow[box->visibleRows - 1] = first;
-			MAIN_func_800FF0FC(box, style);
+			redrawItemMenuRow(box, style);
 		}
 		playSound(0, 2);
 	} else {
@@ -2540,7 +2540,7 @@ void MAIN_func_800FD534(ItemMenuBox *box, int32_t style)
 	}
 }
 
-int32_t MAIN_func_800FD61C(ItemMenuBox *box, RECT *origin, int32_t uiBoxId)
+int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId)
 {
 	RECT rect;
 	uint8_t *out;
@@ -2552,15 +2552,15 @@ int32_t MAIN_func_800FD61C(ItemMenuBox *box, RECT *origin, int32_t uiBoxId)
 		return 0;
 	}
 
-	MAIN_func_800FDF84();
+	setItemMenuSubTextboxLine();
 	boxY = UI_BOX_DATA[uiBoxId].finalPos.y;
 	origin->x += UI_BOX_DATA[uiBoxId].finalPos.x;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x84, -0xb, 0x108, 0x16);
-	createTextbox(3, 0xc1, &rect, origin, MAIN_func_800FB070,
-	              MAIN_func_800FB0CC);
-	registerTextbox(3, MAIN_D_80135018, 1, 0, 0);
-	strcpy((out = TEXT_BUFFERS_PTR + (MAIN_D_80135018 << 6), out),
+	createTextbox(3, 0xc1, &rect, origin, tickItemMenuDescriptionBox,
+	              renderItemMenuDescriptionBox);
+	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
+	strcpy((out = TEXT_BUFFERS_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6), out),
 	       ITEM_DESC_PTR[item]);
 	out += strlen(ITEM_DESC_PTR[item]);
 	*out++ = 0;
@@ -2571,13 +2571,13 @@ int32_t MAIN_func_800FD61C(ItemMenuBox *box, RECT *origin, int32_t uiBoxId)
 	return 1;
 }
 
-void MAIN_func_800FD7D8(int32_t boxId, int32_t idx, int16_t x, int16_t y)
+void renderItemMenuSprite(int32_t boxId, int32_t idx, int16_t x, int16_t y)
 {
 	BoxUVTable uvs;
 	POLY_FT4 poly;
 	int16_t *e;
 
-	uvs = MAIN_D_8012FE24;
+	uvs = ITEM_MENU_HEADER_UVS;
 	e = &uvs.v[idx * 4];
 	SetPolyFT4(&poly);
 	poly.tpage = getTPage(0, 0, 320, 0);
@@ -2604,7 +2604,7 @@ static void MAIN_func_800FD8D4__garbage__(void)
 	MAIN_D_80134F60 = a;
 }
 
-void MAIN_func_800FD8D4(ItemMenuBox *box)
+void renderItemMenuScrollBar(ItemMenuBox *box)
 {
 	int16_t track;
 	POLY_F4 *prim;
@@ -2654,8 +2654,8 @@ void MAIN_func_800FD8D4(ItemMenuBox *box)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2,
-                        int16_t y2, int32_t mode)
+void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2,
+                            int16_t y2, int32_t mode)
 {
 	TextBoxData *tbox;
 	int16_t boxId;
@@ -2675,7 +2675,7 @@ void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2,
 	boxId = box->boxId;
 	tbox = &MAIN_D_801BE80C.box[boxId];
 	if (mode != 2) {
-		if (MAIN_func_800FCF88(box) != 0) {
+		if (isItemMenuBoxBusy(box) != 0) {
 			top = box->prevTopRow;
 			count = box->itemCount - top;
 			if (box->visibleRows < count) {
@@ -2697,7 +2697,7 @@ void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2,
 					renderItemSprite(item, x2, y2, order);
 				} else if (mode == 1) {
 					uint8_t spriteId = CARD_DATA[item].spriteId;
-					MAIN_func_800FE258(spriteId, x2 + 2, yy2, order);
+					renderCardSprite(spriteId, x2 + 2, yy2, order);
 				}
 			}
 		}
@@ -2717,12 +2717,12 @@ void MAIN_func_800FDC5C(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2,
 	}
 }
 
-void MAIN_func_800FDF84(void)
+void setItemMenuSubTextboxLine(void)
 {
 	uint8_t *box = (uint8_t *)TEXT_BOX_DATA;
 
-	MAIN_D_80135018 = *(int32_t *)(box + 0x20);
-	MAIN_D_80135018 = (*(int32_t *)(box + 0x18) ^ 1) * *(int32_t *)(box + 0x24);
+	ITEM_MENU_SUB_TEXTBOX_LINE = *(int32_t *)(box + 0x20);
+	ITEM_MENU_SUB_TEXTBOX_LINE = (*(int32_t *)(box + 0x18) ^ 1) * *(int32_t *)(box + 0x24);
 }
 
 void MAIN_func_800FDFB4(void)
@@ -2805,7 +2805,7 @@ static int32_t MAIN_func_800FE150__garbage__(int32_t seed)
 	return seed + t0 + t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 + t9 + t10 + t11 + t12 + t13 + t14 + t15 + t16 + t17 + t18 + t19 + t20 + t21 + t22 + t23 + t24 + t25 + t26 + t27 + t28 + t29 + t30 + t31 + t32 + t33 + t34 + t35 + t36 + t37 + t38 + t39;
 }
 
-void MAIN_func_800FE150(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
+void renderInsetWithoutBox(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
 {
 	uint8_t order;
 
@@ -2816,7 +2816,7 @@ void MAIN_func_800FE150(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t 
 	renderTrianglePrimitive(0x20202, (x + w) - 1, y, x, y, x, (y + h) - 1, order, 0);
 }
 
-void MAIN_func_800FE258(int32_t spriteId, int16_t x, int16_t y, int32_t depth)
+void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth)
 {
 	POLY_FT4 *prim;
 
@@ -2938,7 +2938,7 @@ state3:
 	SELECTION_MENU_STATE = 2;
 }
 
-int32_t MAIN_func_800FE650(uint8_t a)
+int32_t flipTextboxPage(uint8_t a)
 {
 	TextBoxData *entry;
 
@@ -2965,7 +2965,7 @@ int32_t MAIN_func_800FE650(uint8_t a)
 	entry->pageReady = 0;
 }
 
-void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void layoutItemRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	char *name;
@@ -2985,7 +2985,7 @@ void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	if (type != 0xff) {
 		*out++ = 1;
-		if (MAIN_D_80135011 == 0 || MAIN_D_80135011 == 7) {
+		if (ITEM_MENU_TYPE == 0 || ITEM_MENU_TYPE == 7) {
 			if (amount != 0) {
 				*out++ = 1;
 			} else {
@@ -3004,12 +3004,12 @@ void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		*out++ = 0xf;
 		*out++ = 0;
 
-		if (MAIN_D_80135011 != 5) {
+		if (ITEM_MENU_TYPE != 5) {
 			*out++ = 0x16;
 			*out++ = 0;
-			if (MAIN_D_80135011 != 7) {
+			if (ITEM_MENU_TYPE != 7) {
 				value = ITEM_PARA[type].value;
-				if (MAIN_D_80135011 == 1) {
+				if (ITEM_MENU_TYPE == 1) {
 					if ((amount & 0x80) != 0) {
 						value >>= 1;
 					} else {
@@ -3031,11 +3031,11 @@ void MAIN_func_800FE704(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			*out++ = 0;
 		}
 amountPart:
-		if (MAIN_D_80135011 == 1) {
+		if (ITEM_MENU_TYPE == 1) {
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
 		}
-		if ((MAIN_D_80135011 != 0) && (MAIN_D_80135011 != 7) &&
-		    (MAIN_D_80135011 != 1)) {
+		if ((ITEM_MENU_TYPE != 0) && (ITEM_MENU_TYPE != 7) &&
+		    (ITEM_MENU_TYPE != 1)) {
 			*out++ = 0x1c;
 			*out++ = 0;
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
@@ -3045,7 +3045,7 @@ amountPart:
 	terminateString(out, isLast);
 }
 
-void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void layoutCardRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	char *name;
@@ -3061,7 +3061,7 @@ void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	if (type != 0xff) {
 		*out++ = 1;
-		if (MAIN_D_80135011 == 3) {
+		if (ITEM_MENU_TYPE == 3) {
 			if (amount != 0) {
 				if (getCardAmount(type) == 0) {
 					*out++ = 7;
@@ -3083,10 +3083,10 @@ void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		*out++ = 0;
 		value = MAIN_D_8012FFC4[CARD_DATA[type].spriteId];
 
-		if (MAIN_D_80135011 == 3) {
+		if (ITEM_MENU_TYPE == 3) {
 			out = intToStringSJIS(out, value, 4, 0);
 		} else {
-			if (MAIN_D_80135011 != 6) {
+			if (ITEM_MENU_TYPE != 6) {
 				out = intToStringSJIS(out, value >> 1, 4, 0);
 				*out++ = 0xf;
 				*out++ = 0;
@@ -3098,7 +3098,7 @@ void MAIN_func_800FE9F0(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void MAIN_func_800FEC30(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void layoutBgmTrackRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	uint8_t type;
@@ -3124,7 +3124,7 @@ void MAIN_func_800FEC30(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void MAIN_func_800FED64(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void layoutDestinationRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	uint8_t raw;
@@ -3155,7 +3155,7 @@ void MAIN_func_800FED64(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void MAIN_func_800FF0FC(ItemMenuBox *box, int32_t style)
+void redrawItemMenuRow(ItemMenuBox *box, int32_t style)
 {
 	TextBoxData *entry;
 	uint8_t *p;
@@ -3169,15 +3169,15 @@ void MAIN_func_800FF0FC(ItemMenuBox *box, int32_t style)
 	row = box->cursor;
 
 	if (style == 0) {
-		MAIN_func_800FE704(box, row, 1);
+		layoutItemRow(box, row, 1);
 	} else if (style == 1) {
-		MAIN_func_800FE9F0(box, row, 1);
+		layoutCardRow(box, row, 1);
 	} else if (style == 2) {
-		MAIN_func_800FEC30(box, row, 1);
+		layoutBgmTrackRow(box, row, 1);
 	} else if (style == 3) {
-		MAIN_func_800FED64(box, row, 1);
+		layoutDestinationRow(box, row, 1);
 	} else {
-		MAIN_func_800FEEF0(box, row, 1);
+		layoutTradeRow(box, row, 1);
 	}
 
 	((int32_t *)entry)[6] ^= 1;
@@ -3198,7 +3198,7 @@ void MAIN_func_800FF0FC(ItemMenuBox *box, int32_t style)
 	drawString2(p, outX, row * 12, 1);
 }
 
-void MAIN_func_800FF338(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
+void renderRaisedFrame(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
 {
 	x = x + UI_BOX_DATA[boxId].finalPos.x;
 	y = y + UI_BOX_DATA[boxId].finalPos.y;
@@ -3207,7 +3207,7 @@ void MAIN_func_800FF338(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t 
 	renderTrianglePrimitive(0x20202, x, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, boxId, 0);
 }
 
-void MAIN_func_800FF2A8(ItemMenuBox *data)
+void itemMenuSelectLast(ItemMenuBox *data)
 {
 	int32_t diff;
 
@@ -3226,7 +3226,7 @@ void MAIN_func_800FF2A8(ItemMenuBox *data)
 	playSound(0, 2);
 }
 
-void MAIN_func_800FF310(ItemMenuBox *data)
+void itemMenuSelectFirst(ItemMenuBox *data)
 {
 	data->prevTopRow = data->topRow;
 	data->prevCursor = data->cursor;
@@ -4780,7 +4780,7 @@ void freeArray(uint32_t *array)
 	MAIN_D_80134F64 -= array[-1] + 4;
 }
 
-void MAIN_func_800FBC58(void)
+void renderShopBitBox(void)
 {
 	int16_t rowPx;
 	int16_t x;
