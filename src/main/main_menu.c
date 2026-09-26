@@ -198,15 +198,15 @@ void renderTitleMenuView();
 void renderText(POLY_FT4 *prim, int32_t x, int32_t y, uint8_t u, int32_t v,
 		int32_t w, int32_t h, int32_t textColor);
 void renderMenuBox(int32_t x, int32_t y, int16_t w, int16_t h);
-void renderStartSlotView();
+void renderNewGameView();
 void renderSlotChoiceView();
-void renderMemcardBusyView(void);
-void renderNoMemcardWarningView();
+void renderMemoryCardBusyView(void);
+void renderNoMemoryCardWarningView();
 void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y);
 void renderSaveSlotListView();
 void renderContinueSaveSelection();
 void renderFormatPromptView(void);
-void renderMemcardErrorView();
+void renderMemoryCardErrorView();
 void renderSleepMenuView(void);
 void renderSaveConfirmView();
 void renderInsertBattleCardView();
@@ -285,15 +285,15 @@ void *main_menu_order_anchor[] = {
 	renderInsertBattleCardView,
 	renderSaveConfirmView,
 	renderSleepMenuView,
-	renderMemcardErrorView,
+	renderMemoryCardErrorView,
 	renderFormatPromptView,
 	renderContinueSaveSelection,
 	renderSaveSlotListView,
 	renderSaveSlotBox,
-	renderNoMemcardWarningView,
-	renderMemcardBusyView,
+	renderNoMemoryCardWarningView,
+	renderMemoryCardBusyView,
 	renderSlotChoiceView,
-	renderStartSlotView,
+	renderNewGameView,
 	renderMenuBox,
 	renderText,
 	renderTitleMenuView,
@@ -1999,7 +1999,7 @@ void renderMenuBox(int32_t x, int32_t y, int16_t w, int16_t h)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void renderStartSlotView(void)
+void renderNewGameView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2038,7 +2038,7 @@ void renderSlotChoiceView(void)
 	renderMenuBox(0x3C, 0x32, 0xB7, 0x22);
 }
 
-void renderMemcardBusyView(void)
+void renderMemoryCardBusyView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2048,7 +2048,7 @@ void renderMemcardBusyView(void)
 	renderMenuBox(0x36, 0x32, 0xD4, 0x2E);
 }
 
-void renderNoMemcardWarningView(void)
+void renderNoMemoryCardWarningView(void)
 {
 	POLY_FT4 *cur;
 
@@ -2176,7 +2176,7 @@ void renderFormatPromptView(void)
 	renderMenuBox(0x42, 0x60, 0x38, 0x22);
 }
 
-void renderMemcardErrorView(void)
+void renderMemoryCardErrorView(void)
 {
 	POLY_FT4 *cur;
 
@@ -4313,17 +4313,17 @@ void renderMainMenu(void)
 			renderTitleMenuView();
 			break;
 		case 1:
-			renderStartSlotView();
+			renderNewGameView();
 			break;
 		case 2:
 		case 4:
 			renderSlotChoiceView();
 			break;
 		case 5:
-			renderMemcardBusyView();
+			renderMemoryCardBusyView();
 			break;
 		case 6:
-			renderNoMemcardWarningView();
+			renderNoMemoryCardWarningView();
 			break;
 		case 7:
 			renderSaveSlotListView();
@@ -4335,7 +4335,7 @@ void renderMainMenu(void)
 			renderFormatPromptView();
 			break;
 		case 10:
-			renderMemcardErrorView();
+			renderMemoryCardErrorView();
 			break;
 		case 11:
 			renderSleepMenuView();
