@@ -357,7 +357,7 @@ int32_t tickScript(void)
 			ACTIVE_INSTRUCTION = 0;
 		}
 		break;
-	case 0x64:
+	case SCRIPT_OP_CALL_ROUTINE:
 		switch (MAIN_D_80134FF8) {
 		case 3:
 		case 4:
@@ -1897,7 +1897,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		NPC_ENTITIES[byteArg1 - 2].autotalk = byteArg2;
 		break;
-	case SCRIPT_OP_UNKNOWN_6B:
+	case SCRIPT_OP_DATA:
 		break;
 	case SCRIPT_OP_ENTITY_MOVE_TO:
 		MAIN_func_801062F8(0xff);
@@ -2055,7 +2055,7 @@ void scriptInstruction64to7E(int32_t op)
 		pushScriptStack(&entry);
 		writePStat(0, MAIN_D_80134FE7);
 		break;
-	case SCRIPT_OP_SET_RECT_IMPASSIBLE:
+	case SCRIPT_OP_SET_RECT_IMPASSABLE:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);

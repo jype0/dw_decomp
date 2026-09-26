@@ -95,7 +95,7 @@
 #define SCRIPT_OP_SET_TEXTBOX_MODE		0x68	/* _, u8 mode, u8 frames */
 #define SCRIPT_OP_DEAL_DAMAGE			0x69	/* pstat percent of max HP */
 #define SCRIPT_OP_SET_AUTOTALK			0x6A	/* _, id, u8 autotalk */
-#define SCRIPT_OP_UNKNOWN_6B			0x6B
+#define SCRIPT_OP_DATA				0x6B	/* _[, u8 value...], 0xFF */
 #define SCRIPT_OP_ENTITY_MOVE_TO		0x6C	/* id, s16 x, s16 z, u8 speed, u8 */
 #define SCRIPT_OP_ENTITY_MOVE_TO_ENTITY		0x6D	/* id, id target, u8 speed */
 #define SCRIPT_OP_ENTITY_MOVE_TO_WITH_CAMERA	0x6E	/* as ENTITY_MOVE_TO, but uses ENTITY_MOVE_TO_ENTITY_WITH_CAMERA's movement */
@@ -112,14 +112,14 @@
 #define SCRIPT_OP_UNLOAD_DIGIMON		0x79	/* u8 digimon */
 #define SCRIPT_OP_COPY_PSTAT			0x7A	/* _, pstat from, pstat to */
 #define SCRIPT_OP_SECTION_ON_EXIT		0x7B	/* u8 section to run after a screen change */
-#define SCRIPT_OP_SET_RECT_IMPASSIBLE		0x7C	/* u8, s16 x, s16 z, u8 w, u8 h */
+#define SCRIPT_OP_SET_RECT_IMPASSABLE		0x7C	/* u8, s16 x, s16 z, u8 w, u8 h */
 #define SCRIPT_OP_SPAWN_SPRITE_AT_LOCATION	0x7D	/* u8 sprite, s16 x, y, z, w */
 #define SCRIPT_OP_SPAWN_SPRITE_AT_ENTITY	0x7E	/* id, u8 node, u8 sprite */
 #define SCRIPT_OP_SET_SCRIPT			0xFB	/* _, u16 script, u16 map */
 #define SCRIPT_OP_UNUSED_FC			0xFC
 #define SCRIPT_OP_UNUSED_FD			0xFD
 #define SCRIPT_OP_END_SECTION			0xFE
-#define SCRIPT_OP_END_SECTION_2			0xFF
+#define SCRIPT_OP_END_SCRIPT			0xFF	/* as END_SECTION; marks the end of a script */
 
 /* The stats that SCRIPT_OP_SET_STAT and the like change, see getStatsPointer(). */
 #define SCRIPT_STAT_OFFENSE		0x00
