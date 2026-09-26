@@ -78,7 +78,7 @@ void handleBattleEndBox(void);
 void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
 void damageTick(FighterData *fighter, Stats *stats);
-void MAIN_func_800E5724(int32_t a, int32_t b, int32_t x, int32_t y, int32_t value, int32_t order);
+void drawEntityText(int32_t a, int32_t b, int32_t x, int32_t y, int32_t value, int32_t order);
 int32_t BTL_calculateDamage(DigimonEntity *attacker, DigimonEntity *defender, int16_t move);
 void BTL_deinitializeCombat(void);
 void closeInventoryBoxes(void);
@@ -306,6 +306,12 @@ static void *battle_main_functions[] = {
 	BTL_tickEnemyAI,
 	BTL_tickPartnerAI,
 };
+
+uint8_t MAIN_D_801346E8[4] = { 70, 40, 30, 0 };
+uint8_t MAIN_D_801346EC[4] = { 50, 20, 5, 0 };
+uint8_t MAIN_D_801346F0[4] = { 50, 20, 10, 0 };
+uint8_t MAIN_D_801346F4[4] = { 10, 5, 0, 0 };
+int8_t MAIN_D_801346F8 = -1;
 
 void BTL_tickPartnerAI(void)
 {
@@ -2320,7 +2326,7 @@ void BTL_renderEnemyHPBars(void)
 			spr->unk11 = 0x80;
 		}
 		GsSortFastSprite((GsSPRITE *)spr, ACTIVE_ORDERING_TABLE, 7);
-		MAIN_func_800E5724(0, 4, x + 0x21, y - 9, stats->current.currentHP, 7);
+		drawEntityText(0, 4, x + 0x21, y - 9, stats->current.currentHP, 7);
 	}
 }
 

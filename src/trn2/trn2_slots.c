@@ -34,6 +34,10 @@ static void *trn2_slots_functions[] = {
 	TRN2_tickSlotMachine,
 };
 
+RECT MAIN_D_80134BE8 = { -82, -87, 164, 90 };
+RECT MAIN_D_80134BF0 = { -8, -8, 16, 16 };
+RECT MAIN_D_80134BF8 = { -8, -8, 16, 16 };
+
 // clang-format off
 int8_t TRN2_D_8008DBC8[10] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01,

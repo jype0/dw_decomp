@@ -15,6 +15,12 @@ typedef struct {
 	void (*handler)(void);
 } VsEfeSubOpcode;
 
+typedef struct {
+	int16_t timer;
+	int8_t phase;
+	int8_t side;
+} CameraChase;
+
 extern char MAIN_D_80134A50[4];
 extern char MAIN_D_80134A54[5];
 extern uint8_t MAIN_D_80134A5C[4];

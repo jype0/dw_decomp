@@ -42,6 +42,21 @@ static void *trn_hud_functions[] = {
 	TRN_saveBaseStats,
 };
 
+/* "所持金" (money held) */
+char MAIN_D_80134BC0[] = "\x8f\x8a\x8e\x9d\x8b\xe0";
+
+int32_t MAIN_D_80135394;
+int8_t MAIN_D_80135398[6];
+int16_t MAIN_D_8013539E;
+int16_t MAIN_D_801353A0[4];
+
+static void *trn_hud_sbss_order[] = {
+	&MAIN_D_801353A0,
+	&MAIN_D_8013539E,
+	&MAIN_D_80135398,
+	&MAIN_D_80135394,
+};
+
 // clang-format off
 int8_t TRN_D_8008F1AC[3][13] = {
 	{ 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x1, 0x3, 0x5, 0x2, 0x4, 0x6 },

@@ -56,7 +56,7 @@ void setEntityTextDigit(POLY_FT4* poly, int32_t x, int32_t y);
 void MAIN_func_800E642C(void);
 void renderSmallNumber(int32_t color, int32_t n, int32_t x, int16_t y,
 		       int16_t value, int32_t layer);
-void MAIN_func_800E5724(int32_t color, int32_t n, int32_t x, int16_t y,
+void drawEntityText(int32_t color, int32_t n, int32_t x, int16_t y,
 			int16_t value, int32_t layer);
 int32_t hasMove(int32_t move);
 void learnMove(int32_t move);
@@ -66,7 +66,7 @@ void handlePause(void);
 void renderPauseBox(int32_t instanceId);
 void setPosDataPolyFT4(POLY_FT4 *prim, int16_t posX, int16_t posY, int16_t width, int16_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width, int16_t height);
-void MAIN_func_800E60E0(int16_t x, int16_t y, int16_t u, int32_t otOffset);
+void drawEntityTextIcon(int16_t x, int16_t y, int16_t u, int32_t otOffset);
 
 extern MapLightUpdateData MAP_LIGHT_UPDATE_DATA[];
 extern char *MAIN_D_8012BA8C[];
@@ -80,7 +80,7 @@ extern uint8_t MAIN_D_80134E78[2];
 extern int32_t MAIN_D_80134E7C;
 extern char MAIN_D_80134430;
 
-void MAIN_func_800E5724(int32_t color, int32_t n, int32_t x, int16_t y,
+void drawEntityText(int32_t color, int32_t n, int32_t x, int16_t y,
 			int16_t value, int32_t layer)
 {
 	POLY_FT4 *prim;
@@ -265,7 +265,7 @@ void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY)
 	entityLookAtLocation(entity, &loc);
 }
 
-void MAIN_func_800E60E0(int16_t x, int16_t y, int16_t u, int32_t otOffset)
+void drawEntityTextIcon(int16_t x, int16_t y, int16_t u, int32_t otOffset)
 {
 	POLY_FT4 *prim;
 
