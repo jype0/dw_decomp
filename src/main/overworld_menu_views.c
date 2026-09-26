@@ -32,14 +32,14 @@ extern int32_t MONEY;
 extern int16_t MAIN_D_80124424[];
 extern StringRect MAIN_D_801244EC[11];
 extern RECT MAIN_D_80124494[11];
-extern char *MAIN_D_80124918[];
+extern char *TAMER_LEVEL_TITLES[];
 int32_t drawPlayerInfoStrings(void);
 int32_t isTriggerSet(uint16_t trigger);
 int32_t hasMedal(uint16_t medal);
 void renderInsetBox(int16_t a, int16_t b, int16_t c, int16_t d, int32_t otz);
 void renderDigiviceEntity(Entity *entity, int32_t entityId);
 extern int8_t SELECTED_CARD;
-extern uint8_t MAIN_D_80134234[4];
+extern uint8_t EQUIPPED_MOVES[4];
 extern int16_t MAIN_D_80134D38;
 extern int16_t MAIN_D_80134D3A;
 extern int16_t TECH_VIEW_LINES1[];
@@ -273,9 +273,9 @@ void renderDigimonMovesView(void)
 		renderString(3, -0x8e, -0x57, 0x3c, 0xc, 0, 0x48, 5, 1);
 		j = 0;
 		while (j < 3) {
-			uVar1 = MAIN_D_80134234[j];
+			uVar1 = EQUIPPED_MOVES[j];
 			if (uVar1 != 0xff) {
-				mv = &MOVE_DATA[MAIN_D_80134234[j]];
+				mv = &MOVE_DATA[EQUIPPED_MOVES[j]];
 				renderString(0, -0x7c, j * 0xf - 0x42, 0x78, 0xc, 0, j * 0xc + 0x18, 5, 1);
 				renderNumber(0, 0x10, j * 0xf - 0x43, 3, mv->power, 5);
 				renderNumber(0, 0x39, j * 0xf - 0x43, 3, mv->mpCost * 3, 5);
@@ -505,7 +505,7 @@ grid:
 	renderString(0, -0x54, -0x50, 0x48, 0xc, 0, 0x30, 5, 1);
 	renderNumber(0, 0x35, -0x36, 2, TAMER_ENTITY.tamerLevel, 5);
 	renderString(0, 0x28, -0x24, 0x64, 0xc, 0, (TAMER_ENTITY.tamerLevel * 12) + 0x40, 5, 1);
-	n = strlen(MAIN_D_80124918[TAMER_ENTITY.tamerLevel]) / 2;
+	n = strlen(TAMER_LEVEL_TITLES[TAMER_ENTITY.tamerLevel]) / 2;
 	renderString(0, (n * 12) + 0x28, -0x25, 0x30, 0xc, 0xb4, 0x18, 5, 1);
 	renderNumber(0, 0x35, -0x11, 2, TAMER_ENTITY.raisedCount, 5);
 	renderNumber(0, 0x29, 2, 6, MONEY, 5);

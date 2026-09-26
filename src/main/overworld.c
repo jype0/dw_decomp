@@ -420,7 +420,7 @@ int16_t MIST_CLUT_Y[2] = {
 	0x0050, 0x0010,
 };
 
-uint8_t MAIN_D_80134234[3] = {
+uint8_t EQUIPPED_MOVES[3] = {
 	0xff, 0xff, 0xff,
 };
 
@@ -450,7 +450,7 @@ TriangleCursorOffsetData MAIN_D_80134288 = { { 0x04, 0x04, 0x04, 0x04, 0x04, 0x0
 
 RECT MAIN_D_80134290 = { 0, 232, 24, 12 };
 
-char MAIN_D_80134298[8] = "YearDay";
+char STR_YEAR_DAY[8] = "YearDay";
 
 uint8_t MAIN_D_801342A0[4] = {
 	0x01, 0x01, 0x00, 0x00,
@@ -474,23 +474,23 @@ char MAIN_D_801342D8[] = "Legend";
 
 RECT MAIN_D_801342E0 = { 0, 24, 256, 200 };
 
-RECT MAIN_D_801342E8 = { 0, 24, 256, 200 };
+RECT MOVES_VIEW_TEXT_AREA = { 0, 24, 256, 200 };
 
 RECT MAIN_D_801342F0 = { 0, 24, 256, 200 };
 
-RECT MAIN_D_801342F8 = { 0, 12, 256, 200 };
+RECT PLAYER_INFO_TEXT_AREA = { 0, 12, 256, 200 };
 
-char MAIN_D_80134300[8] = "%d : %d";
+char FMT_PLAYTIME[8] = "%d : %d";
 
-RECT MAIN_D_80134308 = { 0, 12, 256, 200 };
+RECT EVO_CHART_TEXT_AREA = { 0, 12, 256, 200 };
 
-RECT MAIN_D_80134310 = { 0, 48, 120, 12 };
+RECT EVO_CHART_NAME_AREA = { 0, 48, 120, 12 };
 
-RECT MAIN_D_80134318 = { 0, 12, 256, 200 };
+RECT MEDAL_VIEW_TEXT_AREA = { 0, 12, 256, 200 };
 
-RECT MAIN_D_80134320 = { 0, 24, 252, 48 };
+RECT MEDAL_DETAIL_AREA = { 0, 24, 252, 48 };
 
-RECT MAIN_D_80134328 = { 0, 12, 256, 200 };
+RECT CARD_VIEW_TEXT_AREA = { 0, 12, 256, 200 };
 
 GsRVIEW2 MAIN_D_80123860 = {
 	1300, 0, -3280, 0, 0, 0, 0, NULL,
@@ -970,7 +970,7 @@ int16_t MAIN_D_8012472C[70] = {
 	0x0001, 0xff6d, 0x0051, 0x0091, 0x0051, 0x0000,
 };
 
-char *MAIN_D_801247B8[8] = {
+char *STATUS_VIEW_LABELS[8] = {
 	MAIN_D_801238A0,
 	MAIN_D_801238B0,
 	MAIN_D_801238D8,
@@ -981,7 +981,7 @@ char *MAIN_D_801247B8[8] = {
 	MAIN_D_8012394C,
 };
 
-char *MAIN_D_801247D8[10] = {
+char *TECH_VIEW_LABELS[10] = {
 	MAIN_D_80123958,
 	MAIN_D_80123970,
 	MAIN_D_80123990,
@@ -994,7 +994,7 @@ char *MAIN_D_801247D8[10] = {
 	MAIN_D_801239F4,
 };
 
-char *MAIN_D_80124800[5] = {
+char *PLAYER_VIEW_LABELS[5] = {
 	MAIN_D_80123A18,
 	MAIN_D_80123A3C,
 	MAIN_D_80123A60,
@@ -1002,7 +1002,7 @@ char *MAIN_D_80124800[5] = {
 	MAIN_D_80123A98,
 };
 
-char *MAIN_D_80124814[5] = {
+char *CARD_CHART_LABELS[5] = {
 	MAIN_D_80123AB0,
 	MAIN_D_80123AD0,
 	MAIN_D_80123AE4,
@@ -1010,7 +1010,7 @@ char *MAIN_D_80124814[5] = {
 	MAIN_D_80123B20,
 };
 
-char *MAIN_D_80124828[15] = {
+char *MEDAL_NAMES[15] = {
 	MAIN_D_80123B2C,
 	MAIN_D_80123B38,
 	MAIN_D_80123B44,
@@ -1028,7 +1028,7 @@ char *MAIN_D_80124828[15] = {
 	MAIN_D_80123BE8,
 };
 
-char *MAIN_D_80124864[45] = {
+char *MEDAL_DESCRIPTIONS[45] = {
 	MAIN_D_80123BF4,
 	MAIN_D_80123C04,
 	&MAIN_D_80134248[7],
@@ -1076,7 +1076,7 @@ char *MAIN_D_80124864[45] = {
 	&MAIN_D_80134248[7],
 };
 
-char *MAIN_D_80124918[11] = {
+char *TAMER_LEVEL_TITLES[11] = {
 	MAIN_D_801342A8,
 	MAIN_D_801342B0,
 	MAIN_D_80123DE8,
@@ -5566,7 +5566,7 @@ void tickTriangleMenu(void)
 			TRIANGLE_MENU_STATE = -1;
 		}
 		clearTextSubArea(&rect);
-		drawString(MAIN_D_80134298, 0, 0xe8);
+		drawString(STR_YEAR_DAY, 0, 0xe8);
 		break;
 	case 1:
 		closeUIBoxIfOpen(0);
@@ -5585,7 +5585,7 @@ void tickTriangleMenu(void)
 			createMenuBox(1, -0x96, -0x59, 300, 0xbe, 0,
 				      tickDigimonMenu, renderDigimonMenu);
 			clearTextArea();
-			drawString(MAIN_D_801247B8[0], 0, 0);
+			drawString(STATUS_VIEW_LABELS[0], 0, 0);
 			MENU_STATE = 0;
 			MENU_SUB_STATE = 0;
 			TRIANGLE_MENU_STATE = -1;
@@ -5606,7 +5606,7 @@ void tickTriangleMenu(void)
 			createMenuBox(1, -0x96, -0x59, 300, 0xbe, 0,
 				      tickPlayerMenu, renderPlayerMenu);
 			clearTextArea();
-			drawString(MAIN_D_80124800[0], 0, 0);
+			drawString(PLAYER_VIEW_LABELS[0], 0, 0);
 			MENU_STATE = 0;
 			MENU_SUB_STATE = 0;
 			TRIANGLE_MENU_STATE = -1;
@@ -6011,7 +6011,7 @@ void tickDigimonMenu(void)
 			slotResult = getEquippedSlot();
 			equippedSlot = (int8_t)slotResult;
 			if ((int8_t)slotResult != -1) {
-				MAIN_D_80134234[equippedSlot] = 0xff;
+				EQUIPPED_MOVES[equippedSlot] = 0xff;
 				PARTNER_ENTITY.digimonEntity.stats.base
 					.moves[equippedSlot] = 0xff;
 				playSound(0, 3);
@@ -6519,13 +6519,13 @@ int32_t getEquippedSlot(void)
 		moveId++;
 	}
 	for (slot = 0; slot < 3; slot++) {
-		if ((moveId == 0x2c) && (MAIN_D_80134234[slot] == 0x30)) {
+		if ((moveId == 0x2c) && (EQUIPPED_MOVES[slot] == 0x30)) {
 			return (int8_t)slot;
 		}
-		if ((moveId == 0x37) && (MAIN_D_80134234[slot] == 0x39)) {
+		if ((moveId == 0x37) && (EQUIPPED_MOVES[slot] == 0x39)) {
 			return (int8_t)slot;
 		}
-		if (MAIN_D_80134234[slot] == moveId) {
+		if (EQUIPPED_MOVES[slot] == moveId) {
 			return (int8_t)slot;
 		}
 	}
@@ -6599,7 +6599,7 @@ void equipMove(void)
 	}
 
 	for (slot = 0; slot < 3; slot++) {
-		if (MAIN_D_80134234[slot] == 0xff) {
+		if (EQUIPPED_MOVES[slot] == 0xff) {
 			break;
 		}
 		if (slot == 2) {
@@ -6607,7 +6607,7 @@ void equipMove(void)
 			return;
 		}
 	}
-	MAIN_D_80134234[slot] = moveId;
+	EQUIPPED_MOVES[slot] = moveId;
 	PARTNER_ENTITY.digimonEntity.stats.base.moves[slot] = animation + 0x2e;
 	setRECT(&textArea, 0, textY = slot * 12 + 0x18, 0x84, 0xc);
 	clearTextSubArea(&textArea);

@@ -218,8 +218,8 @@ void MAIN_func_8010E938(void);
 void MAIN_func_8010EA1C(void);
 void drawMainMenuStrings();
 void drawSaveSlotText(int32_t slot, int32_t row);
-char *MAIN_func_8010FB7C(int32_t value, char *buf, int32_t digits);
-void MAIN_func_8010FBB0();
+char *formatNumber(int32_t value, char *buf, int32_t digits);
+void drawMoveName();
 void drawRegisteredBattleSlots(int32_t slot);
 void updateMemoryCardState();
 void tickMainMenu(void);
@@ -272,8 +272,8 @@ void *main_menu_order_anchor[] = {
 	tickMainMenu,
 	updateMemoryCardState,
 	drawRegisteredBattleSlots,
-	MAIN_func_8010FBB0,
-	MAIN_func_8010FB7C,
+	drawMoveName,
+	formatNumber,
 	drawSaveSlotText,
 	drawMainMenuStrings,
 	MAIN_func_8010EA1C,
@@ -300,13 +300,13 @@ void *main_menu_order_anchor[] = {
 };
 
 // clang-format off
-char MAIN_D_80134660[2] = "";
+char STR_EMPTY[2] = "";
 
-uint16_t MAIN_D_80134662 = 0x0032;
+uint16_t STR_2 = 0x0032;
 
-char MAIN_D_80134664[] = "YesNo";
+char STR_YES_NO[] = "YesNo";
 
-char MAIN_D_8013466C[] = "Yes No";
+char STR_YES_NO_SPACED[] = "Yes No";
 
 char MAIN_D_80134674[] = {
 	0x82, 0x51, 0x00,
@@ -348,7 +348,7 @@ char MAIN_D_801346C0[2][2] = { ".", "*" };
 
 char MAIN_D_801346C4[] = "Player";
 
-char MAIN_D_801346CC[] = "%i";
+char FMT_NUMBER[] = "%i";
 
 struct DIRENTRY *MEMCARD_DIRENTRIES = (struct DIRENTRY *)(TEXTURE_BUFFER + 0x5c00);
 
@@ -551,7 +551,7 @@ char MAIN_D_80131658[16][6] = {
 	"15",
 };
 
-MenuHighlight MAIN_D_801316B8[22] = {
+MenuHighlight MENU_HIGHLIGHTS[22] = {
 	{
 		0x00,
 		{ 0x04, 0x00, 0x00, 0x00, 0x00 },
@@ -752,7 +752,7 @@ MenuHighlight MAIN_D_801316B8[22] = {
 	},
 };
 
-int8_t MAIN_D_80131818[80] = {
+int8_t MENU_VIEWS[80] = {
 	0x00, 0x09, 0x05, 0x0a, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0x01, 0x05, 0x05, 0x05, 0x07, 0x08,
 	0x05, 0x05, 0xff, 0x06, 0x02, 0x05, 0x05, 0x07,
@@ -765,14 +765,14 @@ int8_t MAIN_D_80131818[80] = {
 	0xff, 0x15, 0x05, 0x05, 0x07, 0x08, 0x05, 0x05,
 };
 
-char *MAIN_D_80131868[4] = {
+char *TITLE_MENU_ITEMS[4] = {
 	MAIN_D_80131008,
 	MAIN_D_80131014,
 	MAIN_D_80131024,
 	MAIN_D_80131030,
 };
 
-char *MAIN_D_80131878[8] = {
+char *SLOT_ACTION_TITLES[8] = {
 	MAIN_D_8013103C,
 	MAIN_D_8013104C,
 	MAIN_D_8013105C,
@@ -783,7 +783,7 @@ char *MAIN_D_80131878[8] = {
 	MAIN_D_801310A4,
 };
 
-char *MAIN_D_80131898[6] = {
+char *MEMCARD_OPERATION_MESSAGES[6] = {
 	MAIN_D_801310B4,
 	MAIN_D_801310CC,
 	MAIN_D_801310E0,
@@ -792,32 +792,32 @@ char *MAIN_D_80131898[6] = {
 	MAIN_D_8013111C,
 };
 
-char *MAIN_D_801318B0[11] = {
-	MAIN_D_80134660,
+char *MEMCARD_ERROR_MESSAGES[11] = {
+	STR_EMPTY,
 	MAIN_D_80131134,
 	MAIN_D_80131144,
 	MAIN_D_80131150,
 	MAIN_D_80131168,
 	MAIN_D_80131178,
-	MAIN_D_80134660,
+	STR_EMPTY,
 	MAIN_D_8013118C,
 	MAIN_D_8013119C,
 	MAIN_D_801311B4,
 	MAIN_D_801311C0,
 };
 
-char *MAIN_D_801318DC[8] = {
+char *SLOT_ACTION_QUESTIONS[8] = {
 	MAIN_D_801311D4,
 	MAIN_D_801311EC,
 	MAIN_D_80131200,
-	MAIN_D_80134660,
-	MAIN_D_80134660,
+	STR_EMPTY,
+	STR_EMPTY,
 	MAIN_D_80131218,
-	MAIN_D_80134660,
+	STR_EMPTY,
 	MAIN_D_80131228,
 };
 
-char *MAIN_D_801318FC[4] = {
+char *BATTLE_MODE_ITEMS[4] = {
 	MAIN_D_80131234,
 	MAIN_D_80131240,
 	MAIN_D_80131254,
@@ -2096,11 +2096,11 @@ void MAIN_func_8010DA44(void)
 	GsSetWorkBase((PACKET *)ft4);
 	renderMenuBox(0x30, 0x13, 0xE0, 0x16);
 
-	if (SAVE_SLOT_SCROLL_TENTHS < (MAIN_D_801316B8[7].pad[2] * 10)) {
+	if (SAVE_SLOT_SCROLL_TENTHS < (MENU_HIGHLIGHTS[7].pad[2] * 10)) {
 		SAVE_SLOT_SCROLL_TENTHS += 2;
 	}
 
-	if ((MAIN_D_801316B8[7].pad[2] * 10) < SAVE_SLOT_SCROLL_TENTHS) {
+	if ((MENU_HIGHLIGHTS[7].pad[2] * 10) < SAVE_SLOT_SCROLL_TENTHS) {
 		SAVE_SLOT_SCROLL_TENTHS -= 2;
 	}
 
@@ -2350,54 +2350,54 @@ void drawMainMenuStrings(int32_t menu)
 	if (menu == -1) {
 		return;
 	}
-	view = MAIN_D_80131818[menu];
+	view = MENU_VIEWS[menu];
 	if (view == -1) {
 		return;
 	}
-	MAIN_D_801316B8[view].pos = MAIN_D_801316B8[view].pad[1];
-	MAIN_D_801316B8[view].pad[2] = 0;
+	MENU_HIGHLIGHTS[view].pos = MENU_HIGHLIGHTS[view].pad[1];
+	MENU_HIGHLIGHTS[view].pad[2] = 0;
 	SAVE_SLOT_SCROLL_TENTHS = 0;
 	MEMORY_CARD_CHANGED_MASK = 0;
 	clearTextArea();
 	switch (view) {
 	case 0:
-		drawString(MAIN_D_80131868[0], 0, 0);
-		drawString(MAIN_D_80131868[1], 0, 0xC);
+		drawString(TITLE_MENU_ITEMS[0], 0, 0);
+		drawString(TITLE_MENU_ITEMS[1], 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131868[2], 0, 0x18);
-		drawString(MAIN_D_80131868[3], 0, 0x24);
+		drawString(TITLE_MENU_ITEMS[2], 0, 0x18);
+		drawString(TITLE_MENU_ITEMS[3], 0, 0x24);
 		break;
 	case 1:
-		drawString(MAIN_D_80131878[0], 0, 0);
+		drawString(SLOT_ACTION_TITLES[0], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[0], 0, 0xC);
-		drawString((char *)&MAIN_D_80134662, 0x76, 0xC);
+		drawString(SLOT_ACTION_TITLES[0], 0, 0xC);
+		drawString((char *)&STR_2, 0x76, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[3], 0, 0x18);
+		drawString(SLOT_ACTION_TITLES[3], 0, 0x18);
 		break;
 	case 2:
-		drawString(MAIN_D_80131878[1], 0, 0);
+		drawString(SLOT_ACTION_TITLES[1], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[1], 0, 0xC);
-		drawString((char *)&MAIN_D_80134662, 0x9A, 0xC);
+		drawString(SLOT_ACTION_TITLES[1], 0, 0xC);
+		drawString((char *)&STR_2, 0x9A, 0xC);
 		MAIN_D_80135054 = 1;
 		break;
 	case 4:
-		drawString(MAIN_D_80131878[2], 0, 0);
+		drawString(SLOT_ACTION_TITLES[2], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_80131878[2], 0, 0xC);
-		drawString((char *)&MAIN_D_80134662, 0x76, 0xC);
+		drawString(SLOT_ACTION_TITLES[2], 0, 0xC);
+		drawString((char *)&STR_2, 0x76, 0xC);
 		MAIN_D_80135054 = 2;
 		break;
 	case 5:
-		drawString(MAIN_D_80131898[MEMORY_CARD_OPERATION], 0, 0);
+		drawString(MEMCARD_OPERATION_MESSAGES[MEMORY_CARD_OPERATION], 0, 0);
 		DrawSync(0);
 		drawString(MAIN_D_80131278, 0, 0xC);
 		DrawSync(0);
 		drawString(MAIN_D_80131290, 0, 0x18);
 		break;
 	case 6:
-		drawString(MAIN_D_80131878[3], 0, 0);
+		drawString(SLOT_ACTION_TITLES[3], 0, 0);
 		DrawSync(0);
 		drawString(MAIN_D_801312A0, 0, 0xC);
 		DrawSync(0);
@@ -2407,19 +2407,19 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_801312E4, 0, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_80134664, 0, 0xF0);
+		drawString(STR_YES_NO, 0, 0xF0);
 		break;
 	case 7:
-		drawString(MAIN_D_80131878[MAIN_MENU_ACTION], 0, 0);
+		drawString(SLOT_ACTION_TITLES[MAIN_MENU_ACTION], 0, 0);
 		DrawSync(0);
 		if (MAIN_MENU_ACTION == 0 || MAIN_MENU_ACTION == 1 ||
 		    MAIN_MENU_ACTION == 2) {
 			if (MEMORY_CARD_ID != 0) {
 				if (MAIN_D_80135054 == 1) {
-					drawString((char *)&MAIN_D_80134662, 0x9A, 0);
+					drawString((char *)&STR_2, 0x9A, 0);
 				}
 				if (MAIN_D_80135054 == 2) {
-					drawString((char *)&MAIN_D_80134662, 0x76, 0);
+					drawString((char *)&STR_2, 0x76, 0);
 				}
 			}
 		}
@@ -2431,25 +2431,25 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(MAIN_D_801312FC, 0, 0);
 		DrawSync(0);
 		if (MEMORY_CARD_ID != 0) {
-			drawString((char *)&MAIN_D_80134662, 0x76, 0);
+			drawString((char *)&STR_2, 0x76, 0);
 		}
 		DrawSync(0);
 		drawString(MAIN_D_80131318, 0, 0xC);
 		DrawSync(0);
 		drawString(MAIN_D_80131328, 0, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_8013466C, 0, 0xF0);
+		drawString(STR_YES_NO_SPACED, 0, 0xF0);
 		break;
 	case 8:
-		drawString(MAIN_D_80131878[MAIN_MENU_ACTION], 0, 0);
+		drawString(SLOT_ACTION_TITLES[MAIN_MENU_ACTION], 0, 0);
 		if (MAIN_MENU_ACTION == 0 || MAIN_MENU_ACTION == 1 ||
 		    MAIN_MENU_ACTION == 2) {
 			if (MEMORY_CARD_ID != 0) {
 				if (MAIN_D_80135054 == 1) {
-					drawString((char *)&MAIN_D_80134662, 0x9A, 0);
+					drawString((char *)&STR_2, 0x9A, 0);
 				}
 				if (MAIN_D_80135054 == 2) {
-					drawString((char *)&MAIN_D_80134662, 0x76, 0);
+					drawString((char *)&STR_2, 0x76, 0);
 				}
 			}
 		}
@@ -2466,11 +2466,11 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_80131658[MEMORY_CARD_SLOT + 1], 0, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_801318DC[MAIN_MENU_ACTION], 0x18, 0x30);
+		drawString(SLOT_ACTION_QUESTIONS[MAIN_MENU_ACTION], 0x18, 0x30);
 		DrawSync(0);
-		drawString(MAIN_D_8013466C, 0, 0xF0);
+		drawString(STR_YES_NO_SPACED, 0, 0xF0);
 		if (MAIN_MENU_ACTION == 2) {
-			MAIN_D_801316B8[view].pos = 1;
+			MENU_HIGHLIGHTS[view].pos = 1;
 		}
 		break;
 	case 10:
@@ -2489,7 +2489,7 @@ void drawMainMenuStrings(int32_t menu)
 			drawString(MAIN_D_80134680, 0x9C, 0);
 		}
 		DrawSync(0);
-		drawString(MAIN_D_801318B0[MEMORY_CARD_ERROR], 0, 0xC);
+		drawString(MEMCARD_ERROR_MESSAGES[MEMORY_CARD_ERROR], 0, 0xC);
 		break;
 	case 11:
 		drawString(MAIN_D_8013136C, 0, 0);
@@ -2504,25 +2504,25 @@ void drawMainMenuStrings(int32_t menu)
 			drawString(MAIN_D_801313D0, 0, 0x24);
 			DrawSync(0);
 			if (MEMORY_CARD_ID != 0) {
-				drawString(&MAIN_D_80134660, 0x30, 0x24);
+				drawString(&STR_EMPTY, 0x30, 0x24);
 			}
 			if (MEMORY_CARD_ERROR == 1) {
-				drawString(&MAIN_D_80134660, 0x3C, 0x24);
+				drawString(&STR_EMPTY, 0x3C, 0x24);
 			}
 			if (MEMORY_CARD_ERROR == 1 || MEMORY_CARD_ERROR == 4) {
-				drawString(&MAIN_D_80134660, 0x9C, 0x24);
+				drawString(&STR_EMPTY, 0x9C, 0x24);
 			}
 			if (MEMORY_CARD_ERROR == 3) {
-				drawString(&MAIN_D_80134660, 0x9C, 0x24);
+				drawString(&STR_EMPTY, 0x9C, 0x24);
 			}
 			DrawSync(0);
-			drawString(MAIN_D_801318B0[MEMORY_CARD_ERROR], 0, 0x30);
+			drawString(MEMCARD_ERROR_MESSAGES[MEMORY_CARD_ERROR], 0, 0x30);
 			DrawSync(0);
 		}
-		drawString(MAIN_D_80134664, 0, 0xF0);
+		drawString(STR_YES_NO, 0, 0xF0);
 		break;
 	case 13:
-		drawString(MAIN_D_80131878[5], 0, 0);
+		drawString(SLOT_ACTION_TITLES[5], 0, 0);
 		DrawSync(0);
 		drawString(MAIN_D_801313E4, 0, 0xC);
 		DrawSync(0);
@@ -2530,14 +2530,14 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_8013141C, 0, 0x24);
 		DrawSync(0);
-		drawString(MAIN_D_80134664, 0, 0xF0);
+		drawString(STR_YES_NO, 0, 0xF0);
 		if (VS_PLAYER_INDEX == 1) {
-			drawString((char *)&MAIN_D_80134662, 0x76, 0x24);
-			drawString((char *)&MAIN_D_80134662, 0xB4, 0x24);
+			drawString((char *)&STR_2, 0x76, 0x24);
+			drawString((char *)&STR_2, 0xB4, 0x24);
 		}
 		break;
 	case 14:
-		drawString(MAIN_D_80131878[6], 0, 0);
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
 		drawString(MAIN_D_80134684, 0, 0xC);
 		drawString(PARTNER_ENTITY.name, 0x64, 0xC);
@@ -2546,38 +2546,38 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x64, 0x18);
 		DrawSync(0);
 		drawString(MAIN_D_80134694, 0, 0x24);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
 		DrawSync(0);
 		drawString(MAIN_D_80134698, 0, 0x30);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
 		DrawSync(0);
 		drawString(MAIN_D_8013469C, 0, 0x3C);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
 		DrawSync(0);
 		drawString(MAIN_D_801346A4, 0, 0x48);
-		drawString(MAIN_func_8010FB7C(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
+		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
 		DrawSync(0);
 		drawString(MAIN_D_8013143C, 0, 0x54);
-		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x64, 0x54);
+		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x64, 0x54);
 		DrawSync(0);
 		drawString(MAIN_D_80131448, 0, 0x60);
-		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[1], 0x64, 0x60);
+		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[1], 0x64, 0x60);
 		DrawSync(0);
 		drawString(MAIN_D_80131454, 0, 0x6C);
-		MAIN_func_8010FBB0((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[2], 0x64, 0x6C);
+		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[2], 0x64, 0x6C);
 		DrawSync(0);
 		drawString(MAIN_D_80131460, 0, 0x78);
 		drawString(MAIN_D_801346AC, 0, 0x84);
 		drawString(MAIN_D_801346B0, 0, 0x90);
 		break;
 	case 15:
-		drawString(MAIN_D_80131878[6], 0, 0);
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
 		drawRegisteredBattleSlots(0);
 		drawString(MAIN_D_8013147C, 0, 0x84);
 		break;
 	case 16:
-		drawString(MAIN_D_80131878[6], 0, 0);
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
 		strcpy(buf, MAIN_D_80131498);
 		drawString(buf, 0, 0xC);
@@ -2609,7 +2609,7 @@ void drawMainMenuStrings(int32_t menu)
 	case 18:
 		drawString(MAIN_D_80131568, 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_8013466C, 0, 0xC);
+		drawString(STR_YES_NO_SPACED, 0, 0xC);
 		break;
 	case 19:
 		strcpy(buf, PARTNER_ENTITY.name);
@@ -2623,12 +2623,12 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(MAIN_D_801315A0, 0, 0x18);
 		break;
 	case 20:
-		drawString(MAIN_D_801318FC[0], 0, 0);
+		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
 		DrawSync(0);
-		drawString(MAIN_D_801318FC[1], 0, 0xC);
+		drawString(BATTLE_MODE_ITEMS[1], 0, 0xC);
 		DrawSync(0);
-		drawString(MAIN_D_801318FC[2], 0, 0x18);
-		drawString(MAIN_D_801318FC[3], 0, 0x24);
+		drawString(BATTLE_MODE_ITEMS[2], 0, 0x18);
+		drawString(BATTLE_MODE_ITEMS[3], 0, 0x24);
 		break;
 	case 21:
 		drawString(MAIN_D_801315C0, 0, 0);
@@ -2637,7 +2637,7 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_801315EC, 0, 0x18);
 		DrawSync(0);
-		drawString(MAIN_D_80134664, 0, 0x24);
+		drawString(STR_YES_NO, 0, 0x24);
 		break;
 	}
 }
@@ -2660,13 +2660,13 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 	}
 }
 
-char *MAIN_func_8010FB7C(int32_t value, char *buf, int32_t digits)
+char *formatNumber(int32_t value, char *buf, int32_t digits)
 {
-	sprintf(buf, MAIN_D_801346CC, value);
+	sprintf(buf, FMT_NUMBER, value);
 	return buf;
 }
 
-void MAIN_func_8010FBB0(int32_t type, int32_t anim, int32_t color, int32_t pos)
+void drawMoveName(int32_t type, int32_t anim, int32_t color, int32_t pos)
 {
 	int16_t move;
 
@@ -2784,7 +2784,7 @@ void tickMainMenu(void)
 	switch (CURRENT_MENU) {
 	case 0:
 		/* Keep this assignment in the call to retain retail CodeWarrior argument scheduling. */
-		input = MAIN_func_8011239C(cursor = (MenuCursor *)MAIN_D_801316B8, 1);
+		input = MAIN_func_8011239C(cursor = (MenuCursor *)MENU_HIGHLIGHTS, 1);
 		switch (input) {
 		case 1:
 			switch (cursor->pos) {
@@ -2817,7 +2817,7 @@ void tickMainMenu(void)
 		break;
 
 	case 1:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[9];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[9];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -2877,7 +2877,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0xA:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[1];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[1];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -2945,7 +2945,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0xE:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
@@ -2962,7 +2962,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0xF:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
 		input = MAIN_func_8011239C(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
@@ -3042,7 +3042,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x13:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[MAIN_D_80131818[CURRENT_MENU]];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[MENU_VIEWS[CURRENT_MENU]];
 		input = MAIN_func_8011239C(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
@@ -3062,7 +3062,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x14:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[2];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[2];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -3114,7 +3114,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x17:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
@@ -3131,7 +3131,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x18:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
 		input = MAIN_func_8011239C(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
@@ -3181,7 +3181,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x1E:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[4];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[4];
 		input = MAIN_func_8011239C(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
@@ -3235,7 +3235,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x21:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
@@ -3252,7 +3252,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x22:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
 		input = MAIN_func_8011239C(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
@@ -3284,7 +3284,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x28:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[11];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[11];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -3397,7 +3397,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x30:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[12];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[12];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -3451,7 +3451,7 @@ void tickMainMenu(void)
 		} else {
 			MEMORY_CARD_ID = 0x10;
 		}
-		cursor = (MenuCursor *)&MAIN_D_801316B8[13];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[13];
 		input = MAIN_func_8011239C(cursor,
 					   VS_PLAYER_INDEX == 0 ? 1 : 2);
 		switch (input) {
@@ -3497,7 +3497,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x34:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[7];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
 		input = MAIN_func_8011296C(cursor,
 					   VS_PLAYER_INDEX == 0 ? 1 : 2);
 		slot = cursor->pos + cursor->scroll;
@@ -3515,7 +3515,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x35:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[8];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
 		input = MAIN_func_8011239C(cursor,
 					   VS_PLAYER_INDEX == 0 ? 1 : 2);
 		if (input != 2) {
@@ -3593,7 +3593,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x3C:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[14];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[14];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -3612,7 +3612,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x3D:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[15];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[15];
 		oldScroll = cursor->scroll;
 		input = MAIN_func_8011239C(cursor, 1);
 		if (oldScroll != cursor->scroll) {
@@ -3629,7 +3629,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x3E:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[16];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[16];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -3742,7 +3742,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x42:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[12];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[12];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -3801,7 +3801,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x45:
-		cursor = (MenuCursor *)&MAIN_D_801316B8[18];
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[18];
 		input = MAIN_func_8011239C(cursor, 1);
 		switch (input) {
 		case 1:
@@ -4296,9 +4296,9 @@ void renderMainMenu(void)
 	int8_t menu;
 
 	if (CURRENT_MENU >= 0) {
-		menu = MAIN_D_80131818[CURRENT_MENU];
+		menu = MENU_VIEWS[CURRENT_MENU];
 		if (menu != -1) {
-			MAIN_func_801136C8(&MAIN_D_801316B8[menu]);
+			MAIN_func_801136C8(&MENU_HIGHLIGHTS[menu]);
 		}
 		switch (menu) {
 		case 0:

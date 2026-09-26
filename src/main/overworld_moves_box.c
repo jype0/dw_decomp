@@ -33,7 +33,7 @@ typedef struct {
 
 extern int32_t ACTIVE_FRAMEBUFFER;
 void clearTextSubArea(RECT *rect);
-extern char *MAIN_D_801247B8[];
+extern char *STATUS_VIEW_LABELS[];
 extern RECT MAIN_D_801342F0;
 extern int8_t MENU_SUB_STATE;
 extern GsOT *ACTIVE_ORDERING_TABLE;
@@ -47,7 +47,7 @@ extern int32_t VIEWPORT_DISTANCE;
 extern int16_t MAP_OBJECT_INSTANCE_COUNT;
 extern LocalMapObject LOCAL_MAP_OBJECTS[];
 extern int32_t MAP_OBJECT_MOVE_TO_DATA[];
-extern uint8_t MAIN_D_80134234[4];
+extern uint8_t EQUIPPED_MOVES[4];
 
 void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		       int32_t height, uint8_t texX, uint8_t texY,
@@ -236,7 +236,7 @@ void renderDigimonMoveBox(void)
 	int32_t iVar13;
 	int16_t local_20[16];
 	for (iVar11 = 0; iVar11 < 3; iVar11++) {
-		uVar2 = (uVar6 = MAIN_D_80134234[iVar11]);
+		uVar2 = (uVar6 = EQUIPPED_MOVES[iVar11]);
 		if (uVar2 < 0x3a) {
 			uVar3 = uVar6 % 8;
 			if (uVar6 < 8) {
@@ -363,7 +363,7 @@ int32_t drawMoveViewHelpStrings(void)
 		clearTextSubArea(&rect);
 	}
 
-	drawString(MAIN_D_801247B8[MENU_SUB_STATE + 9], 0, MENU_SUB_STATE * 0xc + 0x18);
+	drawString(STATUS_VIEW_LABELS[MENU_SUB_STATE + 9], 0, MENU_SUB_STATE * 0xc + 0x18);
 	MENU_SUB_STATE = MENU_SUB_STATE + 1;
 
 	if (MENU_SUB_STATE == 8) {
