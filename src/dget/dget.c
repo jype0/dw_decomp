@@ -7,26 +7,23 @@
 #include <dw/entity.h>
 #include <dw/font.h>
 #include <dw/pstat.h>
+#include <dw/script.h>
 #include <dw/tournament.h>
 #include <dw/trigger.h>
 #include <dw/ui.h>
 
-extern char *TEXT_BUFFERS_PTR;
 
 extern uint16_t ACTIVE_MAP_SCRIPT;
 
 extern uint16_t SELECTION_MENU_STATE;
 
-extern int32_t MAIN_D_801353B0;
 extern uint8_t ACTIVE_INSTRUCTION;
 extern uint8_t SCRIPT_STATE_3;
 extern uint16_t SCRIPT_STATE_4;
 extern uint8_t *MAIN_D_80134FDC;
 extern uint8_t ACTIVE_INSTRUCTION;
 
-uint8_t readPStat(uint32_t address);
 
-void setupBoxOrigin(int32_t, RECT *);
 void createTextbox(int32_t, int32_t, RECT *, RECT *, void *, void *);
 void registerTextbox(int32_t, int32_t, int32_t, int32_t, int32_t);
 void showMapHeadTextbox(int32_t, int32_t, int32_t, int32_t);
@@ -35,14 +32,12 @@ void terminateString(char *, int32_t);
 
 void setTrigger(uint16_t trigger);
 void unsetTrigger(uint16_t trigger);
-void showMapheadSelection(int32_t, int32_t, int32_t, uint32_t *, int32_t);
 void *allocateArray(uint32_t);
 void freeArray(void *);
 
 void setInputRepeatMask(uint32_t);
 
 int32_t isTriggerSet(uint16_t trigger);
-uint8_t* getScript(uint32_t scriptId);
 uint8_t* getScriptSection(uint8_t* ptr, int32_t section);
 
 int32_t isXPressedAfterDialogue(void);
@@ -75,6 +70,18 @@ static void *dget_functions[] = {
 	buildScheduleEntries,
 	buildScheduleLabels,
 	fillEnabledTournamentTable,
+};
+
+uint8_t *TOURNAMENT_ARRAY;
+uint8_t TOURNAMENT_SELECTED_COLUMN;
+uint8_t TOURNAMENT_SELECTED_ROW;
+int32_t MAIN_D_801353B0;
+
+static void *dget_sbss_order[] = {
+	&MAIN_D_801353B0,
+	&TOURNAMENT_SELECTED_ROW,
+	&TOURNAMENT_SELECTED_COLUMN,
+	&TOURNAMENT_ARRAY,
 };
 
 void fillEnabledTournamentTable(void)
@@ -320,7 +327,7 @@ void initTournamentInfo(int32_t arg)
 	jumpTable = getCupDataJumpTable(10, entry);
 	MAIN_D_80134FDC = getCupDataJumpTableEntry(jumpTable, 0) + 2;
 	MAIN_func_80101EF8(3, 0xff);
-	ACTIVE_INSTRUCTION = 0x64;
+	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 	MAIN_D_80134FDC = saved;
 }
 
@@ -695,7 +702,7 @@ void initTournamentSchedule(void)
 		}
 		break;
 	case 4:
-		showMapheadSelection(4, 0xfd, 2, &selectionResult, 0x4d8);
+		showMapheadSelection(4, 0xfd, 2, (int32_t *)&selectionResult, 0x4d8);
 		SELECTION_MENU_STATE = 2;
 		SCRIPT_STATE_4 = 5;
 		SCRIPT_STATE_3 = 2;

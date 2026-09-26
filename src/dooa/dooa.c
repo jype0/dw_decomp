@@ -91,26 +91,11 @@ typedef struct {
 } DissolveScaleCurve;
 
 extern int32_t VIEWPORT_DISTANCE;
-extern int32_t MAIN_D_8013532C;
-extern int32_t MAIN_D_80135330;
-extern int32_t MAIN_D_80135334;
 extern GsRVIEW2 GS_VIEWPOINT;
-extern int8_t MAIN_D_80135364[8];
-extern int16_t MAIN_D_80135324;
 extern int32_t ACTIVE_FRAMEBUFFER;
-extern SVECTOR MAIN_D_80135338;
-extern int32_t MAIN_D_80135340;
 extern VECTOR CAMERA_TARGET;
 extern int8_t CAMERA_REACHED_TARGET;
 extern int32_t FLASH_INSTANCE;
-extern int8_t DOO2_LOADING_COMPLETE;
-extern int32_t MAIN_D_80135328;
-extern int32_t MAIN_D_80135348;
-extern int32_t MAIN_D_8013534C;
-extern int32_t MAIN_D_80135350;
-extern int32_t MAIN_D_80135354;
-extern int32_t MAIN_D_80135358;
-extern SVECTOR MAIN_D_8013535C;
 
 void DOOA_renderDigimonModel(Entity *entity, uint32_t otPoint);
 int32_t DOOA_renderIrisWindow(Entity *entity, int32_t startFrame, int32_t endFrame, int32_t frame);
@@ -190,6 +175,44 @@ static void *dooa_functions[] = {
 	DOOA_initOrderingTable,
 	DOOA_renderDissolve,
 	DOOA_tickDissolve,
+};
+
+int16_t EGG_DIGIMON_TYPES[4] = { 1, 15, 29, 43 };
+SVECTOR MAIN_D_80134BB4 = { 0 };
+int8_t DOOA_ENTITIES_VISIBLE = 1;
+
+int16_t MAIN_D_80135324;
+int32_t MAIN_D_80135328;
+int32_t MAIN_D_8013532C;
+int32_t MAIN_D_80135330;
+int32_t MAIN_D_80135334;
+SVECTOR MAIN_D_80135338;
+int32_t MAIN_D_80135340;
+int8_t DOO2_LOADING_COMPLETE;
+int32_t MAIN_D_80135348;
+int32_t MAIN_D_8013534C;
+int32_t MAIN_D_80135350;
+int32_t MAIN_D_80135354;
+int32_t MAIN_D_80135358;
+SVECTOR MAIN_D_8013535C;
+int8_t MAIN_D_80135364[8];
+
+static void *dooa_sbss_order[] = {
+	&MAIN_D_80135364,
+	&MAIN_D_8013535C,
+	&MAIN_D_80135358,
+	&MAIN_D_80135354,
+	&MAIN_D_80135350,
+	&MAIN_D_8013534C,
+	&MAIN_D_80135348,
+	&DOO2_LOADING_COMPLETE,
+	&MAIN_D_80135340,
+	&MAIN_D_80135338,
+	&MAIN_D_80135334,
+	&MAIN_D_80135330,
+	&MAIN_D_8013532C,
+	&MAIN_D_80135328,
+	&MAIN_D_80135324,
 };
 
 // clang-format off

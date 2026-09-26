@@ -85,53 +85,6 @@ static void *btl_functions[] = {
 	isScreenConcave,
 };
 
-int16_t MAIN_D_801346D8[4] = { 0, 1024, 2048, 3072 };
-uint8_t MAIN_D_801346E0[5] = { 3, 4, 5, 7, 8 };
-uint8_t MAIN_D_801346E8[4] = { 70, 40, 30, 0 };
-uint8_t MAIN_D_801346EC[4] = { 50, 20, 5, 0 };
-uint8_t MAIN_D_801346F0[4] = { 50, 20, 10, 0 };
-uint8_t MAIN_D_801346F4[4] = { 10, 5, 0, 0 };
-int8_t MAIN_D_801346F8 = -1;
-char BTL_STR_SHOUT_RUN[] = "Run!";
-char BTL_STR_SHOUT_ATTACK[] = "Attack!";
-char BTL_STR_SHOUT_CHANGE[] = "Change!";
-char BTL_STR_COMMAND_RUN[] = "Run";
-char BTL_STR_COMMAND_ATTACK[] = "Attack";
-char BTL_STR_COMMAND_CHANGE[] = "Change";
-uint8_t MAIN_D_80134728[5] = { 0, 11, 25, 39, 50 };
-uint8_t MAIN_D_80134730[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
-uint8_t MAIN_D_80134738[8] = { 0x50, 0x68, 0x58, 0x68, 0xa8, 0x90, 0x90, 0x80 };
-char BTL_STR_YELLOW[] = "#C7";
-char BTL_STR_WHITE_WAIT[] = "#C1#W";
-char BTL_STR_MP_BONUS_20[] = "20";
-char BTL_STR_MP_BONUS_15[] = "15";
-char BTL_STR_MP_BONUS_10[] = "10";
-char BTL_STR_MP_BONUS_5[] = "5";
-char BTL_STR_MP_BONUS_PERCENT[] = "%!#W";
-uint8_t MAIN_D_80134764[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-uint8_t MAIN_D_8013476C[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
-uint8_t MAIN_D_80134774[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-char MAIN_D_8013477C[] = "%d\n";
-int8_t MAIN_D_80134780[4] = { 1, 0, -1, 0 };
-int8_t MAIN_D_80134784[4] = { 0, 1, 0, -1 };
-int8_t MAIN_D_80134788[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
-int8_t MAIN_D_80134790[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
-int8_t MAIN_D_80134798[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
-int32_t MAIN_D_801347A0 = 0x808080;
-uint8_t MAIN_D_801347A4[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
-int8_t MAIN_D_801347AC[6] = { 0, 16, 32, 48, 64, 80 };
-SVECTOR MAIN_D_801347B4 = { 0 };
-int16_t MAIN_D_801347BC[3] = { 0, 1, 2 };
-SVECTOR MAIN_D_801347C4 = { 0 };
-RGB8 MAIN_D_801347CC = { 0xcc, 0xa8, 0x28 };
-SVECTOR MAIN_D_801347D0 = { 0, -50, -50, 0 };
-SVECTOR MAIN_D_801347D8 = { 0, -50, 50, 0 };
-SVECTOR MAIN_D_801347E0 = { 0, 50, -50, 0 };
-SVECTOR MAIN_D_801347E8 = { 0, 50, 50, 0 };
-uint8_t MAIN_D_801347F0[4] = { 180, 100, 235, 180 };
-uint8_t MAIN_D_801347F4[4] = { 20, 20, 150, 180 };
-uint8_t MAIN_D_801347F8[4] = { 255, 255, 220, 180 };
-
 int32_t isScreenConcave(void)
 {
 	int32_t i;

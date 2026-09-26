@@ -25,6 +25,18 @@ static void *trn_hp_functions[] = {
 	TRN_setupHpTraining,
 };
 
+int16_t MAIN_D_8013536C;
+int16_t MAIN_D_8013536E;
+int8_t MAIN_D_80135370;
+int8_t MAIN_D_80135371;
+
+static void *trn_hp_sbss_order[] = {
+	&MAIN_D_80135371,
+	&MAIN_D_80135370,
+	&MAIN_D_8013536E,
+	&MAIN_D_8013536C,
+};
+
 static void trn_hp__garbage__(void)
 {
 	int32_t v0;

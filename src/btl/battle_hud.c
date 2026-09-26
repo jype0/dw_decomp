@@ -17,19 +17,8 @@
 #include <dw/sjis.h>
 #include <dw/swap.h>
 
-extern char BTL_STR_COMMAND_RUN[];
-extern char BTL_STR_COMMAND_ATTACK[];
-extern char BTL_STR_COMMAND_CHANGE[];
-extern int16_t BATTLE_END_POS_X;
-extern uint8_t *BATTLE_END_CURSOR;
-extern uint16_t BATTLE_END_PEN_X;
-extern uint16_t BATTLE_END_PEN_Y;
-extern uint16_t BATTLE_END_V;
-extern int16_t MAIN_D_80135090[2];
-extern int32_t MAIN_D_801350C0;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
-extern uint8_t MAIN_D_801350BC;
 extern StatsGains STATS_GAINS;
 extern char BTL_STR_LISTENS_TO[];
 extern char BTL_STR_DROPPED[];
@@ -43,17 +32,6 @@ extern char BTL_STR_MP_CONSUMPTION_BONUS[];
 extern char BTL_STR_REDUCED_BY[];
 extern char BTL_STR_LEARNED[];
 extern MATRIX BTL_D_80072FF4;
-extern int16_t BATTLE_END_POS_Z;
-extern int16_t BATTLE_END_WIDTH;
-extern int16_t BATTLE_END_HEIGHT;
-extern uint8_t MAIN_D_801350C4;
-extern uint8_t MAIN_D_801350C5;
-extern uint8_t MAIN_D_801350C6;
-extern uint8_t MAIN_D_801350C7;
-extern uint8_t MAIN_D_801350C8;
-extern uint8_t MAIN_D_801350C9;
-extern uint8_t MAIN_D_801350CA;
-extern uint8_t MAIN_D_801350CB;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 int16_t entityGetTechFromAnim(Entity *entity, int32_t anim);
@@ -126,6 +104,82 @@ static void *battle_hud_functions[] = {
 	BTL_tickFinisherChargeup,
 	BTL_initializeFinisherChargeup,
 	BTL_drawHoveredCommandName,
+};
+
+char BTL_STR_COMMAND_RUN[] = "Run";
+char BTL_STR_COMMAND_ATTACK[] = "Attack";
+char BTL_STR_COMMAND_CHANGE[] = "Change";
+uint8_t MAIN_D_80134728[5] = { 0, 11, 25, 39, 50 };
+uint8_t MAIN_D_80134730[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
+uint8_t MAIN_D_80134738[4] = { 0x50, 0x68, 0x58, 0x68 };
+uint8_t MAIN_D_8013473C[4] = { 0xa8, 0x90, 0x90, 0x80 };
+char BTL_STR_YELLOW[] = "#C7";
+char BTL_STR_WHITE_WAIT[] = "#C1#W";
+char BTL_STR_MP_BONUS_20[] = "20";
+char BTL_STR_MP_BONUS_15[] = "15";
+char BTL_STR_MP_BONUS_10[] = "10";
+char BTL_STR_MP_BONUS_5[] = "5";
+char BTL_STR_MP_BONUS_PERCENT[] = "%!#W";
+uint8_t MAIN_D_80134764[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t MAIN_D_8013476C[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
+uint8_t MAIN_D_80134774[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+
+int16_t MAIN_D_80135090[2];
+int8_t MAIN_D_80135094;
+int32_t BATTLE_END_TYPING;
+int16_t BATTLE_END_POS_X;
+int16_t BATTLE_END_POS_Z;
+int16_t BATTLE_END_WIDTH;
+int16_t BATTLE_END_HEIGHT;
+uint8_t *BATTLE_END_CURSOR;
+uint16_t BATTLE_END_PEN_X;
+uint16_t BATTLE_END_PEN_Y;
+uint16_t BATTLE_END_V;
+int16_t BATTLE_END_ROWS_SHOWN;
+int16_t BATTLE_END_BOX_LINE_COUNT;
+int16_t BATTLE_END_ROWS_DRAWN;
+int16_t BATTLE_END_VISIBLE_ROWS;
+int16_t BATTLE_END_WAIT_FRAMES;
+int16_t BATTLE_END_WAIT_TIMER[2];
+uint8_t MAIN_D_801350BC;
+int32_t MAIN_D_801350C0;
+uint8_t MAIN_D_801350C4;
+uint8_t MAIN_D_801350C5;
+uint8_t MAIN_D_801350C6;
+uint8_t MAIN_D_801350C7;
+uint8_t MAIN_D_801350C8;
+uint8_t MAIN_D_801350C9;
+uint8_t MAIN_D_801350CA;
+uint8_t MAIN_D_801350CB;
+
+static void *battle_hud_sbss_order[] = {
+	&MAIN_D_801350CB,
+	&MAIN_D_801350CA,
+	&MAIN_D_801350C9,
+	&MAIN_D_801350C8,
+	&MAIN_D_801350C7,
+	&MAIN_D_801350C6,
+	&MAIN_D_801350C5,
+	&MAIN_D_801350C4,
+	&MAIN_D_801350C0,
+	&MAIN_D_801350BC,
+	&BATTLE_END_WAIT_TIMER,
+	&BATTLE_END_WAIT_FRAMES,
+	&BATTLE_END_VISIBLE_ROWS,
+	&BATTLE_END_ROWS_DRAWN,
+	&BATTLE_END_BOX_LINE_COUNT,
+	&BATTLE_END_ROWS_SHOWN,
+	&BATTLE_END_V,
+	&BATTLE_END_PEN_Y,
+	&BATTLE_END_PEN_X,
+	&BATTLE_END_CURSOR,
+	&BATTLE_END_HEIGHT,
+	&BATTLE_END_WIDTH,
+	&BATTLE_END_POS_Z,
+	&BATTLE_END_POS_X,
+	&BATTLE_END_TYPING,
+	&MAIN_D_80135094,
+	&MAIN_D_80135090,
 };
 
 // clang-format off
@@ -401,8 +455,8 @@ void BTL_tickDeathCountdown(void)
 			BTL_D_80073E78.data.step++;
 			frame = (BTL_D_80073E78.data.timer + 0x1d) / 30;
 			if (frame < 5) {
-				spin->u = (MAIN_D_80134730 + frame)[7];
-				vpos = (MAIN_D_80134730 + frame)[0xb];
+				spin->u = (MAIN_D_80134738 - 1)[frame];
+				vpos = (MAIN_D_8013473C - 1)[frame];
 			} else {
 				spin->u = 0x58;
 				vpos = 0x80;
@@ -482,7 +536,7 @@ void BTL_initializeBattleEndText(int16_t arg0, int16_t arg1, RECT *arg2)
 	BTL_END_BOX_TEXTBUFFER[0] = 0;
 	BATTLE_END_VISIBLE_ROWS = arg1;
 	BATTLE_END_WAIT_FRAMES = 0x3c;
-	BATTLE_END_WAIT_TIMER = 0x3c;
+	BATTLE_END_WAIT_TIMER[0] = 0x3c;
 }
 
 void BTL_appendItemDroppedText(int32_t *p)
@@ -613,7 +667,7 @@ void BTL_drawBattleEndText(int32_t flag)
 				BATTLE_END_CURSOR++;
 				break;
 			case 'W':
-				BATTLE_END_WAIT_TIMER = BATTLE_END_WAIT_FRAMES;
+				BATTLE_END_WAIT_TIMER[0] = BATTLE_END_WAIT_FRAMES;
 				/* fall through */
 			case 'R':
 				BATTLE_END_PEN_X = 0;
@@ -644,31 +698,31 @@ void BTL_scrollBattleEndText(void)
 
 void BTL_tickBattleEndText(void)
 {
-	if (BATTLE_END_WAIT_TIMER != 0) {
-		BATTLE_END_WAIT_TIMER -= 1;
+	if (BATTLE_END_WAIT_TIMER[0] != 0) {
+		BATTLE_END_WAIT_TIMER[0] -= 1;
 	}
 
 	if (BTL_END_BOX_TEXTBUFFER[0] == 0) {
 		if (((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) && (POLLED_INPUT != POLLED_INPUT_PREVIOUS)) {
-			BATTLE_END_WAIT_TIMER = 0;
+			BATTLE_END_WAIT_TIMER[0] = 0;
 		}
 		return;
 	}
 
 	if (BATTLE_END_ROWS_SHOWN == BATTLE_END_VISIBLE_ROWS) {
-		if (BATTLE_END_WAIT_TIMER == 0) {
+		if (BATTLE_END_WAIT_TIMER[0] == 0) {
 			BTL_scrollBattleEndText();
 		}
 	} else {
 		BTL_drawBattleEndText(BATTLE_END_TYPING);
-		if (BATTLE_END_WAIT_TIMER != 0) {
+		if (BATTLE_END_WAIT_TIMER[0] != 0) {
 			BATTLE_END_TYPING = 0;
 		}
 	}
 
 	if (((POLLED_INPUT == 0x40) || (POLLED_INPUT == 0x10)) && (POLLED_INPUT != POLLED_INPUT_PREVIOUS)) {
-		if (BATTLE_END_WAIT_TIMER != 0) {
-			BATTLE_END_WAIT_TIMER = 0;
+		if (BATTLE_END_WAIT_TIMER[0] != 0) {
+			BATTLE_END_WAIT_TIMER[0] = 0;
 		} else {
 			BATTLE_END_TYPING = 1;
 		}
@@ -682,7 +736,7 @@ void BTL_renderBattleEndText(int32_t n)
 
 int32_t BTL_isEndBoxTextFinished(void)
 {
-	if ((BATTLE_END_WAIT_TIMER == 0) && (BATTLE_END_BOX_LINE_COUNT == BATTLE_END_ROWS_DRAWN)) {
+	if ((BATTLE_END_WAIT_TIMER[0] == 0) && (BATTLE_END_BOX_LINE_COUNT == BATTLE_END_ROWS_DRAWN)) {
 		return 1;
 	}
 
