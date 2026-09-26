@@ -108,8 +108,8 @@ extern uint8_t *CURRENT_SCRIPT_PTR;
 void unsetCameraFollowPlayer(void);
 int32_t MAIN_func_800D8E64(int32_t param_1, int32_t param_2, int32_t param_3);
 int32_t tickRemoveMist(void);
-int32_t MAIN_func_801138B0(void);
-int32_t MAIN_func_80113A20(void);
+int32_t tickSaveMachine(void);
+int32_t tickGameClearSave(void);
 int32_t isTrainingComplete(void);
 void setCameraFollowPlayer(void);
 void setFoodTimer(int32_t type);
@@ -469,12 +469,12 @@ int32_t tickScript(void)
 			lostAllLives();
 			break;
 		case 48:
-			if (MAIN_func_801138B0()) {
+			if (tickSaveMachine()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
 		case 54:
-			if (MAIN_func_80113A20()) {
+			if (tickGameClearSave()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 			break;
