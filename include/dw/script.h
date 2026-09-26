@@ -9,6 +9,143 @@
 #include <dw/font.h>
 #include <dw/types.h>
 
+/*
+ * Script opcodes, named as in the DW1 script instruction sheet. Arguments
+ * follow the opcode byte; "_" is a padding byte, u8/u16/s16/s32 are
+ * little-endian values, "id" is a script id (an NPC, or a SPEAKER_* value) and
+ * "pstat" the index of a pstat. Offsets are from the start of the script.
+ * ACTIVE_INSTRUCTION holds the opcode the script waits on, such as
+ * SCRIPT_OP_SHOW_TEXTBOX while a textbox is shown.
+ */
+#define SCRIPT_OP_SET_SELECTION			0x10	/* u8 count, u16 targets[count], text */
+#define SCRIPT_OP_JUMP_AND_LINK			0x13	/* _, u16 offset */
+#define SCRIPT_OP_JUMP_TO_FILE_AND_LINK		0x14	/* _, u16 script, u16 section */
+#define SCRIPT_OP_JUMP_RETURN			0x15	/* _ */
+#define SCRIPT_OP_JUMP_TO			0x16	/* _, u16 offset */
+#define SCRIPT_OP_JUMP_TO_FILE			0x17	/* _, u16 script, u16 section */
+#define SCRIPT_OP_SWITCH			0x18	/* pstat, u16 count, u16 offsets[count] */
+#define SCRIPT_OP_IF				0x19	/* _, entries, 0x19, _ */
+#define SCRIPT_OP_SHOW_TEXTBOX			0x1A	/* _, text */
+#define SCRIPT_OP_SET_DIALOG_OWNER		0x1B	/* id */
+#define SCRIPT_OP_SET_TRIGGER			0x1C	/* _, u16 trigger */
+#define SCRIPT_OP_UNSET_TRIGGER			0x1D	/* _, u16 trigger */
+#define SCRIPT_OP_SET_PSTAT			0x1E	/* _, pstat, u8 value */
+#define SCRIPT_OP_ADD_TO_PSTAT			0x1F	/* _, pstat, u8 value */
+#define SCRIPT_OP_REDUCE_PSTAT			0x20	/* _, pstat, u8 value */
+#define SCRIPT_OP_STORE_MAP_ID			0x21	/* pstat */
+#define SCRIPT_OP_STORE_DIGIMON_TYPE		0x22	/* pstat */
+#define SCRIPT_OP_SET_INVENTORY_SIZE		0x23	/* u8 size */
+#define SCRIPT_OP_STORE_RANDOM			0x24	/* _, pstat, u8 max */
+#define SCRIPT_OP_STORE_DATE			0x25	/* pstat: year, day, hour, minute */
+#define SCRIPT_OP_SET_TEXTBOX_SIZE		0x26	/* id origin, u8 cols, u8 rows */
+#define SCRIPT_OP_FADEOUT_HUD			0x27	/* u8 box */
+#define SCRIPT_OP_GIVE_ITEM			0x28	/* _, u8 item, u8 amount */
+#define SCRIPT_OP_REMOVE_ITEM			0x29	/* _, u8 item, u8 amount */
+#define SCRIPT_OP_ADD_MONEY			0x2A	/* _, s32 amount */
+#define SCRIPT_OP_REDUCE_MONEY			0x2B	/* _, s32 amount */
+#define SCRIPT_OP_COMPARE_DATE			0x2C	/* pstat date, u16 trigger, u8 compare, u8 year, u8 day, u8 hour, u8 minute, _ */
+#define SCRIPT_OP_LEARN_MOVE			0x2D	/* u8 move */
+#define SCRIPT_OP_UNUSED_2E			0x2E	/* u8 */
+#define SCRIPT_OP_GIVE_CARD			0x2F	/* u8 card */
+#define SCRIPT_OP_TAKE_CARD			0x30	/* u8 card */
+#define SCRIPT_OP_SET_MERIT			0x31	/* _, u16 value */
+#define SCRIPT_OP_ADD_MERIT			0x32	/* _, u16 value */
+#define SCRIPT_OP_REDUCE_MERIT			0x33	/* _, u16 value; sets MERIT to -value */
+#define SCRIPT_OP_SET_STAT			0x34	/* u8 stat, u16 value; a SCRIPT_STAT_* */
+#define SCRIPT_OP_ADD_STAT			0x35	/* u8 stat, u16 value */
+#define SCRIPT_OP_REDUCE_STAT			0x36	/* u8 stat, u16 value */
+#define SCRIPT_OP_ADVANCE_TO_DATE_AT		0x37	/* pstat: year, day, hour, minute */
+#define SCRIPT_OP_ADD_MINUTES_TO_DATE_AT	0x38	/* pstat, s32 minutes */
+#define SCRIPT_OP_ADD_MINUTES_TO_DATE_AT_2	0x39	/* pstat, s32 minutes */
+#define SCRIPT_OP_UNUSED_3A			0x3A	/* _, u8, u8 */
+#define SCRIPT_OP_UNUSED_3B			0x3B	/* _, u8, u8 */
+#define SCRIPT_OP_UNUSED_3C			0x3C	/* _, u8, u8 */
+#define SCRIPT_OP_UNUSED_3D			0x3D	/* u8 */
+#define SCRIPT_OP_UNUSED_3E			0x3E	/* u8 */
+#define SCRIPT_OP_STORE_DIGIMON_VALUE		0x3F	/* _, pstat digimon, pstat out */
+#define SCRIPT_OP_LOAD_DIGIMON			0x46	/* u8 digimon */
+#define SCRIPT_OP_SET_DIGIMON			0x47	/* u8 digimon, u8 slot, u8 autotalk */
+#define SCRIPT_OP_UNLOAD_ENTITY			0x48	/* id */
+#define SCRIPT_OP_CALL_DIGIMON_ROUTINE		0x49	/* u8 routine, see callDigimonRoutine() */
+#define SCRIPT_OP_WAIT_FOR_ENTITY		0x4A	/* id, or 0xFF for all */
+#define SCRIPT_OP_WARP_TO			0x4B	/* u8 screen, u8 exit, u8 section */
+#define SCRIPT_OP_ENTITY_LOOK_AT_ENTITY		0x4C	/* _, id, id target */
+#define SCRIPT_OP_ENTITY_SET_ROTATION		0x4D	/* id, s16 rotation */
+#define SCRIPT_OP_ENTITY_WALK_TO		0x4E	/* id, s16 x, s16 z, u8 anim, u8 */
+#define SCRIPT_OP_MOVE_CAMERA_TO		0x4F	/* u8 speed, s16 x, s16 z */
+#define SCRIPT_OP_MOVE_CAMERA_TO_ENTITY		0x50	/* _, id, u8 speed */
+#define SCRIPT_OP_ENTITY_WALK_TO_ENTITY		0x51	/* id, u8 anim, id target */
+#define SCRIPT_OP_ENTITY_WALK_TO_WITH_CAMERA	0x52	/* as ENTITY_WALK_TO, the camera follows */
+#define SCRIPT_OP_ENTITY_WALK_TO_ENTITY_WITH_CAMERA	0x53	/* as ENTITY_WALK_TO_ENTITY, the camera follows */
+#define SCRIPT_OP_RESET_ENTITY_ORIGIN		0x54	/* id */
+#define SCRIPT_OP_SET_TEXTBOX_ORIGIN		0x55	/* _, s16 x, s16 y, s16 z */
+#define SCRIPT_OP_PLAY_ANIMATION		0x56	/* _, id, u8 anim */
+#define SCRIPT_OP_SET_OBJ_VISIBILITY		0x57	/* _, u8 object, u8 flag */
+#define SCRIPT_OP_TELEPORT			0x58	/* pstat: screen, exit */
+#define SCRIPT_OP_PLAY_SOUND			0x5A	/* _, u8 bank, u8 sound */
+#define SCRIPT_OP_UNUSED_5B			0x5B	/* u8 */
+#define SCRIPT_OP_UNUSED_5C			0x5C	/* u8 */
+#define SCRIPT_OP_SET_BGM			0x5D	/* u8 bgm */
+#define SCRIPT_OP_STOP_BGM			0x5E	/* u8 */
+#define SCRIPT_OP_UNUSED_5F			0x5F	/* u8 */
+#define SCRIPT_OP_CALL_ROUTINE			0x64	/* u8 builtin */
+#define SCRIPT_OP_REMOVE_CONDITION		0x65	/* u8 mask of CONDITION_* */
+#define SCRIPT_OP_START_BATTLE			0x66	/* u8 */
+#define SCRIPT_OP_DELAY				0x67	/* _, u16 frames */
+#define SCRIPT_OP_SET_TEXTBOX_MODE		0x68	/* _, u8 mode, u8 frames */
+#define SCRIPT_OP_DEAL_DAMAGE			0x69	/* pstat percent of max HP */
+#define SCRIPT_OP_SET_AUTOTALK			0x6A	/* _, id, u8 autotalk */
+#define SCRIPT_OP_UNKNOWN_6B			0x6B
+#define SCRIPT_OP_ENTITY_MOVE_TO		0x6C	/* id, s16 x, s16 z, u8 speed, u8 */
+#define SCRIPT_OP_ENTITY_MOVE_TO_ENTITY		0x6D	/* id, id target, u8 speed */
+#define SCRIPT_OP_ENTITY_MOVE_TO_WITH_CAMERA	0x6E	/* as ENTITY_MOVE_TO, but uses ENTITY_MOVE_TO_ENTITY_WITH_CAMERA's movement */
+#define SCRIPT_OP_ENTITY_MOVE_TO_ENTITY_WITH_CAMERA	0x6F	/* as ENTITY_MOVE_TO_ENTITY, the camera follows */
+#define SCRIPT_OP_ROTATE_3D_OBJECT		0x70	/* u8 door, u8, u8 target */
+#define SCRIPT_OP_MOVE_OBJECT_TO		0x71	/* u8 slot, id, u8 speed, s8 angle, _, s16 x, s16 z */
+#define SCRIPT_OP_ENTITY_MOVE_TO_AXIS		0x72	/* id, s16 target, u8 axis, u8 speed */
+#define SCRIPT_OP_ENTITY_MOVE_TO_AXIS_WITH_CAMERA	0x73	/* as ENTITY_MOVE_TO_AXIS, the camera follows */
+#define SCRIPT_OP_SPAWN_ITEM			0x74	/* u8 item, s16 x, s16 z */
+#define SCRIPT_OP_SPAWN_CHEST			0x75	/* u8 item, s16 x, y, z, w, u16 trigger */
+#define SCRIPT_OP_SPAWN_BOULDER			0x76	/* u8 */
+#define SCRIPT_OP_MOVE_BOULDER			0x77	/* u8, s16 x, s16 z */
+#define SCRIPT_OP_DESPAWN_BOULDER		0x78	/* u8 */
+#define SCRIPT_OP_UNLOAD_DIGIMON		0x79	/* u8 digimon */
+#define SCRIPT_OP_COPY_PSTAT			0x7A	/* _, pstat from, pstat to */
+#define SCRIPT_OP_SECTION_ON_EXIT		0x7B	/* u8 section to run after a screen change */
+#define SCRIPT_OP_SET_RECT_IMPASSIBLE		0x7C	/* u8, s16 x, s16 z, u8 w, u8 h */
+#define SCRIPT_OP_SPAWN_SPRITE_AT_LOCATION	0x7D	/* u8 sprite, s16 x, y, z, w */
+#define SCRIPT_OP_SPAWN_SPRITE_AT_ENTITY	0x7E	/* id, u8 node, u8 sprite */
+#define SCRIPT_OP_SET_SCRIPT			0xFB	/* _, u16 script, u16 map */
+#define SCRIPT_OP_UNUSED_FC			0xFC
+#define SCRIPT_OP_UNUSED_FD			0xFD
+#define SCRIPT_OP_END_SECTION			0xFE
+#define SCRIPT_OP_END_SECTION_2			0xFF
+
+/* The stats that SCRIPT_OP_SET_STAT and the like change, see getStatsPointer(). */
+#define SCRIPT_STAT_OFFENSE		0x00
+#define SCRIPT_STAT_DEFENSE		0x01
+#define SCRIPT_STAT_SPEED		0x02
+#define SCRIPT_STAT_BRAINS		0x03
+#define SCRIPT_STAT_MAX_HP		0x04
+#define SCRIPT_STAT_MAX_MP		0x05
+#define SCRIPT_STAT_CURRENT_HP		0x06
+#define SCRIPT_STAT_CURRENT_MP		0x07
+#define SCRIPT_STAT_TIREDNESS		0x08
+#define SCRIPT_STAT_HAPPINESS		0x09
+#define SCRIPT_STAT_DISCIPLINE		0x0A
+#define SCRIPT_STAT_ENERGY		0x0B
+#define SCRIPT_STAT_VIRUS		0x0C
+#define SCRIPT_STAT_LIFETIME		0x0D
+#define SCRIPT_STAT_MERIT		0x0E
+#define SCRIPT_STAT_STARTED_BATTLES	0x0F
+#define SCRIPT_STAT_FLED_BATTLES	0x10
+#define SCRIPT_STAT_TOURNAMENTS_WON	0x11
+#define SCRIPT_STAT_TOURNAMENT_WINS	0x12
+#define SCRIPT_STAT_TOURNAMENTS_LOST	0x13
+#define SCRIPT_STAT_WEIGHT		0x14
+#define SCRIPT_STAT_TAMER_LEVEL		0x15
+#define SCRIPT_STAT_LIVES		0x16
+
 typedef struct {
 	uint8_t *scriptPtr;
 	uint16_t scriptId;

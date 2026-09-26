@@ -352,7 +352,7 @@ int32_t tickScript(void)
 	}
 
 	switch (ACTIVE_INSTRUCTION) {
-	case 0x67:
+	case SCRIPT_OP_DELAY:
 		if (MAIN_D_80134FFC == 0) {
 			ACTIVE_INSTRUCTION = 0;
 		}
@@ -500,7 +500,7 @@ done:
 			break;
 		}
 		break;
-	case 0x4a:
+	case SCRIPT_OP_WAIT_FOR_ENTITY:
 		if ((entityId = MAIN_D_80134FA4) == 0x19) {
 			if (MAIN_func_800DF7F8()) {
 				ACTIVE_INSTRUCTION = 0;
@@ -527,8 +527,8 @@ found:;
 			}
 		}
 		break;
-	case 0x10:
-	case 0x1a:
+	case SCRIPT_OP_SET_SELECTION:
+	case SCRIPT_OP_SHOW_TEXTBOX:
 	case 0xff:
 		break;
 	}
@@ -635,12 +635,12 @@ void scriptInstruction10to27(int32_t op)
 	int32_t newValue;
 
 	switch (op) {
-	case 0x10:
+	case SCRIPT_OP_SET_SELECTION:
 		MAIN_D_80135000 = 1;
 		scriptShowSelection();
 		longjmp(SCRIPT_JMP_BUF, 2);
 		break;
-	case 0x13:
+	case SCRIPT_OP_JUMP_AND_LINK:
 		skipOneReadOneUShort(&shortArg);
 		entry.scriptPtr = MAIN_D_80134FDC;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
@@ -649,7 +649,7 @@ void scriptInstruction10to27(int32_t op)
 		MAIN_D_80134FDC =
 			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
-	case 0x14:
+	case SCRIPT_OP_JUMP_TO_FILE_AND_LINK:
 		skipOneReadTwoShort(&shortArg, &offset);
 		entry.scriptPtr = MAIN_D_80134FDC;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
@@ -659,24 +659,24 @@ void scriptInstruction10to27(int32_t op)
 		MAIN_D_80134FDC = getScriptSection(
 			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
 		break;
-	case 0x15:
+	case SCRIPT_OP_JUMP_RETURN:
 		MAIN_D_80134FDC++;
 		popScriptStack(&entry);
 		CURRENT_SCRIPT_PTR = getScript(entry.scriptId);
 		MAIN_D_80134FDC = (uint8_t *)entry.scriptPtr;
 		break;
-	case 0x16:
+	case SCRIPT_OP_JUMP_TO:
 		skipOneReadOneUShort(&shortArg);
 		MAIN_D_80134FDC =
 			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
-	case 0x17:
+	case SCRIPT_OP_JUMP_TO_FILE:
 		skipOneReadTwoShort(&shortArg, &offset);
 		CURRENT_SCRIPT_PTR = getScript(shortArg);
 		MAIN_D_80134FDC = getScriptSection(
 			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
 		break;
-	case 0x18:
+	case SCRIPT_OP_SWITCH:
 		pollOneUByteOneUShort(&pstat, &shortArg);
 		value = readPStat(pstat);
 		if (value >= shortArg) {
@@ -686,11 +686,11 @@ void scriptInstruction10to27(int32_t op)
 		MAIN_D_80134FDC =
 			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
 		break;
-	case 0x19:
+	case SCRIPT_OP_IF:
 		MAIN_D_80134FDC++;
 		MAIN_func_801050C0();
 		break;
-	case 0x1a:
+	case SCRIPT_OP_SHOW_TEXTBOX:
 		MAIN_D_80134FDC++;
 		if (MAIN_D_80135000 == 2) {
 			showTextbox(0, 0xff);
@@ -698,7 +698,7 @@ void scriptInstruction10to27(int32_t op)
 			showTextbox(0, MAIN_D_80134FE6);
 		}
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x1b:
+	case SCRIPT_OP_SET_DIALOG_OWNER:
 		pollNextScriptUByte(&pstat);
 		MAIN_D_80135000 = 0;
 		if (UI_BOX_DATA[0].state != 1) {
@@ -706,19 +706,19 @@ void scriptInstruction10to27(int32_t op)
 		}
 		setDialogueOwner(pstat);
 		break;
-	case 0x1c:
+	case SCRIPT_OP_SET_TRIGGER:
 		skipOneReadOneUShort(&shortArg);
 		setTrigger(shortArg);
 		break;
-	case 0x1d:
+	case SCRIPT_OP_UNSET_TRIGGER:
 		skipOneReadOneUShort(&shortArg);
 		unsetTrigger(shortArg);
 		break;
-	case 0x1e:
+	case SCRIPT_OP_SET_PSTAT:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		writePStat(pstat, value);
 		break;
-	case 0x1f:
+	case SCRIPT_OP_ADD_TO_PSTAT:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		newValue = readPStat(pstat) + value;
 		if (newValue >= 0x100) {
@@ -726,7 +726,7 @@ void scriptInstruction10to27(int32_t op)
 		}
 		writePStat(pstat, newValue);
 		break;
-	case 0x20:
+	case SCRIPT_OP_REDUCE_PSTAT:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		newValue = readPStat(pstat) - value;
 		if (newValue < 0) {
@@ -734,36 +734,36 @@ void scriptInstruction10to27(int32_t op)
 		}
 		writePStat(pstat, newValue);
 		break;
-	case 0x21:
+	case SCRIPT_OP_STORE_MAP_ID:
 		pollNextScriptUByte(&pstat);
 		writePStat(pstat, CURRENT_MAP_ID);
 		break;
-	case 0x22:
+	case SCRIPT_OP_STORE_DIGIMON_TYPE:
 		pollNextScriptUByte(&pstat);
 		value = PARTNER_ENTITY.digimonEntity.entity.type;
 		writePStat(pstat, value);
 		break;
-	case 0x23:
+	case SCRIPT_OP_SET_INVENTORY_SIZE:
 		pollNextScriptUByte(&pstat);
 		setInventorySize(pstat);
 		break;
-	case 0x24:
+	case SCRIPT_OP_STORE_RANDOM:
 		skipOnePollTwoScriptBytes(&pstat, &value);
 		writePStat(pstat, random(value + 1));
 		break;
-	case 0x25:
+	case SCRIPT_OP_STORE_DATE:
 		pollNextScriptUByte(&pstat);
 		writePStat(pstat, YEAR);
 		writePStat((pstat + 1) & 0xff, DAY);
 		writePStat((pstat + 2) & 0xff, HOUR);
 		writePStat((pstat + 3) & 0xff, MINUTE);
 		break;
-	case 0x26:
+	case SCRIPT_OP_SET_TEXTBOX_SIZE:
 		MAIN_func_801062F8(0xff);
 		MAIN_D_80135000 = 2;
 		scriptSetTextboxSize();
 		break;
-	case 0x27:
+	case SCRIPT_OP_FADEOUT_HUD:
 		pollNextScriptUByte(&pstat);
 		closeBox(pstat);
 		longjmp(SCRIPT_JMP_BUF, 2);
@@ -976,12 +976,12 @@ static void scriptInstruction28to3F__garbage__(int32_t op)
 	int32_t newValue;
 
 	switch (op) {
-	case 0x10:
+	case SCRIPT_OP_SET_SELECTION:
 		MAIN_D_80135000 = 1;
 		scriptShowSelection();
 		longjmp(SCRIPT_JMP_BUF, 2);
 		break;
-	case 0x13:
+	case SCRIPT_OP_JUMP_AND_LINK:
 		skipOneReadOneUShort(&shortArg);
 		entry.scriptPtr = MAIN_D_80134FDC;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
@@ -1006,7 +1006,7 @@ void scriptInstruction28to3F(int32_t op)
 	uint32_t sec;
 
 	switch (op) {
-	case 0x28:
+	case SCRIPT_OP_GIVE_ITEM:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		if (giveItem(byteArg1, byteArg2) != 0) {
 			unsetTrigger(0);
@@ -1014,35 +1014,35 @@ void scriptInstruction28to3F(int32_t op)
 			setTrigger(0);
 		}
 		break;
-	case 0x29:
+	case SCRIPT_OP_REMOVE_ITEM:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		removeItem(byteArg1, byteArg2);
 		break;
-	case 0x2a:
+	case SCRIPT_OP_ADD_MONEY:
 		skipOneReadInteger(&intArg);
 		MONEY += intArg;
 		if (MONEY >= 0xf4240) {
 			MONEY = 0xf423f;
 		}
 		break;
-	case 0x2b:
+	case SCRIPT_OP_REDUCE_MONEY:
 		skipOneReadInteger(&intArg);
 		MONEY -= intArg;
 		if (MONEY < 0) {
 			MONEY = 0;
 		}
 		break;
-	case 0x2c:
+	case SCRIPT_OP_COMPARE_DATE:
 		scriptCompareDate();
 		break;
-	case 0x2d:
+	case SCRIPT_OP_LEARN_MOVE:
 		pollNextScriptUByte(&byteArg1);
 		scriptLearnMove(byteArg1);
 		break;
-	case 0x2e:
+	case SCRIPT_OP_UNUSED_2E:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x2f:
+	case SCRIPT_OP_GIVE_CARD:
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = getCardAmount(byteArg1);
 		if (byteArg2 < 9) {
@@ -1050,7 +1050,7 @@ void scriptInstruction28to3F(int32_t op)
 			setCardAmount(byteArg1, byteArg2);
 		}
 		break;
-	case 0x30:
+	case SCRIPT_OP_TAKE_CARD:
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = getCardAmount(byteArg1);
 		if (byteArg2 != 0) {
@@ -1058,55 +1058,55 @@ void scriptInstruction28to3F(int32_t op)
 			setCardAmount(byteArg1, byteArg2);
 		}
 		break;
-	case 0x31:
+	case SCRIPT_OP_SET_MERIT:
 		skipOneReadOneUShort(&value);
 		MERIT = value;
 		if (MERIT >= 0x2710) {
 			MERIT = 0x270f;
 		}
 		break;
-	case 0x32:
+	case SCRIPT_OP_ADD_MERIT:
 		skipOneReadOneUShort(&value);
 		MERIT += value;
 		if (MERIT >= 0x2710) {
 			MERIT = 0x270f;
 		}
 		break;
-	case 0x33:
+	case SCRIPT_OP_REDUCE_MERIT:
 		skipOneReadOneUShort(&value);
 		MERIT = -value;
 		if (MERIT < 0) {
 			MERIT = 0;
 		}
 		break;
-	case 0x34:
+	case SCRIPT_OP_SET_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
 		value32 = value;
 		*statPtr = enforceStatsLimits(byteArg1, (int16_t)value32);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
-		if (byteArg1 == 0x15) {
+		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
 			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
 		}
-		if (byteArg1 == 0x16) {
+		if (byteArg1 == SCRIPT_STAT_LIVES) {
 			PARTNER_ENTITY.lives = MAIN_D_80135004;
 		}
 		break;
-	case 0x35:
+	case SCRIPT_OP_ADD_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
 		value32 = value;
 		*statPtr += value32;
 		*statPtr = enforceStatsLimits(byteArg1, *statPtr);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
-		if (byteArg1 == 0x15) {
+		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
 			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
 		}
-		if (byteArg1 == 0x16) {
+		if (byteArg1 == SCRIPT_STAT_LIVES) {
 			PARTNER_ENTITY.lives = MAIN_D_80135004;
 		}
 		break;
-	case 0x36:
+	case SCRIPT_OP_REDUCE_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
 		intArg = *statPtr - (int16_t)value;
@@ -1121,14 +1121,14 @@ void scriptInstruction28to3F(int32_t op)
 		}
 		*statPtr = intArg;
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
-		if (byteArg1 == 0x15) {
+		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
 			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
 		}
-		if (byteArg1 == 0x16) {
+		if (byteArg1 == SCRIPT_STAT_LIVES) {
 			PARTNER_ENTITY.lives = MAIN_D_80135004;
 		}
 		break;
-	case 0x37:
+	case SCRIPT_OP_ADVANCE_TO_DATE_AT:
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = readPStat(byteArg1);
 		day = readPStat((byteArg1 + 1) & 0xff);
@@ -1154,8 +1154,8 @@ void scriptInstruction28to3F(int32_t op)
 			}
 		}
 		break;
-	case 0x38:
-	case 0x39:
+	case SCRIPT_OP_ADD_MINUTES_TO_DATE_AT:
+	case SCRIPT_OP_ADD_MINUTES_TO_DATE_AT_2:
 		pollNextScriptUByte(&byteArg1);
 		pollNextInt(&intArg);
 		byteArg2 = readPStat(byteArg1);
@@ -1177,16 +1177,16 @@ void scriptInstruction28to3F(int32_t op)
 		writePStat((byteArg1 + 2) & 0xff, hour);
 		writePStat((byteArg1 + 3) & 0xff, minute);
 		break;
-	case 0x3a:
-	case 0x3b:
-	case 0x3c:
+	case SCRIPT_OP_UNUSED_3A:
+	case SCRIPT_OP_UNUSED_3B:
+	case SCRIPT_OP_UNUSED_3C:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		break;
-	case 0x3d:
-	case 0x3e:
+	case SCRIPT_OP_UNUSED_3D:
+	case SCRIPT_OP_UNUSED_3E:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x3f:
+	case SCRIPT_OP_STORE_DIGIMON_VALUE:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		byteArg1 = readPStat(byteArg1);
 		byteArg1 = DIGIMON_DATA[byteArg1].type;
@@ -1209,29 +1209,29 @@ void scriptInstruction46to58(int32_t op)
 	uint8_t *b;
 
 	switch (op) {
-	case 0x46:
+	case SCRIPT_OP_LOAD_DIGIMON:
 		pollNextScriptUByte(&byteArg1);
 		scriptLoadModel(byteArg1);
 		break;
-	case 0x47:
+	case SCRIPT_OP_SET_DIGIMON:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		scriptSetDigimon(byteArg1, byteArg2, byteArg3);
 		break;
-	case 0x48:
+	case SCRIPT_OP_UNLOAD_ENTITY:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		scriptUnloadEntity(byteArg1);
 		break;
-	case 0x49:
+	case SCRIPT_OP_CALL_DIGIMON_ROUTINE:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		callDigimonRoutine(byteArg1);
 		break;
-	case 0x4a:
+	case SCRIPT_OP_WAIT_FOR_ENTITY:
 		pollNextScriptUByte(&byteArg1);
-		ACTIVE_INSTRUCTION = 0x4a;
+		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT_FOR_ENTITY;
 		if (byteArg1 == 0xff) {
 			goto wait_for_entity_end;
 		}
@@ -1300,7 +1300,7 @@ void scriptInstruction46to58(int32_t op)
 wait_for_entity_end:
 		MAIN_D_80134FA4 = byteArg1;
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x4b:
+	case SCRIPT_OP_WARP_TO:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1311,7 +1311,7 @@ wait_for_entity_end:
 		entry.smth[1] = byteArg3;
 		pushScriptStack(&entry);
 		longjmp(SCRIPT_JMP_BUF, 3);
-	case 0x4c:
+	case SCRIPT_OP_ENTITY_LOOK_AT_ENTITY:
 		MAIN_func_801062F8(0xff);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		entityId = scriptIdToEntityId(byteArg1);
@@ -1323,7 +1323,7 @@ wait_for_entity_end:
 		b[1] = byteArg1;
 		b[2] = byteArg2;
 		break;
-	case 0x4d:
+	case SCRIPT_OP_ENTITY_SET_ROTATION:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
@@ -1336,7 +1336,7 @@ wait_for_entity_end:
 		b[1] = byteArg1;
 		*(int16_t *)(b + 4) = posX;
 		break;
-	case 0x4e:
+	case SCRIPT_OP_ENTITY_WALK_TO:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
@@ -1352,7 +1352,7 @@ wait_for_entity_end:
 		*(int16_t *)(b + 4) = posX;
 		*(int16_t *)(b + 6) = posY;
 		break;
-	case 0x4f:
+	case SCRIPT_OP_MOVE_CAMERA_TO:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
@@ -1362,7 +1362,7 @@ wait_for_entity_end:
 		*(int16_t *)(b + 6) = posY;
 		b[3] = byteArg1;
 		break;
-	case 0x50:
+	case SCRIPT_OP_MOVE_CAMERA_TO_ENTITY:
 		MAIN_func_801062F8(0xff);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		b = (uint8_t *)&MAIN_D_801BE72C;
@@ -1370,7 +1370,7 @@ wait_for_entity_end:
 		b[1] = byteArg1;
 		b[3] = byteArg2;
 		break;
-	case 0x51:
+	case SCRIPT_OP_ENTITY_WALK_TO_ENTITY:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1384,7 +1384,7 @@ wait_for_entity_end:
 		b[1] = byteArg1;
 		b[2] = byteArg3;
 		break;
-	case 0x52:
+	case SCRIPT_OP_ENTITY_WALK_TO_WITH_CAMERA:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
@@ -1400,7 +1400,7 @@ wait_for_entity_end:
 		*(int16_t *)(b + 4) = posX;
 		*(int16_t *)(b + 6) = posY;
 		break;
-	case 0x53:
+	case SCRIPT_OP_ENTITY_WALK_TO_ENTITY_WITH_CAMERA:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1414,25 +1414,25 @@ wait_for_entity_end:
 		b[1] = byteArg1;
 		b[2] = byteArg3;
 		break;
-	case 0x54:
+	case SCRIPT_OP_RESET_ENTITY_ORIGIN:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		resetEntityOrigin(byteArg1);
 		break;
-	case 0x55:
+	case SCRIPT_OP_SET_TEXTBOX_ORIGIN:
 		MAIN_D_80134FDC++;
 		pollNextTwoScriptShorts(&MAIN_D_80134FD2, &MAIN_D_80134FD4);
 		pollNextScriptShort(&MAIN_D_80134FD6);
 		break;
-	case 0x56:
+	case SCRIPT_OP_PLAY_ANIMATION:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		scriptStartAnimation(byteArg1, byteArg2);
 		break;
-	case 0x57:
+	case SCRIPT_OP_SET_OBJ_VISIBILITY:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		setMapObjectsFlag(byteArg1, 1, byteArg2);
 		break;
-	case 0x58:
+	case SCRIPT_OP_TELEPORT:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		MAIN_D_80134FF8 = readPStat(byteArg1);
@@ -1453,25 +1453,25 @@ void scriptInstruction5Ato5F(int32_t op)
 	uint8_t byteArg2;
 
 	switch (op) {
-	case 0x5a:
+	case SCRIPT_OP_PLAY_SOUND:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		playSound(byteArg1, byteArg2);
 		break;
-	case 0x5b:
+	case SCRIPT_OP_UNUSED_5B:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x5c:
+	case SCRIPT_OP_UNUSED_5C:
 		pollNextScriptUByte(&byteArg1);
 		break;
-	case 0x5d:
+	case SCRIPT_OP_SET_BGM:
 		pollNextScriptUByte(&byteArg1);
 		playBGM(byteArg1);
 		break;
-	case 0x5e:
+	case SCRIPT_OP_STOP_BGM:
 		pollNextScriptUByte(&byteArg1);
 		resetBGM();
 		break;
-	case 0x5f:
+	case SCRIPT_OP_UNUSED_5F:
 		pollNextScriptUByte(&byteArg1);
 		break;
 	}
@@ -1547,7 +1547,7 @@ void scriptInstruction64to7E(int32_t op)
 	uint8_t *b;
 
 	switch (op) {
-	case 0x64:
+	case SCRIPT_OP_CALL_ROUTINE:
 		pollNextScriptUByte(&byteArg1);
 		MAIN_D_80134FF8 = byteArg1;
 		switch (byteArg1) {
@@ -1567,7 +1567,7 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x0e:
 		case 0x12:
 		case 0x2f:
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SELECTION_MENU_STATE = 0;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
@@ -1616,7 +1616,7 @@ void scriptInstruction64to7E(int32_t op)
 					break;
 				}
 			}
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 			break;
@@ -1656,7 +1656,7 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x17:
 		case 0x18:
 		case 0x32:
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x19:
@@ -1717,12 +1717,12 @@ void scriptInstruction64to7E(int32_t op)
 			openSaveMachine();
 			/* fall through */
 		case 0x25:
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x36:
 			gameClearSave();
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x26:
@@ -1750,7 +1750,7 @@ void scriptInstruction64to7E(int32_t op)
 			isSoundLoaded(0, 8);
 			setTamerState(0x10);
 			SOME_SCRIPT_SYNC_BIT = 0;
-			ACTIVE_INSTRUCTION = 0x64;
+			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 			break;
@@ -1790,11 +1790,11 @@ void scriptInstruction64to7E(int32_t op)
 			goto script_end;
 		}
 		break;
-	case 0x65:
+	case SCRIPT_OP_REMOVE_CONDITION:
 		pollNextScriptUByte(&byteArg1);
 		PARTNER_PARA.condition &= ~byteArg1;
 		break;
-	case 0x66:
+	case SCRIPT_OP_START_BATTLE:
 		pollNextScriptUByte(&byteArg1);
 		if (MAIN_D_80134FC8 < 0x270f) {
 			MAIN_D_80134FC8++;
@@ -1851,15 +1851,15 @@ void scriptInstruction64to7E(int32_t op)
 		b[1] = 0xfd;
 		b[3] = 0xa;
 
-		ACTIVE_INSTRUCTION = 0x4a;
+		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT_FOR_ENTITY;
 		MAIN_D_80134FA4 = 0xa;
 		MAIN_func_8010020C();
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x67:
+	case SCRIPT_OP_DELAY:
 		skipOneReadOneUShort(&MAIN_D_80134FFC);
-		ACTIVE_INSTRUCTION = 0x67;
+		ACTIVE_INSTRUCTION = SCRIPT_OP_DELAY;
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x68:
+	case SCRIPT_OP_SET_TEXTBOX_MODE:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		MAIN_D_80134FE5 = byteArg1;
 		if (byteArg1 != 2) {
@@ -1867,7 +1867,7 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		MAIN_D_80135010 = byteArg2;
 		break;
-	case 0x69:
+	case SCRIPT_OP_DEAL_DAMAGE:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		{
@@ -1889,7 +1889,7 @@ void scriptInstruction64to7E(int32_t op)
 			              0);
 		}
 		break;
-	case 0x6a:
+	case SCRIPT_OP_SET_AUTOTALK:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		byteArg1 = scriptIdToEntityId(byteArg1);
 		if (byteArg1 == 0xff || byteArg1 < 2) {
@@ -1897,9 +1897,9 @@ void scriptInstruction64to7E(int32_t op)
 		}
 		NPC_ENTITIES[byteArg1 - 2].autotalk = byteArg2;
 		break;
-	case 0x6b:
+	case SCRIPT_OP_UNKNOWN_6B:
 		break;
-	case 0x6c:
+	case SCRIPT_OP_ENTITY_MOVE_TO:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
@@ -1915,7 +1915,7 @@ void scriptInstruction64to7E(int32_t op)
 			*(int16_t *)(b + 6) = posY;
 		}
 		break;
-	case 0x6d:
+	case SCRIPT_OP_ENTITY_MOVE_TO_ENTITY:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1929,7 +1929,7 @@ void scriptInstruction64to7E(int32_t op)
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x6e:
+	case SCRIPT_OP_ENTITY_MOVE_TO_WITH_CAMERA:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
@@ -1945,7 +1945,7 @@ void scriptInstruction64to7E(int32_t op)
 			*(int16_t *)(b + 6) = posY;
 		}
 		break;
-	case 0x6f:
+	case SCRIPT_OP_ENTITY_MOVE_TO_ENTITY_WITH_CAMERA:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1959,7 +1959,7 @@ void scriptInstruction64to7E(int32_t op)
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x70:
+	case SCRIPT_OP_ROTATE_3D_OBJECT:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1967,7 +1967,7 @@ void scriptInstruction64to7E(int32_t op)
 		MAIN_D_801BE738[1] = byteArg1;
 		MAIN_D_801BE738[2] = byteArg3;
 		break;
-	case 0x71:
+	case SCRIPT_OP_MOVE_OBJECT_TO:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
@@ -1982,7 +1982,7 @@ void scriptInstruction64to7E(int32_t op)
 		*(int16_t *)(b + 8) = posX;
 		*(int16_t *)(b + 0xa) = posY;
 		break;
-	case 0x72:
+	case SCRIPT_OP_ENTITY_MOVE_TO_AXIS:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
@@ -1998,7 +1998,7 @@ void scriptInstruction64to7E(int32_t op)
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x73:
+	case SCRIPT_OP_ENTITY_MOVE_TO_AXIS_WITH_CAMERA:
 		MAIN_func_801062F8(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextScriptShort(&posX);
@@ -2014,61 +2014,61 @@ void scriptInstruction64to7E(int32_t op)
 			b[3] = byteArg3;
 		}
 		break;
-	case 0x74:
+	case SCRIPT_OP_SPAWN_ITEM:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		spawnItem(byteArg1, posX, posY);
 		break;
-	case 0x75:
+	case SCRIPT_OP_SPAWN_CHEST:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptShorts(&posZ, &posW);
 		pollNextScriptUShort(&triggerId);
 		spawnChest(posX, posY, posZ, posW, byteArg1, triggerId);
 		break;
-	case 0x76:
+	case SCRIPT_OP_SPAWN_BOULDER:
 		pollNextScriptUByte(&byteArg1);
 		spawnBoulder();
 		break;
-	case 0x77:
+	case SCRIPT_OP_MOVE_BOULDER:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		moveBoulder(posX, posY);
 		longjmp(SCRIPT_JMP_BUF, 2);
-	case 0x78:
+	case SCRIPT_OP_DESPAWN_BOULDER:
 		pollNextScriptUByte(&byteArg1);
 		removeObject(0xfb6, 0);
 		break;
-	case 0x79:
+	case SCRIPT_OP_UNLOAD_DIGIMON:
 		pollNextScriptUByte(&byteArg1);
 		scriptUnloadModel(byteArg1);
 		break;
-	case 0x7a:
+	case SCRIPT_OP_COPY_PSTAT:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
 		byteArg1 = readPStat(byteArg1);
 		writePStat(byteArg2, byteArg1);
 		break;
-	case 0x7b:
+	case SCRIPT_OP_SECTION_ON_EXIT:
 		pollNextScriptUByte(&byteArg1);
 		entry.smth[0] = 4;
 		entry.smth[1] = byteArg1;
 		pushScriptStack(&entry);
 		writePStat(0, MAIN_D_80134FE7);
 		break;
-	case 0x7c:
+	case SCRIPT_OP_SET_RECT_IMPASSIBLE:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		setRectImpassible(posX, posY, byteArg2,
 		                  byteArg3);
 		break;
-	case 0x7d:
+	case SCRIPT_OP_SPAWN_SPRITE_AT_LOCATION:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
 		pollNextTwoScriptShorts(&posZ, &posW);
 		spawnSpriteAtLocation(posX, posY, posZ, posW, byteArg1);
 		break;
-	case 0x7e:
+	case SCRIPT_OP_SPAWN_SPRITE_AT_ENTITY:
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
 		spawnSpriteAtEntity(byteArg1, byteArg2, byteArg3);

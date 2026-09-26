@@ -2853,7 +2853,7 @@ void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
 	}
 
 	MAIN_func_80101EF8(boxId, owner);
-	ACTIVE_INSTRUCTION = 0x64;
+	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 	MAIN_D_80134FDC = savedCursor;
 }
 
@@ -3346,7 +3346,7 @@ void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
 		MAIN_D_801BE954[0] = 0;
 	}
 
-	ACTIVE_INSTRUCTION = 0x64;
+	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 	MAIN_D_80134FDC = saved;
 }
 
@@ -3372,9 +3372,9 @@ void renderScriptDialogueBox(void)
 		y += 0xd;
 	}
 
-	if (ACTIVE_INSTRUCTION == 0x10) {
+	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
 		MAIN_func_800FFF80(x, ySave);
-	} else if (ACTIVE_INSTRUCTION == 0x64 && SCRIPT_STATE_3 == 2) {
+	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE && SCRIPT_STATE_3 == 2) {
 		MAIN_func_800FFF80(x, ySave);
 	}
 
@@ -3549,7 +3549,7 @@ int32_t MAIN_func_800FFC1C(void)
 
 	if (isKeyDown(0x10)) {
 		if (isTriggerSet(0x31) == 0) {
-			if (ACTIVE_INSTRUCTION != 0x64) {
+			if (ACTIVE_INSTRUCTION != SCRIPT_OP_CALL_ROUTINE) {
 				advanceTextbox(0);
 				MAIN_D_80134FDC =
 					(uint8_t *)MAIN_D_801BE94C[0];
@@ -4190,7 +4190,7 @@ void tickScriptDialogueBox(void)
 {
 	int32_t sel;
 
-	if (ACTIVE_INSTRUCTION == 0x10) {
+	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
 		sel = MAIN_func_800FFC1C();
 		if (sel != 0xffff) {
 			MAIN_D_80134FDC =
@@ -4200,9 +4200,9 @@ void tickScriptDialogueBox(void)
 				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
 			                    *(uint16_t *)MAIN_D_80134FDC);
 		}
-	} else if (ACTIVE_INSTRUCTION == 0x1a) {
+	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_SHOW_TEXTBOX) {
 		MAIN_func_800FFDF4();
-	} else if (ACTIVE_INSTRUCTION == 0x64) {
+	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE) {
 		switch (SCRIPT_STATE_3) {
 		case 0:
 			break;
@@ -4210,7 +4210,7 @@ void tickScriptDialogueBox(void)
 			if (MAIN_func_800FFDF4() == 1) {
 				SCRIPT_STATE_3 = 0;
 				SELECTION_MENU_STATE = SCRIPT_STATE_4;
-				ACTIVE_INSTRUCTION = 0x64;
+				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			}
 			break;
 		case 2:
@@ -4220,12 +4220,12 @@ void tickScriptDialogueBox(void)
 				sel = MAIN_D_801BE952[0];
 				SELECTION_MENU_STATE =
 					SCRIPT_STATE_4 + (uint16_t)sel;
-				ACTIVE_INSTRUCTION = 0x64;
+				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			}
 			break;
 		case 3:
 			if (MAIN_func_800FFF24() == 1) {
-				ACTIVE_INSTRUCTION = 0x64;
+				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 				SCRIPT_STATE_3 = 0;
 			}
 			break;
@@ -4282,7 +4282,7 @@ void scriptShowSelection(void)
 		MAIN_D_801BE954[0] = 0;
 	}
 
-	ACTIVE_INSTRUCTION = 0x10;
+	ACTIVE_INSTRUCTION = SCRIPT_OP_SET_SELECTION;
 }
 
 static void showTextbox__garbage__(void)
@@ -4492,7 +4492,7 @@ top: {
 				out -= 2;
 				*out = ctrl;
 				ctrl = *MAIN_D_80134FDC;
-				if (ctrl == 0x1a) {
+				if (ctrl == SCRIPT_OP_SHOW_TEXTBOX) {
 					goto done;
 				}
 				entry->pageReady = 1;
@@ -4519,7 +4519,7 @@ top: {
 }
 done:
 	entry->writeCount++;
-	ACTIVE_INSTRUCTION = 0x1a;
+	ACTIVE_INSTRUCTION = SCRIPT_OP_SHOW_TEXTBOX;
 
 	return maxCol;
 }
@@ -4712,52 +4712,52 @@ int32_t MAIN_func_801022FC(void)
 int16_t *getStatsPointer(int32_t stat)
 {
 	switch (stat) {
-	case 0:
+	case SCRIPT_STAT_OFFENSE:
 		return &PARTNER_ENTITY.digimonEntity.stats.base.off;
-	case 1:
+	case SCRIPT_STAT_DEFENSE:
 		return &PARTNER_ENTITY.digimonEntity.stats.base.def;
-	case 2:
+	case SCRIPT_STAT_SPEED:
 		return &PARTNER_ENTITY.digimonEntity.stats.base.speed;
-	case 3:
+	case SCRIPT_STAT_BRAINS:
 		return &PARTNER_ENTITY.digimonEntity.stats.base.brain;
-	case 4:
+	case SCRIPT_STAT_MAX_HP:
 		return &PARTNER_ENTITY.digimonEntity.stats.base.hp;
-	case 5:
+	case SCRIPT_STAT_MAX_MP:
 		return &PARTNER_ENTITY.digimonEntity.stats.base.mp;
-	case 6:
+	case SCRIPT_STAT_CURRENT_HP:
 		return &PARTNER_ENTITY.digimonEntity.stats.current.currentHP;
-	case 7:
+	case SCRIPT_STAT_CURRENT_MP:
 		return &PARTNER_ENTITY.digimonEntity.stats.current.currentMP;
-	case 8:
+	case SCRIPT_STAT_TIREDNESS:
 		return &PARTNER_PARA.tiredness;
-	case 9:
+	case SCRIPT_STAT_HAPPINESS:
 		return &PARTNER_PARA.happiness;
-	case 0xa:
+	case SCRIPT_STAT_DISCIPLINE:
 		return &PARTNER_PARA.discipline;
-	case 0xb:
+	case SCRIPT_STAT_ENERGY:
 		return &PARTNER_PARA.energyLevel;
-	case 0xc:
+	case SCRIPT_STAT_VIRUS:
 		return &PARTNER_PARA.virusBar;
-	case 0xd:
+	case SCRIPT_STAT_LIFETIME:
 		return &PARTNER_PARA.remainingLifetime;
-	case 0xe:
+	case SCRIPT_STAT_MERIT:
 		return &MERIT;
-	case 0xf:
+	case SCRIPT_STAT_STARTED_BATTLES:
 		return &MAIN_D_80134FC8;
-	case 0x10:
+	case SCRIPT_STAT_FLED_BATTLES:
 		return &MAIN_D_80134FCA;
-	case 0x11:
+	case SCRIPT_STAT_TOURNAMENTS_WON:
 		return &MAIN_D_80134FCC;
-	case 0x12:
+	case SCRIPT_STAT_TOURNAMENT_WINS:
 		return &TOURNAMENTS_LOST;
-	case 0x13:
+	case SCRIPT_STAT_TOURNAMENTS_LOST:
 		return &MAIN_D_80134FD0;
-	case 0x14:
+	case SCRIPT_STAT_WEIGHT:
 		return &PARTNER_PARA.weight;
-	case 0x15:
+	case SCRIPT_STAT_TAMER_LEVEL:
 		MAIN_D_80135002 = TAMER_ENTITY.tamerLevel;
 		return &MAIN_D_80135002;
-	case 0x16:
+	case SCRIPT_STAT_LIVES:
 		MAIN_D_80135004 = PARTNER_ENTITY.lives;
 		return &MAIN_D_80135004;
 	}
@@ -4929,9 +4929,9 @@ int32_t enforceStatsLimits(int32_t stat, int32_t value)
 {
 	int32_t cap;
 
-	if (stat == 6) {
+	if (stat == SCRIPT_STAT_CURRENT_HP) {
 		cap = PARTNER_ENTITY.digimonEntity.stats.base.hp;
-	} else if (stat == 7) {
+	} else if (stat == SCRIPT_STAT_CURRENT_MP) {
 		cap = PARTNER_ENTITY.digimonEntity.stats.base.mp;
 	} else {
 		cap = MAIN_D_80130318[stat];

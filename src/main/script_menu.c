@@ -576,7 +576,7 @@ void initializeNamingBuffer(uint8_t flags)
 		}
 	}
 
-	ACTIVE_INSTRUCTION = 0x64;
+	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 	SCRIPT_STATE_3 = 0;
 }
 
