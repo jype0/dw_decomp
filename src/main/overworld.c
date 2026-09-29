@@ -5,6 +5,7 @@
 #include <dw/evl.h>
 #include <dw/fish.h>
 #include <dw/font.h>
+#include <dw/input.h>
 #include <dw/item.h>
 #include <dw/map.h>
 #include <dw/model.h>
@@ -55,6 +56,13 @@ typedef struct {
 } LocalMapObjectInstance;
 
 typedef struct {
+	uint8_t tiles[0x2bc];
+	LocalMapObjectInstance objects[188];
+} MapTiles;
+
+extern MapTiles MAP_TILE_DATA;
+
+typedef struct {
 	int16_t texX;
 	int16_t texY;
 	int16_t someX;
@@ -69,7 +77,7 @@ typedef struct {
 extern int32_t IS_IN_MENU;
 extern int32_t IS_SCRIPT_PAUSED;
 extern uint16_t CURRENT_SCRIPT_ID;
-extern int32_t LOADED_DIGIMON_MODELS[8];
+extern long LOADED_DIGIMON_MODELS[8];
 extern int8_t GAME_STATE;
 extern int8_t MAIN_D_80134D20[8];
 extern MapDigimonEntity MAP_DIGIMON_TABLE[];
@@ -77,7 +85,6 @@ extern int16_t NPC_COLLISION_STATE[];
 extern int32_t NPC_IS_WALKING_TOWARDS[];
 extern int8_t TALKED_TO_ENTITY;
 extern int8_t NPC_ACTIVE_ANIM;
-extern LocalMapObjectInstance LOCAL_MAP_OBJECT_INSTANCE[];
 extern int16_t MAIN_D_8013CA38[];
 extern int16_t MAIN_D_8013CA8C[];
 extern int8_t MAIN_D_8013CAE0[];
@@ -106,9 +113,8 @@ extern int16_t MAIN_D_80134D38;
 extern int16_t MAIN_D_80134D3A;
 extern int32_t CHANGED_INPUT;
 typedef struct {
-  uint8_t digimon;
-  uint8_t moves;
-} MenuTabPair;
+	int8_t tab[2];
+} DigimonTabs;
 
 typedef struct {
 	int8_t tab[4];
@@ -166,15 +172,22 @@ extern int16_t MAIN_D_80134D44;
 extern int8_t MAIN_D_80134D46;
 extern int16_t MAIN_D_80134D48;
 extern char STR_MOVE_NAME_BUG[];
+#if defined(VERSION_JP)
+extern char STR_MOVE_NAME_PARTY_TIME[];
+extern char STR_MOVE_NAME_PUMMEL_WHACK[];
+extern char STR_MOVE_NAME_FIST_OF_THE_BEAST_KING[];
+extern char STR_ITEM_DESC_MYSTERY_ITEM[];
+#else
 extern char STR_MOVE_NAME_TREMAR[];
 extern char STR_MOVE_NAME_WAR_CRY[];
 extern char STR_MOVE_NAME_COUNTER[];
+#endif
 extern char STR_MOVE_NAME_BUBBLE[];
 
 int32_t isTriggerSet(int32_t triggerId);
 void callScriptSection(uint16_t scriptId, uint32_t scriptSection,
-		       uint32_t param);
-void scriptNPCStartAnimation(uint8_t scriptId, int32_t animId);
+                       uint32_t param);
+void scriptNPCStartAnimation(uint8_t scriptId, int8_t animId);
 void drawInventoryText(void);
 void closeTriangleMenu(void);
 void closeInventoryBoxes2();
@@ -185,13 +198,13 @@ void renderMedalView(void);
 void renderEvoChartView(void);
 void renderPlayerInfoView(void);
 void renderString();
-void renderMenuTab(int32_t a, int32_t b, int32_t c);
+void renderMenuTab(int16_t x, int8_t w, int8_t layer);
 
 void setCameraFollowPlayer(void);
 void handleGameMenuSelection(int32_t selection);
 int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
-		      int16_t height, int8_t features, void (*tick)(void),
-		      void (*render)(void));
+                      int16_t height, int8_t features, void (*tick)(void),
+                      void (*render)(void));
 void closeUIBoxIfOpen(int32_t arg);
 void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
 void addInventoryUI(void);
@@ -202,52 +215,60 @@ void renderDigimonMenu(void);
 void tickPlayerMenu(void);
 void renderPlayerMenu(void);
 void tickTriangleMenu(void);
-void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
-		       int32_t height, uint8_t texX, uint8_t texY,
-		       int16_t texturePage, int16_t clut, int32_t zIndex,
-		       int8_t flag);
+void renderRectPolyFT4(int16_t posX, int16_t posY, uint8_t width,
+                       uint8_t height, uint8_t texX, uint8_t texY,
+                       int16_t texturePage, int16_t clut, int32_t zIndex,
+                       int8_t flag);
 void renderSeparatorLines(int16_t *lines, int8_t count, int32_t zIndex);
 void renderMist(void);
-void renderMapOverlays(LocalMapObjectInstance *instances, int32_t screenX,
-		       int16_t screenY);
+void renderMapOverlays(LocalMapObjectInstance *instances, int16_t screenX,
+                       int16_t screenY);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY,
-		       int32_t width, int32_t height);
+                       int32_t width, int32_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uPos, int32_t vPos,
-		      int32_t width, int32_t height);
+                      int32_t width, int32_t height);
 void buildMapOverlayPrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
-			 LocalMapObject *obj, int32_t arg3, int16_t arg4,
-			 int8_t mode);
+                         LocalMapObject *obj, int16_t arg3, int16_t arg4,
+                         int8_t mode);
 void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
-			LocalMapObject *obj);
+                        LocalMapObject *obj);
 void NPCEntityTickBattle(int32_t instanceId);
+#if defined(VERSION_JP)
+void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity);
+#else
 void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
-		             int32_t instanceId);
+                             int32_t instanceId);
+#endif
 void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity);
+#if defined(VERSION_JP)
 void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
-		               int32_t animation, int32_t instanceId);
+                               int32_t animation);
+#else
+void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
+                               int32_t animation, int32_t instanceId);
+#endif
 int32_t NPCEntityIsInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location);
 void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-			         TamerEntity *tamer);
+                                 TamerEntity *tamer);
 void clearMapObjects(LocalMapObjectInstance *instances);
-void loadMapObjects(LocalMapObjectInstance *mapObjects, uint8_t *data,
-		    int32_t mapId);
+void loadMapObjects(LocalMapObjectInstance *mapObjects, int16_t *data,
+                    int16_t mapId);
 void getRotationDifference(PositionData *posData, VECTOR *targetLoc,
-			   int16_t *outAngle, int16_t *outCcDiff,
-			   int16_t *outCwDiff);
+                           int16_t *outAngle, int16_t *outCcDiff,
+                           int16_t *outCwDiff);
 int32_t rotateEntity(SVECTOR *rotation, int16_t *targetAngle, int16_t *ccDiff,
-		     int16_t *cwDiff, int16_t speed);
+                     int16_t *cwDiff, int16_t speed);
 void getModelTile(VECTOR *position, int16_t *outTileX, int16_t *outTileY);
 void NPCEntityTickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-		                TamerEntity *tamer, int32_t instanceId);
+                                TamerEntity *tamer, int32_t instanceId);
 void NPCEntityTickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
-			         int32_t instanceId);
+                                 int16_t instanceId);
 int32_t NPCEntityIsInTrackingRadius(Entity *entity, Entity *otherEntity,
-			            MapDigimonEntity *mapDigimon);
+                                    MapDigimonEntity *mapDigimon);
 void NPCEntityTickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
-			         TamerEntity *tamer, int32_t instanceId,
-			         uint8_t animId);
+                                 TamerEntity *tamer, int32_t instanceId, int32_t animId);
 void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
-			         TamerEntity *tamer, int32_t instanceId);
+                                 TamerEntity *tamer, int16_t instanceId);
 int32_t entityCheckCollision(Entity *a, Entity *entity, int32_t c, int32_t d);
 void removeTriangleMenu(void);
 void closeInventoryBoxes(void);
@@ -258,16 +279,16 @@ void NPCEntityTick(int32_t instanceId);
 void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon);
 void scriptUnloadEntity(uint8_t scriptId);
 void setLoopCountToOne(uint32_t scriptId);
-void loadNPCModel(int32_t digimonId);
-void unloadDigimonModel(int32_t digimonType);
+void loadNPCModel(uint8_t digimonId);
+void unloadDigimonModel(uint8_t digimonType);
 void setPartnerIdling(void);
 int32_t tickRemoveMist(void);
-void setActiveAnim(uint8_t scriptId, uint8_t animId);
-void spawnSpriteAtEntity(int32_t scriptId, int32_t nodeId, uint8_t sprite);
+void setActiveAnim(uint8_t scriptId, int8_t animId);
+void spawnSpriteAtEntity(int32_t scriptId, int8_t nodeId, int16_t sprite);
 void spawnSpriteAtLocation(int16_t x, int16_t y, int16_t z, int16_t sprite,
-			   int16_t flag);
+                           int16_t flag);
 void loadMapImage1(u_long *tim);
-void loadMapImage2(u_long *tim, int32_t id);
+void loadMapImage2(u_long *tim, int8_t id);
 void renderNinjamonEffect(int32_t instanceId);
 int32_t randomLimit(int32_t max);
 int32_t _atan(int32_t dy, int32_t dx);
@@ -275,43 +296,42 @@ void createNinjamonEffect(void);
 void calcMapObjectOrder(LocalMapObjectInstance *instances);
 void getDrawPosition(SVECTOR *worldPos, int16_t *outX, int16_t *outY);
 void storeMapObjectPosition(int16_t *outX, int16_t *outY, uint8_t a,
-			    int32_t count);
+                            int16_t count);
 void loadMapObjectPosition(int16_t *xData, int16_t *yData, int16_t startIndex,
-			   int32_t count);
-void moveMapObjects(uint8_t startIndex, int32_t count, int16_t dx,
-		    int16_t dy);
-int32_t moveMapObjectsWithLimit(uint8_t startIndex, int32_t count, int16_t dx,
-				int16_t dy, int16_t limitX, int16_t limitY);
-void setMapObjectsFlag(uint8_t start, int32_t count, int32_t flag);
-void resetMapObjectAnimation(uint8_t startIndex, int32_t count);
+                           int16_t count);
+void moveMapObjects(uint8_t startIndex, int16_t count, int16_t dx, int16_t dy);
+int32_t moveMapObjectsWithLimit(uint8_t startIndex, int16_t count, int16_t dx,
+                                int16_t dy, int16_t limitX, int16_t limitY);
+void setMapObjectsFlag(int16_t start, int16_t count, int8_t flag);
+void resetMapObjectAnimation(uint8_t startIndex, int16_t count);
 void clearMapAITable(int32_t index);
 void removeMapEntities(void);
 void clearMapDigimon(void);
-void resetEntityOrigin(int32_t scriptId);
-void loadMapDigimon(int16_t *data, int32_t mapId);
+void resetEntityOrigin(uint8_t scriptId);
+void loadMapDigimon(int16_t *data, int16_t mapId);
 void initializeLoadedNPCModels(void);
 int32_t scriptSetDigimon(uint8_t type, uint8_t slot, uint8_t autotalk);
 int32_t tickMoveObjectTo(uint8_t objectIndex, uint8_t moveIndex,
-			 int8_t steps, int16_t targetX, int16_t targetY);
+                         int8_t steps, int16_t targetX, int16_t targetY);
 void setMovementEnabled(int32_t id, int32_t enabled);
 void addGameMenu(void);
 void renderDateDigits(void);
-void renderTriangleCursor(int32_t selection, int16_t yOffset);
+void renderTriangleCursor(int8_t selection, int16_t yOffset);
 int32_t isUIBoxAvailable(int32_t id);
-void setSleepDisabled(int32_t arg);
-void startFeedingItem(int32_t arg);
+void setSleepDisabled(int16_t arg);
+void startFeedingItem(uint8_t arg);
 void removeOneSelectedItem(void);
-void renderFeedingItem(int32_t arg);
-int32_t getEquippedSlot(void);
+void renderFeedingItem(int16_t arg);
+int8_t getEquippedSlot(void);
 void equipMove(void);
 int32_t isKeyDown(int32_t mask);
 void convertValueToDigits(int32_t digits, int32_t value, int32_t *outCount,
-			  int32_t *outDigits);
+                          int32_t *outDigits);
 void drawLine2P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-		int32_t y1, int32_t zIndex, int32_t flag);
+                int32_t y1, int32_t zIndex, int32_t flag);
 void drawLine3P(int32_t color, int32_t x0, int32_t y0,
-		int32_t x1, int32_t y1, int32_t x2,
-		int32_t y2, int32_t zIndex, int32_t flag);
+                int32_t x1, int32_t y1, int32_t x2,
+                int32_t y2, int32_t zIndex, int32_t flag);
 uint8_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 int32_t hasDigimonRaised(int32_t digimonId);
 int32_t hasMedal(uint16_t medal);
@@ -428,9 +448,11 @@ uint8_t MAIN_D_80134237 = 0xff;
 
 SVECTOR MAIN_D_80134238 = { 0x0000, 0x0000, 0x0000, 0x0000 };
 
+#if !defined(VERSION_JP)
 char MAIN_D_80134240[] = "Current";
 
 char MAIN_D_80134248[] = "Ending";
+#endif
 
 char STR_OVERWORLD_EMPTY[] = "";
 
@@ -452,14 +474,29 @@ TriangleCursorOffsetData MAIN_D_80134288 = { { 0x04, 0x04, 0x04, 0x04, 0x04, 0x0
 
 RECT MAIN_D_80134290 = { 0, 232, 24, 12 };
 
+#if defined(VERSION_JP)
+char STR_YEAR_DAY[] = "年日";
+#else
 char STR_YEAR_DAY[8] = "YearDay";
+#endif
 
-uint8_t MAIN_D_801342A0[4] = {
-	0x01, 0x01, 0x00, 0x00,
-};
+DigimonTabs MAIN_D_801342A0 = { { 0x01, 0x01 } };
 
 PlayerTabs MAIN_D_801342A4 = { { 0x01, 0x01, 0x01, 0x01 } };
 
+#if defined(VERSION_JP)
+char MAIN_D_80123DE8[] = "半人前";
+
+char MAIN_D_80123DF4[] = "初級";
+
+char MAIN_D_80123E04[] = "中級";
+
+char MAIN_D_80123E10[] = "一流";
+
+char MAIN_D_801342D0[] = "天才";
+
+char MAIN_D_801342D8[] = "伝説";
+#else
 char MAIN_D_801342A8[8] = "Amateur";
 
 char MAIN_D_801342B0[] = "Novice";
@@ -473,6 +510,7 @@ char MAIN_D_801342C8[] = "Master";
 char MAIN_D_801342D0[] = "Genius";
 
 char MAIN_D_801342D8[] = "Legend";
+#endif
 
 RECT MAIN_D_801342E0 = { 0, 24, 256, 200 };
 
@@ -482,7 +520,9 @@ RECT MAIN_D_801342F0 = { 0, 24, 256, 200 };
 
 RECT PLAYER_INFO_TEXT_AREA = { 0, 12, 256, 200 };
 
+#if !defined(VERSION_JP)
 char FMT_PLAYTIME[8] = "%d : %d";
+#endif
 
 RECT EVO_CHART_TEXT_AREA = { 0, 12, 256, 200 };
 
@@ -502,6 +542,131 @@ GsRVIEW2 MAIN_D_80123880 = {
 	-1050, 220, -10000, -1050, 220, 0, 0, NULL,
 };
 
+#if defined(VERSION_JP)
+char MAIN_D_801238A0[] = "ステータス技セット戦績";
+
+char MAIN_D_801238B0[] = "才ｇしつけ／ＬＩＦＥのろいＨＰＭＰゆうよわ";
+
+char MAIN_D_801238D8[] = "あさがたひるがたあさよわゆうがたよるがた";
+
+char MAIN_D_80123900[] = "つけかえ技必殺技おぼえた技";
+
+char MAIN_D_80123914[] = "へルプｃｈｉ近遠全自";
+
+char MAIN_D_80123920[] = "ａｈｉを押すと、技セットモード";
+
+char MAIN_D_80123938[] = "毒混乱マヒ液晶化";
+
+char MAIN_D_8012394C[] = "技セットモードの解除はｂｈｉ";
+
+char MAIN_D_80123958[] = "近距離遠距離全体技補助技";
+
+char MAIN_D_80123970[] = "まだ３つの技をつけてない時はを選んで";
+
+char MAIN_D_80123990[] = "つけかえの時はを　ｈｉでキャンセルして";
+
+char MAIN_D_801239AC[] = "技セットヘルプを選んで　ｈｉで決定ａ";
+
+char MAIN_D_80134240[] = "は、つけかえ技として選ばれている技";
+
+char MAIN_D_801239C4[] = "は、つけかえられる技（技あり）";
+
+char MAIN_D_801239D0[] = "は、まだ覚えていない技（技なし）";
+
+char MAIN_D_801239DC[] = "は、性質でつけかえできない技";
+
+char MAIN_D_801239E8[] = "は、つけかえようとして今選んでいる技";
+
+char MAIN_D_801239F4[] = "合計戦績勝った数負けた数勝率％";
+
+char MAIN_D_80123A18[] = "ステータスデジモン表メダルカードつり";
+
+char MAIN_D_80123A3C[] = "メダルコレクションａｂｈｉｊｋｌｍｎｏ？";
+
+char MAIN_D_80123A60[] = "名前才テイマーレベル育てたデジモンひき";
+
+char MAIN_D_80123A7C[] = "持ってるお金｛｝かかった時間：テイマー";
+
+char MAIN_D_80123A98[] = "特別なアイテム集めたメダル枚";
+
+char MAIN_D_80123AB0[] = "カードリストａｈｉｊｋｌｂｈｉｍｎｏ枚";
+
+char MAIN_D_80123AD0[] = "ａｈｉｊｋｌｂｈｉｍｎｏくわしいデータ";
+
+char MAIN_D_80123AE4[] = "進化系図幼年期幼年期成長期成熟期完全体";
+
+char MAIN_D_80123B10[] = "基本体重ｇ属性活動時間必殺技";
+
+char MAIN_D_80123B20[] = "つりの記録全長";
+
+char STR_MEDAL_NAME_GRADE_CUP[] = "グレード戦制覇";
+
+char STR_MEDAL_NAME_VERSION_CUP[] = "バージョン杯制覇";
+
+char STR_MEDAL_NAME_TYPE_CUP[] = "性質杯制覇";
+
+char STR_MEDAL_NAME_SPECIAL_CUP[] = "特別杯制覇";
+
+char STR_MEDAL_NAME_100_TIMES[] = "合計１００勝";
+
+char STR_MEDAL_NAME_TECHNIQUE_MASTER[] = "全技習得";
+
+char STR_MEDAL_NAME_DIGIMON_MASTER[] = "全デジモン育成";
+
+char STR_MEDAL_NAME_MAX_ABILITIES[] = "全能力ＭＡＸ値";
+
+char STR_MEDAL_NAME_PERFECT_CURLING[] = "カーリング満点";
+
+char STR_MEDAL_NAME_100_FISH[] = "釣り１００ぴき";
+
+char MAIN_D_80134248[] = "エンディング";
+
+char STR_MEDAL_NAME_TOWN_FLOURISHING[] = "街が最大発展";
+
+char STR_MEDAL_NAME_CARD_COMPLETE[] = "カードコンプリート";
+
+char STR_MEDAL_NAME_BITS_MAXED[] = "｛｝最大";
+
+char STR_MEDAL_NAME_10_YEARS[] = "開始１０周年";
+
+char STR_MEDAL_DESCRIPTION_CUP_D_C_B_A_S[] = "グレード戦Ｄ、Ｃ、Ｂ、Ａ、Ｓ、";
+
+char STR_MEDAL_DESCRIPTION_WIN_IN_ALL[] = "全てで優勝";
+
+char STR_MEDAL_DESCRIPTION_WIN_IN_ALL_VER_1_2_3_4_0[] = "ＶＥＲ　１、２、３、４、０、全てで優勝";
+
+char STR_MEDAL_DESCRIPTION_FIRE_GRAPPLE_THUNDER_WIND[] = "ファイアー、グラップル、サンダーウインド、";
+
+char STR_MEDAL_DESCRIPTION_NATURE_COOL_METALLIC_FILTH_CUP[] = "ネイチャー、クール、メタリック、ダーティ杯";
+
+char STR_MEDAL_DESCRIPTION_WIN_IN_ALL_2[] = "の全てで優勝";
+
+char STR_MEDAL_DESCRIPTION_DINO_WING_ANIMAL_HUMAN_CUP[] = "ダイノ、ウイング、アニマル、ヒューマン杯";
+
+char STR_MEDAL_DESCRIPTION_WON_CHAMPIONSHIP_100_TIMES[] = "大会（何でもよい）で１００回優勝する";
+
+char STR_MEDAL_DESCRIPTION_MASTERED_56_SWITCH_TECHNIQUES[] = "全てのつけかえ技５６種を技リストに習得";
+
+char STR_MEDAL_DESCRIPTION_RAISED_ALL_61_DIGIMON[] = "全デジモン６１種を育てる";
+
+char STR_MEDAL_DESCRIPTION_MAXED_ALL_OF_THE_DIGIMONS[] = "デジモン１ぴきのパラメータ６種を";
+
+char STR_MEDAL_DESCRIPTION_PARAMETERS[] = "ＭＡＸにする";
+
+char STR_MEDAL_DESCRIPTION_GOT_A_PERFECT_SCORE_IN_CURLING[] = "カーリングで満点を取る";
+
+char STR_MEDAL_DESCRIPTION_100_FISH_CAUGHT[] = "釣った魚の合計１００ぴき";
+
+char STR_MEDAL_DESCRIPTION_FINISHED_THE_GAME[] = "ラスボスを倒し一度エンディングを見る";
+
+char STR_MEDAL_DESCRIPTION_JIJIMON_SAID_THE_TOWN[] = "ジジモンに最大発展完了のコメントをもらう";
+
+char STR_MEDAL_DESCRIPTION_COLLECTED_ALL_DIGIMON_CARDS[] = "デジモンカードを全種集める";
+
+char STR_MEDAL_DESCRIPTION_COLLECTED_999999_BITS[] = "｛｝を９９９９９９にする";
+
+char STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS[] = "ゲームを始めて３００日たった";
+#else
 char MAIN_D_801238A0[] = "Status  Tech";
 
 char MAIN_D_801238B0[] = "      Disc.      Life  Vir. HPMPnight";
@@ -658,6 +823,7 @@ char STR_MEDAL_DESCRIPTION_COLLECTED_ALL_DIGIMON_CARDS[28] = "Collected all Digi
 char STR_MEDAL_DESCRIPTION_COLLECTED_999999_BITS[] = "Collected 999999 bits";
 
 char STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS[] = "Survived for 300 days!";
+#endif
 
 uint8_t MAIN_D_80123DB8[24] = {
 	0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09, 0x09,
@@ -670,6 +836,17 @@ int32_t MAIN_D_80123DD0[6] = {
 	0x00000010, 0x00000002,
 };
 
+#if defined(VERSION_JP)
+char MAIN_D_801342A8[] = "しろうと";
+
+char MAIN_D_801342B0[] = "かけだし";
+
+char MAIN_D_801342B8[] = "ベテラン";
+
+char MAIN_D_801342C0[] = "スーパー";
+
+char MAIN_D_801342C8[] = "マスター";
+#else
 char MAIN_D_80123DE8[] = "Beginner";
 
 char MAIN_D_80123DF4[] = "Intermediate";
@@ -677,6 +854,7 @@ char MAIN_D_80123DF4[] = "Intermediate";
 char MAIN_D_80123E04[] = "Advanced";
 
 char MAIN_D_80123E10[] = "Top rate";
+#endif
 
 int16_t MAIN_D_80123E1C[6] = {
 	0x7a07, 0x7a47, 0x7a87, 0x7ac7, 0x7b07, 0x0000,
@@ -700,22 +878,15 @@ int16_t MAIN_D_80123E6C[6] = {
 
 char MAIN_D_80123E78[] = "\\CARD\\CARD.ALL";
 
-int16_t MAIN_D_80123E88[6] = {
-	0x0010, 0x001c, 0x0001, 0x0c01, 0x1818, 0x3000,
-};
-
-uint8_t GAME_MENU_SPRITES[84] = {
-	0x14, 0x00, 0x47, 0x00, 0x01, 0x00, 0x00, 0x0c,
-	0x14, 0x14, 0x00, 0x00, 0x38, 0x00, 0x47, 0x00,
-	0x02, 0x00, 0x00, 0x0d, 0x14, 0x14, 0x28, 0x00,
-	0x5b, 0x00, 0x47, 0x00, 0x03, 0x00, 0x00, 0x0c,
-	0x14, 0x14, 0x00, 0x14, 0x14, 0x00, 0x6f, 0x00,
-	0x04, 0x00, 0x00, 0x0d, 0x14, 0x14, 0x28, 0x14,
-	0x38, 0x00, 0x6f, 0x00, 0x05, 0x00, 0x00, 0x0d,
-	0x14, 0x14, 0x00, 0x28, 0x5b, 0x00, 0x6f, 0x00,
-	0x06, 0x00, 0x00, 0x0d, 0x14, 0x14, 0x28, 0x28,
-	0x14, 0x00, 0x1f, 0x00, 0x07, 0x00, 0x00, 0x0d,
-	0x14, 0x13, 0x50, 0x00,
+GameMenuSprite GAME_MENU_SPRITES[8] = {
+	{ 0x10, 0x1c, 1, 1, 0xc, 0x18, 0x18, 0x0, 0x30 },
+	{ 0x14, 0x47, 1, 0, 0xc, 0x14, 0x14, 0x0, 0x0 },
+	{ 0x38, 0x47, 2, 0, 0xd, 0x14, 0x14, 0x28, 0x0 },
+	{ 0x5b, 0x47, 3, 0, 0xc, 0x14, 0x14, 0x0, 0x14 },
+	{ 0x14, 0x6f, 4, 0, 0xd, 0x14, 0x14, 0x28, 0x14 },
+	{ 0x38, 0x6f, 5, 0, 0xd, 0x14, 0x14, 0x0, 0x28 },
+	{ 0x5b, 0x6f, 6, 0, 0xd, 0x14, 0x14, 0x28, 0x28 },
+	{ 0x14, 0x1f, 7, 0, 0xd, 0x14, 0x13, 0x50, 0x0 },
 };
 
 uint8_t GAME_MENU_LABELS[64] = {
@@ -809,6 +980,23 @@ int32_t MAIN_D_801241CC[26] = {
 	0xffe00075, 0x0c780404,
 };
 
+#if defined(VERSION_JP)
+int32_t MAIN_D_80124234[24] = {
+	0xffbfff8e, 0x1800009c, 0xffbf0042, 0x18a80030,
+	0xffcdff8e, 0x30840048, 0xffdeff8e, 0x24000054,
+	0xffdefffa, 0x24540084, 0xffecffa6, 0x30540078,
+	0x0002ff9a, 0x3c0000cc, 0x0012ff9a, 0x48000078,
+	0x0022ff9a, 0x54000084, 0x0032ff9a, 0x600000a8,
+	0x0042ff9a, 0x600000a8, 0x0052ff9a, 0x6c0000d8,
+};
+
+int32_t MAIN_D_80124294[14] = {
+	0xffbf0030, 0x00240c0c, 0xffdeffe8, 0x00540c0c,
+	0xffecff94, 0x00240c0c, 0x0002ff88, 0x00540c0c,
+	0x0012ff88, 0x00240c0c, 0x0032ff88, 0x006c0c0c,
+	0x0052ff88, 0x00b40c0c,
+};
+#else
 int32_t MAIN_D_80124234[24] = {
 	0xffbfff8e, 0x18000073, 0xffbf000f, 0x1871006e,
 	0xffcdff8e, 0x18df0000, 0xffdeff8e, 0x2400000c,
@@ -824,6 +1012,7 @@ int32_t MAIN_D_80124294[14] = {
 	0x0012ff88, 0x00240c0c, 0x0032ff88, 0x006c0c0c,
 	0x0052ff88, 0x00b40c0c,
 };
+#endif
 
 RECT MAIN_D_801242CC[13] = {
 	{ 50, 52, 98, 14 },
@@ -841,6 +1030,15 @@ RECT MAIN_D_801242CC[13] = {
 	{ 194, 205, 54, 5 },
 };
 
+#if defined(VERSION_JP)
+int32_t MAIN_D_80124334[18] = {
+	0x0022ff76, 0x30480030, 0x0040ff82, 0x30180024,
+	0x004fff82, 0x30780024, 0x0004fffc, 0x309c0018,
+	0x0013fffc, 0x30b40018, 0x0022fffc, 0x24000024,
+	0x0031fffc, 0x24240024, 0xffddffaf, 0x3000000c,
+	0xffddfff6, 0x300c000c,
+};
+#else
 int32_t MAIN_D_80124334[18] = {
 	0x0022ff76, 0x30480030, 0x0040ff82, 0x30180024,
 	0x004fff82, 0x30780024, 0x0004fffc, 0x309c0018,
@@ -848,6 +1046,7 @@ int32_t MAIN_D_80124334[18] = {
 	0x0031fffc, 0x24240024, 0xffddffaf, 0x30000000,
 	0xffddfff6, 0x30000000,
 };
+#endif
 
 int32_t MAIN_D_8012437C[42] = {
 	0xffafff74, 0x4b000b35, 0xfff4ff74, 0x56000b35,
@@ -887,6 +1086,16 @@ RECT MAIN_D_80124494[11] = {
 	{ 271, 174, 18, 18 },
 };
 
+#if defined(VERSION_JP)
+int32_t MAIN_D_801244EC[22] = {
+	0xffafff88, 0x0c000018, 0xffcaffdb, 0x0c240054,
+	0xffefffdb, 0x0c780054, 0x0002ffdb, 0x18000048,
+	0x0016ffdb, 0x18600048, 0x0039ffdb, 0x24000054,
+	0x004dffdb, 0x24540048, 0xffef0050, 0x0ccc0018,
+	0x00020074, 0x18480018, 0x0016004d, 0x18a8000c,
+	0x004d0050, 0x249c000c,
+};
+#else
 int32_t MAIN_D_801244EC[22] = {
 	0xffafff84, 0x0c000024, 0xffcaffdb, 0x0c240054,
 	0xffefffdb, 0x0c780054, 0x0002ffdb, 0x18000048,
@@ -895,6 +1104,7 @@ int32_t MAIN_D_801244EC[22] = {
 	0x00020074, 0x18480018, 0x0016004d, 0x18a8000c,
 	0x004d0050, 0x249c000c,
 };
+#endif
 
 EvoChartEntry MAIN_D_80124544[61] = {
 	{ 0x001e, 0x002b, 0x40, 0x90, 0x00, 0x00 },
@@ -1030,6 +1240,55 @@ char *MEDAL_NAMES[15] = {
 	STR_MEDAL_NAME_10_YEARS,
 };
 
+#if defined(VERSION_JP)
+char *MEDAL_DESCRIPTIONS[45] = {
+	STR_MEDAL_DESCRIPTION_CUP_D_C_B_A_S,
+	STR_MEDAL_DESCRIPTION_WIN_IN_ALL,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_WIN_IN_ALL_VER_1_2_3_4_0,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_FIRE_GRAPPLE_THUNDER_WIND,
+	STR_MEDAL_DESCRIPTION_NATURE_COOL_METALLIC_FILTH_CUP,
+	STR_MEDAL_DESCRIPTION_WIN_IN_ALL_2,
+	STR_MEDAL_DESCRIPTION_DINO_WING_ANIMAL_HUMAN_CUP,
+	STR_MEDAL_DESCRIPTION_WIN_IN_ALL_2,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_WON_CHAMPIONSHIP_100_TIMES,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_MASTERED_56_SWITCH_TECHNIQUES,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_RAISED_ALL_61_DIGIMON,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_MAXED_ALL_OF_THE_DIGIMONS,
+	STR_MEDAL_DESCRIPTION_PARAMETERS,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_GOT_A_PERFECT_SCORE_IN_CURLING,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_100_FISH_CAUGHT,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_FINISHED_THE_GAME,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_JIJIMON_SAID_THE_TOWN,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_COLLECTED_ALL_DIGIMON_CARDS,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_COLLECTED_999999_BITS,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+	STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS,
+	STR_OVERWORLD_EMPTY,
+	STR_OVERWORLD_EMPTY,
+};
+#else
 char *MEDAL_DESCRIPTIONS[45] = {
 	STR_MEDAL_DESCRIPTION_CUP_D_C_B_A_S,
 	STR_MEDAL_DESCRIPTION_WIN_IN_ALL,
@@ -1077,6 +1336,7 @@ char *MEDAL_DESCRIPTIONS[45] = {
 	STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS,
 	STR_OVERWORLD_EMPTY,
 };
+#endif
 
 char *TAMER_LEVEL_TITLES[11] = {
 	MAIN_D_801342A8,
@@ -1162,11 +1422,19 @@ int16_t MAIN_D_80124B20[20] = {
 	0x0042, 0x001b, 0x0000, 0x0000,
 };
 
+#if defined(VERSION_JP)
+int16_t MAIN_D_80124B48[24] = {
+	0x001c, 0x002b, 0x004e, 0x0082, 0x0081, 0x0032, 0x003c, 0x0004,
+	0x0088, 0x0055, 0x0030, 0x002e, 0x00d6, 0x002a, 0x004e, 0x0082,
+	0x0044, 0x00bb, 0x0030, 0x0004, 0x001a, 0x00ce, 0x0084, 0x0004,
+};
+#else
 int16_t MAIN_D_80124B48[24] = {
 	0x001c, 0x002b, 0x004e, 0x0082, 0x0081, 0x0032, 0x003c, 0x0004,
 	0x0088, 0x0055, 0x0030, 0x002e, 0x00d6, 0x002a, 0x004e, 0x0082,
 	0x0026, 0x00bb, 0x006c, 0x0004, 0x001a, 0x00ce, 0x0084, 0x0004,
 };
+#endif
 
 RGB8 PARTICLE_COLOR3[6] = {
 	{ 0x47, 0x51, 0x00 },
@@ -1227,6 +1495,20 @@ RGB8 UI_BOX_COLORS[5] = {
 	{ 0x00, 0x00, 0x00 },
 };
 
+#if defined(VERSION_JP)
+char MAIN_D_80124C0C[2][12] = {
+	"最大ＨＰ",
+	"最大ＭＰ",
+};
+
+char MAIN_D_80124C24[12] = "攻撃力";
+
+char MAIN_D_80124C30[3][12] = {
+	"防御力",
+	"すばやさ",
+	"かしこさ",
+};
+#else
 char MAIN_D_80124C0C[2][12] = {
 	"HP",
 	"MP",
@@ -1239,6 +1521,7 @@ char MAIN_D_80124C30[3][12] = {
 	"Speed",
 	"Brain",
 };
+#endif
 
 char MAIN_D_80124C54[] = {
 	0x82, 0x4f, 0x82, 0x50, 0x82, 0x51, 0x82, 0x52,
@@ -1246,6 +1529,459 @@ char MAIN_D_80124C54[] = {
 	0x82, 0x57, 0x82, 0x58, 0x00,
 };
 
+#if defined(VERSION_JP)
+char STR_MOVE_NAME_FIRE_TOWER[] = "ファイアータワー";
+
+char STR_MOVE_NAME_PROMINENCE_BEAM[] = "プロミネンスビーム";
+
+char STR_MOVE_NAME_SPIT_FIRE[] = "スピットファイアー";
+
+char STR_MOVE_NAME_RED_INFERNO[] = "レッドインフェルノ";
+
+char STR_MOVE_NAME_MAGMA_BOMB[] = "マグマボム";
+
+char STR_MOVE_NAME_HEAT_LASER[] = "ヒートウェーブ";
+
+char STR_MOVE_NAME_INIFINITY_BURN[] = "インフィニティバーン";
+
+char STR_MOVE_NAME_MELTDOWN[] = "メルトダウン";
+
+char STR_MOVE_NAME_THUNDER_JUSTICE[] = "サンダージャスティス";
+
+char STR_MOVE_NAME_SPINNING_SHOT[] = "スピニングショット";
+
+char STR_MOVE_NAME_ELECTRIC_CLOUD[] = "エレキクラウド";
+
+char STR_MOVE_NAME_MEGALO_SPARK[] = "メガロスパーク";
+
+char STR_MOVE_NAME_STATIC_ELECT[] = "スタティックエレクト";
+
+char STR_MOVE_NAME_WIND_CUTTER[] = "ウインドカッター";
+
+char STR_MOVE_NAME_CONFUSED_STORM[] = "コンフューズストーム";
+
+char STR_MOVE_NAME_HURRICANE[] = "ハリケーン";
+
+char STR_MOVE_NAME_GIGA_FREEZE[] = "ギガフリーズ";
+
+char STR_MOVE_NAME_ICE_STATUE[] = "アイススタチュー";
+
+char STR_MOVE_NAME_WINTER_BLAST[] = "ウィンターブラスト";
+
+char STR_MOVE_NAME_ICE_NEEDLE[] = "アイスニードル";
+
+char STR_MOVE_NAME_WATER_BLIT[] = "ウォーターブリット";
+
+char STR_MOVE_NAME_AQUA_MAGIC[] = "アクアマジック";
+
+char STR_MOVE_NAME_AURORA_FREEZE[] = "オーロラフリーズ";
+
+char STR_MOVE_NAME_TEAR_DROP[] = "ティアドロップ";
+
+char STR_MOVE_NAME_POWER_CRANE[] = "パワークレーン";
+
+char STR_MOVE_NAME_ALL_RANGE_BEAM[] = "オールレンジビーム";
+
+char STR_MOVE_NAME_METAL_SPRINTER[] = "メタルスプリンター";
+
+char STR_MOVE_NAME_PULSE_LASER[] = "パルスレーザー";
+
+char STR_MOVE_NAME_DELETE_PROGRAM[] = "デリートプログラム";
+
+char STR_MOVE_NAME_DG_DIMENSION[] = "ＤＧディメンジョン";
+
+char STR_MOVE_NAME_FULL_POTENTIAL[] = "フルポテンシャル";
+
+char STR_MOVE_NAME_REVERSE_PROG[] = "リバースプログラム";
+
+char STR_MOVE_NAME_POISON_POWDER[] = "ポイズンパウダー";
+
+char STR_MOVE_NAME_MASS_MORPH[] = "マスモーフ";
+
+char STR_MOVE_NAME_INSECT_PLAGUE[] = "インセクトプレーグ";
+
+char STR_MOVE_NAME_CHARM_PERFUME[] = "チャームパヒューム";
+
+char STR_MOVE_NAME_POISON_CLAW[] = "ポイズンクロー";
+
+char STR_MOVE_NAME_DANGER_STING[] = "デンジャースティング";
+
+char STR_MOVE_NAME_GREEN_TRAP[] = "グリーントラップ";
+
+char STR_MOVE_NAME_TREMAR[] = "トレマー";
+
+char STR_MOVE_NAME_MUSCLE_CHARGE[] = "マッスルチャージ";
+
+char STR_MOVE_NAME_WAR_CRY[] = "ウォークライ";
+
+char STR_MOVE_NAME_SONIC_JAB[] = "マッハジャブ";
+
+char STR_MOVE_NAME_DYNAMITE_KICK[] = "ダイナマイトキック";
+
+char STR_MOVE_NAME_COUNTER[] = "カウンター";
+
+char STR_MOVE_NAME_MEGATON_PUNCH[] = "メガトンパンチ";
+
+char STR_MOVE_NAME_BUSTER_DIVE[] = "バスターダイブ";
+
+char STR_MOVE_NAME_ODOR_SPRAY[] = "超悪臭噴射";
+
+char STR_MOVE_NAME_POOP_SPD_TOSS[] = "高速ウンチ投げ";
+
+char STR_MOVE_NAME_BIG_POOP_TOSS[] = "巨大ウンチ投げ";
+
+char STR_MOVE_NAME_BIG_RND_TOSS[] = "巨大ウンチ乱れ投げ";
+
+char STR_MOVE_NAME_POOP_RND_TOSS[] = "ウンチ乱れ投げ";
+
+char STR_MOVE_NAME_RND_SPD_TOSS[] = "高速ウンチ乱れ投げ";
+
+char STR_MOVE_NAME_HORIZONTAL_KICK[] = "エンガチョキック";
+
+char STR_MOVE_NAME_ULT_POOP_HELL[] = "究極ウンチ地獄絵図";
+
+char STR_MOVE_NAME_BLAZE_BLAST[] = "ファイアーブレス";
+
+char STR_MOVE_NAME_PEPPER_BREATH[] = "ベビーフレイム";
+
+char STR_MOVE_NAME_LOVELY_ATTACK[] = "ラブリーアタック";
+
+char STR_MOVE_NAME_FIREBALL[] = "バーニングフィスト";
+
+char STR_MOVE_NAME_DEATH_CLAW[] = "デスクロウ";
+
+char STR_MOVE_NAME_MEGA_FLAME[] = "メガフレイム";
+
+char STR_MOVE_NAME_HOWLING_BLASTER[] = "フォックスファイアー";
+
+char STR_MOVE_NAME_ELECTRIC_SHOCK[] = "電撃ビリリン";
+
+char STR_MOVE_NAME_ABDUCTION_BEAM[] = "アブダクション光線";
+
+char STR_MOVE_NAME_SMILEY_BOMB[] = "スマイリーボム";
+
+char STR_MOVE_NAME_SPNNING_NEEDLE[] = "スピニングニードル";
+
+char STR_MOVE_NAME_SPIRAL_TWISTER[] = "マジカルファイアー";
+
+char STR_MOVE_NAME_BOOM_BUBBLE[] = "エアショット";
+
+char STR_MOVE_NAME_SWEET_BREATH[] = "甘い吐息";
+
+char STR_MOVE_NAME_BIT_BOMB[] = "ビットボム";
+
+char STR_MOVE_NAME_DEADLY_BOMB[] = "デッドリーボム";
+
+char STR_MOVE_NAME_DRILL_SPIN[] = "ドリルスピン";
+
+char STR_MOVE_NAME_ELECTRIC_THREAD[] = "エレクトリックスレッド";
+
+char STR_MOVE_NAME_ENERGY_BOMB[] = "エネルギーボム";
+
+char STR_MOVE_NAME_GENOSIDE_ATTACK[] = "ジェノサイドアタック";
+
+char STR_MOVE_NAME_GIGA_SCISSOR_CLAW[] = "ギガデストロイヤー";
+
+char STR_MOVE_NAME_DARK_SHOT[] = "グラウンドゼロ";
+
+char STR_MOVE_NAME_HAND_OF_FATE[] = "ヘブンズナックル";
+
+char STR_MOVE_NAME_DARK_CLAW[] = "ヘルズハンド";
+
+char STR_MOVE_NAME_AERIAL_ATTACK[] = "ホーリーショット";
+
+char STR_MOVE_NAME_BONE_BOOMERANG[] = "骨骨ブーメラン";
+
+char STR_MOVE_NAME_SOLAR_RAY[] = "ハンティングキャノン";
+
+char STR_MOVE_NAME_HYDRO_PRESSURE[] = "ハイドロプレッシャー";
+
+char STR_MOVE_NAME_ICE_BLAST[] = "アイスアロー";
+
+char STR_MOVE_NAME_IGA_SCHOOL_KNIFE_THROW[] = "イガ流手裏剣投げ";
+
+char STR_MOVE_NAME_BLASTING_SPOUT[] = "ジェットアロー";
+
+char STR_MOVE_NAME_DARK_NETWORK_CONCERT_CRUSH[] = "ラブ・セレナーデ";
+
+char STR_MOVE_NAME_ELECTRO_SHOCKER[] = "メガブラスター";
+
+char STR_MOVE_NAME_METEOR_WING[] = "メテオウイング";
+
+char STR_MOVE_NAME_SUPER_SLAP[] = "無限ビンタ";
+
+char STR_MOVE_NAME_NIGHTMARE_SYNDROMER[] = "ナイトメアシンドローム";
+
+char STR_MOVE_NAME_FROZEN_FIRE_SHOT[] = "ペトラファイアー";
+
+char STR_MOVE_NAME_POISON_IVY[] = "ポイズンアイビー";
+
+char STR_MOVE_NAME_BLUE_BLASTER[] = "プチファイアー";
+
+char STR_MOVE_NAME_SCISSOR_CLAW[] = "シザーアームズ";
+
+char STR_MOVE_NAME_SUPER_THUNDER_STRIKE[] = "スパークリングサンダー";
+
+char STR_MOVE_NAME_SPIRAL_SWORD[] = "スパイラルソード";
+
+char STR_MOVE_NAME_VARIABLE_DARTS[] = "ヴァリアブルダーツ";
+
+char STR_MOVE_NAME_VOLCANIC_STRIKE[] = "ヴォルケーノストライク";
+
+char STR_MOVE_NAME_SUBZERO_ICE_PUNCH[] = "絶対零度パンチ";
+
+char STR_MOVE_NAME_INFINITY_CANNON[] = "無限キャノン";
+
+char STR_MOVE_NAME_CRIMSON_FLARE[] = "クリムゾンフレア";
+
+char STR_MOVE_NAME_GLACIAL_BLAST[] = "グレイシャルブラスト";
+
+char STR_MOVE_NAME_MAIL_STROME[] = "メイルストローム";
+
+char STR_MOVE_NAME_HIGH_ELECTRO_SHOCKER[] = "ハイメガブラスター";
+
+char STR_ITEM_DESC_SMALL_RECOVERY_500_HP[] = "ＨＰを５００回復する。";
+
+char STR_ITEM_DESC_MEDIUM_RECOVERY_1500_HP[] = "ＨＰを１５００回復する。";
+
+char STR_ITEM_DESC_LARGE_RECOVERY_5000_HP[] = "ＨＰを５０００回復する。";
+
+char STR_ITEM_DESC_SUPER_RECOVERY_FULL_HP[] = "ＨＰをフル回復するぞ！";
+
+char STR_ITEM_DESC_RECOVER_500_MAGIC_POINTS[] = "ＭＰを５００回復する。";
+
+char STR_ITEM_DESC_MED_MP_RECOVER_1500_MP[] = "ＭＰを１５００回復する。";
+
+char STR_ITEM_DESC_LRG_MP_RECOVER_5000_MP[] = "ＭＰを５０００回復する。";
+
+char STR_ITEM_DESC_RECOVERS_1500_MP_AND_HP[] = "ＨＰとＭＰを１５００ずつ回復する。";
+
+char STR_ITEM_DESC_CURES_STATUS_ERRORS[] = "毒・マヒ・混乱・液晶化を治す。";
+
+char STR_ITEM_DESC_CURES_ERRORS_REC_HP_MP[] = "状態異常を治し、ＨＰ、ＭＰも回復するぞ！";
+
+char STR_ITEM_DESC_PROTECTS_YR_COND_IN_BATTLE[] = "戦闘中の全ての状態変化を防ぐぞ！";
+
+char STR_ITEM_DESC_CURES_COMA_REC_HALF_HP[] = "仮死を治し、ＨＰは半分回復するぞ！";
+
+char STR_ITEM_DESC_CURES_COMA_ERRORS_FULL_HP[] = "状態異常、仮死を治し、ＨＰも全快するぞ！";
+
+char STR_ITEM_DESC_CURES_WOUNDS_SOME_SICKNESS[] = "「ケガ」を治し、「病気」にも効くかも？";
+
+char STR_ITEM_DESC_CURES_WOUNDS_SICKNESS[] = "「ケガ」、「病気」を治す。";
+
+char STR_ITEM_DESC_BOOST_OFF_POWER_IN_BATTLE[] = "使った戦闘中、攻撃力がアップする。";
+
+char STR_ITEM_DESC_BOOST_DEF_POWER_IN_BATTLE[] = "使った戦闘中、防御力がアップする。";
+
+char STR_ITEM_DESC_BOOST_SPEED_IN_BATTLE[] = "使った戦闘中、すばやさがアップする。";
+
+char STR_ITEM_DESC_BOOST_ALL_SKILLS_IN_BATTLE[] = "使った戦闘中、全能力がアップする。";
+
+char STR_ITEM_DESC_SUPER_BOOST_OFF_PWR_IN_BAT[] = "使った戦闘中、攻撃力が大きくアップする。";
+
+char STR_ITEM_DESC_SUPER_BOOST_DEF_PWR_IN_BAT[] = "使った戦闘中、防御力が大きくアップする。";
+
+char STR_ITEM_DESC_SUPER_BOOST_SPEED_IN_BATTLE[] = "使った戦闘中、すばやさが大きくアップする。";
+
+char STR_ITEM_DESC_CAN_RETURN_TO_CITY_QUICKLY[] = "街に一瞬で戻ることができるぞ！";
+
+char STR_ITEM_DESC_BOOST_MAX_OFF_PWR_LEVEL_50[] = "攻撃力を永久に＋５０するぞ！";
+
+char STR_ITEM_DESC_BOOST_MAX_DEF_PWR_LEVEL_50[] = "防御力を永久に＋５０するぞ！";
+
+char STR_ITEM_DESC_BOOST_MAX_BRAINS_LEVEL_50[] = "かしこさを永久に＋５０するぞ！";
+
+char STR_ITEM_DESC_BOOST_MAX_SPEED_LEVEL_50[] = "すばやさを永久に＋５０するぞ！";
+
+char STR_ITEM_DESC_BOOST_MAX_HP_LEVEL_500[] = "ＨＰ上限を永久に＋５００するぞ！";
+
+char STR_ITEM_DESC_BOOST_MAX_MP_LEVEL_500[] = "ＭＰ上限を永久に＋５００するぞ！";
+
+char STR_ITEM_DESC_BOOST_OFF_PWR_BRAINS_100[] = "攻撃力、かしこさを永久に＋１００。しかし…";
+
+char STR_ITEM_DESC_BOOST_DEF_PWR_SPEED_100[] = "防御力、すばやさを永久に＋１００。しかし…";
+
+char STR_ITEM_DESC_BOOST_OFF_PWR_SPEED_1000[] = "ＨＰ、ＭＰ上限を永久に＋１０００。しかし…";
+
+char STR_ITEM_DESC_CAN_DO_POTTY_ANYWHERE[] = "使い捨てのトイレ。トイレが無い場所も安心！";
+
+char STR_ITEM_DESC_TRAIN_BETTER_WITH_THIS[] = "持っているだけで、トレーニング効果アップ！";
+
+char STR_ITEM_DESC_MORE_RECOVERY_DURING_REST[] = "持っているだけで、睡眠時の回復力アップ！";
+
+char STR_ITEM_DESC_REPELS_ENEMIES_TO_STAY_AWAY[] = "持っていると敵が参加しにくくなるぞ！";
+
+char STR_ITEM_DESC_ATTRACT_ENEMIES_TO_COME[] = "持っていると敵が参加しやすくなるぞ！";
+
+char STR_ITEM_DESC_WALK_AND_HP_MP_GO_UP[] = "歩くとＨＰとＭＰが少し回復。走るとダメ！";
+
+char STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL[] = "食べ物。そこそこおなかがふくれる。";
+
+char STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL[] = "食べ物。かなりおなかがふくれる。";
+
+char STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL[] = "食べ物。すごくおなかがふくれる。";
+
+char STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT[] = "食べ物。しばらくトレーニング効果アップ。";
+
+char STR_ITEM_DESC_GREATLY_REDUCES_TIREDNESS[] = "食べ物。大幅に疲れがとれるぞ！";
+
+char STR_ITEM_DESC_MAKE_DIGIMON_A_BIT_FULL[] = "食べ物。少しおなかがふくれるぞ！";
+
+char STR_ITEM_DESC_GREATLY_BOOSTS_DISCIPLINE[] = "食べ物。しつけが大幅アップ！";
+
+char STR_ITEM_DESC_BOOSTS_ALL_ABILITIES[] = "食べ物。全能力アップ！";
+
+char STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT_2[] = "食べ物。しばらくトレーニング効果アップ！";
+
+char STR_ITEM_DESC_MAKES_DIGIMON_HAPPY[] = "食べ物。ごきげんが大幅アップ！";
+
+char STR_ITEM_DESC_GIVES_REST_BOOST_DISC_HAP[] = "食べ物。疲れ回復、しつけとごきげんアップ！";
+
+char STR_ITEM_DESC_CAN_BE_SOLD_FOR_A_HIGH_PRICE[] = "食べ物。高く売れるぞ！";
+
+char STR_ITEM_DESC_MAKES_FULL_BOOSTS_WEIGHT[] = "食べ物。満腹になるが体重が大きくアップ！";
+
+char STR_ITEM_DESC_RECOVERS_HP_COMPLETELY[] = "食べ物。ＨＰが全快するぞ！";
+
+char STR_ITEM_DESC_RECOVERS_MP_COMPLETELY[] = "食べ物。ＭＰが全快するぞ！";
+
+char STR_ITEM_DESC_LOWERS_WEIGHT[] = "食べ物。体重が減るぞ！";
+
+char STR_ITEM_DESC_FULLY_RECOVERS_HP_AND_MP[] = "食べ物。ＨＰとＭＰが回復するぞ！";
+
+char STR_ITEM_DESC_BOOST_OFFENSIVE_POWER_20[] = "食べ物。攻撃力が２０アップ！";
+
+char STR_ITEM_DESC_BOOST_DEFENSIVE_POWER_20[] = "食べ物。防御力が２０アップ！";
+
+char STR_ITEM_DESC_BOOST_SPEED_20[] = "食べ物。すばやさが２０アップ！";
+
+char STR_ITEM_DESC_BOOST_BRAINS_20[] = "食べ物。かしこさが２０アップ！";
+
+char STR_ITEM_DESC_BOOST_HP_BY_200[] = "食べ物。ＨＰが２００アップ！";
+
+char STR_ITEM_DESC_BOOST_MP_BY_200[] = "食べ物。ＭＰが２００アップ！";
+
+char STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL_2[] = "食べ物。少しおなかがふくれる。";
+
+char STR_ITEM_DESC_FULL_HP_AND_MP_LIFE_SPAN[] = "食べ物。ＨＰ＆ＭＰ全快、寿命ものびるぞ！";
+
+char STR_ITEM_DESC_MAKES_DIGIMON_SOMEWHAT_FULL[] = "食べ物。一応おなかはふくれるぞ！";
+
+char STR_ITEM_DESC_BOOST_HAPPINESS_BUT_RISKY[] = "食べ物。ごきげんアップ！でも運が悪いと…";
+
+char STR_ITEM_DESC_GOOD_FOR_MANY_THINGS[] = "食べ物。様々なすばらしい効果がえられるぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_GREYMON[] = "グレイモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MERAMON[] = "メラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_BIRDRAMON[] = "バードラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_CENTARUMON[] = "ケンタルモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MONOCHROMON[] = "モノクロモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_DRIMOGEMON[] = "ドリモゲモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_TYRANNOMON[] = "ティラノモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_DEVIMON[] = "デビモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_OGREMON[] = "オーガモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_LEOMON[] = "レオモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_ANGEMON[] = "エンジェモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_BAKEMON[] = "バケモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_KAMINARIMON[] = "カミナリモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_AIRDRAMON[] = "エアドラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_KOKATORIMON[] = "コカトリモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_UNIMON[] = "ユニモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_KABUTERIMON[] = "カブテリモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_KUWAGAMON[] = "クワガーモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_VEGIEMON[] = "ベジーモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_NINJAMON[] = "イガモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_SEADRAMON[] = "シードラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_WHAMON[] = "ホエーモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_SHELLMON[] = "シェルモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_COELAMON[] = "シーラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_GARURUMON[] = "ガルルモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_FRIGIMON[] = "ユキダルモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MOJYAMON[] = "モジャモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_NANIMON[] = "ナニモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_METALGREYMON[] = "メタルグレイモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_SKULLGREYMON[] = "スカルグレイモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_ANDROMON[] = "アンドロモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MEGADRAMON[] = "メガドラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MAMEMON[] = "マメモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_METALMAMEMON[] = "メタルマメモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_GIROMON[] = "ギロモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_PIXIMON[] = "ピッコロモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MONZAEMON[] = "もんざえモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_VADEMON[] = "ベーダモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_ETEMON[] = "エテモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_DIGITAMAMON[] = "デジタマモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_PHOENIXMON[] = "ホウオウモンに進化するぞ！";
+
+char STR_ITEM_DESC_BECOME_HERCULESKABUTERIMON[] = "ヘラクルカブテリモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_MEGASEADRAMON[] = "メガシードラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_WEREGARURUMON[] = "ウェアガルルモンに進化するぞ！";
+
+char STR_ITEM_DESC_SEADRAMON_FRIENDSHIP_PROOF[] = "シードラモンとの友情のあかし。";
+
+char STR_ITEM_DESC_ENABLES_YOU_TO_FISH_AT_LAKE[] = "湖で釣りができるぞ！";
+
+char STR_ITEM_DESC_GIVES_GOOD_FISHING_AT_LAKE[] = "湖で釣りができ、よく釣れるぞ！";
+
+char STR_ITEM_DESC_STONE_TABLET_OF_LEOMON[] = "レオモンの先祖がのこした石板。";
+
+char STR_ITEM_DESC_KEY_TO_GRAY_LORD_MANSION[] = "闇貴族の館のカギ。";
+
+char STR_ITEM_DESC_RECOVER_1000_MP_OTHER_USES[] = "ＭＰが１０００回復。他にも使い道が…";
+
+char STR_ITEM_DESC_KEY_TO_OPEN_REFRIGERATOR[] = "れいぞうこをあけるカギ。";
+
+char STR_ITEM_DESC_YOU_CAN_READ_ANCIENT_SCRIPT[] = "古代文字が読めるようになるぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_GIGADRAMON[] = "ギガドラモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_PANJYAMON[] = "パンジャモンに進化するぞ！";
+
+char STR_ITEM_DESC_DIGIVOLVE_TO_METALETEMON[] = "メタルエテモンに進化するぞ！";
+#else
 char STR_MOVE_NAME_FIRE_TOWER[] = "Fire Tower";
 
 char STR_MOVE_NAME_PROMINENCE_BEAM[16] = "Prominence Beam";
@@ -1701,6 +2437,7 @@ char STR_ITEM_DESC_DIGIVOLVE_TO_GIGADRAMON[] = "Digivolve to Gigadramon!";
 char STR_ITEM_DESC_DIGIVOLVE_TO_PANJYAMON[24] = "Digivolve to Panjyamon!";
 
 char STR_ITEM_DESC_DIGIVOLVE_TO_METALETEMON[] = "Digivolve to MetalEtemon!";
+#endif
 
 InventoryTable DEFAULT_ITEM_AMOUNTS = {
 	{
@@ -1720,7 +2457,11 @@ InventoryTable DEFAULT_ITEM_TYPES = {
 	},
 };
 
+#if defined(VERSION_JP)
+char IS_SICK_SUFFIX[] = "は病気になってしまった！";
+#else
 char IS_SICK_SUFFIX[] = " is sick!";
+#endif
 
 uint8_t MAIN_D_80125F70[7][7] = {
 	{ 0x0a, 0x0f, 0x05, 0x14, 0x14, 0x0f, 0x14 },
@@ -2026,11 +2767,19 @@ Move MOVE_DATA[122] = {
 		0x05, 0x00, 0x64, 0x00, 0x00,
 		0x00, 0x00,
 	},
+#if defined(VERSION_JP)
+	{
+		0x00000000, 0x0000, 0x21, 0x01, 0x04,
+		0x05, 0x00, 0x64, 0x00, 0x00,
+		0x00, 0x00,
+	},
+#else
 	{
 		0x00000000, 0x0000, 0x21, 0x01, 0x04,
 		0x05, 0x00, 0x64, 0x00, 0x01,
 		0x00, 0x00,
 	},
+#endif
 	{
 		0x00077a10, 0x0100, 0x63, 0x01, 0x02,
 		0x05, 0x04, 0x64, 0x0c, 0x01,
@@ -2488,6 +3237,1162 @@ Move MOVE_DATA[122] = {
 	},
 };
 
+#if defined(VERSION_JP)
+Item ITEM_PARA[128] = {
+	{
+		"回復フロッピー",
+		0x00000064,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"中回復フロッピー",
+		0x000001f4,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"大回復フロッピー",
+		0x000003e8,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"超回復フロッピー",
+		0x000009c4,
+		0x0014,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"ＭＰフロッピー",
+		0x0000012c,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"中ＭＰフロッピー",
+		0x00000320,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"大ＭＰフロッピー",
+		0x000007d0,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"ダブルフロッピー",
+		0x000005dc,
+		0x0000,
+		0x0000,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"色々フロッピー",
+		0x0000012c,
+		0x0000,
+		0x0001,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"万能フロッピー",
+		0x000007d0,
+		0x0000,
+		0x0001,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"対変化フロッピー",
+		0x000004b0,
+		0x0000,
+		0x0001,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"再生フロッピー",
+		0x00000fa0,
+		0x0000,
+		0x0001,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"超再生フロッピー",
+		0x0000251c,
+		0x0064,
+		0x0001,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"ばんそうこう",
+		0x000000c8,
+		0x0000,
+		0x0001,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"薬",
+		0x000003e8,
+		0x0000,
+		0x0001,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"攻撃プラグイン",
+		0x000001f4,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"防御プラグイン",
+		0x000001f4,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"高速プラグイン",
+		0x000001f4,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"万能プラグイン",
+		0x00000bb8,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"攻撃プラグインＳ",
+		0x00000fa0,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"防御プラグインＳ",
+		0x00000fa0,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"高速プラグインＳ",
+		0x00000fa0,
+		0x0000,
+		0x0003,
+		0x01,
+		0x01,
+		0x0000,
+	},
+	{
+		"オートパイロット",
+		0x0000012c,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"攻撃チップ",
+		0x0000270f,
+		0x0320,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"防御チップ",
+		0x0000270f,
+		0x0320,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"かしこさチップ",
+		0x0000270f,
+		0x0320,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"すばやさチップ",
+		0x0000270f,
+		0x0320,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ＨＰチップ",
+		0x0000270f,
+		0x0320,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ＭＰチップ",
+		0x0000270f,
+		0x0320,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デビルチップＡ",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デビルチップＤ",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デビルチップＥ",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"けいたいトイレ",
+		0x0000012c,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"トレーマニュアル",
+		0x0000270f,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"安眠まくら",
+		0x000003e8,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"敵よけお守り",
+		0x00001388,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"敵よせシグナル",
+		0x00001388,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"健康サンダル",
+		0x000007d0,
+		0x0000,
+		0x0005,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"肉",
+		0x00000032,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"巨大肉",
+		0x000001f4,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"極上肉",
+		0x000005dc,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"挑戦ニンジン",
+		0x000001f4,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"サクラ鳥大根",
+		0x000001f4,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ペンペンペン草",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジタケ",
+		0x00000064,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"雪割りキノコ",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デラックスキノコ",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジぼっくり",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ブルーリンゴ",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"アセラロ",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"黄金ドングリ",
+		0x00001f40,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ヘビーいちご",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"天然あまぐり",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"モンドレイク",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"食用サボテン",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"オレンジバナナ",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ごうりき草の実",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"じょうぶ草の実",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"はやあし草の実",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ものしり草の実",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"もりもり草の実",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"やすらぎ草の実",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジジャコ",
+		0x00000032,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジブナ",
+		0x00000064,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジマス",
+		0x0000012c,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ブラックデジマス",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジナマズ",
+		0x000007d0,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"デジカムル",
+		0x00001f40,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"くさった肉",
+		0x00000032,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"運だめしキノコ",
+		0x000003e8,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"クサリカケメロン",
+		0x00001388,
+		0x0000,
+		0x0002,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"灰色の爪",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"炎のかけら",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"燃える羽",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"鉄のヒヅメ",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"モノクロストーン",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"鋼のドリル",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"牙の化石",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"黒い羽",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"トゲこん棒",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"輝くたてがみ",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"白い羽",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ボロ布",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"電気リング",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"虹色の笛",
+		0x00001388,
+		0x01f4,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"風見鶏",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"聖なる角",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"重い兜",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ギザギザはさみ",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"有機肥料",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"イガ流の秘伝書",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"お供え酒",
+		0x00001388,
+		0x01f4,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"北極星の印",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"赤い貝がら",
+		0x00001388,
+		0x01f4,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"硬いウロコ",
+		0x00001388,
+		0x01f4,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ミスリル",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"氷水晶",
+		0x00001388,
+		0x01f4,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"けはえ薬",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"サングラス",
+		0x00001388,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"メタルパーツ",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"死を呼ぶ骨",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"サイバーパーツ",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"メガハンド",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"銀玉",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"メタルアーマー",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"チェンソー",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"小さな槍",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"愛のばんそうこう",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ビームガン",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"金のバナナ",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"謎のタマゴ",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"奇跡のルビー",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"ビートルダイヤ",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"サンゴのお守り",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"月光の鏡",
+		0x0000270f,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"湖のぬしの笛",
+		0x0000270f,
+		0x0000,
+		0x0005,
+		0x00,
+		0x00,
+		0x0000,
+	},
+	{
+		"ぼろい釣ざお",
+		0x00000064,
+		0x0000,
+		0x0005,
+		0x00,
+		0x00,
+		0x0000,
+	},
+	{
+		"すごい釣ざお",
+		0x00000bb8,
+		0x012c,
+		0x0005,
+		0x00,
+		0x00,
+		0x0000,
+	},
+	{
+		"レオモン族の石板",
+		0x00000064,
+		0x0000,
+		0x0005,
+		0x00,
+		0x00,
+		0x0000,
+	},
+	{
+		"館のカギ",
+		0x00000064,
+		0x0000,
+		0x0005,
+		0x00,
+		0x00,
+		0x0000,
+	},
+	{
+		"はぐるま",
+		0x00000064,
+		0x0000,
+		0x0005,
+		0x00,
+		0x00,
+		0x0000,
+	},
+	{
+		"雨ふり草の実",
+		0x000003e8,
+		0x0000,
+		0x0005,
+		0x02,
+		0x01,
+		0x0000,
+	},
+	{
+		"血のしたたる肉",
+		0x000003e8,
+		0x0000,
+		0x0000,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"れいぞうこのカギ",
+		0x00000064,
+		0x0000,
+		0x0005,
+		0xff,
+		0x00,
+		0x0000,
+	},
+	{
+		"古代文字解読機",
+		0x000001f4,
+		0x0000,
+		0x0005,
+		0xff,
+		0x00,
+		0x0000,
+	},
+	{
+		"ギガハンド",
+		0x00000000,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"高貴なたてがみ",
+		0x00000000,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+	{
+		"メタルバナナ",
+		0x00000000,
+		0x0000,
+		0x0004,
+		0x00,
+		0x01,
+		0x0000,
+	},
+};
+#else
 Item ITEM_PARA[128] = {
 	{
 		"sm.recovery",
@@ -3642,7 +5547,140 @@ Item ITEM_PARA[128] = {
 		0x0000,
 	},
 };
+#endif
 
+#if defined(VERSION_JP)
+char *ITEM_DESC_PTR[128] = {
+	STR_ITEM_DESC_SMALL_RECOVERY_500_HP,
+	STR_ITEM_DESC_MEDIUM_RECOVERY_1500_HP,
+	STR_ITEM_DESC_LARGE_RECOVERY_5000_HP,
+	STR_ITEM_DESC_SUPER_RECOVERY_FULL_HP,
+	STR_ITEM_DESC_RECOVER_500_MAGIC_POINTS,
+	STR_ITEM_DESC_MED_MP_RECOVER_1500_MP,
+	STR_ITEM_DESC_LRG_MP_RECOVER_5000_MP,
+	STR_ITEM_DESC_RECOVERS_1500_MP_AND_HP,
+	STR_ITEM_DESC_CURES_STATUS_ERRORS,
+	STR_ITEM_DESC_CURES_ERRORS_REC_HP_MP,
+	STR_ITEM_DESC_PROTECTS_YR_COND_IN_BATTLE,
+	STR_ITEM_DESC_CURES_COMA_REC_HALF_HP,
+	STR_ITEM_DESC_CURES_COMA_ERRORS_FULL_HP,
+	STR_ITEM_DESC_CURES_WOUNDS_SOME_SICKNESS,
+	STR_ITEM_DESC_CURES_WOUNDS_SICKNESS,
+	STR_ITEM_DESC_BOOST_OFF_POWER_IN_BATTLE,
+	STR_ITEM_DESC_BOOST_DEF_POWER_IN_BATTLE,
+	STR_ITEM_DESC_BOOST_SPEED_IN_BATTLE,
+	STR_ITEM_DESC_BOOST_ALL_SKILLS_IN_BATTLE,
+	STR_ITEM_DESC_SUPER_BOOST_OFF_PWR_IN_BAT,
+	STR_ITEM_DESC_SUPER_BOOST_DEF_PWR_IN_BAT,
+	STR_ITEM_DESC_SUPER_BOOST_SPEED_IN_BATTLE,
+	STR_ITEM_DESC_CAN_RETURN_TO_CITY_QUICKLY,
+	STR_ITEM_DESC_BOOST_MAX_OFF_PWR_LEVEL_50,
+	STR_ITEM_DESC_BOOST_MAX_DEF_PWR_LEVEL_50,
+	STR_ITEM_DESC_BOOST_MAX_BRAINS_LEVEL_50,
+	STR_ITEM_DESC_BOOST_MAX_SPEED_LEVEL_50,
+	STR_ITEM_DESC_BOOST_MAX_HP_LEVEL_500,
+	STR_ITEM_DESC_BOOST_MAX_MP_LEVEL_500,
+	STR_ITEM_DESC_BOOST_OFF_PWR_BRAINS_100,
+	STR_ITEM_DESC_BOOST_DEF_PWR_SPEED_100,
+	STR_ITEM_DESC_BOOST_OFF_PWR_SPEED_1000,
+	STR_ITEM_DESC_CAN_DO_POTTY_ANYWHERE,
+	STR_ITEM_DESC_TRAIN_BETTER_WITH_THIS,
+	STR_ITEM_DESC_MORE_RECOVERY_DURING_REST,
+	STR_ITEM_DESC_REPELS_ENEMIES_TO_STAY_AWAY,
+	STR_ITEM_DESC_ATTRACT_ENEMIES_TO_COME,
+	STR_ITEM_DESC_WALK_AND_HP_MP_GO_UP,
+	STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL,
+	STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL,
+	STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL,
+	STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT,
+	STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT,
+	STR_ITEM_DESC_GREATLY_REDUCES_TIREDNESS,
+	STR_ITEM_DESC_MAKE_DIGIMON_A_BIT_FULL,
+	STR_ITEM_DESC_GREATLY_BOOSTS_DISCIPLINE,
+	STR_ITEM_DESC_BOOSTS_ALL_ABILITIES,
+	STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT_2,
+	STR_ITEM_DESC_MAKES_DIGIMON_HAPPY,
+	STR_ITEM_DESC_GIVES_REST_BOOST_DISC_HAP,
+	STR_ITEM_DESC_CAN_BE_SOLD_FOR_A_HIGH_PRICE,
+	STR_ITEM_DESC_MAKES_FULL_BOOSTS_WEIGHT,
+	STR_ITEM_DESC_RECOVERS_HP_COMPLETELY,
+	STR_ITEM_DESC_RECOVERS_MP_COMPLETELY,
+	STR_ITEM_DESC_LOWERS_WEIGHT,
+	STR_ITEM_DESC_FULLY_RECOVERS_HP_AND_MP,
+	STR_ITEM_DESC_BOOST_OFFENSIVE_POWER_20,
+	STR_ITEM_DESC_BOOST_DEFENSIVE_POWER_20,
+	STR_ITEM_DESC_BOOST_SPEED_20,
+	STR_ITEM_DESC_BOOST_BRAINS_20,
+	STR_ITEM_DESC_BOOST_HP_BY_200,
+	STR_ITEM_DESC_BOOST_MP_BY_200,
+	STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL_2,
+	STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL,
+	STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL,
+	STR_ITEM_DESC_BOOSTS_ALL_ABILITIES,
+	STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL,
+	STR_ITEM_DESC_FULL_HP_AND_MP_LIFE_SPAN,
+	STR_ITEM_DESC_MAKES_DIGIMON_SOMEWHAT_FULL,
+	STR_ITEM_DESC_BOOST_HAPPINESS_BUT_RISKY,
+	STR_ITEM_DESC_GOOD_FOR_MANY_THINGS,
+	STR_ITEM_DESC_DIGIVOLVE_TO_GREYMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MERAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_BIRDRAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_CENTARUMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MONOCHROMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_DRIMOGEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_TYRANNOMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_DEVIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_OGREMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_LEOMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_ANGEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_BAKEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_KAMINARIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_AIRDRAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_KOKATORIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_UNIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_KABUTERIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_KUWAGAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_VEGIEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_NINJAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_SEADRAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_WHAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_SHELLMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_COELAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_GARURUMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_FRIGIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MOJYAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_NANIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_METALGREYMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_SKULLGREYMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_ANDROMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MEGADRAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MAMEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_METALMAMEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_GIROMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_PIXIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MONZAEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_VADEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_ETEMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_DIGITAMAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_PHOENIXMON,
+	STR_ITEM_DESC_BECOME_HERCULESKABUTERIMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_MEGASEADRAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_WEREGARURUMON,
+	STR_ITEM_DESC_SEADRAMON_FRIENDSHIP_PROOF,
+	STR_ITEM_DESC_ENABLES_YOU_TO_FISH_AT_LAKE,
+	STR_ITEM_DESC_GIVES_GOOD_FISHING_AT_LAKE,
+	STR_ITEM_DESC_STONE_TABLET_OF_LEOMON,
+	STR_ITEM_DESC_KEY_TO_GRAY_LORD_MANSION,
+	STR_ITEM_DESC_MYSTERY_ITEM,
+	STR_ITEM_DESC_RECOVER_1000_MP_OTHER_USES,
+	STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL,
+	STR_ITEM_DESC_KEY_TO_OPEN_REFRIGERATOR,
+	STR_ITEM_DESC_YOU_CAN_READ_ANCIENT_SCRIPT,
+	STR_ITEM_DESC_DIGIVOLVE_TO_GIGADRAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_PANJYAMON,
+	STR_ITEM_DESC_DIGIVOLVE_TO_METALETEMON,
+};
+#else
 char *ITEM_DESC_PTR[128] = {
 	STR_ITEM_DESC_SMALL_RECOVERY_500_HP,
 	STR_ITEM_DESC_MEDIUM_RECOVERY_1500_HP,
@@ -3773,6 +5811,7 @@ char *ITEM_DESC_PTR[128] = {
 	STR_ITEM_DESC_DIGIVOLVE_TO_PANJYAMON,
 	STR_ITEM_DESC_DIGIVOLVE_TO_METALETEMON,
 };
+#endif
 
 uint8_t MAIN_D_80127BDC[128] = {
 	0x00, 0x01, 0x12, 0x03, 0x04, 0x08, 0x06, 0x00,
@@ -3936,71 +5975,67 @@ ItemFunction ITEM_FUNCTIONS[128] = {
 
 void clearMapObjects(LocalMapObjectInstance *instances)
 {
-	LocalMapObjectInstance *data;
 	int32_t i;
 	int32_t j;
 
-	data = instances;
 	for (i = 0; i < 188; i++) {
 		for (j = 0; j < 8; j++) {
-			data->animSprites[j] = -1;
+			instances->animSprites[j] = -1;
 		}
 		for (j = 0; j < 8; j++) {
-			data->animTimes[j] = 0;
+			instances->animTimes[j] = 0;
 		}
-		data->orderValue = 0;
-		data->timer = 0;
-		data->currentFrame = -1;
-		data->flag = 1;
-		data++;
+		instances->orderValue = 0;
+		instances->timer = 0;
+		instances->currentFrame = -1;
+		instances->flag = 1;
+		instances++;
 	}
 }
 
-void loadMapObjects(LocalMapObjectInstance *mapObjects, uint8_t *data,
-		    int32_t mapId)
+void loadMapObjects(LocalMapObjectInstance *mapObjects, int16_t *data,
+                    int16_t mapId)
 {
 	LocalMapObjectInstance *obj;
-	int16_t *src;
 	int32_t i;
-	int32_t j;
 	int32_t k;
+	int32_t j;
 	int16_t count;
 
-	obj = mapObjects;
-	src = (int16_t *)data;
-	count = *src++;
+	count = *data++;
 	for (i = 0; i < count; i++) {
-		LOCAL_MAP_OBJECTS[i].texX = *src++;
-		LOCAL_MAP_OBJECTS[i].texY = *src++;
-		LOCAL_MAP_OBJECTS[i].width = *src++;
-		LOCAL_MAP_OBJECTS[i].height = *src++;
-		LOCAL_MAP_OBJECTS[i].someX = *src++;
-		LOCAL_MAP_OBJECTS[i].someY = *src++;
-		LOCAL_MAP_OBJECTS[i].someZ = *src++;
-		LOCAL_MAP_OBJECTS[i].clut = *src++;
-		LOCAL_MAP_OBJECTS[i].transparency = *src++;
+		LOCAL_MAP_OBJECTS[i].texX = *data++;
+		LOCAL_MAP_OBJECTS[i].texY = *data++;
+		LOCAL_MAP_OBJECTS[i].width = *data++;
+		LOCAL_MAP_OBJECTS[i].height = *data++;
+		LOCAL_MAP_OBJECTS[i].someX = *data++;
+		LOCAL_MAP_OBJECTS[i].someY = *data++;
+		LOCAL_MAP_OBJECTS[i].someZ = *data++;
+		LOCAL_MAP_OBJECTS[i].clut = *data++;
+		LOCAL_MAP_OBJECTS[i].transparency = *data++;
 	}
-	MAP_OBJECT_INSTANCE_COUNT = *src++;
+	obj = mapObjects;
+	MAP_OBJECT_INSTANCE_COUNT = *data++;
 	for (k = 0; k < MAP_OBJECT_INSTANCE_COUNT; k++) {
 		for (j = 0; j < 8; j++) {
-			obj->animSprites[j] = *src++;
+			mapObjects->animSprites[j] = *data++;
 		}
 		for (j = 0; j < 8; j++) {
-			obj->animTimes[j] = *src++;
+			mapObjects->animTimes[j] = *data++;
 		}
-		obj->x = *src++;
-		obj->y = *src++;
-		obj->flag = *src++;
+		mapObjects->x = *data++;
+		mapObjects->y = *data++;
+		mapObjects->flag = *data++;
 		if (((mapId >= 0x58 && mapId < 0x61) ||
 		     (mapId >= 0x84 && mapId < 0x88)) &&
 		    k < 0x23) {
 			if (k >= 0x14) {
-				obj->x = randomLimit(320);
+				mapObjects->x = randomLimit(320);
 			}
-			obj->y = randomLimit(240);
-			obj->flag |= 0x80;
+			mapObjects->y = randomLimit(240);
+			mapObjects->flag |= 0x80;
 		}
-		obj++;
+		mapObjects++;
 	}
 	for (k = 0; k < 10; k++) {
 		MAP_OBJECT_MOVE_TO_DATA[k] = 0;
@@ -4021,7 +6056,7 @@ void loadMapImage1(u_long *tim)
 	}
 }
 
-void loadMapImage2(u_long *tim, int32_t id)
+void loadMapImage2(u_long *tim, int8_t id)
 {
 	TIM_IMAGE image;
 	RECT rect;
@@ -4046,7 +6081,6 @@ void loadMapImage2(u_long *tim, int32_t id)
 
 void calcMapObjectOrder(LocalMapObjectInstance *instances)
 {
-	LocalMapObjectInstance *data;
 	SVECTOR worldPos;
 	SVECTOR screen;
 	int32_t depth;
@@ -4056,10 +6090,9 @@ void calcMapObjectOrder(LocalMapObjectInstance *instances)
 
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
-	data = instances;
 	for (i = 0; i < MAP_OBJECT_INSTANCE_COUNT; i++) {
 		for (j = 0; j < 8; j++) {
-			val = data->animSprites[j];
+			val = instances->animSprites[j];
 			if (val == -1) {
 				continue;
 			}
@@ -4085,30 +6118,23 @@ void calcMapObjectOrder(LocalMapObjectInstance *instances)
 		if (LOCAL_MAP_OBJECTS[val].someY == 0x2710) {
 			depth = 0xffe;
 		}
-		data->orderValue = depth;
-		if (data->flag & 0x80) {
-			data->orderValue = 0x1e;
+		instances->orderValue = depth;
+		if (instances->flag & 0x80) {
+			instances->orderValue = 0x1e;
 		}
-		data->currentFrame = 0;
-		data++;
+		instances->currentFrame = 0;
+		instances++;
 	}
 }
 
-void renderMapOverlays(LocalMapObjectInstance *instances, int32_t screenX,
-		       int16_t screenY)
+void renderMapOverlays(LocalMapObjectInstance *instances, int16_t screenX,
+                       int16_t screenY)
 {
-	LocalMapObjectInstance *inst;
-	LocalMapObject *obj;
 	POLY_FT4 *prim;
+	LocalMapObject *obj;
 	GsOT_TAG *org;
 	int32_t i;
-	int32_t objId;
 	int16_t startFrame;
-	int32_t sx;
-	int32_t xMin;
-	int32_t xMax;
-	int32_t yMin;
-	int32_t yMax;
 
 	if (!MAP_LAYER_ENABLED) {
 		return;
@@ -4120,36 +6146,23 @@ void renderMapOverlays(LocalMapObjectInstance *instances, int32_t screenX,
 		renderMist();
 	}
 
-	sx = screenX;
 	org = ACTIVE_ORDERING_TABLE->org;
-	screenX = sx;
-
-	xMin = screenX - 40;
-	xMax = sx + 360;
-	i = 0;
-	yMin = screenY - 60;
-	yMax = screenY + 300;
-
-	inst = instances;
-	for (; i < 188; i++) {
-		startFrame = inst->currentFrame;
-
-		if (inst->animSprites[startFrame] == -1 || startFrame == -1) {
-			inst++;
+	for (i = 0; i < 188; i++) {
+		startFrame = instances->currentFrame;
+		if (instances->animSprites[startFrame] == -1 || startFrame == -1) {
+			instances++;
 			continue;
 		}
 
-		objId = inst->animSprites[startFrame];
-
-		if (objId != -2 && inst->flag != 1) {
-			obj = &LOCAL_MAP_OBJECTS[objId];
-
-			if (((xMin < (inst->x + obj->width)) &&
-			     (inst->x < xMax) &&
-			     (yMin < (inst->y + obj->height)) &&
-			     (inst->y < yMax)) ||
-			    (inst->flag & 0x80) ||
-			    (inst->orderValue < 20)) {
+		if (instances->animSprites[startFrame] != -2 &&
+		    instances->flag != 1) {
+			obj = &LOCAL_MAP_OBJECTS[instances->animSprites[startFrame]];
+			if (((screenX - 40 < instances->x + obj->width) &&
+			     (instances->x < screenX + 360) &&
+			     (screenY - 60 < instances->y + obj->height) &&
+			     (instances->y < screenY + 300)) ||
+			    (instances->flag & 0x80) ||
+			    (instances->orderValue < 20)) {
 				prim = (POLY_FT4 *)GsGetWorkBase();
 				SetPolyFT4(prim);
 				if (obj->transparency == 4) {
@@ -4158,45 +6171,41 @@ void renderMapOverlays(LocalMapObjectInstance *instances, int32_t screenX,
 					SetSemiTrans(prim, 1);
 				}
 
-				if (inst->flag & 0x80) {
-					buildSnowflakePrim(prim, inst,
-							   obj);
-				} else if (inst->orderValue < 20) {
-					buildMapOverlayPrim(prim, inst,
-							    obj, screenX,
-							    screenY, 1);
+				if (instances->flag & 0x80) {
+					buildSnowflakePrim(prim, instances, obj);
+				} else if (instances->orderValue < 20) {
+					buildMapOverlayPrim(prim, instances, obj,
+					                    screenX, screenY, 1);
 				} else {
-					buildMapOverlayPrim(prim, inst,
-							    obj, screenX,
-							    screenY, 0);
+					buildMapOverlayPrim(prim, instances, obj,
+					                    screenX, screenY, 0);
 				}
 
-				AddPrim(&org[inst->orderValue], prim);
+				AddPrim(&org[instances->orderValue], prim);
 				prim++;
 				GsSetWorkBase((PACKET *)prim);
 			}
-
-			inst->timer++;
-		if (inst->timer == inst->animTimes[startFrame]) {
-			inst->currentFrame++;
-			inst->timer = 0;
-			if (inst->animSprites[inst->currentFrame] == -1 ||
-			    inst->currentFrame >= 8) {
-				inst->currentFrame = 0;
+			instances->timer++;
+			if (instances->timer == instances->animTimes[startFrame]) {
+				instances->currentFrame++;
+				instances->timer = 0;
+				if (instances->animSprites[instances->currentFrame] == -1 ||
+				    instances->currentFrame >= 8) {
+					instances->currentFrame = 0;
+				}
 			}
-		}
 		} else {
-			inst->timer++;
-		if (inst->timer == inst->animTimes[startFrame]) {
-			inst->currentFrame++;
-			inst->timer = 0;
-			if (inst->animSprites[inst->currentFrame] == -1 ||
-			    inst->currentFrame >= 8) {
-				inst->currentFrame = 0;
+			instances->timer++;
+			if (instances->timer == instances->animTimes[startFrame]) {
+				instances->currentFrame++;
+				instances->timer = 0;
+				if (instances->animSprites[instances->currentFrame] == -1 ||
+				    instances->currentFrame >= 8) {
+					instances->currentFrame = 0;
+				}
 			}
 		}
-		}
-		inst++;
+		instances++;
 	}
 }
 
@@ -4206,8 +6215,6 @@ void renderMist(void)
 	int16_t cameraDeltaX;
 	int16_t cameraDeltaY;
 	int32_t i;
-	int32_t yIndex;
-	int32_t evenFrame;
 
 	if (((CURRENT_SCREEN != 0xa3) && (CURRENT_SCREEN != 0xdc)) ||
 	    (isTriggerSet(0x155) != 1)) {
@@ -4216,12 +6223,10 @@ void renderMist(void)
 			MIST_CLUT_Y[1] = 0x80;
 		}
 
-		cameraDeltaX = CAMERA_X_PREVIOUS;
-		cameraDeltaX -= CAMERA_X[0];
-		/* Preserve the retail load order with the pinned compiler. */
-		cameraDeltaY = CAMERA_Y_PREVIOUS - *(volatile int16_t *)CAMERA_Y;
+		cameraDeltaX = CAMERA_X_PREVIOUS - (int16_t)CAMERA_X[0];
+		cameraDeltaY = CAMERA_Y_PREVIOUS - (int16_t)CAMERA_Y[0];
 		MIST_X_OFFSETS[0] += cameraDeltaX;
-		if ((evenFrame = PLAYTIME_FRAMES % 2) == 0) {
+		if (PLAYTIME_FRAMES % 2 == 0) {
 			MIST_X_OFFSETS[0]--;
 		}
 		if (MIST_X_OFFSETS[0] >= 0xa0) {
@@ -4240,7 +6245,7 @@ void renderMist(void)
 		}
 
 		MAIN_D_80134228 += (int16_t)(cameraDeltaX * 12 / 10);
-		if (evenFrame == 0) {
+		if (PLAYTIME_FRAMES % 2 == 0) {
 			MAIN_D_80134228++;
 		}
 		if (MAIN_D_80134228 >= 0x1e0) {
@@ -4279,7 +6284,7 @@ void renderMist(void)
 			MAIN_D_8013422E += 0x1e0;
 		}
 
-		for (i = 0, yIndex = -4; i < 8; i++, yIndex++) {
+		for (i = 0; i < 8; i++) {
 			prim = (POLY_FT4 *)GsGetWorkBase();
 			SetPolyFT4(prim);
 			SetSemiTrans(prim, 1);
@@ -4287,8 +6292,8 @@ void renderMist(void)
 				prim->tpage = GetTPage(0, 3, 0x2c0, 0);
 				prim->clut = GetClut(0, 0x1e6);
 				setPosDataPolyFT4(prim, MIST_X_OFFSETS[i % 2],
-						   MIST_Y_OFFSETS[i / 2], 0x140,
-						   0xf0);
+				                  MIST_Y_OFFSETS[i / 2], 0x140,
+				                  0xf0);
 				setRGB0(prim, 0x96, 0x96, 0x96);
 			} else {
 				prim->tpage = GetTPage(0, 1, 0x2c0, 0);
@@ -4296,19 +6301,19 @@ void renderMist(void)
 					prim->clut = GetClut(0, 0x1e6);
 				} else if (CURRENT_SCREEN == 0x77) {
 					prim->clut = GetClut(MIST_CLUT_Y[0],
-							     0x1e6);
+					                     0x1e6);
 				} else {
 					prim->clut = GetClut(MIST_CLUT_Y[1],
-							     0x1e6);
+					                     0x1e6);
 				}
 				prim->x0 = (&MAIN_D_80134228)[i % 2];
 				prim->x1 = (&MAIN_D_80134228)[i % 2] - 0x140;
 				prim->x2 = (&MAIN_D_80134228)[i % 2];
 				prim->x3 = (&MAIN_D_80134228)[i % 2] - 0x140;
-				prim->y0 = MIST_Y_OFFSETS[yIndex / 2];
-				prim->y1 = MIST_Y_OFFSETS[yIndex / 2];
-				prim->y2 = MIST_Y_OFFSETS[yIndex / 2] + 0xf0;
-				prim->y3 = MIST_Y_OFFSETS[yIndex / 2] + 0xf0;
+				prim->y0 = MIST_Y_OFFSETS[(i - 4) / 2];
+				prim->y1 = MIST_Y_OFFSETS[(i - 4) / 2];
+				prim->y2 = MIST_Y_OFFSETS[(i - 4) / 2] + 0xf0;
+				prim->y3 = MIST_Y_OFFSETS[(i - 4) / 2] + 0xf0;
 				setRGB0(prim, 0x50, 0x50, 0x50);
 			}
 			setUVDataPolyFT4(prim, 0, 0, 0xff, 0xc8);
@@ -4320,13 +6325,12 @@ void renderMist(void)
 }
 
 void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
-			LocalMapObject *obj)
+                        LocalMapObject *obj)
 {
-	int32_t randomRange;
-	int32_t fallSpeed;
-	int8_t randomValue;
-	int8_t chance;
+	uint8_t randomRange;
+	uint8_t fallSpeed;
 	int8_t horizontalMovement;
+	int8_t chance;
 
 	if ((inst->animSprites[0] == 0) || (inst->animSprites[0] == 3) ||
 	    (inst->animSprites[0] == 4)) {
@@ -4343,8 +6347,7 @@ void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 		fallSpeed = 10;
 	}
 
-	randomValue = horizontalMovement = randomLimit(randomRange);
-	if ((randomValue > (randomRange / 2)) != 0) {
+	if ((horizontalMovement = randomLimit(randomRange)) > (randomRange / 2)) {
 		horizontalMovement = -(horizontalMovement % (randomRange / 2));
 	}
 
@@ -4362,15 +6365,15 @@ void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 	}
 
 	setPosDataPolyFT4(prim, inst->x - 0xa0 + horizontalMovement,
-			   inst->y - 0x78, obj->width, obj->height);
+	                  inst->y - 0x78, obj->width, obj->height);
 	setRGB0(prim, 0x80, 0x80, 0x80);
 	setUVDataPolyFT4(prim, obj->texX % 256, obj->texY % 256,
-			 obj->width - 1, obj->height - 1);
+	                 obj->width - 1, obj->height - 1);
 	prim->tpage = GetTPage(0, obj->transparency,
-			       (obj->texX / 256 << 6) + 0x180, 0);
+	                       (obj->texX / 256 << 6) + 0x180, 0);
 	prim->clut = GetClut(obj->clut * 16, 0x1e6);
 
-	inst->y = inst->y + fallSpeed;
+	inst->y += fallSpeed;
 	if ((inst->y >= 0x83) && (inst->animSprites[0] != 2)) {
 		chance = randomLimit(10);
 		if ((chance < 2) && (inst->currentFrame == 0)) {
@@ -4389,18 +6392,17 @@ void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 }
 
 void buildMapOverlayPrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
-			 LocalMapObject *obj, int32_t arg3, int16_t arg4,
-			 int8_t mode)
+                         LocalMapObject *obj, int16_t arg3, int16_t arg4,
+                         int8_t mode)
 {
-
 	if (mode == 0) {
 		setPosDataPolyFT4(prim,
-				  ((inst->x - 160) - (arg3 - (160 - DRAWING_OFFSET_X))),
-				  ((inst->y - 120) - (arg4 - (120 - DRAWING_OFFSET_Y))),
-				  obj->width, obj->height);
+		                  ((inst->x - 160) - ((int16_t)arg3 - (160 - DRAWING_OFFSET_X))),
+		                  ((inst->y - 120) - ((int16_t)arg4 - (120 - DRAWING_OFFSET_Y))),
+		                  obj->width, obj->height);
 	} else {
 		setPosDataPolyFT4(prim, inst->x, inst->y, obj->width,
-				  obj->height);
+		                  obj->height);
 	}
 
 	setRGB0(prim, 128, 128, 128);
@@ -4411,25 +6413,25 @@ void buildMapOverlayPrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 		}
 	}
 	setUVDataPolyFT4(prim, obj->texX % 256, obj->texY % 256,
-			 (obj->width - 1), (obj->height - 1));
+	                 (obj->width - 1), (obj->height - 1));
 	goto clut;
 
 fit:
 	setUVDataPolyFT4(prim, obj->texX % 256, obj->texY % 256, obj->width,
-			 obj->height);
+	                 obj->height);
 
 clut:
 	if (obj->clut == -1) {
 		prim->tpage = GetTPage(1, obj->transparency,
-				       ((obj->texX / 256) << 7) + 384, 0);
+		                       ((obj->texX / 256) << 7) + 384, 0);
 		prim->clut = GetClut(0, 480);
 	} else if (obj->clut < 16) {
 		prim->tpage = GetTPage(0, obj->transparency,
-				       ((obj->texX / 256) << 6) + 384, 0);
+		                       ((obj->texX / 256) << 6) + 384, 0);
 		prim->clut = GetClut(obj->clut << 4, 486);
 	} else {
 		prim->tpage = GetTPage(1, obj->transparency,
-				       ((obj->texX / 256) << 7) + 384, 0);
+		                       ((obj->texX / 256) << 7) + 384, 0);
 		prim->clut = GetClut(0, obj->clut + 468);
 	}
 }
@@ -4448,26 +6450,22 @@ void createNinjamonEffect(void)
 }
 
 void storeMapObjectPosition(int16_t *outX, int16_t *outY, uint8_t startIndex,
-			    int32_t count)
+                            int16_t count)
 {
-	long idx;
 	int32_t i;
 
 	for (i = 0; i < count; i++) {
-		idx = startIndex + i;
-		*outX++ = LOCAL_MAP_OBJECT_INSTANCE[idx].x;
-		*outY++ = LOCAL_MAP_OBJECT_INSTANCE[idx].y;
+		*outX++ = MAP_TILE_DATA.objects[startIndex + i].x;
+		*outY++ = MAP_TILE_DATA.objects[startIndex + i].y;
 	}
 }
 
 void renderNinjamonEffect(int32_t instanceId)
 {
 	LocalMapObjectInstance *data;
-	LocalMapObjectInstance *base;
 	int32_t i;
 
-	base = LOCAL_MAP_OBJECT_INSTANCE;
-	data = base;
+	data = MAP_TILE_DATA.objects;
 	for (i = 0; i < 0x29; i++) {
 		data->x += MAIN_D_8013CAE0[i];
 		data->y += MAIN_D_8013CB0C[i];
@@ -4482,7 +6480,7 @@ void renderNinjamonEffect(int32_t instanceId)
 	}
 	NPC_ACTIVE_ANIM++;
 	if (NPC_ACTIVE_ANIM >= 0x3c) {
-		data = base;
+		data = MAP_TILE_DATA.objects;
 		i = 0;
 		while (i < 0x29) {
 			data->flag = 1;
@@ -4494,45 +6492,41 @@ void renderNinjamonEffect(int32_t instanceId)
 }
 
 void loadMapObjectPosition(int16_t *xData, int16_t *yData, int16_t startIndex,
-			   int32_t count)
+                           int16_t count)
 {
-	long idx;
 	int32_t i;
 
 	for (i = 0; i < count; i++) {
-		idx = startIndex + i;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].x = *xData++;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].y = *yData++;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].flag &= ~0x10;
+		MAP_TILE_DATA.objects[startIndex + i].x = *xData++;
+		MAP_TILE_DATA.objects[startIndex + i].y = *yData++;
+		MAP_TILE_DATA.objects[startIndex + i].flag &= ~0x10;
 	}
 }
 
-int32_t moveMapObjectsWithLimit(uint8_t startIndex, int32_t count, int16_t dx,
-				int16_t dy, int16_t limitX, int16_t limitY)
+int32_t moveMapObjectsWithLimit(uint8_t startIndex, int16_t count, int16_t dx,
+                                int16_t dy, int16_t limitX, int16_t limitY)
 {
-	long idx;
 	int32_t i;
 
 	for (i = 0; i < count; i++) {
-		idx = startIndex + i;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].x += dx;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].y += dy;
+		MAP_TILE_DATA.objects[startIndex + i].x += dx;
+		MAP_TILE_DATA.objects[startIndex + i].y += dy;
 	}
 	if (dx > 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[startIndex].x >= limitX) {
+		if (MAP_TILE_DATA.objects[startIndex].x >= limitX) {
 			return 1;
 		}
 	} else if (dx < 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[startIndex].x <= limitX) {
+		if (MAP_TILE_DATA.objects[startIndex].x <= limitX) {
 			return 1;
 		}
 	}
 	if (dy > 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[startIndex].y >= limitY) {
+		if (MAP_TILE_DATA.objects[startIndex].y >= limitY) {
 			return 1;
 		}
 	} else if (dy < 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[startIndex].y <= limitY) {
+		if (MAP_TILE_DATA.objects[startIndex].y <= limitY) {
 			return 1;
 		}
 	}
@@ -4540,101 +6534,85 @@ int32_t moveMapObjectsWithLimit(uint8_t startIndex, int32_t count, int16_t dx,
 }
 
 int32_t tickMoveObjectTo(uint8_t objectIndex, uint8_t moveIndex,
-			 int8_t steps, int16_t targetX, int16_t targetY)
+                         int8_t steps, int16_t targetX, int16_t targetY)
 {
-	int8_t moveX;
-	int32_t moveY;
-	int32_t currentX;
-	int32_t currentY;
-
 	if (MAP_OBJECT_MOVE_TO_DATA[moveIndex] == 0) {
 		MAIN_D_8013CB38[moveIndex] =
-			(targetX - LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x) / steps;
+			(targetX - MAP_TILE_DATA.objects[objectIndex].x) / steps;
 		MAIN_D_8013CB44[moveIndex] =
-			(targetY - LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y) / steps;
+			(targetY - MAP_TILE_DATA.objects[objectIndex].y) / steps;
 		MAP_OBJECT_MOVE_TO_DATA[moveIndex] = 1;
 	}
 
-	moveX = MAIN_D_8013CB38[moveIndex];
-	LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x +=
-		MAIN_D_8013CB38[moveIndex];
-	moveY = MAIN_D_8013CB44[moveIndex];
-	LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y += moveY;
+	MAP_TILE_DATA.objects[objectIndex].x += MAIN_D_8013CB38[moveIndex];
+	MAP_TILE_DATA.objects[objectIndex].y += MAIN_D_8013CB44[moveIndex];
 
-	if (moveX > 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x >= targetX) {
-			LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x = targetX;
+	if (MAIN_D_8013CB38[moveIndex] > 0) {
+		if (MAP_TILE_DATA.objects[objectIndex].x >= targetX) {
+			MAP_TILE_DATA.objects[objectIndex].x = targetX;
 		}
 	} else if (MAIN_D_8013CB38[moveIndex] < 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x <= targetX) {
-			LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x = targetX;
+		if (MAP_TILE_DATA.objects[objectIndex].x <= targetX) {
+			MAP_TILE_DATA.objects[objectIndex].x = targetX;
 		}
 	} else {
-		LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x = targetX;
+		MAP_TILE_DATA.objects[objectIndex].x = targetX;
 	}
 
 	if (MAIN_D_8013CB44[moveIndex] > 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y >= targetY) {
-			LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y = targetY;
+		if (MAP_TILE_DATA.objects[objectIndex].y >= targetY) {
+			MAP_TILE_DATA.objects[objectIndex].y = targetY;
 		}
 	} else if (MAIN_D_8013CB44[moveIndex] < 0) {
-		if (LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y <= targetY) {
-			LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y = targetY;
+		if (MAP_TILE_DATA.objects[objectIndex].y <= targetY) {
+			MAP_TILE_DATA.objects[objectIndex].y = targetY;
 		}
 	} else {
-		LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y = targetY;
+		MAP_TILE_DATA.objects[objectIndex].y = targetY;
 	}
 
-	currentX = LOCAL_MAP_OBJECT_INSTANCE[objectIndex].x;
-	if (currentX == targetX) {
-		currentY = LOCAL_MAP_OBJECT_INSTANCE[objectIndex].y;
-		if (currentY == targetY) {
-			MAP_OBJECT_MOVE_TO_DATA[moveIndex] = 0;
-			return 1;
-		}
+	if (MAP_TILE_DATA.objects[objectIndex].x == targetX &&
+	    MAP_TILE_DATA.objects[objectIndex].y == targetY) {
+		MAP_OBJECT_MOVE_TO_DATA[moveIndex] = 0;
+		return 1;
 	}
 	return 0;
 }
 
-void moveMapObjects(uint8_t startIndex, int32_t count, int16_t dx, int16_t dy)
+void moveMapObjects(uint8_t startIndex, int16_t count, int16_t dx, int16_t dy)
 {
-	long idx;
 	int32_t i;
 
 	for (i = 0; i < count; i++) {
-		idx = startIndex + i;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].x += dx;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].y += dy;
+		MAP_TILE_DATA.objects[startIndex + i].x += dx;
+		MAP_TILE_DATA.objects[startIndex + i].y += dy;
 	}
 }
 
-void setMapObjectsFlag(uint8_t start, int32_t count, int32_t flag)
+void setMapObjectsFlag(int16_t start, int16_t count, int8_t flag)
 {
-	long idx;
 	int32_t i;
 
 	for (i = 0; i < count; i++) {
-		idx = start + i;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].flag = flag;
+		MAP_TILE_DATA.objects[start + i].flag = flag;
 	}
 }
 
 void getDrawPosition(SVECTOR *worldPos, int16_t *outX, int16_t *outY)
 {
 	int16_t screen[4];
-	int16_t camX;
 
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
 	gte_ldv0(worldPos);
 	gte_rtps();
 	gte_stsxy(screen);
-	*outX = DRAWING_OFFSET_X + (screen[0] + (camX = CAMERA_X[0]));
+	*outX = DRAWING_OFFSET_X + (screen[0] + (int16_t)CAMERA_X[0]);
 	*outY = DRAWING_OFFSET_Y + (screen[1] + CAMERA_Y[0]);
 }
 
 void spawnSpriteAtLocation(int16_t x, int16_t y, int16_t z, int16_t sprite,
-			   int16_t count)
+                           int16_t count)
 {
 	SVECTOR position;
 	int16_t positionsX[30];
@@ -4651,29 +6629,29 @@ void spawnSpriteAtLocation(int16_t x, int16_t y, int16_t z, int16_t sprite,
 
 	for (i = 0; i < count; i++) {
 		for (j = 0; j < 8; j++) {
-			if (LOCAL_MAP_OBJECT_INSTANCE[(long)sprite + i]
-				    .animSprites[j] != -2) {
+			if (MAP_TILE_DATA.objects[(long)sprite + i]
+			            .animSprites[j] != -2) {
 				break;
 			}
 		}
 		positionsX[i] =
 			screenX -
-			LOCAL_MAP_OBJECTS[LOCAL_MAP_OBJECT_INSTANCE[(long)sprite + i]
-						  .animSprites[j]]
-				.width /
+			LOCAL_MAP_OBJECTS[MAP_TILE_DATA.objects[(long)sprite + i]
+		                                  .animSprites[j]]
+					.width /
 				2;
 		positionsY[i] =
 			screenY -
-			LOCAL_MAP_OBJECTS[LOCAL_MAP_OBJECT_INSTANCE[(long)sprite + i]
-						  .animSprites[j]]
-				.height /
+			LOCAL_MAP_OBJECTS[MAP_TILE_DATA.objects[(long)sprite + i]
+		                                  .animSprites[j]]
+					.height /
 				2;
 	}
 
 	loadMapObjectPosition(positionsX, positionsY, sprite, count);
 }
 
-void spawnSpriteAtEntity(int32_t scriptId, int32_t nodeId, uint8_t sprite)
+void spawnSpriteAtEntity(int32_t scriptId, int8_t nodeId, int16_t sprite)
 {
 	Entity *entity;
 	MATRIX *m;
@@ -4683,15 +6661,13 @@ void spawnSpriteAtEntity(int32_t scriptId, int32_t nodeId, uint8_t sprite)
 	spawnSpriteAtLocation(m->t[0], m->t[1], m->t[2], sprite, 1);
 }
 
-void resetMapObjectAnimation(uint8_t startIndex, int32_t count)
+void resetMapObjectAnimation(uint8_t startIndex, int16_t count)
 {
-	long idx;
 	int32_t i;
 
 	for (i = 0; i < count; i++) {
-		idx = startIndex + i;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].timer = 0;
-		LOCAL_MAP_OBJECT_INSTANCE[idx].currentFrame = 0;
+		MAP_TILE_DATA.objects[startIndex + i].timer = 0;
+		MAP_TILE_DATA.objects[startIndex + i].currentFrame = 0;
 	}
 }
 
@@ -4709,11 +6685,11 @@ int32_t tickRemoveMist(void)
 	return 0;
 }
 
-void loadMapDigimon(int16_t *data, int32_t mapId)
+void loadMapDigimon(int16_t *data, int16_t mapId)
 {
 	Stats *stats;
+	int16_t digimonCount;
 	int16_t count;
-	int32_t digimonCount;
 	VECTOR *waypoints;
 	int32_t i;
 	int32_t j;
@@ -4759,7 +6735,11 @@ void loadMapDigimon(int16_t *data, int32_t mapId)
 			waypoints = MAP_DIGIMON_TABLE[i].waypoints;
 			count = *data++;
 			for (j = 0; j < 8; j++) {
+#if defined(VERSION_JP)
+				*(int16_t *)((uint8_t *)waypoints + j * 2 + 0x80) = *data++;
+#else
 				*(int16_t *)((uint8_t *)(j * 2) + (uint32_t)waypoints + 0x80) = *data++;
+#endif
 			}
 			for (j = 0; j < count; j++) {
 				waypoints[j].vx = *data++;
@@ -4771,34 +6751,30 @@ void loadMapDigimon(int16_t *data, int32_t mapId)
 	}
 }
 
-void loadNPCModel(int32_t digimonId)
+void loadNPCModel(uint8_t digimonId)
 {
 	thunkLoadMMD(digimonId, 0);
 }
 
 int32_t scriptSetDigimon(uint8_t type, uint8_t slot, uint8_t autotalk)
 {
-	Entity *entity;
-	int32_t entityId;
-
 	if (type != MAP_DIGIMON_TABLE[slot].typeId) {
 		return 0;
 	}
-	entityId = slot + 2;
-	if ((entity = ENTITY_TABLE[entityId]) != NULL) {
-		removeEntity(entity->type, slot + 2);
+	if (ENTITY_TABLE[slot + 2] != NULL) {
+		removeEntity(ENTITY_TABLE[slot + 2]->type, slot + 2);
 	}
 	ENTITY_TABLE[slot + 2] = &NPC_ENTITIES[slot].digimonEntity.entity;
 	initializeDigimonObject(type, slot + 2, NPCEntityTick);
 	setEntityPosition(slot + 2, MAP_DIGIMON_TABLE[slot].posX,
-			  MAP_DIGIMON_TABLE[slot].posY,
-			  MAP_DIGIMON_TABLE[slot].posZ);
+	                  MAP_DIGIMON_TABLE[slot].posY,
+	                  MAP_DIGIMON_TABLE[slot].posZ);
 	setEntityRotation(slot + 2, MAP_DIGIMON_TABLE[slot].rotX,
-			  MAP_DIGIMON_TABLE[slot].rotY,
-			  MAP_DIGIMON_TABLE[slot].rotZ);
+	                  MAP_DIGIMON_TABLE[slot].rotY,
+	                  MAP_DIGIMON_TABLE[slot].rotZ);
 	setupEntityMatrix(slot + 2);
 	startAnimation(ENTITY_TABLE[slot + 2],
-		       MAP_DIGIMON_TABLE[slot].animation);
+	               MAP_DIGIMON_TABLE[slot].animation);
 	NPC_ENTITIES[slot].autotalk = autotalk;
 	NPC_IS_WALKING_TOWARDS[slot] = 0;
 	ENTITY_TABLE[slot + 2]->isOnMap = 1;
@@ -4838,7 +6814,7 @@ void scriptUnloadEntity(uint8_t scriptId)
 	removeEntity(entity->type, scriptId);
 }
 
-void unloadDigimonModel(int32_t digimonType)
+void unloadDigimonModel(uint8_t digimonType)
 {
 	thunkUnloadModel(digimonType, 0);
 }
@@ -4860,11 +6836,10 @@ void clearMapDigimon(void)
 		ENTITY_TABLE[i + 2]->isOnMap = 0;
 		MAP_DIGIMON_TABLE[i].typeId = -1;
 		MAP_DIGIMON_TABLE[i].waypointWaitTimer = 0;
-		MAP_DIGIMON_TABLE[i].cwDiff = 0;
-		MAP_DIGIMON_TABLE[i].ccDiff = 0;
-		MAP_DIGIMON_TABLE[i].targetAngle = 0;
-		MAP_DIGIMON_TABLE[i].hasWaypointTarget = 0;
-		MAP_DIGIMON_TABLE[i].lookAtTamerState = 0;
+		MAP_DIGIMON_TABLE[i].targetAngle = MAP_DIGIMON_TABLE[i].ccDiff =
+			MAP_DIGIMON_TABLE[i].cwDiff = 0;
+		MAP_DIGIMON_TABLE[i].lookAtTamerState =
+			MAP_DIGIMON_TABLE[i].hasWaypointTarget = 0;
 		MAIN_D_80134D20[i] = 0;
 	}
 }
@@ -4873,7 +6848,6 @@ void removeMapEntities(void)
 {
 	volatile int32_t unloaded[8];
 	Entity *entity;
-	int32_t *models;
 	int32_t i;
 	int32_t j;
 
@@ -4881,8 +6855,7 @@ void removeMapEntities(void)
 		unloaded[j] = -1;
 	}
 	for (i = 0; i < 8; i++) {
-		entity = ENTITY_TABLE[i + 2];
-		if (entity != NULL) {
+		if (ENTITY_TABLE[i + 2] != NULL) {
 			entity = ENTITY_TABLE[i + 2];
 			removeEntity(entity->type, i + 2);
 			ENTITY_TABLE[i + 2] = NULL;
@@ -4890,7 +6863,7 @@ void removeMapEntities(void)
 	}
 	for (i = 0; i < 8; i++) {
 		if (LOADED_DIGIMON_MODELS[i] != -1) {
-			thunkUnloadModel((models = LOADED_DIGIMON_MODELS)[i], 0);
+			thunkUnloadModel(LOADED_DIGIMON_MODELS[i], 0);
 		}
 	}
 	initializeLoadedNPCModels();
@@ -4907,8 +6880,8 @@ void clearMapAITable(int32_t index)
 		MAP_DIGIMON_TABLE[index].activeSection = 0;
 	} else {
 		for (i = 0; i < 8; i++) {
-			MAP_DIGIMON_TABLE[i].hasWaypointTarget = 0;
-			MAP_DIGIMON_TABLE[i].lookAtTamerState = 0;
+			MAP_DIGIMON_TABLE[i].lookAtTamerState =
+				MAP_DIGIMON_TABLE[i].hasWaypointTarget = 0;
 			MAP_DIGIMON_TABLE[i].activeSection = 0;
 		}
 	}
@@ -4917,98 +6890,128 @@ void clearMapAITable(int32_t index)
 void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 {
 	Entity *entity;
+	int32_t inRange;
 
-	if ((entity = ENTITY_TABLE[instanceId]) == NULL) {
+	if (ENTITY_TABLE[instanceId] == NULL) {
 		return;
 	}
 	if (IS_IN_MENU == 1) {
 		return;
 	}
+	entity = ENTITY_TABLE[instanceId];
 
-	if (MAIN_D_80134D20[instanceId - 2] != 0) {
-	} else if (mapDigimon->stopAnim == 0) {
-		if (mapDigimon->lookAtTamerState == 0) {
-			NPCEntityTickWaypointAI(mapDigimon, entity, instanceId);
-		}
+	if (MAIN_D_80134D20[instanceId - 2] == 0) {
+		if (mapDigimon->stopAnim == 0) {
+			if (mapDigimon->lookAtTamerState == 0) {
+#if defined(VERSION_JP)
+				NPCEntityTickWaypointAI(mapDigimon, entity);
+#else
+				NPCEntityTickWaypointAI(mapDigimon, entity, instanceId);
+#endif
+			}
 
-		switch (mapDigimon->followMode) {
-		case 2:
-		case 11:
-			if ((NPCEntityIsInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 1) ||
-			    (mapDigimon->lookAtTamerState != 0)) {
-				NPCEntityTickLookingAtTamer(mapDigimon, entity,
-						            &TAMER_ENTITY);
+			switch (mapDigimon->followMode) {
+			case 2:
+			case 11:
+				inRange = NPCEntityIsInTrackingRect(
+					mapDigimon,
+					&TAMER_ENTITY.entity.posData->location);
+				if (inRange == 1 || mapDigimon->lookAtTamerState != 0) {
+					NPCEntityTickLookingAtTamer(mapDigimon, entity,
+					                            &TAMER_ENTITY);
+				}
+				break;
+			case 3:
+			case 4:
+			case 5:
+			case 12:
+			case 13:
+			case 14:
+				inRange = NPCEntityIsInTrackingRect(
+					mapDigimon,
+					&TAMER_ENTITY.entity.posData->location);
+				if (inRange == 1 || mapDigimon->lookAtTamerState != 0) {
+					NPCEntityTickTrackingTamer(mapDigimon, entity,
+					                           &TAMER_ENTITY, instanceId);
+				}
+				break;
+			case 6:
+			case 15:
+				inRange = NPCEntityIsInTrackingRadius(
+					&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
+					&TAMER_ENTITY.entity, mapDigimon);
+				if (inRange == 1 || mapDigimon->lookAtTamerState != 0) {
+					NPCEntityTickTrackingTamer2(mapDigimon, entity,
+					                            &TAMER_ENTITY, instanceId, 2);
+				}
+				break;
+			case 7:
+			case 16:
+				inRange = NPCEntityIsInTrackingRadius(
+					&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
+					&TAMER_ENTITY.entity, mapDigimon);
+				if (inRange == 1 || mapDigimon->lookAtTamerState != 0) {
+					NPCEntityTickTrackingTamer2(mapDigimon, entity,
+					                            &TAMER_ENTITY, instanceId, 4);
+				}
+				break;
+			case 8:
+			case 9:
+			case 17:
+			case 18:
+				inRange = NPCEntityIsInTrackingRect(
+					mapDigimon,
+					&TAMER_ENTITY.entity.posData->location);
+				if (inRange == 1 || mapDigimon->lookAtTamerState != 0) {
+					NPCEntityTickTrackingTamer2(mapDigimon, entity,
+					                            &TAMER_ENTITY, instanceId, 2);
+				}
+				break;
 			}
-			break;
-		case 3:
-		case 4:
-		case 5:
-		case 12:
-		case 13:
-		case 14:
-			if ((NPCEntityIsInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 1) ||
-			    (mapDigimon->lookAtTamerState != 0)) {
-				NPCEntityTickTrackingTamer(mapDigimon, entity,
-						           &TAMER_ENTITY, instanceId);
-			}
-			break;
-		case 6:
-		case 15:
-			if ((NPCEntityIsInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
-						         &TAMER_ENTITY.entity, mapDigimon) == 1) ||
-			    (mapDigimon->lookAtTamerState != 0)) {
-				NPCEntityTickTrackingTamer2(mapDigimon, entity,
-						            &TAMER_ENTITY,
-						            instanceId, 2);
-			}
-			break;
-		case 7:
-		case 16:
-			if ((NPCEntityIsInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
-						         &TAMER_ENTITY.entity, mapDigimon) == 1) ||
-			    (mapDigimon->lookAtTamerState != 0)) {
-				NPCEntityTickTrackingTamer2(mapDigimon, entity,
-						            &TAMER_ENTITY,
-						            instanceId, 4);
-			}
-			break;
-		case 8:
-		case 9:
-		case 17:
-		case 18:
-			if (NPCEntityIsInTrackingRect(
-				    mapDigimon,
-				    &TAMER_ENTITY.entity.posData->location) == 1 ||
-			    mapDigimon->lookAtTamerState != 0) {
-				NPCEntityTickTrackingTamer2(mapDigimon, entity, &TAMER_ENTITY,
-						            instanceId, 2);
-			}
-			break;
-		}
 
-		NPC_COLLISION_STATE[instanceId - 2] =
-			entityCheckCollision(NULL, entity, 0, 0);
-		if ((NPC_COLLISION_STATE[instanceId - 2] == 0) &&
-		    (tamerGetState() == 0) &&
-		    (NPC_ENTITIES[instanceId - 2].autotalk == 1)) {
-			entity->anim.animFlag |= 2;
-			if (IS_SCRIPT_PAUSED == 1) {
-				removeTriangleMenu();
-				closeInventoryBoxes();
-				removeUIBox1();
-				TALKED_TO_ENTITY = instanceId;
-				callScriptSection(CURRENT_SCRIPT_ID, NPC_ENTITIES[instanceId - 2].scriptId, 1);
+			NPC_COLLISION_STATE[instanceId - 2] =
+				entityCheckCollision(NULL, entity, 0, 0);
+#if defined(VERSION_JP)
+			if (NPC_COLLISION_STATE[instanceId - 2] == 0 &&
+			    tamerGetState() == 0) {
+				entity->anim.animFlag |= 2;
+				if (NPC_ENTITIES[instanceId - 2].autotalk == 1 &&
+				    IS_SCRIPT_PAUSED == 1) {
+					removeTriangleMenu();
+					closeInventoryBoxes();
+					removeUIBox1();
+					TALKED_TO_ENTITY = instanceId;
+					callScriptSection(
+						CURRENT_SCRIPT_ID,
+						NPC_ENTITIES[instanceId - 2].scriptId, 1);
+				}
 			}
-		}
-		if ((NPC_COLLISION_STATE[instanceId - 2] != -1) &&
-		    (NPC_IS_WALKING_TOWARDS[instanceId - 2] == 0) &&
-		    (entity->anim.animId > 1 && entity->anim.animId < 5)) {
-			collisionGrace(0, entity, 0, 0);
-		}
-	} else {
-		if (mapDigimon->animation != 0) {
-			mapDigimon->animation = 0;
-			startAnimation(entity, mapDigimon->animation);
+#else
+			if (NPC_COLLISION_STATE[instanceId - 2] == 0 &&
+			    tamerGetState() == 0 &&
+			    NPC_ENTITIES[instanceId - 2].autotalk == 1) {
+				entity->anim.animFlag |= 2;
+				if (IS_SCRIPT_PAUSED == 1) {
+					removeTriangleMenu();
+					closeInventoryBoxes();
+					removeUIBox1();
+					TALKED_TO_ENTITY = instanceId;
+					callScriptSection(
+						CURRENT_SCRIPT_ID,
+						NPC_ENTITIES[instanceId - 2].scriptId, 1);
+				}
+			}
+#endif
+			if (NPC_COLLISION_STATE[instanceId - 2] != -1 &&
+			    NPC_IS_WALKING_TOWARDS[instanceId - 2] == 0 &&
+			    entity->anim.animId > 1 && entity->anim.animId < 5) {
+				collisionGrace(0, entity, 0, 0);
+			}
+		} else {
+			if (mapDigimon->animation != 0) {
+				mapDigimon->animation = 0;
+				startAnimation(entity, mapDigimon->animation);
+			}
 		}
 	}
 
@@ -5016,18 +7019,30 @@ void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 	tickAnimation(entity);
 }
 
+#if defined(VERSION_JP)
+void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity)
+#else
 void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
-		             int32_t instanceId)
+                             int32_t instanceId)
+#endif
 {
 	switch (mapDigimon->aiSections[mapDigimon->activeSection]) {
 	case 0:
 		tickWaypointWait(mapDigimon, entity);
 		break;
 	case 1:
+#if defined(VERSION_JP)
+		NPCEntityTickWaypointWalk(mapDigimon, entity, 2);
+#else
 		NPCEntityTickWaypointWalk(mapDigimon, entity, 2, instanceId);
+#endif
 		break;
 	case 2:
+#if defined(VERSION_JP)
+		NPCEntityTickWaypointWalk(mapDigimon, entity, 4);
+#else
 		NPCEntityTickWaypointWalk(mapDigimon, entity, 4, instanceId);
+#endif
 		break;
 	}
 
@@ -5049,7 +7064,7 @@ int32_t NPCEntityIsInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location
 }
 
 void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-			         TamerEntity *tamer)
+                                 TamerEntity *tamer)
 {
 	if (mapDigimon->lookAtTamerState == 0) {
 		mapDigimon->animation = 0;
@@ -5057,13 +7072,13 @@ void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
 		mapDigimon->lookAtTamerState = 1;
 	} else {
 		getRotationDifference(entity->posData,
-				      &tamer->entity.posData->location,
-				      &mapDigimon->targetAngle,
-				      &mapDigimon->ccDiff,
-				      &mapDigimon->cwDiff);
+		                      &tamer->entity.posData->location,
+		                      &mapDigimon->targetAngle,
+		                      &mapDigimon->ccDiff,
+		                      &mapDigimon->cwDiff);
 		rotateEntity(&entity->posData->rotation,
-			     &mapDigimon->targetAngle, &mapDigimon->ccDiff,
-			     &mapDigimon->cwDiff, 0x71);
+		             &mapDigimon->targetAngle, &mapDigimon->ccDiff,
+		             &mapDigimon->cwDiff, 0x71);
 		if (NPCEntityIsInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 0) {
 			mapDigimon->lookAtTamerState = 0;
 			mapDigimon->hasWaypointTarget = 0;
@@ -5071,8 +7086,13 @@ void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
 	}
 }
 
-void NPCEntityTickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-		                TamerEntity *tamer, int32_t instanceId)
+// clang-format off
+void NPCEntityTickTrackingTamer(mapDigimon, entity, tamer, instanceId)
+	MapDigimonEntity *mapDigimon;
+	Entity *entity;
+	TamerEntity *tamer;
+	int16_t instanceId;
+// clang-format on
 {
 	if (mapDigimon->lookAtTamerState == 0) {
 		mapDigimon->targetLocation.vx =
@@ -5090,22 +7110,31 @@ void NPCEntityTickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
 }
 
 int32_t NPCEntityIsInTrackingRadius(Entity *entity, Entity *otherEntity,
-			            MapDigimonEntity *mapDigimon)
+                                    MapDigimonEntity *mapDigimon)
 {
 	int32_t dx;
 	int32_t dz;
+	int32_t dist;
+	int32_t radius;
 
 	dx = entity->posData->location.vx - otherEntity->posData->location.vx;
 	dz = entity->posData->location.vz - otherEntity->posData->location.vz;
-	if ((dx + dz) < ((mapDigimon->trackingRange * 6 / 10) * (mapDigimon->trackingRange * 6 / 10))) {
+	dist = dx + dz;
+	radius = (mapDigimon->trackingRange * 6 / 10) * (mapDigimon->trackingRange * 6 / 10);
+	if (dist < radius) {
 		return 1;
 	}
 	return 0;
 }
 
-void NPCEntityTickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
-			         TamerEntity *tamer, int32_t instanceId,
-			         uint8_t animId)
+// clang-format off
+void NPCEntityTickTrackingTamer2(mapDigimon, entity, tamer, instanceId, animId)
+	MapDigimonEntity *mapDigimon;
+	Entity *entity;
+	TamerEntity *tamer;
+	int16_t instanceId;
+	uint8_t animId;
+// clang-format on
 {
 	if (mapDigimon->lookAtTamerState == 0) {
 		if (mapDigimon->animation != animId) {
@@ -5119,11 +7148,15 @@ void NPCEntityTickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
 }
 
 void getRotationDifference(PositionData *posData, VECTOR *targetLoc,
-			   int16_t *outAngle, int16_t *outCcDiff,
-			   int16_t *outCwDiff)
+                           int16_t *outAngle, int16_t *outCcDiff,
+                           int16_t *outCwDiff)
 {
-	*outAngle = _atan((int16_t)(targetLoc->vz - posData->location.vz),
-			  (int16_t)(targetLoc->vx - posData->location.vx));
+	int16_t dx;
+	int16_t dz;
+
+	dx = targetLoc->vx - posData->location.vx;
+	dz = targetLoc->vz - posData->location.vz;
+	*outAngle = _atan(dz, dx);
 	if (*outAngle > posData->rotation.vy) {
 		*outCwDiff = *outAngle - posData->rotation.vy;
 		*outCcDiff = posData->rotation.vy + (4096 - *outAngle);
@@ -5134,11 +7167,11 @@ void getRotationDifference(PositionData *posData, VECTOR *targetLoc,
 }
 
 int32_t rotateEntity(SVECTOR *rotation, int16_t *targetAngle, int16_t *ccDiff,
-		     int16_t *cwDiff, int16_t speed)
+                     int16_t *cwDiff, int16_t speed)
 {
 	int16_t target;
-	int16_t cw;
 	int16_t cc;
+	int16_t cw;
 
 	target = *targetAngle;
 	cc = *ccDiff;
@@ -5179,7 +7212,7 @@ int32_t rotateEntity(SVECTOR *rotation, int16_t *targetAngle, int16_t *ccDiff,
 }
 
 void NPCEntityTickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
-			         int32_t instanceId)
+                                 int16_t instanceId)
 {
 	int16_t currentTileX;
 	int16_t currentTileY;
@@ -5195,19 +7228,19 @@ void NPCEntityTickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
 	case 2:
 		if (NPC_COLLISION_STATE[instanceId - 2] == -1) {
 			getRotationDifference(entity->posData,
-					      &mapDigimon->targetLocation,
-					      &mapDigimon->targetAngle,
-					      &mapDigimon->ccDiff,
-					      &mapDigimon->cwDiff);
+			                      &mapDigimon->targetLocation,
+			                      &mapDigimon->targetAngle,
+			                      &mapDigimon->ccDiff,
+			                      &mapDigimon->cwDiff);
 			rotateEntity(&entity->posData->rotation,
-				     &mapDigimon->targetAngle,
-				     &mapDigimon->ccDiff, &mapDigimon->cwDiff,
-				     0x71);
+			             &mapDigimon->targetAngle,
+			             &mapDigimon->ccDiff, &mapDigimon->cwDiff,
+			             0x71);
 		}
 		getModelTile(&entity->posData->location, &currentTileX,
-			     &currentTileY);
+		             &currentTileY);
 		getModelTile(&mapDigimon->targetLocation, &targetTileX,
-			     &targetTileY);
+		             &targetTileY);
 		if (((currentTileX == targetTileX) &&
 		     (currentTileY == targetTileY)) ||
 		    (NPC_COLLISION_STATE[instanceId - 2] == 0)) {
@@ -5232,34 +7265,34 @@ void NPCEntityTickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
 	case 4:
 		if (NPC_COLLISION_STATE[instanceId - 2] == -1) {
 			getRotationDifference(entity->posData,
-					      &mapDigimon->targetLocation,
-					      &mapDigimon->targetAngle,
-					      &mapDigimon->ccDiff,
-					      &mapDigimon->cwDiff);
+			                      &mapDigimon->targetLocation,
+			                      &mapDigimon->targetAngle,
+			                      &mapDigimon->ccDiff,
+			                      &mapDigimon->cwDiff);
 			rotateEntity(&entity->posData->rotation,
-				     &mapDigimon->targetAngle,
-				     &mapDigimon->ccDiff, &mapDigimon->cwDiff,
-				     0x71);
+			             &mapDigimon->targetAngle,
+			             &mapDigimon->ccDiff, &mapDigimon->cwDiff,
+			             0x71);
 		}
 		getModelTile(&entity->posData->location, &currentTileX,
-			     &currentTileY);
+		             &currentTileY);
 		getModelTile(&mapDigimon->targetLocation, &targetTileX,
-			     &targetTileY);
+		             &targetTileY);
 		if ((currentTileX == targetTileX) &&
 		    (currentTileY == targetTileY)) {
 			mapDigimon->animation = 0;
 			startAnimation(entity, mapDigimon->animation);
 			mapDigimon->waypointWaitTimer = 0;
-			mapDigimon->hasWaypointTarget = 0;
-			mapDigimon->lookAtTamerState = 0;
+			mapDigimon->lookAtTamerState = mapDigimon->hasWaypointTarget = 0;
 		}
 		break;
 	}
 }
 
 void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
-			         TamerEntity *tamer, int32_t instanceId)
+                                 TamerEntity *tamer, int16_t instanceId)
 {
+	int32_t inRadius;
 	int16_t currentTileX;
 	int16_t currentTileY;
 	int16_t targetTileX;
@@ -5267,8 +7300,10 @@ void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
 
 	switch (mapDigimon->lookAtTamerState) {
 	case 1:
-		if (NPCEntityIsInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
-				                &tamer->entity, mapDigimon) == 1) {
+		inRadius = NPCEntityIsInTrackingRadius(
+			&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
+			&tamer->entity, mapDigimon);
+		if (inRadius == 1) {
 			if (NPC_COLLISION_STATE[instanceId - 2] == -1) {
 				getRotationDifference(
 					entity->posData,
@@ -5277,9 +7312,9 @@ void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
 					&mapDigimon->ccDiff,
 					&mapDigimon->cwDiff);
 				rotateEntity(&entity->posData->rotation,
-					     &mapDigimon->targetAngle,
-					     &mapDigimon->ccDiff,
-					     &mapDigimon->cwDiff, 0x71);
+				             &mapDigimon->targetAngle,
+				             &mapDigimon->ccDiff,
+				             &mapDigimon->cwDiff, 0x71);
 			}
 		} else {
 			mapDigimon->lookAtTamerState = 2;
@@ -5291,19 +7326,19 @@ void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
 	case 2:
 		if (NPC_COLLISION_STATE[instanceId - 2] == -1) {
 			getRotationDifference(entity->posData,
-					      &mapDigimon->targetLocation,
-					      &mapDigimon->targetAngle,
-					      &mapDigimon->ccDiff,
-					      &mapDigimon->cwDiff);
+			                      &mapDigimon->targetLocation,
+			                      &mapDigimon->targetAngle,
+			                      &mapDigimon->ccDiff,
+			                      &mapDigimon->cwDiff);
 			rotateEntity(&entity->posData->rotation,
-				     &mapDigimon->targetAngle,
-				     &mapDigimon->ccDiff,
-				     &mapDigimon->cwDiff, 0x71);
+			             &mapDigimon->targetAngle,
+			             &mapDigimon->ccDiff,
+			             &mapDigimon->cwDiff, 0x71);
 		}
 		getModelTile(&entity->posData->location, &currentTileX,
-			     &currentTileY);
+		             &currentTileY);
 		getModelTile(&mapDigimon->targetLocation, &targetTileX,
-			     &targetTileY);
+		             &targetTileY);
 		if ((currentTileX == targetTileX) &&
 		    (currentTileY == targetTileY)) {
 			mapDigimon->animation = 0;
@@ -5315,8 +7350,8 @@ void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
 	case 3:
 		mapDigimon->waypointWaitTimer++;
 		if (mapDigimon->waypointWaitTimer >= 80) {
-			mapDigimon->hasWaypointTarget = 0;
-			mapDigimon->lookAtTamerState = 0;
+			mapDigimon->lookAtTamerState =
+				mapDigimon->hasWaypointTarget = 0;
 			mapDigimon->waypointWaitTimer = 0;
 		}
 		break;
@@ -5346,8 +7381,13 @@ void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity)
 	}
 }
 
+#if defined(VERSION_JP)
 void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
-		               int32_t animation, int32_t instanceId)
+                               int32_t animation)
+#else
+void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
+                               int32_t animation, int32_t instanceId)
+#endif
 {
 	int16_t currentTileX;
 	int16_t currentTileY;
@@ -5369,21 +7409,29 @@ void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
 		mapDigimon->hasWaypointTarget = 1;
 		break;
 	case 1:
+#if defined(VERSION_JP)
+		getRotationDifference(entity->posData, &mapDigimon->targetLocation,
+		                      &mapDigimon->targetAngle, &mapDigimon->ccDiff,
+		                      &mapDigimon->cwDiff);
+		rotateEntity(&entity->posData->rotation, &mapDigimon->targetAngle,
+		             &mapDigimon->ccDiff, &mapDigimon->cwDiff, 0x71);
+#else
 		if (NPC_COLLISION_STATE[instanceId - 2] == -1) {
 			getRotationDifference(entity->posData,
-					      &mapDigimon->targetLocation,
-					      &mapDigimon->targetAngle,
-					      &mapDigimon->ccDiff,
-					      &mapDigimon->cwDiff);
+			                      &mapDigimon->targetLocation,
+			                      &mapDigimon->targetAngle,
+			                      &mapDigimon->ccDiff,
+			                      &mapDigimon->cwDiff);
 			rotateEntity(&entity->posData->rotation,
-				     &mapDigimon->targetAngle,
-				     &mapDigimon->ccDiff, &mapDigimon->cwDiff,
-				     0x71);
+			             &mapDigimon->targetAngle,
+			             &mapDigimon->ccDiff, &mapDigimon->cwDiff,
+			             0x71);
 		}
+#endif
 		getModelTile(&entity->posData->location, &currentTileX,
-			     &currentTileY);
+		             &currentTileY);
 		getModelTile(&mapDigimon->targetLocation, &targetTileX,
-			     &targetTileY);
+		             &targetTileY);
 		if ((currentTileX == targetTileX) &&
 		    (currentTileY == targetTileY)) {
 			mapDigimon->hasWaypointTarget = 0;
@@ -5393,7 +7441,7 @@ void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
 	}
 }
 
-void setActiveAnim(uint8_t scriptId, uint8_t animId)
+void setActiveAnim(uint8_t scriptId, int8_t animId)
 {
 	NPCEntity *npc;
 	int32_t i;
@@ -5412,7 +7460,7 @@ void setActiveAnim(uint8_t scriptId, uint8_t animId)
 	}
 }
 
-void scriptNPCStartAnimation(uint8_t scriptId, int32_t animId)
+void scriptNPCStartAnimation(uint8_t scriptId, int8_t animId)
 {
 	NPCEntity *npc;
 	int32_t i;
@@ -5439,20 +7487,18 @@ void setLoopCountToOne(uint32_t scriptId)
 	entity->anim.loopCount = 1;
 }
 
-void resetEntityOrigin(int32_t scriptId)
+void resetEntityOrigin(uint8_t scriptId)
 {
 	NPCEntity *npc;
 	VECTOR *waypoints;
 	int16_t deltaX;
 	int16_t deltaZ;
-	int32_t entityIndex;
 	int32_t i;
 	int32_t j;
 
 	npc = NPC_ENTITIES;
 	for (i = 0; i < 8; i++) {
-		entityIndex = i + 2;
-		if (ENTITY_TABLE[entityIndex] == NULL) {
+		if (ENTITY_TABLE[i + 2] == NULL) {
 			npc++;
 			continue;
 		}
@@ -5462,19 +7508,26 @@ void resetEntityOrigin(int32_t scriptId)
 		npc++;
 	}
 	deltaX = npc->digimonEntity.entity.posData->location.vx -
-		 MAP_DIGIMON_TABLE[i].posX;
+	         MAP_DIGIMON_TABLE[i].posX;
 	deltaZ = npc->digimonEntity.entity.posData->location.vz -
-		 MAP_DIGIMON_TABLE[i].posZ;
+	         MAP_DIGIMON_TABLE[i].posZ;
 	MAP_DIGIMON_TABLE[i].posX =
 		npc->digimonEntity.entity.posData->location.vx;
 	MAP_DIGIMON_TABLE[i].posZ =
 		npc->digimonEntity.entity.posData->location.vz;
 	waypoints = MAP_DIGIMON_TABLE[i].waypoints;
+	if (0) {
+		waypoints = waypoints;
+	}
 	for (j = 0; j < 8; j++) {
-		if (*(int16_t *)((uint8_t *)(j * 2) +
-				   (uint32_t)waypoints + 0x80) != 0) {
-			if (*(int16_t *)((uint8_t *)(j * 2) +
-					   (uint32_t)waypoints + 0x80) == -1) {
+#if defined(VERSION_JP)
+		if (*(int16_t *)((uint8_t *)waypoints + j * 2 + 0x80) != 0) {
+			if (*(int16_t *)((uint8_t *)waypoints + j * 2 + 0x80) == -1) {
+#else
+		if (*(int16_t *)((uint8_t *)(j * 2) + (uint32_t)waypoints + 0x80) != 0) {
+			if (*(int16_t *)((uint8_t *)(j * 2) + (uint32_t)waypoints + 0x80) ==
+			    -1) {
+#endif
 				break;
 			}
 			waypoints[j].vx += deltaX;
@@ -5530,21 +7583,21 @@ void setPartnerIdling(void)
 
 void addGameMenu(void)
 {
-	MAIN_D_80123E88[2] = 1;
+	GAME_MENU_SPRITES[0].unknown = 1;
 	MAIN_D_80134D28 = 7;
-	GAME_MENU_SPRITES[0x4e] = 0;
+	GAME_MENU_SPRITES[7].disabled = 0;
 	MAIN_D_80134D2C = getFishingAvailability();
 	if (MAIN_D_80134D2C != 0) {
 		MAIN_D_80134D28++;
 		if (MAIN_D_80134D2C == 1) {
-			GAME_MENU_SPRITES[0x4e] = 1;
+			GAME_MENU_SPRITES[7].disabled = 1;
 		}
-		MAIN_D_80123E88[2] = 7;
+		GAME_MENU_SPRITES[0].unknown = 7;
 	}
 	if (PARTNER_PARA.condition & 1) {
-		GAME_MENU_SPRITES[0x42] = 0;
+		GAME_MENU_SPRITES[6].disabled = 0;
 	} else {
-		GAME_MENU_SPRITES[0x42] = 1;
+		GAME_MENU_SPRITES[6].disabled = 1;
 	}
 	TRIANGLE_MENU_STATE = 0;
 	addObject(0xfa4, 0, (void (*)(int32_t))tickTriangleMenu, NULL);
@@ -5559,10 +7612,10 @@ void tickTriangleMenu(void)
 	case 0:
 		if (MAIN_D_80134D2C != 0) {
 			createMenuBox(0, -0x42, -0x50, 0x84, 0x95, 2,
-				      tickGameMenu, renderGameMenu);
+			              tickGameMenu, renderGameMenu);
 		} else {
 			createMenuBox(0, -0x42, -0x50, 0x84, 0x6e, 2,
-				      tickGameMenu, renderGameMenu);
+			              tickGameMenu, renderGameMenu);
 		}
 		if (UI_BOX_DATA[0].frame == 4) {
 			TRIANGLE_MENU_STATE = -1;
@@ -5585,7 +7638,7 @@ void tickTriangleMenu(void)
 		closeUIBoxIfOpen(0);
 		if (UI_BOX_DATA[0].frame == 0) {
 			createMenuBox(1, -0x96, -0x59, 300, 0xbe, 0,
-				      tickDigimonMenu, renderDigimonMenu);
+			              tickDigimonMenu, renderDigimonMenu);
 			clearTextArea();
 			drawString(STATUS_VIEW_LABELS[0], 0, 0);
 			MENU_STATE = 0;
@@ -5606,7 +7659,7 @@ void tickTriangleMenu(void)
 		closeUIBoxIfOpen(0);
 		if (UI_BOX_DATA[0].frame == 0) {
 			createMenuBox(1, -0x96, -0x59, 300, 0xbe, 0,
-				      tickPlayerMenu, renderPlayerMenu);
+			              tickPlayerMenu, renderPlayerMenu);
 			clearTextArea();
 			drawString(PLAYER_VIEW_LABELS[0], 0, 0);
 			MENU_STATE = 0;
@@ -5636,10 +7689,12 @@ void closeTriangleMenu(void)
 void closeUIBoxIfOpen(id)
 	int16_t id;
 {
+	RECT rect;
 	int16_t pos[2];
 
 	if (UI_BOX_DATA[id].frame >= 5 && UI_BOX_DATA[id].state == 1) {
 		getEntityScreenPos(ENTITY_TABLE[0], 0, pos);
+		setRECT(&rect, pos[0] - 5, pos[1] - 5, 10, 10);
 		removeAnimatedUIBox(id, 0);
 	}
 }
@@ -5650,7 +7705,7 @@ void renderGameMenu(void)
 	int32_t digitCount;
 	int32_t digits[6];
 	int8_t disabled;
-	int32_t highlight;
+	int8_t highlight;
 	int16_t yOffset;
 	int32_t i;
 
@@ -5660,35 +7715,40 @@ void renderGameMenu(void)
 	if (MAIN_D_80134D28 == 7) {
 		yOffset = -0x28;
 	}
-	sprite = (GameMenuSprite *)GAME_MENU_SPRITES;
-	renderTriangleCursor((int8_t)MAIN_D_80123E88[2], yOffset);
+	sprite = &GAME_MENU_SPRITES[1];
+	renderTriangleCursor((int8_t)GAME_MENU_SPRITES[0].unknown, yOffset);
 	for (i = 1; i < MAIN_D_80134D28; sprite++, i++) {
 		disabled = 0;
 		if (sprite->disabled == 1) {
 			disabled = 1;
 		}
 		highlight = 0;
-		if ((i == MAIN_D_80123E88[2]) &&
+		if ((i == GAME_MENU_SPRITES[0].unknown) &&
 		    ((PLAYTIME_FRAMES % 10) < 5)) {
 			highlight = 0x14;
 		}
 		renderRectPolyFT4(sprite->x - 0x42,
-				  sprite->y - 0x50 + yOffset,
-				  sprite->width, sprite->height,
-				  sprite->texX + highlight,
-				  sprite->texY + 0xc0, 0x1e,
-				  GetClut(0x100, sprite->clutY + 0x1f0), 6,
-				  disabled);
+		                  sprite->y - 0x50 + yOffset,
+		                  sprite->width, sprite->height,
+		                  sprite->texX + highlight,
+		                  sprite->texY + 0xc0, 0x1e,
+		                  GetClut(0x100, sprite->clutY + 0x1f0), 6,
+		                  disabled);
 		renderRectPolyFT4(((GameMenuLabel *)GAME_MENU_LABELS)[i].x - 0x42,
-				  yOffset + (((GameMenuLabel *)GAME_MENU_LABELS)[i].y - 0x50),
-				  ((GameMenuLabel *)GAME_MENU_LABELS)[i].width,
-				  ((GameMenuLabel *)GAME_MENU_LABELS)[i].height,
-				  ((GameMenuLabel *)GAME_MENU_LABELS)[i].texX,
-				  ((GameMenuLabel *)GAME_MENU_LABELS)[i].texY + 0xbf, 0x1e, 0x7f50, 6,
-				  disabled);
+		                  yOffset + (((GameMenuLabel *)GAME_MENU_LABELS)[i].y - 0x50),
+		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].width,
+		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].height,
+		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].texX,
+		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].texY + 0xbf, 0x1e, 0x7f50, 6,
+		                  disabled);
 	}
+#if defined(VERSION_JP)
+	renderString(3, 7, -0x49, 0xc, 0xc, 0, 0xe8, 6, 1);
+	renderString(3, 0x2c, -0x49, 0xc, 0xc, 0xc, 0xe8, 6, 1);
+#else
 	renderString(3, -0x3c, -0x49, 0x24, 0xc, 0, 0xe7, 6, 1);
 	renderString(3, 6, -0x49, 0x1c, 0xc, 0x24, 0xe7, 6, 1);
+#endif
 	convertValueToDigits(3, DAY, &digitCount, digits);
 }
 
@@ -5699,13 +7759,53 @@ void renderSeparatorLines(int16_t *lines, int8_t count, int32_t zIndex)
 
 	for (i = 0; i < count; lines += 5ULL, i++) {
 		color = &MAIN_D_80123F48[((uint8_t *)lines)[8] * 3];
-		drawLine2P(color[0] | (color[1] << 8) |
-			   (color[2] << 16),
-			   lines[0], lines[1], lines[2], lines[3],
-			   zIndex, 0);
+		drawLine2P((color[0] & 0xff) | ((color[1] & 0xff) << 8) |
+		                            ((color[2] & 0xff) << 16),
+		           lines[0], lines[1], lines[2], lines[3],
+		           zIndex, 0);
 	}
 }
 
+#if defined(VERSION_JP)
+void renderDateDigits(void)
+{
+	int32_t digitCount;
+	int32_t digits[6];
+	int32_t i;
+	int16_t texX;
+	int16_t texY;
+
+	convertValueToDigits(2, DAY + 1, &digitCount, digits);
+	for (i = digitCount - 1; i >= 0; i--) {
+		texY = 0x34;
+		if (digits[i] == 0) {
+			texX = 0x78;
+		} else if (digits[i] < 5) {
+			texX = (digits[i] - 1) * 8 + 0x60;
+			texY = 0x28;
+		} else {
+			texX = (digits[i] - 5) * 8 + 0x50;
+		}
+		renderRectPolyFT4((2 - i) * 9 + 0xf, -0x4a, 8, 0xc, texX,
+		                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+	}
+
+	convertValueToDigits(3, YEAR + 1, &digitCount, digits);
+	for (i = digitCount - 1; i >= 0; i--) {
+		texY = 0x34;
+		if (digits[i] == 0) {
+			texX = 0x78;
+		} else if (digits[i] < 5) {
+			texX = (digits[i] - 1) * 8 + 0x60;
+			texY = 0x28;
+		} else {
+			texX = (digits[i] - 5) * 8 + 0x50;
+		}
+		renderRectPolyFT4((2 - i) * 9 - 0x16, -0x4a, 8, 0xc, texX,
+		                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+	}
+}
+#else
 void renderDateDigits(void)
 {
 	int32_t digitCount;
@@ -5728,7 +7828,7 @@ void renderDateDigits(void)
 			texX = (digits[i] - 5) * 8 + 0x50;
 		}
 		renderRectPolyFT4(0x25 + j * 9, -0x4a, 7, 0xc, texX + 1,
-				  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+		                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
 	}
 
 	convertValueToDigits(3, YEAR + 1, &digitCount, digits);
@@ -5743,11 +7843,12 @@ void renderDateDigits(void)
 			texX = (digits[i] - 5) * 8 + 0x50;
 		}
 		renderRectPolyFT4(-0x16 + j * 9, -0x4a, 7, 0xc, texX + 1,
-				  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+		                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
 	}
 }
+#endif
 
-void renderTriangleCursor(int32_t selection, int16_t yOffset)
+void renderTriangleCursor(int8_t selection, int16_t yOffset)
 {
 	TriangleCursorUVData u0;
 	TriangleCursorUVData u1;
@@ -5758,10 +7859,9 @@ void renderTriangleCursor(int32_t selection, int16_t yOffset)
 	TriangleCursorOffsetData width;
 	TriangleCursorOffsetData height;
 	POLY_FT4 *prim;
-	GsOT_TAG *tag;
+	GsOT_TAG *tags;
 	int16_t baseX;
 	int16_t baseY;
-	int32_t menuYOffset;
 	int32_t i;
 
 	u0 = MAIN_D_80134250;
@@ -5772,45 +7872,34 @@ void renderTriangleCursor(int32_t selection, int16_t yOffset)
 	yOffsetData = MAIN_D_80134278;
 	width = MAIN_D_80134280;
 	height = MAIN_D_80134288;
-	baseX = *(int16_t *)((uint8_t *)MAIN_D_80123E88 + (selection * 12)) -
-		0x46;
-	baseY = *(int16_t *)((uint8_t *)&MAIN_D_80123E88[1] + (selection * 12)) -
-		0x53;
-	i = 0;
-	menuYOffset = yOffset;
-	tag = &ACTIVE_ORDERING_TABLE->org[5];
-	for (; i < 8; i++) {
+	baseX = GAME_MENU_SPRITES[selection].x -
+	        0x46;
+	baseY = GAME_MENU_SPRITES[selection].y -
+	        0x53;
+	tags = ACTIVE_ORDERING_TABLE->org;
+	for (i = 0; i < 8; i++) {
 		prim = (POLY_FT4 *)GsGetWorkBase();
 		SetPolyFT4(prim);
 		setUV4(prim, (uint8_t)u0.data[i], (uint8_t)v0.data[i], (uint8_t)u1.data[i], (uint8_t)v0.data[i], (uint8_t)u0.data[i], (uint8_t)v1.data[i], (uint8_t)u1.data[i], (uint8_t)v1.data[i]);
 		setPosDataPolyFT4(prim, baseX + xOffset.data[i],
-				   baseY + yOffsetData.data[i] + menuYOffset,
-				   width.data[i], height.data[i]);
+		                  yOffset + (baseY + yOffsetData.data[i]),
+		                  width.data[i], height.data[i]);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->tpage = GetTPage(0, 0, 0x380, 0x1c0);
 		prim->clut = GetClut(0x100, 0x1fc);
-		AddPrim(tag, prim);
+		AddPrim(&tags[5], prim);
 		prim++;
 		GsSetWorkBase((PACKET *)prim);
 	}
 }
 
-void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
-		       int32_t height, uint8_t texX, uint8_t texY,
-		       int16_t texturePage, int16_t clut, int32_t zIndex,
-		       int8_t flag)
+void renderRectPolyFT4(int16_t posX, int16_t posY, uint8_t width,
+                       uint8_t height, uint8_t texX, uint8_t texY,
+                       int16_t texturePage, int16_t clut, int32_t zIndex,
+                       int8_t flag)
 {
 	POLY_FT4 *prim;
 	GsOT_TAG *tags;
-	int32_t doubledWidth;
-	uint32_t drawWidth;
-	uint32_t drawHeight;
-	int32_t x;
-	int32_t y;
-	int32_t bottom;
-	int32_t left;
-	int32_t right;
-	int32_t top;
 
 	tags = ACTIVE_ORDERING_TABLE->org;
 	prim = (POLY_FT4 *)GsGetWorkBase();
@@ -5819,22 +7908,22 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		SetSemiTrans(prim, 1);
 	}
 	if ((texY + height) >= 0x100) {
-		height = (height - 1u) & 0xffu;
+		height--;
 	}
 	if ((texX + width) >= 0x100) {
-		width = (width - 1u) & 0xffu;
+		width--;
 	}
-	setUVDataPolyFT4(prim, texX, texY, drawWidth = width, drawHeight = height);
+	setUVDataPolyFT4(prim, texX, texY, width, height);
 	if (flag & 2) {
-		setPosDataPolyFT4(prim, posX, posY, drawWidth * 2, drawHeight * 2);
+		setPosDataPolyFT4(prim, posX, posY, width * 2, height * 2);
 	} else if (flag & 4) {
-		setPosDataPolyFT4(prim, posX, posY, doubledWidth = drawWidth * 2, drawHeight * 2);
-		prim->x0 += (int16_t)doubledWidth;
-		prim->x1 -= (int16_t)doubledWidth;
-		prim->x2 += (int16_t)doubledWidth;
-		prim->x3 -= (int16_t)doubledWidth;
+		setPosDataPolyFT4(prim, posX, posY, width * 2, height * 2);
+		prim->x0 += width * 2;
+		prim->x1 -= width * 2;
+		prim->x2 += width * 2;
+		prim->x3 -= width * 2;
 	} else {
-		setPosDataPolyFT4(prim, posX, posY, drawWidth, drawHeight);
+		setPosDataPolyFT4(prim, posX, posY, width, height);
 	}
 	if (flag & 1) {
 		setRGB0(prim, 0x32, 0x32, 0x32);
@@ -5847,67 +7936,58 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 	prim++;
 	GsSetWorkBase((PACKET *)prim);
 	if (flag & 0x80) {
-		x = posX;
-		y = posY;
-		top = y - 1;
-		right = x + 0xd;
-		drawLine3P(0x20202, left = x - 1, top, right, top, right,
-			   bottom = y + 0xc, 2, 0);
-		drawLine3P(0x20202, left, top, left, bottom,
-			   right, bottom, 2, 0);
+		drawLine3P(0x20202, posX - 1, posY - 1, posX + 0xd,
+		           posY - 1, posX + 0xd, posY + 0xc, 2, 0);
+		drawLine3P(0x20202, posX - 1, posY - 1, posX - 1,
+		           posY + 0xc, posX + 0xd, posY + 0xc, 2, 0);
 	}
 }
 
 void tickGameMenu(void)
 {
 	int32_t selection;
-	int32_t previousSelection;
-	register int32_t input;
-	int32_t pressed;
 
 	if (PARTNER_PARA.condition & 1) {
-		GAME_MENU_SPRITES[0x42] = 0;
+		GAME_MENU_SPRITES[6].disabled = 0;
 	}
-	selection = MAIN_D_80123E88[2];
-	previousSelection = selection;
-	pressed = input = POLLED_INPUT & ~POLLED_INPUT_PREVIOUS;
-	if (pressed & 0x1000) {
+	selection = GAME_MENU_SPRITES[0].unknown;
+	if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x1000) {
 		if ((selection -= 3) <= 0) {
 			selection += ((MAIN_D_80134D28 + 1) / 3) * 3;
 		}
 		if (selection >= MAIN_D_80134D28) {
 			selection -= 3;
 		}
-	} else if (input & 0x4000) {
+	} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x4000) {
 		if ((selection += 3) >= MAIN_D_80134D28) {
 			selection -= ((MAIN_D_80134D28 + 1) / 3) * 3;
 		}
 		if (selection <= 0) {
 			selection += 3;
 		}
-	} else if (input & 0x8000) {
+	} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x8000) {
 		if ((selection -= 1) <= 0) {
 			selection = MAIN_D_80134D28 - 1;
 		}
-	} else if (input & 0x2000) {
+	} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x2000) {
 		if ((selection += 1) >= MAIN_D_80134D28) {
 			selection = 1;
 		}
 	}
-	if (selection != previousSelection) {
-		MAIN_D_80123E88[2] = selection;
+	if (selection != GAME_MENU_SPRITES[0].unknown) {
+		GAME_MENU_SPRITES[0].unknown = selection;
 		playSound(0, 2);
 	}
 	if (TRIANGLE_MENU_STATE == -1) {
-		if (isKeyDown(0x40) != 0) {
-			if (((int8_t *)&MAIN_D_80123E88[3])[MAIN_D_80123E88[2] * 12] & 1) {
+		if (isKeyDown(CONFIRM_BUTTON) != 0) {
+			if (GAME_MENU_SPRITES[GAME_MENU_SPRITES[0].unknown].disabled & 1) {
 				playSound(0, 4);
 			} else {
 				playSound(0, 3);
 			}
-			handleGameMenuSelection(MAIN_D_80123E88[2]);
+			handleGameMenuSelection(GAME_MENU_SPRITES[0].unknown);
 		}
-		if ((isKeyDown(0x10) != 0) &&
+		if ((isKeyDown(CANCEL_BUTTON) != 0) &&
 		    ((UI_BOX_DATA[0].state == 1) ||
 		     (UI_BOX_DATA[0].frame == 0))) {
 			playSound(0, 4);
@@ -5921,8 +8001,8 @@ void tickGameMenu(void)
 }
 
 int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
-		      int16_t height, int8_t features, void (*tick)(void),
-		      void (*render)(void))
+                      int16_t height, int8_t features, void (*tick)(void),
+                      void (*render)(void))
 {
 	RECT finalPos;
 	RECT startPos;
@@ -5936,7 +8016,7 @@ int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
 		getEntityScreenPos(ENTITY_TABLE[0], 1, entityPos);
 		setRECT(&startPos, entityPos[0] - 5, entityPos[1] - 5, 10, 10);
 		createAnimatedUIBox(id, 1, features, &finalPos, &startPos,
-				    (TickFunction)tick, (RenderFunction)render);
+		                    (TickFunction)tick, (RenderFunction)render);
 	}
 	return 0;
 }
@@ -5944,7 +8024,6 @@ int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
 void tickDigimonMenu(void)
 {
 	int8_t equippedSlot;
-	int32_t slotResult;
 	int16_t previousX;
 	int16_t previousY;
 	int32_t i;
@@ -5971,28 +8050,28 @@ void tickDigimonMenu(void)
 				playSound(0, 2);
 			}
 		}
-		if (isKeyDown(0x10) != 0) {
+		if (isKeyDown(CANCEL_BUTTON) != 0) {
 			if (MENU_STATE == 1) {
 				TRIANGLE_MENU_STATE = 4;
 			}
 			playSound(0, 4);
 		}
-		if ((MAIN_D_80134D36 == 1) && (isKeyDown(0x40) != 0)) {
+		if ((MAIN_D_80134D36 == 1) && (isKeyDown(CONFIRM_BUTTON) != 0)) {
 			if (MENU_STATE == 1) {
 				MENU_STATE = 2;
 			}
 			playSound(0, 3);
 		}
 	} else if (MENU_STATE == 6) {
-		if (isKeyDown(0x10) != 0) {
+		if (isKeyDown(CANCEL_BUTTON) != 0) {
 			for (i = 0; i < 3; i++) {
 				if ((PARTNER_ENTITY.digimonEntity.stats.base.moves[i] !=
 				     0xff) &&
 				    (MOVE_DATA[entityGetTechFromAnim(
-					     &PARTNER_ENTITY.digimonEntity.entity,
-					     PARTNER_ENTITY.digimonEntity.stats.base
-						     .moves[i])]
-					     .power != 0)) {
+						       &PARTNER_ENTITY.digimonEntity.entity,
+						       PARTNER_ENTITY.digimonEntity.stats.base
+							       .moves[i])]
+				             .power != 0)) {
 					break;
 				}
 			}
@@ -6010,10 +8089,8 @@ void tickDigimonMenu(void)
 			MENU_STATE = 7;
 			MENU_SUB_STATE = 0;
 			playSound(0, 3);
-		} else if (isKeyDown(0x40) != 0) {
-			slotResult = getEquippedSlot();
-			equippedSlot = (int8_t)slotResult;
-			if ((int8_t)slotResult != -1) {
+		} else if (isKeyDown(CONFIRM_BUTTON) != 0) {
+			if ((equippedSlot = getEquippedSlot()) != -1) {
 				EQUIPPED_MOVES[equippedSlot] = 0xff;
 				PARTNER_ENTITY.digimonEntity.stats.base
 					.moves[equippedSlot] = 0xff;
@@ -6022,8 +8099,8 @@ void tickDigimonMenu(void)
 				equipMove();
 			}
 		}
-		previousY = MAIN_D_80134D38;
 		previousX = MAIN_D_80134D3A;
+		previousY = MAIN_D_80134D38;
 		if (CHANGED_INPUT & 0x1000) {
 			MAIN_D_80134D38 -= 0xf;
 		}
@@ -6052,7 +8129,7 @@ void tickDigimonMenu(void)
 		    (previousY != MAIN_D_80134D38)) {
 			playSound(0, 2);
 		}
-	} else if ((MENU_STATE == 8) && (isKeyDown(0x10) != 0)) {
+	} else if ((MENU_STATE == 8) && (isKeyDown(CANCEL_BUTTON) != 0)) {
 		MENU_STATE = 9;
 		MENU_SUB_STATE = 0;
 		playSound(0, 4);
@@ -6063,29 +8140,22 @@ void tickDigimonMenu(void)
 
 void renderDigimonMenu(void)
 {
-  int8_t tabs[2];
-  int32_t v;
-  MenuTabPair *tp;
-  long nv;
-  tp = (MenuTabPair *)MAIN_D_801342A0;
-  nv = tp->digimon;
-  v = tp->moves;
-  tabs[0] = nv;
-  tabs[1] = v;
-  v = MAIN_D_80134D36;
-  if (v != 1) {
-    if (v == 0) {
-      renderDigimonStatsView();
-    }
-  } else {
-    renderDigimonMovesView();
-  }
-  tabs[MAIN_D_80134D36] = 0;
-  renderString(tabs[0], -0x8A, -((short) 0x65), 0x3C, 0xC, 0, 0, 5, 1);
-  renderString(tabs[1], -0x3F, -0x65, 0x30, 0xC, 0x3C, 0, 5, 1);
-  nv = tabs[0];
-  renderMenuTab(-0x91, 0x4C, nv);
-  renderMenuTab(-0x46, 0x40, tabs[1]);
+	DigimonTabs tabs;
+
+	tabs = MAIN_D_801342A0;
+	switch (MAIN_D_80134D36) {
+	case 0:
+		renderDigimonStatsView();
+		break;
+	case 1:
+		renderDigimonMovesView();
+		break;
+	}
+	tabs.tab[MAIN_D_80134D36] = 0;
+	renderString(tabs.tab[0], -0x8a, -0x65, 0x3c, 0xc, 0, 0, 5, 1);
+	renderString(tabs.tab[1], -0x3f, -0x65, 0x30, 0xc, 0x3c, 0, 5, 1);
+	renderMenuTab(-0x91, 0x4c, tabs.tab[0]);
+	renderMenuTab(-0x46, 0x40, tabs.tab[1]);
 }
 
 int32_t isUIBoxAvailable(int32_t id)
@@ -6108,9 +8178,10 @@ void tickPlayerMenu(void)
 	RECT startPos;
 	int16_t previousRow;
 	int16_t previousColumn;
-	int32_t maxColumn;
+	int16_t cardX;
+	uint8_t maxColumn;
 	int16_t selectorX;
-	int32_t previousCard;
+	uint8_t previousCard;
 	int32_t i;
 
 	if (MENU_STATE < 2) {
@@ -6134,20 +8205,19 @@ void tickPlayerMenu(void)
 				playSound(0, 2);
 			}
 		}
-		if (isKeyDown(0x10) != 0) {
+		if (isKeyDown(CANCEL_BUTTON) != 0) {
 			TRIANGLE_MENU_STATE = 6;
 			playSound(0, 4);
 		}
-		if ((isKeyDown(0x40) != 0) && (MENU_STATE == 1) &&
+		if ((isKeyDown(CONFIRM_BUTTON) != 0) && (MENU_STATE == 1) &&
 		    (MAIN_D_80134D37 != 0) && (MAIN_D_80134D37 != 4)) {
 			MENU_STATE = 2;
 			playSound(0, 3);
-			SELECTED_MEDAL = 0;
-			MEDAL_SELECTOR_INDEX = 0;
+			MEDAL_SELECTOR_INDEX = SELECTED_MEDAL = 0;
 			SELECTED_CARD = 0;
 		}
 	} else {
-		if ((isKeyDown(0x10) != 0) && (MENU_STATE == 2)) {
+		if ((isKeyDown(CANCEL_BUTTON) != 0) && (MENU_STATE == 2)) {
 			playSound(0, 4);
 			MENU_STATE = 1;
 			MAIN_D_80134D40 = -1;
@@ -6192,8 +8262,8 @@ void tickPlayerMenu(void)
 					if (MAIN_D_80134D42 == 2) {
 						maxColumn = 8;
 					} else if (((MAIN_D_80134D42 >= 4) &&
-						    (MAIN_D_80134D42 < 7)) ||
-						   (MAIN_D_80134D42 == 8)) {
+					            (MAIN_D_80134D42 < 7)) ||
+					           (MAIN_D_80134D42 == 8)) {
 						maxColumn = 6;
 					} else {
 						maxColumn = 7;
@@ -6229,7 +8299,7 @@ void tickPlayerMenu(void)
 					}
 				}
 				MAIN_D_80134D40 = i + 1;
-				if (isKeyDown(0x40) != 0) {
+				if (isKeyDown(CONFIRM_BUTTON) != 0) {
 					if (hasDigimonRaised(
 						    (uint16_t)MAIN_D_80134D40) != 0) {
 						if (MAIN_D_80134D42 < 3) {
@@ -6261,7 +8331,7 @@ void tickPlayerMenu(void)
 					}
 				}
 			} else if ((MENU_STATE == 3) &&
-				   (isKeyDown(0x10) != 0)) {
+			           (isKeyDown(CANCEL_BUTTON) != 0)) {
 				if (MENU_STATE == 3) {
 					if (MAIN_D_80134D42 < 3) {
 						selectorX = MAIN_D_80134D42 * 0x25 + 0x1c;
@@ -6280,7 +8350,11 @@ void tickPlayerMenu(void)
 			}
 		}
 
+#if defined(VERSION_JP)
+		if (MAIN_D_80134D37 == 2 && MENU_STATE == 2) {
+#else
 		if (MAIN_D_80134D37 == 2) {
+#endif
 			if ((CHANGED_INPUT & 0x8000) &&
 			    ((MEDAL_SELECTOR_INDEX % 5) != 0)) {
 				MEDAL_SELECTOR_INDEX--;
@@ -6300,7 +8374,7 @@ void tickPlayerMenu(void)
 			if (SELECTED_MEDAL != MEDAL_SELECTOR_INDEX) {
 				if (hasMedal(MEDAL_SELECTOR_INDEX) != 0) {
 					activateMedalTexture(MEDAL_SELECTOR_INDEX,
-							     SELECTED_MEDAL);
+					                     SELECTED_MEDAL);
 					MENU_STATE = 3;
 				}
 				playSound(0, 2);
@@ -6309,13 +8383,14 @@ void tickPlayerMenu(void)
 		}
 
 		if (MAIN_D_80134D37 == 3) {
-			previousCard = (uint8_t)SELECTED_CARD;
+			previousCard = SELECTED_CARD;
 			if (MENU_STATE == 2) {
-				if ((isKeyDown(0x40) != 0) &&
+				if ((isKeyDown(CONFIRM_BUTTON) != 0) &&
 				    (getCardAmount((uint8_t)SELECTED_CARD) != 0)) {
 					playSound(0, 3);
 					MENU_STATE = 3;
 					loadCardImage(SELECTED_CARD);
+					cardX = (SELECTED_CARD % 11) < 6 ? 0xa6 : -0xcc;
 					setRECT(&startPos, (SELECTED_CARD % 11) * 0x18 - 0x79, (SELECTED_CARD / 11) * 0x18 - 0x36, 1, 1);
 					setRECT(&finalPos, -0x4b, -0x53, 0x96, 0xb4);
 					setRECT(&secondFinalPos, 0x4a, 0x45, 0x36, 0x18);
@@ -6348,7 +8423,7 @@ void tickPlayerMenu(void)
 					}
 				}
 			}
-			if ((isKeyDown(0x10) != 0) && (MENU_STATE == 3)) {
+			if ((isKeyDown(CANCEL_BUTTON) != 0) && (MENU_STATE == 3)) {
 				playSound(0, 4);
 				MENU_STATE = 2;
 				setRECT(&startPos, (SELECTED_CARD % 11) * 0x18 - 0x79, (SELECTED_CARD / 11) * 0x18 - 0x36, 1, 1);
@@ -6371,52 +8446,46 @@ void renderPlayerMenu(void);
 
 void renderPlayerMenu(void)
 {
-	int8_t tabs[4];
-	int32_t v;
-	int32_t t1;
-	int32_t t2;
-	int32_t t3;
+	PlayerTabs tabs;
 
-	*(PlayerTabs *)tabs = MAIN_D_801342A4;
-	v = MAIN_D_80134D37;
-	if (v != 3) {
-		if (v != 2) {
-			if (v != 1) {
-				if (v == 0) {
-					renderPlayerInfoView();
-				}
-			} else {
-				renderEvoChartView();
-			}
-		} else {
-			renderMedalView();
-		}
-	} else {
+	tabs = MAIN_D_801342A4;
+	switch (MAIN_D_80134D37) {
+	case 0:
+		renderPlayerInfoView();
+		break;
+	case 1:
+		renderEvoChartView();
+		break;
+	case 2:
+		renderMedalView();
+		break;
+	case 3:
 		renderCardsView();
+		break;
 	}
-	tabs[MAIN_D_80134D37] = 0;
-	renderString(tabs[0], -0x89, -0x65, 0x3C, 0xC, 0, 0, 5, 1);
-	renderString(t1 = tabs[1], -0x3E, -0x65, 0x3C, 0xC, 0x3C, 0, 5, 1);
-	renderString(t2 = tabs[2], 0xD, -0x65, 0x24, 0xC, 0x78, 0, 5, 1);
-	renderString(t3 = tabs[3], 0x40, -0x65, 0x24, 0xC, 0x9C, 0, 5, 1);
-	renderMenuTab(-0x91, 0x4C, tabs[0]);
-	renderMenuTab(-0x46, 0x4C, t1);
-	renderMenuTab(5, 0x34, t2);
-	renderMenuTab(0x38, 0x34, t3);
+	tabs.tab[MAIN_D_80134D37] = 0;
+	renderString(tabs.tab[0], -0x89, -0x65, 0x3c, 0xc, 0, 0, 5, 1);
+	renderString(tabs.tab[1], -0x3e, -0x65, 0x3c, 0xc, 0x3c, 0, 5, 1);
+	renderString(tabs.tab[2], 0xd, -0x65, 0x24, 0xc, 0x78, 0, 5, 1);
+	renderString(tabs.tab[3], 0x40, -0x65, 0x24, 0xc, 0x9c, 0, 5, 1);
+	renderMenuTab(-0x91, 0x4c, tabs.tab[0]);
+	renderMenuTab(-0x46, 0x4c, tabs.tab[1]);
+	renderMenuTab(5, 0x34, tabs.tab[2]);
+	renderMenuTab(0x38, 0x34, tabs.tab[3]);
 }
 
 void handleGameMenuSelection(int32_t selection)
 {
 	switch (selection) {
 	case 1:
-		if (((int8_t *)&MAIN_D_80123E88[3])[selection * 12] & 1) {
+		if (GAME_MENU_SPRITES[selection].disabled & 1) {
 			return;
 		}
 		TRIANGLE_MENU_STATE = 2;
 		drawInventoryText();
 		break;
 	case 6:
-		if (((int8_t *)&MAIN_D_80123E88[3])[selection * 12] & 1) {
+		if (GAME_MENU_SPRITES[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -6425,7 +8494,7 @@ void handleGameMenuSelection(int32_t selection)
 		startGameTime();
 		break;
 	case 5:
-		if (((int8_t *)&MAIN_D_80123E88[3])[selection * 12] & 1) {
+		if (GAME_MENU_SPRITES[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -6440,7 +8509,7 @@ void handleGameMenuSelection(int32_t selection)
 		TRIANGLE_MENU_STATE = 5;
 		break;
 	case 4:
-		if (((int8_t *)&MAIN_D_80123E88[3])[selection * 12] & 1) {
+		if (GAME_MENU_SPRITES[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -6449,7 +8518,7 @@ void handleGameMenuSelection(int32_t selection)
 		startGameTime();
 		break;
 	case 7:
-		if (((int8_t *)&MAIN_D_80123E88[3])[selection * 12] & 1) {
+		if (GAME_MENU_SPRITES[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -6460,12 +8529,12 @@ void handleGameMenuSelection(int32_t selection)
 	}
 }
 
-void setSleepDisabled(int32_t arg)
+void setSleepDisabled(int16_t arg)
 {
-	GAME_MENU_SPRITES[0x42] = arg;
+	GAME_MENU_SPRITES[6].disabled = arg;
 }
 
-void startFeedingItem(int32_t arg)
+void startFeedingItem(uint8_t arg)
 {
 	if (TAMER_ITEM.worldItem.type == 0xff) {
 		TAMER_ITEM.worldItem.type = arg;
@@ -6482,7 +8551,7 @@ void removeOneSelectedItem(void)
 	removeItem(INVENTORY.types.array[INVENTORY_POINTER], 1);
 }
 
-void renderFeedingItem(int32_t arg)
+void renderFeedingItem(int16_t arg)
 {
 	MATRIX *m;
 
@@ -6497,7 +8566,7 @@ void renderFeedingItem(int32_t arg)
 	renderOverworldItem(&TAMER_ITEM.worldItem);
 }
 
-int32_t getEquippedSlot(void)
+int8_t getEquippedSlot(void)
 {
 	uint8_t moveId;
 	uint8_t column;
@@ -6523,13 +8592,13 @@ int32_t getEquippedSlot(void)
 	}
 	for (slot = 0; slot < 3; slot++) {
 		if ((moveId == 0x2c) && (EQUIPPED_MOVES[slot] == 0x30)) {
-			return (int8_t)slot;
+			return slot;
 		}
 		if ((moveId == 0x37) && (EQUIPPED_MOVES[slot] == 0x39)) {
-			return (int8_t)slot;
+			return slot;
 		}
 		if (EQUIPPED_MOVES[slot] == moveId) {
-			return (int8_t)slot;
+			return slot;
 		}
 	}
 	return -1;
@@ -6543,7 +8612,6 @@ void equipMove(void)
 	uint8_t moveId;
 	int32_t slot;
 	int32_t animation;
-	int32_t textY;
 
 	column = (MAIN_D_80134D3A - 0x73) / 18;
 	row = (MAIN_D_80134D38 - 0x6f) / 15;
@@ -6570,29 +8638,29 @@ void equipMove(void)
 	for (animation = 0; animation < 16; animation++) {
 		if (moveId == 0x2c) {
 			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
-				    .moves[animation] == 0x2c) {
+			            .moves[animation] == 0x2c) {
 				break;
 			}
 			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
-				    .moves[animation] == 0x30) {
+			            .moves[animation] == 0x30) {
 				moveId = 0x30;
 				break;
 			}
 		}
 		if (moveId == 0x37) {
 			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
-				    .moves[animation] == 0x37) {
+			            .moves[animation] == 0x37) {
 				break;
 			}
 			if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
-				    .moves[animation] == 0x39) {
+			            .moves[animation] == 0x39) {
 				moveId = 0x39;
 				break;
 			}
 		}
 		if (moveId ==
 		    DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type]
-			    .moves[animation]) {
+		            .moves[animation]) {
 			break;
 		}
 		if (animation == 15) {
@@ -6612,8 +8680,8 @@ void equipMove(void)
 	}
 	EQUIPPED_MOVES[slot] = moveId;
 	PARTNER_ENTITY.digimonEntity.stats.base.moves[slot] = animation + 0x2e;
-	setRECT(&textArea, 0, textY = slot * 12 + 0x18, 0x84, 0xc);
+	setRECT(&textArea, 0, slot * 12 + 0x18, 0x84, 0xc);
 	clearTextSubArea(&textArea);
-	drawString(MOVE_NAMES[(uint8_t)moveId], 0, textY);
+	drawString(MOVE_NAMES[moveId], 0, slot * 12 + 0x18);
 	playSound(0, 3);
 }

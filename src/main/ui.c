@@ -49,13 +49,15 @@ uint8_t MAIN_D_80134334[4] = {
 #if defined(VERSION_JP)
 char STR_MOVE_NAME_BUG[] = "バグ";
 
-char STR_MOVE_NAME_TREMAR[] = "ウンチ";
+char STR_MOVE_NAME_PARTY_TIME[] = "ウンチ";
 
-char STR_MOVE_NAME_WAR_CRY[] = "覇王拳";
+char STR_MOVE_NAME_PUMMEL_WHACK[] = "覇王拳";
 
-char STR_MOVE_NAME_COUNTER[] = "獣王拳";
+char STR_MOVE_NAME_FIST_OF_THE_BEAST_KING[] = "獣王拳";
 
 char STR_MOVE_NAME_BUBBLE[] = "あわ";
+
+char STR_ITEM_DESC_MYSTERY_ITEM[] = "？？？";
 #else
 char STR_MOVE_NAME_BUG[4] = "Bug";
 

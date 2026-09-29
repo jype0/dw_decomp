@@ -62,6 +62,7 @@ MAIN_C_SRC := \
 	src/main/map_object.c \
 	src/main/math.c \
 	src/main/new_game.c \
+	src/main/overworld.c \
 	src/main/overworld_card_text.c \
 	src/main/overworld_evochart_detail.c \
 	src/main/overworld_evochart_text.c \

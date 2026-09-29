@@ -32,6 +32,7 @@ SECTIONS
         BUILD_DIR/src/main/aabb.c.o(.text .text.*);
         BUILD_DIR/src/main/efe.c.o(.text .text.*);
         KEEP(BUILD_DIR/asm/main/242CC.s.o(.text .text.*));
+        BUILD_DIR/src/main/overworld.c.o(.text .text.*);
         BUILD_DIR/src/main/overworld_evochart_detail.c.o(.text .text.*);
         BUILD_DIR/src/main/overworld_menu_views.c.o(.text .text.*);
         BUILD_DIR/src/main/overworld_evochart_view.c.o(.text .text.*);
@@ -89,6 +90,7 @@ SECTIONS
         BUILD_DIR/src/main/tamer.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/efe.c.o(.rodata .rodata.*);
         KEEP(BUILD_DIR/asm/main/data/8A71C.rodata.s.o(.rodata .rodata.*));
+        BUILD_DIR/src/main/overworld.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/overworld_menu_views.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/overworld_moves_box.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/overworld_evochart_view.c.o(.rodata .rodata.*);
@@ -158,6 +160,7 @@ SECTIONS
         BUILD_DIR/src/main/door_mapdata.c.o(.data .data.*);
         BUILD_DIR/src/main/efe.c.o(.data .data.*);
         KEEP(BUILD_DIR/asm/main/data/9F198.data.s.o(.data .data.*));
+        BUILD_DIR/src/main/overworld.c.o(.data .data.*);
         BUILD_DIR/src/main/sound.c.o(.data .data.*);
         KEEP(BUILD_DIR/asm/main/data/A43D0.data.s.o(.data .data.*));
         BUILD_DIR/src/main/map.c.o(.data .data.*);
@@ -195,10 +198,10 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/efe.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/AD4F0.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/main/overworld.c.o(.sdata .sdata.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/ui.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/AD60C.sdata.s.o(.sdata .sdata.*));
         BUILD_DIR/src/main/item.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/sound.c.o(.sdata .sdata.*);

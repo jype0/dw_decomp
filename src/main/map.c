@@ -53,6 +53,11 @@ typedef struct {
 	int8_t flag;
 } LocalMapObjectInstance;
 
+typedef struct {
+	MapTileData tiles[35];
+	LocalMapObjectInstance objects[188];
+} MapTiles;
+
 long RotTransPers3(SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, long *sxy0, long *sxy1, long *sxy2, long *p, long *flag);
 int abs(int x);
 int32_t addObject(int32_t objectId, int16_t instanceId, void (*tick)(int32_t), void (*render)(int32_t));
@@ -65,7 +70,7 @@ int32_t checkMapCollisionX(Entity *entity, int32_t direction);
 int32_t checkMapCollisionZ(Entity *entity, int32_t direction);
 void checkShopMap(uint8_t mapId);
 void clearMapDigimon(void);
-void clearMapObjects(uint8_t *instances);
+void clearMapObjects(LocalMapObjectInstance *instances);
 void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY);
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
 void handleBattleIdle(DigimonEntity *entity, Stats *stats, int32_t flags);
@@ -75,14 +80,14 @@ void loadDoors(int32_t doorEntryId);
 void loadMapCollisionData(uint8_t *data);
 void loadMapImage1(uint8_t *tim);
 void loadMapImage2(uint8_t *tim, int8_t id);
-void loadMapObjects(uint8_t *mapObjects, uint8_t *data, int32_t mapId);
+void loadMapObjects(LocalMapObjectInstance *mapObjects, uint8_t *data, int32_t mapId);
 int32_t loadMapSounds(int32_t mapSoundId);
 void initializeTrainingPoop(void);
 void loadWarpCrystals(int32_t mapId);
 int32_t readFile(char *path, void *dest);
 void removeMapEntities(void);
 int32_t removeObject(int32_t objectId, int16_t instanceId);
-void renderMapOverlays(int8_t *instances, int16_t screenX, int16_t screenY);
+void renderMapOverlays(LocalMapObjectInstance *instances, int16_t screenX, int16_t screenY);
 void renderPoop(int32_t instanceId);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void runMapHeadScript(int32_t section);
@@ -237,14 +242,13 @@ extern int16_t HOUR;
 extern int32_t IS_SCRIPT_PAUSED;
 extern GsF_LIGHT LIGHT_DATA[];
 extern int32_t LOADED_DIGIMON_MODELS[];
-extern int8_t LOCAL_MAP_OBJECT_INSTANCE[];
 extern int16_t MAIN_D_80134DFC;
 extern u_long *MAP_CLUTS[];
 extern int8_t MAP_COLLISION_DATA[];
 extern int8_t MAP_HEIGHT[];
 extern GsF_LIGHT MAP_LIGHT[];
 extern int8_t MAP_TILES[];
-extern MapTileData MAP_TILE_DATA[];
+extern MapTiles MAP_TILE_DATA;
 extern int8_t MAP_TILE_X;
 extern int8_t MAP_TILE_Y;
 extern int8_t MAP_WIDTH[];
@@ -4290,9 +4294,9 @@ void initializeMap(void)
 	}
 
 	for (i = 0; i < 35; i++) {
-		MAP_TILE_DATA[i].imagePtr = 0;
-		MAP_TILE_DATA[i].posX = MAP_TILE_DATA[i].posY = 0;
-		MAP_TILE_DATA[i].texU = MAP_TILE_DATA[i].texV = 0;
+		MAP_TILE_DATA.tiles[i].imagePtr = 0;
+		MAP_TILE_DATA.tiles[i].posX = MAP_TILE_DATA.tiles[i].posY = 0;
+		MAP_TILE_DATA.tiles[i].texU = MAP_TILE_DATA.tiles[i].texV = 0;
 	}
 
 	PREVIOUS_SCREEN = CURRENT_SCREEN = 0xcc;
@@ -4355,15 +4359,15 @@ void renderMap(int32_t arg0)
 				setRGB0(prim, 0x80, 0x80, 0x80);
 			}
 
-			if ((MAP_TILE_DATA[col + (startTile + stride * row)].texV % 256) != 0) {
-				setUVDataPolyFT4(prim, 0, MAP_TILE_DATA[col + (startTile + stride * row)].texV % 256, 0x80, 0x7F);
+			if ((MAP_TILE_DATA.tiles[col + (startTile + stride * row)].texV % 256) != 0) {
+				setUVDataPolyFT4(prim, 0, MAP_TILE_DATA.tiles[col + (startTile + stride * row)].texV % 256, 0x80, 0x7F);
 			} else {
-				setUVDataPolyFT4(prim, 0, MAP_TILE_DATA[col + (startTile + stride * row)].texV % 256, 0x80, 0x80);
+				setUVDataPolyFT4(prim, 0, MAP_TILE_DATA.tiles[col + (startTile + stride * row)].texV % 256, 0x80, 0x80);
 			}
 
-			prim->tpage = MAP_TILE_DATA[col + (startTile + stride * row)].tpage;
-			prim->clut = MAP_TILE_DATA[col + (startTile + stride * row)].clut;
-			setPosDataMapTile(&MAP_TILE_DATA[col + (startTile + stride * row)],
+			prim->tpage = MAP_TILE_DATA.tiles[col + (startTile + stride * row)].tpage;
+			prim->clut = MAP_TILE_DATA.tiles[col + (startTile + stride * row)].clut;
+			setPosDataMapTile(&MAP_TILE_DATA.tiles[col + (startTile + stride * row)],
 					  CAMERA_X[0], CAMERA_Y[0], prim);
 			AddPrim(&ot[0xfff], prim);
 			++prim;
@@ -4372,7 +4376,7 @@ void renderMap(int32_t arg0)
 		}
 	}
 
-	renderMapOverlays(LOCAL_MAP_OBJECT_INSTANCE,
+	renderMapOverlays(MAP_TILE_DATA.objects,
 			  CAMERA_X[0], CAMERA_Y[0]);
 
 	CAMERA_X_PREVIOUS = CAMERA_X[0];
@@ -4393,7 +4397,7 @@ void loadMap(int32_t mapId)
 	int32_t result;
 #if !defined(VERSION_JP)
 	uint32_t idx;
-	uint8_t *objects;
+	LocalMapObjectInstance *objects;
 #endif
 
 	offsets = (int32_t *)GENERAL_BUFFER_PTR;
@@ -4405,7 +4409,7 @@ void loadMap(int32_t mapId)
 	setupOffset = *offsets++;
 	result = loadMapSetup((int32_t *)(GENERAL_BUFFER_PTR + setupOffset));
 #if defined(VERSION_JP)
-	clearMapObjects((uint8_t *)LOCAL_MAP_OBJECT_INSTANCE);
+	clearMapObjects(MAP_TILE_DATA.objects);
 
 	if ((MAP_ENTRIES[mapId].num8bppImages != 0) ||
 	    (MAP_ENTRIES[mapId].num4bppImages != 0)) {
@@ -4424,11 +4428,11 @@ void loadMap(int32_t mapId)
 		}
 
 		objectOffset = *offsets++;
-		loadMapObjects((uint8_t *)LOCAL_MAP_OBJECT_INSTANCE,
+		loadMapObjects(MAP_TILE_DATA.objects,
 			       GENERAL_BUFFER_PTR + objectOffset, mapId);
 	}
 #else
-	clearMapObjects(objects = (uint8_t *)LOCAL_MAP_OBJECT_INSTANCE);
+	clearMapObjects(objects = MAP_TILE_DATA.objects);
 
 	idx = mapId;
 	if ((MAP_ENTRIES[mapId].num8bppImages != 0) ||
@@ -4638,7 +4642,7 @@ void setupMap(void)
 
 	updateTimeOfDay();
 
-	tile = MAP_TILE_DATA;
+	tile = MAP_TILE_DATA.tiles;
 	for (y = 0; y < MAP_HEIGHT[0]; y++) {
 		for (x = 0; x < MAP_WIDTH[0]; x++) {
 			tile->tileId = MAP_TILES[x + (y * MAP_WIDTH[0])];
@@ -4666,7 +4670,7 @@ void setupMap(void)
 	PLAYER_OFFSET_X = DRAWING_OFFSET_X = 160;
 	PLAYER_OFFSET_Y = DRAWING_OFFSET_Y = 120;
 
-	initializeDrawingOffsets(MAP_TILE_DATA);
+	initializeDrawingOffsets(MAP_TILE_DATA.tiles);
 
 	MAP_TILE_X = CAMERA_X[0] / 128;
 	if (MAP_WIDTH[0] < 5) {
@@ -4686,9 +4690,9 @@ void setupMap(void)
 
 	PREV_TILE_Y = MAP_TILE_Y;
 
-	uploadMapTileImages(MAP_TILE_DATA,
+	uploadMapTileImages(MAP_TILE_DATA.tiles,
 			    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]));
-	calcMapObjectOrder((LocalMapObjectInstance *)LOCAL_MAP_OBJECT_INSTANCE);
+	calcMapObjectOrder(MAP_TILE_DATA.objects);
 
 	CAMERA_FOLLOW_PLAYER = 1;
 }
@@ -4843,9 +4847,9 @@ void unloadMap(void)
 	int32_t i;
 
 	for (i = 0; i < 35; i++) {
-		MAP_TILE_DATA[i].imagePtr = 0;
-		MAP_TILE_DATA[i].posX = MAP_TILE_DATA[i].posY = 0;
-		MAP_TILE_DATA[i].texU = MAP_TILE_DATA[i].texV = 0;
+		MAP_TILE_DATA.tiles[i].imagePtr = 0;
+		MAP_TILE_DATA.tiles[i].posX = MAP_TILE_DATA.tiles[i].posY = 0;
+		MAP_TILE_DATA.tiles[i].texU = MAP_TILE_DATA.tiles[i].texV = 0;
 	}
 
 	MAP_WIDTH[0] = MAP_HEIGHT[0] = 0;
@@ -5205,7 +5209,7 @@ void handleTileUpdate(int32_t input, int32_t force)
 		}
 	}
 	if (force == 1) {
-		uploadMapTileImages(MAP_TILE_DATA,
+		uploadMapTileImages(MAP_TILE_DATA.tiles,
 				    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]));
 	}
 }
@@ -5454,7 +5458,7 @@ void tickCameraMovement(instanceId)
 		removeObject(0xfb1, instanceId);
 
 		if (CAMERA_UPDATE_TILES == 1) {
-			uploadMapTileImages(MAP_TILE_DATA,
+			uploadMapTileImages(MAP_TILE_DATA.tiles,
 					    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]));
 			CAMERA_UPDATE_TILES = 0;
 		}
@@ -5629,12 +5633,12 @@ void updateTileRow(bottom)
 		}
 
 		for (i = 0; i < count; i++) {
-			setRECT(&rect, MAP_TILE_DATA[i + (base + start)].texU, MAP_TILE_DATA[i + (base + start)].texV, 64, 128);
+			setRECT(&rect, MAP_TILE_DATA.tiles[i + (base + start)].texU, MAP_TILE_DATA.tiles[i + (base + start)].texV, 64, 128);
 
-			if (MAP_TILE_DATA[base + i].tileId == -1) {
+			if (MAP_TILE_DATA.tiles[base + i].tileId == -1) {
 				ClearImage(&rect, 0, 0, 0);
 			} else {
-				LoadImage(&rect, (u_long *)MAP_TILE_DATA[i + (base + start)].imagePtr);
+				LoadImage(&rect, (u_long *)MAP_TILE_DATA.tiles[i + (base + start)].imagePtr);
 			}
 
 			DrawSync(0);
@@ -5670,12 +5674,12 @@ void updateTileColumn(right)
 				break;
 			}
 
-			setRECT(&rect, MAP_TILE_DATA[start + (base + stride * i)].texU, MAP_TILE_DATA[start + (base + stride * i)].texV, 64, 128);
+			setRECT(&rect, MAP_TILE_DATA.tiles[start + (base + stride * i)].texU, MAP_TILE_DATA.tiles[start + (base + stride * i)].texV, 64, 128);
 
-			if (MAP_TILE_DATA[start + (base + stride * i)].tileId == -1) {
+			if (MAP_TILE_DATA.tiles[start + (base + stride * i)].tileId == -1) {
 				ClearImage(&rect, 0, 0, 0);
 			} else {
-				LoadImage(&rect, (u_long *)MAP_TILE_DATA[start + (base + stride * i)].imagePtr);
+				LoadImage(&rect, (u_long *)MAP_TILE_DATA.tiles[start + (base + stride * i)].imagePtr);
 			}
 
 			DrawSync(0);
