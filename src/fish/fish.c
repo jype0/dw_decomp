@@ -4331,7 +4331,7 @@ stateD:
 	}
 	PARTNER_PARA.fishCaught++;
 	playSound(8, 8);
-	if (giveItem(rod->bait & 0xff, 1) == 0) {
+	if (giveItem(rod->bait, 1) == 0) {
 		FISH_showTextBox(ITEM_PARA[rod->bait].name,
 		                 FISHING_DATA_PTR->messageBuffer,
 		                 FISH_MSG_GOT_ONE, FISH_MSG_LET_IT_GO,
@@ -4411,7 +4411,7 @@ state44C:
 	FISH_showBaitSprite(NULL, rod->bait);
 	FISH_moveBaitToRodTip(0);
 	playSound(8, 8);
-	if (giveItem(rod->bait & 0xff, 1) == 0) {
+	if (giveItem(rod->bait, 1) == 0) {
 #if defined(VERSION_JP)
 		FISH_showTextBox(ITEM_PARA[rod->bait].name,
 		                 FISH_MSG_IT_GOT_STUCK, FISH_MSG_BAG_FULL, 0,

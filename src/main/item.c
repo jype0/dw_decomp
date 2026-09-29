@@ -472,10 +472,7 @@ void renderDroppedItemShadow(WorldItem *item)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-// clang-format off
-int32_t getItemCount(type)
-	uint8_t type;
-// clang-format on
+uint8_t getItemCount(uint8_t type)
 {
 	int32_t i;
 
@@ -488,11 +485,7 @@ int32_t getItemCount(type)
 	return 0;
 }
 
-// clang-format off
-int32_t giveItem(item, amount)
-	uint8_t item;
-	uint8_t amount;
-// clang-format on
+int32_t giveItem(uint8_t item, uint8_t amount)
 {
 	int16_t used[30];
 	int32_t i;
@@ -546,11 +539,7 @@ int32_t giveItem(item, amount)
 	return result;
 }
 
-// clang-format off
-void removeItem(type, amount)
-	uint8_t type;
-	uint8_t amount;
-// clang-format on
+void removeItem(uint8_t type, uint8_t amount)
 {
 	int32_t i;
 	uint8_t *count;

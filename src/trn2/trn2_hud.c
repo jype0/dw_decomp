@@ -5,7 +5,6 @@
 #include <dw/entity.h>
 #include <dw/font.h>
 #include <dw/input.h>
-#include <dw/item.h>
 #include <dw/params.h>
 #include <dw/partner.h>
 #include <dw/script.h>
@@ -23,6 +22,7 @@ extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
+int32_t getItemCount(int32_t type);
 void worldPosToScreenPos(TrainingSpot *item, SVECTOR *out);
 void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits, int32_t value, int32_t layer);

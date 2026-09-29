@@ -266,8 +266,6 @@ SECTIONS
         BUILD_DIR/src/trn/trn_slots.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_menu.c.o(.sdata .sdata.*);
-        . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/ADE58.sdata.s.o(.sdata .sdata.*));
         BUILD_DIR/src/trn2/trn2_hud.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/trn2/trn2_slots.c.o(.sdata .sdata.*);

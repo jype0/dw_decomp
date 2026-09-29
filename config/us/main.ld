@@ -631,6 +631,8 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_interp.c.o(.sdata.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_menu.c.o(.sdata.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/font.c.o(.sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/main_menu.c.o(.sdata.*);

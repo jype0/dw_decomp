@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include <dw/item.h>
 #include <dw/params.h>
 #include <dw/script.h>
 #include <dw/ui.h>
@@ -8,7 +9,6 @@ typedef struct {
 	int32_t v[6];
 } Pow10Table;
 
-uint8_t getItemCount(int32_t type);
 int32_t scriptCompareSignedValue(uint8_t op, uint32_t lhs, uint32_t rhs);
 int32_t getSpeakerName(int32_t speakerId, uint8_t *buf);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag);

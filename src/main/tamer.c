@@ -1395,7 +1395,7 @@ void tamerTickPickupItem(void)
 			if (TAKE_ITEM_FRAME_COUNT < 0x3c) {
 				playSound(0, 3);
 			}
-			if (giveItem(DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type & 0xff, 0) == 0) {
+			if (giveItem(DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type, 0) == 0) {
 				drawString(MAIN_D_80122D68, 0, 0x18);
 				TAKE_ITEM_FRAME_COUNT = 0;
 				INTERACTED_CHEST_STATE = 1;

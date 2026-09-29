@@ -172,8 +172,7 @@ extern BattleEntry MAIN_D_8013024C[];
 typedef struct {
 	uint8_t digimonId;
 	uint8_t spriteId;
-	uint8_t unk2;
-	uint8_t unk3;
+	int16_t meritValue;
 } CardData;
 
 extern CardData CARD_DATA[];
@@ -391,8 +390,8 @@ void createBirdraTransportMenu(void);
 void createMojyaTradeMenu(void);
 void setMojyaItemTradedTrigger(void);
 void setupNewGameDialogueBox(void);
-void showNewGameDialogue(int32_t textId, int16_t nextState);
-void showNewGameSelection(int32_t textId, int16_t nextState);
+void showNewGameDialogue(int32_t textId, uint16_t nextState);
+void showNewGameSelection(int32_t textId, uint16_t nextState);
 void setupNameSelectorBox(void);
 void setupNameDisplayBox(void);
 void openRecycleShop(void);

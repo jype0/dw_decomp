@@ -4,7 +4,6 @@
 #include <dw/clock.h>
 #include <dw/entity.h>
 #include <dw/font.h>
-#include <dw/item.h>
 #include <dw/math.h>
 #include <dw/params.h>
 #include <dw/partner.h>
@@ -15,6 +14,7 @@
 extern int16_t STATS_GAINS[6];
 extern char *MOVE_NAMES[];
 
+int32_t getItemCount(int32_t type);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void createCameraMovement(VECTOR *pos, int32_t speed);
 void initializeDaytimeTransition(int32_t phase);

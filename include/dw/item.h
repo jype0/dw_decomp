@@ -54,9 +54,9 @@ extern ItemFunction ITEM_FUNCTIONS[128];
 
 void initializeInventory(void);
 void setInventorySize(uint8_t size);
-int32_t giveItem(int32_t type, int32_t amount);
-void removeItem(int32_t type, int32_t amount);
-int32_t getItemCount(int32_t type);
+int32_t giveItem(uint8_t type, uint8_t amount);
+void removeItem(uint8_t type, uint8_t amount);
+uint8_t getItemCount(uint8_t type);
 
 void initializeDroppedItems(void);
 void clearDroppedItems(void);

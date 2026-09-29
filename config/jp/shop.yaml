@@ -62,9 +62,8 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, shop/shop]
-      - [0x5E78, c, main/script_menu]
+      - [0x40, c, main/script_menu]
       - [0x7860, .rodata, main/script_menu]
-      - [0x79E4, data, shop]
+      - [0x79F8, .data, main/script_menu]
 
   - [0x7E0C]
