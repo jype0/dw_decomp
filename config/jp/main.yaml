@@ -230,7 +230,7 @@ segments:
       - [0xADE20, .sdata, trn/trn_reward]
       - [0xADE28, .sdata, trn/trn_hud]
       - [0xADE38, .sdata, trn/trn_slots]
-      - [0xADE50, .sdata, main/script_menu]
+      - [0xADE50, .sdata, shop/script_menu]
       - [0xADEA8, .sdata, trn2/trn2_hud]
       - [0xADEB8, .sdata, trn2/trn2_slots]
       - [0xADED0, .sdata, murd/murd]

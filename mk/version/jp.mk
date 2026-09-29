@@ -149,7 +149,7 @@ MURD_C_SRC := \
 
 $(eval $(call overlay,MURD,murd))
 SHOP_C_SRC := \
-	src/main/script_menu.c
+	src/shop/script_menu.c
 
 $(eval $(call overlay,SHOP,shop))
 STD_C_SRC := \

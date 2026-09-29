@@ -173,9 +173,9 @@ SECTIONS
 	{
 		.SHOP {
 			KEEP(BUILD_DIR/asm/shop/data/header.rodata.s.o(.rodata .rodata.*));
-			BUILD_DIR/src/main/script_menu.c.o(.text .text.*);
-			BUILD_DIR/src/main/script_menu.c.o(.rodata .rodata.*);
-			BUILD_DIR/src/main/script_menu.c.o(.data .data.*);
+			BUILD_DIR/src/shop/script_menu.c.o(.text .text.*);
+			BUILD_DIR/src/shop/script_menu.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/shop/script_menu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}

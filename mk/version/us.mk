@@ -86,7 +86,6 @@ MAIN_C_SRC := \
 	src/main/partner_impl.c \
 	src/main/script_common.c \
 	src/main/script_interp.c \
-	src/main/script_menu.c \
 	src/main/script_textbox.c \
 	src/main/script_value.c \
 	src/main/sjis.c \
@@ -101,7 +100,14 @@ MAIN_C_SRC := \
 	src/main/vs.c \
 	src/main/world_object.c
 
+MAIN_ASM_EXCLUDE := shop
+
 $(eval $(call unit,MAIN,main))
+
+SHOP_C_SRC := \
+	src/shop/script_menu.c
+
+$(eval $(call unit,SHOP,shop))
 
 BTL_C_SRC := \
 	src/btl/battle_effect.c \
