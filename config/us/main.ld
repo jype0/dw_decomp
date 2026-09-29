@@ -154,6 +154,10 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_common.c.o(.text.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_textbox.c.o(.text.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_value.c.o(.text.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/script_interp.c.o(.text.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_menu.c.o(.text.*);
@@ -379,6 +383,10 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_common.c.o(.rodata.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_textbox.c.o(.rodata.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_value.c.o(.rodata.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/script_interp.c.o(.rodata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_menu.c.o(.rodata.*);
@@ -539,6 +547,10 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_common.c.o(.data.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_textbox.c.o(.data.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_value.c.o(.data.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/script_interp.c.o(.data.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_menu.c.o(.data.*);
@@ -614,6 +626,8 @@ SECTIONS
         BUILD_DIR/src/main/vs.c.o(.sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_common.c.o(.sdata.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/script_value.c.o(.sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_interp.c.o(.sdata.*);
         . = ALIGN(., 4);

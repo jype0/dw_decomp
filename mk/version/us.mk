@@ -87,6 +87,8 @@ MAIN_C_SRC := \
 	src/main/script_common.c \
 	src/main/script_interp.c \
 	src/main/script_menu.c \
+	src/main/script_textbox.c \
+	src/main/script_value.c \
 	src/main/sjis.c \
 	src/main/sound.c \
 	src/main/sound_async.c \

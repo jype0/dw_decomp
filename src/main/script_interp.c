@@ -77,6 +77,7 @@ extern TextBoxTable MAIN_D_801BE80C;
 extern char MAIN_D_801B1D26[];
 extern int16_t SELECTION_CURSOR_WIDTHS[];
 extern uint8_t *CURRENT_SCRIPT_PTR;
+extern int32_t MAIN_D_80134FA8;
 
 void unsetCameraFollowPlayer(void);
 int32_t scriptTickChangeMap(int32_t param_1, int32_t param_2, int32_t param_3);
@@ -186,6 +187,7 @@ void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w);
 void drawString(char *str, int32_t x, int32_t y);
 int32_t flipTextboxPage(uint8_t boxId);
 void setupMap(int32_t param_1, int32_t param_2);
+void loadMap(uint16_t mapId);
 
 static void *script_interp_text_order[] = {
 	renderNamingUnderscore,
@@ -299,6 +301,9 @@ static void *script_interp_text_order[] = {
 	scriptInstruction46to58,
 	scriptInstruction28to3F,
 	scriptInstruction10to27,
+	scriptInstructionFBtoFF,
+	tickScriptedMovements,
+	readFileSection,
 };
 
 // clang-format off
@@ -530,6 +535,8 @@ BoxLabel MAIN_D_801307B4 = { "In hand" };
 BoxLabel MAIN_D_801307C0 = { "Keeping" };
 
 char MAIN_D_801307CC[20] = "You have Will trade";
+
+char MAIN_D_801345F0[] = ";1";
 
 char MAIN_D_801345F4[4] = "";
 
@@ -4923,4 +4930,74 @@ void writePStat(int32_t index, uint8_t value)
 
 	ptr = &SCRIPT_STATE_PTR->pstats[index];
 	*ptr = value;
+}
+
+void readFileSection(char *filename, void *dest, uint32_t offset,
+                     uint32_t size)
+{
+	CdlFILE file;
+	char path[64];
+	uint8_t mode;
+
+	mode = 0x80;
+
+	if (MAIN_D_80134FA8 == 0) {
+		path[0] = '\\';
+		strcpy(&path[1], filename);
+		strcat(path, MAIN_D_801345F0);
+		if (CdSearchFile(&file, path) == 0) {
+			return;
+		}
+
+		while (CdControl(0xe, &mode, 0) == 0)
+			;
+
+		MAIN_D_80134FA8 = CdPosToInt(&file.pos);
+	} else {
+		while (CdControl(0xe, &mode, 0) == 0)
+			;
+	}
+
+	file.pos = *CdIntToPos(MAIN_D_80134FA8 + (offset >> 11), &file.pos);
+
+	while (CdControl(2, (u_char *)&file.pos, 0) == 0)
+		;
+	while (CdRead(size >> 11, dest, mode) == 0)
+		;
+	while (CdReadSync(0, 0) > 0)
+		;
+}
+
+void tickScriptedMovements(void)
+{
+	int32_t i;
+
+	for (i = 0; i < 0x16; i++) {
+		if (MAIN_D_801BE6B4[i * 0xc] != 0xff) {
+			tickScriptedMovement(i);
+		}
+	}
+}
+
+void scriptInstructionFBtoFF(int32_t op)
+{
+	StackEntry entry;
+
+	if (op != 0xfb) {
+		if (op == 0xfe || op == 0xff) {
+			returnFromScriptFile();
+		}
+		return;
+	}
+
+	skipOneReadTwoShort(&CURRENT_SCRIPT_ID, &CURRENT_MAP_ID);
+
+	entry.smth[0] = 3;
+	pushScriptStack(&entry);
+
+	MAIN_D_80134FEC = 1;
+
+	resetBGM();
+	loadMap(CURRENT_MAP_ID);
+	longjmp(SCRIPT_JMP_BUF, 1);
 }
