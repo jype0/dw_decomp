@@ -76,6 +76,7 @@ MAIN_C_SRC := \
 	src/main/partner.c \
 	src/main/partner_impl.c \
 	src/main/script_common.c \
+	src/main/script_interp.c \
 	src/main/script_textbox.c \
 	src/main/script_value.c \
 	src/main/sound.c \

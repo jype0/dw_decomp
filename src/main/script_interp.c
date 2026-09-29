@@ -7,7 +7,6 @@
 #include <dw/eab.h>
 #include <dw/fade.h>
 #include <dw/file.h>
-#include <dw/file_queue.h>
 #include <dw/font.h>
 #include <dw/item.h>
 #include <dw/main.h>
@@ -30,8 +29,6 @@
 extern uint8_t MAIN_D_80134FE4;
 extern uint8_t MAIN_D_80134FE9;
 extern int32_t MAIN_D_80134FF0;
-extern uint8_t MAIN_D_801BE6B5[];
-extern uint8_t MAIN_D_801BE6B6[];
 extern uint8_t *SCRIPT_HEADER_PTR;
 extern uint8_t *SCRIPT_DATA_PTR;
 extern int8_t MAIN_STATE;
@@ -89,13 +86,16 @@ int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut);
 void setMapHeadActive(void);
 int32_t tickCameraMoveTo(int32_t x, int32_t y, uint8_t speed);
 int32_t tickCameraMoveToEntity(uint32_t scriptId, uint8_t speed);
-int32_t tickMoveObjectTo(uint32_t scriptId1, uint32_t scriptId2, int32_t angle, int32_t targetX, int32_t targetY);
+int32_t tickMoveObjectTo(uint8_t objectIndex, uint8_t moveIndex, int8_t steps,
+                         int16_t targetX, int16_t targetY);
 void initializeScripts(void);
 void initializeLoadedNPCModels(void);
 void runMapHeadScript(int32_t section);
 void setupMap(int32_t param_1, int32_t param_2);
 void loadMap(uint16_t mapId);
 uint8_t *getScriptSection(uint8_t *script, int32_t section);
+int32_t addFileReadRequestPath(char *path, int32_t buffer, uint8_t *isRunning,
+                               void *callback, void *callbackParam);
 
 static void *script_interp_text_order[] = {
 	_hasMove,
@@ -172,16 +172,17 @@ char MAIN_D_801345F0[] = ";1";
 int32_t tickScript(void)
 {
 	int32_t ret;
-	int32_t offset;
-	int32_t entityId;
-	uint32_t op;
-	uint8_t i;
+	uint8_t op;
 
 	if (IS_SCRIPT_PAUSED) {
 		return 1;
 	}
 
+#if defined(VERSION_JP)
+	tickTextboxHandling();
+#else
 	tickTextboxHandling(0);
+#endif
 	tickScriptedMovements();
 	if (MAIN_D_80134FE9 == 0x4b) {
 		if (scriptTickChangeMap((int16_t)MAIN_D_80134FF8,
@@ -201,42 +202,6 @@ int32_t tickScript(void)
 		break;
 	case SCRIPT_OP_CALL_ROUTINE:
 		switch (MAIN_D_80134FF8) {
-		case 3:
-		case 4:
-		case 5:
-		case 12:
-		case 13:
-		case 15:
-		case 16:
-		case 17:
-		case 19:
-		case 20:
-		case 21:
-		case 25:
-		case 26:
-		case 27:
-		case 28:
-		case 30:
-		case 31:
-		case 33:
-		case 34:
-		case 35:
-		case 36:
-		case 38:
-		case 39:
-		case 40:
-		case 41:
-		case 42:
-		case 43:
-		case 44:
-		case 45:
-		case 46:
-		case 49:
-		case 51:
-		case 52:
-		case 55:
-		case 56:
-			goto done;
 		case 0:
 			openDiscardItem();
 			break;
@@ -337,26 +302,58 @@ int32_t tickScript(void)
 				longjmp(SCRIPT_JMP_BUF, 2);
 			}
 			/* fall through */
-done:
+		case 3:
+		case 4:
+		case 5:
+		case 12:
+		case 13:
+		case 15:
+		case 16:
+		case 17:
+		case 19:
+		case 20:
+		case 21:
+		case 25:
+		case 26:
+		case 27:
+		case 28:
+		case 30:
+		case 31:
+		case 33:
+		case 34:
+		case 35:
+		case 36:
+		case 38:
+		case 39:
+		case 40:
+		case 41:
+		case 42:
+		case 43:
+		case 44:
+		case 45:
+		case 46:
+		case 49:
+		case 51:
+		case 52:
+		case 55:
+		case 56:
 		default:
 			break;
 		}
 		break;
 	case SCRIPT_OP_WAIT_FOR_ENTITY:
-		if ((entityId = MAIN_D_80134FA4) == 0x19) {
+		if (MAIN_D_80134FA4 == 0x19) {
 			if (getScriptSyncBit()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
-		} else if (entityId == 0x1a) {
+		} else if (MAIN_D_80134FA4 == 0x1a) {
 			if (TRN_LOADING_COMPLETE == 0) {
 				ACTIVE_INSTRUCTION = 0;
 			}
-		} else if (entityId == 0xff) {
+		} else if (MAIN_D_80134FA4 == 0xff) {
 			if (getScriptSyncBit()) {
-				for (i = 0, offset = 0;
-				     i < 0x16;
-				     ++i, offset += 0xc) {
-					if (MAIN_D_801BE6B4[offset] != 0xff) {
+				for (op = 0; op < 0x16; op++) {
+					if (MAIN_D_801BE6B4[op * 0xc] != 0xff) {
 						goto found;
 					}
 				}
@@ -364,7 +361,7 @@ done:
 found:;
 			}
 		} else {
-			if (MAIN_D_801BE6B4[entityId * 0xc] == 0xff) {
+			if (MAIN_D_801BE6B4[MAIN_D_80134FA4 * 0xc] == 0xff) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 		}
@@ -386,7 +383,7 @@ setjmp_retry:
 	ret = setjmp(SCRIPT_JMP_BUF);
 	if (ret == 0) {
 		op = *MAIN_D_80134FDC++;
-		if (op >= 0xfb && op < 0x100) {
+		if (op >= 0xfb && op <= 0xff) {
 			scriptInstructionFBtoFF(op);
 		} else if (op >= 0x10 && op < 0x28) {
 			scriptInstruction10to27(op);
@@ -429,9 +426,11 @@ setjmp_retry:
 	return IS_SCRIPT_PAUSED;
 }
 
-uint8_t *getScript(int32_t mapId)
+uint8_t *getScript(uint16_t mapId)
 {
 	uint32_t *table;
+	uint32_t offset;
+	uint32_t size;
 
 	if (mapId == 0) {
 		return MAPHEAD_DATA_PTR;
@@ -443,13 +442,18 @@ uint8_t *getScript(int32_t mapId)
 
 	ACTIVE_MAP_SCRIPT = mapId;
 	table = (uint32_t *)SCRIPT_HEADER_PTR;
-	readFileSection(MAIN_D_80130388, SCRIPT_DATA_PTR, table[mapId],
-	                table[mapId + 1] - table[mapId]);
+	offset = table[mapId];
+	size = table[mapId + 1] - table[mapId];
+	readFileSection(MAIN_D_80130388, SCRIPT_DATA_PTR, offset, size);
 
 	return SCRIPT_DATA_PTR;
 }
 
-uint8_t *getScriptSection(uint8_t *script, int32_t section)
+// clang-format off
+uint8_t *getScriptSection(script, section)
+	uint8_t *script;
+	uint16_t section;
+// clang-format on
 {
 	uint16_t *entry = (uint16_t *)&script[2];
 
@@ -462,11 +466,14 @@ uint8_t *getScriptSection(uint8_t *script, int32_t section)
 			return 0;
 		}
 
-		entry = &entry[2];
+		entry += 2;
 	}
 }
 
-void scriptInstruction10to27(int32_t op)
+// clang-format off
+void scriptInstruction10to27(op)
+	uint8_t op;
+// clang-format on
 {
 	StackEntry entry;
 	uint16_t shortArg;
@@ -481,6 +488,9 @@ void scriptInstruction10to27(int32_t op)
 		MAIN_D_80135000 = 1;
 		scriptShowSelection();
 		longjmp(SCRIPT_JMP_BUF, 2);
+	case SCRIPT_OP_UNUSED_11:
+		break;
+	case SCRIPT_OP_UNUSED_12:
 		break;
 	case SCRIPT_OP_JUMP_AND_LINK:
 		skipOneReadOneUShort(&shortArg);
@@ -522,7 +532,7 @@ void scriptInstruction10to27(int32_t op)
 		pollOneUByteOneUShort(&pstat, &shortArg);
 		value = readPStat(pstat);
 		if (value >= shortArg) {
-			value = (shortArg - 1) & 0xff;
+			value = shortArg - 1;
 		}
 		shortArg = *(uint16_t *)(MAIN_D_80134FDC + (value << 1));
 		MAIN_D_80134FDC =
@@ -591,14 +601,15 @@ void scriptInstruction10to27(int32_t op)
 		break;
 	case SCRIPT_OP_STORE_RANDOM:
 		skipOnePollTwoScriptBytes(&pstat, &value);
-		writePStat(pstat, randomLimit(value + 1));
+		newValue = randomLimit(value + 1);
+		writePStat(pstat, newValue);
 		break;
 	case SCRIPT_OP_STORE_DATE:
 		pollNextScriptUByte(&pstat);
-		writePStat(pstat, YEAR);
-		writePStat((pstat + 1) & 0xff, DAY);
-		writePStat((pstat + 2) & 0xff, HOUR);
-		writePStat((pstat + 3) & 0xff, MINUTE);
+		writePStat(pstat + 0, YEAR);
+		writePStat(pstat + 1, DAY);
+		writePStat(pstat + 2, HOUR);
+		writePStat(pstat + 3, MINUTE);
 		break;
 	case SCRIPT_OP_SET_TEXTBOX_SIZE:
 		scriptPauseGame(0xff);
@@ -678,7 +689,6 @@ void scriptStartAnimation(uint8_t actorId, int32_t animationId)
 void scriptIfInstruction(void)
 {
 	uint8_t condOp;
-	uint32_t one;
 	uint8_t pstatValue;
 	uint8_t comparand;
 	uint16_t shortArg;
@@ -697,8 +707,7 @@ void scriptIfInstruction(void)
 			pollNextScriptUShort(&shortArg);
 			cond = isTriggerSet(shortArg);
 			if ((condOp & 7) == 0) {
-				cond ^= (one = 1);
-				cond = (cond == 0);
+				cond = (cond == 1);
 				break;
 			} else {
 				cond = (cond == 0);
@@ -773,38 +782,63 @@ void scriptIfInstruction(void)
 
 int32_t scriptCompareValue(uint8_t op, uint32_t lhs, uint32_t rhs)
 {
+	int32_t result;
+
 	switch (op & 7) {
 	case 0:
-		return lhs == rhs;
+		result = lhs == rhs;
+		break;
 	case 1:
-		return lhs != rhs;
+		result = lhs != rhs;
+		break;
 	case 2:
-		return lhs >= rhs;
+		result = lhs >= rhs;
+		break;
 	case 3:
-		return lhs <= rhs;
+		result = lhs <= rhs;
+		break;
 	case 4:
-		return lhs > rhs;
+		result = lhs > rhs;
+		break;
 	case 5:
-		return lhs < rhs;
+		result = lhs < rhs;
+		break;
 	}
+
+	return result;
 }
 
-int32_t scriptCompareSignedValue(int32_t op, int32_t lhs, int32_t rhs)
+// clang-format off
+int32_t scriptCompareSignedValue(op, lhs, rhs)
+	uint8_t op;
+	int32_t lhs;
+	int32_t rhs;
+// clang-format on
 {
+	int32_t result;
+
 	switch (op & 7) {
 	case 0:
-		return lhs == rhs;
+		result = lhs == rhs;
+		break;
 	case 1:
-		return lhs != rhs;
+		result = lhs != rhs;
+		break;
 	case 2:
-		return lhs >= rhs;
+		result = lhs >= rhs;
+		break;
 	case 3:
-		return lhs <= rhs;
+		result = lhs <= rhs;
+		break;
 	case 4:
-		return lhs > rhs;
+		result = lhs > rhs;
+		break;
 	case 5:
-		return lhs < rhs;
+		result = lhs < rhs;
+		break;
 	}
+
+	return result;
 }
 
 static void scriptInstruction28to3F__garbage__(int32_t op)
@@ -834,11 +868,14 @@ static void scriptInstruction28to3F__garbage__(int32_t op)
 	}
 }
 
-void scriptInstruction28to3F(int32_t op)
+// clang-format off
+void scriptInstruction28to3F(op)
+	uint8_t op;
+// clang-format on
 {
 	int16_t *statPtr;
-	uint32_t value32;
 	int32_t intArg;
+	int32_t result;
 	uint16_t value;
 	uint8_t byteArg1;
 	uint8_t byteArg2;
@@ -850,7 +887,8 @@ void scriptInstruction28to3F(int32_t op)
 	switch (op) {
 	case SCRIPT_OP_GIVE_ITEM:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
-		if (giveItem(byteArg1, byteArg2) != 0) {
+		result = giveItem(byteArg1, byteArg2);
+		if (result != 0) {
 			unsetTrigger(0);
 		} else {
 			setTrigger(0);
@@ -888,7 +926,7 @@ void scriptInstruction28to3F(int32_t op)
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = getCardAmount(byteArg1);
 		if (byteArg2 < 9) {
-			byteArg2 = byteArg2 + 1u;
+			byteArg2++;
 			setCardAmount(byteArg1, byteArg2);
 		}
 		break;
@@ -896,7 +934,7 @@ void scriptInstruction28to3F(int32_t op)
 		pollNextScriptUByte(&byteArg1);
 		byteArg2 = getCardAmount(byteArg1);
 		if (byteArg2 != 0) {
-			byteArg2 = byteArg2 - 1u;
+			byteArg2--;
 			setCardAmount(byteArg1, byteArg2);
 		}
 		break;
@@ -924,28 +962,26 @@ void scriptInstruction28to3F(int32_t op)
 	case SCRIPT_OP_SET_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
-		value32 = value;
-		*statPtr = enforceStatsLimits(byteArg1, (int16_t)value32);
+		*statPtr = enforceStatsLimits(byteArg1, value);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
 		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
-			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+			TAMER_ENTITY.tamerLevel = (uint8_t)MAIN_D_80135002;
 		}
 		if (byteArg1 == SCRIPT_STAT_LIVES) {
-			PARTNER_ENTITY.lives = MAIN_D_80135004;
+			PARTNER_ENTITY.lives = (uint8_t)MAIN_D_80135004;
 		}
 		break;
 	case SCRIPT_OP_ADD_STAT:
 		pollOneUByteOneUShort(&byteArg1, &value);
 		statPtr = getStatsPointer(byteArg1);
-		value32 = value;
-		*statPtr += value32;
+		*statPtr += value;
 		*statPtr = enforceStatsLimits(byteArg1, *statPtr);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
 		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
-			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+			TAMER_ENTITY.tamerLevel = (uint8_t)MAIN_D_80135002;
 		}
 		if (byteArg1 == SCRIPT_STAT_LIVES) {
-			PARTNER_ENTITY.lives = MAIN_D_80135004;
+			PARTNER_ENTITY.lives = (uint8_t)MAIN_D_80135004;
 		}
 		break;
 	case SCRIPT_OP_REDUCE_STAT:
@@ -964,18 +1000,18 @@ void scriptInstruction28to3F(int32_t op)
 		*statPtr = intArg;
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
 		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
-			TAMER_ENTITY.tamerLevel = MAIN_D_80135002;
+			TAMER_ENTITY.tamerLevel = (uint8_t)MAIN_D_80135002;
 		}
 		if (byteArg1 == SCRIPT_STAT_LIVES) {
-			PARTNER_ENTITY.lives = MAIN_D_80135004;
+			PARTNER_ENTITY.lives = (uint8_t)MAIN_D_80135004;
 		}
 		break;
 	case SCRIPT_OP_ADVANCE_TO_DATE_AT:
 		pollNextScriptUByte(&byteArg1);
-		byteArg2 = readPStat(byteArg1);
-		day = readPStat((byteArg1 + 1) & 0xff);
-		hour = readPStat((byteArg1 + 2) & 0xff);
-		minute = readPStat((byteArg1 + 3) & 0xff);
+		byteArg2 = readPStat(byteArg1 + 0);
+		day = readPStat(byteArg1 + 1);
+		hour = readPStat(byteArg1 + 2);
+		minute = readPStat(byteArg1 + 3);
 		sec = dateToSeconds(byteArg2, day, hour, minute);
 		{
 			uint32_t cur_sec = dateToSeconds(YEAR, DAY & 0xff,
@@ -984,12 +1020,12 @@ void scriptInstruction28to3F(int32_t op)
 				skipHours((sec - cur_sec) / 60);
 			}
 		}
-		YEAR = byteArg2;
 		{
 			int16_t prev_day = DAY;
-			DAY = day;
-			HOUR = hour;
-			MINUTE = minute;
+			YEAR = (int32_t)byteArg2;
+			DAY = (int32_t)day;
+			HOUR = (int32_t)hour;
+			MINUTE = (int32_t)minute;
 			CURRENT_FRAME = HOUR * 1200 + MINUTE * 20;
 			if (DAY != prev_day) {
 				dailyPStatTrigger();
@@ -1000,10 +1036,10 @@ void scriptInstruction28to3F(int32_t op)
 	case SCRIPT_OP_ADD_MINUTES_TO_DATE_AT_2:
 		pollNextScriptUByte(&byteArg1);
 		pollNextInt(&intArg);
-		byteArg2 = readPStat(byteArg1);
-		day = readPStat((byteArg1 + 1) & 0xff);
-		hour = readPStat((byteArg1 + 2) & 0xff);
-		minute = readPStat((byteArg1 + 3) & 0xff);
+		byteArg2 = readPStat(byteArg1 + 0);
+		day = readPStat(byteArg1 + 1);
+		hour = readPStat(byteArg1 + 2);
+		minute = readPStat(byteArg1 + 3);
 		sec = dateToSeconds(byteArg2, day, hour, minute);
 		if (op == 0x38) {
 			intArg = sec + intArg;
@@ -1014,10 +1050,10 @@ void scriptInstruction28to3F(int32_t op)
 			}
 		}
 		secondsToDate(intArg, &byteArg2, &day, &hour, &minute);
-		writePStat(byteArg1, byteArg2);
-		writePStat((byteArg1 + 1) & 0xff, day);
-		writePStat((byteArg1 + 2) & 0xff, hour);
-		writePStat((byteArg1 + 3) & 0xff, minute);
+		writePStat(byteArg1 + 0, byteArg2);
+		writePStat(byteArg1 + 1, day);
+		writePStat(byteArg1 + 2, hour);
+		writePStat(byteArg1 + 3, minute);
 		break;
 	case SCRIPT_OP_UNUSED_3A:
 	case SCRIPT_OP_UNUSED_3B:
@@ -1039,7 +1075,10 @@ void scriptInstruction28to3F(int32_t op)
 	longjmp(SCRIPT_JMP_BUF, 1);
 }
 
-void scriptInstruction46to58(int32_t op)
+// clang-format off
+void scriptInstruction46to58(op)
+	uint8_t op;
+// clang-format on
 {
 	StackEntry entry;
 	int16_t posX;
@@ -1202,7 +1241,7 @@ wait_for_entity_end:
 		b[0] = 6;
 		*(int16_t *)(b + 4) = posX;
 		*(int16_t *)(b + 6) = posY;
-		b[3] = byteArg1;
+		b[3] = (int32_t)byteArg1;
 		break;
 	case SCRIPT_OP_MOVE_CAMERA_TO_ENTITY:
 		scriptPauseGame(0xff);
@@ -1210,7 +1249,7 @@ wait_for_entity_end:
 		b = (uint8_t *)&MAIN_D_801BE72C;
 		b[0] = 7;
 		b[1] = byteArg1;
-		b[3] = byteArg2;
+		b[3] = (int32_t)byteArg2;
 		break;
 	case SCRIPT_OP_ENTITY_WALK_TO_ENTITY:
 		scriptPauseGame(0xff);
@@ -1277,8 +1316,8 @@ wait_for_entity_end:
 	case SCRIPT_OP_TELEPORT:
 		scriptPauseGame(0xff);
 		pollNextScriptUByte(&byteArg1);
-		MAIN_D_80134FF8 = readPStat(byteArg1);
-		SELECTION_MENU_STATE = readPStat((byteArg1 + 1) & 0xff);
+		MAIN_D_80134FF8 = readPStat(byteArg1 + 0);
+		SELECTION_MENU_STATE = readPStat(byteArg1 + 1);
 		consumeMapChangeShowName();
 		entry.smth[0] = 4;
 		entry.smth[1] = 0xff;
@@ -1289,7 +1328,10 @@ wait_for_entity_end:
 	longjmp(SCRIPT_JMP_BUF, 1);
 }
 
-void scriptInstruction5Ato5F(int32_t op)
+// clang-format off
+void scriptInstruction5Ato5F(op)
+	uint8_t op;
+// clang-format on
 {
 	uint8_t byteArg1;
 	uint8_t byteArg2;
@@ -1323,7 +1365,10 @@ void scriptInstruction5Ato5F(int32_t op)
 
 void handleMusicOverride(uint8_t *outFont, uint8_t *outVariant)
 {
-	switch (readPStat(PSTAT_245) & 0xff) {
+	uint8_t mode;
+
+	mode = readPStat(PSTAT_245);
+	switch (mode) {
 	case 0:
 		if (HOUR >= 6 && HOUR < 21) {
 			*outVariant = 0;
@@ -1373,7 +1418,10 @@ void handleMusicOverride(uint8_t *outFont, uint8_t *outVariant)
 	}
 }
 
-void scriptInstruction64to7E(int32_t op)
+// clang-format off
+void scriptInstruction64to7E(op)
+	uint8_t op;
+// clang-format on
 {
 	StackEntry entry;
 	int16_t posX;
@@ -1461,6 +1509,10 @@ void scriptInstruction64to7E(int32_t op)
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			SCRIPT_STATE_3 = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
+		case 0x03:
+		case 0x04:
+		case 0x05:
+		case 0x11:
 			break;
 		case 0x0c:
 			byteArg1 = readPStat(0xfe);
@@ -1516,12 +1568,10 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x1e:
 			MAIN_D_8013500C = 0;
 			break;
-		case 0x1f: {
-			int32_t hi = readPStat(0xf3) << 8;
-			int32_t lo = readPStat(0xf4);
-			posX = lo + hi;
+		case 0x1f:
+			posX = readPStat(0xf4) + (readPStat(0xf3) << 8);
 			MAIN_D_8013500C += posX;
-		} break;
+			break;
 		case 0x38:
 			writePStat(0xf3, (MAIN_D_8013500C / 256) & 0xff);
 			writePStat(0xf4, MAIN_D_8013500C & 0xff);
@@ -1572,8 +1622,7 @@ void scriptInstruction64to7E(int32_t op)
 			break;
 		case 0x33:
 			addFileReadRequestPath(MAIN_D_80130394,
-			                       BOSS_EFE_TMD_BUFFER, 0, 0,
-			                       0);
+			                       (int32_t)BOSS_EFE_TMD_BUFFER, 0, 0, 0);
 			loadDynamicLibrary(EAB_REL, 0, 0, 0, 0);
 			readVBALLSection(5, 0x73);
 			loadMapSounds2(0x15);
@@ -1603,33 +1652,24 @@ void scriptInstruction64to7E(int32_t op)
 		case 0x29:
 			spawnGearbox();
 			break;
-		case 0x2a: {
-			int8_t pstat = readPStat(0xfe);
-			somethingToyTown(pstat);
-		} break;
+		case 0x2a:
+			somethingToyTown((int8_t)readPStat(0xfe));
+			break;
 		case 0x2b:
 			spawnToyTownBoxes();
 			break;
-		case 0x2c: {
-			int8_t value = readPStat(0xfe);
-			openToyTownBox(value);
-		} break;
-		case 0x2d: {
-			int16_t value = readPStat(0xfe);
-			fadeToWhite(value);
-		} break;
-		case 0x2e: {
-			int16_t value = readPStat(0xfe);
-			fadeFromWhite(value);
-		} break;
+		case 0x2c:
+			openToyTownBox((int8_t)readPStat(0xfe));
+			break;
+		case 0x2d:
+			fadeToWhite((int32_t)readPStat(0xfe));
+			break;
+		case 0x2e:
+			fadeFromWhite((int32_t)readPStat(0xfe));
+			break;
 		case 0x31:
 			spawnAngemonPedestal();
 			break;
-		case 0x03:
-		case 0x04:
-		case 0x05:
-		case 0x11:
-			goto script_end;
 		}
 		break;
 	case SCRIPT_OP_REMOVE_CONDITION:
@@ -1672,10 +1712,10 @@ void scriptInstruction64to7E(int32_t op)
 				if (MAIN_D_80134FCA < 0x270f) {
 					MAIN_D_80134FCA++;
 				}
-				MAIN_D_80134FA0 = 0;
 				MAIN_D_80134FF8 = PREVIOUS_SCREEN;
 				SELECTION_MENU_STATE = PREVIOUS_EXIT;
 				PREVIOUS_EXIT = CURRENT_EXIT;
+				MAIN_D_80134FA0 = 0;
 				entry.smth[0] = 4;
 				entry.smth[1] = 0xff;
 				pushScriptStack(&entry);
@@ -1916,19 +1956,17 @@ void scriptInstruction64to7E(int32_t op)
 		spawnSpriteAtEntity(byteArg1, byteArg2, byteArg3);
 		break;
 	}
-script_end:
+
 	longjmp(SCRIPT_JMP_BUF, 1);
 }
 
 void setMapHeadActive(void)
 {
-	uint8_t *scriptPtr;
-	int32_t off;
+	uint16_t off;
 
-	scriptPtr = MAPHEAD_DATA_PTR;
-	off = *(int16_t *)scriptPtr;
-	CURRENT_SCRIPT_PTR = scriptPtr;
-	MAIN_D_80134FDC = scriptPtr + (off & 0xffff) - 2;
+	off = *(int16_t *)MAPHEAD_DATA_PTR;
+	CURRENT_SCRIPT_PTR = MAPHEAD_DATA_PTR;
+	MAIN_D_80134FDC = MAPHEAD_DATA_PTR + off - 2;
 }
 
 void initializeScripts(void)
@@ -1943,8 +1981,6 @@ void initializeScripts(void)
 	readFileSection(MAIN_D_80130388, SCRIPT_HEADER_PTR, 0, 0x2000);
 	memset((void *)SCRIPT_STATE_PTR, 0, sizeof(*SCRIPT_STATE_PTR));
 
-	CURRENT_SCRIPT_ID = 0xffff;
-	ACTIVE_MAP_SCRIPT = 0xffff;
 	MERIT = 0;
 	MAIN_D_80134FC6 = 0;
 	MAIN_D_80134FC8 = 0;
@@ -1952,6 +1988,8 @@ void initializeScripts(void)
 	MAIN_D_80134FCC = 0;
 	TOURNAMENTS_LOST = 0;
 	MAIN_D_80134FD0 = 0;
+	CURRENT_SCRIPT_ID = 0xffff;
+	ACTIVE_MAP_SCRIPT = 0xffff;
 	MAIN_D_80134FD2 = -0x270f;
 	MAIN_D_80134FD4 = -0x270f;
 	MAIN_D_80134FD6 = -0x270f;
@@ -1970,13 +2008,21 @@ void initializeLoadedNPCModels(void)
 	}
 }
 
-void runMapHeadScript(int32_t section)
+// clang-format off
+void runMapHeadScript(section)
+	uint8_t section;
+// clang-format on
 {
 	callScriptSection(0, section, 1);
 	tickScript();
 }
 
-void callScriptSection(int32_t scriptId, int32_t section, int32_t param)
+// clang-format off
+void callScriptSection(scriptId, section, param)
+	uint16_t scriptId;
+	int32_t section;
+	int32_t param;
+// clang-format on
 {
 	int32_t i;
 
@@ -1989,12 +2035,12 @@ void callScriptSection(int32_t scriptId, int32_t section, int32_t param)
 	MAIN_D_80134FE5 = 0;
 	MAIN_D_80134FE6 = 0xfd;
 	MAIN_D_80134FE7 = readPStat(0);
-	SOME_SCRIPT_SYNC_BIT = 1;
 	ACTIVE_INSTRUCTION = 0;
 	MAIN_D_80134FE9 = 0;
 	MAIN_D_80134FEC = 0;
 	MAIN_D_80134FF0 = 0;
 	IS_SCRIPT_PAUSED = 0;
+	SOME_SCRIPT_SYNC_BIT = 1;
 	MAIN_D_80134F9C = TALKED_TO_ENTITY;
 	for (i = 0; i < 0x16; i++) {
 		((ScriptCameraMovement *)MAIN_D_801BE6B4)[i].type = 0xff;
@@ -2059,20 +2105,13 @@ void tickScriptedMovement(int32_t slot)
 		done = tickEntityMoveTo(movement->entityId, movement->target,
 		                        0, 0, movement->speed, 1);
 		break;
-	case 0xc: {
-		int32_t instanceId;
-		int32_t target;
-
-		instanceId = movement->entityId;
-		target = movement->target;
-
-		done = tickRotateDoor(instanceId, target);
-	} break;
+	case 0xc:
+		done = tickRotateDoor((int32_t)movement->entityId, movement->target);
+		break;
 	case 0xd:
-		done = tickMoveObjectTo(movement->entityId,
-		                        ((slot & 0xff) - 0xc) & 0xff,
-		                        (int8_t)movement->target,
-		                        movement->targetX, movement->targetY);
+		done = tickMoveObjectTo(movement->entityId, (slot & 0xff) - 0xc,
+		                        movement->target, movement->targetX,
+		                        movement->targetY);
 		break;
 	case 0xe:
 		done = tickEntityMoveToAxis(movement->entityId,
@@ -2169,18 +2208,22 @@ void setTrigger(uint16_t trigger)
 {
 	uint8_t *ptr;
 	uint8_t mask;
+	uint8_t flags;
 
 	getTriggerOffset(trigger, &ptr, &mask);
-	*ptr |= mask;
+	flags = *ptr;
+	*ptr = flags | mask;
 }
 
 void unsetTrigger(uint16_t trigger)
 {
 	uint8_t *ptr;
 	uint8_t mask;
+	uint8_t flags;
 
 	getTriggerOffset(trigger, &ptr, &mask);
-	*ptr = *ptr & ~mask;
+	flags = *ptr;
+	*ptr = flags & ~mask;
 }
 
 void skipOnePollTwoScriptBytes(uint8_t *out1, uint8_t *out2)
@@ -2205,50 +2248,61 @@ void skipOneReadInteger(int32_t *out)
 	*out = lo + (hi << 16);
 }
 
-void scriptLearnMove(int32_t moveId)
+// clang-format off
+void scriptLearnMove(moveId)
+	uint8_t moveId;
+// clang-format on
 {
-	learnMove((int16_t)moveId);
+	learnMove((int16_t)(int32_t)moveId);
 }
 
-int32_t getCardAmount(int32_t cardId)
+// clang-format off
+uint8_t getCardAmount(cardId)
+	int16_t cardId;
+// clang-format on
 {
 	uint8_t *cardPtr;
-	int32_t origId;
-	uint8_t amount;
 
-	origId = cardId;
-	cardPtr = &SCRIPT_STATE_PTR->cards[cardId /= 2];
-	if ((origId & 1) == 0) {
-		amount = *cardPtr & 0xf;
+	cardPtr = &SCRIPT_STATE_PTR->cards[cardId / 2];
+	if ((cardId & 1) == 0) {
+		return *cardPtr & 0xf;
 	} else {
-		amount = *cardPtr >> 4;
+		return *cardPtr >> 4;
 	}
-
-	return amount;
 }
 
-int32_t setCardAmount(int32_t cardId, int32_t value)
+// clang-format off
+int32_t setCardAmount(cardId, value)
+	int16_t cardId;
+	int32_t value;
+// clang-format on
 {
 	uint8_t *cardPtr;
-	int32_t origId;
 
-	origId = cardId;
-	cardPtr = &SCRIPT_STATE_PTR->cards[cardId /= 2];
-	if ((origId & 1) == 0) {
+	cardPtr = &SCRIPT_STATE_PTR->cards[cardId / 2];
+	if ((cardId & 1) == 0) {
 		*cardPtr = (*cardPtr & 0xf0) | value;
 	} else {
 		*cardPtr = (*cardPtr & 0xf) | (value << 4);
 	}
 }
 
-uint32_t dateToSeconds(uint32_t years, uint32_t days, uint32_t hours,
-                       uint32_t minutes)
+// clang-format off
+uint32_t dateToSeconds(years, days, hours, minutes)
+	uint8_t years;
+	uint8_t days;
+	uint8_t hours;
+	uint8_t minutes;
+// clang-format on
 {
-	minutes += hours * 60;
-	minutes += days * 1440;
-	minutes += years * 43200;
+	uint32_t total;
 
-	return minutes;
+	total = minutes;
+	total += hours * 60;
+	total += days * 24 * 60;
+	total += years * 30 * 24 * 60;
+
+	return total;
 }
 
 void pollNextScriptTwoUShort(uint16_t *out1, uint16_t *out2)
@@ -2306,13 +2360,16 @@ void pollNextTwoScriptShorts(int16_t *out1, int16_t *out2)
 	pollNextScriptShort(out2);
 }
 
-void playBGM(int16_t bgmId)
+// clang-format off
+void playBGM(bgmId)
+	uint8_t bgmId;
+// clang-format on
 {
 	uint8_t font;
 	uint8_t variant;
 
 	font = bgmId;
-	if (bgmId == 0xff) {
+	if (font == 0xff) {
 		resetBGM();
 		return;
 	}
@@ -2330,7 +2387,7 @@ void updateBGM(void)
 	uint8_t variant;
 
 	font = ACTIVE_BGM_FONT;
-	if (ACTIVE_BGM_FONT == 0xff) {
+	if (font == 0xff) {
 		resetBGM();
 		return;
 	}
@@ -2350,7 +2407,7 @@ void forceUpdateBGM(void)
 	uint8_t variant;
 
 	font = ACTIVE_BGM_FONT;
-	if (ACTIVE_BGM_FONT == 0xff) {
+	if (font == 0xff) {
 		resetBGM();
 		return;
 	}
@@ -2375,14 +2432,17 @@ void scriptUnloadModel(int16_t modelId)
 	}
 }
 
-void getTriggerOffset(int32_t trigger, uint8_t **outPtr, uint8_t *outMask)
+// clang-format off
+void getTriggerOffset(trigger, outPtr, outMask)
+	uint16_t trigger;
+	uint8_t **outPtr;
+	uint8_t *outMask;
+// clang-format on
 {
 	uint8_t bit;
-	int32_t origTrigger;
 
-	origTrigger = trigger;
-	bit = (trigger %= 8);
-	*outPtr = &SCRIPT_STATE_PTR->triggers[origTrigger / 8];
+	bit = trigger % 8;
+	*outPtr = &SCRIPT_STATE_PTR->triggers[trigger / 8];
 	*outMask = 1;
 	while (bit != 0) {
 		*outMask <<= 1;
@@ -2390,9 +2450,12 @@ void getTriggerOffset(int32_t trigger, uint8_t **outPtr, uint8_t *outMask)
 	}
 }
 
-int32_t _hasMove(int32_t moveId)
+// clang-format off
+int32_t _hasMove(moveId)
+	uint8_t moveId;
+// clang-format on
 {
-	return hasMove((int16_t)moveId);
+	return hasMove((int16_t)(int32_t)moveId);
 }
 
 void returnFromScriptFile(void)
@@ -2400,7 +2463,7 @@ void returnFromScriptFile(void)
 	StackEntry entry;
 	uint8_t *script;
 	uint8_t *section;
-	int32_t type;
+	uint8_t type;
 
 	for (;;) {
 		popScriptStack(&entry);
@@ -2433,7 +2496,7 @@ void returnFromScriptFile(void)
 	longjmp(SCRIPT_JMP_BUF, 2);
 }
 
-uint8_t readPStat(int32_t index)
+uint8_t readPStat(uint8_t index)
 {
 	return SCRIPT_STATE_PTR->pstats[index];
 }
@@ -2441,8 +2504,6 @@ uint8_t readPStat(int32_t index)
 void scriptPauseGame(int32_t owner)
 {
 	int32_t entityId;
-	uint8_t speaker;
-	int32_t idx;
 
 	if (MAIN_D_80134FF0 == 0) {
 		MAIN_D_80134FF0 = 1;
@@ -2457,13 +2518,11 @@ void scriptPauseGame(int32_t owner)
 			entityId = scriptIdToEntityId(MAIN_D_80134FE4) & 0xff;
 			if (entityId != 0xff) {
 				MAIN_D_801BE6B4[entityId * 0xc] = 0;
-				idx = entityId * 0xc;
-				speaker = MAIN_D_80134FE4;
-				MAIN_D_801BE6B5[idx] = speaker;
-				MAIN_D_801BE6B6[idx] = 0xfd;
+				(MAIN_D_801BE6B4 + 1)[entityId * 0xc] = MAIN_D_80134FE4;
+				(MAIN_D_801BE6B4 + 2)[entityId * 0xc] = 0xfd;
 				MAIN_D_801BE6B4[0] = 0;
-				MAIN_D_801BE6B5[0] = 0xfd;
-				MAIN_D_801BE6B6[0] = speaker;
+				MAIN_D_801BE6B4[1] = 0xfd;
+				MAIN_D_801BE6B4[2] = MAIN_D_80134FE4;
 			}
 		}
 	}
@@ -2482,13 +2541,15 @@ int32_t isTriggerSet(uint16_t trigger)
 {
 	uint8_t *ptr;
 	uint8_t mask;
+	uint8_t flags;
 
 	getTriggerOffset(trigger, &ptr, &mask);
+	flags = *ptr;
 
-	return (*ptr & mask) != 0;
+	return (flags & mask) != 0;
 }
 
-void writePStat(int32_t index, uint8_t value)
+void writePStat(uint8_t index, uint8_t value)
 {
 	uint8_t *ptr;
 
@@ -2502,6 +2563,7 @@ void readFileSection(char *filename, void *dest, uint32_t offset,
 	CdlFILE file;
 	char path[64];
 	uint8_t mode;
+	int32_t sector;
 
 	mode = 0x80;
 
@@ -2522,7 +2584,8 @@ void readFileSection(char *filename, void *dest, uint32_t offset,
 			;
 	}
 
-	file.pos = *CdIntToPos(MAIN_D_80134FA8 + (offset >> 11), &file.pos);
+	sector = MAIN_D_80134FA8 + (offset >> 11);
+	file.pos = *CdIntToPos(sector, &file.pos);
 
 	while (CdControl(2, (u_char *)&file.pos, 0) == 0)
 		;
@@ -2543,25 +2606,29 @@ void tickScriptedMovements(void)
 	}
 }
 
-void scriptInstructionFBtoFF(int32_t op)
+// clang-format off
+void scriptInstructionFBtoFF(op)
+	uint8_t op;
+// clang-format on
 {
 	StackEntry entry;
 
-	if (op != 0xfb) {
-		if (op == 0xfe || op == 0xff) {
-			returnFromScriptFile();
-		}
-		return;
+	switch (op) {
+	case 0xff:
+	case 0xfe:
+		returnFromScriptFile();
+		break;
+	case 0xfb:
+		skipOneReadTwoShort(&CURRENT_SCRIPT_ID, &CURRENT_MAP_ID);
+
+		entry.smth[0] = 3;
+		pushScriptStack(&entry);
+
+		MAIN_D_80134FEC = 1;
+
+		resetBGM();
+		loadMap(CURRENT_MAP_ID);
+		longjmp(SCRIPT_JMP_BUF, 1);
+		break;
 	}
-
-	skipOneReadTwoShort(&CURRENT_SCRIPT_ID, &CURRENT_MAP_ID);
-
-	entry.smth[0] = 3;
-	pushScriptStack(&entry);
-
-	MAIN_D_80134FEC = 1;
-
-	resetBGM();
-	loadMap(CURRENT_MAP_ID);
-	longjmp(SCRIPT_JMP_BUF, 1);
 }

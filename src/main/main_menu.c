@@ -203,8 +203,6 @@ int8_t getFileCityTopMap(void);
 void renderUIBoxBorder(int16_t *rect, int32_t flag);
 void SetPolyG4(POLY_G4 *prim);
 void recalculatePPandArena(void);
-uint8_t readPStat(int32_t index);
-void writePStat(int32_t index, uint8_t value);
 void VS__initialize(char *namesP1, char *namesP2);
 void renderMainMenuBackground(void);
 

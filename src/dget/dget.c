@@ -46,7 +46,6 @@ int32_t isXPressedAfterDialogue(void);
 int32_t isKeyDown(int32_t);
 void triggerBoxCloseFlag(int32_t);
 void playSound(int16_t, int16_t);
-void writePStat(int32_t id, uint8_t value);
 
 void renderString(int32_t colorId,
 		  int32_t posX, int32_t posY,

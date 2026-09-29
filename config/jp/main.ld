@@ -53,7 +53,7 @@ SECTIONS
         BUILD_DIR/src/main/inventory.c.o(.text .text.*);
         BUILD_DIR/src/main/clock.c.o(.text .text.*);
         BUILD_DIR/src/main/partner.c.o(.text .text.*);
-        KEEP(BUILD_DIR/asm/main/5C21C.s.o(.text .text.*));
+        BUILD_DIR/src/main/script_interp.c.o(.text .text.*);
         BUILD_DIR/src/main/entity_text.c.o(.text .text.*);
         BUILD_DIR/src/main/script_textbox.c.o(.text .text.*);
         BUILD_DIR/src/main/script_value.c.o(.text .text.*);
@@ -100,7 +100,7 @@ SECTIONS
         BUILD_DIR/src/main/map.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/inventory.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/partner.c.o(.rodata .rodata.*);
-        KEEP(BUILD_DIR/asm/main/data/8B014.rodata.s.o(.rodata .rodata.*));
+        BUILD_DIR/src/main/script_interp.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/script_textbox.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/script_value.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/map_object.c.o(.rodata .rodata.*);
@@ -163,7 +163,7 @@ SECTIONS
         BUILD_DIR/src/main/map.c.o(.data .data.*);
         BUILD_DIR/src/main/inventory.c.o(.data .data.*);
         BUILD_DIR/src/main/clock.c.o(.data .data.*);
-        KEEP(BUILD_DIR/asm/main/data/A6B98.data.s.o(.data .data.*));
+        BUILD_DIR/src/main/script_interp.c.o(.data .data.*);
         BUILD_DIR/src/main/entity_text.c.o(.data .data.*);
         BUILD_DIR/src/main/script_value.c.o(.data .data.*);
         BUILD_DIR/src/main/map_object.c.o(.data .data.*);
@@ -208,7 +208,8 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/clock.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/AD6B8.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/main/script_interp.c.o(.sdata .sdata.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/entity_text.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/script_value.c.o(.sdata .sdata.*);

@@ -18,6 +18,8 @@
  * SCRIPT_OP_SHOW_TEXTBOX while a textbox is shown.
  */
 #define SCRIPT_OP_SET_SELECTION			0x10	/* u8 count, u16 targets[count], text */
+#define SCRIPT_OP_UNUSED_11			0x11
+#define SCRIPT_OP_UNUSED_12			0x12
 #define SCRIPT_OP_JUMP_AND_LINK			0x13	/* _, u16 offset */
 #define SCRIPT_OP_JUMP_TO_FILE_AND_LINK		0x14	/* _, u16 script, u16 section */
 #define SCRIPT_OP_JUMP_RETURN			0x15	/* _ */
@@ -323,7 +325,7 @@ int32_t scriptCompareMove(void);
 int32_t scriptCompareCondition(void);
 int32_t scriptCompareItemCount(void);
 int32_t scriptCompareMoney(void);
-int16_t enforceStatsLimits(int32_t stat, int16_t value);
+int16_t enforceStatsLimits(uint8_t stat, int16_t value);
 void tickScriptedMovements(void);
 void scriptInstructionFBtoFF(int32_t op);
 void scriptInstruction10to27(int32_t op);
@@ -340,10 +342,10 @@ void tickScriptedMovement(int32_t slot);
 void callScriptSection(int32_t scriptId, int32_t section, int32_t param);
 void callScriptSection(int32_t scriptId, int32_t section, int32_t param);
 int32_t tickScript(void);
-uint8_t *getScript(int32_t mapId);
-uint8_t readPStat(int32_t index);
+uint8_t *getScript(uint16_t mapId);
+uint8_t readPStat(uint8_t index);
 int32_t isTriggerSet(uint16_t trigger);
-void writePStat(int32_t index, uint8_t value);
+void writePStat(uint8_t index, uint8_t value);
 void skipOneReadTwoShort(uint16_t *out1, uint16_t *out2);
 void pushScriptStack(StackEntry *entry);
 void resetBGM(void);
@@ -358,13 +360,9 @@ void pollNextTwoScriptBytes(uint8_t *out1, uint8_t *out2);
 int32_t scriptCompareValue(uint8_t op, uint32_t lhs, uint32_t rhs);
 void skipOneReadInteger(int32_t *out);
 void scriptLearnMove(int32_t moveId);
-#if defined(VERSION_JP)
 uint8_t getCardAmount(int32_t cardId);
-#else
-int32_t getCardAmount(int32_t cardId);
-#endif
-uint32_t dateToSeconds(uint32_t years, uint32_t days, uint32_t hours,
-		       uint32_t minutes);
+uint32_t dateToSeconds(int32_t years, int32_t days, int32_t hours,
+		       int32_t minutes);
 void pollNextInt(int32_t *out);
 void secondsToDate(uint32_t totalMinutes, uint8_t *outYear,
 		   uint8_t *outDay, uint8_t *outHour,
@@ -372,7 +370,7 @@ void secondsToDate(uint32_t totalMinutes, uint8_t *outYear,
 void scriptLoadModel(int32_t modelId);
 void pollNextScriptShort(int16_t *out);
 void pollNextTwoScriptShorts(int16_t *out1, int16_t *out2);
-void playBGM(int16_t bgmId);
+void playBGM(int32_t bgmId);
 void scriptUnloadModel(int16_t modelId);
 void getTriggerOffset(int32_t trigger, uint8_t **outPtr, uint8_t *outMask);
 int32_t _hasMove(int32_t moveId);
@@ -406,7 +404,7 @@ void openMojyamonShop(void);
 void initializeNamingBuffer(uint8_t flags);
 int32_t newGameStateMachine(void);
 int16_t *getStatsPointer(int32_t stat);
-uint8_t *getScript(int32_t mapId);
+uint8_t *getScript(uint16_t mapId);
 #if defined(VERSION_JP)
 void tickTextboxHandling(void);
 #else

@@ -191,7 +191,7 @@ void scriptCompareDate(void)
 	pollNextScriptUByte(&minutes);
 
 	MAIN_D_80134FDC = (uint8_t *)(MAIN_D_80134FDC + 1);
-	now = dateToSeconds(readPStat(statIdx & 0xff), readPStat((statIdx + 1) & 0xff), readPStat((statIdx + 2) & 0xff), readPStat((statIdx + 3) & 0xff));
+	now = dateToSeconds(readPStat(statIdx + 0), readPStat(statIdx + 1), readPStat(statIdx + 2), readPStat(statIdx + 3));
 	date = dateToSeconds(years, days, hours, minutes);
 	res = scriptCompareValue(op, now, date);
 
@@ -375,7 +375,7 @@ int32_t scriptCompareItemCount(void)
 	return scriptCompareValue(op, count, value);
 }
 
-int16_t enforceStatsLimits(int32_t stat, int16_t value)
+int16_t enforceStatsLimits(uint8_t stat, int16_t value)
 {
 	int16_t cap;
 

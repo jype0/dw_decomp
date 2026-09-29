@@ -1766,7 +1766,7 @@ retry:
 		st->smth[i] = r;
 	}
 	for (i = 0x1c; i < 0x20; i++) {
-		v = readPStat(i & 0xff);
+		v = readPStat(i);
 		if (v != 0xff) {
 			v++;
 			writePStat((uint8_t)i, v);

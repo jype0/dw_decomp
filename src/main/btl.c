@@ -217,7 +217,7 @@ int32_t handleBattleStart(id)
 	IS_PREDEFINED_BATTLE = readPStat(0xfa);
 	if (IS_PREDEFINED_BATTLE == 1) {
 		for (i = 0; i < 3; i++) {
-			slots[i] = readPStat((i + 0xfb) & 0xff);
+			slots[i] = readPStat(i + 0xfb);
 			if (slots[i] != 0xff) {
 				setFleeBubble(slots[i], 0);
 				COMBAT_DATA_PTR->player.entityIds[++count] = slots[i];
