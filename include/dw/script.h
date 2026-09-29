@@ -260,8 +260,13 @@ extern uint16_t MAIN_D_80134FF8;
 extern ScriptCameraMovement MAIN_D_801BE72C;
 extern uint8_t MAIN_D_80134F8E;
 extern int8_t MAIN_D_80134F98;
-int32_t scriptIdToEntityId(int32_t scriptId);
-uint32_t showTextbox(int32_t boxId, uint32_t speakerId);
+uint8_t scriptIdToEntityId(int32_t scriptId);
+uint16_t showTextbox(uint8_t boxId, uint8_t speakerId);
+#if defined(VERSION_JP)
+int32_t drawString2(uint8_t *str, int16_t x, int16_t y);
+#else
+int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
+#endif
 void closeBox(int32_t boxId);
 void scriptPauseGame(int32_t owner);
 void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style);
@@ -273,8 +278,7 @@ void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
 void readFileSection(char *filename, void *dest, uint32_t offset,
 		     uint32_t size);
 void dailyPStatTrigger(void);
-void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
-			  int32_t *outSel, uint16_t section);
+void showMapheadSelection(int32_t idx, uint8_t owner, uint16_t x, int32_t *outSel, uint16_t section);
 int32_t setCardAmount(int32_t cardId, int32_t value);
 int32_t popScriptStack(StackEntry *entry);
 void scriptIfInstruction(void);
@@ -291,8 +295,7 @@ void inputInit(void);
 void setInputRepeatMask(uint32_t mask);
 int32_t isPartnerBaby(void);
 void openShop(void);
-void allocateItemMenuBox(ItemMenuBox **box, int32_t bufSize, int32_t rows,
-			 int32_t x, uint8_t y, uint8_t w, uint8_t h);
+void allocateItemMenuBox(ItemMenuBox **box, int32_t bufSize, uint8_t rows, uint8_t x, uint8_t y, uint8_t w, uint8_t h);
 void showShopkeeperTextbox(int32_t idx, int32_t owner, int32_t boxId);
 void destroyItemMenuBox(ItemMenuBox **box);
 void createShopBitsBox(int32_t showBits);
@@ -303,15 +306,11 @@ void openDiscardItem(void);
 ItemMenuBox *getItemMenuFromType(void);
 void initItemMenuBox(ItemMenuBox *box, int32_t boxId, int32_t startRow);
 void playShopSoundOnlyInSavannah(void);
-void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
-			int32_t section);
 void setDialogueOwner(int32_t owner);
 void createMonochromonMoodBubble(void);
 void loadShopLibrary(void);
 void initializeTextbox(void);
 void closeAllTextboxes(void);
-void createTextbox(int32_t boxId, uint8_t flags, RECT *rect, RECT *origin,
-		   void *tick, void *render);
 void triggerBoxCloseFlag(int32_t boxId);
 void registerTextbox(int32_t boxId, int32_t row, int32_t rows,
 		     int32_t doubleBuffer, int32_t mode);
@@ -343,7 +342,6 @@ void callScriptSection(int32_t scriptId, int32_t section, int32_t param);
 void callScriptSection(int32_t scriptId, int32_t section, int32_t param);
 int32_t tickScript(void);
 uint8_t *getScript(int32_t mapId);
-uint8_t *getScriptSection(uint8_t *script, int32_t section);
 uint8_t readPStat(int32_t index);
 int32_t isTriggerSet(uint16_t trigger);
 void writePStat(int32_t index, uint8_t value);
@@ -410,8 +408,11 @@ void initializeNamingBuffer(uint8_t flags);
 int32_t newGameStateMachine(void);
 int16_t *getStatsPointer(int32_t stat);
 uint8_t *getScript(int32_t mapId);
-uint8_t *getScriptSection(uint8_t *script, int32_t section);
-extern void tickTextboxHandling(int32_t a0);
+#if defined(VERSION_JP)
+void tickTextboxHandling(void);
+#else
+void tickTextboxHandling(int32_t flag);
+#endif
 extern void lostAllLives(void);
 
 #endif

@@ -10,6 +10,8 @@
 extern uint8_t MAIN_D_80134F90;
 extern char MAIN_D_80134600[8];
 extern int32_t CURRENT_SCRIPT_PTR;
+void showMapHeadTextbox(int32_t idx, uint8_t owner, uint8_t boxId, int32_t section);
+uint8_t *getScriptSection(uint8_t *script, int32_t section);
 
 static void *script_menu_text_order[] = {
 	newGameStateMachine,

@@ -1,6 +1,5 @@
 #include <string.h>
 
-#include <dw/item.h>
 #include <dw/params.h>
 #include <dw/script.h>
 #include <dw/ui.h>
@@ -9,6 +8,7 @@ typedef struct {
 	int32_t v[6];
 } Pow10Table;
 
+uint8_t getItemCount(int32_t type);
 int32_t scriptCompareSignedValue(uint8_t op, uint32_t lhs, uint32_t rhs);
 int32_t getSpeakerName(int32_t speakerId, uint8_t *buf);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag);
@@ -29,17 +29,31 @@ static void *script_value_functions[] = {
 };
 
 // clang-format off
+#if defined(VERSION_JP)
+char MAIN_D_801345CC[] = "かんばん";
+
+char MAIN_D_801345D4[] = "はこ";
+
+char MAIN_D_801345D8[] = "ベタモン";
+
+char MAIN_D_8013030C[] = "シーラモン";
+
+char MAIN_D_801345E0[] = "タネモン";
+
+char MAIN_D_801345E8[] = "パルモン";
+#else
 char MAIN_D_801345CC[] = "Sign";
 
 char MAIN_D_801345D4[4] = "Box";
 
 char MAIN_D_801345D8[8] = "Betamon";
 
+char MAIN_D_8013030C[] = "Coelamon";
+
 char MAIN_D_801345E0[8] = "Tanemon";
 
 char MAIN_D_801345E8[] = "Palmon";
-
-char MAIN_D_8013030C[] = "Coelamon";
+#endif
 
 int16_t MAIN_D_80130318[22] = {
 	0x03e7, 0x03e7, 0x03e7, 0x03e7, 0x270f, 0x270f, 0x270f, 0x270f,
@@ -64,7 +78,11 @@ char *MAIN_D_8013035C[6] = {
 };
 // clang-format on
 
-int32_t getSpeakerName(int32_t speakerId, uint8_t *buf)
+// clang-format off
+int32_t getSpeakerName(speakerId, buf)
+	uint8_t speakerId;
+	uint8_t *buf;
+// clang-format on
 {
 	if (speakerId == 0xff) {
 		return 0;
@@ -81,13 +99,13 @@ int32_t getSpeakerName(int32_t speakerId, uint8_t *buf)
 		return strlen(PARTNER_ENTITY.name);
 	}
 
-	if ((uint32_t)speakerId < 0xc8) {
-		speakerId = scriptIdToEntityId(speakerId) & 0xff;
-		speakerId = ENTITY_TABLE[speakerId]->type & 0xff;
+	if (speakerId < 0xc8) {
+		speakerId = scriptIdToEntityId(speakerId);
+		speakerId = ENTITY_TABLE[speakerId]->type;
 		goto digimon;
 	}
 
-	speakerId = (speakerId - 0xc8) & 0xff;
+	speakerId = speakerId - 0xc8;
 	strcpy((char *)buf, MAIN_D_8013035C[speakerId]);
 
 	return strlen(MAIN_D_8013035C[speakerId]);
@@ -104,18 +122,15 @@ uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t fl
 	uint16_t base;
 	int32_t started;
 	uint16_t c;
-	int32_t hi;
-	int32_t lo;
 
 	divs = MAIN_D_80130344;
-	base = 0x824f;
 	started = 0;
+	base = 0x824f;
 	while (digits != 0) {
-		c = value / divs.v[digits - 1];
-		c = base + c;
+		c = base + ((value / divs.v[digits - 1]) & 0xffff);
 		value = value % divs.v[digits - 1];
 		if (digits != 1) {
-			if (c == 0x824f) {
+			if (c == base) {
 				if (started == 0) {
 					if (flag != 0) {
 						goto skip;
@@ -126,10 +141,8 @@ uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t fl
 				started = 1;
 			}
 		}
-		hi = c >> 8;
-		lo = c;
-		*buf++ = hi;
-		*buf++ = lo;
+		*buf++ = c >> 8;
+		*buf++ = c & 0xff;
 skip:
 		digits--;
 	}
@@ -137,7 +150,7 @@ skip:
 	return buf;
 }
 
-int32_t scriptIdToEntityId(int32_t scriptId)
+uint8_t scriptIdToEntityId(int32_t scriptId)
 {
 	uint8_t i;
 
@@ -168,9 +181,8 @@ void scriptCompareDate(void)
 	uint8_t hours;
 	uint8_t minutes;
 	uint32_t now;
-	uint32_t v1;
-	uint32_t v2;
-	uint32_t v3;
+	uint32_t date;
+	int32_t res;
 
 	pollNextScriptUByte(&statIdx);
 	pollNextScriptUShort(&trigger);
@@ -179,12 +191,11 @@ void scriptCompareDate(void)
 	pollNextScriptUByte(&minutes);
 
 	MAIN_D_80134FDC = (uint8_t *)(MAIN_D_80134FDC + 1);
-	v1 = readPStat(statIdx);
-	v2 = readPStat((uint8_t)(statIdx + 1));
-	v3 = readPStat((uint8_t)(statIdx + 2));
-	now = dateToSeconds(v1, v2, v3, readPStat((uint8_t)(statIdx + 3)));
+	now = dateToSeconds(readPStat(statIdx & 0xff), readPStat((statIdx + 1) & 0xff), readPStat((statIdx + 2) & 0xff), readPStat((statIdx + 3) & 0xff));
+	date = dateToSeconds(years, days, hours, minutes);
+	res = scriptCompareValue(op, now, date);
 
-	if (scriptCompareValue(op, now, dateToSeconds(years, days, hours, minutes)) != 0) {
+	if (res != 0) {
 		setTrigger(trigger);
 	} else {
 		unsetTrigger(trigger);
@@ -215,58 +226,88 @@ int32_t scriptCompareStat(void)
 	return scriptCompareSignedValue(b2, stat2, s);
 }
 
-int16_t *getStatsPointer(int32_t stat)
+// clang-format off
+int16_t *getStatsPointer(stat)
+	uint8_t stat;
+// clang-format on
 {
+	int16_t *ptr;
+
 	switch (stat) {
 	case SCRIPT_STAT_OFFENSE:
-		return &PARTNER_ENTITY.digimonEntity.stats.base.off;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.base.off;
+		break;
 	case SCRIPT_STAT_DEFENSE:
-		return &PARTNER_ENTITY.digimonEntity.stats.base.def;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.base.def;
+		break;
 	case SCRIPT_STAT_SPEED:
-		return &PARTNER_ENTITY.digimonEntity.stats.base.speed;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.base.speed;
+		break;
 	case SCRIPT_STAT_BRAINS:
-		return &PARTNER_ENTITY.digimonEntity.stats.base.brain;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.base.brain;
+		break;
 	case SCRIPT_STAT_MAX_HP:
-		return &PARTNER_ENTITY.digimonEntity.stats.base.hp;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.base.hp;
+		break;
 	case SCRIPT_STAT_MAX_MP:
-		return &PARTNER_ENTITY.digimonEntity.stats.base.mp;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.base.mp;
+		break;
 	case SCRIPT_STAT_CURRENT_HP:
-		return &PARTNER_ENTITY.digimonEntity.stats.current.currentHP;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.current.currentHP;
+		break;
 	case SCRIPT_STAT_CURRENT_MP:
-		return &PARTNER_ENTITY.digimonEntity.stats.current.currentMP;
+		ptr = &PARTNER_ENTITY.digimonEntity.stats.current.currentMP;
+		break;
 	case SCRIPT_STAT_TIREDNESS:
-		return &PARTNER_PARA.tiredness;
+		ptr = &PARTNER_PARA.tiredness;
+		break;
 	case SCRIPT_STAT_HAPPINESS:
-		return &PARTNER_PARA.happiness;
+		ptr = &PARTNER_PARA.happiness;
+		break;
 	case SCRIPT_STAT_DISCIPLINE:
-		return &PARTNER_PARA.discipline;
+		ptr = &PARTNER_PARA.discipline;
+		break;
 	case SCRIPT_STAT_ENERGY:
-		return &PARTNER_PARA.energyLevel;
+		ptr = &PARTNER_PARA.energyLevel;
+		break;
 	case SCRIPT_STAT_VIRUS:
-		return &PARTNER_PARA.virusBar;
+		ptr = &PARTNER_PARA.virusBar;
+		break;
 	case SCRIPT_STAT_LIFETIME:
-		return &PARTNER_PARA.remainingLifetime;
+		ptr = &PARTNER_PARA.remainingLifetime;
+		break;
 	case SCRIPT_STAT_MERIT:
-		return &MERIT;
+		ptr = &MERIT;
+		break;
 	case SCRIPT_STAT_STARTED_BATTLES:
-		return &MAIN_D_80134FC8;
+		ptr = &MAIN_D_80134FC8;
+		break;
 	case SCRIPT_STAT_FLED_BATTLES:
-		return &MAIN_D_80134FCA;
+		ptr = &MAIN_D_80134FCA;
+		break;
 	case SCRIPT_STAT_TOURNAMENTS_WON:
-		return &MAIN_D_80134FCC;
+		ptr = &MAIN_D_80134FCC;
+		break;
 	case SCRIPT_STAT_TOURNAMENT_WINS:
-		return &TOURNAMENTS_LOST;
+		ptr = &TOURNAMENTS_LOST;
+		break;
 	case SCRIPT_STAT_TOURNAMENTS_LOST:
-		return &MAIN_D_80134FD0;
+		ptr = &MAIN_D_80134FD0;
+		break;
 	case SCRIPT_STAT_WEIGHT:
-		return &PARTNER_PARA.weight;
+		ptr = &PARTNER_PARA.weight;
+		break;
 	case SCRIPT_STAT_TAMER_LEVEL:
-		MAIN_D_80135002 = TAMER_ENTITY.tamerLevel;
-		return &MAIN_D_80135002;
+		MAIN_D_80135002 = (int32_t)TAMER_ENTITY.tamerLevel;
+		ptr = &MAIN_D_80135002;
+		break;
 	case SCRIPT_STAT_LIVES:
-		MAIN_D_80135004 = PARTNER_ENTITY.lives;
-		return &MAIN_D_80135004;
+		MAIN_D_80135004 = (int32_t)PARTNER_ENTITY.lives;
+		ptr = &MAIN_D_80135004;
+		break;
 	}
+
+	return ptr;
 }
 
 int32_t scriptCompareCard(void)
@@ -274,11 +315,13 @@ int32_t scriptCompareCard(void)
 	uint16_t value;
 	uint8_t cardId;
 	uint8_t op;
+	uint8_t amount;
 
 	pollNextTwoScriptBytes(&cardId, &op);
 	pollNextScriptUShort(&value);
+	amount = getCardAmount(cardId);
 
-	return scriptCompareValue(op, (uint8_t)getCardAmount(cardId), value);
+	return scriptCompareValue(op, amount, value);
 }
 
 int32_t scriptCompareMove(void)
@@ -323,11 +366,13 @@ int32_t scriptCompareItemCount(void)
 	uint16_t value;
 	uint8_t itemId;
 	uint8_t op;
+	uint8_t count;
 
 	pollNextTwoScriptBytes(&itemId, &op);
 	pollNextScriptUShort(&value);
+	count = getItemCount(itemId);
 
-	return scriptCompareValue(op, (uint8_t)getItemCount(itemId), value);
+	return scriptCompareValue(op, count, value);
 }
 
 int16_t enforceStatsLimits(int32_t stat, int16_t value)

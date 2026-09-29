@@ -62,7 +62,7 @@ extern uint8_t MAIN_D_80134F90;
 extern int32_t MAIN_D_8012FFC4[];
 extern uint8_t SHOP_AMOUNT;
 extern uint32_t POLLED_INPUT;
-extern RECT ITEM_MENU_DESCRIPTION_RECTS[];
+extern int16_t ITEM_MENU_DESCRIPTION_RECTS[];
 extern uint8_t PREVIOUS_SCREEN;
 extern uint8_t PREVIOUS_EXIT;
 extern uint8_t CURRENT_EXIT;
@@ -99,7 +99,6 @@ void *allocateArray(uint32_t size);
 void freeArray(uint32_t *array);
 uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used);
 void terminateString(uint8_t *str, int32_t flag);
-void drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
 int32_t hasMove(int32_t moveId);
 void learnMove(int32_t moveId);
 void unloadDigimonModel(int32_t a0);
@@ -109,7 +108,7 @@ int32_t isKeyDown(int32_t mask);
 int32_t createItemMenuAmountBox(RECT *origin);
 int32_t createSingleCardShopMenu(RECT *origin);
 ItemMenuBox *getItemMenuFromType(void);
-int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
+int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiBoxId);
 void itemMenuCursorTop(ItemMenuBox *box, int32_t startRow, int32_t style);
 void itemMenuCursorBottom(ItemMenuBox *box, int32_t startRow, int32_t style);
 void itemMenuCursorMoveToBottom(ItemMenuBox *box);
@@ -179,15 +178,18 @@ int32_t tickMoveObjectTo(uint32_t scriptId1, uint32_t scriptId2, int32_t angle, 
 void initializeScripts(void);
 void initializeLoadedNPCModels(void);
 void runMapHeadScript(int32_t section);
-void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
+void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int16_t w, int16_t h);
 void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void GsSortBoxFill(GsBOXF *bp, GsOT *otp, u_short pri);
-void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w);
+void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int16_t w);
 void drawString(char *str, int32_t x, int32_t y);
 int32_t flipTextboxPage(uint8_t boxId);
 void setupMap(int32_t param_1, int32_t param_2);
 void loadMap(uint16_t mapId);
+void createTextbox(int32_t boxId, uint8_t flags, RECT *rect, RECT *origin, void *tick, void *render);
+void showMapHeadTextbox(int32_t idx, uint8_t owner, uint8_t boxId, int32_t section);
+uint8_t *getScriptSection(uint8_t *script, int32_t section);
 
 static void *script_interp_text_order[] = {
 	renderNamingUnderscore,
@@ -2976,7 +2978,7 @@ void createCardMenu(void)
 	RECT origin;
 	ItemMenuBox *result;
 	int32_t boxId;
-	RECT *src;
+	int16_t *src;
 
 	if (ITEM_MENU_TYPE == 4) {
 		boxId = 0xfd;
@@ -2986,8 +2988,8 @@ void createCardMenu(void)
 
 	setupBoxOrigin(boxId, &origin);
 	result = getItemMenuFromType();
-	src = &((RECT *)ITEM_MENU_POS)[ITEM_MENU_TYPE];
-	setRECT(&rect, src->x, src->y, src->w, src->h);
+	src = &ITEM_MENU_POS[ITEM_MENU_TYPE * 4];
+	setRECT(&rect, src[0], src[1], src[2], src[3]);
 	createTextbox(1, 0xf1, &rect, &origin, tickCardMenu,
 	              renderCardMenu);
 	registerTextbox(1, 9, 6, 1, 0);
@@ -3355,7 +3357,7 @@ void tickCardMenu(void)
 {
 	ItemMenuBox *box;
 	RECT rect;
-	RECT *src;
+	int16_t *src;
 
 	box = getItemMenuFromType();
 	if (isItemMenuBoxBusy(box) != 0) {
@@ -3379,14 +3381,14 @@ void tickCardMenu(void)
 	}
 
 	if (isKeyDown(0x40)) {
-		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE];
+		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE * 4];
 		if (ITEM_MENU_TYPE == 3) {
-			setRECT(&rect, src->x, src->y, src->w, src->h);
+			setRECT(&rect, src[0], src[1], src[2], src[3]);
 			createSingleCardShopMenu(&rect);
 		} else if (ITEM_MENU_TYPE == 6) {
 			createMeritCardTradeDialogue();
 		} else {
-			setRECT(&rect, src->x, src->y, src->w, src->h);
+			setRECT(&rect, src[0], src[1], src[2], src[3]);
 			createItemMenuAmountBox(&rect);
 		}
 	} else if (isKeyDown(0x10)) {

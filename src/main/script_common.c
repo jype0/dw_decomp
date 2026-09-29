@@ -3,6 +3,7 @@
 #include <libgs.h>
 
 #include <dw/garbage.h>
+#include <dw/input.h>
 #include <dw/item.h>
 #include <dw/main.h>
 #include <dw/map.h>
@@ -40,7 +41,7 @@ extern int32_t MAIN_D_80135028;
 extern uint32_t MAIN_D_80134F64;
 extern int16_t MAIN_D_80134F60;
 extern int32_t MAIN_D_80135024;
-extern int32_t MAIN_D_80135020;
+extern uint32_t MAIN_D_80135020;
 extern uint16_t MAIN_D_80135016;
 extern int32_t ITEM_MENU_SUB_TEXTBOX_LINE;
 extern uint32_t POLLED_INPUT;
@@ -74,7 +75,7 @@ void renderShopBitsBox(void);
 void tickItemMenu(void);
 void renderItemMenu(void);
 void itemMenuCursorDown(ItemMenuBox *box, int32_t style);
-int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
+int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiBoxId);
 int32_t shopFillBuyItemList(void);
 int32_t shopFillSellItemList(void);
 int32_t readSelectedItemMerit(void);
@@ -98,7 +99,7 @@ void updateItemMenuSubTextboxLine(void);
 int32_t flipTextboxPage(uint8_t a);
 void itemMenuCursorMoveToBottom(ItemMenuBox *box);
 void itemMenuCursorMoveToTop(ItemMenuBox *box);
-uint8_t *getTextboxLine(uint8_t *data, int32_t index);
+uint8_t *getTextboxLine(ItemMenuBox *box, uint8_t index);
 void terminateString(uint8_t *str, int32_t flag);
 uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used);
 void setDigimonRaised(int32_t digimonId);
@@ -110,31 +111,33 @@ void checkShopMap(int32_t mapId);
 void checkArenaMap(int32_t mapId);
 void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 void setupDialogueBox(uint8_t owner);
-int32_t showTextboxReady(int32_t boxId, int32_t speakerId);
+uint16_t showTextboxReady(uint8_t boxId, uint8_t speakerId);
 void updateItemMenuAmountBoxString(void);
 void tickSingleCardShop(void);
 void renderSingleCardShop(void);
 int32_t createItemMenuAmountBox(RECT *origin);
 int32_t createSingleCardShopMenu(RECT *origin);
-void renderItemMenuSprite(int32_t boxId, int32_t idx, int16_t x, int16_t y);
+void renderItemMenuSprite(uint8_t boxId, uint8_t idx, int16_t x, int16_t y);
 void renderItemMenuScrollBar(ItemMenuBox *box);
 void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
-void renderInsetWithoutBox(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
+void renderInsetWithoutBox(uint8_t boxId, int16_t x, int16_t y, int16_t w, int16_t h);
 void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
-void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth);
+void renderCardSprite(uint8_t spriteId, int16_t x, int16_t y, int32_t depth);
 void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
 void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
 void calculateMusicMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
 void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
 void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
-int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
+void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int16_t w, int16_t h);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag);
-void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w);
+void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int16_t w);
 void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void renderItemMenuAmountBox(void);
-void renderVerticalLine(int32_t boxId, int16_t x, int16_t y, int32_t h);
+void renderVerticalLine(uint8_t boxId, int16_t x, int16_t y, int16_t h);
 void tickItemMenuAmountBox(void);
+void createTextbox(int32_t boxId, uint8_t flags, RECT *rect, RECT *origin, void *tick, void *render);
+void showMapHeadTextbox(int32_t idx, uint8_t owner, uint8_t boxId, int32_t section);
+uint8_t *getScriptSection(uint8_t *script, uint16_t section);
 
 static void *script_common_text_order[] = {
 	checkArenaMap,
@@ -223,82 +226,225 @@ static void *script_common_text_order[] = {
 };
 
 // clang-format off
-char STR_TOURNAMENT_NAME_GRADE_D[8] = "Grade D";
+#if defined(VERSION_JP)
+char STR_BGM_TRACK_NON_BEWILDERING_FOREST_THEME[] = "迷わずの森のテーマ";
 
-char STR_TOURNAMENT_NAME_GRADE_C[8] = "Grade C";
+char STR_BGM_TRACK_NON_BEWILDERING_FOREST_NIGHT_THEME[] = "迷わずの森・夜のテーマ";
 
-char STR_TOURNAMENT_NAME_GRADE_B[8] = "Grade B";
+char STR_BGM_TRACK_TROPICAL_THEME[] = "トロピカのテーマ";
 
-char STR_TOURNAMENT_NAME_GRADE_A[8] = "Grade A";
+char STR_BGM_TRACK_TROPICAL_NIGHT_THEME[] = "トロピカ・夜のテーマ";
 
-char STR_TOURNAMENT_NAME_GRADE_S[8] = "Grade S";
+char STR_BGM_TRACK_MT_PANORAMA_THEME[] = "ミハラシ山のテーマ";
 
-char STR_TOURNAMENT_NAME_GRADE_R[8] = "Grade R";
+char STR_BGM_TRACK_MT_PANORAMA_NIGHT_THEME[] = "ミハラシ山・夜のテーマ";
 
-char STR_TOURNAMENT_GRADE_D[] = "D";
+char STR_BGM_TRACK_DRILL_TUNNEL_THEME[] = "ドリルトンネルのテーマ";
 
-char STR_TOURNAMENT_GRADE_C[] = "C";
+char STR_BGM_TRACK_OGRE_FORTRESS_THEME[] = "オーガモンのテーマ";
 
-char STR_TOURNAMENT_GRADE_B[] = "B";
+char STR_BGM_TRACK_OVERDELL_CEMETARY_THEME[] = "オーバーデル墓地のテーマ";
 
-char STR_TOURNAMENT_GRADE_A[] = "A";
+char STR_BGM_TRACK_CANYON_THEME[] = "キャニオンのテーマ";
 
-char STR_TOURNAMENT_GRADE_S[] = "S";
+char STR_BGM_TRACK_OGREMON_THEME_NO_2[] = "オーガモンのテーマ２";
 
-char STR_TOURNAMENT_GRADE_R[] = "R";
+char STR_BGM_TRACK_EVERYTHING_SHOP_THEME[] = "よろず屋のテーマ";
 
-char STR_TOURNAMENT_GRADE_H[] = "H";
+char STR_BGM_TRACK_OGREMON_THEMENO_3[] = "オーガモンのテーマ３";
 
-char STR_TOURNAMENT_GRADE_I[] = "I";
+char STR_BGM_TRACK_LAVA_CAVE_THEME[] = "溶岩洞のテーマ";
 
-char STR_TOURNAMENT_GRADE_J[] = "J";
+char STR_BGM_TRACK_DARK_ARISTCRATS_MANSION_THEME[] = "闇貴族の館のテーマ";
 
-char STR_TOURNAMENT_GRADE_K[] = "K";
+char STR_BGM_TRACK_UNDERGROUND_LAB_THEME[] = "地下実験場のテーマ";
 
-char STR_TOURNAMENT_GRADE_L[] = "L";
+char STR_BGM_TRACK_GEAR_SAVANNA_THEME[] = "ギアサバンナのテーマ";
 
-char STR_TOURNAMENT_GRADE_F[] = "F";
+char STR_BGM_TRACK_GEAR_SAVANNA_NIGHT_THEME[] = "ギアサバンナ・夜のテーマ";
 
-char STR_TOURNAMENT_GRADE_G[] = "G";
+char STR_BGM_TRACK_LEOMON_THEME[] = "レオモンのテーマ";
 
-char STR_TOURNAMENT_GRADE_W[] = "W";
+char STR_BGM_TRACK_AMIDA_FOREST_THEME[] = "アミダ森のテーマ";
 
-char STR_TOURNAMENT_GRADE_O[] = "O";
+char STR_BGM_TRACK_AMIDA_FOREST_NIGHT_THEME[] = "アミダ森・夜のテーマ";
 
-char STR_TOURNAMENT_GRADE_N[] = "N";
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_THEME[] = "古代境時急域のテーマ";
 
-char STR_TOURNAMENT_GRADE_M[] = "M";
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_NIGHT_THEME[] = "古代境時急域・夜のテーマ";
 
-char STR_TOURNAMENT_GRADE_T[] = "T";
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_THEME[] = "古代境時静域のテーマ";
 
-char STR_TOURNAMENT_GRADE_Y[] = "Y";
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_NIGHT_THEME[] = "古代境時静域・夜のテーマ";
 
-char STR_TOURNAMENT_GRADE_Z[] = "Z";
+char STR_BGM_TRACK_FREEZELAND_THEME[] = "フリーズランドのテーマ";
 
-char STR_TOURNAMENT_GRADE_X[] = "X";
+char STR_BGM_TRACK_FREEZELAND_NIGHT_THEME[] = "フリーズ・夜のテーマ";
 
-char STR_TOURNAMENT_GRADE_Q[] = "Q";
+char STR_BGM_TRACK_IGLOO_THEME[] = "かまくらのテーマ";
 
-uint8_t *MAIN_D_801345B0 = TEXTURE_BUFFER;
+char STR_BGM_TRACK_CURLING_THEME[] = "カーリングのテーマ";
 
-BabyTypeTable MAIN_D_801345B4 = { {
-	0x01, 0x02, 0x0f, 0x10, 0x1d, 0x1e, 0x2b, 0x2c,
-} };
+char STR_BGM_TRACK_SANCTUARY_THEME[] = "サンクチュアリのテーマ";
 
-int16_t MAIN_D_801345BC[2] = {
-	0x00d0, 0x00df,
-};
+char STR_BGM_TRACK_SANCTUARY_BELOW_THEME[] = "サンクチュアリ下のテーマ";
 
-int16_t MAIN_D_801345C0[1] = {
-	0x0083,
-};
+char STR_BGM_TRACK_GECKO_SWAMP_THEME[] = "ゲッコー湿地のテーマ";
 
-uint16_t MAIN_D_801345C2 = 0x1700;
+char STR_BGM_TRACK_GECKO_SWAMP_NIGHT_THEME[] = "ゲッコー湿地・夜のテーマ";
 
-int32_t MAP_LIGHT_UPDATE_DATA[2] = {
-	0x003101b7, 0xffff0002,
-};
+char STR_BGM_TRACK_MISTY_TREES_THEME[] = "ミスティツリーズのテーマ";
 
+char STR_BGM_TRACK_MISTY_TREES_NIGHT_THEME[] = "ミスティ・夜のテーマ";
+
+char STR_BGM_TRACK_WARUMONZAEMON_THEME[] = "ワルモンザエモンのテーマ";
+
+char STR_BGM_TRACK_TOY_TOWN_THEME[] = "おもちゃのまちのテーマ";
+
+char STR_BGM_TRACK_THEME_OF_FACTORIAL[] = "ファクトリアルのテーマ";
+
+char STR_BGM_TRACK_FACTORIAL_NIGHT_THEME[] = "ファクトリー・夜のテーマ";
+
+char STR_BGM_TRACK_SEWER_THEME[] = "下水道のテーマ";
+
+char STR_BGM_TRACK_TRASH_MOUNTAIN_THEME[] = "ゴミの山のテーマ";
+
+char STR_BGM_TRACK_TRASH_MOUNTAIN_NIGHT_THEME[] = "ゴミの山・夜のテーマ";
+
+char STR_BGM_TRACK_BEATLAND_THEME[] = "ビートランドのテーマ";
+
+char STR_BGM_TRACK_BEATLAND_NIGHT_THEME[] = "ビートランド・夜のテーマ";
+
+char STR_BGM_TRACK_SECRET_BEACH_CAVE_THEME[] = "ひみつの海岸洞のテーマ";
+
+char STR_BGM_TRACK_MT_INFINITY_THEME[] = "ムゲンマウンテンのテーマ";
+
+char STR_BGM_TRACK_LAST_ROOM_THEME[] = "ラストルームのテーマ";
+
+char STR_BGM_TRACK_FILE_CITY_THEME[] = "はじまりの街のテーマ";
+
+char STR_BGM_TRACK_FILE_CITY_NIGHT_THEME[] = "はじまりの街・夜のテーマ";
+
+char STR_BGM_TRACK_TORNAMENT_OPENING_THEME[] = "トーナメント開始のテーマ";
+
+char STR_BGM_TRACK_TORNAMENT_PROGRESS_THEME[] = "トーナメント進行のテーマ";
+
+char STR_BGM_TRACK_TORNAMENT_CHAMPIONSHIP_THEME[] = "トーナメント優勝のテーマ";
+
+char STR_BGM_TRACK_PARTNERS_ENTRANCE_THEME[] = "パートナー入場のテーマ";
+
+char STR_BGM_TRACK_COMPETITION_BATTLE_OPPONENTS_ENTRANCE_THEME[] = "対戦相手入場のテーマ";
+
+char STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_1[] = "闘技場バトルのテーマ１";
+
+char STR_BGM_TRACK_PARTNERS_WIN_THEME[] = "パートナー勝利のテーマ";
+
+char STR_BGM_TRACK_PARTNERS_LOSS_THEME[] = "パートナー敗北のテーマ";
+
+char STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_2[] = "闘技場バトルのテーマ２";
+
+char STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_3[] = "闘技場バトルのテーマ３";
+
+char STR_BGM_TRACK_EVENT_BATTLE_THEME[] = "イベントバトルのテーマ";
+
+char STR_BGM_TRACK_NORMAL_BATTLE_THEME[] = "ノーマルバトルのテーマ";
+
+char STR_BGM_TRACK_NORMAL_BATTLE__THEME_NO2[] = "ノーマルバトルのテーマ２";
+
+char STR_BGM_TRACK_LAST_BATTLE_THEME[] = "ラストバトルのテーマ";
+
+char STR_TOURNAMENT_NAME_GRADE_D[] = "グレードＤ";
+
+char STR_TOURNAMENT_NAME_GRADE_C[] = "グレードＣ";
+
+char STR_TOURNAMENT_NAME_GRADE_B[] = "グレードＢ";
+
+char STR_TOURNAMENT_NAME_GRADE_A[] = "グレードＡ";
+
+char STR_TOURNAMENT_NAME_GRADE_S[] = "グレードＳ";
+
+char STR_TOURNAMENT_NAME_GRADE_R[] = "グレードＲ";
+
+char STR_TOURNAMENT_NAME_VERSION_1_CUP[] = "バージョン１カップ";
+
+char STR_TOURNAMENT_NAME_VERSION_2_CUP[] = "バージョン２カップ";
+
+char STR_TOURNAMENT_NAME_VERSION_3_CUP[] = "バージョン３カップ";
+
+char STR_TOURNAMENT_NAME_VERSION_4_CUP[] = "バージョン４カップ";
+
+char STR_TOURNAMENT_NAME_VERSION_0_CUP[] = "バージョンＯカップ";
+
+char STR_TOURNAMENT_NAME_FIRE_CUP[] = "ファイアーカップ";
+
+char STR_TOURNAMENT_NAME_GRAPPLE_CUP[] = "グラップルカップ";
+
+char STR_TOURNAMENT_NAME_THUNDER_WIND_CUP[] = "サンダーウインドカップ";
+
+char STR_TOURNAMENT_NAME_COOL_CUP[] = "クールカップ";
+
+char STR_TOURNAMENT_NAME_NATURE_CUP[] = "ネイチャーカップ";
+
+char STR_TOURNAMENT_NAME_METALIC_CUP[] = "メタリックカップ";
+
+char STR_TOURNAMENT_NAME_FILTH_CUP[] = "ダーティカップ";
+
+char STR_TOURNAMENT_NAME_DINO_CUP[] = "ダイノカップ";
+
+char STR_TOURNAMENT_NAME_WING_CUP[] = "ウイングカップ";
+
+char STR_TOURNAMENT_NAME_ANIMAL_CUP[] = "アニマルカップ";
+
+char STR_TOURNAMENT_NAME_HUMAN_CUP[] = "ヒューマンカップ";
+
+char STR_TOURNAMENT_NAME_BEETLE_CUP[] = "ビートルカップ";
+
+char STR_TOURNAMENT_GRADE_D[] = "Ｄ";
+
+char STR_TOURNAMENT_GRADE_C[] = "Ｃ";
+
+char STR_TOURNAMENT_GRADE_B[] = "Ｂ";
+
+char STR_TOURNAMENT_GRADE_A[] = "Ａ";
+
+char STR_TOURNAMENT_GRADE_S[] = "Ｓ";
+
+char STR_TOURNAMENT_GRADE_R[] = "Ｒ";
+
+char STR_TOURNAMENT_GRADE_V1[] = "Ｖ１";
+
+char STR_TOURNAMENT_GRADE_V2[] = "Ｖ２";
+
+char STR_TOURNAMENT_GRADE_V3[] = "Ｖ３";
+
+char STR_TOURNAMENT_GRADE_V4[] = "Ｖ４";
+
+char STR_TOURNAMENT_GRADE_VO[] = "ＶＯ";
+
+char STR_TOURNAMENT_GRADE_FR[] = "ＦＲ";
+
+char STR_TOURNAMENT_GRADE_GP[] = "ＧＰ";
+
+char STR_TOURNAMENT_GRADE_TW[] = "ＴＷ";
+
+char STR_TOURNAMENT_GRADE_CO[] = "ＣＯ";
+
+char STR_TOURNAMENT_GRADE_NT[] = "ＮＴ";
+
+char STR_TOURNAMENT_GRADE_MT[] = "ＭＴ";
+
+char STR_TOURNAMENT_GRADE_DT[] = "ＤＴ";
+
+char STR_TOURNAMENT_GRADE_DY[] = "ＤＹ";
+
+char STR_TOURNAMENT_GRADE_WI[] = "ＷＩ";
+
+char STR_TOURNAMENT_GRADE_AN[] = "ＡＮ";
+
+char STR_TOURNAMENT_GRADE_HU[] = "ＨＵ";
+
+char STR_TOURNAMENT_GRADE_BT[] = "ＢＴ";
+#else
 char STR_BGM_TRACK_NON_BEWILDERING_FOREST_THEME[] = "Non Bewildering Forest Theme";
 
 char STR_BGM_TRACK_NON_BEWILDERING_FOREST_NIGHT_THEME[] = "Non Bewildering Forest Night Theme";
@@ -423,6 +569,18 @@ char STR_BGM_TRACK_NORMAL_BATTLE__THEME_NO2[] = "Normal Battle  Theme No.2";
 
 char STR_BGM_TRACK_LAST_BATTLE_THEME[] = "Last Battle Theme";
 
+char STR_TOURNAMENT_NAME_GRADE_D[8] = "Grade D";
+
+char STR_TOURNAMENT_NAME_GRADE_C[8] = "Grade C";
+
+char STR_TOURNAMENT_NAME_GRADE_B[8] = "Grade B";
+
+char STR_TOURNAMENT_NAME_GRADE_A[8] = "Grade A";
+
+char STR_TOURNAMENT_NAME_GRADE_S[8] = "Grade S";
+
+char STR_TOURNAMENT_NAME_GRADE_R[8] = "Grade R";
+
 char STR_TOURNAMENT_NAME_VERSION_1_CUP[] = "Version 1 Cup";
 
 char STR_TOURNAMENT_NAME_VERSION_2_CUP[] = "Version 2 Cup";
@@ -457,6 +615,71 @@ char STR_TOURNAMENT_NAME_HUMAN_CUP[] = "Human Cup";
 
 char STR_TOURNAMENT_NAME_BEETLE_CUP[] = "Beetle Cup";
 
+char STR_TOURNAMENT_GRADE_D[] = "D";
+
+char STR_TOURNAMENT_GRADE_C[] = "C";
+
+char STR_TOURNAMENT_GRADE_B[] = "B";
+
+char STR_TOURNAMENT_GRADE_A[] = "A";
+
+char STR_TOURNAMENT_GRADE_S[] = "S";
+
+char STR_TOURNAMENT_GRADE_R[] = "R";
+
+char STR_TOURNAMENT_GRADE_H[] = "H";
+
+char STR_TOURNAMENT_GRADE_I[] = "I";
+
+char STR_TOURNAMENT_GRADE_J[] = "J";
+
+char STR_TOURNAMENT_GRADE_K[] = "K";
+
+char STR_TOURNAMENT_GRADE_L[] = "L";
+
+char STR_TOURNAMENT_GRADE_F[] = "F";
+
+char STR_TOURNAMENT_GRADE_G[] = "G";
+
+char STR_TOURNAMENT_GRADE_W[] = "W";
+
+char STR_TOURNAMENT_GRADE_O[] = "O";
+
+char STR_TOURNAMENT_GRADE_N[] = "N";
+
+char STR_TOURNAMENT_GRADE_M[] = "M";
+
+char STR_TOURNAMENT_GRADE_T[] = "T";
+
+char STR_TOURNAMENT_GRADE_Y[] = "Y";
+
+char STR_TOURNAMENT_GRADE_Z[] = "Z";
+
+char STR_TOURNAMENT_GRADE_X[] = "X";
+
+char STR_TOURNAMENT_GRADE_Q[] = "Q";
+#endif
+
+uint8_t *MAIN_D_801345B0 = TEXTURE_BUFFER;
+
+BabyTypeTable MAIN_D_801345B4 = { {
+	0x01, 0x02, 0x0f, 0x10, 0x1d, 0x1e, 0x2b, 0x2c,
+} };
+
+int16_t MAIN_D_801345BC[2] = {
+	0x00d0, 0x00df,
+};
+
+int16_t MAIN_D_801345C0[1] = {
+	0x0083,
+};
+
+uint16_t MAIN_D_801345C2 = 0x1700;
+
+int32_t MAP_LIGHT_UPDATE_DATA[2] = {
+	0x003101b7, 0xffff0002,
+};
+
 GsSPRITE MAIN_D_8012FDC0 = {
 	0x50000000,			/* attribute */
 	0,				/* x */
@@ -480,19 +703,33 @@ GsSPRITE MAIN_D_8012FDC0 = {
 
 MenuTextLayout AMOUNT_BOX_LAYOUT = {
 	{
+#if defined(VERSION_JP)
+		0x001a, 0x0007, 0x0008, 0x0032,
+		0x001b, 0x0005, 0x0056, 0x002b,
+		0x0002, 0x0026, 0x0041, 0x0006,
+		0x0016, 0x002b, 0x0001,
+#else
 		0x001a, 0x0007, 0x0008, 0x004a,
 		0x001b, 0x0005, 0x0059, 0x002b,
 		0x0002, 0x0040, 0x0041, 0x0006,
 		0x0016, 0x002b, 0x0001,
+#endif
 	},
 };
 
 MenuTextLayout CONFIRM_BOX_LAYOUT = {
 	{
+#if defined(VERSION_JP)
+		0x0000, 0x0000, 0x0004, 0x0002,
+		0x0060, 0x0000, 0x000c, 0x0010,
+		0x0012, 0x0018, 0x0018, 0x000c,
+		0x003a, 0x0012, 0x0024,
+#else
 		0x0000, 0x0000, 0x0004, 0x0002,
 		0x0060, 0x0000, 0x000c, 0x000e,
 		0x0012, 0x0024, 0x0024, 0x000c,
 		0x0044, 0x0012, 0x0024,
+#endif
 	},
 };
 
@@ -575,7 +812,11 @@ char *BGM_TRACK_NAMES[63] = {
 	STR_BGM_TRACK_BEATLAND_THEME,
 	STR_BGM_TRACK_BEATLAND_NIGHT_THEME,
 	STR_BGM_TRACK_SECRET_BEACH_CAVE_THEME,
+#if defined(VERSION_JP)
+	STR_BGM_TRACK_MT_INFINITY_THEME,
+#else
 	STR_BGM_TRACK_MT_PANORAMA_THEME,
+#endif
 	STR_BGM_TRACK_LAST_ROOM_THEME,
 	STR_BGM_TRACK_FILE_CITY_THEME,
 	STR_BGM_TRACK_FILE_CITY_NIGHT_THEME,
@@ -696,6 +937,31 @@ char *TOURNAMENT_NAMES[23] = {
 };
 
 char *TOURNAMENT_GRADES[23] = {
+#if defined(VERSION_JP)
+	STR_TOURNAMENT_GRADE_D,
+	STR_TOURNAMENT_GRADE_C,
+	STR_TOURNAMENT_GRADE_B,
+	STR_TOURNAMENT_GRADE_A,
+	STR_TOURNAMENT_GRADE_S,
+	STR_TOURNAMENT_GRADE_R,
+	STR_TOURNAMENT_GRADE_V1,
+	STR_TOURNAMENT_GRADE_V2,
+	STR_TOURNAMENT_GRADE_V3,
+	STR_TOURNAMENT_GRADE_V4,
+	STR_TOURNAMENT_GRADE_VO,
+	STR_TOURNAMENT_GRADE_FR,
+	STR_TOURNAMENT_GRADE_GP,
+	STR_TOURNAMENT_GRADE_TW,
+	STR_TOURNAMENT_GRADE_CO,
+	STR_TOURNAMENT_GRADE_NT,
+	STR_TOURNAMENT_GRADE_MT,
+	STR_TOURNAMENT_GRADE_DT,
+	STR_TOURNAMENT_GRADE_DY,
+	STR_TOURNAMENT_GRADE_WI,
+	STR_TOURNAMENT_GRADE_AN,
+	STR_TOURNAMENT_GRADE_HU,
+	STR_TOURNAMENT_GRADE_BT,
+#else
 	STR_TOURNAMENT_GRADE_D,
 	STR_TOURNAMENT_GRADE_C,
 	STR_TOURNAMENT_GRADE_B,
@@ -719,6 +985,7 @@ char *TOURNAMENT_GRADES[23] = {
 	STR_TOURNAMENT_GRADE_Z,
 	STR_TOURNAMENT_GRADE_X,
 	STR_TOURNAMENT_GRADE_Q,
+#endif
 };
 
 uint8_t TOURNAMENT_DATA[180] = {
@@ -750,7 +1017,11 @@ uint8_t TOURNAMENT_DATA[180] = {
 BattleEntry MAIN_D_8013024C[6] = {
 	{ 0x26, 0x09, 0x00dd, 0x000003e8 },
 	{ 0x46, 0x09, 0x00be, 0x000003e8 },
+#if defined(VERSION_JP)
+	{ 0x4f, 0x09, 0x0051, 0x000005dc },
+#else
 	{ 0x4f, 0x09, 0x00bc, 0x000005dc },
+#endif
 	{ 0x5d, 0x09, 0x015f, 0x000007d0 },
 	{ 0x77, 0x09, 0x0093, 0x000009c4 },
 	{ 0x69, 0x00, 0x00d2, 0x000009c4 },
@@ -763,15 +1034,9 @@ int16_t ITEM_MENU_POS[32] = {
 	0xffdc, 0xff9e, 0x00a6, 0x0081, 0xffc9, 0xff9e, 0x00be, 0x0081,
 };
 
-RECT ITEM_MENU_DESCRIPTION_RECTS[8] = {
-	{ 5, 17, 170, 18 },
-	{ 5, 17, 202, 18 },
-	{ 5, 17, 202, 18 },
-	{ 5, 17, 170, 18 },
-	{ 5, 17, 202, 18 },
-	{ 5, 17, 146, 18 },
-	{ 5, 17, 146, 18 },
-	{ 5, 17, 170, 18 },
+int16_t ITEM_MENU_DESCRIPTION_RECTS[32] = {
+	5, 17, 170, 18, 5, 17, 202, 18, 5, 17, 202, 18, 5, 17, 170, 18,
+	5, 17, 202, 18, 5, 17, 146, 18, 5, 17, 146, 18, 5, 17, 170, 18,
 };
 
 int16_t SELECTION_CURSOR_WIDTHS[8] = {
@@ -783,14 +1048,15 @@ int32_t shopFillBuyItemList()
 {
 	uint8_t itemId;
 	uint8_t slotId;
+	int32_t canBuyAnything;
 	int32_t hasSpace;
 	uint8_t *itemList;
-	uint32_t inventorySize;
-	int32_t canBuyAnything;
-	inventorySize = INVENTORY.size;
-	itemList = ITEM_MENU_LEFT->buf;
+	uint8_t inventorySize;
+
 	canBuyAnything = 0;
 	hasSpace = 0;
+	inventorySize = INVENTORY.size;
+	itemList = ITEM_MENU_LEFT->buf;
 	ITEM_MENU_LEFT->itemCount = 0;
 
 	for (slotId = 0; slotId < inventorySize; slotId++) {
@@ -853,8 +1119,8 @@ int32_t shopFillSellItemList(void)
 	int32_t i;
 	uint8_t *buf;
 	int32_t result;
-	int32_t type;
-	int32_t amount;
+	uint8_t type;
+	uint8_t amount;
 
 	result = 0;
 	buf = ITEM_MENU_RIGHT->buf;
@@ -866,7 +1132,7 @@ int32_t shopFillSellItemList(void)
 
 		if (type != 0xff) {
 			if (ITEM_PARA[type].droppable != 0) {
-				amount = (amount | 0x80) & 0xff;
+				amount |= 0x80;
 				result = 1;
 			}
 		} else {
@@ -885,7 +1151,7 @@ void tickItemMenu(void)
 {
 	ItemMenuBox *box;
 	RECT rect;
-	RECT *src;
+	int16_t *src;
 
 	box = getItemMenuFromType();
 
@@ -913,22 +1179,20 @@ void tickItemMenu(void)
 		return;
 	}
 
-	if (isKeyDown(0x40)) {
-		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE];
-		setRECT(&rect, src->x, src->y, src->w, src->h);
+	if (isKeyDown(CONFIRM_BUTTON)) {
+		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE * 4];
+		setRECT(&rect, src[0], src[1], src[2], src[3]);
 
-		switch (ITEM_MENU_TYPE) {
-		default:
-			createItemMenuAmountBox(&rect);
-			break;
-		case 7:
-			readSelectedItemMerit();
-			break;
-		case 5:
+		if (ITEM_MENU_TYPE != 5) {
+			if (ITEM_MENU_TYPE != 7) {
+				createItemMenuAmountBox(&rect);
+			} else {
+				readSelectedItemMerit();
+			}
+		} else {
 			createSingleCardShopMenu(&rect);
-			break;
 		}
-	} else if (isKeyDown(0x10)) {
+	} else if (isKeyDown(CANCEL_BUTTON)) {
 		if (ITEM_MENU_TYPE == 7) {
 			SELECTION_MENU_STATE = 0xa;
 		} else if (ITEM_MENU_TYPE == 5) {
@@ -955,8 +1219,8 @@ void tickItemMenu(void)
 			itemMenuCursorDown(box, 0);
 		}
 	} else if (isKeyDown(0x800)) {
-		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE];
-		setRECT(&rect, src->x, src->y, src->w, src->h);
+		src = &ITEM_MENU_DESCRIPTION_RECTS[ITEM_MENU_TYPE * 4];
+		setRECT(&rect, src[0], src[1], src[2], src[3]);
 		createItemMenuDescriptionBox(box, &rect, 1);
 		playSound(0, 3);
 	}
@@ -966,17 +1230,21 @@ int32_t readSelectedItemMerit(void)
 {
 	ItemMenuBox *box;
 	int32_t idx;
+	uint8_t amount;
 
 	box = getItemMenuFromType();
 	idx = (box->topRow + box->cursor) * 2;
 	SHOP_ITEM_TYPE = box->buf[idx];
 
-	if (SHOP_ITEM_TYPE != 0xff && box->buf[idx + 1] != 0) {
-		MAIN_D_8013500C = ITEM_PARA[SHOP_ITEM_TYPE].meritValue;
-		SELECTION_MENU_STATE = 0xb;
-		SCRIPT_STATE_3 = 0;
-		playSound(0, 3);
-		return 1;
+	if (SHOP_ITEM_TYPE != 0xff) {
+		amount = box->buf[idx + 1];
+		if (amount != 0) {
+			MAIN_D_8013500C = ITEM_PARA[SHOP_ITEM_TYPE].meritValue;
+			SELECTION_MENU_STATE = 0xb;
+			SCRIPT_STATE_3 = 0;
+			playSound(0, 3);
+			return 1;
+		}
 	}
 
 	playSound(0, 0xb);
@@ -994,7 +1262,7 @@ void tickItemMenuDescriptionBox(void)
 		return;
 	}
 
-	if (isKeyDown(0x850) == 0) {
+	if (isKeyDown(CONFIRM_BUTTON | CANCEL_BUTTON | 0x800) == 0) {
 		return;
 	}
 
@@ -1004,23 +1272,27 @@ void tickItemMenuDescriptionBox(void)
 
 void renderItemMenuDescriptionBox(void)
 {
-	renderString(0, (int16_t)(UI_BOX_DATA[3].finalPos.x + 6),
-	             (int16_t)(UI_BOX_DATA[3].finalPos.y + 5), 0xfc, 0xc, 0,
-	             (int16_t)(TEXT_BOX_DATA[3].vramRow * 12), 3, 1);
+	int16_t rowPx;
+	int16_t x;
+	int16_t y;
+
+	rowPx = TEXT_BOX_DATA[3].vramRow * 12;
+	x = UI_BOX_DATA[3].finalPos.x + 6;
+	y = UI_BOX_DATA[3].finalPos.y + 5;
+	renderString(0, x, y, 0xfc, 0xc, 0, rowPx, 3, 1);
 }
 
 void renderItemMenuAmountBox(void)
 {
 	MenuTextLayout layout;
-	int32_t srcCol;
 	int16_t *entry;
-	CardData *card;
 	int32_t i;
-	int16_t rowPx;
-	int16_t y;
 	int16_t x;
+	int16_t y;
 	int16_t sx;
 	int16_t sy;
+	int16_t rowPx;
+	int16_t srcCol;
 
 	layout = AMOUNT_BOX_LAYOUT;
 	rowPx = TEXT_BOX_DATA[3].vramRow * 12;
@@ -1035,31 +1307,33 @@ void renderItemMenuAmountBox(void)
 	if (ITEM_MENU_TYPE < 3) {
 		renderItemSprite(SHOP_ITEM_TYPE, sx, sy, 3);
 	} else {
-		card = (CardData *)(SHOP_ITEM_TYPE * 4);
-		card = (CardData *)((uint32_t)card + (uint32_t)CARD_DATA);
-		sx += 2;
-		sy += 2;
-		renderCardSprite(card->spriteId, sx, sy, 3);
+		renderCardSprite(CARD_DATA[SHOP_ITEM_TYPE].spriteId, sx + 2, sy + 2, 3);
 	}
 
 	entry = layout.v;
 	i = 0;
 	srcCol = 0;
 	while (i < 4) {
-		renderString(0, entry[0] + x, entry[1] + y, entry[2] * 12,
-		             0xc, srcCol * 12, rowPx, 3, 1);
+		renderString(0, entry[0] + x, entry[1] + y, entry[2] * 12, 0xc, srcCol * 12, rowPx, 3, 1);
+		srcCol += entry[2];
 		i++;
-		srcCol = (int16_t)(srcCol + entry[2]);
 		entry += 3;
 	}
+#if defined(VERSION_JP)
+	renderString(0, entry[0] + x, entry[1] + y, entry[2] * 12, 0xc, 0x90, 0x60, 3, 1);
+#endif
 }
 
 void renderItemMenu(void)
 {
 	int16_t bx;
 	int16_t by;
-	int16_t cy;
 	ItemMenuBox *box;
+	int16_t x;
+	int16_t y;
+	int16_t x2;
+	int16_t y2;
+	int16_t w;
 
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
@@ -1078,28 +1352,42 @@ void renderItemMenu(void)
 	}
 	box = getItemMenuFromType();
 	renderItemMenuScrollBar(box);
-	cy = by + box->cursor * 0x12 + 0x11;
+	y = by + box->cursor * 0x12 + 0x11;
 draw:
-	renderSelectionCursor(bx + 5, cy, SELECTION_CURSOR_WIDTHS[ITEM_MENU_TYPE], 0x12, 5);
-	renderItemMenuItemList(box, bx + 0x1a, by + 0x13, bx + 8, by + 0x12, 0);
+	w = SELECTION_CURSOR_WIDTHS[ITEM_MENU_TYPE];
+	renderSelectionCursor(bx + 5, y, w, 0x12, 5);
+	x = bx + 0x1a;
+	y = by + 0x13;
+	x2 = bx + 8;
+	y2 = by + 0x12;
+	renderItemMenuItemList(box, x, y, x2, y2, 0);
 }
 
 void updateItemMenuAmountBoxString(void)
 {
 	uint8_t *out;
-	char *name;
 	uint32_t total;
+	uint8_t id;
+	uint32_t len;
 
 	out = TEXT_BUFFERS_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
 
 	if (ITEM_MENU_TYPE < 3) {
 		strcpy(out, ITEM_PARA[SHOP_ITEM_TYPE].name);
-		out += strlen(ITEM_PARA[SHOP_ITEM_TYPE].name);
+		len = strlen(ITEM_PARA[SHOP_ITEM_TYPE].name);
 	} else {
-		strcpy(out, name = DIGIMON_DATA[CARD_DATA[SHOP_ITEM_TYPE].digimonId].name);
-		out += strlen(name);
+		id = CARD_DATA[SHOP_ITEM_TYPE].digimonId;
+		strcpy(out, DIGIMON_DATA[id].name);
+		len = strlen(DIGIMON_DATA[id].name);
 	}
 
+	out += len;
+#if defined(VERSION_JP)
+	*out++ = 0xc;
+	*out++ = 0;
+	out = intToStringSJIS(out, SHOP_ITEM_PRICE, 5, 0);
+	out = intToStringSJIS(out, SHOP_AMOUNT, 2, 0);
+#else
 	*out++ = 0x18;
 	*out++ = 0;
 	out = intToStringSJIS(out, SHOP_ITEM_PRICE, 5, 0);
@@ -1108,6 +1396,7 @@ void updateItemMenuAmountBoxString(void)
 	out = intToStringSJIS(out, SHOP_AMOUNT, 2, 0);
 	*out++ = 0x1a;
 	*out++ = 0;
+#endif
 
 	total = SHOP_ITEM_PRICE * SHOP_AMOUNT;
 	if (total >= 0xf4240) {
@@ -1134,7 +1423,7 @@ void tickSingleCardShop(void)
 		return;
 	}
 
-	if (isKeyDown(0x10)) {
+	if (isKeyDown(CANCEL_BUTTON)) {
 		triggerBoxCloseFlag(3);
 		playSound(0, 4);
 		return;
@@ -1152,15 +1441,16 @@ void tickSingleCardShop(void)
 		return;
 	}
 
-	if (isKeyDown(0x40)) {
+	if (isKeyDown(CONFIRM_BUTTON)) {
 		triggerBoxCloseFlag(3);
 		if (SHOP_AMOUNT == 0) {
 			if (ITEM_MENU_TYPE != 5) {
 				box = getItemMenuFromType();
 				amount = getCardAmount(SHOP_ITEM_TYPE);
-				amount = amount + 1u;
+				amount++;
 				setCardAmount(SHOP_ITEM_TYPE, amount);
-				MONEY -= MAIN_D_8012FFC4[CARD_DATA[SHOP_ITEM_TYPE].spriteId];
+				amount = CARD_DATA[SHOP_ITEM_TYPE].spriteId;
+				MONEY -= MAIN_D_8012FFC4[amount];
 				SCRIPT_STATE_PTR->smth[box->cursor] = 0xff;
 				UPDATE_SHOP_BIT_BOX = 1;
 				SELECTION_MENU_STATE = 4;
@@ -1181,17 +1471,19 @@ void renderSingleCardShop(void)
 {
 	MenuTextLayout layout;
 	int16_t *entry;
+	int32_t i;
+	int32_t unused;
 	int16_t rowPx;
 	int16_t x;
 	int16_t y;
-	int32_t i;
 
 	layout = CONFIRM_BOX_LAYOUT;
-	entry = layout.v;
 	rowPx = TEXT_BOX_DATA[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x + 4;
 	y = UI_BOX_DATA[3].finalPos.y + 3;
+	entry = layout.v;
 	i = 0;
+	unused = 0;
 	while (i < 3) {
 		renderString(0, x + entry[2], y + entry[3], entry[4], 0xc,
 		             entry[0], rowPx + entry[1], 3, 1);
@@ -1225,24 +1517,22 @@ void tickShopBitsBox(void)
 uint8_t *getShopkeeperLine(int32_t idx)
 {
 	ShopkeeperIdTable shopkeeperIds;
-	int32_t section;
-	int32_t pstat;
+	uint16_t section;
+	uint8_t pstat;
 	int32_t i;
-	int32_t npcType;
 
 	shopkeeperIds = MAIN_D_8012FE5C;
-	pstat = readPStat(0xfe) & 0xff;
+	pstat = readPStat(0xfe);
 
 	if (pstat == 0xff) {
 		section = 0x4ce;
 	} else {
-		pstat = scriptIdToEntityId(pstat) & 0xff;
+		pstat = scriptIdToEntityId(pstat);
 		if (pstat != 0xff) {
-			npcType =
-				*(int32_t *)(&NPC_ENTITIES[pstat - 2]) & 0xff;
+			pstat = *(int32_t *)(&NPC_ENTITIES[pstat - 2]);
 			for (i = 0; (uint32_t)i < 0xb; i++) {
-				if (npcType == shopkeeperIds.b[i]) {
-					section = (i + 0x4c4) & 0xffff;
+				if (pstat == shopkeeperIds.b[i]) {
+					section = i + 0x4c4;
 					goto done;
 				}
 			}
@@ -1253,31 +1543,35 @@ done:
 	return resolveMapHeadEntry(section, idx);
 }
 
-uint8_t *resolveMapHeadEntry(int32_t section, int32_t idx)
+// clang-format off
+uint8_t *resolveMapHeadEntry(section, idx)
+	uint16_t section;
+	int32_t idx;
+// clang-format on
 {
 	uint8_t *script;
-	uint8_t *sectionPtr;
-	uint8_t *offsetPtr;
+	uint8_t *ptr;
 
 	script = getScript(0);
-	sectionPtr = getScriptSection(script, section);
-	offsetPtr = sectionPtr + idx * 4;
-	offsetPtr = (uint8_t *)(offsetPtr + 2);
+	ptr = getScriptSection(script, section);
+	ptr = ptr + idx * 4 + 2;
+	ptr = script + *(uint16_t *)ptr + 2;
 
-	return script + *(uint16_t *)offsetPtr + 2;
+	return ptr;
 }
 
 void renderMonochromonMoodBubble(int32_t instanceId)
 {
 	SVECTOR pos;
+	int32_t depth;
 	DVECTOR screen;
 	uint8_t entityId;
-	int32_t depth;
 	int16_t offset;
 	int16_t scale;
+	uint8_t mood;
 
 	entityId = readPStat(0xf7);
-	readPStat(0xf8);
+	mood = readPStat(0xf8);
 	entityId = scriptIdToEntityId(entityId);
 	if (entityId == 0xff) {
 		return;
@@ -1310,15 +1604,19 @@ void inputInit(void)
 void processInput(void)
 {
 	uint32_t held;
+	uint32_t prev;
+	uint32_t released;
 
-	MAIN_D_80135020 |= ~POLLED_INPUT;
+	released = ~POLLED_INPUT;
+	MAIN_D_80135020 |= released;
 	held = POLLED_INPUT & MAIN_D_8013501C;
 	if (held == 0) {
 		MAIN_D_80135016 = 0;
 	}
 
 	if (MAIN_D_8013501C != 0) {
-		if (held == (POLLED_INPUT_PREVIOUS & MAIN_D_8013501C)) {
+		prev = POLLED_INPUT_PREVIOUS & MAIN_D_8013501C;
+		if (held == prev) {
 			if (MAIN_D_80135016 == 8) {
 				MAIN_D_80135016 = 6;
 			} else if (MAIN_D_80135016 != 6) {
@@ -1355,7 +1653,7 @@ void setFreshDialogue(void)
 int32_t isXPressedAfterDialogue(void)
 {
 	if (MAIN_D_80135028 != 0) {
-		if ((POLLED_INPUT & 0x40) != 0) {
+		if ((POLLED_INPUT & CONFIRM_BUTTON) != 0) {
 			return 0;
 		}
 
@@ -1372,14 +1670,13 @@ void setInputRepeatMask(uint32_t mask)
 void handleItemLoss(void)
 {
 	uint8_t *pool;
-	uint8_t size;
 	uint8_t k;
 	int32_t count;
 	int32_t lose;
 	uint8_t n;
 	uint8_t slot;
 	uint8_t recycleId;
-	int32_t idx;
+	uint8_t size;
 
 	size = INVENTORY.size;
 	pool = allocateArray(size);
@@ -1417,13 +1714,13 @@ void handleItemLoss(void)
 		if (recycleId != 0xff) {
 			SCRIPT_STATE_PTR->smth[recycleId + 6] +=
 				INVENTORY.amounts.array[slot];
-			idx = recycleId + 6;
-			if (SCRIPT_STATE_PTR->smth[idx] >= 0x64) {
-				SCRIPT_STATE_PTR->smth[idx] = 0x63;
+			if (SCRIPT_STATE_PTR->smth[recycleId + 6] >= 0x64) {
+				SCRIPT_STATE_PTR->smth[recycleId + 6] = 0x63;
 			}
 		}
 
-		removeItem(INVENTORY.types.array[slot], 0x63);
+		recycleId = INVENTORY.types.array[slot];
+		removeItem(recycleId, 0x63);
 	}
 
 	freeArray((uint32_t *)pool);
@@ -1486,10 +1783,10 @@ int32_t isPartnerBaby(void)
 {
 	BabyTypeTable babyTypes;
 	int32_t i;
-	int32_t partnerType;
+	uint8_t partnerType;
 
 	babyTypes = MAIN_D_801345B4;
-	partnerType = PARTNER_ENTITY.digimonEntity.entity.type & 0xff;
+	partnerType = PARTNER_ENTITY.digimonEntity.entity.type;
 
 	for (i = 0; (uint32_t)i < 8; i++) {
 		if (partnerType == babyTypes.b[i]) {
@@ -1504,10 +1801,8 @@ void tickItemMenuAmountBox(void)
 {
 	RECT origin;
 	uint8_t owner;
-	uint8_t qty;
-	int32_t unitPrice;
-	int32_t savings;
 	int8_t q;
+	int32_t unitPrice;
 
 	if (UI_BOX_DATA[3].state != 1) {
 		return;
@@ -1518,7 +1813,7 @@ void tickItemMenuAmountBox(void)
 	}
 
 	if (SHOP_AMOUNT != MAX_SHOP_AMOUNT && isKeyDown(0x1000)) {
-		if (POLLED_INPUT & 0x20) {
+		if (POLLED_INPUT & ALT_BUTTON) {
 			SHOP_AMOUNT += 10;
 			if (SHOP_AMOUNT > MAX_SHOP_AMOUNT) {
 				SHOP_AMOUNT -= 10;
@@ -1533,7 +1828,7 @@ void tickItemMenuAmountBox(void)
 		return;
 	}
 	if (SHOP_AMOUNT != 1 && isKeyDown(0x4000)) {
-		if (POLLED_INPUT & 0x20) {
+		if (POLLED_INPUT & ALT_BUTTON) {
 			q = SHOP_AMOUNT;
 			q -= 10;
 			if (q <= 0) {
@@ -1550,13 +1845,13 @@ void tickItemMenuAmountBox(void)
 		return;
 	}
 
-	if (isKeyDown(0x10)) {
+	if (isKeyDown(CANCEL_BUTTON)) {
 		triggerBoxCloseFlag(3);
 		playSound(0, 4);
 	} else if (isKeyDown(0x80)) {
 		SHOP_AMOUNT = MAX_SHOP_AMOUNT;
 		playSound(0, 3);
-	} else if (isKeyDown(0x40)) {
+	} else if (isKeyDown(CONFIRM_BUTTON)) {
 		if (ITEM_MENU_TYPE < 3) {
 			if (ITEM_MENU_TYPE == 1) {
 				MONEY += SHOP_AMOUNT * SHOP_ITEM_PRICE;
@@ -1568,23 +1863,17 @@ void tickItemMenuAmountBox(void)
 				owner = readPStat(0xfe);
 			} else {
 				unitPrice = SHOP_ITEM_PRICE;
-				savings = isPartnerBaby();
-				if (savings != 0) {
+				if (isPartnerBaby() != 0) {
 					unitPrice = unitPrice * 90 / 100;
-					savings = SHOP_ITEM_PRICE;
-					savings -= unitPrice;
-					MAIN_D_8013500C =
-						SHOP_AMOUNT * savings;
+					MAIN_D_8013500C = (int16_t)SHOP_AMOUNT * (SHOP_ITEM_PRICE - unitPrice);
 				}
 
-				qty = SHOP_AMOUNT;
-				MONEY -= qty * unitPrice;
-				giveItem(SHOP_ITEM_TYPE, qty);
+				MONEY -= SHOP_AMOUNT * unitPrice;
+				giveItem(SHOP_ITEM_TYPE, SHOP_AMOUNT);
 
 				if (ITEM_MENU_TYPE == 2) {
 					owner = getRecycleId(SHOP_ITEM_TYPE);
-					SCRIPT_STATE_PTR->smth[owner + 6] -=
-						SHOP_AMOUNT;
+					SCRIPT_STATE_PTR->smth[owner + 6] -= SHOP_AMOUNT;
 				}
 
 				owner = 0xfd;
@@ -1597,7 +1886,7 @@ void tickItemMenuAmountBox(void)
 			}
 
 			owner = getCardAmount(SHOP_ITEM_TYPE);
-			owner = (uint32_t)owner - SHOP_AMOUNT;
+			owner -= SHOP_AMOUNT;
 			setCardAmount(SHOP_ITEM_TYPE, owner);
 			owner = readPStat(0xfe);
 			SELECTION_MENU_STATE = 4;
@@ -1616,28 +1905,29 @@ void tickItemMenuAmountBox(void)
 void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
+	uint8_t item;
 	int32_t idx;
-	int32_t row0;
-	int32_t item;
-	int32_t len;
+	uint32_t len;
 
-	out = getTextboxLine((uint8_t *)box, row);
+	out = getTextboxLine(box, row);
 	*out++ = 1;
 	*out++ = 7;
 
-	row0 = row;
-	row0 = row0;
 	idx = ITEM_MENU_TYPE + ((ITEM_MENU_LEFT->topRow + 5) + row);
-
 	if (isTriggerSet(idx) != 0) {
+#if defined(VERSION_JP)
+		*out++ = 0x82;
+		*out++ = 0x85;
+#else
 		*out++ = 0x81;
 		*out++ = 0x7c;
+#endif
 	} else {
 		*out++ = 0x81;
 		*out++ = 0x40;
 	}
 
-	idx = (box->topRow + row0) * 2;
+	idx = (box->topRow + row) * 2;
 	item = ITEM_MENU_LEFT->buf[idx];
 	*out++ = 1;
 
@@ -1647,8 +1937,8 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		*out++ = 3;
 	}
 
-	item = (uint8_t)(item & 0x7f);
-	strcpy((char *)out, ITEM_PARA[item].name);
+	item &= 0x7f;
+	strcpy(out, ITEM_PARA[item].name);
 	len = strlen(ITEM_PARA[item].name);
 	out += len;
 	out = padWithSpaces(out, 8, len);
@@ -1658,19 +1948,19 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	*out++ = 1;
 
 	item = ITEM_MENU_RIGHT->buf[idx];
-	strcpy((char *)out, ITEM_PARA[item].name);
-	out += strlen(ITEM_PARA[item].name);
+	strcpy(out, ITEM_PARA[item].name);
+	len = strlen(ITEM_PARA[item].name);
+	out += len;
 	terminateString(out, isLast);
 }
 
 void openShop(void)
 {
-	int32_t npcId;
+	uint8_t npcId;
 	int32_t i;
-	int32_t trig;
 	int32_t found;
 
-	npcId = readPStat(0xfe) & 0xff;
+	npcId = readPStat(0xfe);
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
@@ -1682,8 +1972,8 @@ void openShop(void)
 		MAIN_D_80134F70 = 0;
 
 		found = 0;
-		for (i = 0, trig = 0x180; i < 0x80; i++, trig++) {
-			if (isTriggerSet(trig)) {
+		for (i = 0; i < 0x80; i++) {
+			if (isTriggerSet(i + 0x180)) {
 				found = 1;
 				break;
 			}
@@ -1701,7 +1991,6 @@ void openShop(void)
 			SCRIPT_STATE_4 = 2;
 			SCRIPT_STATE_3 = 1;
 		}
-		break;
 	case 1:
 		break;
 	case 2:
@@ -1757,8 +2046,8 @@ void openShop(void)
 			showShopkeeperTextbox(0xa, npcId, 0);
 		}
 
-		SCRIPT_STATE_4 = 3;
 		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_4 = 3;
 		SCRIPT_STATE_3 = 1;
 		MAIN_D_80134F74 = 1;
 		break;
@@ -1776,8 +2065,7 @@ void openShop(void)
 	}
 }
 
-void allocateItemMenuBox(ItemMenuBox **box, int32_t bufSize, int32_t rows,
-                         int32_t x, uint8_t y, uint8_t w, uint8_t h)
+void allocateItemMenuBox(ItemMenuBox **box, int32_t bufSize, uint8_t rows, uint8_t x, uint8_t y, uint8_t w, uint8_t h)
 {
 	*box = (ItemMenuBox *)allocateArray(0x20);
 	(*box)->buf = allocateArray(bufSize);
@@ -1788,7 +2076,12 @@ void allocateItemMenuBox(ItemMenuBox **box, int32_t bufSize, int32_t rows,
 	setWH(&(*box)->rect, w, h);
 }
 
-void showShopkeeperTextbox(int32_t idx, int32_t owner, int32_t boxId)
+// clang-format off
+void showShopkeeperTextbox(idx, owner, boxId)
+	int32_t idx;
+	uint8_t owner;
+	uint8_t boxId;
+// clang-format on
 {
 	showMapHeadTextbox(idx, owner, boxId, 0xff);
 }
@@ -1804,23 +2097,29 @@ void createShopBitsBox(int32_t showBits)
 {
 	RECT rect;
 	RECT origin;
+	uint8_t flags;
 
-	UPDATE_SHOP_BIT_BOX = 1;
+	flags = 0xe1;
 	BIT_BOX_SHOW_BITS = showBits;
+	UPDATE_SHOP_BIT_BOX = 1;
 	if (UI_BOX_DATA[2].state == 1) {
 		return;
 	}
 
 	setupBoxOrigin(0xfd, &origin);
 	setRECT(&rect, -0x98, -0x62, 0x52, 0x21);
-	createTextbox(2, 0xe1, &rect, &origin, tickShopBitsBox,
-	              renderShopBitsBox);
+	createTextbox(2, flags, &rect, &origin, tickShopBitsBox, renderShopBitsBox);
 	registerTextbox(2, 8, 1, 0, 0);
 	tickShopBitsBox();
 }
 
-void showShopkeepSelection(int32_t idx, int32_t owner, int32_t boxId,
-                           int32_t *outSelection)
+// clang-format off
+void showShopkeepSelection(idx, owner, boxId, outSelection)
+	int32_t idx;
+	uint8_t owner;
+	uint16_t boxId;
+	int32_t *outSelection;
+// clang-format on
 {
 	showMapheadSelection(idx, owner, boxId, outSelection, 0xff);
 }
@@ -1829,22 +2128,23 @@ void createItemMenu(void)
 {
 	RECT rect;
 	RECT origin;
-	int32_t boxId;
+	uint8_t flags;
 	ItemMenuBox *result;
+	uint8_t boxId;
 	int16_t *dims;
 
+	flags = 0xf1;
 	if (ITEM_MENU_TYPE == 1 || ITEM_MENU_TYPE == 5) {
 		boxId = 0xfd;
 	} else {
-		boxId = readPStat(0xfe) & 0xff;
+		boxId = readPStat(0xfe);
 	}
 
 	setupBoxOrigin(boxId, &origin);
 	result = getItemMenuFromType();
-	dims = (int16_t *)((uint8_t *)ITEM_MENU_POS + ITEM_MENU_TYPE * 8);
+	dims = &ITEM_MENU_POS[ITEM_MENU_TYPE * 4];
 	setRECT(&rect, dims[0], dims[1], dims[2], dims[3]);
-	createTextbox(1, 0xf1, &rect, &origin, tickItemMenu,
-	              renderItemMenu);
+	createTextbox(1, flags, &rect, &origin, tickItemMenu, renderItemMenu);
 	registerTextbox(1, 9, 6, 1, 0);
 	initItemMenuBox(result, 1, 9);
 	updateItemMenuStrings(result, 9, 0);
@@ -1853,22 +2153,25 @@ void createItemMenu(void)
 
 void openDiscardItem(void)
 {
+	int32_t found;
+
 	switch (SELECTION_MENU_STATE) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_RIGHT,
 		                    INVENTORY.size << 1, 6, 0x9a, 0x18,
 		                    6, 0x5a);
 
-		if (shopFillSellItemList()) {
+		found = shopFillSellItemList();
+		if (found) {
 			SELECTION_MENU_STATE = 3;
 			SCRIPT_STATE_3 = 0;
-		} else {
-			setTrigger(3);
-			writePStat(0xfe, 0xff);
-			SELECTION_MENU_STATE = 2;
-			SCRIPT_STATE_3 = 0;
+			break;
 		}
-		break;
+
+		setTrigger(3);
+		writePStat(0xfe, 0xff);
+		SELECTION_MENU_STATE = 2;
+		SCRIPT_STATE_3 = 0;
 	case 1:
 		break;
 	case 2:
@@ -1907,7 +2210,12 @@ ItemMenuBox *getItemMenuFromType(void)
 	return 0;
 }
 
-void initItemMenuBox(ItemMenuBox *box, int32_t boxId, int32_t startRow)
+// clang-format off
+void initItemMenuBox(box, boxId, startRow)
+	ItemMenuBox *box;
+	uint8_t boxId;
+	int32_t startRow;
+// clang-format on
 {
 	int32_t i;
 
@@ -1927,22 +2235,19 @@ void initItemMenuBox(ItemMenuBox *box, int32_t boxId, int32_t startRow)
 void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
 	TextBoxData *entry;
+	int32_t i;
 	uint8_t *p;
 	int32_t rows;
-	int32_t last;
-	int32_t i;
 
 	entry = &MAIN_D_801BE80C.box[box->boxId];
 	rows = box->itemCount - box->topRow;
-	if (box->visibleRows < rows) {
+	if (rows > box->visibleRows) {
 		rows = box->visibleRows;
 	}
 
 	if (rows != 0) {
-		i = 0;
-		last = startRow + rows - 1;
-		while (i < rows) {
-			if (box->itemRow[i] == last) {
+		for (i = 0; i < rows; i++) {
+			if (box->itemRow[i] == startRow + rows - 1) {
 				if (style == 0) {
 					calculateItemMenuStrings(box, i, 1);
 				} else if (style == 1) {
@@ -1967,8 +2272,6 @@ void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style)
 					calculateItemListStrings(box, i, 0);
 				}
 			}
-
-			i++;
 		}
 	} else {
 		p = TEXT_BUFFERS_PTR + (startRow << 6);
@@ -1981,7 +2284,7 @@ void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style)
 		}
 
 		*p++ = 0;
-		*p = 0;
+		*p++ = 0;
 	}
 
 	entry->pageReady = 1;
@@ -2000,13 +2303,16 @@ int32_t isItemMenuBoxBusy(ItemMenuBox *box)
 int32_t createItemMenuAmountBox(RECT *origin)
 {
 	ItemMenuBox *box;
+	uint8_t amount;
+	uint8_t n;
 	RECT rect;
 	int32_t idx;
+	int32_t cost;
+	int16_t boxX;
 	int16_t boxY;
-	uint8_t id;
-	uint8_t amount;
-	uint8_t room;
+	uint8_t flags;
 
+	flags = 0xc1;
 	box = getItemMenuFromType();
 	idx = (box->topRow + box->cursor) * 2;
 	SHOP_ITEM_TYPE = box->buf[idx];
@@ -2014,11 +2320,9 @@ int32_t createItemMenuAmountBox(RECT *origin)
 		goto fail;
 	}
 
-	id = SHOP_ITEM_TYPE;
 	amount = box->buf[idx + 1];
-
 	if (ITEM_MENU_TYPE < 3) {
-		SHOP_ITEM_PRICE = ITEM_PARA[id].value;
+		SHOP_ITEM_PRICE = ITEM_PARA[SHOP_ITEM_TYPE].value;
 		if (ITEM_MENU_TYPE == 1) {
 			if ((amount & 0x80) == 0) {
 				goto fail;
@@ -2039,31 +2343,31 @@ int32_t createItemMenuAmountBox(RECT *origin)
 				MAX_SHOP_AMOUNT = amount & 0x7f;
 			}
 
-			room = 0x63 - getItemCount(id);
-			if (room < MAX_SHOP_AMOUNT) {
-				MAX_SHOP_AMOUNT = room;
+			n = 0x63 - getItemCount(SHOP_ITEM_TYPE);
+			if (n < MAX_SHOP_AMOUNT) {
+				MAX_SHOP_AMOUNT = n;
 			}
 
-			idx = SHOP_ITEM_PRICE;
-			if (MAX_SHOP_AMOUNT * idx > MONEY) {
+			cost = MAX_SHOP_AMOUNT * SHOP_ITEM_PRICE;
+			if (cost > MONEY) {
 				MAX_SHOP_AMOUNT = MONEY / SHOP_ITEM_PRICE;
 			}
 		}
 	} else {
-		SHOP_ITEM_PRICE =
-			MAIN_D_8012FFC4[CARD_DATA[id].spriteId] >> 1;
+		n = CARD_DATA[SHOP_ITEM_TYPE].spriteId;
+		SHOP_ITEM_PRICE = MAIN_D_8012FFC4[n] >> 1;
 		MAX_SHOP_AMOUNT = amount;
 	}
 
 	SHOP_AMOUNT = 1;
 	MAIN_D_80134F82 = 1;
 	updateItemMenuSubTextboxLine();
+	boxX = UI_BOX_DATA[1].finalPos.x;
 	boxY = UI_BOX_DATA[1].finalPos.y;
-	origin->x += UI_BOX_DATA[1].finalPos.x;
+	origin->x += boxX;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x41, -0x2a, 0x82, 0x53);
-	createTextbox(3, 0xc1, &rect, origin, tickItemMenuAmountBox,
-	              renderItemMenuAmountBox);
+	createTextbox(3, flags, &rect, origin, tickItemMenuAmountBox, renderItemMenuAmountBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
 	updateItemMenuAmountBoxString();
 	playSound(0, 3);
@@ -2078,11 +2382,14 @@ fail:
 int32_t createSingleCardShopMenu(RECT *origin)
 {
 	ItemMenuBox *box;
-	RECT rect;
 	int32_t idx;
+	RECT rect;
+	int16_t boxX;
 	int16_t boxY;
+	uint8_t flags;
 	uint8_t amount;
 
+	flags = 0xc1;
 	box = getItemMenuFromType();
 	idx = (box->topRow + box->cursor) * 2;
 	SHOP_ITEM_TYPE = box->buf[idx];
@@ -2102,12 +2409,12 @@ int32_t createSingleCardShopMenu(RECT *origin)
 	}
 
 	updateItemMenuSubTextboxLine();
+	boxX = UI_BOX_DATA[1].finalPos.x;
 	boxY = UI_BOX_DATA[1].finalPos.y;
-	origin->x += UI_BOX_DATA[1].finalPos.x;
+	origin->x += boxX;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x38, -0x15, 0x70, 0x2a);
-	createTextbox(3, 0xc1, &rect, origin, tickSingleCardShop,
-	              renderSingleCardShop);
+	createTextbox(3, flags, &rect, origin, tickSingleCardShop, renderSingleCardShop);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 2, 0, 0);
 	showMapHeadTextbox(0, 0xff, 3, 0x4d8);
 	SHOP_AMOUNT = 0;
@@ -2165,7 +2472,6 @@ void itemMenuCursorDown(ItemMenuBox *box, int32_t style)
 {
 	int32_t k;
 	uint8_t first;
-	int32_t d;
 
 	box->cursor += 1;
 
@@ -2173,14 +2479,10 @@ void itemMenuCursorDown(ItemMenuBox *box, int32_t style)
 		if (box->cursor == box->visibleRows) {
 			box->topRow += 1;
 			box->cursor -= 1;
-			k = 1;
 			first = box->itemRow[0];
-			d = 0;
 
-			while (k < box->visibleRows) {
-				box->itemRow[d] = box->itemRow[k];
-				k++;
-				d++;
+			for (k = 1; k < box->visibleRows; k++) {
+				box->itemRow[k - 1] = box->itemRow[k];
 			}
 
 			box->itemRow[box->visibleRows - 1] = first;
@@ -2193,29 +2495,38 @@ void itemMenuCursorDown(ItemMenuBox *box, int32_t style)
 	}
 }
 
-int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId)
+int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiBoxId)
 {
-	RECT rect;
 	uint8_t *out;
-	uint8_t item;
+	RECT rect;
+	uint32_t len;
+	int16_t boxX;
 	int16_t boxY;
+	uint8_t flags;
+	uint8_t item;
 
+	flags = 0xc1;
 	item = box->buf[(box->topRow + box->cursor) * 2];
 	if (item == 0xff) {
 		return 0;
 	}
 
 	updateItemMenuSubTextboxLine();
+	boxX = UI_BOX_DATA[uiBoxId].finalPos.x;
 	boxY = UI_BOX_DATA[uiBoxId].finalPos.y;
-	origin->x += UI_BOX_DATA[uiBoxId].finalPos.x;
+	origin->x += boxX;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x84, -0xb, 0x108, 0x16);
-	createTextbox(3, 0xc1, &rect, origin, tickItemMenuDescriptionBox,
-	              renderItemMenuDescriptionBox);
+	createTextbox(3, flags, &rect, origin, tickItemMenuDescriptionBox, renderItemMenuDescriptionBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
-	strcpy((out = TEXT_BUFFERS_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6), out),
-	       ITEM_DESC_PTR[item]);
-	out += strlen(ITEM_DESC_PTR[item]);
+#if defined(VERSION_JP)
+	out = TEXT_BUFFERS_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
+	strcpy(out, ITEM_DESC_PTR[item]);
+#else
+	strcpy((out = TEXT_BUFFERS_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6), out), ITEM_DESC_PTR[item]);
+#endif
+	len = strlen(ITEM_DESC_PTR[item]);
+	out += len;
 	*out++ = 0;
 	*out = 0;
 	TEXT_BOX_DATA[3].pageReady = 1;
@@ -2224,7 +2535,7 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiB
 	return 1;
 }
 
-void renderItemMenuSprite(int32_t boxId, int32_t idx, int16_t x, int16_t y)
+void renderItemMenuSprite(uint8_t boxId, uint8_t idx, int16_t x, int16_t y)
 {
 	BoxUVTable uvs;
 	POLY_FT4 poly;
@@ -2259,25 +2570,26 @@ static void MAIN_func_800FD8D4__garbage__(void)
 
 void renderItemMenuScrollBar(ItemMenuBox *box)
 {
-	int16_t track;
 	POLY_F4 *prim;
-	int16_t boxId;
-	int16_t h;
 	int16_t x;
-	int16_t rows;
-	int16_t y;
+	int32_t shadow;
+	int32_t highlight;
 	GsOT_TAG *otp;
+	int16_t boxId;
 	int16_t thumbY;
-	int32_t bottom;
-	int32_t offset = 0;
-	int32_t scale = 1;
+	int16_t y;
 	int16_t w;
+	int16_t h;
+	int16_t track;
+	int16_t rows;
 
 	boxId = box->boxId;
 	x = box->rect.x + UI_BOX_DATA[boxId].finalPos.x;
 	y = box->rect.y + UI_BOX_DATA[boxId].finalPos.y;
 	boxId = 6 - boxId;
 	otp = ACTIVE_ORDERING_TABLE->org + boxId;
+	shadow = 0x20202;
+	highlight = 0xa08769;
 	w = box->rect.w;
 	h = box->rect.h;
 	if (box->itemCount < box->visibleRows) {
@@ -2289,11 +2601,10 @@ void renderItemMenuScrollBar(ItemMenuBox *box)
 	thumbY = y + 1 + ((track * box->topRow) / 100);
 	track = (track * box->visibleRows) / 100;
 
-	bottom = y + h;
-	drawLine3P(0x20202, x + w + 1, y, x, y, x, bottom + offset, boxId, 0);
-	drawLine3P(0xa08769, x, y + h + 1, x + w + 1, y + h + 1, x + w + 1, y + 1, boxId, 0);
-	drawLine3P(0xa08769, x + offset + w * scale, thumbY, x + 1, thumbY, x + 1, thumbY + track - 2, boxId, 0);
-	drawLine3P(0x20202, x + 1, thumbY + track - 1, x + offset + w * scale, thumbY + track - 1, x + offset + w * scale, thumbY + 1, boxId, 0);
+	drawLine3P(shadow, x + w + 1, y, x, y, x, y + h + 1 - 1, boxId, 0);
+	drawLine3P(highlight, x, y + h + 1, x + w + 1, y + h + 1, x + w + 1, y + 1, boxId, 0);
+	drawLine3P(highlight, x + 1 - 1 + w, thumbY, x + 1, thumbY, x + 1, thumbY + track - 2, boxId, 0);
+	drawLine3P(shadow, x + 1, thumbY + track - 1, x + 1 - 1 + w, thumbY + track - 1, x + 1 - 1 + w, thumbY + 1, boxId, 0);
 
 	prim = (POLY_F4 *)GsGetWorkBase();
 	SetPolyF4(prim);
@@ -2307,23 +2618,18 @@ void renderItemMenuScrollBar(ItemMenuBox *box)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2,
-                            int16_t y2, int32_t mode)
+void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t mode)
 {
+	int32_t count;
+	int32_t i;
 	TextBoxData *tbox;
-	int16_t boxId;
-	int32_t off;
+	int32_t top;
 	int32_t outX;
 	int32_t outW;
-	int32_t i;
-	int32_t count;
-	int32_t top;
-	int32_t order;
-	int32_t order2;
-	int32_t yy2;
+	int16_t boxId;
 	int16_t texY;
+	int16_t rowY;
 	uint8_t item;
-	uint8_t row;
 
 	boxId = box->boxId;
 	tbox = &MAIN_D_801BE80C.box[boxId];
@@ -2341,16 +2647,15 @@ void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2
 				count = box->visibleRows;
 			}
 		}
-		off = top * 2;
-		order = 6 - boxId;
-		for (i = 0, yy2 = y2 + 2; i < count; i++, off += 2, top++, y2 += 0x12, yy2 += 0x12) {
-			item = box->buf[off];
+
+		for (i = 0; i < count; i++, top++, y2 += 0x12) {
+			item = box->buf[top * 2];
 			if (item != 0xff) {
 				if (mode == 0) {
-					renderItemSprite(item, x2, y2, order);
+					renderItemSprite(item, x2, y2, 6 - boxId);
 				} else if (mode == 1) {
-					uint8_t spriteId = CARD_DATA[item].spriteId;
-					renderCardSprite(spriteId, x2 + 2, yy2, order);
+					item = CARD_DATA[item].spriteId;
+					renderCardSprite(item, x2 + 2, y2 + 2, 6 - boxId);
 				}
 			}
 		}
@@ -2362,10 +2667,12 @@ void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2
 	if (box->visibleRows < count) {
 		count = box->visibleRows;
 	}
-	for (i = 0, order2 = 6 - boxId; i < count; i++, y1 += 0x12) {
-		if (box->buf[(box->topRow + i) * 2] != 0xff) {
-			row = box->itemRow[i];
-			renderString(0, x1, y1, outW, 0xc, outX, (int16_t)(texY + row * 12), order2, 1);
+
+	for (i = 0; i < count; i++, y1 += 0x12) {
+		item = box->buf[(box->topRow + i) * 2];
+		if (item != 0xff) {
+			rowY = texY + box->itemRow[i] * 12;
+			renderString(0, x1, y1, outW, 0xc, outX, rowY, 6 - boxId, 1);
 		}
 	}
 }
@@ -2380,13 +2687,10 @@ void updateItemMenuSubTextboxLine(void)
 
 void playShopSoundOnlyInSavannah(void)
 {
-	uint16_t mapId;
 	int32_t i;
 
-	mapId = CURRENT_MAP_ID;
-
 	for (i = 0; i <= 0; i++) {
-		if (mapId == MAIN_D_801345C0[i]) {
+		if (CURRENT_MAP_ID == MAIN_D_801345C0[i]) {
 			i = i * 2;
 			playSound(((uint8_t *)&MAIN_D_801345C2)[i],
 			          ((uint8_t *)&MAIN_D_801345C2)[i + 1]);
@@ -2396,36 +2700,37 @@ void playShopSoundOnlyInSavannah(void)
 	}
 }
 
-void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w)
+void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int16_t w)
 {
-	int32_t yc;
+	uint32_t color;
 
-	x = x + UI_BOX_DATA[boxId].finalPos.x;
-	y = y + UI_BOX_DATA[boxId].finalPos.y;
+	x += UI_BOX_DATA[boxId].finalPos.x;
+	y += UI_BOX_DATA[boxId].finalPos.y;
 	boxId = 6 - boxId;
-	yc = y;
-
-	drawLine2P(0x20202, x, yc, (x + w) - 1, yc, boxId, 0);
+	color = 0x20202;
+	drawLine2P(color, x, y, (x + w) - 1, y, boxId, 0);
 	y++;
-	drawLine2P(0xa08769, x, y, (x + w) - 1, y, boxId, 0);
+	color = 0xa08769;
+	drawLine2P(color, x, y, (x + w) - 1, y, boxId, 0);
 	y++;
-	drawLine2P(0x20202, x, y, (x + w) - 1, y, boxId, 0);
+	color = 0x20202;
+	drawLine2P(color, x, y, (x + w) - 1, y, boxId, 0);
 }
 
-GARBAGE(renderInsetWithoutBox, 1);
-
-void renderInsetWithoutBox(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
+void renderInsetWithoutBox(uint8_t boxId, int16_t x, int16_t y, int16_t w, int16_t h)
 {
-	uint8_t order;
+	int32_t color;
 
-	x = x + UI_BOX_DATA[boxId].finalPos.x;
-	y = y + UI_BOX_DATA[boxId].finalPos.y;
-	order = 6 - boxId;
-	drawLine3P(0xa08769, x + 1, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, order, 0);
-	drawLine3P(0x20202, (x + w) - 1, y, x, y, x, (y + h) - 1, order, 0);
+	x += UI_BOX_DATA[boxId].finalPos.x;
+	y += UI_BOX_DATA[boxId].finalPos.y;
+	boxId = 6 - boxId;
+	color = 0xa08769;
+	drawLine3P(color, x + 1, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, boxId, 0);
+	color = 0x20202;
+	drawLine3P(color, (x + w) - 1, y, x, y, x, (y + h) - 1, boxId, 0);
 }
 
-void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth)
+void renderCardSprite(uint8_t spriteId, int16_t x, int16_t y, int32_t depth)
 {
 	POLY_FT4 *prim;
 
@@ -2440,8 +2745,7 @@ void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
-                        int32_t section)
+void showMapHeadTextbox(int32_t idx, uint8_t owner, uint8_t boxId, int32_t section)
 {
 	uint8_t *savedCursor;
 
@@ -2470,8 +2774,7 @@ void lostAllLives(void)
 {
 	uint8_t *pool;
 	int16_t i;
-	int16_t count;
-	int16_t pick;
+	int16_t n;
 	int32_t j;
 
 	switch (SELECTION_MENU_STATE) {
@@ -2488,26 +2791,26 @@ void lostAllLives(void)
 	}
 
 	i = 0;
-	count = 0;
+	n = 0;
 	while (i < 0x3a) {
 		if (hasMove(i) != 0) {
-			count += 1;
+			n += 1;
 		}
 		i++;
 	}
 
-	count = (10 - TAMER_ENTITY.tamerLevel) * 2 * (count * 100) / 100;
-	if (count % 100 >= 0x32) {
-		count += 100;
+	n = (10 - TAMER_ENTITY.tamerLevel) * 2 * (n * 100) / 100;
+	if (n % 100 >= 0x32) {
+		n += 100;
 	}
 
-	count = count / 100;
-	if (count == 0) {
+	n = n / 100;
+	if (n == 0) {
 		ACTIVE_INSTRUCTION = 0;
 		return;
 	}
 
-	writePStat(0xf4, count);
+	writePStat(0xf4, n);
 	SELECTION_MENU_STATE = 2;
 
 	return;
@@ -2523,10 +2826,10 @@ state2:
 		i++;
 	}
 
-	pick = randomLimit(j);
-	pick = pool[pick];
-	unlearnMove(pick);
-	writePStat(0xf3, pick);
+	n = randomLimit(j);
+	n = pool[n];
+	unlearnMove(n);
+	writePStat(0xf3, n);
 	freeArray((uint32_t *)pool);
 	showMapHeadTextbox(7, 0xff, 0, 0x4d8);
 	SELECTION_MENU_STATE = 1;
@@ -2535,15 +2838,15 @@ state2:
 
 	return;
 state3:
-	pick = readPStat(0xf4);
-	pick -= 1;
-	if (pick == 0) {
+	n = readPStat(0xf4);
+	n -= 1;
+	if (n == 0) {
 		closeBox(0);
 		ACTIVE_INSTRUCTION = 0;
 		return;
 	}
 
-	writePStat(0xf4, pick);
+	writePStat(0xf4, n);
 	SELECTION_MENU_STATE = 2;
 }
 
@@ -2577,20 +2880,16 @@ int32_t flipTextboxPage(uint8_t a)
 void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
-	char *name;
+	int32_t i;
+	uint32_t len;
+	int32_t value;
 	uint8_t type;
 	uint8_t amount;
-	int32_t value;
-	int32_t sum;
-	int32_t idx;
-	int32_t i;
 
-	out = getTextboxLine((uint8_t *)box, row);
-	sum = box->topRow + row;
-	i = sum * 2;
-	idx = i;
-	type = box->buf[idx];
-	amount = box->buf[idx + 1];
+	out = getTextboxLine(box, row);
+	i = (box->topRow + row) * 2;
+	type = box->buf[i];
+	amount = box->buf[i + 1];
 
 	if (type != 0xff) {
 		*out++ = 1;
@@ -2608,14 +2907,21 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			}
 		}
 
-		strcpy(out, name = ITEM_PARA[type].name);
-		out += strlen(name);
+		strcpy(out, ITEM_PARA[type].name);
+		len = strlen(ITEM_PARA[type].name);
+		out += len;
+#if defined(VERSION_JP)
+		*out++ = 0xc;
+		*out++ = 0;
+#endif
 		*out++ = 0xf;
 		*out++ = 0;
 
 		if (ITEM_MENU_TYPE != 5) {
+#if !defined(VERSION_JP)
 			*out++ = 0x16;
 			*out++ = 0;
+#endif
 			if (ITEM_MENU_TYPE != 7) {
 				value = ITEM_PARA[type].value;
 				if (ITEM_MENU_TYPE == 1) {
@@ -2640,6 +2946,11 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			*out++ = 0;
 		}
 amountPart:
+#if defined(VERSION_JP)
+		if (ITEM_MENU_TYPE != 0 && ITEM_MENU_TYPE != 7) {
+			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
+		}
+#else
 		if (ITEM_MENU_TYPE == 1) {
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
 		}
@@ -2649,6 +2960,7 @@ amountPart:
 			*out++ = 0;
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
 		}
+#endif
 	}
 
 	terminateString(out, isLast);
@@ -2657,13 +2969,14 @@ amountPart:
 void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
-	char *name;
 	uint8_t type;
+	uint8_t id;
 	uint8_t amount;
 	int32_t idx;
+	uint32_t len;
 	int32_t value;
 
-	out = getTextboxLine((uint8_t *)box, row);
+	out = getTextboxLine(box, row);
 	idx = (box->topRow + row) * 2;
 	type = box->buf[idx];
 	amount = box->buf[idx + 1];
@@ -2684,13 +2997,20 @@ void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			*out++ = 1;
 		}
 
-		strcpy(out, name = DIGIMON_DATA[CARD_DATA[type].digimonId].name);
-		out += strlen(name);
+		id = CARD_DATA[type].digimonId;
+		strcpy(out, DIGIMON_DATA[id].name);
+		len = strlen(DIGIMON_DATA[id].name);
+		out += len;
+#if defined(VERSION_JP)
+		*out++ = 0xc;
+#else
 		*out++ = 0x17;
+#endif
 		*out++ = 0;
 		*out++ = 0xf;
 		*out++ = 0;
-		value = MAIN_D_8012FFC4[CARD_DATA[type].spriteId];
+		id = CARD_DATA[type].spriteId;
+		value = MAIN_D_8012FFC4[id];
 
 		if (ITEM_MENU_TYPE == 3) {
 			out = intToStringSJIS(out, value, 4, 0);
@@ -2711,10 +3031,12 @@ void calculateMusicMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	uint8_t type;
-	int32_t len;
+	int32_t idx;
+	uint32_t len;
 
-	out = getTextboxLine((uint8_t *)box, row);
-	type = box->buf[(box->topRow + row) * 2];
+	out = getTextboxLine(box, row);
+	idx = (box->topRow + row) * 2;
+	type = box->buf[idx];
 	*out++ = 1;
 
 	if (type == readPStat(0xf9)) {
@@ -2738,10 +3060,12 @@ void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast
 	uint8_t *out;
 	uint8_t raw;
 	uint8_t nameId;
-	int32_t len;
+	int32_t idx;
+	uint32_t len;
 
-	out = getTextboxLine((uint8_t *)box, row);
-	raw = box->buf[(box->topRow + row) * 2];
+	out = getTextboxLine(box, row);
+	idx = (box->topRow + row) * 2;
+	raw = box->buf[idx];
 	*out++ = 1;
 
 	if ((raw & 0x80) != 0) {
@@ -2751,15 +3075,18 @@ void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast
 	}
 
 	raw &= 0x7f;
-	nameId = MAP_ENTRIES[MAIN_D_8013024C[raw].mapId].loadingName;
+	nameId = MAIN_D_8013024C[raw].mapId;
+	nameId = MAP_ENTRIES[nameId].loadingName;
 	strcpy(out, MAP_NAME_PTR[nameId]);
 	len = strlen(MAP_NAME_PTR[nameId]);
 	out += len;
 	out = padWithSpaces(out, 0xc, len);
 	*out++ = 0xf;
 	*out++ = 0;
+#if !defined(VERSION_JP)
 	*out++ = 0x1b;
 	*out++ = 0;
+#endif
 	out = intToStringSJIS(out, MAIN_D_8013024C[raw].cost, 4, 0);
 	terminateString(out, isLast);
 }
@@ -2767,13 +3094,13 @@ void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast
 void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 {
 	TextBoxData *entry;
-	uint8_t *p;
 	int16_t row;
 	int32_t outX;
 	int32_t outClut;
+	uint8_t *p;
 
 	entry = &MAIN_D_801BE80C.box[box->boxId];
-	((int32_t *)entry)[6] ^= 1;
+	entry->backPage ^= 1;
 
 	row = box->cursor;
 
@@ -2789,31 +3116,38 @@ void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 		calculateItemListStrings(box, row, 1);
 	}
 
-	((int32_t *)entry)[6] ^= 1;
+	entry->backPage ^= 1;
 
 	row = box->itemRow[row];
 	if (entry->doubleBuffered == 1) {
-		row = row + (int16_t)(((int32_t *)entry)[6] *
-		                      ((int32_t *)entry)[9]);
+		row += entry->backPage * entry->vramRows;
 	}
 
-	getVRAMModeCoords(((int32_t *)entry)[7], &outX, &outClut);
+	getVRAMModeCoords(entry->vramMode, &outX, &outClut);
 
 	p = TEXT_BUFFERS_PTR + (row << 6);
 	if (outX != 0) {
 		p += 0x20;
 	}
 
+#if defined(VERSION_JP)
+	drawString2(p, outX, row * 12);
+#else
 	drawString2(p, outX, row * 12, 1);
+#endif
 }
 
-void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
+void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int16_t w, int16_t h)
 {
-	x = x + UI_BOX_DATA[boxId].finalPos.x;
-	y = y + UI_BOX_DATA[boxId].finalPos.y;
+	int32_t color;
+
+	x += UI_BOX_DATA[boxId].finalPos.x;
+	y += UI_BOX_DATA[boxId].finalPos.y;
 	boxId = 6 - boxId;
-	drawLine3P(0xa08769, (x + w) - 1, y, x, y, x, (y + h) - 1, boxId, 0);
-	drawLine3P(0x20202, x, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, boxId, 0);
+	color = 0xa08769;
+	drawLine3P(color, (x + w) - 1, y, x, y, x, (y + h) - 1, boxId, 0);
+	color = 0x20202;
+	drawLine3P(color, x, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, boxId, 0);
 }
 
 void itemMenuCursorMoveToBottom(ItemMenuBox *data)
@@ -2844,23 +3178,20 @@ void itemMenuCursorMoveToTop(ItemMenuBox *data)
 	playSound(0, 2);
 }
 
-uint8_t *getTextboxLine(uint8_t *data, int32_t index)
+uint8_t *getTextboxLine(ItemMenuBox *box, uint8_t index)
 {
 	TextBoxData *entry;
 	uint8_t *row;
 
-	entry = &MAIN_D_801BE80C.box[data[0xc]];
-	row = TEXT_BUFFERS_PTR + (data + index)[0x18] * 0x40;
+	entry = &MAIN_D_801BE80C.box[box->boxId];
+	row = TEXT_BUFFERS_PTR + box->itemRow[index] * 0x40;
 
-	if (((int32_t *)entry)[7] == 2) {
+	if (entry->vramMode == 2) {
 		row += 0x20;
 	}
 
 	if (entry->doubleBuffered == 1) {
-		row = (uint8_t *)(row +
-		                  (((((int32_t *)entry)[6] ^ 1) *
-		                    ((int32_t *)entry)[9])
-		                   << 6));
+		row = (uint8_t *)(row + (((entry->backPage ^ 1) * entry->vramRows) << 6));
 	}
 
 	return row;
@@ -2892,34 +3223,36 @@ uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used)
 	return str;
 }
 
-void renderVerticalLine(int32_t boxId, int16_t x, int16_t y, int32_t h)
+void renderVerticalLine(uint8_t boxId, int16_t x, int16_t y, int16_t h)
 {
-	int32_t xc;
-	uint8_t order;
+	uint32_t color;
 
-	x = x + UI_BOX_DATA[boxId].finalPos.x;
-	y = y + UI_BOX_DATA[boxId].finalPos.y;
-	order = 6 - boxId;
-	xc = x;
-
-	drawLine2P(0x20202, xc, y, xc, (y + h) - 1, order, 0);
+	x += UI_BOX_DATA[boxId].finalPos.x;
+	y += UI_BOX_DATA[boxId].finalPos.y;
+	boxId = 6 - boxId;
+	color = 0x20202;
+	drawLine2P(color, x, y, x, (y + h) - 1, boxId, 0);
 	x++;
-	drawLine2P(0xa08769, x, y, x, (y + h) - 1, order, 0);
+	color = 0xa08769;
+	drawLine2P(color, x, y, x, (y + h) - 1, boxId, 0);
 	x++;
-	drawLine2P(0x20202, x, y, x, (y + h) - 1, order, 0);
+	color = 0x20202;
+	drawLine2P(color, x, y, x, (y + h) - 1, boxId, 0);
 }
 
-void setDialogueOwner(int32_t owner)
+// clang-format off
+void setDialogueOwner(owner)
+	uint8_t owner;
+// clang-format on
 {
 	if (MAIN_D_80134FE6 != owner) {
 		MAIN_D_80134FE6 = owner;
-		scriptPauseGame(owner);
+		scriptPauseGame(MAIN_D_80134FE6);
 		setupDialogueBox(MAIN_D_80134FE6);
 	}
 }
 
-void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
-                          int32_t *outSel, uint16_t section)
+void showMapheadSelection(int32_t idx, uint8_t owner, uint16_t x, int32_t *outSel, uint16_t section)
 {
 	uint8_t *saved;
 	uint16_t rows;
@@ -2966,7 +3299,10 @@ void setDigimonRaised(int32_t digimonId)
 	}
 }
 
-int32_t hasDigimonRaised(int32_t digimonId)
+// clang-format off
+int32_t hasDigimonRaised(digimonId)
+	uint16_t digimonId;
+// clang-format on
 {
 	return isTriggerSet(digimonId + 0x200);
 }
@@ -3007,7 +3343,10 @@ void triggerSeadramonCutscene(void)
 	callScriptSection(0, 0x4e4, 0);
 }
 
-void checkShopMap(int32_t mapId)
+// clang-format off
+void checkShopMap(mapId)
+	int16_t mapId;
+// clang-format on
 {
 	uint8_t local;
 	int32_t i;
@@ -3029,7 +3368,10 @@ void loadShopLibrary(void)
 	loadDynamicLibrary(SHOP_REL, (uint8_t *)&TRN_LOADING_COMPLETE, 1, 0, 0);
 }
 
-void checkArenaMap(int32_t mapId)
+// clang-format off
+void checkArenaMap(mapId)
+	int16_t mapId;
+// clang-format on
 {
 	uint8_t local;
 	int32_t i;
@@ -3056,7 +3398,10 @@ void *allocateArray(uint32_t size)
 
 void freeArray(uint32_t *array)
 {
-	MAIN_D_80134F64 -= array[-1] + 4;
+	uint32_t *header;
+
+	header = array - 1;
+	MAIN_D_80134F64 -= *header + 4;
 }
 
 void renderShopBitsBox(void)
@@ -3069,6 +3414,11 @@ void renderShopBitsBox(void)
 	x = UI_BOX_DATA[2].finalPos.x + 6;
 	y = UI_BOX_DATA[2].finalPos.y + 4;
 
+#if defined(VERSION_JP)
+	renderString(0, x, y, 0x48, 0xc, 0, rowPx, 4, 1);
+	renderString(0, x, y + 0xd, 0x48, 0xc, 0x48, rowPx, 4, 1);
+#else
 	renderString(0, x + 0x10, y, 0x30, 0xc, 0, rowPx, 4, 1);
 	renderString(0, x + 0x10, y + 0xd, 0x3c, 0xc, 0x30, rowPx, 4, 1);
+#endif
 }

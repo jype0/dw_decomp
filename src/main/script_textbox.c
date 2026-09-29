@@ -4,6 +4,7 @@
 
 #include <dw/font.h>
 #include <dw/garbage.h>
+#include <dw/input.h>
 #include <dw/item.h>
 #include <dw/params.h>
 #include <dw/script.h>
@@ -50,14 +51,18 @@ void tickCustomSizedTextbox(void);
 void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 int32_t advanceTextbox(int32_t boxId);
 void setupDialogueBox(uint8_t owner);
-int32_t showTextboxReady(int32_t boxId, int32_t speakerId);
+uint16_t showTextboxReady(uint8_t boxId, uint8_t speakerId);
+#if defined(VERSION_JP)
+int32_t drawTextboxStrings(int32_t boxId);
+#else
 int32_t drawTextboxStrings(int32_t boxId, int32_t flag);
+#endif
 int32_t tickSelectionDialogue(void);
 int32_t tickBackgroundDialogue(void);
-int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
 int32_t getSpeakerName(int32_t speakerId, uint8_t *buf);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag);
 void renderUIBox(int32_t boxId);
+void createTextbox(int32_t boxId, int32_t flags, RECT *rect, RECT *origin, void *tick, void *render);
 
 static void *script_textbox_functions[] = {
 	showTextboxReady,
@@ -94,10 +99,10 @@ static void *script_textbox_functions[] = {
 void renderScriptDialogueBox(void)
 {
 	int16_t rowPx;
+	int32_t i;
 	int16_t x;
 	int16_t y;
 	int16_t ySave;
-	int32_t i;
 
 	rowPx = TEXT_BOX_DATA[0].vramRow * 12;
 	rowPx += (TEXT_BOX_DATA[0].backPage * 48);
@@ -124,15 +129,25 @@ void renderScriptDialogueBox(void)
 	}
 }
 
-int32_t drawTextboxStrings(int32_t boxId, int32_t flag)
+// clang-format off
+#if defined(VERSION_JP)
+int32_t drawTextboxStrings(boxId)
+#else
+int32_t drawTextboxStrings(boxId, flag)
+#endif
+	uint8_t boxId;
+#if !defined(VERSION_JP)
+	int32_t flag;
+#endif
+// clang-format on
 {
 	TextBoxData *box;
+	int32_t done;
 	uint32_t x;
 	int32_t clut;
 	int16_t px;
 	int16_t row;
 	uint8_t *buf;
-	int32_t done;
 
 	box = &MAIN_D_801BE80C.box[boxId];
 	if (box->writeCount == box->renderCount) {
@@ -154,7 +169,11 @@ int32_t drawTextboxStrings(int32_t boxId, int32_t flag)
 	}
 
 	while (x != 0) {
+#if defined(VERSION_JP)
+		done = drawString2(buf, px, row);
+#else
 		done = drawString2(buf, px, row, flag);
+#endif
 		box->writeRow++;
 		if (done != 0) {
 			box->writeCount = 1;
@@ -171,7 +190,10 @@ int32_t drawTextboxStrings(int32_t boxId, int32_t flag)
 	return 1;
 }
 
-void clearTextboxLineCount(int32_t boxId)
+// clang-format off
+void clearTextboxLineCount(boxId)
+	uint8_t boxId;
+// clang-format on
 {
 	TextBoxData *entry;
 	int32_t rows;
@@ -198,14 +220,14 @@ int32_t tickSelectionDialogue(void)
 		return 0xffff;
 	}
 
-	if (isKeyDown(0x40)) {
+	if (isKeyDown(CONFIRM_BUTTON)) {
 		advanceTextbox(0);
 		playSound(0, 3);
 
 		return MAIN_D_801BE952[0];
 	}
 
-	if (isKeyDown(0x10)) {
+	if (isKeyDown(CANCEL_BUTTON)) {
 		if (isTriggerSet(0x31) == 0) {
 			if (ACTIVE_INSTRUCTION != SCRIPT_OP_CALL_ROUTINE) {
 				advanceTextbox(0);
@@ -224,11 +246,7 @@ int32_t tickSelectionDialogue(void)
 		}
 
 		playSound(0, 0xb);
-
-		return 0xffff;
-	}
-
-	if (isKeyDown(0x1000)) {
+	} else if (isKeyDown(0x1000)) {
 		if (MAIN_D_801BE952[0] == 0) {
 			MAIN_D_801BE952[0] = MAIN_D_801BE950[0] - 1;
 		} else {
@@ -236,11 +254,7 @@ int32_t tickSelectionDialogue(void)
 		}
 
 		playSound(0, 2);
-
-		return 0xffff;
-	}
-
-	if (isKeyDown(0x4000)) {
+	} else if (isKeyDown(0x4000)) {
 		MAIN_D_801BE952[0] += 1;
 		if (MAIN_D_801BE952[0] == MAIN_D_801BE950[0]) {
 			MAIN_D_801BE952[0] = 0;
@@ -267,7 +281,7 @@ int32_t tickConfirmDialogue(void)
 
 	switch (MAIN_D_80134FE5) {
 	case 0:
-		if (isKeyDown(0x40) == 0) {
+		if (isKeyDown(CONFIRM_BUTTON) == 0) {
 			goto ret0;
 		}
 
@@ -302,15 +316,24 @@ ret0:
 	return 0;
 }
 
-void renderDialogueSelectionCursor(int32_t x, int32_t y)
+// clang-format off
+void renderDialogueSelectionCursor(x, y)
+	int16_t x;
+	int16_t y;
+// clang-format on
 {
 	if (TEXT_BOX_DATA[0].idle == 1) {
 		return;
 	}
 
+#if defined(VERSION_JP)
+	renderSelectionCursor(x - 1, (long)y + MAIN_D_801BE954[0] + MAIN_D_801BE952[0] * 13,
+	                      MAIN_D_801BE956[0], 0xd, 6);
+#else
 	renderSelectionCursor(x - 1,
 	                      y + MAIN_D_801BE954[0] + MAIN_D_801BE952[0] * 13 - 2,
 	                      MAIN_D_801BE956[0], 0xd, 6);
+#endif
 }
 
 void tickCustomSizedTextbox(void)
@@ -323,7 +346,7 @@ void tickCustomSizedTextbox(void)
 		return;
 	}
 
-	if (isKeyDown(0x40)) {
+	if (isKeyDown(CONFIRM_BUTTON)) {
 		if (UI_BOX_DATA[0].state != 1) {
 			return;
 		}
@@ -337,7 +360,7 @@ void tickCustomSizedTextbox(void)
 		return;
 	}
 
-	if (!isKeyDown(0x10)) {
+	if (!isKeyDown(CANCEL_BUTTON)) {
 		return;
 	}
 
@@ -357,15 +380,15 @@ void renderCustomSizedTextbox(void)
 {
 	TextBoxData *box;
 	int16_t rowPx;
-	int16_t pagePx;
 	int16_t x;
+	int16_t pagePx;
 	int16_t y;
 	int32_t i;
 
 	box = MAIN_D_801BE80C.box;
-	rowPx = box->vramRow * 12;
 	pagePx = box->vramRows * 12;
-	rowPx = rowPx + (int16_t)(box->backPage * pagePx);
+	rowPx = box->vramRow * 12;
+	rowPx += (int16_t)(box->backPage * pagePx);
 	x = UI_BOX_DATA[0].finalPos.x + 5;
 	y = UI_BOX_DATA[0].finalPos.y + 4;
 
@@ -391,23 +414,25 @@ void initializeTextbox(void)
 	TEXTBOX_OPEN_TIMER = 0;
 }
 
+#if defined(VERSION_JP)
+void tickTextboxHandling(void)
+#else
 void tickTextboxHandling(int32_t flag)
+#endif
 {
 	RECT area;
+	int32_t drew;
 	int32_t x;
 	int32_t clut;
 	TextBoxData *box;
 	int32_t i;
-	int32_t drew;
 	uint8_t flags;
-	int16_t mode;
 	uint8_t features;
 	uint8_t color;
 
 	drew = 0;
 	if (ACTIVE_INSTRUCTION != 0xff) {
-		box = TEXT_BOX_DATA;
-		for (i = 0; i < 6; i++, box++) {
+		for (i = 0, box = TEXT_BOX_DATA; i < 6; i++, box++) {
 			if (box->vramRows != 0) {
 				if (box->registered == 1 && box->writeCount != box->renderCount) {
 					if (box->doubleBuffered == 1) {
@@ -418,17 +443,21 @@ void tickTextboxHandling(int32_t flag)
 						area.w = clut;
 						area.h = box->vramRows * 12;
 						clearTextSubArea(&area);
+						box->registered = 0;
 					} else {
 						box->writeRow = 0;
+						box->registered = 0;
 					}
-					box->registered = 0;
 				}
 				if (drew == 0 && box->registered == 0) {
+#if defined(VERSION_JP)
+					drew = drawTextboxStrings(i & 0xff);
+#else
 					drew = drawTextboxStrings(i & 0xff, flag);
+#endif
 				}
 				flags = box->flags;
-				mode = flags & 0xf;
-				if (mode != UI_BOX_DATA[i].state) {
+				if ((int16_t)(flags & 0xf) != UI_BOX_DATA[i].state) {
 					if ((flags & 0xf) == 1) {
 						if (box->registered == 1 && UI_BOX_DATA[i].state == 0) {
 							features = (flags >> 4) & 3;
@@ -455,8 +484,8 @@ void tickTextboxHandling(int32_t flag)
 		if (MAIN_D_80135010 != 0) {
 			MAIN_D_80135010--;
 		}
-		MAIN_D_80134F94 = 0;
 		TEXTBOX_OPEN_TIMER++;
+		MAIN_D_80134F94 = 0;
 		return;
 	}
 	for (i = 0; i < 6; i++) {
@@ -488,12 +517,8 @@ void closeTextbox(boxId, target)
 	RECT *target;
 // clang-format on
 {
-	uint32_t b;
-
-	b = boxId;
-
 	if (UI_BOX_DATA[boxId].state != 0 && UI_BOX_DATA[boxId].state != 3) {
-		if ((TEXT_BOX_DATA[b].flags & 0x40) == 0) {
+		if ((MAIN_D_801BE80C.box[boxId].flags & 0x40) == 0) {
 			removeStaticUIBox(boxId);
 		} else {
 			removeAnimatedUIBox(boxId, target);
@@ -509,7 +534,7 @@ void closeAllTextboxes(void)
 	uint8_t flags;
 
 	for (i = 0; i < 6; i++) {
-		flags = TEXT_BOX_DATA[i].flags;
+		flags = MAIN_D_801BE80C.box[i].flags;
 		if ((flags & 0xf) != 0) {
 			if (flags & 0x40) {
 				ACTIVE_INSTRUCTION = 0xff;
@@ -521,8 +546,15 @@ void closeAllTextboxes(void)
 	}
 }
 
-void createTextbox(int32_t boxId, uint8_t flags, RECT *rect, RECT *origin,
-                   void *tick, void *render)
+// clang-format off
+void createTextbox(boxId, flags, rect, origin, tick, render)
+	uint8_t boxId;
+	uint8_t flags;
+	RECT *rect;
+	RECT *origin;
+	void *tick;
+	void *render;
+// clang-format on
 {
 	TextBoxData *entry;
 
@@ -541,21 +573,28 @@ void createTextbox(int32_t boxId, uint8_t flags, RECT *rect, RECT *origin,
 	setFreshDialogue();
 }
 
-void triggerBoxCloseFlag(int32_t boxId)
+// clang-format off
+void triggerBoxCloseFlag(boxId)
+	uint8_t boxId;
+// clang-format on
 {
 	TextBoxData *e = &MAIN_D_801BE80C.box[boxId];
 	uint8_t val = e->flags;
-	uint32_t v;
 
 	if ((val & 0xf) != 0) {
-		v = val & 0xf0;
-		v &= 0xff;
-		e->flags = v;
+		val = val & 0xf0;
+		e->flags = val;
 	}
 }
 
-void registerTextbox(int32_t boxId, int32_t row, int32_t rows,
-                     int32_t doubleBuffer, int32_t mode)
+// clang-format off
+void registerTextbox(boxId, row, rows, doubleBuffer, mode)
+	uint8_t boxId;
+	int32_t row;
+	int32_t rows;
+	uint8_t doubleBuffer;
+	int32_t mode;
+// clang-format on
 {
 	TextBoxData *entry;
 	int32_t usedRows;
@@ -589,15 +628,26 @@ void registerTextbox(int32_t boxId, int32_t row, int32_t rows,
 	clearTextSubArea(&rect);
 }
 
+#if defined(VERSION_JP)
+int32_t drawString2(uint8_t *str, int16_t x, int16_t y)
+#else
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
+#endif
 {
+#if defined(VERSION_JP)
+#ifdef __MWERKS__
+	extern void drawGlyph();
+#endif
+#else
 	int32_t y2;
+#endif
 	RECT rect;
 	uint8_t ch;
 	int16_t pos;
 	int16_t rem;
+#if !defined(VERSION_JP)
 	uint16_t adv;
-	int32_t save;
+#endif
 	uint16_t glyph;
 
 	pos = 0;
@@ -619,14 +669,14 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 		case 0xc:
 			str++;
 			rem = pos / 12 % 8;
-			save = pos;
 			if (rem != 0) {
 				rem = (8 - rem) * 12;
-				setRECT(&rect, x + save, y, rem, 0xc);
+				setRECT(&rect, x + pos, y, rem, 0xc);
 				clearTextSubArea(&rect);
-				pos = save + rem;
+				pos = pos + rem;
 			}
 			break;
+#if !defined(VERSION_JP)
 		case 0x16:
 			str++;
 			setRECT(&rect, x + pos - 6, y, 0x69, 0xc);
@@ -669,15 +719,15 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 			clearTextSubArea(&rect);
 			pos = 0xb4;
 			break;
+#endif
 		case 0xe:
 			str++;
 			rem = pos / 12 % 0xb;
-			save = pos;
 			if (rem != 0) {
 				rem = (0xb - rem) * 12;
-				setRECT(&rect, x + save, y, rem, 0xc);
+				setRECT(&rect, x + pos, y, rem, 0xc);
 				clearTextSubArea(&rect);
-				pos = save + rem;
+				pos = pos + rem;
 			}
 			break;
 		case 0xf:
@@ -689,30 +739,45 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 		case 0xd:
 			return 0;
 		default:
+#if defined(VERSION_JP)
+			glyph = ch + (*str++ << 8);
+#else
 			if (isAsciiEncoded((char *)&ch) != 0) {
 				glyph = swapShortBytes(convertAsciiToJis(ch));
 			} else {
 				glyph = ch + (*str++ << 8);
 			}
+#endif
 
 			if (glyph == 0x4081) {
 				setRECT(&rect, x + pos, y, 0xc, 0xc);
 				clearTextSubArea(&rect);
 			} else {
+#if defined(VERSION_JP)
+				drawGlyph(glyph, x + pos, y);
+#else
 				y2 = y;
 				adv = drawGlyph(glyph, x + pos, y2);
 				if (MAIN_D_80134F98 != 0) {
 					adv = 0xc;
 				}
+#endif
 			}
 
+#if defined(VERSION_JP)
+			pos += 0xc;
+#else
 			pos += adv;
+#endif
 			break;
 		}
 	}
 }
 
-int32_t flipIdleTextboxPage(int32_t boxId)
+// clang-format off
+int32_t flipIdleTextboxPage(boxId)
+	uint8_t boxId;
+// clang-format on
 {
 	TextBoxData *entry;
 
@@ -776,7 +841,10 @@ int32_t tickBackgroundDialogue(void)
 	return 0;
 }
 
-int32_t advanceTextbox(int32_t boxId)
+// clang-format off
+int32_t advanceTextbox(boxId)
+	uint8_t boxId;
+// clang-format on
 {
 	TextBoxData *entry;
 
@@ -852,11 +920,8 @@ int32_t setupBoxOrigin(int32_t ownerId, RECT *origin)
 
 void tickScriptDialogueBox(void)
 {
-	int32_t sel;
-
 	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
-		sel = tickSelectionDialogue();
-		if (sel != 0xffff) {
+		if (tickSelectionDialogue() != 0xffff) {
 			MAIN_D_80134FDC =
 				(uint8_t *)((uint32_t)MAIN_D_801BE948[0] +
 			                    MAIN_D_801BE952[0] * 2);
@@ -872,19 +937,16 @@ void tickScriptDialogueBox(void)
 			break;
 		case 1:
 			if (tickConfirmDialogue() == 1) {
-				SCRIPT_STATE_3 = 0;
 				SELECTION_MENU_STATE = SCRIPT_STATE_4;
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
+				SCRIPT_STATE_3 = 0;
 			}
 			break;
 		case 2:
-			sel = tickSelectionDialogue();
-			if (sel != 0xffff) {
-				SCRIPT_STATE_3 = 0;
-				sel = MAIN_D_801BE952[0];
-				SELECTION_MENU_STATE =
-					SCRIPT_STATE_4 + (uint16_t)sel;
+			if (tickSelectionDialogue() != 0xffff) {
+				SELECTION_MENU_STATE = (long)SCRIPT_STATE_4 + MAIN_D_801BE952[0];
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
+				SCRIPT_STATE_3 = 0;
 			}
 			break;
 		case 3:
@@ -921,21 +983,25 @@ void renderUIBox(int32_t boxId)
 void scriptShowSelection(void)
 {
 	uint8_t optionCount;
+#if !defined(VERSION_JP)
 	uint16_t height;
+#endif
 
 	pollNextScriptUByte(&optionCount);
 
 	MAIN_D_801BE950[0] = optionCount;
 	MAIN_D_801BE952[0] = 0;
 	MAIN_D_801BE948[0] = (int32_t)MAIN_D_80134FDC;
-	MAIN_D_80134FDC += (optionCount + 1) * 2;
+	MAIN_D_80134FDC = MAIN_D_80134FDC + (optionCount + 1) * 2;
 	MAIN_D_801BE956[0] = showTextbox(0, MAIN_D_80134FE6);
 	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
+#if !defined(VERSION_JP)
 	height = MAIN_D_801BE956[0];
 
 	if (height > 0xf0) {
 		MAIN_D_801BE956[0] = 0xf0;
 	}
+#endif
 
 	MAIN_D_80134FDC += 2;
 	MAIN_D_801BE94C[0] = (int32_t)MAIN_D_80134FDC;
@@ -951,15 +1017,14 @@ void scriptShowSelection(void)
 
 GARBAGE(showTextbox, 1);
 
-uint32_t showTextbox(int32_t boxId, uint32_t speakerId)
+uint16_t showTextbox(uint8_t boxId, uint8_t speakerId)
 {
 	TextBoxData *entry;
 	uint8_t *base;
 	uint8_t *out;
-	uint32_t col;
+	uint16_t col;
 	uint16_t maxCol;
 	uint32_t row;
-	uint32_t rowOffset;
 	int32_t lines;
 	uint8_t ctrl;
 
@@ -985,7 +1050,8 @@ uint32_t showTextbox(int32_t boxId, uint32_t speakerId)
 		} else {
 			*out++ = 7;
 		}
-		out += getSpeakerName(speakerId, out);
+		lines = getSpeakerName(speakerId, out);
+		out += lines;
 		*out++ = 1;
 		*out++ = 1;
 		*out++ = 0xd;
@@ -993,7 +1059,6 @@ uint32_t showTextbox(int32_t boxId, uint32_t speakerId)
 		row++;
 		out = base + (row << 6);
 	}
-	rowOffset = row << 6;
 top: {
 	ctrl = *MAIN_D_80134FDC++;
 	{
@@ -1013,17 +1078,13 @@ top: {
 			MAIN_D_80134FDC++;
 			lines = getSpeakerName(0xfd, out);
 			out += lines;
-			col = (col + ((lines >> 1) &
-			              0xffff)) &
-			      0xffff;
+			col += (uint16_t)(lines >> 1);
 			goto top;
 		case 6:
 			MAIN_D_80134FDC++;
 			lines = getSpeakerName(0xfc, out);
 			out += lines;
-			col = (col + ((lines >> 1) &
-			              0xffff)) &
-			      0xffff;
+			col += (uint16_t)(lines >> 1);
 			goto top;
 		case 7:
 			ctrl = *MAIN_D_80134FDC++;
@@ -1034,9 +1095,7 @@ top: {
 				lines = strlen(
 					(const char *)&DIGIMON_DATA[ctrl]);
 				out += lines;
-				col = (col + ((lines >> 1) &
-				              0xffff)) &
-				      0xffff;
+				col += (uint16_t)(lines >> 1);
 			}
 			goto top;
 		case 8:
@@ -1046,9 +1105,7 @@ top: {
 				strcpy(out, MOVE_NAMES[ctrl]);
 				lines = strlen(MOVE_NAMES[ctrl]);
 				out += lines;
-				col = (col + ((lines >> 1) &
-				              0xffff)) &
-				      0xffff;
+				col += (uint16_t)(lines >> 1);
 			}
 			goto top;
 		case 9:
@@ -1060,9 +1117,7 @@ top: {
 				lines = strlen(
 					(const char *)&ITEM_PARA[ctrl]);
 				out += lines;
-				col = (col + ((lines >> 1) &
-				              0xffff)) &
-				      0xffff;
+				col += (uint16_t)(lines >> 1);
 			}
 			goto top;
 		case 10:
@@ -1096,7 +1151,7 @@ top: {
 				strcpy(out, BGM_TRACK_NAMES[ctrl]);
 				lines = strlen(BGM_TRACK_NAMES[ctrl]);
 				out += lines;
-				col = (col + ((lines >> 1) & 0xffff)) & 0xffff;
+				col += (uint16_t)(lines >> 1);
 			}
 			goto top;
 		case 18:
@@ -1106,7 +1161,7 @@ top: {
 				strcpy(out, TOURNAMENT_NAMES[ctrl]);
 				lines = strlen(TOURNAMENT_NAMES[ctrl]);
 				out += lines;
-				col = (col + ((lines >> 1) & 0xffff)) & 0xffff;
+				col += (uint16_t)(lines >> 1);
 			}
 			goto top;
 		case 12:
@@ -1120,7 +1175,7 @@ top: {
 		case 13:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
-			if (maxCol < col) {
+			if (col > maxCol) {
 				maxCol = col;
 			}
 			col = 0;
@@ -1136,10 +1191,8 @@ top: {
 				entry->pageReady = 1;
 				goto done;
 			}
-			rowOffset += 0x40;
 			row++;
-			lines = rowOffset;
-			out = base + lines;
+			out = base + (row << 6);
 			goto top;
 		case 1:
 		case 2:
@@ -1150,7 +1203,7 @@ top: {
 		default:
 			*out++ = ctrl;
 			*out++ = *MAIN_D_80134FDC++;
-			col = (col + 1) & 0xffff;
+			col++;
 			goto top;
 		}
 	}
@@ -1189,9 +1242,9 @@ void scriptSetTextboxSize(void)
 	registerTextbox(0, 0, rows, 1, 0);
 }
 
-int32_t showTextboxReady(int32_t boxId, int32_t speakerId)
+uint16_t showTextboxReady(uint8_t boxId, uint8_t speakerId)
 {
-	TEXT_BOX_DATA[boxId].pageReady = 1;
+	MAIN_D_801BE80C.box[boxId].pageReady = 1;
 
 	return showTextbox(boxId, speakerId);
 }

@@ -54,8 +54,8 @@ void renderString(int32_t colorId,
 		  uint32_t uvX, uint32_t uvY,
 		  int32_t offset, int32_t hasShadow);
 
-void renderVerticalLine(int32_t boxId, int16_t x, int16_t y, int32_t h);
-void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w);
+void renderVerticalLine(uint8_t boxId, int16_t x, int16_t y, int16_t h);
+void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int16_t w);
 void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h, int32_t layer);
 
 static void *dget_functions[] = {

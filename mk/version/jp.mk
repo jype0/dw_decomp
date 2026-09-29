@@ -75,6 +75,9 @@ MAIN_C_SRC := \
 	src/main/particle.c \
 	src/main/partner.c \
 	src/main/partner_impl.c \
+	src/main/script_common.c \
+	src/main/script_textbox.c \
+	src/main/script_value.c \
 	src/main/sound.c \
 	src/main/sound_async.c \
 	src/main/tamer.c \
