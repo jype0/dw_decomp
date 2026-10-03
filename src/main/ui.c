@@ -46,29 +46,47 @@ uint8_t MAIN_D_80134334[4] = {
 	0x10, 0x10, 0x14, 0x14,
 };
 
+RGB8 UI_BOX_COLORS[5] = {
+	{ 0x00, 0x00, 0x00 },
+	{ 0x2d, 0x38, 0x40 },
+	{ 0x00, 0x00, 0x00 },
+	{ 0x00, 0x00, 0x00 },
+	{ 0x00, 0x00, 0x00 },
+};
+
 #if defined(VERSION_JP)
-char STR_MOVE_NAME_BUG[] = "バグ";
+char MAIN_D_80124C0C[2][12] = {
+	"最大ＨＰ",
+	"最大ＭＰ",
+};
 
-char STR_MOVE_NAME_PARTY_TIME[] = "ウンチ";
+char MAIN_D_80124C24[12] = "攻撃力";
 
-char STR_MOVE_NAME_PUMMEL_WHACK[] = "覇王拳";
-
-char STR_MOVE_NAME_FIST_OF_THE_BEAST_KING[] = "獣王拳";
-
-char STR_MOVE_NAME_BUBBLE[] = "あわ";
-
-char STR_ITEM_DESC_MYSTERY_ITEM[] = "？？？";
+char MAIN_D_80124C30[3][12] = {
+	"防御力",
+	"すばやさ",
+	"かしこさ",
+};
 #else
-char STR_MOVE_NAME_BUG[4] = "Bug";
+char MAIN_D_80124C0C[2][12] = {
+	"HP",
+	"MP",
+};
 
-char STR_MOVE_NAME_TREMAR[] = "Tremar";
+char MAIN_D_80124C24[12] = "Off";
 
-char STR_MOVE_NAME_WAR_CRY[8] = "War Cry";
-
-char STR_MOVE_NAME_COUNTER[8] = "Counter";
-
-char STR_MOVE_NAME_BUBBLE[] = "Bubble";
+char MAIN_D_80124C30[3][12] = {
+	"Def",
+	"Speed",
+	"Brain",
+};
 #endif
+
+char MAIN_D_80124C54[] = {
+	0x82, 0x4f, 0x82, 0x50, 0x82, 0x51, 0x82, 0x52,
+	0x82, 0x53, 0x82, 0x54, 0x82, 0x55, 0x82, 0x56,
+	0x82, 0x57, 0x82, 0x58, 0x00,
+};
 // clang-format on
 
 void initializeUIBoxData(void)

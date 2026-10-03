@@ -143,6 +143,9 @@ SECTIONS
         BUILD_DIR/src/main/efe.c.o(.data .data.*);
         KEEP(BUILD_DIR/asm/main/data/9F198.data.s.o(.data .data.*));
         BUILD_DIR/src/main/game_menu.c.o(.data .data.*);
+        BUILD_DIR/src/main/particle.c.o(.data .data.*);
+        BUILD_DIR/src/main/ui.c.o(.data .data.*);
+        BUILD_DIR/src/main/item.c.o(.data .data.*);
         BUILD_DIR/src/main/sound.c.o(.data .data.*);
         KEEP(BUILD_DIR/asm/main/data/A43D0.data.s.o(.data .data.*));
         BUILD_DIR/src/main/map.c.o(.data .data.*);
