@@ -28,7 +28,7 @@ typedef struct {
 } MapLightUpdateData;
 
 void reinitializeAfterTournament(void);
-void MAIN_thunk_func_800D92EC(void);
+void thunkReinitializeAfterTournament(void);
 void startTournament(void);
 void *allocateArray(uint32_t size);
 void freeArray(uint32_t *array);
@@ -45,7 +45,7 @@ void convertValueToDigits(int16_t n, int32_t value, int32_t *outCount,
 			  int32_t *digits);
 void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h,
 			   int32_t layer);
-void renderTrianglePrimitive();
+void drawLine3P();
 void loadStackedTIMFile(char *path);
 void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
 		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow);
@@ -55,9 +55,9 @@ void setItemTexture(POLY_FT4 *p, uint8_t id);
 uint8_t entityGetTechFromAnim(Entity *e, uint8_t anim);
 void entityLookAtTile(Entity *entity, int8_t tileX, int8_t tileY);
 void setEntityTextDigit(POLY_FT4* poly, int32_t x, int32_t y);
-void MAIN_func_800E642C(void);
-void renderSmallNumber(int32_t color, int16_t n, int16_t x, int16_t y,
-		       int16_t value, int32_t layer);
+void removePauseBox(void);
+void renderItemAmount(int32_t color, int16_t n, int16_t x, int16_t y,
+		      int16_t value, int32_t layer);
 void drawEntityText(int32_t color, int16_t n, int16_t x, int16_t y,
 			int16_t value, int32_t layer);
 int32_t hasMove(int32_t move);
@@ -197,8 +197,8 @@ void drawEntityText(int32_t color, int16_t n, int16_t x, int16_t y,
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void renderSmallNumber(int32_t color, int16_t n, int16_t x, int16_t y,
-		       int16_t value, int32_t layer)
+void renderItemAmount(int32_t color, int16_t n, int16_t x, int16_t y,
+		      int16_t value, int32_t layer)
 {
 	POLY_FT4 *prim;
 	int32_t i;
@@ -227,10 +227,10 @@ void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h,
 {
 	GsBOXF box;
 
-	renderTrianglePrimitive(0xb0b0b0, x, y + h - 1, x, y, x + w - 1, y, layer,
-				0);
-	renderTrianglePrimitive(0x121212, x + w, y, x + w, y + h, x, y + h, layer,
-				0);
+	drawLine3P(0xb0b0b0, x, y + h - 1, x, y, x + w - 1, y, layer,
+		   0);
+	drawLine3P(0x121212, x + w, y, x + w, y + h, x, y + h, layer,
+		   0);
 	box.attribute = 0x40000000;
 	box.r = box.g = box.b = 0x80;
 	setRECT(&box, x + 1, y + 1, w - 1, h - 1);
@@ -402,7 +402,7 @@ void startMovie(int32_t movieId)
 void handlePause(void)
 {
 	if (MAIN_D_80134E78[0] != 0) {
-		MAIN_func_800E642C();
+		removePauseBox();
 		MAIN_D_80134E78[0] = 0;
 	}
 	if ((readPStat(0) == 3 || IS_GAMETIME_RUNNING == 0) && GAME_STATE == 0) {
@@ -431,7 +431,7 @@ void handlePause(void)
 	}
 }
 
-void MAIN_func_800E642C(void)
+void removePauseBox(void)
 {
 	if (MAIN_D_80134E7C != 0) {
 		removeStaticUIBox(5);
@@ -475,7 +475,7 @@ void renderPauseBox(instanceId)
 #endif
 }
 
-void MAIN_thunk_func_800D92EC(void)
+void thunkReinitializeAfterTournament(void)
 {
 	reinitializeAfterTournament();
 }
@@ -656,7 +656,7 @@ void startTournament(void)
 	stopBGM();
 	loadDynamicLibrary(STD_REL, &isComplete, 0, NULL, NULL);
 	result = STD_func_800579D8(&t.cup);
-	MAIN_thunk_func_800D92EC();
+	thunkReinitializeAfterTournament();
 	unsetTrigger(0x25);
 	id = readPStat(3);
 	if (id != 5) {

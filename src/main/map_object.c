@@ -119,7 +119,7 @@ int32_t isTriggerSet(uint16_t trigger);
 int32_t loadTextureFile(char *path, uint32_t *outTPage,
 			uint32_t *outClut);
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
-void setRectangleImpassable(int32_t tileX, int32_t tileY, int32_t size);
+void setImpassableSquare(int32_t tileX, int32_t tileY, int32_t size);
 int32_t isOffScreen(DVECTOR *xy, int32_t w, int32_t h);
 
 void clearChests(void);
@@ -156,7 +156,7 @@ static void *map_object_text_order[] = {
 	emptyChests,
 	spawnChest,
 	renderTrainingPoop,
-	loadTrainingPoop,
+	initializeTrainingPoop,
 	renderAngemonPedestal,
 	spawnAngemonPedestal,
 	renderGearbox,
@@ -746,7 +746,7 @@ void renderAngemonPedestal(int32_t instanceId)
 	}
 }
 
-void loadTrainingPoop(void)
+void initializeTrainingPoop(void)
 {
 	VECTOR translation;
 	VECTOR scale;
@@ -817,7 +817,7 @@ void spawnChest(int16_t posX, int16_t posY, int16_t posZ, int16_t rotation,
 		CHEST_ARRAY[idx].item = item;
 
 		getModelTile(&pos, &tileX, &tileY);
-		setRectangleImpassable(tileX, tileY, 2);
+		setImpassableSquare(tileX, tileY, 2);
 
 		CHEST_ARRAY[idx].location.vx = (tileX * 100) - 4950;
 		CHEST_ARRAY[idx].location.vy = 0;

@@ -62,7 +62,7 @@ void checkArenaMap(uint8_t mapId);
 void checkCurlingMap(int32_t mapId);
 void checkFishingMap(int32_t mapId, int32_t arg1);
 int32_t checkMapCollisionX(Entity *entity, int32_t direction);
-int32_t checkMapCollisionY(Entity *entity, int32_t direction);
+int32_t checkMapCollisionZ(Entity *entity, int32_t direction);
 void checkShopMap(uint8_t mapId);
 void clearMapDigimon(void);
 void clearMapObjects(uint8_t *instances);
@@ -77,7 +77,7 @@ void loadMapImage1(uint8_t *tim);
 void loadMapImage2(uint8_t *tim, int8_t id);
 void loadMapObjects(uint8_t *mapObjects, uint8_t *data, int32_t mapId);
 int32_t loadMapSounds(int32_t mapSoundId);
-void loadTrainingPoop(void);
+void initializeTrainingPoop(void);
 void loadWarpCrystals(int32_t mapId);
 int32_t readFile(char *path, void *dest);
 void removeMapEntities(void);
@@ -90,7 +90,7 @@ void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY, int32_t width
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uPos, int32_t vPos, int32_t width, int32_t height);
 void startBattleIdleAnimation(DigimonEntity *entity, Stats *stats, int32_t flags);
 void tickFileReadQueue(int32_t instanceId);
-void tickPartnerNormal();
+void tickConditions();
 void unloadMapParts(void);
 
 void popPartnerWaypoint(void);
@@ -179,7 +179,7 @@ void tickDaytimeTransition(int32_t instanceId);
 void tickMeramonShake(int32_t arg0);
 void tickCameraMoveTo(int32_t x, int32_t z, int32_t arg2);
 int32_t tickCameraMoveToEntity(int32_t scriptId, int32_t speed);
-void tickCollision(void);
+void partnerTickCollision(void);
 void tickPartnerWaypoints(void);
 void tickTamerWaypoints(void);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
@@ -373,7 +373,7 @@ static void *map_functions[] = {
 	entityCheckCollision,
 	entityLookAtLocation,
 	setPartnerWaypoint,
-	tickCollision,
+	partnerTickCollision,
 	isLinearPathBlocked,
 	isFiveTileWidePathBlocked,
 	getEntityTile,
@@ -3626,7 +3626,7 @@ int32_t isLinearPathBlocked(int8_t x1, int8_t y1, int8_t x2, int8_t y2)
 	return 0;
 }
 
-void tickCollision(void)
+void partnerTickCollision(void)
 {
 #ifdef __MWERKS__
 	int32_t isFiveTileWidePathBlocked(int8_t x1, int8_t y1, int8_t x2, int8_t y2);
@@ -4088,11 +4088,11 @@ int32_t checkMapCollision(Entity *entity, int32_t diffY, int32_t diffX)
 		return 1;
 	}
 
-	if ((diffY < 0) && (checkMapCollisionY(entity, 0) != 0)) {
+	if ((diffY < 0) && (checkMapCollisionZ(entity, 0) != 0)) {
 		return 1;
 	}
 
-	if ((diffY > 0) && (checkMapCollisionY(entity, 1) != 0)) {
+	if ((diffY > 0) && (checkMapCollisionZ(entity, 1) != 0)) {
 		return 1;
 	}
 
@@ -4466,7 +4466,7 @@ void loadMap(int32_t mapId)
 		loadWarpCrystals(mapId);
 	}
 	if (mapId == 0xa5) {
-		loadTrainingPoop();
+		initializeTrainingPoop();
 	}
 
 	collisionOffset = *offsets;
@@ -4866,7 +4866,7 @@ void tickCameraFollowPlayer(void)
 
 	if ((GAME_STATE == 0) &&
 	    (CAMERA_FOLLOW_PLAYER == 1) &&
-	    (getTamerState() == 0) &&
+	    (tamerGetState() == 0) &&
 	    (((POLLED_INPUT & 0x1000) != 0) ||
 	     ((POLLED_INPUT & 0x4000) != 0) ||
 	     ((POLLED_INPUT & 0x8000) != 0) ||
@@ -4897,7 +4897,7 @@ void initializeDaytimeTransition(timeOfDay)
 // clang-format on
 {
 	if ((PARTNER_STATE != 8) && (PARTNER_STATE != 0xd) &&
-	    (getTamerState() != 0x11) && (getTamerState() != 0x13) &&
+	    (tamerGetState() != 0x11) && (tamerGetState() != 0x13) &&
 	    (CURRENT_TIME_OF_DAY != timeOfDay)) {
 		DAYTIME_TRANSITION_FRAME = 0;
 		CURRENT_TIME_OF_DAY = timeOfDay;
@@ -4939,7 +4939,7 @@ void tickDaytimeTransition(transition)
 
 	if ((GAME_STATE == 0) && (SKIP_DAYTIME_TRANSITION != 1) &&
 	    (PARTNER_STATE != 8) && (PARTNER_STATE != 0xd) &&
-	    (getTamerState() != 0x11) && (getTamerState() != 0x13)) {
+	    (tamerGetState() != 0x11) && (tamerGetState() != 0x13)) {
 		if (transition == 0) {
 			clutA = (int16_t *)MAP_CLUTS[0];
 			clutB = (int16_t *)MAP_CLUTS[1];
@@ -5707,14 +5707,14 @@ int32_t scriptTickChangeMap(int16_t mapId, int16_t exitId, int32_t showName)
 				removeObject(0xfa1, mapId);
 			}
 
-			setTamerState(6);
+			tamerSetState(6);
 			fadeFromBlack(20);
 
 			SCRIPT_MAP_CHANGE_STATE = 0;
 
 			if (IS_SCRIPT_PAUSED == 1) {
-				setPartnerState(1);
-				setTamerState(0);
+				partnerSetState(1);
+				tamerSetState(0);
 				setCameraFollowPlayer();
 			}
 
@@ -5855,11 +5855,11 @@ void reinitializeAfterTournament(void)
 	addObject(0xfa2, 0, tickGameClock, renderGameClock);
 	addObject(0xfa0, 0, NULL, renderMap);
 #if defined(VERSION_JP)
-	addObject(0xfa6, 0, tickPartnerNormal, NULL);
+	addObject(0xfa6, 0, tickConditions, NULL);
 #endif
 	addObject(0xfa8, 0, NULL, renderPoop);
-	setTamerState(0);
-	setPartnerState(1);
+	tamerSetState(0);
+	partnerSetState(1);
 }
 
 void loadTrainingLibrary(int32_t mapId)

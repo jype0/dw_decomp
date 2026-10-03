@@ -48,7 +48,7 @@ void initializeMedalModel(void);
 void spawnToyTownBoxes(void);
 void spawnGearbox(void);
 void spawnAngemonPedestal(void);
-void loadTrainingPoop(void);
+void initializeTrainingPoop(void);
 void spawnChest(int16_t posX, int16_t posY, int16_t posZ, int16_t rotation,
 		uint8_t item, uint16_t trigger);
 void unloadMapParts(void);

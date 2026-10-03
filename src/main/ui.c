@@ -11,16 +11,16 @@ void renderUIBoxAnim(int32_t instanceId, int16_t frame);
 void renderUIBoxBorder(RECT *rect, int32_t layer);
 
 void playSound(int32_t soundId, uint32_t flag);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0,
-			     int32_t x1, int32_t y1, int32_t x2, int32_t y2,
-			     int32_t layer, int32_t blend);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0,
+		int32_t x1, int32_t y1, int32_t x2, int32_t y2,
+		int32_t layer, int32_t blend);
 void setUVDataPolyFT4(PACKET *prim, int32_t uvX, int32_t uvY,
 		      int32_t uvWidth, int32_t uvHeight);
 void setPosDataPolyFT4(PACKET *prim, int32_t posX, int32_t posY,
 		       int32_t width, int32_t height);
-void renderLinePrimitive(int32_t color, int32_t x0, int32_t y0,
-			 int32_t x1, int32_t y1,
-			 int32_t layer, int32_t blend);
+void drawLine2P(int32_t color, int32_t x0, int32_t y0,
+		int32_t x1, int32_t y1,
+		int32_t layer, int32_t blend);
 
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
@@ -108,35 +108,35 @@ void renderUIBoxStatic(instanceId)
 	}
 	renderUIBoxBorder(rect, 6 - instanceId);
 	color1 = 0x20202;
-	renderLinePrimitive(color1, rect->x + 3, rect->y + 3, rect->x + 3, rect->y + rect->h - 3, 6 - instanceId, 0);
-	renderLinePrimitive(color1, rect->x + rect->w - 4, rect->y + 3, rect->x + rect->w - 4,
-			    rect->y + rect->h - 3, 6 - instanceId, 0);
+	drawLine2P(color1, rect->x + 3, rect->y + 3, rect->x + 3, rect->y + rect->h - 3, 6 - instanceId, 0);
+	drawLine2P(color1, rect->x + rect->w - 4, rect->y + 3, rect->x + rect->w - 4,
+		   rect->y + rect->h - 3, 6 - instanceId, 0);
 	if (data->features & 1) {
 		color2 = 0xFAD990;
-		renderLinePrimitive(color1, rect->x + 3, rect->y + 13, rect->x + rect->w - 3, rect->y + 13,
-				    6 - instanceId, 0);
-		renderLinePrimitive(color2, rect->x + 3, rect->y + 14, rect->x + rect->w - 3, rect->y + 14,
-				    6 - instanceId, 0);
-		renderLinePrimitive(color1, rect->x + 3, rect->y + 15, rect->x + rect->w - 3, rect->y + 15,
-				    6 - instanceId, 0);
+		drawLine2P(color1, rect->x + 3, rect->y + 13, rect->x + rect->w - 3, rect->y + 13,
+			   6 - instanceId, 0);
+		drawLine2P(color2, rect->x + 3, rect->y + 14, rect->x + rect->w - 3, rect->y + 14,
+			   6 - instanceId, 0);
+		drawLine2P(color1, rect->x + 3, rect->y + 15, rect->x + rect->w - 3, rect->y + 15,
+			   6 - instanceId, 0);
 	}
 	if (data->features & 4) {
 		color2 = 0xA08769;
-		renderTrianglePrimitive(color1, rect->x + rect->w - 13, rect->y + rect->h - 10,
-					rect->x + rect->w - 13, rect->y + 13, rect->x + rect->w - 6, rect->y + 13,
-					6 - instanceId, 0);
-		renderTrianglePrimitive(color2, rect->x + rect->w - 6, rect->y + 14, rect->x + rect->w - 6,
-					rect->y + rect->h - 10, rect->x + rect->w - 12, rect->y + rect->h - 10, 6 - instanceId,
-					0);
+		drawLine3P(color1, rect->x + rect->w - 13, rect->y + rect->h - 10,
+			   rect->x + rect->w - 13, rect->y + 13, rect->x + rect->w - 6, rect->y + 13,
+			   6 - instanceId, 0);
+		drawLine3P(color2, rect->x + rect->w - 6, rect->y + 14, rect->x + rect->w - 6,
+			   rect->y + rect->h - 10, rect->x + rect->w - 12, rect->y + rect->h - 10, 6 - instanceId,
+			   0);
 		h25 = rect->h - 25;
 		rowHeight = h25 * UI_BOX_DATA[instanceId].visibleRows / UI_BOX_DATA[instanceId].totalRows;
 		barTop = rect->y + 14 +
 			 (h25 - rowHeight) * UI_BOX_DATA[instanceId].rowOffset /
 				 (UI_BOX_DATA[instanceId].totalRows - UI_BOX_DATA[instanceId].visibleRows);
-		renderTrianglePrimitive(color1, rect->x + rect->w - 7, barTop, rect->x + rect->w - 7, barTop + rowHeight,
-					rect->x + rect->w - 13, barTop + rowHeight, 6 - instanceId, 0);
-		renderTrianglePrimitive(color2, rect->x + rect->w - 12, barTop + rowHeight, rect->x + rect->w - 12, barTop,
-					rect->x + rect->w - 6, barTop, 6 - instanceId, 0);
+		drawLine3P(color1, rect->x + rect->w - 7, barTop, rect->x + rect->w - 7, barTop + rowHeight,
+			   rect->x + rect->w - 13, barTop + rowHeight, 6 - instanceId, 0);
+		drawLine3P(color2, rect->x + rect->w - 12, barTop + rowHeight, rect->x + rect->w - 12, barTop,
+			   rect->x + rect->w - 6, barTop, 6 - instanceId, 0);
 		p = (POLY_F4 *)GsGetWorkBase();
 		SetPolyF4(p);
 		setRGB0(p, 0x5B, 0x70, 0x80);
@@ -265,31 +265,31 @@ void renderUIBoxBorder(RECT *rect, int32_t layer)
 	x = rect->x + 4;
 	x1 = rect->x + rect->w - 4;
 	y = rect->y;
-	renderLinePrimitive(black, x, y, x1, y, layer, 0);
+	drawLine2P(black, x, y, x1, y, layer, 0);
 	y++;
-	renderLinePrimitive(gold, x, y, x1, y, layer, 0);
+	drawLine2P(gold, x, y, x1, y, layer, 0);
 	y++;
-	renderLinePrimitive(black, x, y, x1, y, layer, 0);
+	drawLine2P(black, x, y, x1, y, layer, 0);
 	y = rect->y + rect->h - 3;
-	renderLinePrimitive(black, x, y, x1, y, layer, 0);
+	drawLine2P(black, x, y, x1, y, layer, 0);
 	y++;
-	renderLinePrimitive(gold, x, y, x1, y, layer, 0);
+	drawLine2P(gold, x, y, x1, y, layer, 0);
 	y++;
-	renderLinePrimitive(black, x, y, x1, y, layer, 0);
+	drawLine2P(black, x, y, x1, y, layer, 0);
 	x = rect->x;
 	y = rect->y + 4;
 	y1 = rect->y + rect->h - 3;
-	renderLinePrimitive(black, x, y, x, y1, layer, 0);
+	drawLine2P(black, x, y, x, y1, layer, 0);
 	x++;
-	renderLinePrimitive(brown, x, y, x, y1, layer, 0);
+	drawLine2P(brown, x, y, x, y1, layer, 0);
 	x++;
-	renderLinePrimitive(gold, x, y, x, y1, layer, 0);
+	drawLine2P(gold, x, y, x, y1, layer, 0);
 	x = rect->x + rect->w - 3;
-	renderLinePrimitive(gold, x, y, x, y1, layer, 0);
+	drawLine2P(gold, x, y, x, y1, layer, 0);
 	x++;
-	renderLinePrimitive(brown, x, y, x, y1, layer, 0);
+	drawLine2P(brown, x, y, x, y1, layer, 0);
 	x++;
-	renderLinePrimitive(black, x, y, x, y1, layer, 0);
+	drawLine2P(black, x, y, x, y1, layer, 0);
 }
 
 void renderUIBoxAnim(int32_t instanceId, int16_t frame)
@@ -314,6 +314,6 @@ void renderUIBoxAnim(int32_t instanceId, int16_t frame)
 	y1 = y0;
 	x2 = x1;
 	y2 = (start->y + start->h) + frame * ((final->y + final->h) - (start->y + start->h)) / 4;
-	renderTrianglePrimitive(0x808080, x0, y0, x1, y1, x2, y2, 6 - instanceId, 0);
-	renderTrianglePrimitive(0x808080, x2, y2, x0, y2, x0, y0, 6 - instanceId, 0);
+	drawLine3P(0x808080, x0, y0, x1, y1, x2, y2, 6 - instanceId, 0);
+	drawLine3P(0x808080, x2, y2, x0, y2, x0, y0, 6 - instanceId, 0);
 }

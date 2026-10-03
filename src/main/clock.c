@@ -51,7 +51,7 @@ static void *clock_text_order[] = {
 	stopGameTime,
 	updateMinuteHand,
 	advanceToTime,
-	updatePlaytime,
+	tickPlaytime,
 	renderGameClock,
 	tickGameClock,
 	addClock,
@@ -66,7 +66,7 @@ static void *clock_data_order[] = {
 void addClock(void)
 {
 	addObject(0xfa2, 0, tickGameClock, renderGameClock);
-	addObject(0xfb9, 0, updatePlaytime, 0);
+	addObject(0xfb9, 0, tickPlaytime, 0);
 }
 
 void tickGameClock(int32_t instanceId)
@@ -147,7 +147,7 @@ void tickGameClock(int32_t instanceId)
 	updateBGM();
 }
 
-void updatePlaytime(int32_t instanceId)
+void tickPlaytime(int32_t instanceId)
 {
 	++PLAYTIME_FRAMES;
 	if ((PLAYTIME_FRAMES % 1200) == 0) {

@@ -49,7 +49,7 @@ int32_t drawCardViewStrings(void);
 int32_t getCardAmount(uint8_t cardId);
 int32_t hasMedal(uint16_t medal);
 int32_t drawMedalViewStrings(void);
-void renderSeperatorLines(int16_t *lines, int32_t b, ...);
+void renderSeparatorLines(int16_t *lines, int32_t b, ...);
 void renderDigiviceMedals(void);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
 		  int32_t f, int32_t g, int32_t h, int32_t i);
@@ -57,13 +57,13 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		       int32_t height, uint8_t texX, uint8_t texY,
 		       int16_t texturePage, int16_t clut, int32_t zIndex,
 		       int8_t flag);
-void renderSpriteBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t c1,
+void renderBorderBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t c1,
 		     int32_t c2, uint8_t r, uint8_t g, uint8_t b, int32_t a10);
-void renderBoxBar(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
-		  uint8_t g, uint8_t b, uint8_t flags, int32_t otz);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-			     int32_t y1, int32_t x2, int32_t y2, int32_t otz,
-			     int32_t flag);
+void renderBox(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
+	       uint8_t g, uint8_t b, uint8_t flags, int32_t otz);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t x2, int32_t y2, int32_t otz,
+		int32_t flag);
 void renderInsetBox(int16_t a, int16_t b, int16_t c, int16_t d, int32_t otz);
 void renderMedalView(void);
 void renderCardsView(void);
@@ -77,8 +77,8 @@ static void *overworld_status_boxes_functions[] = {
 	renderDigimonStatusConditions,
 	renderDigimonStatsBar,
 	drawDigimonStatsStrings,
-	renderSpriteBox,
-	renderBoxBar,
+	renderBorderBox,
+	renderBox,
 	renderInsetBox,
 	renderCardsView,
 	renderMedalView,
@@ -104,7 +104,7 @@ void renderMedalView(void)
 				  ((MEDAL_SELECTOR_INDEX / 5) * 24) - 0x3d, 0x18, 0x18, 0, 0xd0,
 				  0x18, 0x7dc7, 1, 0);
 	case 1:
-		renderSeperatorLines(MAIN_D_8012472C, 0xe, 5);
+		renderSeparatorLines(MAIN_D_8012472C, 0xe, 5);
 		renderString(3, -0x36, -0x51, 0x6c, 0xc, 0, 0xc, 5, 1);
 
 		for (i = 0; i < 0xf; i++) {
@@ -187,7 +187,7 @@ void renderCardsView(void)
 							  (card % 8) * 32, (card / 8) * 16, 0x18,
 							  sprites.v[card] * 64 + 0x7a07, 5, 0);
 				}
-				renderSpriteBox(j * 24 + 0x1e, i * 24 + 0x39, 0x12, 0x12,
+				renderBorderBox(j * 24 + 0x1e, i * 24 + 0x39, 0x12, 0x12,
 						0xbebebe, 0x3c3c3c, 0x69, 0x69, 0x69, 5);
 			}
 		}
@@ -206,13 +206,13 @@ void renderInsetBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t otz)
 {
 	x -= 0xa0;
 	y -= 0x78;
-	renderTrianglePrimitive(0x20202, x, y + h, x, y, x + w, y, otz, 0);
-	renderTrianglePrimitive(0xa08769, x, y + h, x + w, y + h, x + w, y, otz, 0);
-	renderBoxBar(x, y, w, h, 0x35, 0x4b, 0x5c, 0, otz);
+	drawLine3P(0x20202, x, y + h, x, y, x + w, y, otz, 0);
+	drawLine3P(0xa08769, x, y + h, x + w, y + h, x + w, y, otz, 0);
+	renderBox(x, y, w, h, 0x35, 0x4b, 0x5c, 0, otz);
 }
 
-void renderBoxBar(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
-		  uint8_t g, uint8_t b, uint8_t flags, int32_t otz)
+void renderBox(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
+	       uint8_t g, uint8_t b, uint8_t flags, int32_t otz)
 {
 	GsBOXF box;
 
@@ -236,28 +236,28 @@ void renderBoxBar(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
 	GsSortBoxFill(&box, ACTIVE_ORDERING_TABLE, otz);
 
 	if ((flags & 0x80) != 0) {
-		renderTrianglePrimitive(0x20202,
-					x - 1, y - 1,
-					x + 0xd, y - 1,
-					x + 0xd, y + 0xc,
-					otz, 0);
-		renderTrianglePrimitive(0x20202,
-					x - 1, y - 1,
-					x - 1, y + 0xc,
-					x + 0xd,
-					y + 0xc,
-					otz, 0);
+		drawLine3P(0x20202,
+			   x - 1, y - 1,
+			   x + 0xd, y - 1,
+			   x + 0xd, y + 0xc,
+			   otz, 0);
+		drawLine3P(0x20202,
+			   x - 1, y - 1,
+			   x - 1, y + 0xc,
+			   x + 0xd,
+			   y + 0xc,
+			   otz, 0);
 	}
 }
 
-void renderSpriteBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t c1,
+void renderBorderBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t c1,
 		     int32_t c2, uint8_t r, uint8_t g, uint8_t b, int32_t a10)
 {
 	x -= 0xa0;
 	y -= 0x78;
-	renderTrianglePrimitive(c1, x, y + h, x, y, x + w, y, a10, 0);
-	renderTrianglePrimitive(c2, x, y + h, x + w, y + h, x + w, y, a10, 0);
-	renderBoxBar(x, y, w, h, r, g, b, 0, a10);
+	drawLine3P(c1, x, y + h, x, y, x + w, y, a10, 0);
+	drawLine3P(c2, x, y + h, x + w, y + h, x + w, y, a10, 0);
+	renderBox(x, y, w, h, r, g, b, 0, a10);
 }
 
 int32_t drawDigimonStatsStrings(void)
@@ -306,7 +306,7 @@ void renderDigimonStatsBar(a, b, c, d, e)
 	uint8_t w;
 
 	w = c * a / b;
-	renderBoxBar(d, e, w, 2, 0x32, 0xc8, 0xc8, 0, 5);
+	renderBox(d, e, w, 2, 0x32, 0xc8, 0xc8, 0, 5);
 }
 
 extern uint16_t PLAYTIME_FRAMES;

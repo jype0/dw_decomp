@@ -65,7 +65,7 @@ extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
 
 int32_t doSomethingWithSomePoints(int16_t *rect, DVECTOR *line);
-void MAIN_func_800E4470(MATRIX *m, SVECTOR *out);
+void matrixToEuler1(MATRIX *m, SVECTOR *out);
 void downloadSomeImage();
 void modifySomeImage(int32_t dim);
 int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning, void *callback, void *callbackParam, CdlLOC *loc, int32_t size);
@@ -279,7 +279,7 @@ int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void renderParticleFlash(int16_t *params);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void calculatePosition(GsCOORDINATE2 *coord, MATRIX *matrix);
 char *initializeFlashData(char *base);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
@@ -302,8 +302,8 @@ void setRotTransMatrix(MATRIX *m);
 long RotTransPers(SVECTOR *v0, long *sxy, long *p, long *flag);
 int32_t VS_interpolateClamped(int32_t lo, int32_t hi, int32_t t, int32_t a, int32_t b);
 
-void createFlash();
-void rotateVector();
+void EFECreateFlash();
+void EFERotateVector();
 
 static void *vs_effect_functions[] = {
 	VS_removeAllAuraProjectiles,
@@ -563,7 +563,7 @@ VsEfeSubOpcode VS_D_80070B44[97] = {
 	{ 0x00000002, VS_initializeSubEffectInstructions },
 	{ 0x00000003, VS_drawTMD },
 	{ 0x00000005, VS_initializeEFETransform },
-	{ 0x00000007, rotateVector },
+	{ 0x00000007, EFERotateVector },
 	{ 0x00000004, VS_renderCenteredSprite },
 	{ 0x00000008, VS_setTransformToTargetBone },
 	{ 0x00000009, VS_addAttackObjectToTarget },
@@ -576,7 +576,7 @@ VsEfeSubOpcode VS_D_80070B44[97] = {
 	{ 0x0000000f, VS_setEFEModelObjectColor },
 	{ 0x00000010, VS_addParticleEmitter },
 	{ 0x00000011, VS_selectNextTargetEntity },
-	{ 0x00000012, createFlash },
+	{ 0x00000012, EFECreateFlash },
 	{ 0x00000013, VS_addCloudEffect },
 	{ 0x00000014, VS_renderScreenSprite },
 	{ 0x00000015, VS_projectPositionToScreen },
@@ -1029,7 +1029,7 @@ void VS_tickEFEEngine(void)
 	for (i = 0; i < 0xa; i++) {
 		v = (*p)[0];
 		if ((v >= 0) && (**(int32_t **)((char *)(*p)[1] + 8) < 0)) {
-			stopSoundMask(v);
+			thunkStopSoundMask(v);
 			(*p)[0] = -1;
 		}
 		p++;
@@ -1089,7 +1089,7 @@ void VS_stopEFESounds(void)
 	for (i = 0; i < 10; i++) {
 		v = *p;
 		if (v >= 0) {
-			stopSoundMask(v);
+			thunkStopSoundMask(v);
 			*p = -1;
 		}
 	}
@@ -1545,9 +1545,9 @@ drawLine:
 			gte_rtps();
 			gte_stsxy(&s1v);
 			gte_stszotz(&z);
-			renderLinePrimitive(e->color.r | (e->color.g << 8) | (e->color.b << 16),
-			                    s0v.vx, s0v.vy, s1v.vx, s1v.vy,
-			                    (depth + z) >> 3, 0);
+			drawLine2P(e->color.r | (e->color.g << 8) | (e->color.b << 16),
+			           s0v.vx, s0v.vy, s1v.vx, s1v.vy,
+			           (depth + z) >> 3, 0);
 			goto nextParticle;
 modeTest:
 			if (mode == 1) {
@@ -2835,10 +2835,10 @@ void VS_renderEFELine(void)
 	if ((depth > 0x20) && (depth < 0x1000)) {
 		if ((flags & 0x20) != 0) {
 			for (i = 0; i < 4; i++) {
-				renderLinePrimitive(((col[0] * 50 / 100) & 0xff) | (((col[1] * 50 / 100) & 0xff) << 8) | (((col[2] * 50 / 100) & 0xff) << 16), y0 + MAIN_D_80134B20[i], x1 + MAIN_D_80134B24[i], y1 + MAIN_D_80134B20[i], x0 + MAIN_D_80134B24[i], depth, 5);
+				drawLine2P(((col[0] * 50 / 100) & 0xff) | (((col[1] * 50 / 100) & 0xff) << 8) | (((col[2] * 50 / 100) & 0xff) << 16), y0 + MAIN_D_80134B20[i], x1 + MAIN_D_80134B24[i], y1 + MAIN_D_80134B20[i], x0 + MAIN_D_80134B24[i], depth, 5);
 			}
 		} else {
-			renderLinePrimitive((col[0] & 0xff) | ((col[1] & 0xff) << 8) | ((col[2] & 0xff) << 16), y0, x1, y1, x0, depth, 0);
+			drawLine2P((col[0] & 0xff) | ((col[1] & 0xff) << 8) | ((col[2] & 0xff) << 16), y0, x1, y1, x0, depth, 0);
 		}
 	}
 }
@@ -2871,7 +2871,7 @@ void VS_normalizeRotationAngles2(void)
 	rot.vy = v[1];
 	rot.vz = v[2];
 	RotMatrixYXZ(&rot, &m);
-	MAIN_func_800E4470(&m, &rot);
+	matrixToEuler1(&m, &rot);
 	out[0] = rot.vx;
 	out[1] = rot.vy;
 	out[2] = rot.vz;
@@ -3077,7 +3077,7 @@ void VS_normalizeRotationAngles(void)
 	rot.vy = v[1];
 	rot.vz = v[2];
 	RotMatrixYXZ(&rot, &m);
-	MAIN_func_800E4470(&m, &res);
+	matrixToEuler1(&m, &res);
 	out[0] = res.vx;
 	out[1] = res.vy;
 	out[2] = res.vz;

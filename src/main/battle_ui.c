@@ -21,11 +21,11 @@ void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits,
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
 		  int32_t f, int32_t g, int32_t h, int32_t i);
 void BTL_renderBattleEndText(int32_t layer);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
-			 int32_t y1, int32_t order, uint32_t mode);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-			     int32_t y1, int32_t x2, int32_t y2, int32_t otz,
-			     int32_t flag);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t order, uint32_t mode);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t x2, int32_t y2, int32_t otz,
+		int32_t flag);
 void initStringFT4(POLY_FT4 *p);
 void setUVDataPolyFT4(POLY_FT4 *p, int32_t u, int32_t v, int32_t w, int32_t h);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w,
@@ -43,11 +43,11 @@ void BTL_drawBattleEndText(int32_t a);
 int32_t BTL_isEndBoxTextFinished(void);
 void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
 
-void initBitBox();
+void initializeBitText();
 void battleStatsGainsAndDrops(uint8_t *droppedItems);
 void handleBattleInjury();
 void battleMoveLearning();
-void createBitBox();
+void createBitsBox();
 void createFinalBalanceBox();
 void handleBattleEndBox();
 void tickBitBox(int32_t instanceId);
@@ -57,7 +57,7 @@ void resetStatsAfterCombat();
 void createPostBattleStatsBox();
 void tickPostBattleStatsBox();
 void renderPostBattleStatsBox(int16_t depth);
-void closeBattleEndBox(int32_t id);
+void removeBattleEndBox(int32_t id);
 
 extern uint8_t MOVE_LEARN_CHANCES[58][3];
 extern int16_t ENEMY_COUNT;
@@ -90,7 +90,7 @@ char BITS_LABEL[] = "Bits";
 #endif
 
 static void *battle_ui_functions[] = {
-	closeBattleEndBox,
+	removeBattleEndBox,
 	renderPostBattleStatsBox,
 	tickPostBattleStatsBox,
 	createPostBattleStatsBox,
@@ -100,11 +100,11 @@ static void *battle_ui_functions[] = {
 	tickBitBox,
 	handleBattleEndBox,
 	createFinalBalanceBox,
-	createBitBox,
+	createBitsBox,
 	battleMoveLearning,
 	handleBattleInjury,
 	battleStatsGainsAndDrops,
-	initBitBox,
+	initializeBitText,
 };
 
 void battleStatsGainsAndDrops(uint8_t *droppedItems)
@@ -271,7 +271,7 @@ void battleMoveLearning(void)
 	BTL_appendMoveLearnedText(moveId);
 }
 
-void createBitBox(void)
+void createBitsBox(void)
 {
 	int16_t screenPos[2];
 	RECT finalPos;
@@ -300,7 +300,7 @@ void handleBattleEndBox(void)
 #endif
 	int32_t done;
 
-	initBitBox();
+	initializeBitText();
 
 	BITS_TO_GAIN = 0;
 	for (i = 1; i <= ENEMY_COUNT; i++) {
@@ -346,7 +346,7 @@ void handleBattleEndBox(void)
 	battleMoveLearning();
 	GAME_STATE = 2;
 	createPostBattleStatsBox();
-	createBitBox();
+	createBitsBox();
 
 	while (1) {
 		if ((UI_BOX_DATA[0].state == 1) &&
@@ -431,9 +431,9 @@ void handleBattleEndBox(void)
 #endif
 
 	resetStatsAfterCombat();
-	closeBattleEndBox(0);
-	closeBattleEndBox(1);
-	closeBattleEndBox(2);
+	removeBattleEndBox(0);
+	removeBattleEndBox(1);
+	removeBattleEndBox(2);
 }
 
 void tickBitBox(instanceId)
@@ -483,8 +483,8 @@ void renderBitBox(uint8_t layer)
 	renderString(4, -78, 28, 48, 12, 0, 72, 6 - layer, 0);
 
 	if (BTL_END_BOX_TEXTBUFFER[0]) {
-		renderLinePrimitive(0x8e8e8e, -86, 50, 84, 50, 6 - layer, 0);
-		renderLinePrimitive(0x121212, -85, 51, 85, 51, 6 - layer, 0);
+		drawLine2P(0x8e8e8e, -86, 50, 84, 50, 6 - layer, 0);
+		drawLine2P(0x121212, -85, 51, 85, 51, 6 - layer, 0);
 		BTL_renderBattleEndText(layer);
 	}
 }
@@ -670,12 +670,12 @@ void renderPostBattleStatsBox(int16_t depth)
 			     4, INITIAL_COMBAT_STATS[0][i], 6 - depth);
 	}
 
-	renderLinePrimitive(0xfad990, box->x + 122,
-			    box->y + 2, box->x + 122,
-			    (box->y + box->h) - 3, 6 - depth, 0);
-	renderLinePrimitive(0x20202, box->x + 123,
-			    box->y + 2, box->x + 123,
-			    (box->y + box->h) - 3, 6 - depth, 0);
+	drawLine2P(0xfad990, box->x + 122,
+		   box->y + 2, box->x + 122,
+		   (box->y + box->h) - 3, 6 - depth, 0);
+	drawLine2P(0x20202, box->x + 123,
+		   box->y + 2, box->x + 123,
+		   (box->y + box->h) - 3, 6 - depth, 0);
 
 	for (i = 0; i < 6; i++) {
 		renderString(4,
@@ -718,22 +718,22 @@ void renderPostBattleStatsBox(int16_t depth)
 
 		rect.w = 50;
 
-		renderTrianglePrimitive(0x20202,
-					box->x + 64, y,
-					box->x + 64, y - 3,
-					box->x + 117, y - 3,
-					6 - depth, 0);
-		renderTrianglePrimitive(0x666666,
-					box->x + 117, y - 2,
-					box->x + 117, y,
-					box->x + 65, y,
-					6 - depth, 0);
+		drawLine3P(0x20202,
+			   box->x + 64, y,
+			   box->x + 64, y - 3,
+			   box->x + 117, y - 3,
+			   6 - depth, 0);
+		drawLine3P(0x666666,
+			   box->x + 117, y - 2,
+			   box->x + 117, y,
+			   box->x + 65, y,
+			   6 - depth, 0);
 		GsSortBoxFill(&rect, ACTIVE_ORDERING_TABLE,
 			      (uint16_t)(6 - depth));
 	}
 }
 
-void closeBattleEndBox(id)
+void removeBattleEndBox(id)
 	int16_t id;
 {
 	if (UI_BOX_DATA[id].state != 0) {
@@ -741,7 +741,7 @@ void closeBattleEndBox(id)
 	}
 }
 
-void initBitBox(void)
+void initializeBitText(void)
 {
 	initStringFT4(&BIT_BOX);
 

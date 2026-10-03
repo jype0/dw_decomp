@@ -191,7 +191,7 @@ int32_t rotateEntity(SVECTOR *rot, int16_t *outX, int16_t *outY,
                      int16_t *outZ, int32_t speed);
 void tickTamerWaypoints(void);
 void loadMapDigimon(uint8_t *data, int16_t a);
-void tickTamerBattle(int32_t instanceId);
+void tamerTickBattle(int32_t instanceId);
 void tickConditionBoundaries(void);
 void handlePostBattleTiredness(void);
 int32_t getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
@@ -213,24 +213,24 @@ extern uint8_t GS_WORK_BASES[2][81920];
 extern MATRIX GsWSMATRIX;
 extern int32_t FADE_PROTECTION;
 
-void tickTamerBattle(int32_t instanceId);
-void tickTamerOverworld(int16_t instanceId);
-void tickWalkingState();
-void tickChangeMap(void);
-void tickPickupItem(void);
-void tickTakeChest(void);
-void tickIdle(void);
-void tickTraining(void);
-void tickPraiseScold(int8_t state);
-void tickFishing(void);
-void tickOpening(void);
-void tickEnding(void);
-void tickSicknessLostLife(void);
-void tickMachinedramonSpawn(void);
-void tickBattleLostLife(void);
-void tickAwardSomething(void);
+void tamerTickBattle(int32_t instanceId);
+void tamerTickOverworld(int16_t instanceId);
+void tamerTickWalkingState();
+void tamerTickChangeMap(void);
+void tamerTickPickupItem(void);
+void tamerTickTakeChest(void);
+void tamerTickIdle(void);
+void tamerTickTraining(void);
+void tamerTickPraiseScold(int8_t state);
+void tamerTickFishing(void);
+void tamerTickOpening(void);
+void tamerTickEnding(void);
+void tamerTickSicknessLostLife(void);
+void tamerTickMachinedramonSpawn(void);
+void tamerTickBattleLostLife(void);
+void tamerTickAwardSomething(void);
 
-void tickTamer(int16_t instanceId);
+void tamerTick(int16_t instanceId);
 void renderItemPickupTextbox(int32_t instanceId);
 void renderAwardSomethingTextbox(int32_t instanceId);
 void setTamerDirection(int32_t direction);
@@ -242,19 +242,19 @@ void checkItemPickup(void);
 void checkMedalConditions(void);
 uint8_t checkChestCollision(void);
 void checkPendingAwards(void);
-void tickPickupItem(void);
-void tickTakeChest(void);
-void tickAwardSomething(void);
-void tickWalkingState();
-void tickChangeMap(void);
-void tickPraiseScold(int8_t state);
-void tickOpening(void);
-void tickEnding(void);
-void tickSicknessLostLife(void);
-void tickMachinedramonSpawn(void);
-void tickBattleLostLife(void);
-void tickIdle(void);
-void tickTraining(void);
+void tamerTickPickupItem(void);
+void tamerTickTakeChest(void);
+void tamerTickAwardSomething(void);
+void tamerTickWalkingState();
+void tamerTickChangeMap(void);
+void tamerTickPraiseScold(int8_t state);
+void tamerTickOpening(void);
+void tamerTickEnding(void);
+void tamerTickSicknessLostLife(void);
+void tamerTickMachinedramonSpawn(void);
+void tamerTickBattleLostLife(void);
+void tamerTickIdle(void);
+void tamerTickTraining(void);
 
 static void *tamer_functions[] = {
 	renderAwardSomethingTextbox,
@@ -269,8 +269,8 @@ static void *tamer_functions[] = {
 	getEntityFromScriptId,
 	tickEntityWalkTo,
 	startAnimationTamer,
-	getTamerState,
-	setFullState,
+	tamerGetState,
+	tamerSetFullState,
 	advanceBattleTime,
 	startBattle,
 	renderItemPickupTextbox,
@@ -280,24 +280,24 @@ static void *tamer_functions[] = {
 	checkItemPickup,
 	setTamerDirection,
 	getMapRotation,
-	tickAwardSomething,
-	tickBattleLostLife,
-	tickMachinedramonSpawn,
-	tickSicknessLostLife,
-	tickEnding,
-	tickOpening,
-	tickPraiseScold,
-	tickTraining,
-	tickIdle,
-	tickTakeChest,
-	tickPickupItem,
-	tickChangeMap,
-	setTamerState,
-	tickWalkingState,
-	tickTamerOverworld,
+	tamerTickAwardSomething,
+	tamerTickBattleLostLife,
+	tamerTickMachinedramonSpawn,
+	tamerTickSicknessLostLife,
+	tamerTickEnding,
+	tamerTickOpening,
+	tamerTickPraiseScold,
+	tamerTickTraining,
+	tamerTickIdle,
+	tamerTickTakeChest,
+	tamerTickPickupItem,
+	tamerTickChangeMap,
+	tamerSetState,
+	tamerTickWalkingState,
+	tamerTickOverworld,
 	setupTamerOnWarp,
 	loadMapEntities,
-	tickTamer,
+	tamerTick,
 	initializeTamer,
 };
 
@@ -311,7 +311,7 @@ void initializeTamer(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
 
 	ENTITY_TABLE[0] = &TAMER_ENTITY.entity;
 
-	initializeDigimonObject(type, 0, (TickFunction)tickTamer);
+	initializeDigimonObject(type, 0, (TickFunction)tamerTick);
 	setEntityPosition(0, posX, posY, posZ);
 	setEntityRotation(0, rotX, rotY, rotZ);
 	setupEntityMatrix(0);
@@ -389,7 +389,7 @@ void setupTamerOnWarp(int16_t x, int16_t y, int16_t z, int16_t rotationY)
 	startAnimation(ENTITY_TABLE[0], 0);
 }
 
-void tickTamer(int16_t instanceId)
+void tamerTick(int16_t instanceId)
 {
 	if (((GAME_STATE != 0) || (TAMER_STATE != 0)) && (HAS_BUTTERFLY == 0)) {
 		unsetButterfly(BUTTERFLY_ID);
@@ -397,12 +397,12 @@ void tickTamer(int16_t instanceId)
 	}
 	switch (GAME_STATE) {
 	case 0:
-		tickTamerOverworld(instanceId);
+		tamerTickOverworld(instanceId);
 		break;
 	case 1:
 	case 2:
 	case 3:
-		tickTamerBattle(instanceId);
+		tamerTickBattle(instanceId);
 		break;
 	case 4:
 	case 5:
@@ -412,57 +412,57 @@ void tickTamer(int16_t instanceId)
 	}
 }
 
-void tickTamerOverworld(int16_t instanceId)
+void tamerTickOverworld(int16_t instanceId)
 {
 	switch (TAMER_STATE) {
 	case 0:
-		tickWalkingState(instanceId);
+		tamerTickWalkingState(instanceId);
 		break;
 	case 1:
-		setTamerState(6);
+		tamerSetState(6);
 		break;
 	case 5:
-		tickChangeMap();
+		tamerTickChangeMap();
 		break;
 	case 7:
-		tickPickupItem();
+		tamerTickPickupItem();
 		break;
 	case 14:
-		tickTakeChest();
+		tamerTickTakeChest();
 		break;
 	case 6:
-		tickIdle();
+		tamerTickIdle();
 		break;
 	case 8:
-		tickTraining();
+		tamerTickTraining();
 		break;
 	case 9:
 	case 13:
-		tickPraiseScold(TAMER_STATE);
+		tamerTickPraiseScold(TAMER_STATE);
 		break;
 	case 11:
-		tickFishing();
+		tamerTickFishing();
 		break;
 	case 12:
 		KAR_tick();
 		break;
 	case 15:
-		tickOpening();
+		tamerTickOpening();
 		break;
 	case 16:
-		tickEnding();
+		tamerTickEnding();
 		break;
 	case 17:
-		tickSicknessLostLife();
+		tamerTickSicknessLostLife();
 		break;
 	case 18:
-		tickMachinedramonSpawn();
+		tamerTickMachinedramonSpawn();
 		break;
 	case 19:
-		tickBattleLostLife();
+		tamerTickBattleLostLife();
 		break;
 	case 20:
-		tickAwardSomething();
+		tamerTickAwardSomething();
 	default:
 		break;
 	}
@@ -470,7 +470,7 @@ void tickTamerOverworld(int16_t instanceId)
 	tickAnimation(&TAMER_ENTITY.entity);
 }
 
-void tickWalkingState(void)
+void tamerTickWalkingState(void)
 {
 	int16_t rotation;
 	int16_t quadrant;
@@ -485,7 +485,7 @@ void tickWalkingState(void)
 	    (UI_BOX_DATA[0].state != 1) &&
 	    (UI_BOX_DATA[0].frame == 0)) {
 		addGameMenu();
-		setTamerState(1);
+		tamerSetState(1);
 		startAnimation(&TAMER_ENTITY.entity, 0);
 		unsetCameraFollowPlayer();
 
@@ -603,7 +603,7 @@ void checkItemPickup(void)
 		PICKUP_ITEM_TYPE = i;
 
 		if (IS_STANDING_ON_DROP != 1) {
-			setTamerState(7);
+			tamerSetState(7);
 			IS_STANDING_ON_DROP = 1;
 		}
 		break;
@@ -656,7 +656,7 @@ void checkMapInteraction(void)
 		CURRENT_EXIT = MAP_WARPS.targetExit[trigger - 110];
 		PREVIOUS_EXIT = trigger - 110;
 
-		setTamerState(5);
+		tamerSetState(5);
 		unsetCameraFollowPlayer();
 		stopGameTime();
 	} else if ((trigger > 50) && (trigger < 80)) {
@@ -673,7 +673,7 @@ void checkMapInteraction(void)
 	trigger = checkChestCollision();
 	if ((trigger != 0xff) && ((CHANGED_INPUT & CONFIRM_BUTTON) != 0)) {
 		INTERACTED_CHEST = trigger;
-		setTamerState(14);
+		tamerSetState(14);
 	}
 }
 
@@ -752,7 +752,7 @@ void checkMedalConditions(void)
 void checkPendingAwards(void)
 {
 	if ((HAS_LEVELS_AWARD_PENDING == 1) || (HAS_MEDAL_AWARD_PENDING == 1)) {
-		setTamerState(0x14);
+		tamerSetState(0x14);
 		stopGameTime();
 	}
 }
@@ -805,7 +805,7 @@ int8_t startBattle(int16_t instanceId)
 	if (result == -1) {
 		PARTNER_PARA.happiness -= 0x1e;
 		PARTNER_PARA.discipline -= 0x14;
-		setPartnerState(-1);
+		partnerSetState(-1);
 		SKIP_DAYTIME_TRANSITION = 1;
 	} else if (result == 0) {
 		PARTNER_PARA.happiness -= 10;
@@ -817,7 +817,7 @@ int8_t startBattle(int16_t instanceId)
 		playBGM(ACTIVE_BGM_FONT);
 		readMapTFS(CURRENT_SCREEN);
 		STORED_TAMER_POS = TAMER_ENTITY.entity.posData->location;
-		setPartnerState(1);
+		partnerSetState(1);
 		PARTNER_PARA.happiness += 2;
 		handlePostBattleTiredness();
 		++PARTNER_PARA.battles;
@@ -920,7 +920,7 @@ void advanceBattleTime(result)
 }
 
 // clang-format off
-void setFullState(state, substate)
+void tamerSetFullState(state, substate)
 	int16_t state;
 	int16_t substate;
 // clang-format on
@@ -929,7 +929,7 @@ void setFullState(state, substate)
 	TAMER_SUBSTATE = substate;
 }
 
-int32_t getTamerState(void)
+int32_t tamerGetState(void)
 {
 	return TAMER_STATE;
 }
@@ -1311,7 +1311,7 @@ void renderAwardSomethingTextbox(int32_t instanceId)
 }
 
 // clang-format off
-void setTamerState(state)
+void tamerSetState(state)
 	int16_t state;
 // clang-format on
 {
@@ -1319,7 +1319,7 @@ void setTamerState(state)
 	TAMER_SUBSTATE = 0;
 }
 
-void tickChangeMap(void)
+void tamerTickChangeMap(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1341,8 +1341,8 @@ void tickChangeMap(void)
 		break;
 	case 2:
 		if (0x13 < FADE_IN_CURRENT) {
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 			checkMapInteraction();
 			STORED_TAMER_POS = TAMER_ENTITY.entity.posData->location;
 			startGameTime();
@@ -1352,7 +1352,7 @@ void tickChangeMap(void)
 	}
 }
 
-void tickPickupItem(void)
+void tamerTickPickupItem(void)
 {
 	RECT textRect;
 	RECT targetRect;
@@ -1425,7 +1425,7 @@ void tickPickupItem(void)
 		if (INTERACTED_CHEST_STATE == 0) {
 			pickupItem(PICKUP_ITEM_TYPE);
 		}
-		setTamerState(0);
+		tamerSetState(0);
 		setCameraFollowPlayer();
 	default:
 		break;
@@ -1436,7 +1436,7 @@ void tickPickupItem(void)
 	}
 }
 
-void tickTakeChest(void)
+void tamerTickTakeChest(void)
 {
 	RECT textRect;
 	RECT targetRect;
@@ -1448,7 +1448,7 @@ void tickTakeChest(void)
 	switch (TAMER_SUBSTATE) {
 	case 0:
 		startAnimation(ENTITY_TABLE[0], 0);
-		setPartnerState(0xb);
+		partnerSetState(0xb);
 		unsetCameraFollowPlayer();
 		entityLookAtLocation(ENTITY_TABLE[0],
 				     &CHEST_ARRAY[INTERACTED_CHEST].location);
@@ -1523,8 +1523,8 @@ void tickTakeChest(void)
 			if (INTERACTED_CHEST_STATE == 0) {
 				giveItem(RECEIVED_ITEM_TYPE, 1);
 			}
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 			setCameraFollowPlayer();
 		}
 	default:
@@ -1536,7 +1536,7 @@ void tickTakeChest(void)
 	}
 }
 
-void tickIdle(void)
+void tamerTickIdle(void)
 {
 	if (TAMER_SUBSTATE == 0) {
 		startAnimation(&TAMER_ENTITY.entity, 0);
@@ -1544,7 +1544,7 @@ void tickIdle(void)
 	}
 }
 
-void tickTraining(void)
+void tamerTickTraining(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1559,7 +1559,7 @@ void tickTraining(void)
 	}
 }
 
-void tickPraiseScold(int8_t state)
+void tamerTickPraiseScold(int8_t state)
 {
 	int32_t type;
 
@@ -1595,14 +1595,14 @@ void tickPraiseScold(int8_t state)
 	case 1:
 		if (TAMER_ENTITY.entity.anim.animFrame >=
 		    TAMER_ENTITY.entity.anim.frameCount) {
-			setTamerState(6);
+			tamerSetState(6);
 		}
 	default:
 		break;
 	}
 }
 
-void tickOpening(void)
+void tamerTickOpening(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1616,7 +1616,7 @@ void tickOpening(void)
 	}
 }
 
-void tickEnding(void)
+void tamerTickEnding(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1633,7 +1633,7 @@ void tickEnding(void)
 	}
 }
 
-void tickSicknessLostLife(void)
+void tamerTickSicknessLostLife(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1652,7 +1652,7 @@ void tickSicknessLostLife(void)
 	}
 }
 
-void tickMachinedramonSpawn(void)
+void tamerTickMachinedramonSpawn(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1668,7 +1668,7 @@ void tickMachinedramonSpawn(void)
 	}
 }
 
-void tickBattleLostLife(void)
+void tamerTickBattleLostLife(void)
 {
 	switch (TAMER_SUBSTATE) {
 	case 0:
@@ -1685,7 +1685,7 @@ void tickBattleLostLife(void)
 	}
 }
 
-void tickAwardSomething(void)
+void tamerTickAwardSomething(void)
 {
 	RECT textRect;
 	RECT targetRect;
@@ -1698,7 +1698,7 @@ void tickAwardSomething(void)
 	case 0:
 		stopGameTime();
 		startAnimation(&TAMER_ENTITY.entity, 0);
-		setPartnerState(0xb);
+		partnerSetState(0xb);
 		unsetCameraFollowPlayer();
 		if (HAS_MEDAL_AWARD_PENDING == 1) {
 			TAMER_SUBSTATE = 1;
@@ -1758,8 +1758,8 @@ void tickAwardSomething(void)
 				screenPos[1] - 5,
 				10, 10);
 			removeAnimatedUIBox(1, &textRect);
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 			setCameraFollowPlayer();
 			startGameTime();
 			HAS_MEDAL_AWARD_PENDING = 0;

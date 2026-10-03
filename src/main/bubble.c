@@ -610,7 +610,7 @@ void tickConditionBubble(int32_t instanceId)
 
 	if (bubble->frameCount >= 50) {
 		if (bubble->frameCount > 50) {
-			unsetBubble(instanceId);
+			removeConditionBubble(instanceId);
 			return;
 		}
 		bubble->activeHeight = bubble->baseHeight - 230;
@@ -643,7 +643,7 @@ void tickConditionBubble(int32_t instanceId)
 	++bubble->frameCount;
 }
 
-void unsetBubble(int32_t instanceId)
+void removeConditionBubble(int32_t instanceId)
 {
 	if ((instanceId >= 0) &&
 	    (instanceId < NUM_CONDITION_BUBBLES) &&

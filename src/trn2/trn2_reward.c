@@ -18,7 +18,7 @@ void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
 void TRN2_awardSpeedTrainingGains(int32_t a, int32_t b, int32_t c);
 void TRN2_func_8008AA84(int8_t arg);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn2_reward_functions[] = {
@@ -42,9 +42,9 @@ void TRN2_tickSpeedTraining(int32_t instanceId)
 
 	switch (MAIN_D_801353BD) {
 	case 0:
-		setTamerState(8);
+		tamerSetState(8);
 		unsetCameraFollowPlayer();
-		setPartnerState(10);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		createCameraMovement(&TRN2_D_8008DC1C, 10);
 		playSound(8, 9);
@@ -82,7 +82,7 @@ void TRN2_tickSpeedTraining(int32_t instanceId)
 			TRN2_awardSpeedTrainingGains(PARTNER_ENTITY.digimonEntity.entity.type, instanceId, r);
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x12);
 			playSound(8, 0xa);
-			stopSoundMask(MAIN_D_801353C8);
+			thunkStopSoundMask(MAIN_D_801353C8);
 			createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
 			MAIN_D_801353BD = 4;
 		}
@@ -104,7 +104,7 @@ void TRN2_tickSpeedTraining(int32_t instanceId)
 		if (tickEntityWalkTo(0xfc, 0xff, TRN2_D_8008DC2C.vx, TRN2_D_8008DC1C.vz, 0) == 1) {
 			TRN2_applyBaseStats();
 			TRN2_closeUIBox(1);
-			setPartnerState(1);
+			partnerSetState(1);
 			setCameraFollowPlayer();
 			MAIN_D_801353C2 = 0;
 			MAIN_D_801353BD = 0;

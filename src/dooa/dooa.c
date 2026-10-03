@@ -125,7 +125,7 @@ int32_t DOOA_initShardEffect(Entity *entity, intptr_t addr, int32_t size);
 void DOOA_saveEntityClut(int32_t buffer, Entity *entity);
 void DOOA_saveModelClut(int32_t buffer);
 void renderDropShadow(Entity *entity);
-void createFlash(void);
+void EFECreateFlash(void);
 void setMapLayerEnabled(int32_t enabled);
 void DOOA_tickRebirth(int32_t instanceId);
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
@@ -311,9 +311,9 @@ void DOOA_tickDissolve(int32_t instanceId)
 		loadMapSounds2(0x13);
 		isSoundLoaded(0, 8);
 		if (((PartnerEntity *)entity)->lives != 0) {
-			MAIN_func_800DF5A0();
+			setSomeDyingState();
 		} else {
-			MAIN_func_800DF5A0();
+			setSomeDyingState();
 		}
 		entity = ENTITY_TABLE[1];
 		seq->entity = entity;
@@ -473,7 +473,7 @@ void DOOA_tickDissolve(int32_t instanceId)
 		endColor.vx = endColor.vy = endColor.vz = 0x14;
 		EFE_PUSH1(VECTOR *, &startColor);
 		EFE_PUSH1(VECTOR *, &endColor);
-		createFlash();
+		EFECreateFlash();
 		work = lerp(0, 0x600, 0xd1, 0x135, seq->frame);
 		work = _sin(work) * 10 / 4096;
 		setEFEFlashOffset(FLASH_INSTANCE, work, 0);
@@ -1051,7 +1051,7 @@ void DOOA_tickRebirth(int32_t instanceId)
 		colorEnd.vx = colorEnd.vy = colorEnd.vz = level / 6;
 		EFE_PUSH1(VECTOR *, &colorStart);
 		EFE_PUSH1(VECTOR *, &colorEnd);
-		createFlash();
+		EFECreateFlash();
 		if (seq->frame >= 152) {
 			while (seq->isModelLoading != 0) {
 				tickFileReadQueue(0);

@@ -863,7 +863,7 @@ int32_t handleSpecialEvolutions(mode, entity)
   int16_t rand;
   int16_t evoTarget;
 
-  if (getTamerState() != 0)
+  if (tamerGetState() != 0)
     return -1;
 
   type = entity->type;
@@ -916,8 +916,8 @@ int32_t handleSpecialEvolutions(mode, entity)
 
   if (evoTarget != -1) {
     EVOLUTION_TARGET = evoTarget;
-    setTamerState(6);
-    setPartnerState(0xd);
+    tamerSetState(6);
+    partnerSetState(0xd);
   }
 
   return evoTarget;

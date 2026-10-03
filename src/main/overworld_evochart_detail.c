@@ -88,15 +88,15 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		       int32_t height, uint8_t texX, uint8_t texY,
 		       int16_t texturePage, int16_t clut, int32_t zIndex,
 		       int8_t flag);
-void renderSpriteBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t c1,
+void renderBorderBox(int16_t x, int16_t y, int16_t w, int16_t h, int32_t c1,
 		     int32_t c2, uint8_t r, uint8_t g, uint8_t b, int32_t a10);
 void renderString();
 int32_t hasDigimonRaised(int32_t id);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-			     int32_t y1, int32_t x2, int32_t y2, int32_t otz,
-			     int32_t flag);
-void renderLinePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-			 int32_t y1, int32_t otz, int32_t flag);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t x2, int32_t y2, int32_t otz,
+		int32_t flag);
+void drawLine2P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t otz, int32_t flag);
 int32_t strlen(char *s);
 void renderInsetBox(int16_t a, int16_t b, int16_t c, int16_t d, int32_t otz);
 void renderEvoChartDetail(void);
@@ -207,33 +207,33 @@ void renderEvoChartDetail(void)
 
 	for (j = 0; j < fromCount; j++) {
 		if (EVO_PATHS_DATA[MAIN_D_80134D40 - 1].from[j] > 0) {
-			renderTrianglePrimitive(0x65db,
-						fromLines->x1, fromLines->y1 - 1,
-						fromLines->x2, fromLines->y2 - 1,
-						fromLines->x3, fromLines->y3 - 1,
-						4, 0);
-			renderLinePrimitive(0x65db,
-					    fromLines->x3, fromLines->y3 - 1,
-					    fromLines->x4, fromLines->y4 - 1,
-					    4, 0);
-			renderTrianglePrimitive(0x794e3,
-						fromLines->x1, fromLines->y1,
-						fromLines->x2, fromLines->y2,
-						fromLines->x3, fromLines->y3,
-						4, 0);
-			renderLinePrimitive(0x794e3,
-					    fromLines->x3, fromLines->y3,
-					    fromLines->x4, fromLines->y4,
-					    4, 0);
-			renderTrianglePrimitive(0x65db,
-						fromLines->x1, fromLines->y1 + 1,
-						fromLines->x2, fromLines->y2 + 1,
-						fromLines->x3, fromLines->y3 + 1,
-						4, 0);
-			renderLinePrimitive(0x65db,
-					    fromLines->x3, fromLines->y3 + 1,
-					    fromLines->x4, fromLines->y4 + 1,
-					    4, 0);
+			drawLine3P(0x65db,
+				   fromLines->x1, fromLines->y1 - 1,
+				   fromLines->x2, fromLines->y2 - 1,
+				   fromLines->x3, fromLines->y3 - 1,
+				   4, 0);
+			drawLine2P(0x65db,
+				   fromLines->x3, fromLines->y3 - 1,
+				   fromLines->x4, fromLines->y4 - 1,
+				   4, 0);
+			drawLine3P(0x794e3,
+				   fromLines->x1, fromLines->y1,
+				   fromLines->x2, fromLines->y2,
+				   fromLines->x3, fromLines->y3,
+				   4, 0);
+			drawLine2P(0x794e3,
+				   fromLines->x3, fromLines->y3,
+				   fromLines->x4, fromLines->y4,
+				   4, 0);
+			drawLine3P(0x65db,
+				   fromLines->x1, fromLines->y1 + 1,
+				   fromLines->x2, fromLines->y2 + 1,
+				   fromLines->x3, fromLines->y3 + 1,
+				   4, 0);
+			drawLine2P(0x65db,
+				   fromLines->x3, fromLines->y3 + 1,
+				   fromLines->x4, fromLines->y4 + 1,
+				   4, 0);
 		}
 		fromLines++;
 	}
@@ -246,33 +246,33 @@ void renderEvoChartDetail(void)
 			color2 = (MAIN_D_80124A84[(j * 2) + 1].r & 0xff) |
 				 ((MAIN_D_80124A84[(j * 2) + 1].g & 0xff) << 8) |
 				 ((MAIN_D_80124A84[(j * 2) + 1].b & 0xff) << 16);
-			renderTrianglePrimitive(color2,
-						toLines->x1, toLines->y1 - 1,
-						toLines->x2, toLines->y2 - 1,
-						toLines->x3, toLines->y3 - 1,
-						4, 0);
-			renderLinePrimitive(color2,
-					    toLines->x3, toLines->y3 - 1,
-					    toLines->x4, toLines->y4 - 1,
-					    4, 0);
-			renderTrianglePrimitive(color1,
-						toLines->x1, toLines->y1,
-						toLines->x2, toLines->y2,
-						toLines->x3, toLines->y3,
-						4, 0);
-			renderLinePrimitive(color1,
-					    toLines->x3, toLines->y3,
-					    toLines->x4, toLines->y4,
-					    4, 0);
-			renderTrianglePrimitive(color2,
-						toLines->x1, toLines->y1 + 1,
-						toLines->x2, toLines->y2 + 1,
-						toLines->x3, toLines->y3 + 1,
-						4, 0);
-			renderLinePrimitive(color2,
-					    toLines->x3, toLines->y3 + 1,
-					    toLines->x4, toLines->y4 + 1,
-					    4, 0);
+			drawLine3P(color2,
+				   toLines->x1, toLines->y1 - 1,
+				   toLines->x2, toLines->y2 - 1,
+				   toLines->x3, toLines->y3 - 1,
+				   4, 0);
+			drawLine2P(color2,
+				   toLines->x3, toLines->y3 - 1,
+				   toLines->x4, toLines->y4 - 1,
+				   4, 0);
+			drawLine3P(color1,
+				   toLines->x1, toLines->y1,
+				   toLines->x2, toLines->y2,
+				   toLines->x3, toLines->y3,
+				   4, 0);
+			drawLine2P(color1,
+				   toLines->x3, toLines->y3,
+				   toLines->x4, toLines->y4,
+				   4, 0);
+			drawLine3P(color2,
+				   toLines->x1, toLines->y1 + 1,
+				   toLines->x2, toLines->y2 + 1,
+				   toLines->x3, toLines->y3 + 1,
+				   4, 0);
+			drawLine2P(color2,
+				   toLines->x3, toLines->y3 + 1,
+				   toLines->x4, toLines->y4 + 1,
+				   4, 0);
 		}
 		toLines++;
 	}
@@ -282,7 +282,7 @@ void renderEvoChartDetail(void)
 			  MAIN_D_80124544[MAIN_D_80134D40 - 1].v, 0x18,
 			  clut.m[MAIN_D_80124544[MAIN_D_80134D40 - 1].clut],
 			  4, 0);
-	renderSpriteBox(0x97, 99, 0x12, 0x12, 0xbebebe, 0x3c3c3c, 0x87, 0x87,
+	renderBorderBox(0x97, 99, 0x12, 0x12, 0xbebebe, 0x3c3c3c, 0x87, 0x87,
 			0x87, 4);
 
 	for (j = 0; j < fromCount; j++) {
@@ -296,7 +296,7 @@ void renderEvoChartDetail(void)
 						  clut.m[MAIN_D_80124544[id - 1].clut],
 						  4, 0);
 			}
-			renderSpriteBox(fromSprites->posX + 0x9f,
+			renderBorderBox(fromSprites->posX + 0x9f,
 					fromSprites->posY + 0x77, 0x12, 0x12,
 					0xbebebe, 0x3c3c3c, 0x87, 0x87, 0x87, 4);
 		}
@@ -314,7 +314,7 @@ void renderEvoChartDetail(void)
 						  clut.m[MAIN_D_80124544[id - 1].clut],
 						  4, 0);
 			}
-			renderSpriteBox(toSprites->posX + 0x9f,
+			renderBorderBox(toSprites->posX + 0x9f,
 					toSprites->posY + 0x77, 0x12, 0x12,
 					0xbebebe, 0x3c3c3c, 0x87, 0x87, 0x87, 4);
 		}

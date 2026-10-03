@@ -113,7 +113,7 @@ void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uvX, int32_t uvY,
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY,
                        int32_t width, int32_t height);
 void createPauseBox(void);
-void MAIN_func_800E642C(void);
+void removePauseBox(void);
 void SetPolyGT4(POLY_GT4 *prim);
 void handleBattleIdle(DigimonEntity *entity, Stats *stats, int32_t flags);
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
@@ -1529,7 +1529,7 @@ void VS__handlePause(void)
 		createPauseBox();
 		++MAIN_D_80134E78[0];
 	} else {
-		MAIN_func_800E642C();
+		removePauseBox();
 		MAIN_D_80134E78[0] = 0;
 	}
 }
@@ -2759,7 +2759,7 @@ int32_t VS__combatMain(void)
 		VS__handlePause();
 	}
 
-	MAIN_func_800E642C();
+	removePauseBox();
 
 	if (result == -1) {
 		VS__deinitializeCombat(1, 0);

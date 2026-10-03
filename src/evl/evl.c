@@ -70,7 +70,7 @@ extern uint8_t CURRENT_SCREEN;
 extern int32_t MAIN_D_801349E4;
 extern VECTOR EVL_D_80068908;
 int32_t getMapSoundId(int32_t mapId);
-void createFlash(void);
+void EFECreateFlash(void);
 void forceUpdateBGM(void);
 void fadeoutCLUT1(int32_t level, int16_t *src, int32_t unused);
 void fadeoutCLUT2(int32_t fade, char *src, int32_t unused);
@@ -400,7 +400,7 @@ shards:
 					colorEnd.vx = colorEnd.vy = colorEnd.vz = 0x14;
 					*EFE_DATA_STACK++ = (int32_t)&colorStart;
 					*EFE_DATA_STACK++ = (int32_t)&colorEnd;
-					createFlash();
+					EFECreateFlash();
 				}
 			}
 		} else if ((int32_t)*(uint8_t **)&data->timer >= 0x9b) {
@@ -474,7 +474,7 @@ shards:
 			colorEnd.vx = colorEnd.vy = colorEnd.vz = 0x14;
 			*EFE_DATA_STACK++ = (int32_t)&colorStart;
 			*EFE_DATA_STACK++ = (int32_t)&colorEnd;
-			createFlash();
+			EFECreateFlash();
 		}
 		if (frame == 0x11c) {
 			PARTNER_WIREFRAME_TOTAL = 0;

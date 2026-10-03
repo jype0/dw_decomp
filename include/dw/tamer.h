@@ -8,7 +8,7 @@ void checkMapInteraction(void);
 
 Entity *getEntityFromScriptId(uint8_t *scriptId);
 
-int32_t getTamerState(void);
+int32_t tamerGetState(void);
 
 void initializeTamer(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
 		     int32_t rotX, int32_t rotY, int32_t rotZ);
@@ -17,8 +17,8 @@ int32_t isTrainingComplete(void);
 
 void loadMapEntities(uint8_t *data, int32_t mapId, int32_t warpIdx);
 
-void setFullState(int32_t state, int32_t substate);
-void setTamerState(int32_t state);
+void tamerSetFullState(int32_t state, int32_t substate);
+void tamerSetState(int32_t state);
 
 void startAnimationTamer(int32_t animId);
 

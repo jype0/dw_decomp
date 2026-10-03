@@ -76,12 +76,12 @@ extern int32_t MAIN_D_80134FA8;
 extern int32_t CURRENT_SCRIPT_PTR;
 
 void renderSelectionCursor(int32_t a0, int32_t a1, int32_t a2, int32_t a3, int32_t a4);
-int32_t MAIN_func_80106730(uint8_t op, uint32_t lhs, uint32_t rhs);
+int32_t scriptCompareSignedValue(uint8_t op, uint32_t lhs, uint32_t rhs);
 void renderItemSprite(int32_t itemId, int32_t x, int32_t y, int32_t depth);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY, int32_t width, int32_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t xPos, int32_t yPos, int32_t width, int32_t height);
 void renderString(int32_t a0, int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5, int32_t a6, int32_t a7, int32_t a8);
-int32_t MAIN_func_80100E40(int32_t boxId);
+int32_t flipIdleTextboxPage(int32_t boxId);
 int32_t hasMove(int32_t moveId);
 void unlearnMove(int32_t moveId);
 void loadMap(uint16_t mapId);
@@ -89,24 +89,24 @@ void renderMonochromonMoodBubble(int32_t instanceId);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
 int32_t worldPosToScreenPos(SVECTOR *worldPos, DVECTOR *screenPos);
 void closeTextbox(int32_t boxId, RECT *target);
-void redrawItemMenuRow(ItemMenuBox *box, int32_t style);
-void renderShopBitBox(void);
+void updateItemMenuLine(ItemMenuBox *box, int32_t style);
+void renderShopBitsBox(void);
 void tickItemMenu(void);
 void renderItemMenu(void);
 void itemMenuCursorDown(ItemMenuBox *box, int32_t style);
 int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiBoxId);
-void MAIN_func_801000E4(void);
+void renderCustomSizedTextbox(void);
 int32_t shopFillBuyItemList(void);
-int32_t fillInventoryItemList(void);
-int32_t MAIN_func_800FAFB0(void);
+int32_t shopFillSellItemList(void);
+int32_t readSelectedItemMerit(void);
 void tickItemMenuDescriptionBox(void);
 void renderItemMenuDescriptionBox(void);
-void tickShopBitBox(void);
-uint8_t *doShopkeeperLine(int32_t idx);
+void tickShopBitsBox(void);
+uint8_t *getShopkeeperLine(int32_t idx);
 uint8_t *resolveMapHeadEntry(int32_t section, int32_t idx);
 void processInput(void);
 int32_t isKeyDown(uint32_t key);
-void MAIN_func_800FC08C(void);
+void setFreshDialogue(void);
 int32_t isXPressedAfterDialogue(void);
 void *allocateArray(uint32_t size);
 void freeArray(uint32_t *array);
@@ -115,75 +115,75 @@ int32_t isItemMenuBoxBusy(ItemMenuBox *box);
 void itemMenuCursorTop(ItemMenuBox *box, int32_t startRow, int32_t style);
 void itemMenuCursorUp(ItemMenuBox *box, int32_t style);
 void itemMenuCursorBottom(ItemMenuBox *box, int32_t startRow, int32_t style);
-void setItemMenuSubTextboxLine(void);
+void updateItemMenuSubTextboxLine(void);
 int32_t flipTextboxPage(uint8_t a);
-void itemMenuSelectLast(ItemMenuBox *box);
-void itemMenuSelectFirst(ItemMenuBox *box);
-uint8_t *MAIN_func_800FF444(uint8_t *data, int32_t index);
+void itemMenuCursorMoveToBottom(ItemMenuBox *box);
+void itemMenuCursorMoveToTop(ItemMenuBox *box);
+uint8_t *getTextboxLine(uint8_t *data, int32_t index);
 void terminateString(uint8_t *str, int32_t flag);
 uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used);
 void setDigimonRaised(int32_t digimonId);
 int32_t hasDigimonRaised(int32_t digimonId);
 void unlockMedal(uint16_t medal);
 int32_t hasMedal(uint16_t medal);
-void MAIN_func_800FF900(void);
+void triggerSeadramonCutscene(void);
 void checkShopMap(int32_t mapId);
 void checkArenaMap(int32_t mapId);
-void MAIN_func_800FFBB8(int32_t boxId);
-int32_t MAIN_func_800FFDF4(void);
-void MAIN_func_800FFF80(int32_t x, int32_t y);
-void MAIN_func_800FFFF0(void);
+void clearTextboxLineCount(int32_t boxId);
+int32_t tickConfirmDialogue(void);
+void renderDialogueSelectionCursor(int32_t x, int32_t y);
+void tickCustomSizedTextbox(void);
 void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 int32_t advanceTextbox(int32_t boxId);
 void setupDialogueBox(uint8_t owner);
-int32_t MAIN_func_80101EF8(int32_t boxId, int32_t speakerId);
-void layoutItemMenuAmountBox(void);
-void tickItemMenuConfirmBox(void);
-void renderItemMenuConfirmBox(void);
+int32_t showTextboxReady(int32_t boxId, int32_t speakerId);
+void updateItemMenuAmountBoxString(void);
+void tickSingleCardShop(void);
+void renderSingleCardShop(void);
 int32_t createItemMenuAmountBox(RECT *origin);
-int32_t createItemMenuConfirmBox(RECT *origin);
+int32_t createSingleCardShopMenu(RECT *origin);
 void renderItemMenuSprite(int32_t boxId, int32_t idx, int16_t x, int16_t y);
 void renderItemMenuScrollBar(ItemMenuBox *box);
 void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int32_t flag);
 void renderInsetWithoutBox(int32_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
 void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth);
-void layoutItemRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void layoutCardRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void layoutBgmTrackRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void layoutDestinationRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void layoutTradeRow(ItemMenuBox *box, uint8_t row, int32_t isLast);
-void renderRaisedFrame(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
-int32_t MAIN_func_800FFA4C(int32_t boxId, int32_t flag);
-int32_t MAIN_func_800FFC1C(void);
-int32_t MAIN_func_800FFF24(void);
+void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void calculateMusicMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast);
+void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h);
+int32_t drawTextboxStrings(int32_t boxId, int32_t flag);
+int32_t tickSelectionDialogue(void);
+int32_t tickBackgroundDialogue(void);
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
 int32_t getSpeakerName(int32_t speakerId, uint8_t *buf);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag);
 void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
-void renderSellItemBox(void);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
+void renderItemMenuAmountBox(void);
 void renderUIBox(int32_t boxId);
 void renderVerticalLine(int32_t boxId, int16_t x, int16_t y, int32_t h);
-void tickSellItemBox(void);
+void tickItemMenuAmountBox(void);
 
 static void *script_common_text_order[] = {
 	scriptInstructionFBtoFF,
 	tickScriptedMovements,
 	readFileSection,
 	enforceStatsLimits,
-	MAIN_func_80102630,
-	MAIN_func_801025E8,
-	MAIN_func_80102564,
-	MAIN_func_80102514,
-	MAIN_func_801024CC,
+	scriptCompareMoney,
+	scriptCompareItemCount,
+	scriptCompareCondition,
+	scriptCompareMove,
+	scriptCompareCard,
 	getStatsPointer,
-	MAIN_func_801022FC,
+	scriptCompareStat,
 	scriptCompareDate,
 	scriptIdToEntityId,
 	intToStringSJIS,
 	getSpeakerName,
-	MAIN_func_80101EF8,
+	showTextboxReady,
 	scriptSetTextboxSize,
 	showTextbox,
 	scriptShowSelection,
@@ -193,29 +193,29 @@ static void *script_common_text_order[] = {
 	setupBoxOrigin,
 	setupDialogueBox,
 	advanceTextbox,
-	MAIN_func_80100E40,
+	flipIdleTextboxPage,
 	drawString2,
 	registerTextbox,
 	triggerBoxCloseFlag,
 	createTextbox,
 	closeBox,
-	MAIN_func_8010064C,
+	closeAllTextboxes,
 	closeTextbox,
 	getVRAMModeCoords,
-	MAIN_func_80100258,
-	MAIN_func_8010020C,
-	MAIN_func_801000E4,
-	MAIN_func_800FFFF0,
-	MAIN_func_800FFF80,
-	MAIN_func_800FFF24,
-	MAIN_func_800FFDF4,
-	MAIN_func_800FFC1C,
-	MAIN_func_800FFBB8,
-	MAIN_func_800FFA4C,
+	tickTextboxHandling,
+	initializeTextbox,
+	renderCustomSizedTextbox,
+	tickCustomSizedTextbox,
+	renderDialogueSelectionCursor,
+	tickBackgroundDialogue,
+	tickConfirmDialogue,
+	tickSelectionDialogue,
+	clearTextboxLineCount,
+	drawTextboxStrings,
 	checkArenaMap,
-	MAIN_func_800FF9AC,
+	loadShopLibrary,
 	checkShopMap,
-	MAIN_func_800FF900,
+	triggerSeadramonCutscene,
 	createMonochromonMoodBubble,
 	hasMedal,
 	unlockMedal,
@@ -226,24 +226,24 @@ static void *script_common_text_order[] = {
 	renderVerticalLine,
 	padWithSpaces,
 	terminateString,
-	MAIN_func_800FF444,
-	renderRaisedFrame,
-	itemMenuSelectFirst,
-	itemMenuSelectLast,
-	redrawItemMenuRow,
-	layoutTradeRow,
-	layoutDestinationRow,
-	layoutBgmTrackRow,
-	layoutCardRow,
-	layoutItemRow,
+	getTextboxLine,
+	renderKeeperTableBox,
+	itemMenuCursorMoveToTop,
+	itemMenuCursorMoveToBottom,
+	updateItemMenuLine,
+	calculateItemListStrings,
+	calculateBirdramonMenuStrings,
+	calculateMusicMenuStrings,
+	calculateCardMenuStrings,
+	calculateItemMenuStrings,
 	flipTextboxPage,
 	lostAllLives,
 	showMapHeadTextbox,
 	renderCardSprite,
 	renderInsetWithoutBox,
 	renderHorizontalLine,
-	MAIN_func_800FDFB4,
-	setItemMenuSubTextboxLine,
+	playShopSoundOnlyInSavannah,
+	updateItemMenuSubTextboxLine,
 	renderItemMenuItemList,
 	renderItemMenuScrollBar,
 	renderItemMenuSprite,
@@ -252,20 +252,20 @@ static void *script_common_text_order[] = {
 	itemMenuCursorBottom,
 	itemMenuCursorUp,
 	itemMenuCursorTop,
-	createItemMenuConfirmBox,
+	createSingleCardShopMenu,
 	createItemMenuAmountBox,
 	isItemMenuBoxBusy,
-	layoutItemMenu,
-	openItemMenu,
+	updateItemMenuStrings,
+	initItemMenuBox,
 	getItemMenuFromType,
-	tickPickItemMenu,
-	createItemMenuBox,
-	MAIN_func_800FCA14,
-	createShopBitBox,
+	openDiscardItem,
+	createItemMenu,
+	showShopkeepSelection,
+	createShopBitsBox,
 	destroyItemMenuBox,
 	showShopkeeperTextbox,
-	initializeItemMenuBox,
-	MAIN_func_800FC508,
+	allocateItemMenuBox,
+	openShop,
 	isPartnerBaby,
 	dailyPStatTrigger,
 	getRecycleId,
@@ -274,26 +274,26 @@ static void *script_common_text_order[] = {
 	handleItemLoss,
 	setInputRepeatMask,
 	isXPressedAfterDialogue,
-	MAIN_func_800FC08C,
+	setFreshDialogue,
 	isKeyDown,
 	processInput,
-	initialKeyInputs,
+	inputInit,
 	renderMonochromonMoodBubble,
 	resolveMapHeadEntry,
-	doShopkeeperLine,
-	renderShopBitBox,
-	tickShopBitBox,
-	renderItemMenuConfirmBox,
-	tickItemMenuConfirmBox,
-	layoutItemMenuAmountBox,
-	renderSellItemBox,
-	tickSellItemBox,
+	getShopkeeperLine,
+	renderShopBitsBox,
+	tickShopBitsBox,
+	renderSingleCardShop,
+	tickSingleCardShop,
+	updateItemMenuAmountBoxString,
+	renderItemMenuAmountBox,
+	tickItemMenuAmountBox,
 	renderItemMenuDescriptionBox,
 	tickItemMenuDescriptionBox,
-	MAIN_func_800FAFB0,
+	readSelectedItemMerit,
 	renderItemMenu,
 	tickItemMenu,
-	fillInventoryItemList,
+	shopFillSellItemList,
 	shopFillBuyItemList,
 };
 
@@ -881,7 +881,7 @@ end:
 	return canBuyAnything;
 }
 
-int32_t fillInventoryItemList(void)
+int32_t shopFillSellItemList(void)
 {
 	int32_t i;
 	uint8_t *buf;
@@ -955,10 +955,10 @@ void tickItemMenu(void)
 			createItemMenuAmountBox(&rect);
 			break;
 		case 7:
-			MAIN_func_800FAFB0();
+			readSelectedItemMerit();
 			break;
 		case 5:
-			createItemMenuConfirmBox(&rect);
+			createSingleCardShopMenu(&rect);
 			break;
 		}
 	} else if (isKeyDown(0x10)) {
@@ -995,7 +995,7 @@ void tickItemMenu(void)
 	}
 }
 
-int32_t MAIN_func_800FAFB0(void)
+int32_t readSelectedItemMerit(void)
 {
 	ItemMenuBox *box;
 	int32_t idx;
@@ -1042,7 +1042,7 @@ void renderItemMenuDescriptionBox(void)
 	             (int16_t)(TEXT_BOX_DATA[3].vramRow * 12), 3, 1);
 }
 
-void renderSellItemBox(void)
+void renderItemMenuAmountBox(void)
 {
 	MenuTextLayout layout;
 	int32_t srcCol;
@@ -1117,7 +1117,7 @@ draw:
 	renderItemMenuItemList(box, bx + 0x1a, by + 0x13, bx + 8, by + 0x12, 0);
 }
 
-void layoutItemMenuAmountBox(void)
+void updateItemMenuAmountBoxString(void)
 {
 	uint8_t *out;
 	char *name;
@@ -1154,7 +1154,7 @@ void layoutItemMenuAmountBox(void)
 	TEXT_BOX_DATA[3].writeCount++;
 }
 
-void tickItemMenuConfirmBox(void)
+void tickSingleCardShop(void)
 {
 	ItemMenuBox *box;
 	uint8_t amount;
@@ -1197,7 +1197,7 @@ void tickItemMenuConfirmBox(void)
 				SCRIPT_STATE_PTR->smth[box->cursor] = 0xff;
 				UPDATE_SHOP_BIT_BOX = 1;
 				SELECTION_MENU_STATE = 4;
-				MAIN_func_800FDFB4();
+				playShopSoundOnlyInSavannah();
 			} else {
 				writePStat(0xfe, SHOP_ITEM_TYPE);
 				unsetTrigger(3);
@@ -1210,7 +1210,7 @@ void tickItemMenuConfirmBox(void)
 	}
 }
 
-void renderItemMenuConfirmBox(void)
+void renderSingleCardShop(void)
 {
 	MenuTextLayout layout;
 	int16_t *entry;
@@ -1235,7 +1235,7 @@ void renderItemMenuConfirmBox(void)
 	                      0xe, 3);
 }
 
-void tickShopBitBox(void)
+void tickShopBitsBox(void)
 {
 	int32_t line;
 	uint8_t saved;
@@ -1255,7 +1255,7 @@ void tickShopBitBox(void)
 	}
 }
 
-uint8_t *doShopkeeperLine(int32_t idx)
+uint8_t *getShopkeeperLine(int32_t idx)
 {
 	ShopkeeperIdTable shopkeeperIds;
 	int32_t section;
@@ -1332,7 +1332,7 @@ void renderMonochromonMoodBubble(int32_t instanceId)
 	}
 }
 
-void initialKeyInputs(void)
+void inputInit(void)
 {
 	MAIN_D_80135024 = 0;
 	MAIN_D_80135020 = -1;
@@ -1380,7 +1380,7 @@ int32_t isKeyDown(uint32_t key)
 	return 1;
 }
 
-void MAIN_func_800FC08C(void)
+void setFreshDialogue(void)
 {
 	MAIN_D_80135028 = 1;
 }
@@ -1533,7 +1533,7 @@ int32_t isPartnerBaby(void)
 	return 0;
 }
 
-void tickSellItemBox(void)
+void tickItemMenuAmountBox(void)
 {
 	RECT origin;
 	uint8_t owner;
@@ -1561,7 +1561,7 @@ void tickSellItemBox(void)
 		}
 
 		playSound(0, 2);
-		layoutItemMenuAmountBox();
+		updateItemMenuAmountBoxString();
 
 		return;
 	}
@@ -1578,7 +1578,7 @@ void tickSellItemBox(void)
 		}
 
 		playSound(0, 2);
-		layoutItemMenuAmountBox();
+		updateItemMenuAmountBoxString();
 
 		return;
 	}
@@ -1640,13 +1640,13 @@ void tickSellItemBox(void)
 		triggerBoxCloseFlag(3);
 		closeTextbox(3, &origin);
 		UPDATE_SHOP_BIT_BOX = 1;
-		MAIN_func_800FDFB4();
+		playShopSoundOnlyInSavannah();
 	}
 
-	layoutItemMenuAmountBox();
+	updateItemMenuAmountBoxString();
 }
 
-void layoutTradeRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	int32_t idx;
@@ -1654,7 +1654,7 @@ void layoutTradeRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	int32_t item;
 	int32_t len;
 
-	out = MAIN_func_800FF444((uint8_t *)box, row);
+	out = getTextboxLine((uint8_t *)box, row);
 	*out++ = 1;
 	*out++ = 7;
 
@@ -1696,7 +1696,7 @@ void layoutTradeRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void MAIN_func_800FC508(void)
+void openShop(void)
 {
 	int32_t npcId;
 	int32_t i;
@@ -1707,11 +1707,11 @@ void MAIN_func_800FC508(void)
 
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&ITEM_MENU_LEFT, 0x100, 6, 0xb2, 0x18,
-		                      6, 0x5a);
-		initializeItemMenuBox(&ITEM_MENU_RIGHT,
-		                      INVENTORY.size << 1, 6, 0xd2, 0x18,
-		                      6, 0x5a);
+		allocateItemMenuBox(&ITEM_MENU_LEFT, 0x100, 6, 0xb2, 0x18,
+		                    6, 0x5a);
+		allocateItemMenuBox(&ITEM_MENU_RIGHT,
+		                    INVENTORY.size << 1, 6, 0xd2, 0x18,
+		                    6, 0x5a);
 		MAIN_D_80134F70 = 0;
 
 		found = 0;
@@ -1743,8 +1743,8 @@ void MAIN_func_800FC508(void)
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
-		createShopBitBox(1);
-		MAIN_func_800FCA14(2, 0xfd, 3, &MAIN_D_80134F70);
+		createShopBitsBox(1);
+		showShopkeepSelection(2, 0xfd, 3, &MAIN_D_80134F70);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_4 = 4;
 		SCRIPT_STATE_3 = 2;
@@ -1753,7 +1753,7 @@ void MAIN_func_800FC508(void)
 		setInputRepeatMask(0x5000);
 		ITEM_MENU_TYPE = 0;
 		shopFillBuyItemList();
-		createItemMenuBox();
+		createItemMenu();
 		showShopkeeperTextbox(8, npcId, 0);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
@@ -1761,8 +1761,8 @@ void MAIN_func_800FC508(void)
 	case 5:
 		setInputRepeatMask(0x5000);
 		ITEM_MENU_TYPE = 1;
-		fillInventoryItemList();
-		createItemMenuBox();
+		shopFillSellItemList();
+		createItemMenu();
 		showShopkeeperTextbox(9, npcId, 0);
 		SELECTION_MENU_STATE = 1;
 		SCRIPT_STATE_3 = 3;
@@ -1809,8 +1809,8 @@ void MAIN_func_800FC508(void)
 	}
 }
 
-void initializeItemMenuBox(ItemMenuBox **box, int32_t bufSize, int32_t rows,
-                           int32_t x, uint8_t y, uint8_t w, uint8_t h)
+void allocateItemMenuBox(ItemMenuBox **box, int32_t bufSize, int32_t rows,
+                         int32_t x, uint8_t y, uint8_t w, uint8_t h)
 {
 	*box = (ItemMenuBox *)allocateArray(0x20);
 	(*box)->buf = allocateArray(bufSize);
@@ -1833,7 +1833,7 @@ void destroyItemMenuBox(ItemMenuBox **box)
 	*box = 0;
 }
 
-void createShopBitBox(int32_t showBits)
+void createShopBitsBox(int32_t showBits)
 {
 	RECT rect;
 	RECT origin;
@@ -1846,19 +1846,19 @@ void createShopBitBox(int32_t showBits)
 
 	setupBoxOrigin(0xfd, &origin);
 	setRECT(&rect, -0x98, -0x62, 0x52, 0x21);
-	createTextbox(2, 0xe1, &rect, &origin, tickShopBitBox,
-	              renderShopBitBox);
+	createTextbox(2, 0xe1, &rect, &origin, tickShopBitsBox,
+	              renderShopBitsBox);
 	registerTextbox(2, 8, 1, 0, 0);
-	tickShopBitBox();
+	tickShopBitsBox();
 }
 
-void MAIN_func_800FCA14(int32_t idx, int32_t owner, int32_t boxId,
-                        int32_t *outSelection)
+void showShopkeepSelection(int32_t idx, int32_t owner, int32_t boxId,
+                           int32_t *outSelection)
 {
 	showMapheadSelection(idx, owner, boxId, outSelection, 0xff);
 }
 
-void createItemMenuBox(void)
+void createItemMenu(void)
 {
 	RECT rect;
 	RECT origin;
@@ -1879,20 +1879,20 @@ void createItemMenuBox(void)
 	createTextbox(1, 0xf1, &rect, &origin, tickItemMenu,
 	              renderItemMenu);
 	registerTextbox(1, 9, 6, 1, 0);
-	openItemMenu(result, 1, 9);
-	layoutItemMenu(result, 9, 0);
+	initItemMenuBox(result, 1, 9);
+	updateItemMenuStrings(result, 9, 0);
 	MAIN_D_8013500C = 0;
 }
 
-void tickPickItemMenu(void)
+void openDiscardItem(void)
 {
 	switch (SELECTION_MENU_STATE) {
 	case 0:
-		initializeItemMenuBox(&ITEM_MENU_RIGHT,
-		                      INVENTORY.size << 1, 6, 0x9a, 0x18,
-		                      6, 0x5a);
+		allocateItemMenuBox(&ITEM_MENU_RIGHT,
+		                    INVENTORY.size << 1, 6, 0x9a, 0x18,
+		                    6, 0x5a);
 
-		if (fillInventoryItemList()) {
+		if (shopFillSellItemList()) {
 			SELECTION_MENU_STATE = 3;
 			SCRIPT_STATE_3 = 0;
 		} else {
@@ -1911,7 +1911,7 @@ void tickPickItemMenu(void)
 	case 3:
 		setInputRepeatMask(0x5000);
 		ITEM_MENU_TYPE = 5;
-		createItemMenuBox();
+		createItemMenu();
 		SELECTION_MENU_STATE = 1;
 		break;
 	case 4:
@@ -1940,7 +1940,7 @@ ItemMenuBox *getItemMenuFromType(void)
 	return 0;
 }
 
-void openItemMenu(ItemMenuBox *box, int32_t boxId, int32_t startRow)
+void initItemMenuBox(ItemMenuBox *box, int32_t boxId, int32_t startRow)
 {
 	int32_t i;
 
@@ -1957,7 +1957,7 @@ void openItemMenu(ItemMenuBox *box, int32_t boxId, int32_t startRow)
 	}
 }
 
-void layoutItemMenu(ItemMenuBox *box, int32_t startRow, int32_t style)
+void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
 	TextBoxData *entry;
 	uint8_t *p;
@@ -1977,27 +1977,27 @@ void layoutItemMenu(ItemMenuBox *box, int32_t startRow, int32_t style)
 		while (i < rows) {
 			if (box->itemRow[i] == last) {
 				if (style == 0) {
-					layoutItemRow(box, i, 1);
+					calculateItemMenuStrings(box, i, 1);
 				} else if (style == 1) {
-					layoutCardRow(box, i, 1);
+					calculateCardMenuStrings(box, i, 1);
 				} else if (style == 2) {
-					layoutBgmTrackRow(box, i, 1);
+					calculateMusicMenuStrings(box, i, 1);
 				} else if (style == 3) {
-					layoutDestinationRow(box, i, 1);
+					calculateBirdramonMenuStrings(box, i, 1);
 				} else {
-					layoutTradeRow(box, i, 1);
+					calculateItemListStrings(box, i, 1);
 				}
 			} else {
 				if (style == 0) {
-					layoutItemRow(box, i, 0);
+					calculateItemMenuStrings(box, i, 0);
 				} else if (style == 1) {
-					layoutCardRow(box, i, 0);
+					calculateCardMenuStrings(box, i, 0);
 				} else if (style == 2) {
-					layoutBgmTrackRow(box, i, 0);
+					calculateMusicMenuStrings(box, i, 0);
 				} else if (style == 3) {
-					layoutDestinationRow(box, i, 0);
+					calculateBirdramonMenuStrings(box, i, 0);
 				} else {
-					layoutTradeRow(box, i, 0);
+					calculateItemListStrings(box, i, 0);
 				}
 			}
 
@@ -2090,15 +2090,15 @@ int32_t createItemMenuAmountBox(RECT *origin)
 
 	SHOP_AMOUNT = 1;
 	MAIN_D_80134F82 = 1;
-	setItemMenuSubTextboxLine();
+	updateItemMenuSubTextboxLine();
 	boxY = UI_BOX_DATA[1].finalPos.y;
 	origin->x += UI_BOX_DATA[1].finalPos.x;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x41, -0x2a, 0x82, 0x53);
-	createTextbox(3, 0xc1, &rect, origin, tickSellItemBox,
-	              renderSellItemBox);
+	createTextbox(3, 0xc1, &rect, origin, tickItemMenuAmountBox,
+	              renderItemMenuAmountBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
-	layoutItemMenuAmountBox();
+	updateItemMenuAmountBoxString();
 	playSound(0, 3);
 
 	return 1;
@@ -2108,7 +2108,7 @@ fail:
 	return 0;
 }
 
-int32_t createItemMenuConfirmBox(RECT *origin)
+int32_t createSingleCardShopMenu(RECT *origin)
 {
 	ItemMenuBox *box;
 	RECT rect;
@@ -2134,13 +2134,13 @@ int32_t createItemMenuConfirmBox(RECT *origin)
 		}
 	}
 
-	setItemMenuSubTextboxLine();
+	updateItemMenuSubTextboxLine();
 	boxY = UI_BOX_DATA[1].finalPos.y;
 	origin->x += UI_BOX_DATA[1].finalPos.x;
 	origin->y += (boxY + box->cursor * 18);
 	setRECT(&rect, -0x38, -0x15, 0x70, 0x2a);
-	createTextbox(3, 0xc1, &rect, origin, tickItemMenuConfirmBox,
-	              renderItemMenuConfirmBox);
+	createTextbox(3, 0xc1, &rect, origin, tickSingleCardShop,
+	              renderSingleCardShop);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 2, 0, 0);
 	showMapHeadTextbox(0, 0xff, 3, 0x4d8);
 	SHOP_AMOUNT = 0;
@@ -2155,8 +2155,8 @@ fail:
 
 void itemMenuCursorTop(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
-	itemMenuSelectFirst(box);
-	layoutItemMenu(box, startRow, style);
+	itemMenuCursorMoveToTop(box);
+	updateItemMenuStrings(box, startRow, style);
 }
 
 void itemMenuCursorUp(ItemMenuBox *box, int32_t style)
@@ -2178,7 +2178,7 @@ void itemMenuCursorUp(ItemMenuBox *box, int32_t style)
 			}
 
 			box->itemRow[0] = last;
-			redrawItemMenuRow(box, style);
+			updateItemMenuLine(box, style);
 		} else {
 			box->cursor -= 1;
 		}
@@ -2190,8 +2190,8 @@ void itemMenuCursorUp(ItemMenuBox *box, int32_t style)
 
 void itemMenuCursorBottom(ItemMenuBox *box, int32_t startRow, int32_t style)
 {
-	itemMenuSelectLast(box);
-	layoutItemMenu(box, startRow, style);
+	itemMenuCursorMoveToBottom(box);
+	updateItemMenuStrings(box, startRow, style);
 }
 
 void itemMenuCursorDown(ItemMenuBox *box, int32_t style)
@@ -2217,7 +2217,7 @@ void itemMenuCursorDown(ItemMenuBox *box, int32_t style)
 			}
 
 			box->itemRow[box->visibleRows - 1] = first;
-			redrawItemMenuRow(box, style);
+			updateItemMenuLine(box, style);
 		}
 		playSound(0, 2);
 	} else {
@@ -2238,7 +2238,7 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, int32_t uiB
 		return 0;
 	}
 
-	setItemMenuSubTextboxLine();
+	updateItemMenuSubTextboxLine();
 	boxY = UI_BOX_DATA[uiBoxId].finalPos.y;
 	origin->x += UI_BOX_DATA[uiBoxId].finalPos.x;
 	origin->y += (boxY + box->cursor * 18);
@@ -2323,10 +2323,10 @@ void renderItemMenuScrollBar(ItemMenuBox *box)
 	track = (track * box->visibleRows) / 100;
 
 	bottom = y + h;
-	renderTrianglePrimitive(0x20202, x + w + 1, y, x, y, x, bottom + offset, boxId, 0);
-	renderTrianglePrimitive(0xa08769, x, y + h + 1, x + w + 1, y + h + 1, x + w + 1, y + 1, boxId, 0);
-	renderTrianglePrimitive(0xa08769, x + offset + w * scale, thumbY, x + 1, thumbY, x + 1, thumbY + track - 2, boxId, 0);
-	renderTrianglePrimitive(0x20202, x + 1, thumbY + track - 1, x + offset + w * scale, thumbY + track - 1, x + offset + w * scale, thumbY + 1, boxId, 0);
+	drawLine3P(0x20202, x + w + 1, y, x, y, x, bottom + offset, boxId, 0);
+	drawLine3P(0xa08769, x, y + h + 1, x + w + 1, y + h + 1, x + w + 1, y + 1, boxId, 0);
+	drawLine3P(0xa08769, x + offset + w * scale, thumbY, x + 1, thumbY, x + 1, thumbY + track - 2, boxId, 0);
+	drawLine3P(0x20202, x + 1, thumbY + track - 1, x + offset + w * scale, thumbY + track - 1, x + offset + w * scale, thumbY + 1, boxId, 0);
 
 	prim = (POLY_F4 *)GsGetWorkBase();
 	SetPolyF4(prim);
@@ -2403,7 +2403,7 @@ void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2
 	}
 }
 
-void setItemMenuSubTextboxLine(void)
+void updateItemMenuSubTextboxLine(void)
 {
 	uint8_t *box = (uint8_t *)TEXT_BOX_DATA;
 
@@ -2411,7 +2411,7 @@ void setItemMenuSubTextboxLine(void)
 	ITEM_MENU_SUB_TEXTBOX_LINE = (*(int32_t *)(box + 0x18) ^ 1) * *(int32_t *)(box + 0x24);
 }
 
-void MAIN_func_800FDFB4(void)
+void playShopSoundOnlyInSavannah(void)
 {
 	uint16_t mapId;
 	int32_t i;
@@ -2438,11 +2438,11 @@ void renderHorizontalLine(uint8_t boxId, int16_t x, int16_t y, int32_t w)
 	boxId = 6 - boxId;
 	yc = y;
 
-	renderLinePrimitive(0x20202, x, yc, (x + w) - 1, yc, boxId, 0);
+	drawLine2P(0x20202, x, yc, (x + w) - 1, yc, boxId, 0);
 	y++;
-	renderLinePrimitive(0xa08769, x, y, (x + w) - 1, y, boxId, 0);
+	drawLine2P(0xa08769, x, y, (x + w) - 1, y, boxId, 0);
 	y++;
-	renderLinePrimitive(0x20202, x, y, (x + w) - 1, y, boxId, 0);
+	drawLine2P(0x20202, x, y, (x + w) - 1, y, boxId, 0);
 }
 
 GARBAGE(renderInsetWithoutBox, 1);
@@ -2454,8 +2454,8 @@ void renderInsetWithoutBox(int32_t boxId, int16_t x, int16_t y, int32_t w, int16
 	x = x + UI_BOX_DATA[boxId].finalPos.x;
 	y = y + UI_BOX_DATA[boxId].finalPos.y;
 	order = 6 - boxId;
-	renderTrianglePrimitive(0xa08769, x + 1, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, order, 0);
-	renderTrianglePrimitive(0x20202, (x + w) - 1, y, x, y, x, (y + h) - 1, order, 0);
+	drawLine3P(0xa08769, x + 1, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, order, 0);
+	drawLine3P(0x20202, (x + w) - 1, y, x, y, x, (y + h) - 1, order, 0);
 }
 
 void renderCardSprite(int32_t spriteId, int16_t x, int16_t y, int32_t depth)
@@ -2485,7 +2485,7 @@ void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
 	savedCursor = MAIN_D_80134FDC;
 
 	if (section == 0xff) {
-		MAIN_D_80134FDC = doShopkeeperLine(idx);
+		MAIN_D_80134FDC = getShopkeeperLine(idx);
 	} else {
 		MAIN_D_80134FDC = resolveMapHeadEntry(section, idx);
 	}
@@ -2494,7 +2494,7 @@ void showMapHeadTextbox(int32_t idx, int32_t owner, int32_t boxId,
 		owner = 0xff;
 	}
 
-	MAIN_func_80101EF8(boxId, owner);
+	showTextboxReady(boxId, owner);
 	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 	MAIN_D_80134FDC = savedCursor;
 }
@@ -2607,7 +2607,7 @@ int32_t flipTextboxPage(uint8_t a)
 	entry->pageReady = 0;
 }
 
-void layoutItemRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	char *name;
@@ -2618,7 +2618,7 @@ void layoutItemRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	int32_t idx;
 	int32_t i;
 
-	out = MAIN_func_800FF444((uint8_t *)box, row);
+	out = getTextboxLine((uint8_t *)box, row);
 	sum = box->topRow + row;
 	i = sum * 2;
 	idx = i;
@@ -2687,7 +2687,7 @@ amountPart:
 	terminateString(out, isLast);
 }
 
-void layoutCardRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	char *name;
@@ -2696,7 +2696,7 @@ void layoutCardRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	int32_t idx;
 	int32_t value;
 
-	out = MAIN_func_800FF444((uint8_t *)box, row);
+	out = getTextboxLine((uint8_t *)box, row);
 	idx = (box->topRow + row) * 2;
 	type = box->buf[idx];
 	amount = box->buf[idx + 1];
@@ -2740,13 +2740,13 @@ void layoutCardRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void layoutBgmTrackRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void calculateMusicMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	uint8_t type;
 	int32_t len;
 
-	out = MAIN_func_800FF444((uint8_t *)box, row);
+	out = getTextboxLine((uint8_t *)box, row);
 	type = box->buf[(box->topRow + row) * 2];
 	*out++ = 1;
 
@@ -2766,14 +2766,14 @@ void layoutBgmTrackRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void layoutDestinationRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
+void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 {
 	uint8_t *out;
 	uint8_t raw;
 	uint8_t nameId;
 	int32_t len;
 
-	out = MAIN_func_800FF444((uint8_t *)box, row);
+	out = getTextboxLine((uint8_t *)box, row);
 	raw = box->buf[(box->topRow + row) * 2];
 	*out++ = 1;
 
@@ -2797,7 +2797,7 @@ void layoutDestinationRow(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	terminateString(out, isLast);
 }
 
-void redrawItemMenuRow(ItemMenuBox *box, int32_t style)
+void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 {
 	TextBoxData *entry;
 	uint8_t *p;
@@ -2811,15 +2811,15 @@ void redrawItemMenuRow(ItemMenuBox *box, int32_t style)
 	row = box->cursor;
 
 	if (style == 0) {
-		layoutItemRow(box, row, 1);
+		calculateItemMenuStrings(box, row, 1);
 	} else if (style == 1) {
-		layoutCardRow(box, row, 1);
+		calculateCardMenuStrings(box, row, 1);
 	} else if (style == 2) {
-		layoutBgmTrackRow(box, row, 1);
+		calculateMusicMenuStrings(box, row, 1);
 	} else if (style == 3) {
-		layoutDestinationRow(box, row, 1);
+		calculateBirdramonMenuStrings(box, row, 1);
 	} else {
-		layoutTradeRow(box, row, 1);
+		calculateItemListStrings(box, row, 1);
 	}
 
 	((int32_t *)entry)[6] ^= 1;
@@ -2840,16 +2840,16 @@ void redrawItemMenuRow(ItemMenuBox *box, int32_t style)
 	drawString2(p, outX, row * 12, 1);
 }
 
-void renderRaisedFrame(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
+void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int32_t w, int16_t h)
 {
 	x = x + UI_BOX_DATA[boxId].finalPos.x;
 	y = y + UI_BOX_DATA[boxId].finalPos.y;
 	boxId = 6 - boxId;
-	renderTrianglePrimitive(0xa08769, (x + w) - 1, y, x, y, x, (y + h) - 1, boxId, 0);
-	renderTrianglePrimitive(0x20202, x, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, boxId, 0);
+	drawLine3P(0xa08769, (x + w) - 1, y, x, y, x, (y + h) - 1, boxId, 0);
+	drawLine3P(0x20202, x, (y + h) - 1, (x + w) - 1, (y + h) - 1, (x + w) - 1, y, boxId, 0);
 }
 
-void itemMenuSelectLast(ItemMenuBox *data)
+void itemMenuCursorMoveToBottom(ItemMenuBox *data)
 {
 	int32_t diff;
 
@@ -2868,7 +2868,7 @@ void itemMenuSelectLast(ItemMenuBox *data)
 	playSound(0, 2);
 }
 
-void itemMenuSelectFirst(ItemMenuBox *data)
+void itemMenuCursorMoveToTop(ItemMenuBox *data)
 {
 	data->prevTopRow = data->topRow;
 	data->prevCursor = data->cursor;
@@ -2877,7 +2877,7 @@ void itemMenuSelectFirst(ItemMenuBox *data)
 	playSound(0, 2);
 }
 
-uint8_t *MAIN_func_800FF444(uint8_t *data, int32_t index)
+uint8_t *getTextboxLine(uint8_t *data, int32_t index)
 {
 	TextBoxData *entry;
 	uint8_t *row;
@@ -2935,18 +2935,18 @@ void renderVerticalLine(int32_t boxId, int16_t x, int16_t y, int32_t h)
 	order = 6 - boxId;
 	xc = x;
 
-	renderLinePrimitive(0x20202, xc, y, xc, (y + h) - 1, order, 0);
+	drawLine2P(0x20202, xc, y, xc, (y + h) - 1, order, 0);
 	x++;
-	renderLinePrimitive(0xa08769, x, y, x, (y + h) - 1, order, 0);
+	drawLine2P(0xa08769, x, y, x, (y + h) - 1, order, 0);
 	x++;
-	renderLinePrimitive(0x20202, x, y, x, (y + h) - 1, order, 0);
+	drawLine2P(0x20202, x, y, x, (y + h) - 1, order, 0);
 }
 
 void setDialogueOwner(int32_t owner)
 {
 	if (MAIN_D_80134FE6 != owner) {
 		MAIN_D_80134FE6 = owner;
-		MAIN_func_801062F8(owner);
+		scriptPauseGame(owner);
 		setupDialogueBox(MAIN_D_80134FE6);
 	}
 }
@@ -2967,7 +2967,7 @@ void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
 	saved = MAIN_D_80134FDC;
 
 	if (section == 0xff) {
-		MAIN_D_80134FDC = doShopkeeperLine(idx);
+		MAIN_D_80134FDC = getShopkeeperLine(idx);
 	} else {
 		MAIN_D_80134FDC = resolveMapHeadEntry(section, idx);
 	}
@@ -2979,7 +2979,7 @@ void showMapheadSelection(int32_t idx, int32_t owner, int32_t x,
 		MAIN_D_801BE952[0] = 0;
 	}
 
-	MAIN_D_801BE956[0] = MAIN_func_80101EF8(0, MAIN_D_80134FE6);
+	MAIN_D_801BE956[0] = showTextboxReady(0, MAIN_D_80134FE6);
 	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
 
 	if (owner != 0xff) {
@@ -3015,9 +3015,9 @@ void renderScriptDialogueBox(void)
 	}
 
 	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
-		MAIN_func_800FFF80(x, ySave);
+		renderDialogueSelectionCursor(x, ySave);
 	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE && SCRIPT_STATE_3 == 2) {
-		MAIN_func_800FFF80(x, ySave);
+		renderDialogueSelectionCursor(x, ySave);
 	}
 
 	if (MAIN_D_80134F94 != 0) {
@@ -3068,7 +3068,7 @@ void createMonochromonMoodBubble(void)
 	}
 }
 
-void MAIN_func_800FF900(void)
+void triggerSeadramonCutscene(void)
 {
 	callScriptSection(0, 0x4e4, 0);
 }
@@ -3090,7 +3090,7 @@ void checkShopMap(int32_t mapId)
 	}
 }
 
-void MAIN_func_800FF9AC(void)
+void loadShopLibrary(void)
 {
 	loadDynamicLibrary(SHOP_REL, (uint8_t *)&TRN_LOADING_COMPLETE, 1, 0, 0);
 }
@@ -3108,7 +3108,7 @@ void checkArenaMap(int32_t mapId)
 	}
 }
 
-int32_t MAIN_func_800FFA4C(int32_t boxId, int32_t flag)
+int32_t drawTextboxStrings(int32_t boxId, int32_t flag)
 {
 	TextBoxData *box;
 	uint32_t x;
@@ -3155,7 +3155,7 @@ int32_t MAIN_func_800FFA4C(int32_t boxId, int32_t flag)
 	return 1;
 }
 
-void MAIN_func_800FFBB8(int32_t boxId)
+void clearTextboxLineCount(int32_t boxId)
 {
 	TextBoxData *entry;
 	int32_t rows;
@@ -3172,9 +3172,9 @@ void MAIN_func_800FFBB8(int32_t boxId)
 	MAIN_D_801BE80C.usedRows -= rows;
 }
 
-int32_t MAIN_func_800FFC1C(void)
+int32_t tickSelectionDialogue(void)
 {
-	if (MAIN_func_80100E40(0) != 0) {
+	if (flipIdleTextboxPage(0) != 0) {
 		return 0xffff;
 	}
 
@@ -3235,9 +3235,9 @@ int32_t MAIN_func_800FFC1C(void)
 	return 0xffff;
 }
 
-int32_t MAIN_func_800FFDF4(void)
+int32_t tickConfirmDialogue(void)
 {
-	if (MAIN_func_80100E40(0) != 0) {
+	if (flipIdleTextboxPage(0) != 0) {
 		return 0;
 	}
 
@@ -3286,7 +3286,7 @@ ret0:
 	return 0;
 }
 
-void MAIN_func_800FFF80(int32_t x, int32_t y)
+void renderDialogueSelectionCursor(int32_t x, int32_t y)
 {
 	if (TEXT_BOX_DATA[0].idle == 1) {
 		return;
@@ -3297,9 +3297,9 @@ void MAIN_func_800FFF80(int32_t x, int32_t y)
 	                      MAIN_D_801BE956[0], 0xd, 6);
 }
 
-void MAIN_func_800FFFF0(void)
+void tickCustomSizedTextbox(void)
 {
-	if (MAIN_func_80100E40(0) != 0) {
+	if (flipIdleTextboxPage(0) != 0) {
 		return;
 	}
 
@@ -3337,7 +3337,7 @@ void MAIN_func_800FFFF0(void)
 	}
 }
 
-void MAIN_func_801000E4(void)
+void renderCustomSizedTextbox(void)
 {
 	TextBoxData *box;
 	int16_t rowPx;
@@ -3358,7 +3358,7 @@ void MAIN_func_801000E4(void)
 	}
 }
 
-void MAIN_func_8010020C(void)
+void initializeTextbox(void)
 {
 	TextBoxData *box;
 	int32_t i;
@@ -3375,7 +3375,7 @@ void MAIN_func_8010020C(void)
 	TEXTBOX_OPEN_TIMER = 0;
 }
 
-void MAIN_func_80100258(int32_t flag)
+void tickTextboxHandling(int32_t flag)
 {
 	RECT area;
 	int32_t x;
@@ -3408,7 +3408,7 @@ void MAIN_func_80100258(int32_t flag)
 					box->registered = 0;
 				}
 				if (drew == 0 && box->registered == 0) {
-					drew = MAIN_func_800FFA4C(i & 0xff, flag);
+					drew = drawTextboxStrings(i & 0xff, flag);
 				}
 				flags = box->flags;
 				mode = flags & 0xf;
@@ -3482,11 +3482,11 @@ void closeTextbox(boxId, target)
 			removeAnimatedUIBox(boxId, target);
 		}
 
-		MAIN_func_800FFBB8(boxId);
+		clearTextboxLineCount(boxId);
 	}
 }
 
-void MAIN_func_8010064C(void)
+void closeAllTextboxes(void)
 {
 	int32_t i;
 	uint8_t flags;
@@ -3521,7 +3521,7 @@ void createTextbox(int32_t boxId, uint8_t flags, RECT *rect, RECT *origin,
 	entry->tick = tick;
 	entry->render = render;
 
-	MAIN_func_800FC08C();
+	setFreshDialogue();
 }
 
 void triggerBoxCloseFlag(int32_t boxId)
@@ -3695,7 +3695,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 	}
 }
 
-int32_t MAIN_func_80100E40(int32_t boxId)
+int32_t flipIdleTextboxPage(int32_t boxId)
 {
 	TextBoxData *entry;
 
@@ -3740,13 +3740,13 @@ void closeBox(int32_t boxId)
 	closeTextbox(boxId, 0);
 }
 
-int32_t MAIN_func_800FFF24(void)
+int32_t tickBackgroundDialogue(void)
 {
 	TextBoxData *entry;
 
 	entry = TEXT_BOX_DATA;
 
-	if (MAIN_func_80100E40(0) != 0) {
+	if (flipIdleTextboxPage(0) != 0) {
 		return 0;
 	}
 
@@ -3837,7 +3837,7 @@ void tickScriptDialogueBox(void)
 	int32_t sel;
 
 	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
-		sel = MAIN_func_800FFC1C();
+		sel = tickSelectionDialogue();
 		if (sel != 0xffff) {
 			MAIN_D_80134FDC =
 				(uint8_t *)((uint32_t)MAIN_D_801BE948[0] +
@@ -3847,20 +3847,20 @@ void tickScriptDialogueBox(void)
 			                    *(uint16_t *)MAIN_D_80134FDC);
 		}
 	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_SHOW_TEXTBOX) {
-		MAIN_func_800FFDF4();
+		tickConfirmDialogue();
 	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE) {
 		switch (SCRIPT_STATE_3) {
 		case 0:
 			break;
 		case 1:
-			if (MAIN_func_800FFDF4() == 1) {
+			if (tickConfirmDialogue() == 1) {
 				SCRIPT_STATE_3 = 0;
 				SELECTION_MENU_STATE = SCRIPT_STATE_4;
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 			}
 			break;
 		case 2:
-			sel = MAIN_func_800FFC1C();
+			sel = tickSelectionDialogue();
 			if (sel != 0xffff) {
 				SCRIPT_STATE_3 = 0;
 				sel = MAIN_D_801BE952[0];
@@ -3870,7 +3870,7 @@ void tickScriptDialogueBox(void)
 			}
 			break;
 		case 3:
-			if (MAIN_func_800FFF24() == 1) {
+			if (tickBackgroundDialogue() == 1) {
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 				SCRIPT_STATE_3 = 0;
 			}
@@ -4166,12 +4166,12 @@ void scriptSetTextboxSize(void)
 	width = cols * 12 + 10;
 	height = rows * 13 + 7;
 	setRECT(&rect1, (0x140 - width) / 2 - 0xa0, (0xf0 - height) / 2 - 0x78, width, height);
-	createTextbox(0, boxFlags, &rect1, &origin, MAIN_func_800FFFF0,
-	              MAIN_func_801000E4);
+	createTextbox(0, boxFlags, &rect1, &origin, tickCustomSizedTextbox,
+	              renderCustomSizedTextbox);
 	registerTextbox(0, 0, rows, 1, 0);
 }
 
-int32_t MAIN_func_80101EF8(int32_t boxId, int32_t speakerId)
+int32_t showTextboxReady(int32_t boxId, int32_t speakerId)
 {
 	TEXT_BOX_DATA[boxId].pageReady = 1;
 
@@ -4298,14 +4298,14 @@ void scriptCompareDate(void)
 	v3 = readPStat((uint8_t)(statIdx + 2));
 	now = dateToSeconds(v1, v2, v3, readPStat((uint8_t)(statIdx + 3)));
 
-	if (scriptCompareValues(op, now, dateToSeconds(years, days, hours, minutes)) != 0) {
+	if (scriptCompareValue(op, now, dateToSeconds(years, days, hours, minutes)) != 0) {
 		setTrigger(trigger);
 	} else {
 		unsetTrigger(trigger);
 	}
 }
 
-int32_t MAIN_func_801022FC(void)
+int32_t scriptCompareStat(void)
 {
 	uint16_t u;
 	int16_t s;
@@ -4320,13 +4320,13 @@ int32_t MAIN_func_801022FC(void)
 		stat = *getStatsPointer(b1);
 		pollNextScriptUShort(&u);
 
-		return scriptCompareValues(b2, stat, u);
+		return scriptCompareValue(b2, stat, u);
 	}
 
 	stat2 = *getStatsPointer(b1);
 	pollNextScriptShort(&s);
 
-	return MAIN_func_80106730(b2, stat2, s);
+	return scriptCompareSignedValue(b2, stat2, s);
 }
 
 int16_t *getStatsPointer(int32_t stat)
@@ -4400,7 +4400,7 @@ void freeArray(uint32_t *array)
 	MAIN_D_80134F64 -= array[-1] + 4;
 }
 
-void renderShopBitBox(void)
+void renderShopBitsBox(void)
 {
 	int16_t rowPx;
 	int16_t x;
@@ -4414,7 +4414,7 @@ void renderShopBitBox(void)
 	renderString(0, x + 0x10, y + 0xd, 0x3c, 0xc, 0x30, rowPx, 4, 1);
 }
 
-int32_t MAIN_func_801024CC(void)
+int32_t scriptCompareCard(void)
 {
 	uint16_t value;
 	uint8_t cardId;
@@ -4423,17 +4423,17 @@ int32_t MAIN_func_801024CC(void)
 	pollNextTwoScriptBytes(&cardId, &op);
 	pollNextScriptUShort(&value);
 
-	return scriptCompareValues(op, (uint8_t)getCardAmount(cardId), value);
+	return scriptCompareValue(op, (uint8_t)getCardAmount(cardId), value);
 }
 
-int32_t MAIN_func_80102514(void)
+int32_t scriptCompareMove(void)
 {
 	uint8_t moveId;
 	uint8_t negate;
 	int32_t res;
 
 	pollNextTwoScriptBytes(&moveId, &negate);
-	res = MAIN_func_80106D1C(moveId);
+	res = _hasMove(moveId);
 	if (negate == 0) {
 		return res;
 	}
@@ -4441,7 +4441,7 @@ int32_t MAIN_func_80102514(void)
 	return (res != 0) ^ 1;
 }
 
-int32_t MAIN_func_80102564(void)
+int32_t scriptCompareCondition(void)
 {
 	uint8_t mask;
 	uint8_t negate;
@@ -4463,7 +4463,7 @@ int32_t MAIN_func_80102564(void)
 	}
 }
 
-int32_t MAIN_func_801025E8(void)
+int32_t scriptCompareItemCount(void)
 {
 	uint16_t value;
 	uint8_t itemId;
@@ -4472,7 +4472,7 @@ int32_t MAIN_func_801025E8(void)
 	pollNextTwoScriptBytes(&itemId, &op);
 	pollNextScriptUShort(&value);
 
-	return scriptCompareValues(op, (uint8_t)getItemCount(itemId), value);
+	return scriptCompareValue(op, (uint8_t)getItemCount(itemId), value);
 }
 
 void readFileSection(char *filename, void *dest, uint32_t offset,
@@ -4564,7 +4564,7 @@ int16_t enforceStatsLimits(int32_t stat, int16_t value)
 	return value;
 }
 
-int32_t MAIN_func_80102630(void)
+int32_t scriptCompareMoney(void)
 {
 	int32_t value;
 	uint8_t op;
@@ -4574,5 +4574,5 @@ int32_t MAIN_func_80102630(void)
 	pollNextScriptUByte(&op);
 	pollNextInt(&value);
 
-	return scriptCompareValues(op, MONEY, value);
+	return scriptCompareValue(op, MONEY, value);
 }

@@ -31,7 +31,7 @@ int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
 char *initializeFlashData(char *base);
-void createFlash(void);
+void EFECreateFlash(void);
 
 void EAB_setModelColor(int32_t *color);
 void EAB_tickBuildup(void);
@@ -674,7 +674,7 @@ int32_t EAB_tick(entity, isInitialized)
 		colorStart.vx = colorStart.vy = colorStart.vz = 0x14;
 		*EFE_DATA_STACK++ = (int32_t)&colorStart;
 		*EFE_DATA_STACK++ = (int32_t)&colorEnd;
-		createFlash();
+		EFECreateFlash();
 	}
 	playSound(8, 1);
 

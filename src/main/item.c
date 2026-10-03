@@ -137,8 +137,8 @@ void handleEvoItems(int16_t item)
 	HAS_USED_EVOITEM = 1;
 	removeTamerItem();
 	closeInventoryBoxes();
-	setTamerState(6);
-	setPartnerState(0xd);
+	tamerSetState(6);
+	partnerSetState(0xd);
 }
 
 void handleStatusItems(int32_t itemId)
@@ -989,7 +989,7 @@ void handleItemSickness(int16_t chance)
 			PARTNER_PARA.condition &= ~CONDITION_INJURED;
 			PARTNER_PARA.injuryTimer = 0;
 		}
-		setTamerState(0x14);
+		tamerSetState(0x14);
 		clearTextArea();
 		setTextColor(0xa);
 #if defined(VERSION_JP)

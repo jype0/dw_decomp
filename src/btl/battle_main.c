@@ -50,7 +50,7 @@ void startBattleIdleAnimation(DigimonEntity *entity, Stats *stats, int32_t flags
 void tickObjects(void);
 void renderObjects(void);
 void handlePause(void);
-void MAIN_func_800E642C(void);
+void removePauseBox(void);
 void BTL_tickPartnerAI(void);
 void BTL_tickEnemyAI(void);
 void BTL_tickFighterStates(void);
@@ -62,8 +62,8 @@ int32_t BTL_startEFE(int32_t arg0);
 int32_t BTL_applyBuffMove(DigimonEntity *digimon, int32_t slot, int16_t anim);
 int32_t getMapSoundId(int32_t mapId);
 void handleBattleEndBox(void);
-void renderLinePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
+void drawLine2P(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
 void damageTick(FighterData *fighter, Stats *stats);
 void drawEntityText(int32_t a, int32_t b, int32_t x, int32_t y, int32_t value, int32_t order);
 int32_t BTL_calculateDamage(DigimonEntity *attacker, DigimonEntity *defender, int16_t move);
@@ -1867,7 +1867,7 @@ int32_t BTL_battleMain(void)
 		MAIN_D_80134D66++;
 	}
 
-	MAIN_func_800E642C();
+	removePauseBox();
 	BTL_deinitializeCombat();
 	if (PARTNER_ENTITY.digimonEntity.stats.current.currentHP == 0) {
 		COMBAT_DATA_PTR->player.currentCommand[0] = 0;
@@ -2307,9 +2307,9 @@ void BTL_renderEnemyHPBars(void)
 		} else {
 			x = pos[0] + 0x14;
 		}
-		renderTrianglePrimitive(color, x, y, x + 0x36, y, x + 0x36, y + 6, 7, 0);
-		renderTrianglePrimitive(color, x, y + 1, x, y + 6, x + 0x35, y + 6, 7, 0);
-		renderLinePrimitive(color, x, y + 6, pos[0], pos[1], 7, 0);
+		drawLine3P(color, x, y, x + 0x36, y, x + 0x36, y + 6, 7, 0);
+		drawLine3P(color, x, y + 1, x, y + 6, x + 0x35, y + 6, 7, 0);
+		drawLine2P(color, x, y + 6, pos[0], pos[1], 7, 0);
 		sprite = (GsSPRITE *)spr;
 		sprite->x = x + 2;
 		sprite->y = y + 2;

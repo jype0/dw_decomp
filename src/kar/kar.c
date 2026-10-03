@@ -3310,7 +3310,7 @@ void KAR_tickMatchState(void)
 	case 0xC: {
 		KarStone *stone;
 
-		stopSoundMask(MAIN_D_80135228);
+		thunkStopSoundMask(MAIN_D_80135228);
 		KAR_classifyStoneRings();
 		KAR_D_8005B5A0[MAIN_D_8013523C].row.thrown++;
 		MAIN_D_80135244 = 0xD;

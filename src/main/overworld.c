@@ -174,7 +174,7 @@ extern char STR_MOVE_NAME_BUBBLE[];
 int32_t isTriggerSet(int32_t triggerId);
 void callScriptSection(uint16_t scriptId, uint32_t scriptSection,
 		       uint32_t param);
-void startNPCAnimation(uint8_t scriptId, int32_t animId);
+void scriptNPCStartAnimation(uint8_t scriptId, int32_t animId);
 void drawInventoryText(void);
 void closeTriangleMenu(void);
 void closeInventoryBoxes2();
@@ -194,7 +194,7 @@ int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
 		      void (*render)(void));
 void closeUIBoxIfOpen(int32_t arg);
 void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
-void initializeInventoryObject(void);
+void addInventoryUI(void);
 void tickGameMenu(void);
 void renderGameMenu(void);
 void tickDigimonMenu(void);
@@ -206,7 +206,7 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		       int32_t height, uint8_t texX, uint8_t texY,
 		       int16_t texturePage, int16_t clut, int32_t zIndex,
 		       int8_t flag);
-void renderSeperatorLines(int16_t *lines, int8_t count, int32_t zIndex);
+void renderSeparatorLines(int16_t *lines, int8_t count, int32_t zIndex);
 void renderMist(void);
 void renderMapOverlays(LocalMapObjectInstance *instances, int32_t screenX,
 		       int16_t screenY);
@@ -219,15 +219,15 @@ void buildMapOverlayPrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 			 int8_t mode);
 void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 			LocalMapObject *obj);
-void tickNPCBattle(int32_t instanceId);
-void tickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
-		    int32_t instanceId);
+void NPCEntityTickBattle(int32_t instanceId);
+void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
+		             int32_t instanceId);
 void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity);
-void tickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
-		      int32_t animation, int32_t instanceId);
-int32_t isInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location);
-void tickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-			TamerEntity *tamer);
+void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
+		               int32_t animation, int32_t instanceId);
+int32_t NPCEntityIsInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location);
+void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
+			         TamerEntity *tamer);
 void clearMapObjects(LocalMapObjectInstance *instances);
 void loadMapObjects(LocalMapObjectInstance *mapObjects, uint8_t *data,
 		    int32_t mapId);
@@ -237,25 +237,25 @@ void getRotationDifference(PositionData *posData, VECTOR *targetLoc,
 int32_t rotateEntity(SVECTOR *rotation, int16_t *targetAngle, int16_t *ccDiff,
 		     int16_t *cwDiff, int16_t speed);
 void getModelTile(VECTOR *position, int16_t *outTileX, int16_t *outTileY);
-void tickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-		       TamerEntity *tamer, int32_t instanceId);
-void tickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
-			int32_t instanceId);
-int32_t isInTrackingRadius(Entity *entity, Entity *otherEntity,
-			   MapDigimonEntity *mapDigimon);
-void tickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
-			TamerEntity *tamer, int32_t instanceId,
-			uint8_t animId);
-void tickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
-			TamerEntity *tamer, int32_t instanceId);
+void NPCEntityTickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
+		                TamerEntity *tamer, int32_t instanceId);
+void NPCEntityTickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
+			         int32_t instanceId);
+int32_t NPCEntityIsInTrackingRadius(Entity *entity, Entity *otherEntity,
+			            MapDigimonEntity *mapDigimon);
+void NPCEntityTickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
+			         TamerEntity *tamer, int32_t instanceId,
+			         uint8_t animId);
+void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
+			         TamerEntity *tamer, int32_t instanceId);
 int32_t entityCheckCollision(Entity *a, Entity *entity, int32_t c, int32_t d);
 void removeTriangleMenu(void);
 void closeInventoryBoxes(void);
 void removeUIBox1(void);
 void collisionGrace(int32_t a, Entity *entity, int32_t c, int32_t d);
 uint8_t entityIsOffScreen(Entity *entity, int32_t w, int32_t h);
-void tickNPC(int32_t instanceId);
-void tickNPCOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon);
+void NPCEntityTick(int32_t instanceId);
+void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon);
 void scriptUnloadEntity(uint8_t scriptId);
 void setLoopCountToOne(uint32_t scriptId);
 void loadNPCModel(int32_t digimonId);
@@ -307,11 +307,11 @@ void equipMove(void);
 int32_t isKeyDown(int32_t mask);
 void convertValueToDigits(int32_t digits, int32_t value, int32_t *outCount,
 			  int32_t *outDigits);
-void renderLinePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-			 int32_t y1, int32_t zIndex, int32_t flag);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0,
-			     int32_t x1, int32_t y1, int32_t x2,
-			     int32_t y2, int32_t zIndex, int32_t flag);
+void drawLine2P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t zIndex, int32_t flag);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0,
+		int32_t x1, int32_t y1, int32_t x2,
+		int32_t y2, int32_t zIndex, int32_t flag);
 uint8_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 int32_t hasDigimonRaised(int32_t digimonId);
 int32_t hasMedal(uint16_t medal);
@@ -341,7 +341,7 @@ static void *overworld_functions[] = {
 	renderRectPolyFT4,
 	renderTriangleCursor,
 	renderDateDigits,
-	renderSeperatorLines,
+	renderSeparatorLines,
 	renderGameMenu,
 	closeUIBoxIfOpen,
 	closeTriangleMenu,
@@ -351,27 +351,27 @@ static void *overworld_functions[] = {
 	setMovementEnabled,
 	resetEntityOrigin,
 	setLoopCountToOne,
-	startNPCAnimation,
+	scriptNPCStartAnimation,
 	setActiveAnim,
-	tickWaypointWalk,
+	NPCEntityTickWaypointWalk,
 	tickWaypointWait,
-	tickTrackingTamer4,
-	tickTrackingTamer3,
+	NPCEntityTickTrackingTamer4,
+	NPCEntityTickTrackingTamer3,
 	rotateEntity,
 	getRotationDifference,
-	tickTrackingTamer2,
-	isInTrackingRadius,
-	tickTrackingTamer,
-	tickLookingAtTamer,
-	isInTrackingRect,
-	tickWaypointAI,
-	tickNPCOverworld,
+	NPCEntityTickTrackingTamer2,
+	NPCEntityIsInTrackingRadius,
+	NPCEntityTickTrackingTamer,
+	NPCEntityTickLookingAtTamer,
+	NPCEntityIsInTrackingRect,
+	NPCEntityTickWaypointAI,
+	NPCEntityTickOverworld,
 	clearMapAITable,
 	removeMapEntities,
 	clearMapDigimon,
 	unloadDigimonModel,
 	scriptUnloadEntity,
-	tickNPC,
+	NPCEntityTick,
 	scriptSetDigimon,
 	loadNPCModel,
 	loadMapDigimon,
@@ -4789,7 +4789,7 @@ int32_t scriptSetDigimon(uint8_t type, uint8_t slot, uint8_t autotalk)
 		removeEntity(entity->type, slot + 2);
 	}
 	ENTITY_TABLE[slot + 2] = &NPC_ENTITIES[slot].digimonEntity.entity;
-	initializeDigimonObject(type, slot + 2, tickNPC);
+	initializeDigimonObject(type, slot + 2, NPCEntityTick);
 	setEntityPosition(slot + 2, MAP_DIGIMON_TABLE[slot].posX,
 			  MAP_DIGIMON_TABLE[slot].posY,
 			  MAP_DIGIMON_TABLE[slot].posZ);
@@ -4807,7 +4807,7 @@ int32_t scriptSetDigimon(uint8_t type, uint8_t slot, uint8_t autotalk)
 	return 1;
 }
 
-void tickNPC(int32_t instanceId)
+void NPCEntityTick(int32_t instanceId)
 {
 	if (ENTITY_TABLE[instanceId]->isOnMap == 0) {
 		return;
@@ -4815,12 +4815,12 @@ void tickNPC(int32_t instanceId)
 
 	switch (GAME_STATE) {
 	case 0:
-		tickNPCOverworld(instanceId, &MAP_DIGIMON_TABLE[instanceId - 2]);
+		NPCEntityTickOverworld(instanceId, &MAP_DIGIMON_TABLE[instanceId - 2]);
 		break;
 	case 1:
 	case 2:
 	case 3:
-		tickNPCBattle(instanceId);
+		NPCEntityTickBattle(instanceId);
 		break;
 	case 4:
 	case 5:
@@ -4914,7 +4914,7 @@ void clearMapAITable(int32_t index)
 	}
 }
 
-void tickNPCOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
+void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 {
 	Entity *entity;
 
@@ -4928,16 +4928,16 @@ void tickNPCOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 	if (MAIN_D_80134D20[instanceId - 2] != 0) {
 	} else if (mapDigimon->stopAnim == 0) {
 		if (mapDigimon->lookAtTamerState == 0) {
-			tickWaypointAI(mapDigimon, entity, instanceId);
+			NPCEntityTickWaypointAI(mapDigimon, entity, instanceId);
 		}
 
 		switch (mapDigimon->followMode) {
 		case 2:
 		case 11:
-			if ((isInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 1) ||
+			if ((NPCEntityIsInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 1) ||
 			    (mapDigimon->lookAtTamerState != 0)) {
-				tickLookingAtTamer(mapDigimon, entity,
-						   &TAMER_ENTITY);
+				NPCEntityTickLookingAtTamer(mapDigimon, entity,
+						            &TAMER_ENTITY);
 			}
 			break;
 		case 3:
@@ -4946,42 +4946,42 @@ void tickNPCOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 		case 12:
 		case 13:
 		case 14:
-			if ((isInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 1) ||
+			if ((NPCEntityIsInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 1) ||
 			    (mapDigimon->lookAtTamerState != 0)) {
-				tickTrackingTamer(mapDigimon, entity,
-						  &TAMER_ENTITY, instanceId);
+				NPCEntityTickTrackingTamer(mapDigimon, entity,
+						           &TAMER_ENTITY, instanceId);
 			}
 			break;
 		case 6:
 		case 15:
-			if ((isInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
-						&TAMER_ENTITY.entity, mapDigimon) == 1) ||
+			if ((NPCEntityIsInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
+						         &TAMER_ENTITY.entity, mapDigimon) == 1) ||
 			    (mapDigimon->lookAtTamerState != 0)) {
-				tickTrackingTamer2(mapDigimon, entity,
-						   &TAMER_ENTITY,
-						   instanceId, 2);
+				NPCEntityTickTrackingTamer2(mapDigimon, entity,
+						            &TAMER_ENTITY,
+						            instanceId, 2);
 			}
 			break;
 		case 7:
 		case 16:
-			if ((isInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
-						&TAMER_ENTITY.entity, mapDigimon) == 1) ||
+			if ((NPCEntityIsInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
+						         &TAMER_ENTITY.entity, mapDigimon) == 1) ||
 			    (mapDigimon->lookAtTamerState != 0)) {
-				tickTrackingTamer2(mapDigimon, entity,
-						   &TAMER_ENTITY,
-						   instanceId, 4);
+				NPCEntityTickTrackingTamer2(mapDigimon, entity,
+						            &TAMER_ENTITY,
+						            instanceId, 4);
 			}
 			break;
 		case 8:
 		case 9:
 		case 17:
 		case 18:
-			if (isInTrackingRect(
+			if (NPCEntityIsInTrackingRect(
 				    mapDigimon,
 				    &TAMER_ENTITY.entity.posData->location) == 1 ||
 			    mapDigimon->lookAtTamerState != 0) {
-				tickTrackingTamer2(mapDigimon, entity, &TAMER_ENTITY,
-						   instanceId, 2);
+				NPCEntityTickTrackingTamer2(mapDigimon, entity, &TAMER_ENTITY,
+						            instanceId, 2);
 			}
 			break;
 		}
@@ -4989,7 +4989,7 @@ void tickNPCOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 		NPC_COLLISION_STATE[instanceId - 2] =
 			entityCheckCollision(NULL, entity, 0, 0);
 		if ((NPC_COLLISION_STATE[instanceId - 2] == 0) &&
-		    (getTamerState() == 0) &&
+		    (tamerGetState() == 0) &&
 		    (NPC_ENTITIES[instanceId - 2].autotalk == 1)) {
 			entity->anim.animFlag |= 2;
 			if (IS_SCRIPT_PAUSED == 1) {
@@ -5016,18 +5016,18 @@ void tickNPCOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 	tickAnimation(entity);
 }
 
-void tickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
-		    int32_t instanceId)
+void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
+		             int32_t instanceId)
 {
 	switch (mapDigimon->aiSections[mapDigimon->activeSection]) {
 	case 0:
 		tickWaypointWait(mapDigimon, entity);
 		break;
 	case 1:
-		tickWaypointWalk(mapDigimon, entity, 2, instanceId);
+		NPCEntityTickWaypointWalk(mapDigimon, entity, 2, instanceId);
 		break;
 	case 2:
-		tickWaypointWalk(mapDigimon, entity, 4, instanceId);
+		NPCEntityTickWaypointWalk(mapDigimon, entity, 4, instanceId);
 		break;
 	}
 
@@ -5037,7 +5037,7 @@ void tickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
 	}
 }
 
-int32_t isInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location)
+int32_t NPCEntityIsInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location)
 {
 	if ((mapDigimon->posX + mapDigimon->trackingRange > location->vx) &&
 	    (mapDigimon->posX - mapDigimon->trackingRange < location->vx) &&
@@ -5048,8 +5048,8 @@ int32_t isInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location)
 	return 0;
 }
 
-void tickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-			TamerEntity *tamer)
+void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
+			         TamerEntity *tamer)
 {
 	if (mapDigimon->lookAtTamerState == 0) {
 		mapDigimon->animation = 0;
@@ -5064,15 +5064,15 @@ void tickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
 		rotateEntity(&entity->posData->rotation,
 			     &mapDigimon->targetAngle, &mapDigimon->ccDiff,
 			     &mapDigimon->cwDiff, 0x71);
-		if (isInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 0) {
+		if (NPCEntityIsInTrackingRect(mapDigimon, &TAMER_ENTITY.entity.posData->location) == 0) {
 			mapDigimon->lookAtTamerState = 0;
 			mapDigimon->hasWaypointTarget = 0;
 		}
 	}
 }
 
-void tickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
-		       TamerEntity *tamer, int32_t instanceId)
+void NPCEntityTickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
+		                TamerEntity *tamer, int32_t instanceId)
 {
 	if (mapDigimon->lookAtTamerState == 0) {
 		mapDigimon->targetLocation.vx =
@@ -5085,12 +5085,12 @@ void tickTrackingTamer(MapDigimonEntity *mapDigimon, Entity *entity,
 		startAnimation(entity, mapDigimon->animation);
 		mapDigimon->lookAtTamerState = 1;
 	} else {
-		tickTrackingTamer3(mapDigimon, entity, instanceId);
+		NPCEntityTickTrackingTamer3(mapDigimon, entity, instanceId);
 	}
 }
 
-int32_t isInTrackingRadius(Entity *entity, Entity *otherEntity,
-			   MapDigimonEntity *mapDigimon)
+int32_t NPCEntityIsInTrackingRadius(Entity *entity, Entity *otherEntity,
+			            MapDigimonEntity *mapDigimon)
 {
 	int32_t dx;
 	int32_t dz;
@@ -5103,9 +5103,9 @@ int32_t isInTrackingRadius(Entity *entity, Entity *otherEntity,
 	return 0;
 }
 
-void tickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
-			TamerEntity *tamer, int32_t instanceId,
-			uint8_t animId)
+void NPCEntityTickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
+			         TamerEntity *tamer, int32_t instanceId,
+			         uint8_t animId)
 {
 	if (mapDigimon->lookAtTamerState == 0) {
 		if (mapDigimon->animation != animId) {
@@ -5114,7 +5114,7 @@ void tickTrackingTamer2(MapDigimonEntity *mapDigimon, Entity *entity,
 		}
 		mapDigimon->lookAtTamerState = 1;
 	} else {
-		tickTrackingTamer4(mapDigimon, entity, tamer, instanceId);
+		NPCEntityTickTrackingTamer4(mapDigimon, entity, tamer, instanceId);
 	}
 }
 
@@ -5178,8 +5178,8 @@ int32_t rotateEntity(SVECTOR *rotation, int16_t *targetAngle, int16_t *ccDiff,
 	return 0;
 }
 
-void tickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
-			int32_t instanceId)
+void NPCEntityTickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
+			         int32_t instanceId)
 {
 	int16_t currentTileX;
 	int16_t currentTileY;
@@ -5257,8 +5257,8 @@ void tickTrackingTamer3(MapDigimonEntity *mapDigimon, Entity *entity,
 	}
 }
 
-void tickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
-			TamerEntity *tamer, int32_t instanceId)
+void NPCEntityTickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
+			         TamerEntity *tamer, int32_t instanceId)
 {
 	int16_t currentTileX;
 	int16_t currentTileY;
@@ -5267,8 +5267,8 @@ void tickTrackingTamer4(MapDigimonEntity *mapDigimon, Entity *entity,
 
 	switch (mapDigimon->lookAtTamerState) {
 	case 1:
-		if (isInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
-				       &tamer->entity, mapDigimon) == 1) {
+		if (NPCEntityIsInTrackingRadius(&NPC_ENTITIES[instanceId - 2].digimonEntity.entity,
+				                &tamer->entity, mapDigimon) == 1) {
 			if (NPC_COLLISION_STATE[instanceId - 2] == -1) {
 				getRotationDifference(
 					entity->posData,
@@ -5346,8 +5346,8 @@ void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity)
 	}
 }
 
-void tickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
-		      int32_t animation, int32_t instanceId)
+void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
+		               int32_t animation, int32_t instanceId)
 {
 	int16_t currentTileX;
 	int16_t currentTileY;
@@ -5412,7 +5412,7 @@ void setActiveAnim(uint8_t scriptId, uint8_t animId)
 	}
 }
 
-void startNPCAnimation(uint8_t scriptId, int32_t animId)
+void scriptNPCStartAnimation(uint8_t scriptId, int32_t animId)
 {
 	NPCEntity *npc;
 	int32_t i;
@@ -5490,15 +5490,15 @@ void setMovementEnabled(int32_t id, int32_t enabled)
 	if (id != -1) {
 		if (id == 0) {
 			if (enabled == 0) {
-				setTamerState(0);
+				tamerSetState(0);
 			} else {
-				setTamerState(6);
+				tamerSetState(6);
 			}
 		} else if (id == 1) {
 			if (enabled == 0) {
-				setPartnerState(1);
+				partnerSetState(1);
 			} else {
-				setPartnerState(11);
+				partnerSetState(11);
 			}
 		} else {
 			MAP_DIGIMON_TABLE[id - 2].stopAnim = enabled;
@@ -5508,11 +5508,11 @@ void setMovementEnabled(int32_t id, int32_t enabled)
 		}
 	} else {
 		if (enabled == 0) {
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 		} else {
-			setTamerState(6);
-			setPartnerState(11);
+			tamerSetState(6);
+			partnerSetState(11);
 		}
 		for (i = 0; i < 8; i++) {
 			MAP_DIGIMON_TABLE[i].stopAnim = enabled;
@@ -5577,7 +5577,7 @@ void tickTriangleMenu(void)
 	case 2:
 		closeUIBoxIfOpen(0);
 		if (UI_BOX_DATA[0].frame == 0) {
-			initializeInventoryObject();
+			addInventoryUI();
 			TRIANGLE_MENU_STATE = -1;
 		}
 		break;
@@ -5654,7 +5654,7 @@ void renderGameMenu(void)
 	int16_t yOffset;
 	int32_t i;
 
-	renderSeperatorLines(GAME_MENU_LINES, 2, 5);
+	renderSeparatorLines(GAME_MENU_LINES, 2, 5);
 	renderDateDigits();
 	yOffset = 0;
 	if (MAIN_D_80134D28 == 7) {
@@ -5692,17 +5692,17 @@ void renderGameMenu(void)
 	convertValueToDigits(3, DAY, &digitCount, digits);
 }
 
-void renderSeperatorLines(int16_t *lines, int8_t count, int32_t zIndex)
+void renderSeparatorLines(int16_t *lines, int8_t count, int32_t zIndex)
 {
 	uint8_t *color;
 	int32_t i;
 
 	for (i = 0; i < count; lines += 5ULL, i++) {
 		color = &MAIN_D_80123F48[((uint8_t *)lines)[8] * 3];
-		renderLinePrimitive(color[0] | (color[1] << 8) |
-				    (color[2] << 16),
-				    lines[0], lines[1], lines[2], lines[3],
-				    zIndex, 0);
+		drawLine2P(color[0] | (color[1] << 8) |
+			   (color[2] << 16),
+			   lines[0], lines[1], lines[2], lines[3],
+			   zIndex, 0);
 	}
 }
 
@@ -5851,10 +5851,10 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		y = posY;
 		top = y - 1;
 		right = x + 0xd;
-		renderTrianglePrimitive(0x20202, left = x - 1, top, right, top, right,
-					bottom = y + 0xc, 2, 0);
-		renderTrianglePrimitive(0x20202, left, top, left, bottom,
-					right, bottom, 2, 0);
+		drawLine3P(0x20202, left = x - 1, top, right, top, right,
+			   bottom = y + 0xc, 2, 0);
+		drawLine3P(0x20202, left, top, left, bottom,
+			   right, bottom, 2, 0);
 	}
 }
 
@@ -5912,7 +5912,7 @@ void tickGameMenu(void)
 		     (UI_BOX_DATA[0].frame == 0))) {
 			playSound(0, 4);
 			closeTriangleMenu();
-			setTamerState(0);
+			tamerSetState(0);
 			setCameraFollowPlayer();
 			IS_IN_MENU = 0;
 			startGameTime();
@@ -6420,7 +6420,7 @@ void handleGameMenuSelection(int32_t selection)
 			return;
 		}
 		closeTriangleMenu();
-		setPartnerState(3);
+		partnerSetState(3);
 		IS_IN_MENU = 0;
 		startGameTime();
 		break;
@@ -6429,7 +6429,7 @@ void handleGameMenuSelection(int32_t selection)
 			return;
 		}
 		closeTriangleMenu();
-		setPartnerState(4);
+		partnerSetState(4);
 		IS_IN_MENU = 0;
 		startGameTime();
 		break;
@@ -6444,7 +6444,7 @@ void handleGameMenuSelection(int32_t selection)
 			return;
 		}
 		closeTriangleMenu();
-		setPartnerState(0xf);
+		partnerSetState(0xf);
 		IS_IN_MENU = 0;
 		startGameTime();
 		break;
@@ -6455,7 +6455,7 @@ void handleGameMenuSelection(int32_t selection)
 		closeTriangleMenu();
 		setCameraFollowPlayer();
 		initializeFishing();
-		setTamerState(0xb);
+		tamerSetState(0xb);
 		IS_IN_MENU = 0;
 	}
 }
@@ -6469,8 +6469,8 @@ void startFeedingItem(int32_t arg)
 {
 	if (TAMER_ITEM.worldItem.type == 0xff) {
 		TAMER_ITEM.worldItem.type = arg;
-		setTamerState(6);
-		setPartnerState(5);
+		tamerSetState(6);
+		partnerSetState(5);
 		removeObject(0xfa4, 0);
 		IS_IN_MENU = 0;
 		startGameTime();

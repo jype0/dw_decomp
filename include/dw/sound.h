@@ -21,14 +21,14 @@ int32_t initializeMusic(void);
 void finalizeMusic(void);
 
 int32_t loadMapSounds(int32_t mapSoundId);
-int32_t loadVSSounds(void);
+int32_t VSLoadSounds(void);
 int32_t loadDigimonSounds(int32_t vabId, int32_t type);
 int32_t loadPartnerSounds(int32_t type);
 
 uint32_t playSound(int32_t vabId, int32_t val);
 uint32_t playSound2(int32_t vabId, int32_t val);
 void stopSound(void);
-void stopSoundMask(uint32_t mask);
+void thunkStopSoundMask(uint32_t mask);
 
 int32_t playMusic(int32_t font, int32_t track);
 void stopBGM(void);

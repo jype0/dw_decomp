@@ -109,13 +109,13 @@ extern int16_t CAMERA_Y[];
 int32_t getDistance(long x, long y, long z);
 int32_t customRandom(long a, long b);
 void renderSelectionCursor(int32_t a0, int32_t a1, int32_t a2, int32_t a3, int32_t a4);
-void renderSmallNumber(int32_t color, int32_t n, int32_t x, int32_t y, int32_t value, int32_t layer);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t semiTrans);
+void renderItemAmount(int32_t color, int32_t n, int32_t x, int32_t y, int32_t value, int32_t layer);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t semiTrans);
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
 void toEulerAngles(SVECTOR *out, long x, long y, long z);
-void rotateVectorYXZ(SVECTOR *rotation, VECTOR *input, VECTOR *output);
-void MAIN_func_800E4038(VECTOR *out, int32_t x, int32_t z, int32_t *f);
+void rotateVector(SVECTOR *rotation, VECTOR *input, VECTOR *output);
+void mapToWorldPosition(VECTOR *out, int32_t x, int32_t z, int32_t *f);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void renderUIBox(int32_t id);
 void renderItemSprite(int32_t itemId, int32_t x, int32_t y, int32_t depth);
@@ -1358,9 +1358,9 @@ void FISH_renderBaitMenu(int32_t boxId)
 			addPrim(ACTIVE_ORDERING_TABLE->org + layer, prim);
 			GsSetWorkBase((PACKET *)(prim + 1));
 
-			renderSmallNumber(0, 2, x + ((col != 0) ? 0x116 : 0x86),
-			                  y + 0x12 + row * 0x12,
-			                  (INVENTORY.types.array + item)[0x1e], layer);
+			renderItemAmount(0, 2, x + ((col != 0) ? 0x116 : 0x86),
+			                 y + 0x12 + row * 0x12,
+			                 (INVENTORY.types.array + item)[0x1e], layer);
 		}
 	}
 
@@ -1668,7 +1668,7 @@ retry:
 		goto retry;
 	}
 
-	MAIN_func_800E4038(out, pos.vx, pos.vy, &t);
+	mapToWorldPosition(out, pos.vx, pos.vy, &t);
 }
 
 void FISH_drawStub(void)
@@ -2233,7 +2233,7 @@ int32_t FISH_moveBaitToRodTip(int32_t maxStep)
 		delta.vy = 0;
 		delta.vz = maxStep;
 
-		rotateVectorYXZ(&rot, &delta, &target);
+		rotateVector(&rot, &delta, &target);
 
 		addVector(&item->pos, &target);
 		return 1;
@@ -2268,7 +2268,7 @@ void FISH_tickBaitSprite(void)
 	step.vy = 0;
 	step.vz = 0x64;
 
-	rotateVectorYXZ(&rot, &step, &item->pos);
+	rotateVector(&rot, &step, &item->pos);
 
 	addVector(&item->pos, &FISHING_DATA_PTR->swimmer.pos);
 
@@ -2570,7 +2570,7 @@ void FISH_tickBobberPhysics(void)
 				FISH_SCRATCH->v0.vx = 0;
 				FISH_SCRATCH->v0.vy = 0;
 				FISH_SCRATCH->v0.vz = s->dist;
-				rotateVectorYXZ(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, (VECTOR *)s);
+				rotateVector(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, (VECTOR *)s);
 				addVector(&s->pos, &FISHING_DATA_PTR->rod.lineStart);
 				FISH_SCRATCH->v0.vx = s->pos.vx - old.vx;
 				FISH_SCRATCH->v0.vy = s->pos.vy - old.vy;
@@ -2595,7 +2595,7 @@ void FISH_tickBobberPhysics(void)
 				FISH_SCRATCH->v0.vx = 0;
 				FISH_SCRATCH->v0.vy = 0;
 				FISH_SCRATCH->v0.vz = s->dist;
-				rotateVectorYXZ(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, (VECTOR *)s);
+				rotateVector(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, (VECTOR *)s);
 				addVector(&s->pos, &FISHING_DATA_PTR->rod.lineStart);
 			}
 		}
@@ -2693,9 +2693,9 @@ void FISH_spawnSeadramon(Fish *f)
 	sea->pathLength = FISHING_DATA_PTR->mapData->seadramonWaypointCount;
 
 	f->state = 0;
-	MAIN_func_800E4038(&f->pos, sea->path[f->state].vx, sea->path[f->state].vy, NULL);
+	mapToWorldPosition(&f->pos, sea->path[f->state].vx, sea->path[f->state].vy, NULL);
 	f->state++;
-	MAIN_func_800E4038(&FISH_SCRATCH->v0, sea->path[f->state].vx, sea->path[f->state].vy, NULL);
+	mapToWorldPosition(&FISH_SCRATCH->v0, sea->path[f->state].vx, sea->path[f->state].vy, NULL);
 
 	toEulerAngles(&f->rotation, FISH_SCRATCH->v0.vx - f->pos.vx, 0,
 	              FISH_SCRATCH->v0.vz - f->pos.vz);
@@ -2712,7 +2712,7 @@ void FISH_tickSeadramon(Fish *f)
 		FISH_SCRATCH->v0.vx = 0;
 		FISH_SCRATCH->v0.vy = 0;
 		FISH_SCRATCH->v0.vz = f->timeThisMove;
-		rotateVectorYXZ(&f->rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
+		rotateVector(&f->rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
 		addVector(&f->pos, &FISH_SCRATCH->v1);
 		f->transparency -= 8;
 		f->transparency = (f->transparency < 0) ? 0 : ((f->transparency > 0x80) ? 0x80 : f->transparency);
@@ -2722,7 +2722,7 @@ void FISH_tickSeadramon(Fish *f)
 			return;
 		}
 	} else {
-		MAIN_func_800E4038(&target, sea->path[f->state].vx, sea->path[f->state].vy, NULL);
+		mapToWorldPosition(&target, sea->path[f->state].vx, sea->path[f->state].vy, NULL);
 		f->transparency += 8;
 		f->transparency = (f->transparency < 0) ? 0 : ((f->transparency > 0x80) ? 0x80 : f->transparency);
 		toEulerAngles(&FISH_SCRATCH->rot, target.vx - f->pos.vx, 0,
@@ -2738,7 +2738,7 @@ void FISH_tickSeadramon(Fish *f)
 		FISH_SCRATCH->v0.vx = 0;
 		FISH_SCRATCH->v0.vy = 0;
 		FISH_SCRATCH->v0.vz = f->timeThisMove;
-		rotateVectorYXZ(&f->rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
+		rotateVector(&f->rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
 		addVector(&f->pos, &FISH_SCRATCH->v1);
 		FISH_SCRATCH->unk18 = getDistance(target.vx - f->pos.vx, 0,
 		                                  target.vz - f->pos.vz);
@@ -2786,7 +2786,7 @@ void FISH_tickFish(Fish *f)
 		step.vx = 0;
 		step.vy = 0;
 		step.vz = 0x1e;
-		rotateVectorYXZ(&f->rotation, &step, &out);
+		rotateVector(&f->rotation, &step, &out);
 		addVector(&f->pos, &out);
 		f->transparency += 8;
 		f->transparency = (f->transparency < 0) ? 0 : ((f->transparency > 0x80) ? 0x80 : f->transparency);
@@ -2861,7 +2861,7 @@ approachBobber:
 		step.vx = 0;
 		step.vy = 0;
 		step.vz = f->timeThisMove;
-		rotateVectorYXZ(&f->rotation, &step, &out);
+		rotateVector(&f->rotation, &step, &out);
 		addVector(&f->pos, &out);
 		f->timeThisMove -= f->timeThisMove >> 3;
 		if (f->timeThisMove < 8) {
@@ -2881,7 +2881,7 @@ faceTamer:
 		step.vx = 0;
 		step.vy = 0;
 		step.vz = 0x28;
-		rotateVectorYXZ(&f->rotation, &step, &out);
+		rotateVector(&f->rotation, &step, &out);
 		addVector(&f->pos, &out);
 		f->transparency -= 8;
 		f->transparency = (f->transparency < 0) ? 0 : ((f->transparency > 0x80) ? 0x80 : f->transparency);
@@ -3268,8 +3268,8 @@ void FISH_tickHookedFish(int32_t mode)
 					FISH_SCRATCH->v0.vx = 0;
 					FISH_SCRATCH->v0.vy = 0;
 					FISH_SCRATCH->v0.vz = FISH_SCRATCH->unk18;
-					rotateVectorYXZ(&FISHING_DATA_PTR->hooked.fish.rotation, &FISH_SCRATCH->v0,
-					                &FISH_SCRATCH->v1);
+					rotateVector(&FISHING_DATA_PTR->hooked.fish.rotation, &FISH_SCRATCH->v0,
+					             &FISH_SCRATCH->v1);
 					addVector(&h->fish.pos, &FISH_SCRATCH->v1);
 				}
 			} else {
@@ -3295,8 +3295,8 @@ void FISH_tickHookedFish(int32_t mode)
 				FISH_SCRATCH->v0.vx = 0;
 				FISH_SCRATCH->v0.vy = 0;
 				FISH_SCRATCH->v0.vz = FISH_SCRATCH->unk18;
-				rotateVectorYXZ(&FISHING_DATA_PTR->hooked.fish.rotation, &FISH_SCRATCH->v0,
-				                &FISH_SCRATCH->v1);
+				rotateVector(&FISHING_DATA_PTR->hooked.fish.rotation, &FISH_SCRATCH->v0,
+				             &FISH_SCRATCH->v1);
 				addVector(&h->fish.pos, &FISH_SCRATCH->v1);
 			}
 
@@ -3328,7 +3328,7 @@ grabbed:
 				FISH_SCRATCH->v0.vx = 0;
 				FISH_SCRATCH->v0.vy = 0;
 				FISH_SCRATCH->v0.vz = h->fish.size;
-				rotateVectorYXZ(&h->fish.rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
+				rotateVector(&h->fish.rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
 				addVector(&FISH_SCRATCH->v1, &h->fish.pos);
 				FISH_spawnRipple(0, &h->fish.pos, 0x2bc, 0, h->fish.size / 2);
 			}
@@ -3338,7 +3338,7 @@ grabbed:
 				step.vx = 0;
 				step.vy = 0;
 				step.vz = 0x12c;
-				rotateVectorYXZ(&h->fish.rotation, &step, &probe);
+				rotateVector(&h->fish.rotation, &step, &probe);
 				addVector(&probe, &FISHING_DATA_PTR->swimmer.pos);
 				if (FISH_projectPoint(&probe, &FISH_SCRATCH->x, &FISH_SCRATCH->y) != 0) {
 					if (FISH_isScreenPointVisible(FISH_SCRATCH->x, FISH_SCRATCH->y) != 0) {
@@ -3357,7 +3357,7 @@ grabbed:
 			step.vx = 0;
 			step.vy = 0;
 			step.vz = h->fish.timeThisMove / ((h->powerLeft <= (h->powerMax / 10)) ? 0xf : 8);
-			rotateVectorYXZ(&h->fish.rotation, &step, &probe);
+			rotateVector(&h->fish.rotation, &step, &probe);
 			addVector(&probe, &FISHING_DATA_PTR->swimmer.pos);
 			h->fish.pos = FISHING_DATA_PTR->swimmer.pos = probe;
 			h->fish.pos = FISHING_DATA_PTR->swimmer.pos;
@@ -3412,7 +3412,7 @@ nextMove:
 				step.vx = 0;
 				step.vy = 0;
 				step.vz = 0x12c;
-				rotateVectorYXZ(&h->fish.rotation, &step, &probe);
+				rotateVector(&h->fish.rotation, &step, &probe);
 				addVector(&probe, &FISHING_DATA_PTR->swimmer.pos);
 				if (FISH_projectPoint(&probe, &FISH_SCRATCH->x, &FISH_SCRATCH->y) != 0) {
 					if (FISH_isScreenPointVisible(FISH_SCRATCH->x, FISH_SCRATCH->y) != 0) {
@@ -3431,7 +3431,7 @@ nextMove:
 			step.vx = 0;
 			step.vy = 0;
 			step.vz = h->fish.timeThisMove;
-			rotateVectorYXZ(&h->fish.rotation, &step, &probe);
+			rotateVector(&h->fish.rotation, &step, &probe);
 			addVector(&probe, &FISHING_DATA_PTR->swimmer.pos);
 			h->fish.pos = FISHING_DATA_PTR->swimmer.pos = probe;
 			if (FISHING_DATA_PTR->rod.fishingState != 0xb) {
@@ -3457,7 +3457,7 @@ escape:
 			step.vx = 0;
 			step.vy = 0;
 			step.vz = 0x28;
-			rotateVectorYXZ(&h->fish.rotation, &step, &probe);
+			rotateVector(&h->fish.rotation, &step, &probe);
 			addVector(&h->fish.pos, &probe);
 			h->fish.transparency -= 8;
 			h->fish.transparency = (h->fish.transparency < 0) ? 0 : ((h->fish.transparency >= 0x81) ? 0x80 : h->fish.transparency);
@@ -3483,7 +3483,7 @@ snapped:
 			FISH_SCRATCH->v0.vx = 0;
 			FISH_SCRATCH->v0.vy = 0;
 			FISH_SCRATCH->v0.vz = FISH_SCRATCH->unk18;
-			rotateVectorYXZ(&h->fish.rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
+			rotateVector(&h->fish.rotation, &FISH_SCRATCH->v0, &FISH_SCRATCH->v1);
 			addVector(&h->fish.pos, &FISH_SCRATCH->v1);
 			FISH_spawnRipple(0, &h->fish.pos, 0x2bc, 1, (h->fish.size << 12) / 120);
 			if (customRandom(1, 0xa) < 6) {
@@ -3731,9 +3731,9 @@ void FISH_drawFishingLine(FishingRod *rod)
 		cur.vy = ((pts[0].vy * (n - j)) / n) + ((pts[1].vy * j) / n);
 		cur.vz = ((pts[0].vz * (n - j)) / n) + ((pts[1].vz * j) / n);
 		if (j > 0) {
-			renderLinePrimitive(*(uint32_t *)&FISHING_DATA_PTR->tension.color, cur.vx, cur.vy,
-			                    prev.vx, prev.vy,
-			                    ((cur.vz > prev.vz) ? cur.vz : prev.vz) >> 4, 0);
+			drawLine2P(*(uint32_t *)&FISHING_DATA_PTR->tension.color, cur.vx, cur.vy,
+			           prev.vx, prev.vy,
+			           ((cur.vz > prev.vz) ? cur.vz : prev.vz) >> 4, 0);
 		}
 		prev = cur;
 	}
@@ -4690,7 +4690,7 @@ int32_t FISH_tamerTick(void)
 	FISH_tickRod(&FISHING_DATA_PTR->rod);
 
 	if (isFishing() == 0) {
-		setTamerState(0);
+		tamerSetState(0);
 		startGameTime();
 		return 0;
 	}
@@ -4698,7 +4698,7 @@ int32_t FISH_tamerTick(void)
 	if (FISHING_DATA_PTR->catchComplete != 0) {
 		FISH_tickHookedFish(0x11);
 		FISH_endFishing(&FISHING_DATA_PTR->rod);
-		setTamerState(0);
+		tamerSetState(0);
 		return 1;
 	}
 

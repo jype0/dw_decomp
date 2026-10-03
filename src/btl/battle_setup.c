@@ -22,7 +22,7 @@ void BTL_removeFinisherAura(int32_t arg0);
 int32_t isInvisible(Entity *entity);
 void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY);
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
-void tickCollision(void);
+void partnerTickCollision(void);
 void startBattleIdleAnimation(DigimonEntity *entity, Stats *stats, int32_t flags);
 void playSound(int32_t soundId, uint32_t flag);
 void clearTamerWaypoints(void);
@@ -295,7 +295,7 @@ void BTL_handleBattleIntro(void)
 			allOffScreen = 1;
 		}
 		done = BTL_isBattleStartTextFinished();
-		tickCollision();
+		partnerTickCollision();
 		entityLookAtLocation(&PARTNER_ENTITY.digimonEntity.entity, &ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->posData->location);
 		BTL_battleTickFrame();
 	}

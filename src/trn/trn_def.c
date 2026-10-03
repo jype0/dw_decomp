@@ -22,7 +22,7 @@ void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
 void createParticleFX(uint8_t kind, int32_t count, void *arg2, Entity *entity, int32_t arg4);
 void TRN_tickDefenseTraining(int32_t instanceId);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn_def_functions[] = {
@@ -95,9 +95,9 @@ int16_t instanceId;
 	switch (MAIN_D_80135371) {
 	case 0:
 		storeMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
-		setTamerState(8);
+		tamerSetState(8);
 		unsetCameraFollowPlayer();
-		setPartnerState(10);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
@@ -229,7 +229,7 @@ int16_t instanceId;
 				TRN_awardDefenseTrainingGains(PARTNER_ENTITY.digimonEntity.entity.type, 0, r);
 				startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x12);
 				playSound(8, 0xa);
-				stopSoundMask(MAIN_D_80135384);
+				thunkStopSoundMask(MAIN_D_80135384);
 				createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
 				MAIN_D_80135371 = 0xc;
 			} else {
@@ -258,9 +258,9 @@ int16_t instanceId;
 			TRN_applyBaseStats();
 			TRN_closeUIBox(1);
 			loadMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
-			setTamerState(0);
+			tamerSetState(0);
 			setCameraFollowPlayer();
-			setPartnerState(1);
+			partnerSetState(1);
 			MAIN_D_8013537A = 0;
 			MAIN_D_80135371 = 0;
 			removeObject(0xfae, instanceId, TRN_tickDefenseTraining, NULL);

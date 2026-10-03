@@ -20,7 +20,7 @@ void loadMapObjectPosition();
 void setMapObjectsFlag(int16_t start, int16_t count, int32_t flag);
 void moveMapObjects(int32_t startIndex, int32_t count, int32_t dx, int32_t dy);
 void getDrawPosition(SVECTOR *worldPos, int16_t *outX, int16_t *outY);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn_mp_functions[] = {
@@ -54,8 +54,8 @@ int16_t instanceId;
 	switch (MAIN_D_80135371) {
 	case 0:
 		storeMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
-		setTamerState(8);
-		setPartnerState(10);
+		tamerSetState(8);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
@@ -100,7 +100,7 @@ int16_t instanceId;
 			createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 			playSound(8, 0xa);
-			stopSoundMask(MAIN_D_80135384);
+			thunkStopSoundMask(MAIN_D_80135384);
 			MAIN_D_80135371 = 4;
 		}
 		break;
@@ -121,8 +121,8 @@ int16_t instanceId;
 		if (MAIN_D_8013537C >= 0x14) {
 			TRN_applyBaseStats();
 			TRN_closeUIBox(1);
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 			MAIN_D_8013537A = 0;
 			MAIN_D_80135371 = 0;
 			removeObject(0xfaf, instanceId, TRN_tickMpTraining, NULL);

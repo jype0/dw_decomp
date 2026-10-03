@@ -79,11 +79,11 @@ void updateTournamentRegistration(void)
 			return;
 		}
 
-		if (getTamerState()) {
+		if (tamerGetState()) {
 			return;
 		}
 
-		if (getPartnerState() != 1) {
+		if (partnerGetState() != 1) {
 			return;
 		}
 

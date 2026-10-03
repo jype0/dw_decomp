@@ -23,7 +23,7 @@ void setMapObjectsFlag(int16_t start, int16_t count, int32_t flag);
 void createParticleFX(uint8_t kind, int32_t count, void *arg2, Entity *entity, int32_t arg4);
 void resetMapObjectAnimation(int16_t startIndex, int16_t count);
 void TRN_func_800888A0(int8_t arg);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 void TRN_tickOffenseTraining(int32_t instanceId);
 
@@ -96,9 +96,9 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 	switch (MAIN_D_80135371) {
 	case 0:
 		storeMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
-		setTamerState(8);
+		tamerSetState(8);
 		unsetCameraFollowPlayer();
-		setPartnerState(10);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
@@ -184,8 +184,8 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 		if (tickEntityWalkTo(0xfc, 0xfd, 0, 0, 0) == 1) {
 			TRN_applyBaseStats();
 			TRN_closeUIBox(1);
-			setPartnerState(1);
-			setTamerState(0);
+			partnerSetState(1);
+			tamerSetState(0);
 			setCameraFollowPlayer();
 			MAIN_D_8013537A = 0;
 			MAIN_D_80135371 = 0;

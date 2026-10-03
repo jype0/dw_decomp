@@ -33,18 +33,18 @@ extern int32_t MAIN_D_80134F0C;
 void BTL_getRemainingEnemies(Entity *self, int16_t *out, int16_t *count);
 void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY);
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
-void initializeInventoryObject(void);
+void addInventoryUI(void);
 
 void handleCommands(void);
 void handleFleeing(void);
-void tickTamerBattle(int32_t instanceId);
-void tickPartnerBattle(int32_t instanceId);
-void tickNPCBattle(int32_t instanceId);
+void tamerTickBattle(int32_t instanceId);
+void partnerTickBattle(int32_t instanceId);
+void NPCEntityTickBattle(int32_t instanceId);
 
 static void *battle_tick_functions[] = {
-	tickNPCBattle,
-	tickPartnerBattle,
-	tickTamerBattle,
+	NPCEntityTickBattle,
+	partnerTickBattle,
+	tamerTickBattle,
 	handleFleeing,
 	handleCommands,
 };
@@ -230,7 +230,7 @@ void handleFleeing(void)
 }
 
 // clang-format off
-void tickTamerBattle(instanceId)
+void tamerTickBattle(instanceId)
 	int16_t instanceId;
 // clang-format on
 {
@@ -246,7 +246,7 @@ void tickTamerBattle(instanceId)
 
 			if (MAIN_D_80134D78 == 0) {
 				if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x10) != 0) {
-					initializeInventoryObject();
+					addInventoryUI();
 				}
 			}
 
@@ -292,14 +292,14 @@ void tickTamerBattle(instanceId)
 }
 
 // clang-format off
-void tickPartnerBattle(instanceId)
+void partnerTickBattle(instanceId)
 	int16_t instanceId;
 // clang-format on
 {
 	tickAnimation(ENTITY_TABLE[instanceId]);
 }
 
-void tickNPCBattle(int32_t instanceId)
+void NPCEntityTickBattle(int32_t instanceId)
 {
 	tickAnimation(ENTITY_TABLE[instanceId]);
 	if (ENTITY_TABLE[instanceId]->anim.animFlag & 4) {

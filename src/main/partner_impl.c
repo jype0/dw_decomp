@@ -283,8 +283,8 @@ int32_t partnerWillRefuseItem(void);
 void tickHungerMechanics(void);
 void handleConditionBubble(void);
 void partnerHandleFoodFeed(int32_t itemType);
-void tickPartnerPoopingMechanic(void);
-void detectEdiblePoop(void);
+void tickPoopingMechanic(void);
+void tickPoopDetection(void);
 void handleToilet(void);
 void handlePoopWeightLoss(int32_t type);
 void handleWildPoop(void);
@@ -297,14 +297,14 @@ void skipHours(int16_t hours);
 void skipHours(int32_t hours);
 #endif
 void handlePostBattleTiredness(void);
-void tickPartnerNormal(void);
+void tickConditions(void);
 void renderStatusBars(int32_t state);
 void setImmortalHour(void);
 
 static void *partner_impl_functions[] = {
 	setImmortalHour,
 	renderStatusBars,
-	tickPartnerNormal,
+	tickConditions,
 	handlePostBattleTiredness,
 	skipHours,
 	tickDeathCondition,
@@ -313,8 +313,8 @@ static void *partner_impl_functions[] = {
 	handleWildPoop,
 	handlePoopWeightLoss,
 	handleToilet,
-	detectEdiblePoop,
-	tickPartnerPoopingMechanic,
+	tickPoopDetection,
+	tickPoopingMechanic,
 	partnerHandleFoodFeed,
 	handleConditionBubble,
 	tickHungerMechanics,
@@ -382,7 +382,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 
 	thunkLoadMMD(type, 3);
 	ENTITY_TABLE[1] = (Entity *)&PARTNER_ENTITY;
-	initializeDigimonObject(type, 1, tickPartner);
+	initializeDigimonObject(type, 1, partnerTick);
 	setEntityPosition(1, posX, posY, posZ);
 	setEntityRotation(1, rotX, rotY, rotZ);
 	setupEntityMatrix(1);
@@ -502,7 +502,7 @@ void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY,
 
 	ENTITY_TABLE[1] = (Entity *)&PARTNER_ENTITY;
 
-	initializeDigimonObject(type, 1, tickPartner);
+	initializeDigimonObject(type, 1, partnerTick);
 
 	setEntityPosition(1, posX, posY, posZ);
 	setEntityRotation(1, rotX, rotY, rotZ);
@@ -699,7 +699,7 @@ void initializeReincarnatedPartner(int32_t type, int32_t posX, int32_t posY,
 		 (EvoModelData *)&DOOA_REINCARNATION_SEQ.modelData);
 
 	ENTITY_TABLE[1] = (Entity *)&PARTNER_ENTITY;
-	initializeDigimonObject(type, 1, tickPartner);
+	initializeDigimonObject(type, 1, partnerTick);
 	setEntityPosition(1, posX, posY, posZ);
 	setEntityRotation(1, rotX, rotY, rotZ);
 	setupEntityMatrix(1);
@@ -1522,7 +1522,7 @@ void handleConditionBubble(void)
 
 	if ((cond & 0x10) && (newBubble == -1) &&
 	    (HAS_BUTTERFLY != 0) && (cond == 0x10)) {
-		unsetBubble(MAIN_D_80134C70);
+		removeConditionBubble(MAIN_D_80134C70);
 		BUTTERFLY_ID = setButterfly(ENTITY_TABLE[1]);
 		HAS_BUTTERFLY = 0;
 		return;
@@ -1535,7 +1535,7 @@ void handleConditionBubble(void)
 			PARTNER_ENTITY.digimonEntity.entity.anim.loopCount = 1;
 		}
 
-		unsetBubble(MAIN_D_80134C70);
+		removeConditionBubble(MAIN_D_80134C70);
 		MAIN_D_80134C70 = addConditionBubble(newBubble, ENTITY_TABLE[1]);
 		MAIN_D_80134C74 = 0;
 		MAIN_D_80134C6C = newBubble;
@@ -1588,11 +1588,11 @@ void partnerHandleFoodFeed(int32_t itemType)
 	PARTNER_PARA.discipline -= 2;
 }
 
-void tickPartnerPoopingMechanic(void)
+void tickPoopingMechanic(void)
 {
 	uint32_t isPoopy;
 
-	if (getTamerState() != 0) {
+	if (tamerGetState() != 0) {
 		return;
 	}
 
@@ -1614,13 +1614,13 @@ void tickPartnerPoopingMechanic(void)
 	}
 
 	if (isPoopy && (PARTNER_PARA.poopingTimer <= 0)) {
-		setPartnerState(7);
+		partnerSetState(7);
 		PARTNER_PARA.poopingTimer = -1;
 		ITEM_SCOLD_FLAG = 1;
 	}
 }
 
-void detectEdiblePoop(void)
+void tickPoopDetection(void)
 {
 	int16_t radius;
 	int16_t tileX;
@@ -1820,7 +1820,7 @@ void tickSicknessMechanics(void)
 		return;
 
 	if ((PARTNER_PARA.injuryTimer >= 12) && !wasSick &&
-	    (getTamerState() == 0)) {
+	    (tamerGetState() == 0)) {
 		PARTNER_PARA.condition |= 0x40;
 		PARTNER_PARA.timesBeingSick++;
 		PARTNER_PARA.sicknessTimer = 1;
@@ -1830,7 +1830,7 @@ void tickSicknessMechanics(void)
 	}
 	if (!wasSick && ((PARTNER_PARA.condition & 0x40) != 0)) {
 #endif
-		setTamerState(0x14);
+		tamerSetState(0x14);
 		clearTextArea();
 		setTextColor(10);
 		drawString(PARTNER_ENTITY.name, 0, 120);
@@ -1840,7 +1840,7 @@ void tickSicknessMechanics(void)
 	}
 
 	if ((PARTNER_PARA.sicknessTimer >= 12) && (PARTNER_STATE != 8) &&
-	    (getTamerState() == 0) && (PARTNER_PARA.remainingLifetime != 0) &&
+	    (tamerGetState() == 0) && (PARTNER_PARA.remainingLifetime != 0) &&
 	    (IS_SCRIPT_PAUSED == 1)) {
 		writePStat(0xFF, 0);
 		PARTNER_ENTITY.lives--;
@@ -1863,7 +1863,7 @@ void tickDeathCondition(void)
 		return;
 	}
 
-	if (getTamerState() != 0) {
+	if (tamerGetState() != 0) {
 		return;
 	}
 
@@ -1991,14 +1991,14 @@ void handlePostBattleTiredness(void)
 	PARTNER_PARA.foodLevel -= 15;
 }
 
-void tickPartnerNormal(void)
+void tickConditions(void)
 {
 #ifdef __MWERKS__
 	extern int32_t getFreshEvolutionTarget(int32_t currentDigimon);
 	extern int32_t getInTrainingEvolutionTarget(int32_t currentDigimon);
 	extern int32_t getRookieEvolutionTarget(int32_t currentDigimon);
 	extern int32_t getChampionEvolutionTarget(int32_t currentDigimon);
-	extern int16_t getTamerState(void);
+	extern int16_t tamerGetState(void);
 #endif
 	int16_t evoTimer;
 	uint8_t level;
@@ -2040,7 +2040,7 @@ void tickPartnerNormal(void)
 	}
 	evoTimer = PARTNER_PARA.evoTimer;
 	level = DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].level;
-	tamerState = getTamerState();
+	tamerState = tamerGetState();
 	if (CURRENT_FRAME != LAST_HANDLED_FRAME && PARTNER_STATE == 1 &&
 	    tamerState == 0) {
 		if (level == 1 && evoTimer >= 6)
@@ -2079,8 +2079,8 @@ void tickPartnerNormal(void)
 		}
 	}
 	if (EVOLUTION_TARGET != -1 && PARTNER_STATE != 13) {
-		setTamerState(6);
-		setPartnerState(13);
+		tamerSetState(6);
+		partnerSetState(13);
 	}
 }
 

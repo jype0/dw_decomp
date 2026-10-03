@@ -7,7 +7,7 @@
 #include <dw/utils.h>
 #include <dw/world_object.h>
 
-void MAIN_func_800FF900(VECTOR *v);
+void triggerSeadramonCutscene(VECTOR *v);
 int32_t isTriggerSet(uint16_t trigger);
 
 extern int32_t MAIN_D_801349E0;
@@ -74,7 +74,7 @@ void initializeFishing(void)
 	FISH_loadFishing(&FISHING_DATA_PTR->rod);
 }
 
-void tickFishing(void)
+void tamerTickFishing(void)
 {
 	VECTOR loc;
 	int32_t done;
@@ -84,7 +84,7 @@ void tickFishing(void)
 		done = FISH_tamerTick();
 		if (done != 0) {
 			setFishingDisabled();
-			MAIN_func_800FF900(&loc);
+			triggerSeadramonCutscene(&loc);
 		}
 	}
 }

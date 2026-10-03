@@ -59,17 +59,17 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, uint8_t width,
 		       int16_t texturePage, int16_t clut, int32_t zIndex,
 		       int8_t flag);
 void renderString();
-void renderBoxBar(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
-		  uint8_t g, uint8_t b, uint8_t flags, int32_t otz);
+void renderBox(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
+	       uint8_t g, uint8_t b, uint8_t flags, int32_t otz);
 void renderDigimonMoveBox(void);
-void renderLinePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1,
-			 int32_t y1, int32_t otz, int32_t flag);
+void drawLine2P(int32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t otz, int32_t flag);
 int32_t getCardAmount(uint8_t card);
 int32_t loadStackedTIMEntry(char *path, u_long buffer, int32_t offset,
 			     int32_t sectors);
 void renderNumber(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
 		  int32_t f);
-void renderSeperatorLines(int16_t *lines, int32_t b, ...);
+void renderSeparatorLines(int16_t *lines, int32_t b, ...);
 void renderDigimonMovesSelected(int16_t panel);
 int32_t drawMoveViewHelpStrings(void);
 void renderDigimonMovesView(void);
@@ -143,7 +143,7 @@ void renderDigimonStatsView(void)
 		}
 		break;
 	case 1:
-		renderSeperatorLines(MAIN_D_80123F54, 6, 5);
+		renderSeparatorLines(MAIN_D_80123F54, 6, 5);
 		for (j = 0; j < 9; j++) {
 			sr = &MAIN_D_80124334[j];
 			renderString(3, sr->posX, sr->posY + 1, sr->uvWidth, 0xc, sr->uvX, sr->uvY, 5, 1);
@@ -250,7 +250,7 @@ void renderDigimonStatsView(void)
 		} else {
 			renderRectPolyFT4(-0x54, 0x44, (uint8_t)PARTNER_PARA.discipline, 6, 0x4a, 0xf0, 0x18, GetClut(0x70, 0x1f5), 5, 0);
 		}
-		renderBoxBar(-0x54, 0x52, PARTNER_PARA.virusBar * 3, 6, 0xc8, 0xc8, 0x3c, 0, 5);
+		renderBox(-0x54, 0x52, PARTNER_PARA.virusBar * 3, 6, 0xc8, 0xc8, 0x3c, 0, 5);
 		for (j = 0; j < 0xd; j++) {
 			r = &MAIN_D_801242CC[j];
 			renderInsetBox(r->x, r->y, r->w, r->h, 5);
@@ -303,7 +303,7 @@ void renderDigimonMovesView(void)
 			}
 			j++;
 		}
-		renderSeperatorLines(TECH_VIEW_LINES1, 3, 3);
+		renderSeparatorLines(TECH_VIEW_LINES1, 3, 3);
 	}
 	switch (MENU_STATE) {
 	case 0:
@@ -322,7 +322,7 @@ void renderDigimonMovesView(void)
 					  icon->texY + 0x80, 5, 0x7b06, 5, 0);
 		}
 		renderRectPolyFT4(0x75, 4, 4, 4, 0x78, 0x8c, 5, 0x7b06, 5, 0);
-		renderSeperatorLines(&TECH_VIEW_LINES1[15], 3, 5);
+		renderSeparatorLines(&TECH_VIEW_LINES1[15], 3, 5);
 		if (MAIN_D_80134237 != 0xff) {
 			renderString(3, -0x8e, -0xf, 0x24, 0xc, 0x3c, 0x48, 5, 1);
 			renderString(0, -0x7c, 1, 0x84, 0xc, 0, 0x3c, 5, 1);
@@ -364,7 +364,7 @@ void renderDigimonMovesView(void)
 		break;
 	case 6:
 		renderString(3, -0x8e, -0xf, 0x3c, 0xc, 0x60, 0x48, 5, 1);
-		renderSeperatorLines(TECH_VIEW_LINES3, 0xc, 5);
+		renderSeparatorLines(TECH_VIEW_LINES3, 0xc, 5);
 		for (i = 0; i < 4; i++) {
 			icon = &MAIN_D_80124044[i];
 			renderRectPolyFT4(icon->posX,
@@ -398,8 +398,8 @@ void renderDigimonMovesView(void)
 				  MAIN_D_80134D38 - 0x78, 0x12, 0x10, 0xc0, 0x8c, 5, 0x7b06, 5, 0);
 		for (row = 0; row < 7; row++) {
 			for (j = 0; j < 8; j++) {
-				renderBoxBar(j * 0x12 - 0x2a, row * 0xf - 7, 0xc, 0xc,
-					     0x4e, 0x60, 0x6e, 0x80, 5);
+				renderBox(j * 0x12 - 0x2a, row * 0xf - 7, 0xc, 0xc,
+					  0x4e, 0x60, 0x6e, 0x80, 5);
 			}
 		}
 		if (0xa8 < MAIN_D_80134D3A) {
@@ -415,9 +415,9 @@ void renderDigimonMovesView(void)
 		}
 		break;
 	case 8:
-		renderLinePrimitive(0x20202, -0x92, -4, 0x92, -4, 5, 0);
-		renderLinePrimitive(0xfad990, -0x93, -3, 0x93, -3, 5, 0);
-		renderLinePrimitive(0x20202, -0x92, -2, 0x92, -2, 5, 0);
+		drawLine2P(0x20202, -0x92, -4, 0x92, -4, 5, 0);
+		drawLine2P(0xfad990, -0x93, -3, 0x93, -3, 5, 0);
+		drawLine2P(0x20202, -0x92, -2, 0x92, -2, 5, 0);
 #if defined(VERSION_JP)
 		renderString(3, -0x8e, -0x52, 0x54, 0xc, 0, 0x30, 5, 1);
 #else
@@ -452,14 +452,14 @@ void renderDigimonMovesView(void)
 #endif
 		}
 #if defined(VERSION_JP)
-		renderBoxBar(-0x18, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
+		renderBox(-0x18, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
 #else
-		renderBoxBar(0x52, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
+		renderBox(0x52, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
 #endif
-		renderBoxBar(-0x78, 2, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
-		renderBoxBar(-0x78, 0x22, 0xc, 0xc, 0x4e, 0x60, 0x6e, 0x80, 4);
-		renderBoxBar(-0x78, 0x32, 0xc, 0xc, 0x68, 0x68, 0x68, 0x83, 4);
-		renderBoxBar(-0x78, 0x42, 0xc, 0xc, 0x68, 0x68, 0x68, 0x83, 4);
+		renderBox(-0x78, 2, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
+		renderBox(-0x78, 0x22, 0xc, 0xc, 0x4e, 0x60, 0x6e, 0x80, 4);
+		renderBox(-0x78, 0x32, 0xc, 0xc, 0x68, 0x68, 0x68, 0x83, 4);
+		renderBox(-0x78, 0x42, 0xc, 0xc, 0x68, 0x68, 0x68, 0x83, 4);
 		break;
 	case 9:
 		if (drawDigimonMovesText() == 1) {
@@ -501,7 +501,7 @@ void renderPlayerInfoView(void)
 		}
 		break;
 	case 1:
-		renderSeperatorLines(MAIN_D_80124424, 0xb, 5);
+		renderSeparatorLines(MAIN_D_80124424, 0xb, 5);
 
 		for (i = 0; i < 0xb; i++) {
 			e = &MAIN_D_801244EC[i];

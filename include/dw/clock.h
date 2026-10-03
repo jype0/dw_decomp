@@ -19,7 +19,7 @@ void initializeClockData(void);
 void addClock(void);
 void tickGameClock(int32_t instanceId);
 void renderGameClock(int32_t instanceId);
-void updatePlaytime(int32_t instanceId);
+void tickPlaytime(int32_t instanceId);
 void advanceToTime(int32_t hour, int16_t minute);
 void updateMinuteHand(int32_t hour, int32_t minute);
 void stopGameTime(void);

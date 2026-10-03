@@ -17,7 +17,7 @@ extern int32_t TRAINING_COMPLETE;
 
 void createCameraMovement(VECTOR *pos, int32_t speed);
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 void TRN_tickBrainsTraining(int32_t instanceId);
 
@@ -70,9 +70,9 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 
 	switch (MAIN_D_80135371) {
 	case 0:
-		setTamerState(-1);
+		tamerSetState(-1);
 		startAnimation(&TAMER_ENTITY.entity, 2);
-		setPartnerState(10);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
 		playSound(8, 9);
 		createCameraMovement(&TRN_D_8008F358, 10);
@@ -158,8 +158,8 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 				setRECT(&rect, pos.vx - 5, pos.vy - 5, 10, 10);
 				removeAnimatedUIBox(2, &rect);
 			}
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 			MAIN_D_8013537A = 0;
 			MAIN_D_80135371 = 0;
 			removeObject(0xfb0, instanceId, TRN_tickBrainsTraining, NULL);

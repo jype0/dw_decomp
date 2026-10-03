@@ -354,7 +354,7 @@ void seqPlay(void);
 void seqStop(void);
 void seqClose(void);
 void concatStrings3(char *dst, char *src1, char *src2);
-void _stopSoundMask(uint32_t mask);
+void stopSoundMask(uint32_t mask);
 
 static void *sound_functions[] = {
 	concatStrings3,
@@ -620,7 +620,7 @@ uint32_t startSound(int32_t vabId, char prog, char note)
 	return mask;
 }
 
-void _stopSoundMask(uint32_t mask)
+void stopSoundMask(uint32_t mask)
 {
 	int32_t i;
 
@@ -662,9 +662,9 @@ uint32_t playSound2(int32_t vabId, int32_t val)
 	return startSound(vabId, val / 16, (val % 16) + 0x3c);
 }
 
-void stopSoundMask(uint32_t mask)
+void thunkStopSoundMask(uint32_t mask)
 {
-	_stopSoundMask(mask);
+	stopSoundMask(mask);
 }
 
 int32_t loadPartnerSounds(int32_t type)
@@ -701,7 +701,7 @@ int32_t loadDigimonSounds(int32_t vabId, int32_t type)
 	return 1;
 }
 
-int32_t loadVSSounds(void)
+int32_t VSLoadSounds(void)
 {
 	ACTIVE_MAP_SOUND_ID = -1;
 

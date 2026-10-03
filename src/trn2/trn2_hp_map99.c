@@ -16,7 +16,7 @@ void storeMapObjectPosition();
 void loadMapObjectPosition();
 int32_t moveMapObjectsWithLimit();
 void setMapObjectsFlag();
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 void TRN2_func_8008AA84(int8_t arg);
 
@@ -49,8 +49,8 @@ int16_t instanceId;
 	switch (MAIN_D_801353BD) {
 	case 0:
 		storeMapObjectPosition(TRN2_D_8008DC54, TRN2_D_8008DC74, MAIN_D_801353B4, MAIN_D_801353B6);
-		setTamerState(8);
-		setPartnerState(10);
+		tamerSetState(8);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		createCameraMovement(&TRN2_D_8008DC1C, 10);
 		MAIN_D_801353C2 = 0;
@@ -121,9 +121,9 @@ int16_t instanceId;
 		if ((done == 1) && (MAIN_D_801353C2 <= 0)) {
 			TRN2_applyBaseStats();
 			TRN2_closeUIBox(1);
-			setPartnerState(1);
+			partnerSetState(1);
 			loadMapObjectPosition(TRN2_D_8008DC54, TRN2_D_8008DC74, MAIN_D_801353B4, MAIN_D_801353B6);
-			setTamerState(0);
+			tamerSetState(0);
 			removeAllCloudFX();
 			MAIN_D_801353C2 = 0;
 			MAIN_D_801353BD = 0;

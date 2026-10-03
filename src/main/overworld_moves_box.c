@@ -53,8 +53,8 @@ void renderRectPolyFT4(int16_t posX, int16_t posY, int32_t width,
 		       int32_t height, uint8_t texX, uint8_t texY,
 		       int16_t texturePage, int16_t clut, int32_t zIndex,
 		       int8_t flag);
-void renderBoxBar(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
-		  uint8_t g, uint8_t b, uint8_t flags, int32_t otz);
+void renderBox(int16_t x, int16_t y, int16_t w, int16_t h, uint8_t r,
+	       uint8_t g, uint8_t b, uint8_t flags, int32_t otz);
 int32_t hasMove(int32_t move);
 void sortArray(int16_t *arr, int8_t count);
 void renderDigimonMoveBox(void);
@@ -134,7 +134,7 @@ extern int16_t MAIN_D_80124118[];
 extern int16_t MAIN_D_80134D3A;
 extern int16_t MAIN_D_80134D38;
 extern char *MOVE_NAMES[];
-void renderSeperatorLines(int16_t *lines, int8_t count, int32_t zIndex);
+void renderSeparatorLines(int16_t *lines, int8_t count, int32_t zIndex);
 void drawString(char *str, int32_t x, int32_t y);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void renderNumber(int32_t color, int32_t x, int16_t y, int32_t n, int32_t value, int32_t layer);
@@ -152,9 +152,9 @@ void renderDigimonMovesSelected(int16_t panel)
 	uint8_t moveId;
 
 	if (panel == 0) {
-		renderSeperatorLines(MAIN_D_80124064, 0x12, 4);
+		renderSeparatorLines(MAIN_D_80124064, 0x12, 4);
 	} else {
-		renderSeperatorLines(MAIN_D_80124118, 0x12, 4);
+		renderSeparatorLines(MAIN_D_80124118, 0x12, 4);
 	}
 
 	renderRectPolyFT4((panel * 0x9d) - 0x91, 1, 4, 4, 0x78, 0x90, 5, 0x7b06, 4, 0);
@@ -166,8 +166,8 @@ void renderDigimonMovesSelected(int16_t panel)
 	} else {
 		renderRectPolyFT4(0xc, 0x15, 4, 4, 0x78, 0x94, 5, 0x7b06, 4, 0);
 	}
-	renderBoxBar((panel * 0x9d) - 0x8f, 3, 0x80, 0x13, 0x32, 0x32, 0x80, 0, 4);
-	renderBoxBar((panel * 0xcb) - 0x8f, 0x18, 0x57, 0x45, 0x32, 0x32, 0x80, 0, 4);
+	renderBox((panel * 0x9d) - 0x8f, 3, 0x80, 0x13, 0x32, 0x32, 0x80, 0, 4);
+	renderBox((panel * 0xcb) - 0x8f, 0x18, 0x57, 0x45, 0x32, 0x32, 0x80, 0, 4);
 	renderRectPolyFT4((panel * 0x9d) - 0x8c, -2, 0x25, 7, 0x11, 0xb0, 5, 0x7b06, 3, 0);
 	renderRectPolyFT4((panel * 0xcb) - 0x8c, 0x1d, 0x17, 7, 0x5c, 0xa2, 5, 0x7b06, 3, 0);
 	renderRectPolyFT4((panel * 0xcb) - 0x8c, 0x2e, 0xb, 7, 0x74, 0xa2, 5, 0x7b06, 3, 0);
@@ -274,7 +274,7 @@ void renderDigimonMoveBox(void)
 				x = 6;
 				y = 6;
 			}
-			renderBoxBar(x * 0x12 - 0x2a, y * 0xf - 7, 0xc, 0xc, 200, 0, 0x28, 1, 4);
+			renderBox(x * 0x12 - 0x2a, y * 0xf - 7, 0xc, 0xc, 200, 0, 0x28, 1, 4);
 		}
 	}
 
@@ -297,7 +297,7 @@ void renderDigimonMoveBox(void)
 						break;
 					}
 					if (j == 0xf) {
-						renderBoxBar(0x1e, 8, 0xc, 0xc, 0x68, 0x68, 0x68, 3, 4);
+						renderBox(0x1e, 8, 0xc, 0xc, 0x68, 0x68, 0x68, 3, 4);
 					}
 				}
 			}
@@ -307,7 +307,7 @@ void renderDigimonMoveBox(void)
 						break;
 					}
 					if (j == 0xf) {
-						renderBoxBar(0x42, 0x53, 0xc, 0xc, 0x68, 0x68, 0x68, 3, 4);
+						renderBox(0x42, 0x53, 0xc, 0xc, 0x68, 0x68, 0x68, 3, 4);
 					}
 				}
 			}
@@ -330,7 +330,7 @@ void renderDigimonMoveBox(void)
 				} else {
 					y = 6;
 				}
-				renderBoxBar(col * 0x12 - 0x2a, y * 0xf - 7, 0xc, 0xc, 0x68, 0x68, 0x68, 3, 4);
+				renderBox(col * 0x12 - 0x2a, y * 0xf - 7, 0xc, 0xc, 0x68, 0x68, 0x68, 3, 4);
 			}
 			if (hasMove(moveId) == 1) {
 				special = MOVE_DATA[moveId].special;

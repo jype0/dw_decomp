@@ -283,7 +283,7 @@ void setFishingDisabled(void);
 void setFishingEnabled(void);
 int32_t getFishingAvailability(void);
 void initializeFishing(void);
-void tickFishing(void);
+void tamerTickFishing(void);
 int32_t isFishing(void);
 void deinitializeFishing(void);
 void checkFishingMap(uint32_t mapId);

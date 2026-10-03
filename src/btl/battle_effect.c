@@ -70,7 +70,7 @@ void setMapLayerEnabled(int32_t enabled);
 void GsGetTimInfo(unsigned long *tim, GsIMAGE *img);
 void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t flag);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t flag);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
 void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance, int32_t width, int32_t height);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
@@ -99,7 +99,7 @@ void BTL_renderConfusionEffect(int32_t i);
 void multiplyRotations(SVECTOR *a, SVECTOR *b);
 int32_t getOriginalType(int32_t type);
 void BTL_loadNextEFEFile(int16_t *arg);
-void MAIN_func_800E4470(MATRIX *m, SVECTOR *out);
+void matrixToEuler1(MATRIX *m, SVECTOR *out);
 void toEulerAngles(SVECTOR *out, int32_t x, int32_t y, int32_t z);
 void BTL_runEFESlotScript(int32_t i);
 void matrixToEuler2(MATRIX *m, SVECTOR *out);
@@ -208,8 +208,8 @@ void BTL_copyToParentTransform(void);
 void BTL_combineRotations(void);
 void BTL_normalizeRotationAngles2(void);
 void BTL_rotateVectorByAngles(void);
-void createFlash(void);
-void rotateVector(void);
+void EFECreateFlash(void);
+void EFERotateVector(void);
 void BTL_getTargetBoneTransform(void);
 void BTL_centerTransformOnEntities(void);
 void BTL_shiftVectorsRight(void);
@@ -907,7 +907,7 @@ const EFESubOpcode BTL_D_800732FC[97] = {
 	{ 2, BTL_initializeSubEffectInstructions },
 	{ 3, BTL_drawTMD },
 	{ 5, BTL_initializeEFETransform },
-	{ 7, rotateVector },
+	{ 7, EFERotateVector },
 	{ 4, BTL_renderCenteredSprite },
 	{ 8, BTL_setTransformToTargetBone },
 	{ 9, BTL_addAttackObjectToTarget },
@@ -920,7 +920,7 @@ const EFESubOpcode BTL_D_800732FC[97] = {
 	{ 15, BTL_setEFEModelObjectColor },
 	{ 16, BTL_addParticleEmitter },
 	{ 17, BTL_selectNextTargetEntity },
-	{ 18, createFlash },
+	{ 18, EFECreateFlash },
 	{ 19, BTL_addCloudEffect },
 	{ 20, BTL_renderScreenSprite },
 	{ 21, BTL_projectPositionToScreen },
@@ -1288,7 +1288,7 @@ void BTL_tickEFEEngine(void)
 	for (i = 0; i < 0xa; i++) {
 		v = (*p)[0];
 		if ((v >= 0) && (**(int32_t **)((char *)(*p)[1] + 8) < 0)) {
-			stopSoundMask(v);
+			thunkStopSoundMask(v);
 			(*p)[0] = -1;
 		}
 		p++;
@@ -1348,7 +1348,7 @@ void BTL_stopEFESounds(void)
 	for (i = 0; i < 10; i++) {
 		v = *p;
 		if (v >= 0) {
-			stopSoundMask(v);
+			thunkStopSoundMask(v);
 			*p = -1;
 		}
 	}
@@ -1804,9 +1804,9 @@ drawLine:
 			gte_rtps();
 			gte_stsxy(&s1v);
 			gte_stszotz(&z);
-			renderLinePrimitive(e->color.r | (e->color.g << 8) | (e->color.b << 16),
-			                    s0v.vx, s0v.vy, s1v.vx, s1v.vy,
-			                    (depth + z) >> 3, 0);
+			drawLine2P(e->color.r | (e->color.g << 8) | (e->color.b << 16),
+			           s0v.vx, s0v.vy, s1v.vx, s1v.vy,
+			           (depth + z) >> 3, 0);
 			goto nextParticle;
 modeTest:
 			if (mode == 1) {
@@ -3113,10 +3113,10 @@ void BTL_renderEFELine(void)
 	if ((depth > 0x20) && (depth < 0x1000)) {
 		if ((flags & 0x20) != 0) {
 			for (i = 0; i < 4; i++) {
-				renderLinePrimitive(((col[0] * 50 / 100) & 0xff) | (((col[1] * 50 / 100) & 0xff) << 8) | (((col[2] * 50 / 100) & 0xff) << 16), y0 + MAIN_D_80134780[i], x1 + MAIN_D_80134784[i], y1 + MAIN_D_80134780[i], x0 + MAIN_D_80134784[i], depth, 5);
+				drawLine2P(((col[0] * 50 / 100) & 0xff) | (((col[1] * 50 / 100) & 0xff) << 8) | (((col[2] * 50 / 100) & 0xff) << 16), y0 + MAIN_D_80134780[i], x1 + MAIN_D_80134784[i], y1 + MAIN_D_80134780[i], x0 + MAIN_D_80134784[i], depth, 5);
 			}
 		} else {
-			renderLinePrimitive((col[0] & 0xff) | ((col[1] & 0xff) << 8) | ((col[2] & 0xff) << 16), y0, x1, y1, x0, depth, 0);
+			drawLine2P((col[0] & 0xff) | ((col[1] & 0xff) << 8) | ((col[2] & 0xff) << 16), y0, x1, y1, x0, depth, 0);
 		}
 	}
 }
@@ -3149,7 +3149,7 @@ void BTL_normalizeRotationAngles2(void)
 	rot.vy = v[1];
 	rot.vz = v[2];
 	RotMatrixYXZ(&rot, &m);
-	MAIN_func_800E4470(&m, &rot);
+	matrixToEuler1(&m, &rot);
 	out[0] = rot.vx;
 	out[1] = rot.vy;
 	out[2] = rot.vz;
@@ -3355,7 +3355,7 @@ void BTL_normalizeRotationAngles(void)
 	in.vy = v[1];
 	in.vz = v[2];
 	RotMatrixYXZ(&in, &m);
-	MAIN_func_800E4470(&m, &res);
+	matrixToEuler1(&m, &res);
 	out[0] = res.vx;
 	out[1] = res.vy;
 	out[2] = res.vz;

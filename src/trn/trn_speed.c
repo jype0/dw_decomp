@@ -14,7 +14,7 @@ extern uint32_t POLLED_INPUT;
 extern int32_t TRAINING_COMPLETE;
 
 void createCameraMovement(VECTOR *pos, int32_t speed);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
@@ -59,9 +59,9 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 
 	switch (MAIN_D_80135371) {
 	case 0:
-		setTamerState(8);
+		tamerSetState(8);
 		unsetCameraFollowPlayer();
-		setPartnerState(10);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
@@ -126,7 +126,7 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 		if (tickEntityWalkTo(0xfc, 0xfd, 0, 0, 0) == 1) {
 			TRN_applyBaseStats();
 			TRN_closeUIBox(1);
-			setPartnerState(1);
+			partnerSetState(1);
 			setCameraFollowPlayer();
 			MAIN_D_8013537A = 0;
 			MAIN_D_80135371 = 0;

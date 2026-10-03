@@ -254,7 +254,7 @@ void buildScheduleEntries(void)
 	++textBox->writeCount;
 }
 
-extern void MAIN_func_80101EF8(int32_t, int32_t);
+extern void showTextboxReady(int32_t, int32_t);
 
 GARBAGE_ARRAY(initTournamentInfo, TOURNAMENT_ARRAY, 3, 9);
 
@@ -299,7 +299,7 @@ void initTournamentInfo(int32_t arg)
 	saved = MAIN_D_80134FDC;
 	jumpTable = getCupDataJumpTable(10, entry);
 	MAIN_D_80134FDC = getCupDataJumpTableEntry(jumpTable, 0) + 2;
-	MAIN_func_80101EF8(3, 0xff);
+	showTextboxReady(3, 0xff);
 	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 	MAIN_D_80134FDC = saved;
 }

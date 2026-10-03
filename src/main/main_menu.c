@@ -208,51 +208,51 @@ void writePStat(int32_t index, uint8_t value);
 void VS__initialize(char *namesP1, char *namesP2);
 void renderMainMenuBackground(void);
 
-void renderTitleMenuView();
+void renderInitialMenu();
 void renderText(POLY_FT4 *prim, int32_t x, int32_t y, int32_t u, int32_t v,
 		int32_t w, int32_t h, int32_t textColor);
 void renderMenuBox(int32_t x, int32_t y, int32_t w, int32_t h);
-void renderNewGameView();
-void renderSlotChoiceView();
-void renderMemoryCardBusyView(void);
-void renderNoMemoryCardWarningView();
+void renderSelectNewGameCard();
+void renderSelectCardSlot();
+void renderCheckingCard(void);
+void renderConfirmNoCard();
 void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y);
-void renderSaveSlotListView();
-void renderContinueSaveSelection();
-void renderFormatPromptView(void);
-void renderMemoryCardErrorView();
-void renderSleepMenuView(void);
-void renderSaveConfirmView();
-void renderInsertBattleCardView();
-void renderRegistrationStatsView();
-void renderRegistrationSlotView(void);
-void renderRegistrationConfirmView();
-void renderCannotRegisterView(void);
-void renderSavePromptView(void);
-void renderInTrainingView(void);
+void renderSelectSlot();
+void renderConfirmSlotSelection();
+void renderFormatMemoryCard(void);
+void renderMemoryCardReadError();
+void renderSleepMenu(void);
+void renderConfirmOverwrite();
+void renderConfirmVSSlot();
+void renderRegisterDigimon();
+void renderSelectRegisterSlot(void);
+void renderConfirmRegister();
+void renderCantRegister(void);
+void renderDoYouWantToSave(void);
+void renderCantRegisterBaby(void);
 void drawMainMenuStrings();
 void drawSaveSlotText(int32_t slot, int32_t row);
-char *formatNumber(int32_t value, char *buf, int32_t digits);
+char *formatInteger(int32_t value, char *buf, int32_t digits);
 void drawMoveName(long type, int32_t anim, int32_t color, int32_t pos);
-void drawRegisteredBattleSlots(int32_t slot);
+void drawRegisteredDigimonSlots(int32_t slot);
 void updateMemoryCardState();
 void tickMainMenu(void);
-int32_t tickMenuCursor(MenuCursor *cursor, int32_t which);
-int32_t MAIN_func_80112524(int32_t menu);
+int32_t tickMenuInput(MenuCursor *cursor, int32_t which);
+int32_t getMenuOnCardChange(int32_t menu);
 void setMemoryCardReadError(int32_t id, int32_t returnMenu);
-int32_t probeMemoryCard(int32_t chan, int32_t mode);
-int32_t countUsedMemoryCardBlocks(int32_t channel, int32_t returnMenu);
+int32_t isMemcardUnformatted(int32_t chan, int32_t mode);
+int32_t getCardUsedBlockCount(int32_t channel, int32_t returnMenu);
 int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots, int32_t unused);
-int32_t MAIN_func_8011296C(MenuCursor *cursor, int32_t which);
+int32_t tickSelectSlotInput(MenuCursor *cursor, int32_t which);
 void initializeDefaultSavegame(void);
 char *_strncpy(char *dst, char *src, int32_t n);
 int32_t createSavegameChecksum(int32_t slot);
 void loadSavegame(SavegamePayload *savegame);
 void writeSavegame(SavegamePayload *savegame);
-int32_t MAIN_func_8011341C(uint8_t *p);
+int32_t countRegisteredDigimon(uint8_t *p);
 void renderMainMenu();
 void registerBattleData();
-void renderMenuHighlight(MenuHighlight *b);
+void renderMenuSelector(MenuHighlight *b);
 int32_t createByteSum(uint8_t *data, int32_t len);
 #if defined(VERSION_JP)
 void appendWideDigit(int32_t digit, char **dst, int32_t *started);
@@ -261,10 +261,10 @@ void openSaveMachine(void);
 int32_t tickSaveMachine(void);
 void awardMachinedramonData();
 void gameClearSave();
-int32_t tickGameClearSave(void);
+int32_t scriptTickMainMenu(void);
 
 void *main_menu_order_anchor[] = {
-	tickGameClearSave,
+	scriptTickMainMenu,
 	gameClearSave,
 	awardMachinedramonData,
 	tickSaveMachine,
@@ -273,50 +273,50 @@ void *main_menu_order_anchor[] = {
 	appendWideDigit,
 #endif
 	createByteSum,
-	renderMenuHighlight,
+	renderMenuSelector,
 	registerBattleData,
 	renderMainMenu,
-	MAIN_func_8011341C,
+	countRegisteredDigimon,
 	writeSavegame,
 	loadSavegame,
 	createSavegameChecksum,
 	_strncpy,
 	initializeDefaultSavegame,
-	MAIN_func_8011296C,
+	tickSelectSlotInput,
 	loadSaveSlotData,
-	countUsedMemoryCardBlocks,
-	probeMemoryCard,
+	getCardUsedBlockCount,
+	isMemcardUnformatted,
 	setMemoryCardReadError,
-	MAIN_func_80112524,
-	tickMenuCursor,
+	getMenuOnCardChange,
+	tickMenuInput,
 	tickMainMenu,
 	updateMemoryCardState,
-	drawRegisteredBattleSlots,
+	drawRegisteredDigimonSlots,
 	drawMoveName,
-	formatNumber,
+	formatInteger,
 	drawSaveSlotText,
 	drawMainMenuStrings,
-	renderInTrainingView,
-	renderSavePromptView,
-	renderCannotRegisterView,
-	renderRegistrationConfirmView,
-	renderRegistrationSlotView,
-	renderRegistrationStatsView,
-	renderInsertBattleCardView,
-	renderSaveConfirmView,
-	renderSleepMenuView,
-	renderMemoryCardErrorView,
-	renderFormatPromptView,
-	renderContinueSaveSelection,
-	renderSaveSlotListView,
+	renderCantRegisterBaby,
+	renderDoYouWantToSave,
+	renderCantRegister,
+	renderConfirmRegister,
+	renderSelectRegisterSlot,
+	renderRegisterDigimon,
+	renderConfirmVSSlot,
+	renderConfirmOverwrite,
+	renderSleepMenu,
+	renderMemoryCardReadError,
+	renderFormatMemoryCard,
+	renderConfirmSlotSelection,
+	renderSelectSlot,
 	renderSaveSlotBox,
-	renderNoMemoryCardWarningView,
-	renderMemoryCardBusyView,
-	renderSlotChoiceView,
-	renderNewGameView,
+	renderConfirmNoCard,
+	renderCheckingCard,
+	renderSelectCardSlot,
+	renderSelectNewGameCard,
 	renderMenuBox,
 	renderText,
-	renderTitleMenuView,
+	renderInitialMenu,
 };
 
 // clang-format off
@@ -2408,7 +2408,7 @@ void renderMenuBox(int32_t x, int32_t y, int32_t w, int32_t h)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void renderNewGameView(void)
+void renderSelectNewGameCard(void)
 {
 	POLY_FT4 *cur;
 
@@ -2444,7 +2444,7 @@ void renderNewGameView(void)
 #endif
 }
 
-void renderSlotChoiceView(void)
+void renderSelectCardSlot(void)
 {
 	POLY_FT4 *cur;
 
@@ -2478,7 +2478,7 @@ void renderSlotChoiceView(void)
 #endif
 }
 
-void renderMemoryCardBusyView(void)
+void renderCheckingCard(void)
 {
 	POLY_FT4 *cur;
 
@@ -2488,7 +2488,7 @@ void renderMemoryCardBusyView(void)
 	renderMenuBox(0x36, 0x32, 0xD4, 0x2E);
 }
 
-void renderNoMemoryCardWarningView(void)
+void renderConfirmNoCard(void)
 {
 	POLY_FT4 *cur;
 
@@ -2544,7 +2544,7 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 	renderMenuBox(x, y, 0xE0, 0x24);
 }
 
-void renderSaveSlotListView(void)
+void renderSelectSlot(void)
 {
 	POLY_FT4 *ft4;
 	int32_t page;
@@ -2597,7 +2597,7 @@ void renderSaveSlotListView(void)
 	renderSaveSlotBox(page, 0x30, y);
 }
 
-void renderContinueSaveSelection(void)
+void renderConfirmSlotSelection(void)
 {
 	POLY_FT4 *cur;
 
@@ -2629,7 +2629,7 @@ void renderContinueSaveSelection(void)
 	renderMenuBox(0x30, 0x6F, 0xE0, 0x16);
 }
 
-void renderFormatPromptView(void)
+void renderFormatMemoryCard(void)
 {
 	POLY_FT4 *cur;
 
@@ -2642,7 +2642,7 @@ void renderFormatPromptView(void)
 	renderMenuBox(0x42, 0x60, 0x38, 0x22);
 }
 
-void renderMemoryCardErrorView(void)
+void renderMemoryCardReadError(void)
 {
 	POLY_FT4 *cur;
 
@@ -2660,7 +2660,7 @@ void renderMemoryCardErrorView(void)
 	renderMenuBox(0x36, 0x32, 0xD4, 0x16);
 }
 
-void renderSleepMenuView(void)
+void renderSleepMenu(void)
 {
 	POLY_FT4 *cur;
 
@@ -2671,7 +2671,7 @@ void renderSleepMenuView(void)
 	renderMenuBox(0x6C, 0x65, 0x68, 0x26);
 }
 
-void renderSaveConfirmView(void)
+void renderConfirmOverwrite(void)
 {
 	POLY_FT4 *cur;
 	int32_t mask;
@@ -2712,7 +2712,7 @@ void renderSaveConfirmView(void)
 	}
 }
 
-void renderInsertBattleCardView(void)
+void renderConfirmVSSlot(void)
 {
 	POLY_FT4 *cur;
 	int32_t hl;
@@ -2752,7 +2752,7 @@ void renderInsertBattleCardView(void)
 	renderMenuBox(0x3C, 0x60, 0x38, 0x22);
 }
 
-void renderRegistrationStatsView(void)
+void renderRegisterDigimon(void)
 {
 	POLY_FT4 *cur;
 
@@ -2781,7 +2781,7 @@ void renderRegistrationStatsView(void)
 	renderMenuBox(0x3C, 0xBE, 0x38, 0x22);
 }
 
-void renderRegistrationSlotView(void)
+void renderSelectRegisterSlot(void)
 {
 	POLY_FT4 *cur;
 
@@ -2805,7 +2805,7 @@ void renderRegistrationSlotView(void)
 #endif
 }
 
-void renderRegistrationConfirmView(void)
+void renderConfirmRegister(void)
 {
 	POLY_FT4 *cur;
 
@@ -2835,7 +2835,7 @@ void renderRegistrationConfirmView(void)
 #endif
 }
 
-void renderCannotRegisterView(void)
+void renderCantRegister(void)
 {
 	POLY_FT4 *cur;
 
@@ -2852,7 +2852,7 @@ void renderCannotRegisterView(void)
 #endif
 }
 
-void renderSavePromptView(void)
+void renderDoYouWantToSave(void)
 {
 	POLY_FT4 *cur;
 
@@ -2865,7 +2865,7 @@ void renderSavePromptView(void)
 	renderMenuBox(0x3C, 0x52, 0x38, 0x22);
 }
 
-void renderInTrainingView(void)
+void renderCantRegisterBaby(void)
 {
 	POLY_FT4 *cur;
 
@@ -3081,16 +3081,16 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x2a, 0x18);
 		DrawSync(0);
 		drawString(MAIN_D_80134694, 6, 0x24);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x2a, 0x24);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x2a, 0x24);
 		DrawSync(0);
 		drawString(MAIN_D_80134698, 6, 0x30);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x2a, 0x30);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x2a, 0x30);
 		DrawSync(0);
 		drawString(MAIN_D_8013469C, 0, 0x3c);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x36, 0x3c);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x36, 0x3c);
 		DrawSync(0);
 		drawString(MAIN_D_801346A4, 0, 0x48);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x36, 0x48);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x36, 0x48);
 		DrawSync(0);
 		drawString(MAIN_D_8013143C, 6, 0x54);
 		drawMoveName(PARTNER_ENTITY.digimonEntity.entity.type, PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x2a, 0x54);
@@ -3106,7 +3106,7 @@ void drawMainMenuStrings(int32_t menu)
 	case 15:
 		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
-		drawRegisteredBattleSlots(0);
+		drawRegisteredDigimonSlots(0);
 		drawString(MAIN_D_8013147C, 0, 0x84);
 		break;
 	case 16:
@@ -3337,16 +3337,16 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x64, 0x18);
 		DrawSync(0);
 		drawString(MAIN_D_80134694, 0, 0x24);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
 		DrawSync(0);
 		drawString(MAIN_D_80134698, 0, 0x30);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x64, 0x30);
 		DrawSync(0);
 		drawString(MAIN_D_8013469C, 0, 0x3C);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x64, 0x3C);
 		DrawSync(0);
 		drawString(MAIN_D_801346A4, 0, 0x48);
-		drawString(formatNumber(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x64, 0x48);
 		DrawSync(0);
 		drawString(MAIN_D_8013143C, 0, 0x54);
 		drawMoveName((type = PARTNER_ENTITY.digimonEntity.entity.type), PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x64, 0x54);
@@ -3364,7 +3364,7 @@ void drawMainMenuStrings(int32_t menu)
 	case 15:
 		drawString(SLOT_ACTION_TITLES[6], 0, 0);
 		DrawSync(0);
-		drawRegisteredBattleSlots(0);
+		drawRegisteredDigimonSlots(0);
 		drawString(MAIN_D_8013147C, 0, 0x84);
 		break;
 	case 16:
@@ -3456,7 +3456,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 	}
 }
 
-char *formatNumber(int32_t value, char *buf, int32_t digits)
+char *formatInteger(int32_t value, char *buf, int32_t digits)
 {
 #if defined(VERSION_JP)
 	int32_t started;
@@ -3497,7 +3497,7 @@ void drawMoveName(long type, int32_t anim, int32_t color, int32_t pos)
 	}
 }
 
-void drawRegisteredBattleSlots(int32_t slot)
+void drawRegisteredDigimonSlots(int32_t slot)
 {
 	RECT area;
 	uint8_t type;
@@ -3590,9 +3590,9 @@ void tickMainMenu(void)
 	case 0:
 #if defined(VERSION_JP)
 		cursor = (MenuCursor *)MENU_HIGHLIGHTS;
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 #else
-		input = tickMenuCursor(cursor = (MenuCursor *)MENU_HIGHLIGHTS, 1);
+		input = tickMenuInput(cursor = (MenuCursor *)MENU_HIGHLIGHTS, 1);
 #endif
 		switch (input) {
 		case 1:
@@ -3627,7 +3627,7 @@ void tickMainMenu(void)
 
 	case 1:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[9];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -3641,7 +3641,7 @@ void tickMainMenu(void)
 			TARGET_MENU = 0;
 			break;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 2:
@@ -3692,7 +3692,7 @@ void tickMainMenu(void)
 
 	case 0xA:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[1];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			switch (cursor->pos) {
@@ -3729,7 +3729,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = probeMemoryCard(MEMORY_CARD_ID, result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
 				TARGET_MENU = 0xD;
@@ -3747,7 +3747,7 @@ void tickMainMenu(void)
 
 	case 0xD:
 		TARGET_MENU = 0xE;
-		if ((MEMORY_CARD_USED_BLOCKS = countUsedMemoryCardBlocks(MEMORY_CARD_ID, 0)) != -1) {
+		if ((MEMORY_CARD_USED_BLOCKS = getCardUsedBlockCount(MEMORY_CARD_ID, 0)) != -1) {
 			if (MEMORY_CARD_USED_BLOCKS >= 0xF) {
 				setMemoryCardReadError(7, 0);
 			} else {
@@ -3760,7 +3760,7 @@ void tickMainMenu(void)
 
 	case 0xE:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
-		input = MAIN_func_8011296C(cursor, 1);
+		input = tickSelectSlotInput(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
 			if (input == 1) {
@@ -3772,12 +3772,12 @@ void tickMainMenu(void)
 		} else {
 			TARGET_MENU = 0xA;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 0xF:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -3791,7 +3791,7 @@ void tickMainMenu(void)
 	cancel_create:
 			TARGET_MENU = 0xE;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 0x10:
@@ -3867,7 +3867,7 @@ void tickMainMenu(void)
 	case 0x13:
 		view = MENU_VIEWS[CURRENT_MENU];
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[view];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -3887,7 +3887,7 @@ void tickMainMenu(void)
 
 	case 0x14:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[2];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			switch (cursor->pos) {
@@ -3921,7 +3921,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = probeMemoryCard(MEMORY_CARD_ID, result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x16;
 			} else {
@@ -3939,7 +3939,7 @@ void tickMainMenu(void)
 
 	case 0x17:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
-		input = MAIN_func_8011296C(cursor, 1);
+		input = tickSelectSlotInput(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
 			if (input == 1) {
@@ -3951,12 +3951,12 @@ void tickMainMenu(void)
 		} else {
 			TARGET_MENU = 0x14;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 0x18:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -3970,7 +3970,7 @@ void tickMainMenu(void)
 	cancel_load:
 			TARGET_MENU = 0x17;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 0x19:
@@ -4006,7 +4006,7 @@ void tickMainMenu(void)
 
 	case 0x1E:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[4];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				switch (cursor->pos) {
@@ -4042,7 +4042,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = probeMemoryCard(MEMORY_CARD_ID, result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x20;
 			} else {
@@ -4060,7 +4060,7 @@ void tickMainMenu(void)
 
 	case 0x21:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
-		input = MAIN_func_8011296C(cursor, 1);
+		input = tickSelectSlotInput(cursor, 1);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
 			if (input == 1) {
@@ -4072,12 +4072,12 @@ void tickMainMenu(void)
 		} else {
 			TARGET_MENU = 0x1E;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 0x22:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -4091,7 +4091,7 @@ void tickMainMenu(void)
 	cancel_delete:
 			TARGET_MENU = 0x21;
 		}
-		TARGET_MENU = MAIN_func_80112524(0);
+		TARGET_MENU = getMenuOnCardChange(0);
 		break;
 
 	case 0x23:
@@ -4109,7 +4109,7 @@ void tickMainMenu(void)
 
 	case 0x28:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[11];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4231,7 +4231,7 @@ void tickMainMenu(void)
 
 	case 0x30:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[12];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4256,7 +4256,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = probeMemoryCard(MEMORY_CARD_ID, result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
 				MEMORY_CARD_PRESENT_MASK |= MEMORY_CARD_ID == 0x10 ? 0x10 : 1;
@@ -4282,8 +4282,8 @@ void tickMainMenu(void)
 			MEMORY_CARD_ID = 0x10;
 		}
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[13];
-		input = tickMenuCursor(cursor,
-					   VS_PLAYER_INDEX == 0 ? 1 : 2);
+		input = tickMenuInput(cursor,
+				      VS_PLAYER_INDEX == 0 ? 1 : 2);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4309,7 +4309,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = probeMemoryCard(MEMORY_CARD_ID, result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x34;
 			} else {
@@ -4327,8 +4327,8 @@ void tickMainMenu(void)
 
 	case 0x34:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
-		input = MAIN_func_8011296C(cursor,
-					   VS_PLAYER_INDEX == 0 ? 1 : 2);
+		input = tickSelectSlotInput(cursor,
+					    VS_PLAYER_INDEX == 0 ? 1 : 2);
 		slot = cursor->pos + cursor->scroll;
 		if (input != 2) {
 			if (input == 1) {
@@ -4340,13 +4340,13 @@ void tickMainMenu(void)
 		} else {
 			TARGET_MENU = 0x32;
 		}
-		TARGET_MENU = MAIN_func_80112524(0x32);
+		TARGET_MENU = getMenuOnCardChange(0x32);
 		break;
 
 	case 0x35:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
-		input = tickMenuCursor(cursor,
-					   VS_PLAYER_INDEX == 0 ? 1 : 2);
+		input = tickMenuInput(cursor,
+				      VS_PLAYER_INDEX == 0 ? 1 : 2);
 		if (input != 2) {
 			if (input == 1) {
 				if (cursor->pos == 0) {
@@ -4360,7 +4360,7 @@ void tickMainMenu(void)
 	cancel_vs_load:
 			TARGET_MENU = 0x34;
 		}
-		TARGET_MENU = MAIN_func_80112524(0x32);
+		TARGET_MENU = getMenuOnCardChange(0x32);
 		break;
 
 	case 0x36:
@@ -4386,8 +4386,8 @@ void tickMainMenu(void)
 					setMemoryCardReadError(2, 0x32);
 					break;
 				}
-				if (MAIN_func_8011341C(VS_SAVE_DATA +
-							 VS_PLAYER_INDEX * 0x28 * 0x40)) {
+				if (countRegisteredDigimon(VS_SAVE_DATA +
+							   VS_PLAYER_INDEX * 0x28 * 0x40)) {
 					TARGET_MENU = 0x37;
 				} else {
 					setMemoryCardReadError(8, 0x32);
@@ -4423,7 +4423,7 @@ void tickMainMenu(void)
 
 	case 0x3C:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[14];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4443,9 +4443,9 @@ void tickMainMenu(void)
 	case 0x3D:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[15];
 		oldScroll = cursor->scroll;
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		if (oldScroll != cursor->scroll) {
-			drawRegisteredBattleSlots(cursor->scroll);
+			drawRegisteredDigimonSlots(cursor->scroll);
 		}
 		if (input != 2) {
 			if (input == 1) {
@@ -4459,7 +4459,7 @@ void tickMainMenu(void)
 
 	case 0x3E:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[16];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4581,7 +4581,7 @@ void tickMainMenu(void)
 
 	case 0x42:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[12];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4606,7 +4606,7 @@ void tickMainMenu(void)
 				break;
 			}
 			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
-			result = probeMemoryCard(MEMORY_CARD_ID, result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
 				MEMORY_CARD_PRESENT_MASK |= MEMORY_CARD_ID == 0x10 ? 0x10 : 1;
@@ -4637,7 +4637,7 @@ void tickMainMenu(void)
 
 	case 0x45:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[18];
-		input = tickMenuCursor(cursor, 1);
+		input = tickMenuInput(cursor, 1);
 		switch (input) {
 		case 1:
 			if (cursor->pos == 0) {
@@ -4662,7 +4662,7 @@ void tickMainMenu(void)
 	}
 }
 
-int32_t tickMenuCursor(MenuCursor *cursor, int32_t which)
+int32_t tickMenuInput(MenuCursor *cursor, int32_t which)
 {
 	int32_t input;
 	int32_t lo;
@@ -4706,7 +4706,7 @@ int32_t tickMenuCursor(MenuCursor *cursor, int32_t which)
 	return 0;
 }
 
-int32_t MAIN_func_80112524(int32_t menu)
+int32_t getMenuOnCardChange(int32_t menu)
 {
 	int32_t mask;
 	int32_t mask2;
@@ -4737,7 +4737,7 @@ void setMemoryCardReadError(int32_t id, int32_t returnMenu)
 	MEMORY_CARD_RETURN_MENU = returnMenu;
 }
 
-int32_t probeMemoryCard(int32_t chan, int32_t mode)
+int32_t isMemcardUnformatted(int32_t chan, int32_t mode)
 {
 	unsigned long cmd;
 	unsigned long result;
@@ -4755,7 +4755,7 @@ int32_t probeMemoryCard(int32_t chan, int32_t mode)
 	return result;
 }
 
-int32_t countUsedMemoryCardBlocks(int32_t channel, int32_t returnMenu)
+int32_t getCardUsedBlockCount(int32_t channel, int32_t returnMenu)
 {
 	unsigned long cmd;
 	unsigned long result;
@@ -4853,7 +4853,7 @@ int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots
 	return fileCount;
 }
 
-int32_t MAIN_func_8011296C(MenuCursor *cursor, int32_t which)
+int32_t tickSelectSlotInput(MenuCursor *cursor, int32_t which)
 {
 	int32_t input;
 	int32_t lo;
@@ -5128,7 +5128,7 @@ void writeSavegame(SavegamePayload *savegame)
 	}
 }
 
-int32_t MAIN_func_8011341C(uint8_t *p)
+int32_t countRegisteredDigimon(uint8_t *p)
 {
 	int32_t i;
 	int32_t count;
@@ -5152,63 +5152,63 @@ void renderMainMenu(void)
 	if (CURRENT_MENU >= 0) {
 		menu = MENU_VIEWS[CURRENT_MENU];
 		if (menu != -1) {
-			renderMenuHighlight(&MENU_HIGHLIGHTS[menu]);
+			renderMenuSelector(&MENU_HIGHLIGHTS[menu]);
 		}
 		switch (menu) {
 		case 0:
-			renderTitleMenuView();
+			renderInitialMenu();
 			break;
 		case 1:
-			renderNewGameView();
+			renderSelectNewGameCard();
 			break;
 		case 2:
 		case 4:
-			renderSlotChoiceView();
+			renderSelectCardSlot();
 			break;
 		case 5:
-			renderMemoryCardBusyView();
+			renderCheckingCard();
 			break;
 		case 6:
-			renderNoMemoryCardWarningView();
+			renderConfirmNoCard();
 			break;
 		case 7:
-			renderSaveSlotListView();
+			renderSelectSlot();
 			break;
 		case 8:
-			renderContinueSaveSelection();
+			renderConfirmSlotSelection();
 			break;
 		case 9:
-			renderFormatPromptView();
+			renderFormatMemoryCard();
 			break;
 		case 10:
-			renderMemoryCardErrorView();
+			renderMemoryCardReadError();
 			break;
 		case 11:
-			renderSleepMenuView();
+			renderSleepMenu();
 			break;
 		case 12:
-			renderSaveConfirmView();
+			renderConfirmOverwrite();
 			break;
 		case 13:
-			renderInsertBattleCardView();
+			renderConfirmVSSlot();
 			break;
 		case 14:
-			renderRegistrationStatsView();
+			renderRegisterDigimon();
 			break;
 		case 15:
-			renderRegistrationSlotView();
+			renderSelectRegisterSlot();
 			break;
 		case 16:
-			renderRegistrationConfirmView();
+			renderConfirmRegister();
 			break;
 		case 17:
-			renderCannotRegisterView();
+			renderCantRegister();
 			break;
 		case 18:
-			renderSavePromptView();
+			renderDoYouWantToSave();
 			break;
 		case 19:
-			renderInTrainingView();
+			renderCantRegisterBaby();
 			break;
 		}
 	}
@@ -5231,7 +5231,7 @@ void registerBattleData(void)
 	memcpy((char *)rec + 0x1D, PARTNER_ENTITY.digimonEntity.stats.base.moves, 3);
 }
 
-void renderMenuHighlight(MenuHighlight *b)
+void renderMenuSelector(MenuHighlight *b)
 {
 	LINE_F3 *prim;
 	int32_t x;
@@ -5315,7 +5315,7 @@ void gameClearSave(void)
 	}
 }
 
-int32_t tickGameClearSave(void)
+int32_t scriptTickMainMenu(void)
 {
 	tickMainMenu();
 	renderMainMenu();
@@ -5326,7 +5326,7 @@ int32_t tickGameClearSave(void)
 	return 0;
 }
 
-void renderTitleMenuView(void)
+void renderInitialMenu(void)
 {
 	POLY_FT4 *cur;
 

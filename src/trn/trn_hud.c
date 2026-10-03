@@ -20,9 +20,9 @@ extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits, int32_t value, int32_t layer);
-void renderTrianglePrimitive(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
+void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
 void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t h);
 void setUVDataPolyFT4(POLY_FT4 *p, int32_t u, int32_t v, int32_t w, int32_t h);
@@ -272,8 +272,8 @@ void TRN_renderPostTrainingStatsBox(int16_t depth)
 		renderNumber(0, box->x + 68, (box->y + 9) + (i * 13), 4, INITIAL_COMBAT_STATS[0][i], 6 - depth);
 	}
 
-	renderLinePrimitive(0xfad990, box->x + 122, box->y + 2, box->x + 122, (box->y + box->h) - 3, 6 - depth, 0);
-	renderLinePrimitive(0x20202, box->x + 123, box->y + 2, box->x + 123, (box->y + box->h) - 3, 6 - depth, 0);
+	drawLine2P(0xfad990, box->x + 122, box->y + 2, box->x + 122, (box->y + box->h) - 3, 6 - depth, 0);
+	drawLine2P(0x20202, box->x + 123, box->y + 2, box->x + 123, (box->y + box->h) - 3, 6 - depth, 0);
 
 	for (i = 0; i < 6; i++) {
 		renderString(4, box->x + 10, (box->y + 9) + (i * 13), 48, 12, 0, i * 12, 6 - depth, 0);
@@ -310,8 +310,8 @@ void TRN_renderPostTrainingStatsBox(int16_t depth)
 		}
 		rect.w = 50;
 
-		renderTrianglePrimitive(0x20202, box->x + 64, y, box->x + 64, y - 3, box->x + 117, y - 3, 6 - depth, 0);
-		renderTrianglePrimitive(0x666666, box->x + 117, y - 2, box->x + 117, y, box->x + 65, y, 6 - depth, 0);
+		drawLine3P(0x20202, box->x + 64, y, box->x + 64, y - 3, box->x + 117, y - 3, 6 - depth, 0);
+		drawLine3P(0x666666, box->x + 117, y - 2, box->x + 117, y, box->x + 65, y, 6 - depth, 0);
 		GsSortBoxFill(&rect, ACTIVE_ORDERING_TABLE, (uint16_t)(6 - depth));
 	}
 }

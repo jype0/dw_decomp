@@ -259,8 +259,8 @@ void MURD_tickScene(int32_t instanceId)
 		MURD_renderFullscreenFade(&color);
 		waitForDeathMapLoading(0);
 		changeToDeathMap();
-		setFullState(0x13, 1);
-		setPartnerState(0xb);
+		tamerSetFullState(0x13, 1);
+		partnerSetState(0xb);
 		ENTITY_TABLE[0]->isOnMap = 1;
 		scene->phase = 6;
 		break;

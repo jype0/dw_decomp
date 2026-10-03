@@ -22,20 +22,20 @@ void calculatePosMatrix(PositionData *posData, int32_t unused1,
 void resetMomentumData(MomentumData *momentum);
 void animateEntityTexture(Entity *entity, EntityAnim *anim);
 void tickMomentum(Entity *entity, MomentumData *momentumBase);
-void readMomentumInstructions(MomentumData *momentum, int16_t **instrPtr);
-void readMomentumInstruction(int16_t *delta, int16_t *reload1,
-			     int16_t *subDelta, int16_t *reload2,
-			     int8_t *sign, int16_t **instrPtr,
-			     int16_t *divisor);
-int32_t applyMomentum(int16_t base, int16_t reload, int16_t delta,
-		      int16_t *counter, int8_t step, int32_t offset);
+void animHandleKeyFrameInstruction(MomentumData *momentum, int16_t **instrPtr);
+void animReadMomentumInstruction(int16_t *delta, int16_t *reload1,
+			         int16_t *subDelta, int16_t *reload2,
+			         int8_t *sign, int16_t **instrPtr,
+			         int16_t *divisor);
+int32_t animApplyMomentum(int16_t base, int16_t reload, int16_t delta,
+		          int16_t *counter, int8_t step, int32_t offset);
 void applyRootMomentum(MomentumData *momentum, Entity *entity);
 
 static void *anim_text_order[] = {
 	applyRootMomentum,
-	applyMomentum,
-	readMomentumInstruction,
-	readMomentumInstructions,
+	animApplyMomentum,
+	animReadMomentumInstruction,
+	animHandleKeyFrameInstruction,
 	tickMomentum,
 	tickAnimation,
 	startAnimation,
@@ -167,12 +167,12 @@ void tickMomentum(Entity *entity, MomentumData *momentumBase)
 			if (*delta != 0 || *subDelta != 0) {
 				if (j < 3) {
 					updateScale = 1;
-					scale[j] = applyMomentum(*delta, *scale1,
-								 *subDelta, subScale,
-								 *subValue, scale[j]);
+					scale[j] = animApplyMomentum(*delta, *scale1,
+								     *subDelta, subScale,
+								     *subValue, scale[j]);
 				} else if (j < 6) {
 					updateRot = 1;
-					*(rotation + j - 3) = applyMomentum(
+					*(rotation + j - 3) = animApplyMomentum(
 						*delta, *scale1, *subDelta, subScale,
 						*subValue, *(rotation + j - 3));
 				} else {
@@ -180,7 +180,7 @@ void tickMomentum(Entity *entity, MomentumData *momentumBase)
 						break;
 
 					updateLoc = 1;
-					*(location + j - 6) = applyMomentum(
+					*(location + j - 6) = animApplyMomentum(
 						*delta, *scale1, *subDelta, subScale,
 						*subValue, *(location + j - 6));
 				}
@@ -303,7 +303,7 @@ void tickAnimation(Entity *entity)
 		switch (**instrPtrPtr & 0xf000) {
 		case 0x0000:
 			(*instrPtrPtr)++;
-			readMomentumInstructions(momentum, instrPtrPtr);
+			animHandleKeyFrameInstruction(momentum, instrPtrPtr);
 			break;
 		case 0x1000:
 			anim->loopCount = **instrPtrPtr & 0xff;
@@ -356,7 +356,7 @@ void tickAnimation(Entity *entity)
 	animateEntityTexture(entity, anim);
 }
 
-void readMomentumInstructions(MomentumData *base, int16_t **instrPtr)
+void animHandleKeyFrameInstruction(MomentumData *base, int16_t **instrPtr)
 {
 	MomentumData *momentum;
 	int16_t *reload1;
@@ -384,9 +384,9 @@ void readMomentumInstructions(MomentumData *base, int16_t **instrPtr)
 		flag = 0x4000;
 		for (i = 0; i < 9; i++) {
 			if (instruction & flag) {
-				readMomentumInstruction(delta + i, reload1 + i,
-							subDelta + i, reload2 + i,
-							sign + i, instrPtr, &divisor);
+				animReadMomentumInstruction(delta + i, reload1 + i,
+							    subDelta + i, reload2 + i,
+							    sign + i, instrPtr, &divisor);
 			}
 			flag = flag >> 1;
 		}
@@ -395,10 +395,10 @@ void readMomentumInstructions(MomentumData *base, int16_t **instrPtr)
 	} while (**instrPtr & 0x8000);
 }
 
-void readMomentumInstruction(int16_t *delta, int16_t *reload1,
-			     int16_t *subDelta, int16_t *reload2,
-			     int8_t *sign, int16_t **instrPtr,
-			     int16_t *divisor)
+void animReadMomentumInstruction(int16_t *delta, int16_t *reload1,
+			         int16_t *subDelta, int16_t *reload2,
+			         int8_t *sign, int16_t **instrPtr,
+			         int16_t *divisor)
 {
 	int16_t value;
 
@@ -417,8 +417,8 @@ void readMomentumInstruction(int16_t *delta, int16_t *reload1,
 	}
 }
 
-int32_t applyMomentum(int16_t base, int16_t reload, int16_t delta,
-		      int16_t *counter, int8_t step, int32_t offset)
+int32_t animApplyMomentum(int16_t base, int16_t reload, int16_t delta,
+		          int16_t *counter, int8_t step, int32_t offset)
 {
 	if (delta != 0) {
 		*counter -= delta;

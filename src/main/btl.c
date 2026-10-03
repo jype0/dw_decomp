@@ -48,7 +48,7 @@ void getEntityTile(Entity *entity, int8_t *outTileX, int8_t *outTileY);
 int32_t isLinearPathBlocked(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void tickPartnerWaypoints(void);
-void tickCollision(void);
+void partnerTickCollision(void);
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 void initializeBuffModel(void *model);
 void initializeBuffModelObject(void);
@@ -63,7 +63,7 @@ char *BTL_initializeEFEEngine(char *base);
 void BTL_loadMoveEFE(int16_t *moves, int16_t *effectIds, int8_t *isLoaded);
 int32_t isScreenConcave(void);
 void loadBattleData(int32_t entityId, int32_t count);
-void loadCombatDataTick();
+void loadBattleDataTick();
 void handleBattleIdle(DigimonEntity *entity, Stats *stats, int32_t flags);
 void setFleeBubble(int16_t id, int16_t v);
 void renderFleeBubble(int32_t instanceId);
@@ -78,7 +78,7 @@ static void *btl_functions[] = {
 	renderFleeBubble,
 	setFleeBubble,
 	handleBattleIdle,
-	loadCombatDataTick,
+	loadBattleDataTick,
 	loadBattleData,
 	isScreenConcave,
 };
@@ -123,7 +123,7 @@ int32_t isScreenConcave(void)
 	return 0;
 }
 
-void loadCombatDataTick(void)
+void loadBattleDataTick(void)
 {
 	POLLED_INPUT = PadRead(1);
 	ACTIVE_FRAMEBUFFER = GsGetActiveBuff();
@@ -394,9 +394,9 @@ void loadBattleData(int32_t entityId, int32_t count)
 						     .entityIds[i]],
 						     &ENTITY_TABLE[1]->posData->location);
 			}
-			tickCollision();
+			partnerTickCollision();
 		}
-		loadCombatDataTick();
+		loadBattleDataTick();
 	}
 	loadSB();
 	for (i = 0; i <= ENEMY_COUNT; i++) {
@@ -414,9 +414,9 @@ void loadBattleData(int32_t entityId, int32_t count)
 						     .entityIds[i]],
 						     &ENTITY_TABLE[1]->posData->location);
 			}
-			tickCollision();
+			partnerTickCollision();
 		}
-		loadCombatDataTick();
+		loadBattleDataTick();
 	}
 	BTL_initializeBattleItemParticles();
 	BTL_initializeUnk3();
@@ -424,32 +424,32 @@ void loadBattleData(int32_t entityId, int32_t count)
 	BTL_initializeFinisherAuraModel(BTL_FINISHER_TIM,
 					BTL_FINISHER_MODEL);
 	if (IS_PREDEFINED_BATTLE != 1) {
-		tickCollision();
+		partnerTickCollision();
 	}
-	loadCombatDataTick();
+	loadBattleDataTick();
 	BTL_initializePoisonBubble();
 	BTL_initializeConfusionEffect(BTL_CONFUSION_MODEL);
 	if (IS_PREDEFINED_BATTLE != 1) {
-		tickCollision();
+		partnerTickCollision();
 	}
-	loadCombatDataTick();
+	loadBattleDataTick();
 	BTL_initializeStunEffect(BTL_STUN_MODEL);
 	if (IS_PREDEFINED_BATTLE != 1) {
-		tickCollision();
+		partnerTickCollision();
 	}
-	loadCombatDataTick();
+	loadBattleDataTick();
 	initializeBuffModel(BTL_BUFF_MODEL);
 	if (IS_PREDEFINED_BATTLE != 1) {
-		tickCollision();
+		partnerTickCollision();
 	}
-	loadCombatDataTick();
+	loadBattleDataTick();
 	initializeBuffModelObject();
 	n = 0;
 	BTL_initializeEFEEngine((char *)GENERAL_BUFFER_PTR);
 	if (IS_PREDEFINED_BATTLE != 1) {
-		tickCollision();
+		partnerTickCollision();
 	}
-	loadCombatDataTick();
+	loadBattleDataTick();
 	for (i = 0; i <= ENEMY_COUNT; i++) {
 		e = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 		e->stats.current.unk1 = -1;
@@ -476,9 +476,9 @@ void loadBattleData(int32_t entityId, int32_t count)
 				entityLookAtLocation(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]],
 						     &ENTITY_TABLE[1]->posData->location);
 			}
-			tickCollision();
+			partnerTickCollision();
 		}
-		loadCombatDataTick();
+		loadBattleDataTick();
 	}
 	n = 0;
 	for (i = 0; i <= ENEMY_COUNT; i++) {

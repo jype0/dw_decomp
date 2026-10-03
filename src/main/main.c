@@ -98,11 +98,11 @@ void handlePause(void);
 int32_t tickScript(void);
 void updateTournamentRegistration(void);
 void initializeNamingBuffer(uint8_t flags);
-void MAIN_func_8010020C(void);
+void initializeTextbox(void);
 #if defined(VERSION_JP)
-void MAIN_func_80100258(void);
+void tickTextboxHandling(void);
 #else
-void MAIN_func_80100258(int32_t flag);
+void tickTextboxHandling(int32_t flag);
 #endif
 int32_t newGameStateMachine(void);
 void processInput(void);
@@ -120,7 +120,7 @@ void tickThrownItem(int32_t instanceId);
 void renderThrownItem(int32_t instanceId);
 void unloadNewGameScene(void);
 
-void resetInventoryFlags(void);
+void initializeInventoryUI(void);
 void initializeEntityText(void);
 void initializeInventoryModules(void);
 
@@ -148,7 +148,7 @@ void loadStackedTIMFile(char *path);
 void runLandingScreen(void);
 void runMainMenu(void);
 void newGameScene(void);
-void MAIN_func_800EF38C(void);
+void initializeLoadedMap(void);
 void recalculatePPandArena(void);
 void gameLoop(void);
 void cleanupGame(void);
@@ -173,7 +173,7 @@ extern int32_t MAIN_D_80155670[];
 extern uint8_t MAIN_D_80155725[];
 
 int32_t main(void);
-void applyHUDOffset(int32_t offset);
+void applyDrawOffset(int32_t offset);
 extern int32_t POLLED_INPUT;
 extern int32_t POLLED_INPUT_PREVIOUS;
 extern int32_t CHANGED_INPUT;
@@ -199,12 +199,12 @@ void *main_order_anchor[] = {
 	renderPressStartToContinue,
 	pollInputMenu,
 	pollInputGame,
-	applyHUDOffset,
+	applyDrawOffset,
 	gameLoop,
 #if !defined(VERSION_JP)
 	recalculatePPandArena,
 #endif
-	MAIN_func_800EF38C,
+	initializeLoadedMap,
 	newGameScene,
 	runMainMenu,
 	runLandingScreen,
@@ -6099,11 +6099,11 @@ int32_t main(void)
 			initializeMap();
 			initializeChest();
 			runMapHeadScript(MAIN_D_80155725[0]);
-			MAIN_func_800EF38C();
+			initializeLoadedMap();
 			addClock();
 #if !defined(VERSION_JP)
-			if (getTamerState() != 0) {
-				setTamerState(0);
+			if (tamerGetState() != 0) {
+				tamerSetState(0);
 			}
 #endif
 			break;
@@ -6117,11 +6117,11 @@ int32_t main(void)
 			initializeMap();
 			initializeChest();
 			runMapHeadScript(MAIN_D_80155725[0]);
-			MAIN_func_800EF38C();
+			initializeLoadedMap();
 			addClock();
 #if !defined(VERSION_JP)
-			if (getTamerState() != 0) {
-				setTamerState(0);
+			if (tamerGetState() != 0) {
+				tamerSetState(0);
 			}
 #endif
 			break;
@@ -6223,7 +6223,7 @@ void runLandingScreen(void)
 		ACTIVE_ORDERING_TABLE = &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER];
 		tickObjects();
 		renderObjects();
-		applyHUDOffset(ACTIVE_FRAMEBUFFER);
+		applyDrawOffset(ACTIVE_FRAMEBUFFER);
 		DrawSync(0);
 		VSync(0);
 		ResetGraph(1);
@@ -6242,7 +6242,7 @@ fade:
 		ACTIVE_ORDERING_TABLE = &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER];
 		tickObjects();
 		renderObjects();
-		applyHUDOffset(ACTIVE_FRAMEBUFFER);
+		applyDrawOffset(ACTIVE_FRAMEBUFFER);
 		DrawSync(0);
 		VSync(0);
 		ResetGraph(1);
@@ -6300,7 +6300,7 @@ void newGameScene(void)
 	done = 0;
 	checkShopMap(0xda);
 	initializeNamingBuffer(0);
-	MAIN_func_8010020C();
+	initializeTextbox();
 	fadeFromBlack(0x14);
 	writePStat(0xfe, 0);
 	writePStat(0xf3, 0xff);
@@ -6314,9 +6314,9 @@ void newGameScene(void)
 		GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 		processInput();
 #if defined(VERSION_JP)
-		MAIN_func_80100258();
+		tickTextboxHandling();
 #else
-		MAIN_func_80100258(1);
+		tickTextboxHandling(1);
 #endif
 
 		if (readPStat(0xf3) == 0) {
@@ -6325,7 +6325,7 @@ void newGameScene(void)
 
 		tickObjects();
 		renderObjects();
-		applyHUDOffset(ACTIVE_FRAMEBUFFER);
+		applyDrawOffset(ACTIVE_FRAMEBUFFER);
 		DrawSync(0);
 		VSync(3);
 		GsSetOrign(DRAWING_OFFSET_X, DRAWING_OFFSET_Y);
@@ -6394,7 +6394,7 @@ extern int8_t PREV_TILE_Y;
 void uploadMapTileImages(MapTileData *tiles, int32_t index);
 void memcpy(uint8_t *dst, uint8_t *src, uint32_t size);
 
-void MAIN_func_800EF38C(void)
+void initializeLoadedMap(void)
 {
 	int32_t type;
 	int16_t x;
@@ -6559,7 +6559,7 @@ void gameLoop(void)
 	DRAWING_OFFSET_Y_COPY = DRAWING_OFFSET_Y;
 	tickObjects();
 	renderObjects();
-	applyHUDOffset(ACTIVE_FRAMEBUFFER);
+	applyDrawOffset(ACTIVE_FRAMEBUFFER);
 	DrawSync(0);
 	VSync(3);
 	GsSwapDispBuff();
@@ -6568,7 +6568,7 @@ void gameLoop(void)
 	handlePause();
 }
 
-void applyHUDOffset(int32_t offset)
+void applyDrawOffset(int32_t offset)
 {
 	AddPrim((char *)GS_ORDERING_TABLE[offset].org + 0x80,
 		&DRAW_OFFSETS[offset]);
@@ -6722,7 +6722,7 @@ void initializeInventoryModules(void)
 	COMBAT_DATA_PTR = &COMBAT_DATA;
 	resetFlattenGlobal();
 	initializeDroppedItems();
-	resetInventoryFlags();
+	initializeInventoryUI();
 	initializeInventory();
 	initializeEntityText();
 }

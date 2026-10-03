@@ -12,7 +12,7 @@ extern int32_t TRAINING_COMPLETE;
 extern uint32_t POLLED_INPUT;
 
 void createCameraMovement(VECTOR *pos, int32_t speed);
-void setTamerState(int8_t state);
+void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn2_mp_functions[] = {
@@ -26,8 +26,8 @@ int16_t instanceId;
 
 	switch (MAIN_D_801353BD) {
 	case 0:
-		setTamerState(8);
-		setPartnerState(10);
+		tamerSetState(8);
+		partnerSetState(10);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 		createCameraMovement(&TRN2_D_8008DC1C, 10);
 		playSound(8, 9);
@@ -85,8 +85,8 @@ int16_t instanceId;
 		if (MAIN_D_801353C4 >= 0x14) {
 			TRN2_applyBaseStats();
 			TRN2_closeUIBox(1);
-			setTamerState(0);
-			setPartnerState(1);
+			tamerSetState(0);
+			partnerSetState(1);
 			MAIN_D_801353C2 = 0;
 			MAIN_D_801353BD = 0;
 			/*

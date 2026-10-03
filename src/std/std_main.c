@@ -272,7 +272,7 @@ void STD_tickFighterCounter(void);
 void STD_applyEntityViewpoint(void);
 void STD_updateFighterStatusVisuals(DigimonEntity *digimon, FighterData *fighter);
 void handlePause(void);
-void MAIN_func_800E642C(void);
+void removePauseBox(void);
 int16_t STD_func_80060620(int32_t a, int32_t b);
 int32_t STD_func_8005F354(void);
 void STD_func_8005E8A4(Entity *entity, Entity *other);
@@ -5393,7 +5393,7 @@ int16_t STD_func_8006314C(Entity *entity, int32_t arg)
 		handlePause();
 	}
 
-	MAIN_func_800E642C();
+	removePauseBox();
 	if (result == -1) {
 		STD_func_80060620(1, 0);
 	} else if (result == 1) {

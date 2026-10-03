@@ -159,9 +159,9 @@ void removeAllCloudFX();
 void createCloudFX(int16_t *pos);
 void tickCloudFX();
 void renderCloudFX(int32_t id);
-void rotateVector(void);
+void EFERotateVector(void);
 char *initializeFlashData(char *base);
-void createFlash(void);
+void EFECreateFlash(void);
 void tickEFEFlash();
 void renderEFEFlash(int32_t id);
 int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y);
@@ -199,9 +199,9 @@ static void *efe_functions[] = {
 	setEFEFlashOffset,
 	renderEFEFlash,
 	tickEFEFlash,
-	createFlash,
+	EFECreateFlash,
 	initializeFlashData,
-	rotateVector,
+	EFERotateVector,
 	renderCloudFX,
 	tickCloudFX,
 	createCloudFX,
@@ -633,7 +633,7 @@ void renderCloudFX(int32_t id)
 	             MAIN_D_80123400[cloud->state], MAIN_D_80123400[cloud->state]);
 }
 
-void rotateVector(void)
+void EFERotateVector(void)
 {
 	MATRIX m;
 	SVECTOR vec;
@@ -667,7 +667,7 @@ char *initializeFlashData(char *base)
 	return base + sizeof(EfeFlashData) * 12;
 }
 
-void createFlash(void)
+void EFECreateFlash(void)
 {
 	EfeFlashData *data;
 	int32_t i;

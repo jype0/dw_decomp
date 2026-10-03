@@ -78,7 +78,7 @@ extern int16_t EFE_LOAD_STATE[];
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void setMapLayerEnabled(int32_t enabled);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t flag);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t flag);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
 void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance, int32_t width, int32_t height);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
@@ -93,7 +93,7 @@ void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void multiplyRotations(SVECTOR *a, SVECTOR *b);
 int32_t getOriginalType(int32_t type);
-void MAIN_func_800E4470(MATRIX *m, SVECTOR *out);
+void matrixToEuler1(MATRIX *m, SVECTOR *out);
 void toEulerAngles(SVECTOR *out, int32_t x, int32_t y, int32_t z);
 void matrixToEuler2(MATRIX *m, SVECTOR *out);
 int32_t customRandom(int32_t a, int32_t b);
@@ -338,8 +338,8 @@ void setRotTransMatrix(MATRIX *m);
 long RotTransPers(SVECTOR *v0, long *sxy, long *p, long *flag);
 int32_t STD_func_800770C0(int32_t lo, int32_t hi, int32_t t, int32_t a, int32_t b);
 
-void createFlash();
-void rotateVector();
+void EFECreateFlash();
+void EFERotateVector();
 
 static void *std_effect_functions[] = {
 	STD_func_80079874,
@@ -614,7 +614,7 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x00000002, STD_initializeSubEffectInstructions },
 	{ 0x00000003, STD_func_80075BF8 },
 	{ 0x00000005, STD_initializeEFETransform },
-	{ 0x00000007, rotateVector },
+	{ 0x00000007, EFERotateVector },
 	{ 0x00000004, STD_renderCenteredSprite },
 	{ 0x00000008, STD_setTransformToTargetBone },
 	{ 0x00000009, STD_addAttackObjectToTarget },
@@ -627,7 +627,7 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x0000000f, STD_setEFEModelObjectColor },
 	{ 0x00000010, STD_addParticleEmitter },
 	{ 0x00000011, STD_selectNextTargetEntity },
-	{ 0x00000012, createFlash },
+	{ 0x00000012, EFECreateFlash },
 	{ 0x00000013, STD_addCloudEffect },
 	{ 0x00000014, STD_renderScreenSprite },
 	{ 0x00000015, STD_projectPositionToScreen },
@@ -1442,7 +1442,7 @@ void STD_tickEFEEngine(void)
 	for (i = 0; i < 0xa; i++) {
 		v = (*p)[0];
 		if ((v >= 0) && (**(int32_t **)((char *)(*p)[1] + 8) < 0)) {
-			stopSoundMask(v);
+			thunkStopSoundMask(v);
 			(*p)[0] = -1;
 		}
 		p++;
@@ -1502,7 +1502,7 @@ void STD_stopEFESounds(void)
 	for (i = 0; i < 10; i++) {
 		v = *p;
 		if (v >= 0) {
-			stopSoundMask(v);
+			thunkStopSoundMask(v);
 			*p = -1;
 		}
 	}
@@ -1912,9 +1912,9 @@ drawLine:
 			gte_rtps();
 			gte_stsxy(&s1v);
 			gte_stszotz(&z);
-			renderLinePrimitive(e->color.r | (e->color.g << 8) | (e->color.b << 16),
-			                    s0v.vx, s0v.vy, s1v.vx, s1v.vy,
-			                    (depth + z) >> 3, 0);
+			drawLine2P(e->color.r | (e->color.g << 8) | (e->color.b << 16),
+			           s0v.vx, s0v.vy, s1v.vx, s1v.vy,
+			           (depth + z) >> 3, 0);
 			goto nextParticle;
 modeTest:
 			if (mode == 1) {
@@ -3248,10 +3248,10 @@ void STD_renderEFELine(void)
 	if ((depth > 0x20) && (depth < 0x1000)) {
 		if ((flags & 0x20) != 0) {
 			for (i = 0; i < 4; i++) {
-				renderLinePrimitive(((col[0] * 50 / 100) & 0xff) | (((col[1] * 50 / 100) & 0xff) << 8) | (((col[2] * 50 / 100) & 0xff) << 16), y0 + MAIN_D_801348E8[i], x1 + MAIN_D_801348EC[i], y1 + MAIN_D_801348E8[i], x0 + MAIN_D_801348EC[i], depth, 5);
+				drawLine2P(((col[0] * 50 / 100) & 0xff) | (((col[1] * 50 / 100) & 0xff) << 8) | (((col[2] * 50 / 100) & 0xff) << 16), y0 + MAIN_D_801348E8[i], x1 + MAIN_D_801348EC[i], y1 + MAIN_D_801348E8[i], x0 + MAIN_D_801348EC[i], depth, 5);
 			}
 		} else {
-			renderLinePrimitive((col[0] & 0xff) | ((col[1] & 0xff) << 8) | ((col[2] & 0xff) << 16), y0, x1, y1, x0, depth, 0);
+			drawLine2P((col[0] & 0xff) | ((col[1] & 0xff) << 8) | ((col[2] & 0xff) << 16), y0, x1, y1, x0, depth, 0);
 		}
 	}
 }
@@ -3284,7 +3284,7 @@ void STD_func_800728D4(void)
 	rot.vy = v[1];
 	rot.vz = v[2];
 	RotMatrixYXZ(&rot, &m);
-	MAIN_func_800E4470(&m, &rot);
+	matrixToEuler1(&m, &rot);
 	out[0] = rot.vx;
 	out[1] = rot.vy;
 	out[2] = rot.vz;
@@ -3490,7 +3490,7 @@ void STD_func_80072FF8(void)
 	in.vy = v[1];
 	in.vz = v[2];
 	RotMatrixYXZ(&in, &m);
-	MAIN_func_800E4470(&m, &res);
+	matrixToEuler1(&m, &res);
 	out[0] = res.vx;
 	out[1] = res.vy;
 	out[2] = res.vz;

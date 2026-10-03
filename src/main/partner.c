@@ -56,25 +56,25 @@ void tickMainMenu(int32_t instanceId);
 void renderMainMenu(int32_t instanceId);
 void renderFeedingItem(int32_t instanceId);
 
-void tickPartnerOverworld(int32_t instanceId);
-void tickNormal(void);
-void partnerSleep(void);
-void partnerPraiseScold(int32_t partnerState);
-void partnerFeedItem(void);
+void partnerTickOverworld(int32_t instanceId);
+void partnerTickNormal(void);
+void partnerTickSleep(void);
+void partnerTickPraiseScold(int32_t partnerState);
+void partnerTickFeedItem(void);
 void tickPartnerToilet(void);
-void partnerWildPoop(void);
-void tickPartnerDying(void);
-void partnerEatShit(void);
-void tickPartnerIdle(void);
-void tickPartnerEvolving(void);
-void tickPartnerDying2(void);
-void tickPartnerWalking(void);
+void tickWildPoop(void);
+void partnerTickDying(void);
+void partnerTickEatShit(void);
+void partnerTickIdle(void);
+void partnerTickEvolving(void);
+void partnerTickDying2(void);
+void partnerTickWalking(void);
 void setPartnerSlowWalking(void);
 void setPartnerIdle(void);
 int8_t getPartnerTamerCloseness(void);
 int32_t checkEatDistance(int32_t distance);
 int32_t tickEntityWalkTo();
-void tickPartnerBattle(int32_t instanceId);
+void partnerTickBattle(int32_t instanceId);
 void handleConditionBubble();
 int32_t entityIsOffScreen(Entity *entity, int32_t width, int32_t height);
 void tickConditionBoundaries();
@@ -82,10 +82,10 @@ void unsetCameraFollowPlayer();
 void tickPartnerWaypoints();
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void playSound(int32_t vabId, uint32_t note);
-void tickCollision();
-void tickPartnerNormal();
-void tickPartnerPoopingMechanic();
-void detectEdiblePoop();
+void partnerTickCollision();
+void tickConditions();
+void tickPoopingMechanic();
+void tickPoopDetection();
 void sleepRegen();
 void handleSleeping();
 void setCameraFollowPlayer();
@@ -123,34 +123,34 @@ void checkArenaMap(int32_t mapId);
 void readMapTFS(int32_t mapId);
 
 static void *partner_text_order[] = {
-	MAIN_func_800DF7F8,
+	getScriptSyncBit,
 	callDigimonRoutine,
-	startPartnerAnimation,
-	getPartnerState,
-	MAIN_func_800DF5A0,
+	partnerStartAnimation,
+	partnerGetState,
+	setSomeDyingState,
 	checkEatDistance,
-	setPartnerState,
+	partnerSetState,
 	setPartnerIdle,
 	updateConditionAnimation,
 	setPartnerSlowWalking,
 	getPartnerTamerCloseness,
-	tickPartnerWalking,
-	tickPartnerDying2,
-	tickPartnerEvolving,
-	tickPartnerIdle,
-	partnerEatShit,
-	tickPartnerDying,
-	partnerWildPoop,
+	partnerTickWalking,
+	partnerTickDying2,
+	partnerTickEvolving,
+	partnerTickIdle,
+	partnerTickEatShit,
+	partnerTickDying,
+	tickWildPoop,
 	tickPartnerToilet,
-	partnerFeedItem,
-	partnerPraiseScold,
-	partnerSleep,
-	tickNormal,
-	tickPartnerOverworld,
-	tickPartner
+	partnerTickFeedItem,
+	partnerTickPraiseScold,
+	partnerTickSleep,
+	partnerTickNormal,
+	partnerTickOverworld,
+	partnerTick
 };
 
-void tickPartner(int32_t instanceId)
+void partnerTick(int32_t instanceId)
 {
 	if (((GAME_STATE != 0) || (PARTNER_STATE != 1)) &&
 	    (HAS_BUTTERFLY == 0)) {
@@ -159,12 +159,12 @@ void tickPartner(int32_t instanceId)
 	}
 	switch (GAME_STATE) {
 	case 0:
-		tickPartnerOverworld(instanceId);
+		partnerTickOverworld(instanceId);
 		break;
 	case 1:
 	case 2:
 	case 3:
-		tickPartnerBattle(instanceId);
+		partnerTickBattle(instanceId);
 		break;
 	case 4:
 	case 5:
@@ -174,49 +174,49 @@ void tickPartner(int32_t instanceId)
 	}
 }
 
-void tickPartnerOverworld(int32_t instanceId)
+void partnerTickOverworld(int32_t instanceId)
 {
 	if (IS_IN_MENU == 1) {
 		tickAnimation(&PARTNER_ENTITY.digimonEntity.entity);
 	} else {
 		switch (PARTNER_STATE) {
 		case 1:
-			tickNormal();
+			partnerTickNormal();
 			break;
 		case 3:
-			partnerSleep();
+			partnerTickSleep();
 			break;
 		case 4:
 		case 15:
-			partnerPraiseScold(PARTNER_STATE);
+			partnerTickPraiseScold(PARTNER_STATE);
 			break;
 		case 5:
-			partnerFeedItem();
+			partnerTickFeedItem();
 			break;
 		case 6:
 			tickPartnerToilet();
 			break;
 		case 7:
-			partnerWildPoop();
+			tickWildPoop();
 			break;
 		case 8:
-			tickPartnerDying();
+			partnerTickDying();
 			break;
 		case 9:
-			partnerEatShit();
+			partnerTickEatShit();
 			break;
 		case 10:
 			handleConditionBubble();
 		case 12:
 			break;
 		case 11:
-			tickPartnerIdle();
+			partnerTickIdle();
 			break;
 		case 13:
-			tickPartnerEvolving();
+			partnerTickEvolving();
 			break;
 		case 14:
-			tickPartnerDying2();
+			partnerTickDying2();
 		default:
 			break;
 		}
@@ -229,17 +229,17 @@ void tickPartnerOverworld(int32_t instanceId)
 	}
 }
 
-void tickNormal(void)
+void partnerTickNormal(void)
 {
-	tickCollision();
-	tickPartnerWalking();
-	tickPartnerNormal();
-	tickPartnerPoopingMechanic();
-	detectEdiblePoop();
+	partnerTickCollision();
+	partnerTickWalking();
+	tickConditions();
+	tickPoopingMechanic();
+	tickPoopDetection();
 	handleConditionBubble();
 }
 
-void partnerSleep(void)
+void partnerTickSleep(void)
 {
 	switch (PARTNER_SUB_STATE) {
 	case 0:
@@ -248,7 +248,7 @@ void partnerSleep(void)
 		if (getPartnerTamerCloseness() != 2) {
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 		}
-		setTamerState(6);
+		tamerSetState(6);
 		tickPartnerWaypoints();
 		PARTNER_SUB_STATE = 1;
 		break;
@@ -318,7 +318,7 @@ void partnerSleep(void)
 	case 7:
 		if (FADE_IN_CURRENT > 34) {
 			PARTNER_STATE = 1;
-			setTamerState(0);
+			tamerSetState(0);
 			setCameraFollowPlayer();
 			handleSpecialEvolutions(2, &PARTNER_ENTITY.digimonEntity.entity);
 			startGameTime();
@@ -329,7 +329,7 @@ void partnerSleep(void)
 	}
 }
 
-void partnerPraiseScold(int32_t partnerState)
+void partnerTickPraiseScold(int32_t partnerState)
 {
 	switch (PARTNER_SUB_STATE) {
 	case 0:
@@ -351,10 +351,10 @@ void partnerPraiseScold(int32_t partnerState)
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
 			if (partnerState == 15) {
 				playSound(0, 14);
-				setTamerState(13);
+				tamerSetState(13);
 			}
 			else {
-				setTamerState(9);
+				tamerSetState(9);
 			}
 			PARTNER_SUB_STATE = 2;
 		}
@@ -375,8 +375,8 @@ void partnerPraiseScold(int32_t partnerState)
 		}
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
-			setPartnerState(1);
-			setTamerState(0);
+			partnerSetState(1);
+			tamerSetState(0);
 			setCameraFollowPlayer();
 			handleSpecialEvolutions(3, ENTITY_TABLE[1]);
 		}
@@ -386,7 +386,7 @@ void partnerPraiseScold(int32_t partnerState)
 	}
 }
 
-void partnerFeedItem(void)
+void partnerTickFeedItem(void)
 {
 	int32_t isClose;
 	int32_t type;
@@ -462,7 +462,7 @@ void partnerFeedItem(void)
 			type = TAMER_ITEM.worldItem.type;
 			PARTNER_STATE = 1;
 
-			setTamerState(0);
+			tamerSetState(0);
 			setCameraFollowPlayer();
 
 			if (ITEM_FUNCTIONS[TAMER_ITEM.worldItem.type] != NULL) {
@@ -486,7 +486,7 @@ void partnerFeedItem(void)
 	case 8:
 		if (TAMER_ENTITY.entity.anim.animFrame >=
                     TAMER_ENTITY.entity.anim.frameCount) {
-			setTamerState(0);
+			tamerSetState(0);
 			PARTNER_STATE = 1;
 			removeTamerItem();
 			setCameraFollowPlayer();
@@ -507,7 +507,7 @@ void tickPartnerToilet(void)
 
 	switch (PARTNER_SUB_STATE) {
 	case 0:
-		setTamerState(6);
+		tamerSetState(6);
 		unsetCameraFollowPlayer();
 		TOILET_POS1.vx = TOILET_DATA[toiletId].posX1;
 		TOILET_POS1.vy = location->vy;
@@ -554,7 +554,7 @@ void tickPartnerToilet(void)
 	}
 }
 
-void partnerWildPoop(void)
+void tickWildPoop(void)
 {
 	short tileX;
 	short tileY;
@@ -562,7 +562,7 @@ void partnerWildPoop(void)
 	switch (PARTNER_SUB_STATE) {
 	case 0:
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
-		setTamerState(6);
+		tamerSetState(6);
 		entityLookAtLocation(&TAMER_ENTITY.entity,
                                      &PARTNER_ENTITY.digimonEntity.entity.posData->location);
 		unsetCameraFollowPlayer();
@@ -590,7 +590,7 @@ void partnerWildPoop(void)
 	case 3:
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
-			setTamerState(0);
+			tamerSetState(0);
 			PARTNER_STATE = 1;
 			setCameraFollowPlayer();
 			addTamerLevel(1, -1);
@@ -601,7 +601,7 @@ void partnerWildPoop(void)
 	}
 }
 
-void tickPartnerDying(void)
+void partnerTickDying(void)
 {
 	int32_t value;
 
@@ -626,7 +626,7 @@ void tickPartnerDying(void)
 			isSoundLoaded(0, 8);
 			DOOA_tick((PartnerEntity*)ENTITY_TABLE[1], GENERAL_BUFFER_PTR + 0x4b000, 0);
 			setFishingDisabled();
-			setTamerState(6);
+			tamerSetState(6);
 			unsetCameraFollowPlayer();
 			PARTNER_SUB_STATE = 2;
 		}
@@ -648,7 +648,7 @@ void tickPartnerDying(void)
 	}
 }
 
-void partnerEatShit(void)
+void partnerTickEatShit(void)
 {
 	int16_t tileX;
 	int16_t posY;
@@ -665,7 +665,7 @@ void partnerEatShit(void)
 	switch (PARTNER_SUB_STATE) {
 	case 0:
 		startAnimationTamer(0);
-		setTamerState(6);
+		tamerSetState(6);
 		unsetCameraFollowPlayer();
 		startAnimation(ENTITY_TABLE[1], 2);
 		tickPartnerWaypoints();
@@ -683,9 +683,9 @@ void partnerEatShit(void)
 		if (PARTNER_ENTITY.digimonEntity.entity.anim.animFrame >=
 		    PARTNER_ENTITY.digimonEntity.entity.anim.frameCount) {
 			handleEatingPoop();
-			setPartnerState(1);
+			partnerSetState(1);
 			startAnimation(ENTITY_TABLE[1], 0);
-			setTamerState(0);
+			tamerSetState(0);
 			setCameraFollowPlayer();
 		}
 		break;
@@ -694,7 +694,7 @@ void partnerEatShit(void)
 	}
 }
 
-void tickPartnerIdle(void)
+void partnerTickIdle(void)
 {
 	if (PARTNER_SUB_STATE == 0) {
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
@@ -702,7 +702,7 @@ void tickPartnerIdle(void)
 	}
 }
 
-void tickPartnerEvolving(void)
+void partnerTickEvolving(void)
 {
 	int32_t value;
 
@@ -742,12 +742,12 @@ void tickPartnerEvolving(void)
 			checkArenaMap(CURRENT_SCREEN);
 			readMapTFS(CURRENT_SCREEN);
 			setFishingEnabled();
-			setPartnerState(1);
+			partnerSetState(1);
 			if (SOME_SCRIPT_SYNC_BIT == 0) {
 				SOME_SCRIPT_SYNC_BIT = 1;
 			}
 			else {
-				setTamerState(0);
+				tamerSetState(0);
 				setCameraFollowPlayer();
 			}
 		}
@@ -757,7 +757,7 @@ void tickPartnerEvolving(void)
 	}
 }
 
-void tickPartnerDying2(void)
+void partnerTickDying2(void)
 {
 	int32_t value;
 
@@ -788,7 +788,7 @@ void tickPartnerDying2(void)
 	}
 }
 
-void tickPartnerWalking(void)
+void partnerTickWalking(void)
 {
 	EntityAnim *anim;
 	int32_t isUnhappy;
@@ -1048,7 +1048,7 @@ void setPartnerIdle(void)
 	}
 }
 
-void setPartnerState(state)
+void partnerSetState(state)
 int16_t state;
 {
 	PARTNER_STATE = state;
@@ -1081,20 +1081,20 @@ int8_t distance;
 	}
 }
 
-void MAIN_func_800DF5A0(void)
+void setSomeDyingState(void)
 {
-	setTamerState(6);
+	tamerSetState(6);
 	PARTNER_STATE = 8;
 	PARTNER_SUB_STATE = 2;
 	unsetCameraFollowPlayer();
 }
 
-int32_t getPartnerState(void)
+int32_t partnerGetState(void)
 {
 	return PARTNER_STATE;
 }
 
-void startPartnerAnimation(animId)
+void partnerStartAnimation(animId)
 int16_t animId;
 {
 	startAnimation(&PARTNER_ENTITY.digimonEntity.entity, (uint8_t)animId);
@@ -1105,41 +1105,41 @@ uint8_t routine;
 {
 	switch (routine) {
 	case 0:
-		setPartnerState(6);
+		partnerSetState(6);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 1:
 		KAR_start();
-		setTamerState(12);
-		setPartnerState(11);
+		tamerSetState(12);
+		partnerSetState(11);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 2:
 		EVOLUTION_TARGET = readPStat(PSTAT_SUKAMON_BACKUP_DIGIMON);
-		setPartnerState(13);
+		partnerSetState(13);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 3:
-		setPartnerState(8);
+		partnerSetState(8);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 4:
-		setPartnerState(14);
+		partnerSetState(14);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 5:
-		setTamerState(15);
-		setPartnerState(11);
+		tamerSetState(15);
+		partnerSetState(11);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 6:
-		setTamerState(16);
-		setPartnerState(11);
+		tamerSetState(16);
+		partnerSetState(11);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 7:
-		setTamerState(17);
-		setPartnerState(12);
+		tamerSetState(17);
+		partnerSetState(12);
 		if ((TAMER_ENTITY.entity.anim.animId == 2) ||
 		    (TAMER_ENTITY.entity.anim.animId == 3)) {
 			startAnimation(&TAMER_ENTITY.entity, 0);
@@ -1151,13 +1151,13 @@ uint8_t routine;
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 8:
-		setTamerState(18);
-		setPartnerState(11);
+		tamerSetState(18);
+		partnerSetState(11);
 		SOME_SCRIPT_SYNC_BIT = 0;
 		break;
 	case 9:
-		setTamerState(19);
-		setPartnerState(12);
+		tamerSetState(19);
+		partnerSetState(12);
 		if ((TAMER_ENTITY.entity.anim.animId == 2) ||
 		    (TAMER_ENTITY.entity.anim.animId == 3)) {
 			startAnimation(&TAMER_ENTITY.entity, 0);
@@ -1170,14 +1170,14 @@ uint8_t routine;
 		break;
 	case 10:
 		EVOLUTION_TARGET = readPStat(PSTAT_254);
-		setPartnerState(13);
+		partnerSetState(13);
 		SOME_SCRIPT_SYNC_BIT = 0;
 	default:
 		break;
 	}
 }
 
-int32_t MAIN_func_800DF7F8(void)
+int32_t getScriptSyncBit(void)
 {
 	return SOME_SCRIPT_SYNC_BIT;
 }

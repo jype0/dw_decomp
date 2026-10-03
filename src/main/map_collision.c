@@ -10,9 +10,9 @@ void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
 void loadMapCollisionData(int8_t *src);
 int32_t getTileTrigger(VECTOR *pos);
 int32_t checkMapCollisionX(Entity *entity, int32_t direction);
-int32_t checkMapCollisionY(Entity *entity, int32_t direction);
-void setRectImpassible(int32_t x, int32_t y, int32_t w, int32_t h);
-void setRectangleImpassable(int32_t x, int32_t y, int32_t r);
+int32_t checkMapCollisionZ(Entity *entity, int32_t direction);
+void setImpassableRect(int32_t x, int32_t y, int32_t w, int32_t h);
+void setImpassableSquare(int32_t x, int32_t y, int32_t r);
 
 static inline int32_t copyValue(int32_t value)
 {
@@ -99,7 +99,7 @@ int8_t direction;
 	return 0;
 }
 
-int32_t checkMapCollisionY(entity, direction)
+int32_t checkMapCollisionZ(entity, direction)
 Entity *entity;
 int8_t direction;
 {
@@ -157,12 +157,12 @@ void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY)
 }
 
 #if defined(VERSION_JP)
-void setRectangleImpassable(x, y, radius)
+void setImpassableSquare(x, y, radius)
 int16_t x;
 int16_t y;
 int32_t radius;
 #else
-void setRectangleImpassable(int32_t x, int32_t y, int32_t radius)
+void setImpassableSquare(int32_t x, int32_t y, int32_t radius)
 #endif
 {
 #if !defined(VERSION_JP)
@@ -186,7 +186,7 @@ void setRectangleImpassable(int32_t x, int32_t y, int32_t radius)
 	}
 }
 
-void setRectImpassible(x, y, width, height)
+void setImpassableRect(x, y, width, height)
 int8_t x;
 int8_t y;
 int8_t width;

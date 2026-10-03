@@ -137,7 +137,7 @@ void VS_renderFighterCounter(void);
 void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits, int32_t value, int32_t layer);
 void VS__tickDigimonP1(int32_t instanceId);
 void VS__tickDigimonP2(int32_t instanceId);
-int32_t loadVSSounds(void);
+int32_t VSLoadSounds(void);
 int32_t loadDigimonSounds(int32_t vabId, int32_t type);
 void VS__runIntro(int32_t stage);
 int32_t VS__combatMain(void);
@@ -1163,7 +1163,7 @@ void VS_initializeVS(void)
 		VS_loadFighterEntities(MAIN_D_80135264);
 		ENTITY_TABLE[1]->isOnScreen = 1;
 		ENTITY_TABLE[2]->isOnScreen = 1;
-		loadVSSounds();
+		VSLoadSounds();
 		((DigimonEntity *)ENTITY_TABLE[1])->stats.current.vabId = 4;
 		((DigimonEntity *)ENTITY_TABLE[2])->stats.current.vabId = 5;
 		loadDigimonSounds(4, ENTITY_TABLE[1]->type);

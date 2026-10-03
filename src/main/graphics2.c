@@ -56,18 +56,18 @@ const uint8_t MAIN_D_80114D68[256] = {
 };
 
 void setLineBlendingMode(int32_t mode, int32_t order);
-void renderTrianglePrimitive(uint32_t color, int32_t x0, int32_t y0,
-			     int32_t x1, int32_t y1, int32_t x2, int32_t y2,
-			     int32_t order, uint32_t mode);
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
-			 int32_t y1, int32_t order, uint32_t mode);
-void MAIN_func_800E4038(VECTOR *output, int32_t x, int32_t y,
+void drawLine3P(uint32_t color, int32_t x0, int32_t y0,
+		int32_t x1, int32_t y1, int32_t x2, int32_t y2,
+		int32_t order, uint32_t mode);
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t order, uint32_t mode);
+void mapToWorldPosition(VECTOR *output, int32_t x, int32_t y,
 			int32_t *success);
-void rotateVectorYXZ(SVECTOR *rotation, VECTOR *input, VECTOR *output);
+void rotateVector(SVECTOR *rotation, VECTOR *input, VECTOR *output);
 void toEulerAngles(SVECTOR *output, int32_t deltaX, int32_t deltaY,
 		   int32_t deltaZ);
 int32_t getDistance(int32_t deltaX, int32_t deltaY, int32_t deltaZ);
-void MAIN_func_800E4470(MATRIX *matrix, SVECTOR *output);
+void matrixToEuler1(MATRIX *matrix, SVECTOR *output);
 void matrixToEuler2(MATRIX *matrix, SVECTOR *output);
 void multiplyRotations(SVECTOR *rotation1, SVECTOR *rotation2);
 int32_t customRandom(int32_t min, int32_t max);
@@ -91,9 +91,9 @@ void setLineBlendingMode(int32_t mode, int32_t order)
 	GsSetWorkBase((PACKET *)&prim[1]);
 }
 
-void renderTrianglePrimitive(uint32_t color, int32_t x0, int32_t y0,
-			     int32_t x1, int32_t y1, int32_t x2, int32_t y2,
-			     int32_t order, uint32_t mode)
+void drawLine3P(uint32_t color, int32_t x0, int32_t y0,
+		int32_t x1, int32_t y1, int32_t x2, int32_t y2,
+		int32_t order, uint32_t mode)
 {
 	LINE_F3 *prim;
 
@@ -109,8 +109,8 @@ void renderTrianglePrimitive(uint32_t color, int32_t x0, int32_t y0,
 	setLineBlendingMode(mode, order);
 }
 
-void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
-			 int32_t y1, int32_t order, uint32_t mode)
+void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
+		int32_t y1, int32_t order, uint32_t mode)
 {
 	LINE_F2 *prim;
 
@@ -127,9 +127,9 @@ void renderLinePrimitive(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
 	setLineBlendingMode(mode, order);
 }
 
-void MAIN_func_800E3FB8(SVECTOR *pos, VECTOR *out);
+void transposeRefMatrix(SVECTOR *pos, VECTOR *out);
 
-void MAIN_func_800E3FB8(SVECTOR *pos, VECTOR *out)
+void transposeRefMatrix(SVECTOR *pos, VECTOR *out)
 {
 	MATRIX m;
 	SVECTOR v;
@@ -141,7 +141,7 @@ void MAIN_func_800E3FB8(SVECTOR *pos, VECTOR *out)
 	ApplyMatrix(&m, &v, out);
 }
 
-void MAIN_func_800E4038(VECTOR *output, int32_t x, int32_t y,
+void mapToWorldPosition(VECTOR *output, int32_t x, int32_t y,
 			int32_t *success)
 {
 	SVECTOR positions[2];
@@ -160,7 +160,7 @@ void MAIN_func_800E4038(VECTOR *output, int32_t x, int32_t y,
 	positions[1].vz = VIEWPORT_DISTANCE;
 
 	for (i = 0; i < 2; i++) {
-		MAIN_func_800E3FB8(&positions[i], &transformed[i]);
+		transposeRefMatrix(&positions[i], &transformed[i]);
 	}
 
 	transformed[1].vx -= transformed[0].vx;
@@ -188,7 +188,7 @@ done:
 	;
 }
 
-void rotateVectorYXZ(SVECTOR *rotation, VECTOR *input, VECTOR *output)
+void rotateVector(SVECTOR *rotation, VECTOR *input, VECTOR *output)
 {
 	MATRIX matrix;
 	RotMatrixYXZ(rotation, &matrix);
@@ -254,7 +254,7 @@ int32_t getDistance(int32_t deltaX, int32_t deltaY, int32_t deltaZ)
 	return deltaX < 0 ? 0x80000000 : deltaX;
 }
 
-void MAIN_func_800E4470(MATRIX *matrix, SVECTOR *output)
+void matrixToEuler1(MATRIX *matrix, SVECTOR *output)
 {
 	int32_t sinX;
 	int32_t cosX;

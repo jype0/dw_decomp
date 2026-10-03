@@ -31,13 +31,13 @@ typedef struct {
 extern RaiseData RAISE_DATA[66];
 extern PoopPile WORLD_POOP[];
 
-void tickPartner(int32_t instanceId);
+void partnerTick(int32_t instanceId);
 void updateConditionAnimation(void);
-void setPartnerState(int32_t state);
-void MAIN_func_800DF5A0(void);
-int32_t getPartnerState(void);
-void startPartnerAnimation(int32_t animId);
+void partnerSetState(int32_t state);
+void setSomeDyingState(void);
+int32_t partnerGetState(void);
+void partnerStartAnimation(int32_t animId);
 void callDigimonRoutine(int32_t routine);
-int32_t MAIN_func_800DF7F8(void);
+int32_t getScriptSyncBit(void);
 
 #endif

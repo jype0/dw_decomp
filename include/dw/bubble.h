@@ -8,6 +8,6 @@ void initializeConditionBubbles(void);
 int32_t addConditionBubble(int32_t type, Entity *entity);
 void tickConditionBubble(int32_t instanceId);
 void renderConditionBubble(int32_t instanceId);
-void unsetBubble(int32_t instanceId);
+void removeConditionBubble(int32_t instanceId);
 
 #endif
