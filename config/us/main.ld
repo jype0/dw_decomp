@@ -40,6 +40,8 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/graphics.c.o(.text.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/main/drop_shadow.c.o(.text.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/_psstart.c.o(.text.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/partner_impl.c.o(.text.*);
@@ -251,6 +253,8 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/graphics.c.o(.rodata.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/main/drop_shadow.c.o(.rodata.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/main/_psstart.c.o(.rodata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/partner_impl.c.o(.rodata.*);
@@ -392,6 +396,8 @@ SECTIONS
         BUILD_DIR/src/main/file_table.c.o(.data.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/graphics.c.o(.data.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/drop_shadow.c.o(.data.*);
         . = ALIGN(., 4);
         KEEP(BUILD_DIR/src/main/_psstart.c.o(.data.*));
         . = ALIGN(., 4);

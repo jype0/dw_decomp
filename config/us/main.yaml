@@ -72,6 +72,7 @@ segments:
       - [0x131F0, c, file]
       - [0x136D4, c, math]
       - [0x13924, c, graphics]
+      - [0x13F60, c, drop_shadow]
       - [0x14238, c, _psstart]
       - [0x1435C, c, partner_impl]
       - [0x197F4, c, tamer]

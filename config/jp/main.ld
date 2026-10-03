@@ -22,9 +22,9 @@ SECTIONS
         BUILD_DIR/src/main/world_object.c.o(.text .text.*);
         BUILD_DIR/src/main/file.c.o(.text .text.*);
         BUILD_DIR/src/main/math.c.o(.text .text.*);
-        KEEP(BUILD_DIR/asm/main/14DF8.s.o(.text .text.*));
+        BUILD_DIR/src/main/graphics.c.o(.text .text.*);
         BUILD_DIR/src/main/font.c.o(.text .text.*);
-        KEEP(BUILD_DIR/asm/main/15BCC.s.o(.text .text.*));
+        BUILD_DIR/src/main/drop_shadow.c.o(.text .text.*);
         BUILD_DIR/src/main/_psstart.c.o(.text .text.*);
         BUILD_DIR/src/main/partner_impl.c.o(.text .text.*);
         BUILD_DIR/src/main/tamer.c.o(.text .text.*);
@@ -104,7 +104,9 @@ SECTIONS
         BUILD_DIR/src/main/file.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/math.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/file_table.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/graphics.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/font.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/drop_shadow.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/_psstart.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/fade.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/aabb.c.o(.rodata .rodata.*);
@@ -134,7 +136,7 @@ SECTIONS
         main_DATA_START = .;
         KEEP(BUILD_DIR/asm/main/data/8B9CC.data.s.o(.data .data.*));
         BUILD_DIR/src/main/file_table.c.o(.data .data.*);
-        KEEP(BUILD_DIR/asm/main/data/9855C.data.s.o(.data .data.*));
+        BUILD_DIR/src/main/graphics.c.o(.data .data.*);
         BUILD_DIR/src/main/font.c.o(.data .data.*);
         BUILD_DIR/src/main/partner_impl.c.o(.data .data.*);
         BUILD_DIR/src/main/tamer.c.o(.data .data.*);

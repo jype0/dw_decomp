@@ -1,16 +1,14 @@
 #include <inline_n.h>
-#include <libgpu.h>
 #include <libgs.h>
 #include <libgte.h>
 
-#include <dw/aabb.h>
 #include <dw/attack_object.h>
-#include <dw/entity.h>
-#include <dw/model.h>
-#include <dw/params.h>
 #include <dw/types.h>
 
-#include "common.h"
+extern _GsFCALL GS_TMD_MAP;
+extern int32_t MAIN_D_80137BE8[];
+extern int32_t MAIN_D_80137BE4[];
+extern AttackObject ATTACK_OBJECTS[];
 
 PACKET *GsTMDfastF3L();
 PACKET *GsTMDfastG3L();
@@ -41,15 +39,7 @@ PACKET *GsTMDdivTG4NL();
 PACKET *GsTMDdivTNG4();
 void setRotTransMatrix(MATRIX *m);
 void initializeGsTMDMap(void);
-int32_t getTileTrigger(VECTOR *loc);
-void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage);
-void renderDropShadow(Entity *entity);
-
-extern _GsFCALL GS_TMD_MAP;
-extern int32_t MAIN_D_80137BE8[];
-extern int32_t MAIN_D_80137BE4[];
-extern GsOT *ACTIVE_ORDERING_TABLE;
-extern AttackObject ATTACK_OBJECTS[];
+void updateTMDTextureData(int32_t *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage);
 
 // clang-format off
 AttackObject RESET_ATTACK_OBJECT = {
@@ -102,11 +92,8 @@ void initializeGsTMDMap(void)
 void initializeAttackObjects(void)
 {
 	int32_t i;
-	AttackObject tmp;
 
-	i = 0;
-	tmp = RESET_ATTACK_OBJECT;
-	for (; i < 0x10; i++) {
+	for (i = 0; i < 0x10; i++) {
 		ATTACK_OBJECTS[i] = RESET_ATTACK_OBJECT;
 	}
 }
@@ -133,9 +120,8 @@ int32_t addAttackObject(int32_t victimId, int32_t active, SVECTOR *pos, int32_t 
 	return 1;
 }
 
-int32_t popAttackObject(uint8_t entityId, AttackObject *out)
+int32_t popAttackObject(int32_t entityId, AttackObject *out)
 {
-	AttackObject tmp;
 	int32_t i;
 	int32_t k;
 	int32_t m;
@@ -152,7 +138,6 @@ int32_t popAttackObject(uint8_t entityId, AttackObject *out)
 	*out = ATTACK_OBJECTS[i];
 	ATTACK_OBJECTS[i] = RESET_ATTACK_OBJECT;
 	for (k = 0; k < 0xF; k++) {
-		tmp = RESET_ATTACK_OBJECT;
 		if (ATTACK_OBJECTS[k].active == -1) {
 			for (m = k + 1; m < 0x10; m++) {
 				if (ATTACK_OBJECTS[m].active != -1) {
@@ -163,20 +148,19 @@ int32_t popAttackObject(uint8_t entityId, AttackObject *out)
 				break;
 			}
 			ATTACK_OBJECTS[k] = ATTACK_OBJECTS[m];
-			ATTACK_OBJECTS[m] = tmp;
+			ATTACK_OBJECTS[m] = RESET_ATTACK_OBJECT;
 		}
 	}
 	return 1;
 }
 
-void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage)
+void updateTMDTextureData(int32_t *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage)
 {
-	int32_t nObj;
-	int32_t *hdr;
 	uint32_t *prim;
 	struct TMD_STRUCT *obj;
 	int32_t i;
 	int32_t j;
+	int32_t nObj;
 	int32_t primn;
 	int32_t clut;
 	int32_t tpages;
@@ -184,9 +168,9 @@ void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_
 	uint8_t mode;
 	uint32_t len;
 
-	hdr = (int32_t *)((int32_t)tmd + 8);
-	nObj = *hdr++;
-	obj = (struct TMD_STRUCT *)hdr;
+	tmd = (int32_t *)((int32_t)tmd + 8);
+	nObj = *tmd++;
+	obj = (struct TMD_STRUCT *)tmd;
 	clut = (y << 8) + x;
 	tpages = tpage << 16;
 	clutXs = clutX << 16;
@@ -198,79 +182,14 @@ void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_
 			if ((mode & 4) == 0) {
 				break;
 			}
-			len = (prim[0] & 0xFF00) >> 8;
+			len = ((prim[0] & 0xFF00) >> 8) + 1;
 			prim[1] += tpages + clut;
 			prim[2] = clut + ((prim[2] & 0xFFE0FFFF) + clutXs);
 			prim[3] += clut;
-			len++;
 			if (mode & 8) {
 				prim[4] += clut;
 			}
 			prim += len;
 		}
 	}
-}
-
-void renderDropShadow(Entity *entity)
-{
-	SVECTOR p0;
-	SVECTOR p1;
-	SVECTOR p2;
-	SVECTOR p3;
-	long depth;
-	long flag;
-	AABB box;
-	SVECTOR c;
-	POLY_FT4 *prim;
-	int16_t x;
-	PositionData *posData;
-	int16_t y;
-	PositionData *pos;
-	int16_t radiusX;
-	int16_t radiusZ;
-	int16_t z;
-
-	if (getTileTrigger(&entity->posData->location) == -1) {
-		return;
-	}
-	radiusX = DIGIMON_DATA[entity->type].radius;
-	radiusZ = DIGIMON_DATA[entity->type].radius;
-	posData = entity->posData;
-	pos = posData;
-	x = pos->location.vx;
-	y = pos->location.vy;
-	z = pos->location.vz;
-	p0.vx = x - radiusX;
-	p0.vy = y;
-	p0.vz = z - radiusZ;
-	p1.vx = x + radiusX;
-	p1.vy = y;
-	p1.vz = z - radiusZ;
-	p2.vx = x - radiusX;
-	p2.vy = y;
-	p2.vz = z + radiusZ;
-	p3.vx = x + radiusX;
-	p3.vy = y;
-	p3.vz = z + radiusZ;
-	prim = (POLY_FT4 *)GsGetWorkBase();
-	SetPolyFT4(prim);
-	SetSemiTrans(prim, 1);
-	prim->tpage = getTPage(1, 2, 832, 256);
-	setClut(prim, 0, 0x1E7);
-	setUVWH(prim, 0x40, 0x80, 63, 63);
-	setRotTransMatrix(&GsWSMATRIX);
-	RotTransPers4(&p0, &p1, &p2, &p3, (long *)&prim->x0, (long *)&prim->x1, (long *)&prim->x2,
-		      (long *)&prim->x3, &depth, &flag);
-	prim->r0 = prim->g0 = prim->b0 = 0x30;
-	AddPrim(ACTIVE_ORDERING_TABLE->org + 0xFFD, prim);
-	prim++;
-	GsSetWorkBase((PACKET *)prim);
-	c.vx = entity->posData->location.vx;
-	c.vy = -(DIGIMON_DATA[entity->type].height >> 1);
-	c.vz = entity->posData->location.vz;
-	box.center = &c;
-	box.extent.vx = DIGIMON_DATA[entity->type].radius;
-	box.extent.vy = DIGIMON_DATA[entity->type].height >> 1;
-	box.extent.vz = DIGIMON_DATA[entity->type].radius;
-	renderAABB(&box);
 }

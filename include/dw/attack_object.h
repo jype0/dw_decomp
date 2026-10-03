@@ -16,6 +16,6 @@ typedef struct {
 void initializeAttackObjects(void);
 int32_t addAttackObject(int32_t victimId, int32_t active, SVECTOR *pos, int32_t effectId, int32_t subEffectIndex,
 			int32_t casterId);
-int32_t popAttackObject(uint8_t entityId, AttackObject *out);
+int32_t popAttackObject(int32_t entityId, AttackObject *out);
 
 #endif

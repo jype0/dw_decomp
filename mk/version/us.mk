@@ -46,6 +46,7 @@ MAIN_C_SRC := \
 	src/main/butterfly.c \
 	src/main/clock.c \
 	src/main/door_mapdata.c \
+	src/main/drop_shadow.c \
 	src/main/efe.c \
 	src/main/efe_table.c \
 	src/main/entity_text.c \
