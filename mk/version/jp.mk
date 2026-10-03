@@ -51,6 +51,7 @@ MAIN_C_SRC := \
 	src/main/file_table.c \
 	src/main/fish.c \
 	src/main/font.c \
+	src/main/game_menu.c \
 	src/main/graphics2.c \
 	src/main/inventory.c \
 	src/main/item.c \
@@ -63,16 +64,6 @@ MAIN_C_SRC := \
 	src/main/math.c \
 	src/main/new_game.c \
 	src/main/overworld.c \
-	src/main/overworld_card_text.c \
-	src/main/overworld_evochart_detail.c \
-	src/main/overworld_evochart_text.c \
-	src/main/overworld_evochart_view.c \
-	src/main/overworld_medal_text.c \
-	src/main/overworld_menu_views.c \
-	src/main/overworld_moves_box.c \
-	src/main/overworld_moves_text.c \
-	src/main/overworld_playerinfo_text.c \
-	src/main/overworld_status_boxes.c \
 	src/main/particle.c \
 	src/main/partner.c \
 	src/main/partner_impl.c \
