@@ -249,6 +249,7 @@ SECTIONS
         BUILD_DIR/src/kar/kar.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         KEEP(BUILD_DIR/asm/main/data/ADC6C.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/vs/vs_scene.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_intro.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_camera.c.o(.sdata .sdata.*);
         KEEP(BUILD_DIR/asm/main/data/ADD18.sdata.s.o(.sdata .sdata.*));
@@ -344,6 +345,14 @@ SECTIONS
         BUILD_DIR/src/kar/kar.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/generated/unk_0x8013E4D0.sbss.s.o(.sbss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/vs/vs_scene.c.o(.sbss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/generated/unk_0x8013E52C.sbss.s.o(.sbss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/vs/vs_camera.c.o(.sbss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/generated/unk_0x8013E544.sbss.s.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_hud.c.o(.sbss.*);
         . = ALIGN(., 4);

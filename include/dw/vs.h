@@ -21,8 +21,8 @@ typedef struct {
 	int8_t side;
 } CameraChase;
 
-extern char MAIN_D_80134A50[4];
-extern char MAIN_D_80134A54[5];
+extern char MAIN_D_80134A50[];
+extern char MAIN_D_80134A54[];
 extern uint8_t MAIN_D_80134A5C[4];
 extern uint8_t MAIN_D_80134A60[4];
 extern SVECTOR MAIN_D_80134A64;

@@ -130,7 +130,9 @@ static void *vs_scene_functions[] = {
 	VS_loadArenaTIMToVRAM,
 	VS_renderVersusIntro,
 	VS_tickVersusIntro,
+#if !defined(VERSION_JP)
 	VS_tickPlaytime,
+#endif
 	VS_playVersusIntroSequence,
 	VS_initializeVS,
 	VS_getFirstSpecialMove,
@@ -150,8 +152,13 @@ static void *vs_scene_functions[] = {
 	VS_resetMatchState,
 };
 
+#if defined(VERSION_JP)
+char MAIN_D_80134A50[] = "ＷＩＮ";
+char MAIN_D_80134A54[] = "ＬＯＳＥ";
+#else
 char MAIN_D_80134A50[] = "Win";
 char MAIN_D_80134A54[] = "Lose";
+#endif
 uint8_t MAIN_D_80134A5C[4] = { 3, 4, 2, 0 };
 uint8_t MAIN_D_80134A60[4] = { 4, 1, 1, 0 };
 
@@ -178,12 +185,8 @@ int16_t MAIN_D_80135294;
 char **MAIN_D_80135298;
 int8_t MAIN_D_8013529C;
 void *MAIN_D_801352A0;
-CameraChase MAIN_D_801352A4;
-int32_t MAIN_D_801352A8;
 
 static void *vs_scene_sbss_order[] = {
-	&MAIN_D_801352A8,
-	&MAIN_D_801352A4,
 	&MAIN_D_801352A0,
 	&MAIN_D_8013529C,
 	&MAIN_D_80135298,
@@ -1055,13 +1058,17 @@ void VS_initializeVS(void)
 	VS_playVersusIntroSequence();
 	MAIN_D_80135264 = 0;
 	while (MAIN_D_80135264 < VS_D_800716A8[11]) {
+#if !defined(VERSION_JP)
 		PLAYTIME_FRAMES = 0;
+#endif
 		VS_loadFighterEntities(MAIN_D_80135264);
 		ENTITY_TABLE[1]->isOnScreen = 1;
 		ENTITY_TABLE[2]->isOnScreen = 1;
 		VSLoadSounds();
+#if !defined(VERSION_JP)
 		((DigimonEntity *)ENTITY_TABLE[1])->stats.current.vabId = 4;
 		((DigimonEntity *)ENTITY_TABLE[2])->stats.current.vabId = 5;
+#endif
 		loadDigimonSounds(4, ENTITY_TABLE[1]->type);
 		loadDigimonSounds(5, ENTITY_TABLE[2]->type);
 		VS_setVSPhase(0xa);
@@ -1102,16 +1109,14 @@ void VS_initializeVS(void)
 void VS_resetMatchState(void)
 {
 	int32_t i;
-	int32_t j;
+	int32_t j = 0;
 
-	MAIN_D_80135258[1] = 0;
-	MAIN_D_8013525A[1] = 0;
 	MAIN_D_8013525C = 0;
 	MAIN_D_8013525E = 0;
 	MAIN_D_80135260 = 0;
 	MAIN_D_80135261 = 0;
-	MAIN_D_80135258[0] = 0;
-	MAIN_D_8013525A[0] = 0;
+	MAIN_D_80135258[0] = MAIN_D_80135258[1] = 0;
+	MAIN_D_8013525A[0] = MAIN_D_8013525A[1] = 0;
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 5; j++) {
 			VS_D_80071690[i][j] = 0;
@@ -1161,8 +1166,10 @@ void VS_addInputObjects(void)
 {
 	addObject(0x1b2, 0, (TickFunction)VS__tickVSInput, NULL);
 	addObject(0x1b2, 1, (TickFunction)VS__tickVSInput, NULL);
+#if !defined(VERSION_JP)
 	PLAYTIME_FRAMES = 0;
 	addObject(0xfb9, 0, (TickFunction)VS_tickPlaytime, NULL);
+#endif
 }
 
 void VS_loadFighterEntities(uint8_t slot)
@@ -1170,41 +1177,35 @@ void VS_loadFighterEntities(uint8_t slot)
 	VsFighterCard *card1;
 	VsFighterCard *card2;
 	Stats *stats;
+	int32_t type1;
+	int32_t type2;
 	int32_t prev;
 
 	card1 = (VsFighterCard *)(MAIN_D_8013526C + VS_D_800716A8[slot] * 64);
 	card2 = (VsFighterCard *)(MAIN_D_80135270 + (&VS_D_800716A8[5])[slot] * 64);
 
-	{
-		int32_t type;
-
-		type = card1->type;
-		if (ENTITY_TABLE[1] == NULL || ENTITY_TABLE[1]->type != type) {
-			if (ENTITY_TABLE[1] != NULL) {
-				prev = ENTITY_TABLE[1]->type;
-				removeEntity(prev, 1);
-				thunkUnloadModel(prev, 3);
-			}
-			thunkLoadMMD(type, 3);
-			ENTITY_TABLE[1] = &PARTNER_ENTITY.digimonEntity.entity;
-			initializeDigimonObject(type, 1, VS__tickDigimonP1);
+	type1 = card1->type;
+	if (ENTITY_TABLE[1] == NULL || ENTITY_TABLE[1]->type != type1) {
+		if (ENTITY_TABLE[1] != NULL) {
+			prev = ENTITY_TABLE[1]->type;
+			removeEntity(prev, 1);
+			thunkUnloadModel(prev, 3);
 		}
+		thunkLoadMMD(type1, 3);
+		ENTITY_TABLE[1] = &PARTNER_ENTITY.digimonEntity.entity;
+		initializeDigimonObject(type1, 1, VS__tickDigimonP1);
 	}
 
-	{
-		int32_t type;
-
-		type = card2->type;
-		if (ENTITY_TABLE[2] == NULL || ENTITY_TABLE[2]->type != type) {
-			if (ENTITY_TABLE[2] != NULL) {
-				prev = ENTITY_TABLE[2]->type;
-				removeEntity(prev, 2);
-				thunkUnloadModel(prev, 0);
-			}
-			thunkLoadMMD(type, 0);
-			ENTITY_TABLE[2] = &NPC_ENTITIES[0].digimonEntity.entity;
-			initializeDigimonObject(type, 2, VS__tickDigimonP2);
+	type2 = card2->type;
+	if (ENTITY_TABLE[2] == NULL || ENTITY_TABLE[2]->type != type2) {
+		if (ENTITY_TABLE[2] != NULL) {
+			prev = ENTITY_TABLE[2]->type;
+			removeEntity(prev, 2);
+			thunkUnloadModel(prev, 0);
 		}
+		thunkLoadMMD(type2, 0);
+		ENTITY_TABLE[2] = &NPC_ENTITIES[0].digimonEntity.entity;
+		initializeDigimonObject(type2, 2, VS__tickDigimonP2);
 	}
 
 	stats = &PARTNER_ENTITY.digimonEntity.stats;
@@ -1249,8 +1250,10 @@ void VS_unloadFighterEntities(void)
 {
 	int32_t type;
 
+#if !defined(VERSION_JP)
 	PLAYTIME_FRAMES = 0;
 	removeObject(0xfb9, 0);
+#endif
 	removeObject(0x1b2, 0);
 	removeObject(0x1b2, 1);
 
@@ -1271,7 +1274,6 @@ void VS_unloadFighterEntities(void)
 void VS_renderVersusFlash(void)
 {
 	POLY_FT4 *prim;
-	int32_t y;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	SetPolyFT4(prim);
@@ -1279,63 +1281,43 @@ void VS_renderVersusFlash(void)
 	prim->tpage = getTPage(0, 0, 320, 0);
 	prim->clut = GetClut(0x40, 0x1e9);
 	setUVDataPolyFT4(prim, 0x30, 0x10, 0x4e, 0x18);
-
-	y = MAIN_D_80135261 * 20 - 0x39;
-	setPosDataPolyFT4(prim, -0x27, y, 0x4e, 0x18);
+	setPosDataPolyFT4(prim, -0x27, MAIN_D_80135261 * 20 - 0x39, 0x4e, 0x18);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 	GsSetWorkBase((PACKET *)prim);
 }
 
 void VS_renderFighterNamePlate(int16_t side)
 {
-	int32_t cb;
-	int32_t cd0;
-	int32_t cd1;
-	int32_t L;
-	int32_t y;
-	int32_t y2;
-	int32_t x0;
-	int32_t x1;
-	int32_t sx;
 	POLY_FT4 *prim;
 	int32_t i;
-	int32_t type;
-	int32_t u;
-	int32_t v;
+	int16_t offset;
+	char *card1;
+	char *card2;
+	int32_t n;
+	int32_t m;
+	int32_t length;
+	uint16_t *name;
 	int16_t w;
 	int16_t h;
-	char *name;
-	int32_t n;
-	int32_t k;
 	int16_t g;
-	int32_t m;
-	int32_t gy;
-	int32_t gx;
-	int32_t cx;
 	uint16_t c;
-	uint16_t *np;
+	uint8_t u;
+	uint8_t v;
+	uint8_t type;
 
 	if (side == 0) {
-		cb = MAIN_D_8013525E;
+		offset = MAIN_D_8013525E;
 	} else {
-		cb = -MAIN_D_8013525E << 16;
-		cb = cb >> 16;
+		offset = -MAIN_D_8013525E;
 	}
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	i = 0;
-	y = -0x39;
-	y2 = 0;
-	sx = side * 0x9a;
-	x1 = sx - 0x77;
-	x0 = cb + x1;
-
-	for (; i < VS_D_800716A8[11]; i++) {
+	for (i = 0; i < VS_D_800716A8[11]; i++) {
 		if (side == 0) {
-			cd0 = (int32_t)(MAIN_D_8013526C + VS_D_800716A8[i] * 64);
-			type = ((VsFighterCard *)cd0)->type;
+			card1 = MAIN_D_8013526C + VS_D_800716A8[i] * 64;
+			type = ((VsFighterCard *)card1)->type;
 		} else {
-			cd1 = (int32_t)(MAIN_D_80135270 + (&VS_D_800716A8[5])[i] * 64);
-			type = ((VsFighterCard *)cd1)->type;
+			card2 = MAIN_D_80135270 + (&VS_D_800716A8[5])[i] * 64;
+			type = ((VsFighterCard *)card2)->type;
 		}
 		SetPolyFT4(prim);
 		setRGB0(prim, 0x80, 0x80, 0x80);
@@ -1343,41 +1325,33 @@ void VS_renderFighterNamePlate(int16_t side)
 		prim->clut = GetClut(0x120, VS_D_8006FA28[type] + 0x1e0);
 		if (type == 0x73) {
 			u = 0xe0;
-			v = u;
+			v = 0xe0;
 		} else {
-			u = (((type - 3) % 32) << 5) & 0xff;
-			v = (((type - 3) / 8) << 5) & 0xff;
+			u = ((type - 3) % 32) << 5;
+			v = ((type - 3) / 8) << 5;
 		}
 		w = (u != 0xf0) ? 0x10 : 0xf;
 		h = (v != 0xf0) ? 0x10 : 0xf;
 		setUVDataPolyFT4(prim, u, v, w, h);
 		if (i == MAIN_D_80135261) {
-			setPosDataPolyFT4(prim, x0, y, w, h);
+			setPosDataPolyFT4(prim, offset + (side * 0x9a - 0x77), i * 20 - 0x39, w, h);
 		} else {
-			setPosDataPolyFT4(prim, x1, y, w, h);
+			setPosDataPolyFT4(prim, side * 0x9a - 0x77, i * 20 - 0x39, w, h);
 		}
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 
 		if (side == 0) {
-			name = (char *)cd0 + 0xe;
+			name = (uint16_t *)(card1 + 0xe);
 		} else {
-			name = (char *)cd1 + 0xe;
+			name = (uint16_t *)(card2 + 0xe);
 		}
-		L = strlen(name) / 2;
-		n = 0;
-		k = 0;
-		cx = cx = cb;
-		gy = y2 - 0x35;
-		y2 = y2;
-		for (; n < L; n++, k += 8) {
-			gx = sx - 0x5f;
+		length = strlen((char *)name) / 2;
+		for (n = 0; n < length; n++) {
 			SetPolyFT4(prim);
 			setRGB0(prim, 0x80, 0x80, 0x80);
 			prim->tpage = getTPage(0, 0, 448, 0);
 			prim->clut = GetClut(0x30, 0x1e8);
-			np = (uint16_t *)name;
-			c = *np++;
-			name = (char *)np;
+			c = *name++;
 			c = ((c & 0xff) << 8) + ((c & 0xff00) >> 8);
 			for (m = 0; m < 0xd8; m++) {
 				if (c == VS_D_8006FBC0[m]) {
@@ -1385,28 +1359,34 @@ void VS_renderFighterNamePlate(int16_t side)
 					break;
 				}
 			}
-			setUVDataPolyFT4(prim, (VS_D_8006FD70[g] % 15) * 8,
-			                 (VS_D_8006FD70[g] / 15) * 8, 8, 8);
+			setUVDataPolyFT4(prim, (VS_D_8006FD70[g] % 15) * 8, (VS_D_8006FD70[g] / 15) * 8, 8, 8);
 			if (i == MAIN_D_80135261) {
-				setPosDataPolyFT4(prim, cx + (gx + k), gy, 8, 8);
+				setPosDataPolyFT4(prim, offset + (side * 0x9a - 0x5f + n * 8), i * 20 - 0x35, 8, 8);
 			} else {
-				setPosDataPolyFT4(prim, gx + k, gy, 8, 8);
+				setPosDataPolyFT4(prim, side * 0x9a - 0x5f + n * 8, i * 20 - 0x35, 8, 8);
 			}
+#if defined(VERSION_JP)
+			AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
+#endif
 		}
-		y2 += 0x14;
-		y += 0x14;
 	}
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void VS_renderRoundPips(int32_t slot)
+// clang-format off
+void VS_renderRoundPips(slot)
+	int16_t slot;
+// clang-format on
 {
 	POLY_FT4 *prim;
-	int32_t y;
 	int32_t i;
+	int16_t x;
+	int16_t y;
 
+	x = -0x98;
+	y = -0x56;
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0, y = -0x39; i < VS_D_800716A8[11]; i++, y += 0x14) {
+	for (i = 0; i < VS_D_800716A8[11]; i++) {
 		if (i < MAIN_D_80135261) {
 			SetPolyFT4(prim);
 			prim->tpage = getTPage(0, 0, 320, 0);
@@ -1418,7 +1398,7 @@ void VS_renderRoundPips(int32_t slot)
 				} else {
 					setUVDataPolyFT4(prim, 0x40, 0x28, 0x10, 0x10);
 				}
-				setPosDataPolyFT4(prim, slot * 0x9a - 0x20, y, 0x10, 0x10);
+				setPosDataPolyFT4(prim, x + 0x78 + slot * 0x9a, y + 0x1d + i * 20, 0x10, 0x10);
 			}
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 		}
@@ -1432,43 +1412,39 @@ void VS_renderRoundScores(int16_t slot)
 	renderNumber(0, slot * 0x9a - 0x1c, 0x30, 1, MAIN_D_8013525A[slot], 0x1e);
 }
 
-void VS_renderVersusBanner(int32_t slot)
+// clang-format off
+void VS_renderVersusBanner(slot)
+	int16_t slot;
+// clang-format on
 {
 	POLY_FT4 *prim;
-	int32_t y;
 	int32_t i;
-	int32_t base;
-	int32_t cluty;
-	int32_t k;
-	int32_t x;
+	int16_t x;
+	int16_t y;
+	int16_t offset;
 
+	x = -0x98;
+	y = -0x56;
 	if (slot == 0) {
-		base = MAIN_D_8013525E;
+		offset = MAIN_D_8013525E;
 	} else {
-		base = (int16_t)-MAIN_D_8013525E;
+		offset = -MAIN_D_8013525E;
 	}
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	x = slot;
-	x = x * 0x9a;
-	cluty = slot + 0x1e8;
-	k = k = -0x90;
-	i = 0;
-	y = -0x3b;
-	base += slot = k + x;
-	for (; i < VS_D_800716A8[11]; i++, y += 0x14) {
+	for (i = 0; i < VS_D_800716A8[11]; i++) {
 		SetPolyFT4(prim);
 		prim->tpage = getTPage(0, 0, 384, 0);
 		setRGB0(prim, 0x80, 0x80, 0x80);
-		prim->clut = GetClut(0, cluty);
+		prim->clut = GetClut(0, slot + 0x1e8);
 		if (i < MAIN_D_80135261) {
 			setUVDataPolyFT4(prim, 0, 0xec, 0x86, 0x13);
-			setPosDataPolyFT4(prim, slot, y, 0x85, 0x14);
+			setPosDataPolyFT4(prim, x + 8 + slot * 0x9a, y + 0x1b + i * 20, 0x85, 0x14);
 		} else {
 			setUVDataPolyFT4(prim, 0, 0xd8, 0x86, 0x14);
 			if (i == MAIN_D_80135261) {
-				setPosDataPolyFT4(prim, base, y, 0x85, 0x14);
+				setPosDataPolyFT4(prim, offset + (x + 8 + slot * 0x9a), y + 0x1b + i * 20, 0x85, 0x14);
 			} else {
-				setPosDataPolyFT4(prim, slot, y, 0x85, 0x14);
+				setPosDataPolyFT4(prim, x + 8 + slot * 0x9a, y + 0x1b + i * 20, 0x85, 0x14);
 			}
 		}
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
@@ -1478,27 +1454,18 @@ void VS_renderVersusBanner(int32_t slot)
 
 void VS_renderVersusText(void)
 {
+	POLY_F4 *prim2;
 	VsTextPiece *p;
 	POLY_FT4 *prim;
-	POLY_F4 *prim2;
-	int32_t x0;
-	int32_t y0;
-	int32_t x1;
-	int32_t x2;
-	int32_t y1;
-	int32_t y2;
-	int32_t xa;
-	int32_t xb;
-	int32_t yb;
-	int32_t ya;
 	int32_t i;
+	int16_t x;
+	int16_t y;
 
+	x = -0x98;
+	y = -0x56;
 	p = VS_D_8006FA6C;
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	i = 0;
-	y0 = y0 = -0x56;
-	x0 = x0 = -0x98;
-	for (; i < 0x15; i++, p++) {
+	for (i = 0; i < 0x15; i++, p++) {
 		SetPolyFT4(prim);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->tpage = p->tpage;
@@ -1508,23 +1475,16 @@ void VS_renderVersusText(void)
 			prim->clut = GetClut((i == 10) ? 0x40 : 0, p->clut + 0x1e8);
 		}
 		setUVDataPolyFT4(prim, p->u, p->v, p->uw, p->uh);
-		setPosDataPolyFT4(prim, x0 + p->dx, y0 + p->dy, p->w, p->h);
+		setPosDataPolyFT4(prim, x + p->dx, y + p->dy, p->w, p->h);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 	}
 	GsSetWorkBase((PACKET *)prim);
 	prim2 = (POLY_F4 *)GsGetWorkBase();
-	xa = xa = -0x98;
-	xb = xb = xa;
-	x1 = x1 = xa + 4;
-	x2 = x2 = xb + 0x98;
-	yb = yb = ya = ya = -0x56;
-	i = 0;
-	y1 = y1 = yb + 3;
-	y2 = y2 = ya + 0x9a;
-	for (; i < 2; i++) {
+	for (i = 0; i < 2; i++) {
 		SetPolyF4(prim2);
 		setRGB0(prim2, (i != 0) ? 0x80 : 0x5b, (i != 0) ? 0x5b : 0x70, (i != 0) ? 0x5b : 0x80);
-		setXY4(prim2, (i == 0) ? x1 : x2, y1, ((i == 0) ? x1 : x2) + 0x94, y1, (i == 0) ? x1 : x2, y2, ((i == 0) ? x1 : x2) + 0x94, y2);
+		setXY4(prim2, (i == 0) ? x + 4 : x + 0x98, y + 3, ((i == 0) ? x + 4 : x + 0x98) + 0x94, y + 3,
+		       (i == 0) ? x + 4 : x + 0x98, y + 0x9a, ((i == 0) ? x + 4 : x + 0x98) + 0x94, y + 0x9a);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim2++);
 	}
 	GsSetWorkBase((PACKET *)prim2);
@@ -1534,8 +1494,6 @@ GARBAGE(VS_initializeLighting, 1);
 
 void VS_initializeLighting(int32_t mode)
 {
-	int32_t amb;
-
 	LIGHT_DATA[0].vx = 1000;
 	LIGHT_DATA[0].vy = 1000;
 	LIGHT_DATA[0].vz = 1000;
@@ -1550,26 +1508,23 @@ void VS_initializeLighting(int32_t mode)
 	LIGHT_DATA[1].g = 160;
 	LIGHT_DATA[1].b = 160;
 	GsSetFlatLight(1, &LIGHT_DATA[1]);
-	amb = 0x400;
 	LIGHT_DATA[2].vx = -20;
 	LIGHT_DATA[2].vy = 20;
 	LIGHT_DATA[2].vz = 100;
 	LIGHT_DATA[2].r = 96;
 	LIGHT_DATA[2].g = 96;
 	LIGHT_DATA[2].b = 96;
-	GsSetAmbient(amb, amb, amb);
+	GsSetAmbient(0x400, 0x400, 0x400);
 	GsSetLightMode(0);
 }
 
 int32_t VS_getFirstSpecialMove(int32_t index)
 {
 	int32_t i;
-	uint8_t move;
 
 	for (i = 15; i >= 0; i--) {
 		if (DIGIMON_DATA[index].moves[i] != 0xff) {
-			move = DIGIMON_DATA[index].moves[i];
-			if (move >= 0x3a) {
+			if (DIGIMON_DATA[index].moves[i] >= 0x3a) {
 				return i + 0x2e;
 			}
 		}
@@ -1629,47 +1584,46 @@ void VS_playVersusIntroSequence(void)
 	}
 }
 
+#if !defined(VERSION_JP)
 void VS_tickPlaytime(void)
 {
 	PLAYTIME_FRAMES++;
 }
+#endif
 
 void VS_tickVersusIntro(void)
 {
-	uint32_t state;
-
-	state = MAIN_D_80135260;
-	switch (state) {
+	switch (MAIN_D_80135260) {
 	case 0:
 		MAIN_D_8013525E++;
 		if (MAIN_D_8013525E == 10) {
-			MAIN_D_80135260 = state + 1;
+			MAIN_D_80135260++;
 		}
 		break;
 	case 1:
 		MAIN_D_8013525C++;
 		if (MAIN_D_8013525C == 20) {
-			MAIN_D_80135260 = state + 1;
+			MAIN_D_80135260++;
 			MAIN_D_80135262 = 1;
 		}
 		break;
 	case 2:
 		MAIN_D_8013525E--;
 		if (MAIN_D_8013525E == 0) {
-			MAIN_D_80135260 = state + 1;
+			MAIN_D_80135260++;
 			MAIN_D_8013525C = 0;
 		}
 		break;
 	case 3:
 		MAIN_D_8013525C++;
 		if (MAIN_D_8013525C == 10) {
-			MAIN_D_80135260 = state + 1;
+			MAIN_D_80135260++;
 		}
 		break;
 	case 4:
 		MAIN_D_80135261++;
 		if (MAIN_D_80135261 == VS_D_800716A8[11]) {
-			MAIN_D_80135260 = state + 1;
+			MAIN_D_80135260++;
 		} else {
 			MAIN_D_80135260 = 0;
 			MAIN_D_8013525C = 0;
@@ -1837,15 +1791,15 @@ void VS_loadArenaTIMToVRAM(char *path, int32_t count)
 	int32_t i;
 
 	p = (int32_t *)GENERAL_BUFFER;
-	readFile(path, GENERAL_BUFFER);
+	readFile(path, p);
 	for (i = 0; i < count; i++) {
 		p = (int32_t *)((char *)p + 4);
 		GsGetTimInfo((u_long *)p, &img);
-		p = &p[((img.pw * img.ph) / 2) + 4];
+		p += ((img.pw * img.ph) / 2) + 4;
 		LoadImage((RECT *)&img.px, img.pixel);
 		if ((img.pmode >> 3) & 1) {
 			LoadImage((RECT *)&img.cx, img.clut);
-			p = &p[((img.cw * img.ch) / 2) + 3];
+			p += ((img.cw * img.ch) / 2) + 3;
 		}
 	}
 }
@@ -1857,15 +1811,15 @@ void VS_loadTIMToVRAM(char *path)
 	int32_t i;
 
 	p = (int32_t *)GENERAL_BUFFER;
-	readFile(path, GENERAL_BUFFER);
+	readFile(path, p);
 	for (i = 0; i < 6; i++) {
 		p = (int32_t *)((char *)p + 4);
 		GsGetTimInfo((u_long *)p, &img);
-		p = &p[((img.pw * img.ph) / 2) + 4];
+		p += ((img.pw * img.ph) / 2) + 4;
 		LoadImage((RECT *)&img.px, img.pixel);
 		if ((img.pmode >> 3) & 1) {
 			LoadImage((RECT *)&img.cx, img.clut);
-			p = &p[((img.cw * img.ch) / 2) + 3];
+			p += ((img.cw * img.ch) / 2) + 3;
 		}
 	}
 }
@@ -1873,7 +1827,7 @@ void VS_loadTIMToVRAM(char *path)
 void VS_initializeCamera(void)
 {
 	VIEWPORT_DISTANCE = 500;
-	GsSetProjection(500);
+	GsSetProjection(VIEWPORT_DISTANCE);
 	MAIN_D_801B1C0C[0].vx = 100;
 	MAIN_D_801B1C0C[0].vy = 0;
 	MAIN_D_801B1C0C[0].vz = 0;

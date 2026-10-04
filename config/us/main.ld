@@ -752,6 +752,8 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_scene.c.o(.sbss.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/vs/vs_camera.c.o(.sbss.*);
+        . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_hud.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_effect.c.o(.sbss.*);

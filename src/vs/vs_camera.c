@@ -25,8 +25,6 @@ extern int32_t MAIN_D_8013528C;
 extern int16_t MAIN_D_80135294;
 extern char **MAIN_D_80135298;
 extern int8_t MAIN_D_8013529C;
-extern CameraChase MAIN_D_801352A4;
-extern int32_t MAIN_D_801352A8;
 
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t processSomeArenaArrays(int32_t count, int32_t t, int32_t *keys, int32_t *values, int32_t *slopes);
@@ -94,6 +92,14 @@ static void *vs_camera_functions[] = {
 	VS_setCameraYXZ,
 	VS_setCameraOrbit,
 	VS_applyCamera,
+};
+
+CameraChase MAIN_D_801352A4;
+int32_t MAIN_D_801352A8;
+
+static void *vs_camera_sbss_order[] = {
+	&MAIN_D_801352A8,
+	&MAIN_D_801352A4,
 };
 
 SVECTOR MAIN_D_80134A64 = { 0 };
