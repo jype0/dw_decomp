@@ -3,6 +3,7 @@
 #include <dw/garbage.h>
 #include <dw/input.h>
 #include <dw/item.h>
+#include <dw/line.h>
 #include <dw/math.h>
 #include <dw/params.h>
 #include <dw/pstat.h>
@@ -100,7 +101,6 @@ void namingSelectionRight(int16_t col, int16_t row, int16_t specialIdx);
 int32_t createMeritCardTradeDialogue(void);
 void namingSelectionUp(int16_t column, int16_t row);
 void namingSelectionDown(int16_t column, int16_t row);
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void renderNamingUnderscore(uint8_t boxId, int16_t x, int16_t y, int16_t w);
 void renderSelectionBox(void);
 void renderKeeperTableBox(uint8_t boxId, int16_t x, int16_t y, int16_t w, int16_t h);

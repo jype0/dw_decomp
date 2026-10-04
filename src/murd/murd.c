@@ -21,6 +21,7 @@
 #include <dw/types.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
+#include <dw/vecmath.h>
 
 #define MURD_ORDERING_TABLE_0	((GsOT_TAG *)0x8008c000)
 
@@ -39,7 +40,6 @@ extern int32_t VIEWPORT_DISTANCE;
 void setMapLayerEnabled(int32_t enabled);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
-int32_t getDistance(int32_t x, int32_t y, int32_t z);
 void renderParticleFlash(ParticleFlashData *params);
 void renderDropShadow(Entity *entity);
 

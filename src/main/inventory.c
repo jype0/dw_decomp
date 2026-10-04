@@ -6,6 +6,7 @@
 #include <dw/garbage.h>
 #include <dw/input.h>
 #include <dw/item.h>
+#include <dw/line.h>
 #include <dw/params.h>
 #include <dw/types.h>
 #include <dw/ui.h>
@@ -33,9 +34,6 @@ void sortItemsById(uint8_t *data, long count);
 void renderItemSprite(int32_t type, int32_t x, int32_t y, int32_t layer);
 void renderItemAmount(int32_t color, int32_t n, int32_t x, int32_t y,
                       int32_t value, int32_t layer);
-void drawLine3P(uint32_t color, int32_t x0, int32_t y0,
-                int32_t x1, int32_t y1, int32_t x2, int32_t y2,
-                int32_t layer, uint32_t mode);
 
 int32_t getItemOptionColor(int32_t mode);
 void drawInventoryText(void);

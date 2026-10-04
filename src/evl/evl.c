@@ -7,14 +7,15 @@
 #include <dw/anim.h>
 #include <dw/btl.h>
 #include <dw/efe.h>
-#include <dw/file_queue.h>
 #include <dw/entity.h>
 #include <dw/evl.h>
+#include <dw/file_queue.h>
 #include <dw/graphics.h>
 #include <dw/model.h>
 #include <dw/move.h>
 #include <dw/params.h>
 #include <dw/partner.h>
+#include <dw/rng.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/sound_async.h>
@@ -81,7 +82,6 @@ void initializeEvolvedPartner(int32_t type, int32_t posX, int32_t posY, int32_t 
 void downloadCLUT1(int16_t *clut);
 void downloadCLUT2(char *base);
 char *initializeFlashData(char *base);
-int32_t customRandom(int32_t a, int32_t b);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);

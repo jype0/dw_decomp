@@ -22,10 +22,12 @@
 #include <dw/model.h>
 #include <dw/move.h>
 #include <dw/params.h>
+#include <dw/rng.h>
 #include <dw/sound.h>
 #include <dw/std.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/vecmath.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -265,7 +267,6 @@ void STD_func_8006324C(void);
 void STD_func_80058958(int32_t idx, int32_t value);
 void STD_func_8005E004(int32_t i);
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount, int32_t *digits);
-int32_t getDistance(int32_t x, int32_t y, int32_t z);
 int32_t STD_getFighterDistance(VECTOR *self, VECTOR *other, VECTOR *target);
 int32_t STD_func_80060B98(void);
 void STD_tickFighterCounter(void);
@@ -340,7 +341,6 @@ void STD_func_80079874(void);
 void STD_unloadAllEFESlots(void);
 void STD_removeEFEEngine(void);
 int32_t loadSB(void);
-int32_t customRandom(int32_t lo, int32_t hi);
 void initializeSomeArenaArrays(int32_t count, int32_t arg1, int32_t arg2, int32_t *out);
 void STD_func_8005D814(int32_t x, int32_t y, int32_t n, int32_t size);
 void swapByte(uint8_t *a, uint8_t *b);

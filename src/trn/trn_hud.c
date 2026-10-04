@@ -4,6 +4,7 @@
 #include <dw/entity.h>
 #include <dw/font.h>
 #include <dw/input.h>
+#include <dw/line.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/training.h>
@@ -20,9 +21,7 @@ extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t order, uint32_t mode);
 void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits, int32_t value, int32_t layer);
-void drawLine3P(int32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t otz, int32_t flag);
 void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t h);
 void setUVDataPolyFT4(POLY_FT4 *p, int32_t u, int32_t v, int32_t w, int32_t h);

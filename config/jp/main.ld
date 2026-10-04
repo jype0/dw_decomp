@@ -53,7 +53,9 @@ SECTIONS
         BUILD_DIR/src/main/script_common.c.o(.text .text.*);
         BUILD_DIR/src/main/evolution.c.o(.text .text.*);
         BUILD_DIR/src/main/file_queue.c.o(.text .text.*);
-        BUILD_DIR/src/main/graphics2.c.o(.text .text.*);
+        BUILD_DIR/src/main/line.c.o(.text .text.*);
+        BUILD_DIR/src/main/vecmath.c.o(.text .text.*);
+        BUILD_DIR/src/main/rng.c.o(.text .text.*);
         BUILD_DIR/src/main/fish.c.o(.text .text.*);
         BUILD_DIR/src/main/utils.c.o(.text .text.*);
         BUILD_DIR/src/main/utils2.c.o(.text .text.*);
@@ -93,7 +95,9 @@ SECTIONS
         BUILD_DIR/src/main/script_value.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/map_object.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/script_common.c.o(.rodata .rodata.*);
-        BUILD_DIR/src/main/graphics2.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/line.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/vecmath.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/rng.c.o(.rodata .rodata.*);
         KEEP(BUILD_DIR/asm/main/data/8B6E0.rodata.s.o(.rodata .rodata.*));
         BUILD_DIR/src/main/main_menu.c.o(.rodata .rodata.*);
         KEEP(BUILD_DIR/asm/main/data/8B7F8.rodata.s.o(.rodata .rodata.*));
@@ -210,7 +214,7 @@ SECTIONS
         BUILD_DIR/src/main/script_common.c.o(.sdata .sdata.*);
         BUILD_DIR/src/main/file_queue.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        BUILD_DIR/src/main/graphics2.c.o(.sdata .sdata.*);
+        BUILD_DIR/src/main/rng.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/utils2.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);

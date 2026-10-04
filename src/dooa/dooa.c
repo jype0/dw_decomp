@@ -20,11 +20,13 @@
 #include <dw/model.h>
 #include <dw/params.h>
 #include <dw/partner.h>
+#include <dw/rng.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/types.h>
 #include <dw/utils.h>
+#include <dw/vecmath.h>
 #include <dw/world_object.h>
 
 #define DOOA_MMD_BUFFER		0x80020000
@@ -101,7 +103,6 @@ extern int32_t FLASH_INSTANCE;
 void DOOA_renderDigimonModel(Entity *entity, uint32_t otPoint);
 int32_t DOOA_renderIrisWindow(Entity *entity, int32_t startFrame, long endFrame, long frame);
 void DOOA_renderDissolve(int32_t instanceId);
-int32_t getDistance(int32_t x, int32_t y, int32_t z);
 int32_t lerp(long start, long end, int32_t t0, long t1, int32_t t);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 int32_t DOOA_hasIrisClosed(Entity *entity, int32_t startFrame, long endFrame, long frame);
@@ -111,7 +112,6 @@ void DOOA_hideAllButPartner(void);
 void DOOA_getOrbitPosition(VECTOR *outRef, VECTOR *outPos, VECTOR *position, SVECTOR *rotation, int32_t distance, int32_t height);
 void DOOA_updateCutsceneCamera(VECTOR *position, int32_t angle, int32_t startFrame, int32_t endFrame, int32_t frame);
 void DOOA_toggleShardFlicker(void);
-int32_t customRandom(int32_t low, int32_t high);
 void DOOA_renderRebirth(int32_t instanceId);
 void DOOA_setShardState(int16_t state);
 void DOOA_removeShardEffect(void);

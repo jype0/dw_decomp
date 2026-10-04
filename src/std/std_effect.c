@@ -18,13 +18,16 @@
 #include <dw/entity.h>
 #include <dw/garbage.h>
 #include <dw/graphics.h>
+#include <dw/line.h>
 #include <dw/math.h>
 #include <dw/model.h>
 #include <dw/move.h>
 #include <dw/params.h>
+#include <dw/rng.h>
 #include <dw/sound.h>
 #include <dw/std.h>
 #include <dw/types.h>
+#include <dw/vecmath.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -78,26 +81,18 @@ extern int16_t EFE_LOAD_STATE[];
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void setMapLayerEnabled(int32_t enabled);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t flag);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
 void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance, int32_t width, int32_t height);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
 int32_t doSomethingWithSomePoints(int16_t *rect, DVECTOR *line);
 char *initializeFlashData(char *base);
 void renderParticleFlash(int16_t *params);
-void calculatePosition(GsCOORDINATE2 *coord, MATRIX *matrix);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
 void STD_renderFinisherAura(int32_t idx);
 void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
-void multiplyRotations(SVECTOR *a, SVECTOR *b);
 int32_t getOriginalType(int32_t type);
-void matrixToEuler1(MATRIX *m, SVECTOR *out);
-void toEulerAngles(SVECTOR *out, int32_t x, int32_t y, int32_t z);
-void matrixToEuler2(MATRIX *m, SVECTOR *out);
-int32_t customRandom(int32_t a, int32_t b);
-int32_t getDistance(int32_t x, int32_t y, int32_t z);
 void createCloudFX(int16_t *pos);
 int32_t addEntityParticleFX(int32_t *typePtr, int32_t timer);
 void setInt16WithStride(int16_t *ptr, int16_t value, int32_t count, int32_t stride);

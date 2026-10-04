@@ -6,6 +6,7 @@
 #include <dw/file.h>
 #include <dw/file_queue.h>
 #include <dw/font.h>
+#include <dw/line.h>
 #include <dw/main.h>
 #include <dw/math.h>
 #include <dw/mov.h>
@@ -45,7 +46,6 @@ void convertValueToDigits(int16_t n, int32_t value, int32_t *outCount,
 			  int32_t *digits);
 void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h,
 			   int32_t layer);
-void drawLine3P();
 void loadStackedTIMFile(char *path);
 void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
 		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow);

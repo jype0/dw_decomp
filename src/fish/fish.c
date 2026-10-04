@@ -16,7 +16,9 @@
 #include <dw/font.h>
 #include <dw/input.h>
 #include <dw/item.h>
+#include <dw/line.h>
 #include <dw/params.h>
+#include <dw/rng.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/tamer.h>
@@ -107,10 +109,8 @@ extern int16_t CAMERA_X[];
 extern int16_t CAMERA_Y[];
 
 int32_t getDistance(long x, long y, long z);
-int32_t customRandom(long a, long b);
 void renderSelectionCursor(int32_t a0, int32_t a1, int32_t a2, int32_t a3, int32_t a4);
 void renderItemAmount(int32_t color, int32_t n, int32_t x, int32_t y, int32_t value, int32_t layer);
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t semiTrans);
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
 void toEulerAngles(SVECTOR *out, long x, long y, long z);

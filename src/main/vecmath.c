@@ -1,25 +1,18 @@
 #include <inline_n.h>
-#include <libgpu.h>
 #include <libgs.h>
 #include <libgte.h>
 
 #include <dw/types.h>
-
-#include "common.h"
-
-#define CUSTOM_RNG_FACTOR	0x41c650ad
-#define CUSTOM_RNG_VALUE	0x3039
+#include <dw/vecmath.h>
 
 #define ABS_VALUE(value)	((value) > 0 ? (value) : -(value))
 #define MAX_VALUE(a, b)	((a) > (b) ? (a) : (b))
 
-extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t VIEWPORT_DISTANCE;
 
-extern uint32_t CUSTOM_RNG_1;
+void transposeRefMatrix(SVECTOR *pos, VECTOR *out);
 
-void calculatePosition(GsCOORDINATE2 *coord, MATRIX *matrix);
-
+// clang-format off
 const uint8_t MAIN_D_80114D68[256] = {
 	0x00, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02,
 	0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
@@ -54,80 +47,7 @@ const uint8_t MAIN_D_80114D68[256] = {
 	0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
 	0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f, 0x0f,
 };
-
-void setLineBlendingMode(int32_t mode, int32_t order);
-void drawLine3P(uint32_t color, int32_t x0, int32_t y0,
-		int32_t x1, int32_t y1, int32_t x2, int32_t y2,
-		int32_t order, uint32_t mode);
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
-		int32_t y1, int32_t order, uint32_t mode);
-void mapToWorldPosition(VECTOR *output, int32_t x, int32_t y,
-			int32_t *success);
-void rotateVector(SVECTOR *rotation, VECTOR *input, VECTOR *output);
-void toEulerAngles(SVECTOR *output, int32_t deltaX, int32_t deltaY,
-		   int32_t deltaZ);
-int32_t getDistance(int32_t deltaX, int32_t deltaY, int32_t deltaZ);
-void matrixToEuler1(MATRIX *matrix, SVECTOR *output);
-void matrixToEuler2(MATRIX *matrix, SVECTOR *output);
-void multiplyRotations(SVECTOR *rotation1, SVECTOR *rotation2);
-int32_t customRandom(int32_t min, int32_t max);
-
-// clang-format off
-uint32_t CUSTOM_RNG_2 = 0x0013cc25;
 // clang-format on
-
-void setLineBlendingMode(int32_t mode, int32_t order)
-{
-	DR_TPAGE *prim;
-
-	if (mode == 0) {
-		return;
-	}
-
-	prim = (DR_TPAGE *)GsGetWorkBase();
-	setDrawTPage(prim, 1, 1, getTPage(0, mode & 3, 0, 0));
-
-	addPrim(&ACTIVE_ORDERING_TABLE->org[order], prim);
-	GsSetWorkBase((PACKET *)&prim[1]);
-}
-
-void drawLine3P(uint32_t color, int32_t x0, int32_t y0,
-		int32_t x1, int32_t y1, int32_t x2, int32_t y2,
-		int32_t order, uint32_t mode)
-{
-	LINE_F3 *prim;
-
-	prim = (LINE_F3 *)GsGetWorkBase();
-	*(uint32_t *)&prim->r0 = color;
-	setXY3(prim, x0, y0, x1, y1, x2, y2);
-	setLineF3(prim);
-	setSemiTrans(prim, mode >> 2);
-
-	addPrim(&ACTIVE_ORDERING_TABLE->org[order], prim);
-	GsSetWorkBase((PACKET *)&prim[1]);
-
-	setLineBlendingMode(mode, order);
-}
-
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1,
-		int32_t y1, int32_t order, uint32_t mode)
-{
-	LINE_F2 *prim;
-
-	prim = (LINE_F2 *)GsGetWorkBase();
-
-	*(uint32_t *)&prim->r0 = color;
-	setXY2(prim, x0, y0, x1, y1);
-	setLineF2(prim);
-	setSemiTrans(prim, mode >> 2);
-
-	addPrim(&ACTIVE_ORDERING_TABLE->org[order], prim);
-	GsSetWorkBase((PACKET *)&prim[1]);
-
-	setLineBlendingMode(mode, order);
-}
-
-void transposeRefMatrix(SVECTOR *pos, VECTOR *out);
 
 void transposeRefMatrix(SVECTOR *pos, VECTOR *out)
 {
@@ -142,7 +62,7 @@ void transposeRefMatrix(SVECTOR *pos, VECTOR *out)
 }
 
 void mapToWorldPosition(VECTOR *output, int32_t x, int32_t y,
-			int32_t *success)
+                        int32_t *success)
 {
 	SVECTOR positions[2];
 	VECTOR transformed[2];
@@ -174,18 +94,17 @@ void mapToWorldPosition(VECTOR *output, int32_t x, int32_t y,
 	}
 
 	output->vx = transformed[1].vx * transformed[0].vy /
-			     -transformed[1].vy +
-		     transformed[0].vx;
+	                     -transformed[1].vy +
+	             transformed[0].vx;
 	output->vy = 0;
 	output->vz = transformed[1].vz * transformed[0].vy /
-			     -transformed[1].vy +
-		     transformed[0].vz;
+	                     -transformed[1].vy +
+	             transformed[0].vz;
 
 	if (success != NULL) {
 		*success = 1;
 	}
-done:
-	;
+done:;
 }
 
 void rotateVector(SVECTOR *rotation, VECTOR *input, VECTOR *output)
@@ -196,7 +115,7 @@ void rotateVector(SVECTOR *rotation, VECTOR *input, VECTOR *output)
 }
 
 void toEulerAngles(SVECTOR *output, int32_t deltaX, int32_t deltaY,
-		   int32_t deltaZ)
+                   int32_t deltaZ)
 {
 	int32_t adjustment;
 
@@ -206,10 +125,11 @@ void toEulerAngles(SVECTOR *output, int32_t deltaX, int32_t deltaY,
 	output->vz = 0;
 
 	output->vx &= 0xfff;
-	if (output->vx >= 0x800)
+	if (output->vx >= 0x800) {
 		adjustment = 0x1000;
-	else
+	} else {
 		adjustment = 0;
+	}
 	output->vx -= adjustment;
 
 	output->vy &= 0xfff;
@@ -279,7 +199,7 @@ void matrixToEuler1(MATRIX *matrix, SVECTOR *output)
 	cosZ = rcos(output->vz);
 
 	maximum = MAX_VALUE(MAX_VALUE(ABS_VALUE(sinX), ABS_VALUE(cosX)),
-			    MAX_VALUE(ABS_VALUE(sinZ), ABS_VALUE(cosZ)));
+	                    MAX_VALUE(ABS_VALUE(sinZ), ABS_VALUE(cosZ)));
 
 	if (maximum == ABS_VALUE(sinX)) {
 		value = matrix->m[1][2] * -0x1000 / sinX;
@@ -320,7 +240,7 @@ void matrixToEuler2(MATRIX *matrix, SVECTOR *output)
 	cosZ = rcos(output->vz);
 
 	maximum = MAX_VALUE(MAX_VALUE(ABS_VALUE(sinY), ABS_VALUE(cosY)),
-			    MAX_VALUE(ABS_VALUE(sinZ), ABS_VALUE(cosZ)));
+	                    MAX_VALUE(ABS_VALUE(sinZ), ABS_VALUE(cosZ)));
 
 	if (maximum == ABS_VALUE(sinY)) {
 		value = (matrix->m[0][2] << 12) / sinY;
@@ -344,14 +264,16 @@ void calculatePosition(GsCOORDINATE2 *coord, MATRIX *matrix)
 
 	ptr = stack;
 	*ptr++ = coord;
-	while (coord->super != NULL)
+	while (coord->super != NULL) {
 		*ptr++ = coord = coord->super;
+	}
 
 	*matrix = (*--ptr)->coord;
 	i = 0;
 
-	while (stack < ptr)
+	while (stack < ptr) {
 		GsMulCoord3(matrix, &(*--ptr)->coord);
+	}
 }
 
 void multiplyRotations(SVECTOR *rotation1, SVECTOR *rotation2)
@@ -370,25 +292,4 @@ void multiplyRotations(SVECTOR *rotation1, SVECTOR *rotation2)
 	RotMatrixYXZ(rotation2, &matrix2);
 	MulMatrix0(&matrix1, &matrix2, &matrix3);
 	matrixToEuler2(&matrix3, rotation1);
-}
-
-int32_t customRandom(int32_t min, int32_t max)
-{
-	int32_t tmp;
-
-	if (max == min) {
-		return min;
-	}
-
-	if (max < min) {
-		tmp = min;
-		min = max;
-		max = tmp;
-	}
-
-	CUSTOM_RNG_1 = CUSTOM_RNG_1 * CUSTOM_RNG_FACTOR + CUSTOM_RNG_VALUE;
-	CUSTOM_RNG_2 = CUSTOM_RNG_2 * CUSTOM_RNG_FACTOR + CUSTOM_RNG_VALUE;
-
-	return min + (int32_t)(((CUSTOM_RNG_1 >> 16) | (CUSTOM_RNG_2 << 16)) %
-			       (max - min + 1));
 }

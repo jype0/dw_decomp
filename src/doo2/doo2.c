@@ -9,6 +9,7 @@
 #include <dw/dooa.h>
 #include <dw/input.h>
 #include <dw/model.h>
+#include <dw/rng.h>
 #include <dw/sound.h>
 #include <dw/types.h>
 #include <dw/ui.h>
@@ -57,7 +58,6 @@ void DOO2_tickEggBox(void);
 void DOO2_renderEggIcons(void);
 void DOO2_renderShardSet(int32_t index);
 void setRotTransMatrix(MATRIX *m);
-int32_t customRandom(int32_t a, int32_t b);
 void DOO2_renderShardSet(int32_t slot);
 
 static void *doo2_functions[] = {

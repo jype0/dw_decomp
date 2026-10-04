@@ -15,10 +15,13 @@
 #include <dw/efe.h>
 #include <dw/garbage.h>
 #include <dw/graphics.h>
+#include <dw/line.h>
 #include <dw/math.h>
 #include <dw/model.h>
 #include <dw/params.h>
+#include <dw/rng.h>
 #include <dw/sound.h>
+#include <dw/vecmath.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -70,7 +73,6 @@ void setMapLayerEnabled(int32_t enabled);
 void GsGetTimInfo(unsigned long *tim, GsIMAGE *img);
 void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
-void drawLine2P(uint32_t color, int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t layer, int32_t flag);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
 void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance, int32_t width, int32_t height);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
@@ -87,7 +89,6 @@ void BTL_renderScrollingBackground(void);
 void BTL_applyHomingMovement(void);
 void renderParticleFlash(int16_t *params);
 void getDrawingOffsetCopy(int32_t *x, int32_t *y);
-void calculatePosition(GsCOORDINATE2 *coord, MATRIX *matrix);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
 void BTL_tickStunEffect(int32_t i);
 void BTL_renderStunSubEffect(int32_t i);
@@ -96,18 +97,12 @@ void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDIN
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void BTL_renderConfusionEffect(int32_t i);
-void multiplyRotations(SVECTOR *a, SVECTOR *b);
 int32_t getOriginalType(int32_t type);
 void BTL_loadNextEFEFile(int16_t *arg);
-void matrixToEuler1(MATRIX *m, SVECTOR *out);
-void toEulerAngles(SVECTOR *out, int32_t x, int32_t y, int32_t z);
 void BTL_runEFESlotScript(int32_t i);
-void matrixToEuler2(MATRIX *m, SVECTOR *out);
 void getRViewCopy(GsRVIEW2 *view);
 void getViewportDistanceCopy(int32_t *out);
-int32_t customRandom(int32_t a, int32_t b);
 int32_t BTL_addPoisonBubble(int32_t arg);
-int32_t getDistance(int32_t x, int32_t y, int32_t z);
 void createCloudFX(int16_t *pos);
 void BTL_removeFinisherAura(int32_t index);
 int32_t addEntityParticleFX(int32_t *typePtr, int32_t timer);

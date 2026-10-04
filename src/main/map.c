@@ -21,6 +21,7 @@
 #include <dw/tamer.h>
 #include <dw/types.h>
 #include <dw/utils.h>
+#include <dw/vecmath.h>
 
 typedef struct {
 	uint8_t *imagePtr;
@@ -62,7 +63,6 @@ long RotTransPers3(SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, long *sxy0, long *sxy1
 int abs(int x);
 int32_t addObject(int32_t objectId, int16_t instanceId, void (*tick)(int32_t), void (*render)(int32_t));
 void calcMapObjectOrder(LocalMapObjectInstance *instances);
-void calculatePosition(GsCOORDINATE2 *coord, MATRIX *matrix);
 void checkArenaMap(uint8_t mapId);
 void checkCurlingMap(int32_t mapId);
 void checkFishingMap(int32_t mapId, int32_t arg1);

@@ -60,10 +60,10 @@ MAIN_C_SRC := \
 	src/main/font.c \
 	src/main/game_menu.c \
 	src/main/graphics.c \
-	src/main/graphics2.c \
 	src/main/inventory.c \
 	src/main/item.c \
 	src/main/kar.c \
+	src/main/line.c \
 	src/main/main.c \
 	src/main/main_menu.c \
 	src/main/map.c \
@@ -76,6 +76,7 @@ MAIN_C_SRC := \
 	src/main/particle.c \
 	src/main/partner.c \
 	src/main/partner_impl.c \
+	src/main/rng.c \
 	src/main/script_common.c \
 	src/main/script_interp.c \
 	src/main/script_textbox.c \
@@ -89,6 +90,7 @@ MAIN_C_SRC := \
 	src/main/ui.c \
 	src/main/utils.c \
 	src/main/utils2.c \
+	src/main/vecmath.c \
 	src/main/world_object.c
 
 MAIN_ASM_EXCLUDE := shop vs

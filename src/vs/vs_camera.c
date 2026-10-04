@@ -4,7 +4,9 @@
 #include <dw/battle.h>
 #include <dw/math.h>
 #include <dw/params.h>
+#include <dw/rng.h>
 #include <dw/types.h>
+#include <dw/vecmath.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
@@ -30,7 +32,6 @@ extern int32_t MAIN_D_801352A8;
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t processSomeArenaArrays(int32_t count, int32_t t, int32_t *keys, int32_t *values, int32_t *slopes);
 int32_t lerp(int32_t a, int32_t b, int32_t lo, int32_t hi, int32_t t);
-int32_t getDistance(int32_t x, int32_t y, int32_t z);
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount, int32_t *digits);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY, int32_t width, int32_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uvX, int32_t uvY, int32_t width, int32_t height);
@@ -61,7 +62,6 @@ void VS_applyEntityViewpoint(void);
 void VS_renderCounterDigits(int32_t x, int32_t y, int32_t digits, int32_t value, int32_t layer);
 void VS_tickFighterCounter(void);
 void VS_renderFighterCounter(void);
-int32_t customRandom(int32_t lo, int32_t hi);
 void initializeSomeArenaArrays(int32_t count, int32_t arg1, int32_t arg2, int32_t *out);
 
 static void *vs_camera_functions[] = {
