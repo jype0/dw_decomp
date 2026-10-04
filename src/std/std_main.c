@@ -78,11 +78,10 @@ extern int32_t COMBAT_AREA_CENTER_X;
 extern int32_t COMBAT_AREA_CENTER_Y;
 extern uint8_t MAIN_D_801350F8;
 extern GsVIEW2 MAIN_D_801B1B98;
-extern int32_t MAIN_D_801B1BBC[];
+extern GsCOORDINATE2 MAIN_D_801B1BBC;
 extern int32_t MAIN_D_80134D7C[2];
 extern int32_t MAIN_D_80134D84;
 extern char *MOVE_NAMES[];
-extern MATRIX MAIN_D_801B1BC0;
 extern int16_t MAIN_D_801350E4;
 extern int8_t MAIN_D_80134D64;
 extern int16_t INITIAL_COMBAT_STATS[][6];
@@ -1941,7 +1940,7 @@ void STD_func_80059908(void)
 	MAIN_D_801B1B98.super = NULL;
 	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
 	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
-	MAIN_D_801B1BBC[0] = 0;
+	MAIN_D_801B1BBC.flg = 0;
 	GsSetView2(&MAIN_D_801B1B98);
 }
 
@@ -1954,7 +1953,6 @@ void STD_func_80059B70(void)
 	int32_t dist;
 	int32_t d;
 	int32_t ang;
-	MATRIX *m;
 	int32_t limA;
 	int32_t limB;
 	int32_t limC;
@@ -1987,10 +1985,10 @@ void STD_func_80059B70(void)
 	MAIN_D_801B1C0C[0].vy = ang + 0x800;
 	MAIN_D_801B1C0C[0].vz = 0;
 	MAIN_D_801B1B98.view = GsIDMATRIX;
-	MAIN_D_801B1B98.super = (GsCOORDINATE2 *)MAIN_D_801B1BBC;
-	RotMatrixYXZ(MAIN_D_801B1C0C, m = m = &MAIN_D_801B1BC0);
-	TransMatrix(m, &MAIN_D_801B1C14);
-	MAIN_D_801B1BBC[0] = 0;
+	MAIN_D_801B1B98.super = &MAIN_D_801B1BBC;
+	RotMatrixYXZ(MAIN_D_801B1C0C, &MAIN_D_801B1BBC.coord);
+	TransMatrix(&MAIN_D_801B1BBC.coord, &MAIN_D_801B1C14);
+	MAIN_D_801B1BBC.flg = 0;
 	GsSetView2(&MAIN_D_801B1B98);
 }
 
@@ -1998,21 +1996,20 @@ void STD_func_80059DBC(void)
 {
 	VECTOR *a;
 	VECTOR *b;
-	MATRIX *m;
 
 	a = &PARTNER_ENTITY.digimonEntity.entity.posData->location;
 	b = &MAIN_D_801350E8->posData->location;
 	MAIN_D_801B1B98.view = GsIDMATRIX;
-	MAIN_D_801B1B98.super = (GsCOORDINATE2 *)MAIN_D_801B1BBC;
+	MAIN_D_801B1B98.super = &MAIN_D_801B1BBC;
 	MAIN_D_801B1C14.vx = a->vx + (b->vx - a->vx) / 2;
 	MAIN_D_801B1C14.vz = a->vz + (b->vz - a->vz) / 2;
 	MAIN_D_801B1C14.vy = -0x1f40;
 	MAIN_D_801B1C0C[0].vz = 0;
 	MAIN_D_801B1C0C[0].vy = 0;
 	MAIN_D_801B1C0C[0].vx = -0x400;
-	RotMatrixYXZ(MAIN_D_801B1C0C, m = m = &MAIN_D_801B1BC0);
-	TransMatrix(m, &MAIN_D_801B1C14);
-	MAIN_D_801B1BBC[0] = 0;
+	RotMatrixYXZ(MAIN_D_801B1C0C, &MAIN_D_801B1BBC.coord);
+	TransMatrix(&MAIN_D_801B1BBC.coord, &MAIN_D_801B1C14);
+	MAIN_D_801B1BBC.flg = 0;
 	GsSetView2(&MAIN_D_801B1B98);
 }
 
@@ -2032,7 +2029,7 @@ void STD_setCameraToEntity(void)
 	v.vy -= out.vy;
 	v.vz -= out.vz;
 	TransMatrix(&MAIN_D_801B1B98.view, &v);
-	MAIN_D_801B1BBC[0] = 0;
+	MAIN_D_801B1BBC.flg = 0;
 	GsSetView2(&MAIN_D_801B1B98);
 }
 
@@ -2168,7 +2165,7 @@ void STD_func_8005A1BC(void)
 	MAIN_D_801B1B98.super = NULL;
 	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
 	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
-	MAIN_D_801B1BBC[0] = 0;
+	MAIN_D_801B1BBC.flg = 0;
 	GsSetView2(&MAIN_D_801B1B98);
 }
 

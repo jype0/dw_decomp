@@ -182,6 +182,7 @@ TRN_C_SRC := \
 
 $(eval $(call overlay,TRN,trn))
 VS_C_SRC := \
+	src/vs/vs_camera.c \
 	src/vs/vs_hud.c \
 	src/vs/vs_intro.c \
 	src/vs/vs_main.c

@@ -50,7 +50,7 @@ typedef struct {
 } VsTextPiece;
 
 extern GsVIEW2 MAIN_D_801B1B98;
-extern int32_t MAIN_D_801B1BBC[];
+extern GsCOORDINATE2 MAIN_D_801B1BBC;
 extern SVECTOR MAIN_D_801B1C0C[];
 extern VECTOR MAIN_D_801B1C14;
 extern int32_t VIEWPORT_DISTANCE;
@@ -1883,6 +1883,6 @@ void VS_initializeCamera(void)
 	MAIN_D_801B1B98.super = NULL;
 	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
 	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
-	MAIN_D_801B1BBC[0] = 0;
+	MAIN_D_801B1BBC.flg = 0;
 	GsSetView2(&MAIN_D_801B1B98);
 }

@@ -112,7 +112,7 @@ extern SVECTOR VS_D_800731C4[];
 
 int32_t VS_addAuraProjectile(Entity *e);
 void VS_addCommandMenu(uint8_t index);
-void VS_addFighterCounter(uint8_t arg);
+void VS_addFighterCounter(int32_t arg);
 void VS_addFighterStatusBars(int32_t id);
 int32_t VS_addFinisherAura(int32_t arg, int32_t val);
 void VS_addFinisherProgress(FighterData *fighter, int16_t amount);
