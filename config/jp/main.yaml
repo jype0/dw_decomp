@@ -207,7 +207,7 @@ segments:
       - [0xAD924, .sdata, btl/battle_main]
       - [0xAD938, .sdata, btl/command_shout]
       - [0xAD94C, .sdata, btl/battle_hud]
-      - [0xAD9A4, sdata]
+      - [0xAD9A4, .sdata, btl/battle_effect]
       - [0xADA24, .sdata, std/std_setup]
       - [0xADA28, sdata]
       - [0xADAD4, .sdata, std/std_hud]

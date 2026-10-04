@@ -127,17 +127,21 @@ extern int8_t BTL_SHOUT_DROP_OFFSETS[20];
 extern uint8_t BTL_D_80072E7C[6][10];
 extern int16_t BTL_D_80072EB8[8];
 extern int16_t BTL_D_80072EC8[8];
+extern int16_t BTL_D_80073014[155][2];
+extern int16_t BTL_D_80073280[8];
+extern int32_t BTL_D_80073290[12];
+extern BarSprite BTL_D_800732C0[6];
 #else
 extern const int8_t BTL_SHOUT_HOP_OFFSETS[20];
 extern const int8_t BTL_SHOUT_DROP_OFFSETS[20];
 extern const uint8_t BTL_D_80072E7C[6][10];
 extern const int16_t BTL_D_80072EB8[8];
 extern const int16_t BTL_D_80072EC8[8];
-#endif
 extern const int16_t BTL_D_80073014[155][2];
 extern const int16_t BTL_D_80073280[8];
 extern const int32_t BTL_D_80073290[12];
 extern const BarSprite BTL_D_800732C0[6];
+#endif
 extern GsSPRITE BTL_D_80073E54;
 extern BtlDeathCountdownRaw BTL_D_80073E78;
 extern char BTL_END_BOX_TEXTBUFFER[1024];

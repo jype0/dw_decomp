@@ -16,7 +16,7 @@ SECTIONS
 			BUILD_DIR/src/btl/command_shout.c.o(.text .text.*);
 			BUILD_DIR/src/btl/command_menu.c.o(.text .text.*);
 			BUILD_DIR/src/btl/battle_hud.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/btl/15DD0.s.o(.text .text.*));
+			BUILD_DIR/src/btl/battle_effect.c.o(.text .text.*);
 			BUILD_DIR/src/btl/battle_main.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/btl/battle_setup.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/btl/command_shout.c.o(.rodata .rodata.*);
@@ -25,7 +25,8 @@ SECTIONS
 			BUILD_DIR/src/btl/command_shout.c.o(.data .data.*);
 			KEEP(BUILD_DIR/asm/btl/data/28B68.data.s.o(.data .data.*));
 			BUILD_DIR/src/btl/battle_hud.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/btl/data/28C10.data.s.o(.data .data.*));
+			BUILD_DIR/src/btl/battle_effect.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/btl/battle_effect.c.o(.data .data.*);
 			BUILD_DIR/src/btl/btl_bss_jp.c.o(.data .data.*);
 			LONG(0);
 		}

@@ -90,6 +90,7 @@ MAIN_C_SRC := \
 $(eval $(call unit,MAIN,main))
 
 BTL_C_SRC := \
+	src/btl/battle_effect.c \
 	src/btl/battle_hud.c \
 	src/btl/battle_main.c \
 	src/btl/battle_setup.c \
