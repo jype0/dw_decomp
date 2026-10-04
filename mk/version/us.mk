@@ -89,10 +89,9 @@ MAIN_C_SRC := \
 	src/main/ui.c \
 	src/main/utils.c \
 	src/main/utils2.c \
-	src/main/vs.c \
 	src/main/world_object.c
 
-MAIN_ASM_EXCLUDE := shop
+MAIN_ASM_EXCLUDE := shop vs
 
 $(eval $(call unit,MAIN,main))
 
@@ -211,9 +210,13 @@ $(eval $(call overlay,TRN,trn))
 
 VS_C_SRC := \
 	src/vs/vs_bss_us.c \
+	src/vs/vs_camera.c \
+	src/vs/vs_combat.c \
 	src/vs/vs_effect.c \
 	src/vs/vs_hud.c \
+	src/vs/vs_intro.c \
 	src/vs/vs_main.c \
-	src/vs/vs_scene.c
+	src/vs/vs_scene.c \
+	src/vs/vs_select.c
 
 $(eval $(call overlay,VS,vs))

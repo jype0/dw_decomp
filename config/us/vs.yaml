@@ -97,12 +97,15 @@ segments:
     subalign: 4
     subsegments:
       - [0x41C8, c, vs_scene]
+      - [0x656C, c, vs_camera]
       - [0x8984, c, vs_main]
       - [0xD07C, c, vs_hud]
       - [0x10758, c, vs_effect]
       - [0x1CEDC, .rodata, vs_scene]
+      - [0x1CEF4, .rodata, vs_camera]
       - [0x1CF20, .rodata, vs_hud]
       - [0x1CF48, .data, vs_scene]
+      - [0x1DB5C, .data, vs_camera]
       - [0x1DC40, .data, vs_main]
       - [0x1DCF4, .data, vs_hud]
       - [0x1E064, .data, vs_effect]

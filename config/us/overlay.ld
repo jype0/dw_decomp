@@ -617,6 +617,10 @@ SECTIONS
 			. = ALIGN(., 4);
 
 			BUILD_DIR/src/vs/vs_scene.c.o(.text.*);
+
+			. = ALIGN(., 4);
+
+			BUILD_DIR/src/vs/vs_camera.c.o(.text.*);
 			. = ALIGN(., 4);
 			BUILD_DIR/src/vs/vs_main.c.o(.text.*);
 			. = ALIGN(., 4);
@@ -626,6 +630,10 @@ SECTIONS
 			. = ALIGN(., 4);
 
 			BUILD_DIR/src/vs/vs_scene.c.o(.rodata.*);
+
+			. = ALIGN(., 4);
+
+			BUILD_DIR/src/vs/vs_camera.c.o(.rodata.*);
 			. = ALIGN(., 4);
 			BUILD_DIR/src/vs/vs_main.c.o(.rodata.*);
 			. = ALIGN(., 4);
@@ -635,6 +643,10 @@ SECTIONS
 			. = ALIGN(., 4);
 
 			BUILD_DIR/src/vs/vs_scene.c.o(.data.*);
+
+			. = ALIGN(., 4);
+
+			BUILD_DIR/src/vs/vs_camera.c.o(.data.*);
 			. = ALIGN(., 4);
 			BUILD_DIR/src/vs/vs_main.c.o(.data.*);
 			. = ALIGN(., 4);
@@ -647,6 +659,10 @@ SECTIONS
 			. = ALIGN(., 4);
 
 			BUILD_DIR/src/vs/vs_scene.c.o(.bss.*);
+
+			. = ALIGN(., 4);
+
+			BUILD_DIR/src/vs/vs_camera.c.o(.bss.*);
 			. = ALIGN(., 4);
 			BUILD_DIR/src/vs/vs_main.c.o(.bss.*);
 			. = ALIGN(., 4);

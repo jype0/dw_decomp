@@ -10,11 +10,9 @@
 #include <dw/btl.h>
 #include <dw/combat.h>
 #include <dw/entity.h>
-#include <dw/fade.h>
-#include <dw/file.h>
 #include <dw/file_queue.h>
 #include <dw/font.h>
-#include <dw/graphics.h>
+#include <dw/garbage.h>
 #include <dw/main.h>
 #include <dw/math.h>
 #include <dw/model.h>
@@ -26,48 +24,9 @@
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
-
-typedef struct {
-	int16_t clutX;
-	int16_t clutY;
-	uint8_t u;
-	uint8_t v;
-	uint8_t w;
-	uint8_t h;
-	uint8_t tpage;
-	uint8_t x;
-	uint8_t y;
-} VsListPanel;
-
-typedef struct {
-	int16_t clut;
-	uint8_t u;
-	uint8_t v;
-	uint8_t w;
-	uint8_t h;
-	uint8_t x;
-	uint8_t y;
-} VsUISprite;
-
 extern int16_t MAIN_D_8013527C[2];
-extern char MAIN_D_80124C24[];
-extern char MAIN_D_80124C54[];
-extern int16_t MAIN_D_80134F24;
-extern int16_t MAIN_D_80134F26;
-extern uint8_t MAIN_D_80134F28;
-extern int16_t MAIN_D_80134F2A;
-extern int16_t MAIN_D_80134F2C;
-extern CameraChase MAIN_D_801352A4;
-extern int32_t MAIN_D_80134F20;
-extern int16_t MAIN_D_801B1C70[];
-extern int16_t MAIN_D_801B1C72[];
-extern int16_t MAIN_D_801B1C74[];
-extern int16_t MAIN_D_801B1C76[];
-extern int16_t MAIN_D_801B1C78[];
-extern int16_t MAIN_D_801B1C7A[];
 extern uint8_t MAIN_D_80135274;
 extern int32_t VIEWPORT_DISTANCE;
-extern uint8_t MAIN_D_80134F2E;
 extern int16_t MAIN_D_80135280[2];
 extern int32_t MAIN_D_80134D84;
 extern int32_t MAIN_D_80134F40;
@@ -92,53 +51,22 @@ extern char *MAIN_D_80135270;
 extern int32_t MAIN_D_80134F48;
 extern int32_t COMBAT_AREA_CENTER_Y;
 extern int32_t COMBAT_AREA_CENTER_X;
-extern uint8_t MAIN_D_801B1C7C[];
-extern int8_t MAIN_D_80134F52[2];
-extern int32_t MAIN_D_80134F54;
-extern int16_t MAIN_D_80134F50;
-extern uint8_t MAIN_D_801B1CB2[];
-extern uint8_t MAIN_D_801B1D02[];
-extern uint8_t MAIN_D_80134F58;
-extern uint8_t MAIN_D_80134F59;
-extern uint8_t MAIN_D_80134F5A;
-extern uint8_t MAIN_D_80134F5B;
-extern uint8_t MAIN_D_80134F5C;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
                   int32_t f, int32_t g, int32_t h, int32_t i);
-void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
-                          int32_t *digits);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uvX, int32_t uvY,
                       int32_t width, int32_t height);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY,
                        int32_t width, int32_t height);
 void createPauseBox(void);
 void removePauseBox(void);
-void SetPolyGT4(POLY_GT4 *prim);
 void handleBattleIdle(DigimonEntity *entity, Stats *stats, int32_t flags);
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 void collisionGrace(Entity *target, Entity *entity, int32_t dx, int32_t dy);
-void loadStackedTIMFile(char *path);
 void removeEntityText(int32_t id);
 
-void VS__placePlayer1(int32_t stage);
-void VS__placePlayer2(int32_t stage);
-void VS__drawStatLabelText(void);
-void VS__addIntroText(Entity *entity, int32_t id);
-void VS__setPostIntroPosition(Entity *entity);
-void VS__removeIntroText(int32_t id);
-void VS__removeIntroStats(int32_t id);
-void VS__addIntroStats(Entity *entity, int32_t id);
-void VS__renderIntroStatBar(int32_t stat, int32_t value);
-void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
-                             uint8_t character);
-void VS__runIntro(int32_t stage);
-void VS__tickIntroStats(int32_t id);
-void VS__renderIntroStats(int32_t id);
 void VS__renderIntroStatNumber(int32_t x, int32_t y, int32_t digits, int32_t value,
-                       int32_t layer);
-void VS__tickIntroName(int32_t id);
-void VS__renderIntroName(int32_t id);
+                               int32_t layer);
 void VS__combatInit(void);
 void VS__combatSetup(void);
 int32_t VS__checkEndCondition(void);
@@ -157,39 +85,39 @@ void VS__faintDigimon(DigimonEntity *entity, FighterData *fighter,
                       uint8_t fighterId);
 int32_t VS__getDigitCount(int32_t value);
 void VS__tickDigimonAttacking(Entity *entity, DigimonEntity *target,
-                         int32_t fighterId);
+                              int32_t fighterId);
 void VS__tickDigimonHitByAttack(Entity *entity, FighterData *fighter,
-                      int32_t fighterId);
+                                int32_t fighterId);
 void VS__tickDigimonFlat(DigimonEntity *entity, DigimonEntity *other,
-                       FighterData *data, int32_t fighterId);
+                         FighterData *data, int32_t fighterId);
 void VS__tickDigimonStun(Entity *entity);
 void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
-                           FighterData *data, int32_t fighterId);
+                              FighterData *data, int32_t fighterId);
 void VS__tickDigimonSenile(DigimonEntity *entity, FighterData *data);
 void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
-                         FighterData *data);
+                               FighterData *data);
 void VS__tickDigimonOnCooldown(DigimonEntity *entity, DigimonEntity *other,
-                           FighterData *data);
+                               FighterData *data);
 void VS__tickDigimonOther(DigimonEntity *entity, DigimonEntity *other,
-                        FighterData *data, int32_t fighterId);
+                          FighterData *data, int32_t fighterId);
 int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
-                                     FighterData *data);
+                                    FighterData *data);
 int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
-                            FighterData *data, int16_t fighterId);
+                                   FighterData *data, int16_t fighterId);
 void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
-                          FighterData *data, int16_t move);
+                                 FighterData *data, int16_t move);
 uint32_t VS__entityGetMoveWithHighestDistance(DigimonEntity *entity);
 void VS__setWalking(Entity *entity, Stats *stats, uint16_t flags);
 void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *other,
-                            FighterData *data);
+                                       FighterData *data);
 void VS__tickDigimonAttackLookAtTarget(DigimonEntity *entity, VECTOR *location, int16_t dx,
-                            int16_t dy);
+                                       int16_t dy);
 void VS__tickDigimonAttackingLogic(int32_t fighterId);
 void VS__confusedRotate(Entity *entity);
 void VS__tickDigimonWaitingDistance(DigimonEntity *entity, DigimonEntity *other,
-                                FighterData *data);
+                                    FighterData *data);
 void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other,
-                               FighterData *data, int32_t min, int32_t max);
+                                     FighterData *data, int32_t min, int32_t max);
 int32_t VS__getBaseDistance(Entity *a, Entity *b);
 void VS__increaseSpeedBuffer(FighterData *fighter, Stats *stats);
 int32_t VS__hasAffordableMoves2(uint16_t *array, uint8_t fighterId);
@@ -197,7 +125,7 @@ void VS___setWalking(Entity *entity, Stats *stats, uint16_t flags);
 void VS__initializePlayerMarker(void);
 void VS__clearFighterDataTables(FighterData *fighter);
 void VS__tickDigimonRotationKeepDistanceCollision(Entity *entity, int16_t *rotationY, int16_t type,
-                               int16_t oldRotation);
+                                                  int16_t oldRotation);
 int32_t VS__combatMain(void);
 void VS__renderTimeoutText(void);
 void VS__renderTimeoutWindow(int32_t id);
@@ -206,42 +134,8 @@ void VS___tickVSInput();
 void VS__tickVSInput(void);
 void VS__tickDigimonP1(int32_t instanceId);
 void VS__tickDigimonP2(int32_t instanceId);
-void VS__loadTextures(void);
-void VS__tickSelectDigimon(void);
-int32_t VS__isAlreadySelected(uint8_t player, int32_t value);
-void VS__handleDigimonSelected(uint8_t *state);
-void VS__createPressStartToBeginBox(uint8_t id);
-void VS__removePressStartToBeginBox(uint8_t id);
-void VS__setPolyFT4White(POLY_FT4 *poly);
-void VS__initialize(char *namesP1, char *namesP2);
-void VS__tickSelectDigimonPlayer(uint8_t id);
-void VS__renderSelectDigimonPlayer();
-void VS__renderPressStartToBeginBox(int32_t id);
-int32_t VS__isKeyPressedByAnyPlayer(uint32_t buttons);
-int32_t VS__tickSelectMode(void);
-void VS__tickSelectBox(int32_t id);
-void VS__renderSelectModeBox(int32_t depth);
-int32_t VS__tickSelectMap(void);
-void VS__renderSelectMapBox(int32_t id);
 
-static void *vs_functions[] = {
-	VS__renderSelectMapBox,
-	VS__tickSelectMap,
-	VS__renderSelectModeBox,
-	VS__tickSelectBox,
-	VS__tickSelectMode,
-	VS__isKeyPressedByAnyPlayer,
-	VS__renderPressStartToBeginBox,
-	VS__renderSelectDigimonPlayer,
-	VS__tickSelectDigimonPlayer,
-	VS__initialize,
-	VS__setPolyFT4White,
-	VS__removePressStartToBeginBox,
-	VS__createPressStartToBeginBox,
-	VS__handleDigimonSelected,
-	VS__isAlreadySelected,
-	VS__tickSelectDigimon,
-	VS__loadTextures,
+static void *vs_combat_functions[] = {
 	VS__tickDigimonP2,
 	VS__tickDigimonP1,
 	VS__tickVSInput,
@@ -293,36 +187,9 @@ static void *vs_functions[] = {
 	VS__checkEndCondition,
 	VS__combatSetup,
 	VS__combatInit,
-	VS__renderIntroName,
-	VS__tickIntroName,
-	VS__renderIntroStatNumber,
-	VS__renderIntroStats,
-	VS__tickIntroStats,
-	VS__runIntro,
-	VS__renderIntroNameChar,
-	VS__renderIntroStatBar,
-	VS__addIntroStats,
-	VS__removeIntroStats,
-	VS__removeIntroText,
-	VS__setPostIntroPosition,
-	VS__addIntroText,
-	VS__drawStatLabelText,
-	VS__placePlayer2,
-	VS__placePlayer1,
 };
 
 // clang-format off
-uint8_t MAIN_D_801344F8[4] = {
-	0x40, 0x2c, 0x26, 0x20,
-};
-
-uint8_t MAIN_D_801344FC[4] = {
-	0x10, 0x07, 0x03, 0x00,
-};
-
-char MAIN_D_80134500[] = "ＨＰ";
-
-char MAIN_D_80134508[] = "ＭＰ";
 
 int16_t MAIN_D_80134510[4] = {
 	0x0000, 0x0400, 0x0800, 0x0c00,
@@ -334,561 +201,12 @@ uint8_t MAIN_D_80134520[8] = {
 	0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x00,
 };
 
-int16_t MAIN_D_80134528[4] = {
-	0x0036, 0x0036, 0x0050, 0x0050,
-};
-
-int16_t MAIN_D_80134530[4] = {
-	0x0020, 0x0055, 0x0020, 0x0055,
-};
-
-int16_t MAIN_D_80134538[4] = {
-	0x0009, 0x0009, 0x005c, 0x005c,
-};
-
-int16_t MAIN_D_80134540[4] = {
-	0x0036, 0x0047, 0x0036, 0x0047,
-};
-
-uint8_t MAIN_D_80134548[6] = {
-	0x00, 0x0c, 0x18, 0x24, 0x30, 0x3c,
-};
-
-uint8_t MAIN_D_80134550[4] = {
-	0x01, 0x03, 0x05, 0x00,
-};
-
-int16_t MAIN_D_8012F42C[6] = {
-	0x270f, 0x270f, 0x03e7, 0x03e7, 0x03e7, 0x03e7,
-};
-
-RGB8 MAIN_D_8012F438[10] = {
-	{ 0x80, 0x80, 0x80 },
-	{ 0xc8, 0x64, 0x32 },
-	{ 0x1e, 0xff, 0x1e },
-	{ 0xd0, 0x1e, 0x50 },
-	{ 0x1e, 0x80, 0x80 },
-	{ 0xc8, 0xc8, 0x00 },
-	{ 0x32, 0xb4, 0xc8 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-	{ 0x00, 0x00, 0x00 },
-};
-
 /* Damage */
 char STR_DAMEEJI[] = "ダメージ";
 
-char MAIN_D_8012F464[] = "\\ETCDAT\\ETCTIM.BIN";
-
-char MAIN_D_8012F478[] = "\\ETCNA\\TITLE2.TIM";
-
-char MAIN_D_8012F48C[] = "\\ETCDAT\\SYSTEM_W.TIM";
-
-char MAIN_D_8012F4A4[20] = "\\STDDAT\\TAISEN1.TIM";
-
-char MAIN_D_8012F4B8[20] = "\\STDDAT\\TAISEN2.TIM";
-
-char MAIN_D_8012F4CC[] = "\\STDDAT\\16TAISEN.TIM";
-
-char MAIN_D_8012F4E4[] = "\\STDDAT\\TAISEN_F.TIM";
-
-char MAIN_D_8012F4FC[] = "\\STDDAT\\TIME.TIM";
-
-char MAIN_D_8012F510[12] = "Press Start";
-
-char MAIN_D_8012F51C[] = "to begin.";
-
-uint8_t MAIN_D_8012F528[68] = {
-	0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x01,
-	0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00,
-	0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00,
-	0x00, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00,
-	0x03, 0x00, 0x00, 0x00, 0x01, 0x02, 0x02, 0x03,
-	0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x01, 0x00, 0x00, 0x00, 0x04, 0x00, 0x02, 0x03,
-	0x04, 0x03, 0x00, 0x00,
-};
-
-int16_t MAIN_D_8012F56C[6] = {
-	0x270f, 0x270f, 0x03e7, 0x03e7, 0x03e7, 0x03e7,
-};
-
-uint8_t MAIN_D_8012F578[12] = {
-	0x08, 0x14, 0x20, 0x2c, 0x38, 0x44, 0x4a, 0x54,
-	0x62, 0x6c, 0x7a, 0x84,
-};
-
-/* Not equipped */
-char STR_SOUBINASHI[] = "ソウビナシ";
-
-VsListPanel MAIN_D_8012F590[12] = {
-	{ 0x0000, 0x01e8, 0x00, 0x00, 0x96, 0xd7, 0x06, 0x00, 0x00 },
-	{ 0x0000, 0x01ea, 0x96, 0x00, 0x44, 0x27, 0x06, 0x06, 0x1b },
-	{ 0x0000, 0x01eb, 0x96, 0x27, 0x44, 0x27, 0x06, 0x06, 0x44 },
-	{ 0x0000, 0x01ec, 0x96, 0x4e, 0x44, 0x27, 0x06, 0x4c, 0x1b },
-	{ 0x0000, 0x01ed, 0x96, 0x75, 0x44, 0x27, 0x06, 0x4c, 0x44 },
-	{ 0x0000, 0x01e8, 0x96, 0x9c, 0x14, 0x0a, 0x06, 0x18, 0x02 },
-	{ 0x0000, 0x01e9, 0x00, 0x00, 0x96, 0xd7, 0x06, 0x00, 0x00 },
-	{ 0x0000, 0x01ea, 0x96, 0x00, 0x44, 0x27, 0x06, 0x06, 0x1b },
-	{ 0x0000, 0x01eb, 0x96, 0x27, 0x44, 0x27, 0x06, 0x06, 0x44 },
-	{ 0x0000, 0x01ec, 0x96, 0x4e, 0x44, 0x27, 0x06, 0x4c, 0x1b },
-	{ 0x0000, 0x01ed, 0x96, 0x75, 0x44, 0x27, 0x06, 0x4c, 0x44 },
-	{ 0x0000, 0x01e9, 0xaa, 0x9c, 0x14, 0x0a, 0x06, 0x18, 0x02 },
-};
-
-VsListPanel MAIN_D_8012F620[4] = {
-	{ 0x0040, 0x01e8, 0x00, 0x00, 0x29, 0x16, 0x05, 0x09, 0x1e },
-	{ 0x0040, 0x01e8, 0x00, 0x00, 0x29, 0x16, 0x05, 0x09, 0x51 },
-	{ 0x0040, 0x01e8, 0x00, 0x00, 0x29, 0x16, 0x05, 0x62, 0x1e },
-	{ 0x0040, 0x01e8, 0x00, 0x00, 0x29, 0x16, 0x05, 0x62, 0x51 },
-};
-
-VsUISprite MAIN_D_8012F650[8] = {
-	{ 0x01e9, 0x78, 0x00, 0x7c, 0x0e, 0x1c, 0x07 },
-	{ 0x01ee, 0x00, 0x88, 0x28, 0x30, 0x0e, 0x25 },
-	{ 0x01ee, 0x50, 0x88, 0x28, 0x30, 0x46, 0x25 },
-	{ 0x01ef, 0xa0, 0x88, 0x28, 0x30, 0x7e, 0x25 },
-	{ 0x01f4, 0x00, 0xe8, 0x34, 0x17, 0x0a, 0x60 },
-	{ 0x01f4, 0x34, 0xe8, 0x34, 0x17, 0x41, 0x60 },
-	{ 0x01f4, 0x68, 0xe8, 0x34, 0x17, 0x7a, 0x60 },
-	{ 0x01ee, 0x78, 0x4c, 0x34, 0x3c, 0x08, 0x1f },
-};
-
-VsUISprite MAIN_D_8012F690[8] = {
-	{ 0x01ea, 0x78, 0x0e, 0x7c, 0x0e, 0x1c, 0x07 },
-	{ 0x01f0, 0x00, 0xb8, 0x28, 0x30, 0x0e, 0x25 },
-	{ 0x01f1, 0x50, 0xb8, 0x28, 0x30, 0x46, 0x25 },
-	{ 0x01f2, 0xa0, 0xb8, 0x28, 0x30, 0x7e, 0x25 },
-	{ 0x01eb, 0x78, 0x34, 0x34, 0x18, 0x08, 0x60 },
-	{ 0x01eb, 0x78, 0x1c, 0x34, 0x18, 0x40, 0x60 },
-	{ 0x01eb, 0xac, 0x1c, 0x30, 0x18, 0x7a, 0x60 },
-	{ 0x01ee, 0x78, 0x4c, 0x34, 0x3c, 0x08, 0x1f },
-};
 // clang-format on
 
-void VS__placePlayer1(int32_t stage)
-{
-	int16_t startX;
-
-	if (stage == 1) {
-		startX = 1800;
-	} else {
-		startX = 2500;
-	}
-
-	setEntityPosition(1, startX, 0, 0);
-	setEntityRotation(1, 0, 0x400, 0);
-	startAnimation(ENTITY_TABLE[1], 33);
-}
-
-void VS__placePlayer2(int32_t stage)
-{
-	int16_t startX;
-
-	if (stage == 1) {
-		startX = -1800;
-	} else {
-		startX = -2500;
-	}
-
-	setEntityPosition(2, startX, 0, 0);
-	setEntityRotation(2, 0, 0xc00, 0);
-	startAnimation(ENTITY_TABLE[2], 33);
-}
-
-void VS__drawStatLabelText(void)
-{
-	int32_t i;
-	int32_t y;
-	char *text;
-
-	clearTextArea();
-	drawString(MAIN_D_80134500, 0, 0);
-	drawString(MAIN_D_80134508, 0, 12);
-
-	for (i = 2, y = 24, text = MAIN_D_80124C24;
-	     i < 6;
-	     ++i, text += 12, y += 12) {
-		drawString(text, 0, y);
-		DrawSync(0);
-	}
-
-	drawString(MAIN_D_80124C54, 0, 0xf0);
-}
-
-void VS__addIntroText(Entity *entity, int32_t id)
-{
-	int32_t len;
-
-	MAIN_D_80134F24 = 4;
-	MAIN_D_80134F26 = 0;
-
-	switch (DIGIMON_DATA[entity->type].special[0]) {
-	case 0:
-		MAIN_D_80134F28 = 3;
-		break;
-	case 1:
-		MAIN_D_80134F28 = 1;
-		break;
-	case 2:
-		MAIN_D_80134F28 = 6;
-		break;
-	case 3:
-		MAIN_D_80134F28 = 2;
-		break;
-	case 4:
-		MAIN_D_80134F28 = 4;
-		break;
-	case 5:
-		MAIN_D_80134F28 = 0;
-		break;
-	case 6:
-		MAIN_D_80134F28 = 5;
-		break;
-	default:
-		MAIN_D_80134F28 = 0;
-		break;
-	}
-
-	len = strlen(DIGIMON_DATA[entity->type].name) / 2;
-	if (entity->type == 0x4e || entity->type == 0x3c) {
-		len = 10;
-	}
-
-	MAIN_D_80134F2A = -(len * 16);
-	MAIN_D_80134F2C = 68;
-	addObject(0x1ab, id, VS__tickIntroName, VS__renderIntroName);
-}
-
-void VS__setPostIntroPosition(Entity *entity)
-{
-	if (MAIN_D_801352A4.timer != -1) {
-		entity->posData->location = VS_D_80071744;
-		entity->anim.locX = VS_D_80071744.vx << 15;
-		entity->anim.locY = VS_D_80071744.vy << 15;
-		entity->anim.locZ = VS_D_80071744.vz << 15;
-		startAnimation(entity, 0x21);
-		MAIN_D_801352A4.timer = -1;
-	}
-}
-
-void VS__removeIntroText(int32_t id)
-{
-	removeObject(0x1ab, id);
-}
-
-void VS__removeIntroStats(int32_t id)
-{
-	if (MAIN_D_80134F20 != 0) {
-		MAIN_D_80134F20 = 0;
-		removeObject(0x1a9, id);
-	}
-}
-
-void VS__addIntroStats(Entity *entity, int32_t id)
-{
-	if (MAIN_D_80134F20 != 1) {
-		MAIN_D_80134F20 = 1;
-		MAIN_D_801B1C70[0] = -100;
-		MAIN_D_801B1C72[0] = -100;
-		MAIN_D_801B1C74[0] = -10;
-		MAIN_D_801B1C76[0] = -10;
-		MAIN_D_801B1C78[0] = -10;
-		MAIN_D_801B1C7A[0] = -10;
-		addObject(0x1a9, id, VS__tickIntroStats, VS__renderIntroStats);
-	}
-}
-
-void VS__renderIntroStatBar(int32_t stat, int32_t value)
-{
-	POLY_F4 *prim;
-
-	prim = (POLY_F4 *)GsGetWorkBase();
-
-	SetPolyF4(prim);
-	setRGB0(prim, 80, 200, 80);
-	setXY4(prim,
-	       -50, stat * 16 - 26,
-	       value * 100 / MAIN_D_8012F42C[stat] - 50, stat * 16 - 26,
-	       -50, stat * 16 - 18,
-	       value * 100 / MAIN_D_8012F42C[stat] - 50, stat * 16 - 18);
-
-	GsSetWorkBase((PACKET *)prim);
-}
-
-void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
-                             uint8_t character)
-{
-	POLY_GT4 *prim;
-	uint8_t u;
-	uint8_t v;
-
-	prim = (POLY_GT4 *)GsGetWorkBase();
-
-	SetPolyGT4(prim);
-	prim->tpage = getTPage(0, 0, 768, 0);
-	setClut(prim, 0, 480);
-	setRGB0(prim, MAIN_D_8012F438[MAIN_D_80134F28].r, MAIN_D_8012F438[MAIN_D_80134F28].g, MAIN_D_8012F438[MAIN_D_80134F28].b);
-	setRGB1(prim, MAIN_D_8012F438[MAIN_D_80134F28].r, MAIN_D_8012F438[MAIN_D_80134F28].g, MAIN_D_8012F438[MAIN_D_80134F28].b);
-	setRGB2(prim, MAIN_D_8012F438[MAIN_D_80134F28].r / 10, MAIN_D_8012F438[MAIN_D_80134F28].g / 10, MAIN_D_8012F438[MAIN_D_80134F28].b / 10);
-	setRGB3(prim, MAIN_D_8012F438[MAIN_D_80134F28].r / 10, MAIN_D_8012F438[MAIN_D_80134F28].g / 10, MAIN_D_8012F438[MAIN_D_80134F28].b / 10);
-
-	u = (character % 32) * 32;
-	v = (character / 8) * 32;
-
-	if (size < 64) {
-		setUVWH(prim, u, v, (u != 0xe0 ? 32 : 31), (v != 0xe0 ? 32 : 31));
-	} else {
-		setUVWH(prim, u, v, 31, 31);
-	}
-
-	setXYWH(prim, x, y, size, size);
-
-	GsSetWorkBase((PACKET *)prim);
-}
-
-void VS__runIntro(int32_t stage)
-{
-	int32_t x;
-	int32_t i;
-	uint32_t pad;
-	uint32_t prev;
-
-	if (stage == 1) {
-		x = 1300;
-	} else {
-		x = 2000;
-	}
-
-	VS__placePlayer1(stage);
-	VS__placePlayer2(stage);
-	VS__drawStatLabelText();
-	VS_startCameraChase(ENTITY_TABLE[1], x, 0);
-	VS__addIntroText(ENTITY_TABLE[1], 1);
-	stopBGM();
-	stopSound();
-	playMusic(MAIN_D_80135274, 0);
-
-	i = 0;
-	fadeFromBlack(5);
-
-	for (; i < 6; ++i) {
-		VS_tickFrame();
-	}
-
-	while (ENTITY_TABLE[1]->anim.animFlag & 1) {
-		pad = PadRead(1);
-		VS_tickFrame();
-
-		if ((pad & ~prev) & 0x40) {
-			VS__setPostIntroPosition(ENTITY_TABLE[1]);
-			prev = pad;
-			break;
-		}
-
-		prev = pad;
-	}
-
-	VS__removeIntroText(1);
-	VS__removeIntroStats(1);
-	removeObject(0x1aa, 0);
-	VS_startCameraChase(ENTITY_TABLE[2], -x, 1);
-	VS__addIntroText(ENTITY_TABLE[2], 2);
-	stopBGM();
-	stopSound();
-	playMusic(MAIN_D_80135274, 1);
-
-	while (ENTITY_TABLE[2]->anim.animFlag & 1) {
-		pad = PadRead(1);
-		pad = (pad >> 16) & 0xffff;
-		prev = (prev >> 16) & 0xffff;
-
-		VS_tickFrame();
-
-		if ((pad & ~prev) & 0x40) {
-			prev = pad;
-			VS__setPostIntroPosition(ENTITY_TABLE[2]);
-			break;
-		}
-
-		prev = pad;
-	}
-
-	VS__removeIntroText(2);
-	VS__removeIntroStats(2);
-	removeObject(0x1aa, 0);
-	stopBGM();
-	stopSound();
-}
-
-void VS__tickIntroStats(int32_t id)
-{
-	Stats *stats;
-
-	MAIN_D_801B1C70[0] += 200;
-	MAIN_D_801B1C72[0] += 200;
-	MAIN_D_801B1C74[0] += 20;
-	MAIN_D_801B1C76[0] += 20;
-	MAIN_D_801B1C78[0] += 20;
-	MAIN_D_801B1C7A[0] += 20;
-
-	stats = &((DigimonEntity *)ENTITY_TABLE[id])->stats;
-	if (stats->current.currentHP < MAIN_D_801B1C70[0]) {
-		MAIN_D_801B1C70[0] = stats->current.currentHP;
-	}
-
-	if (stats->current.currentMP < MAIN_D_801B1C72[0]) {
-		MAIN_D_801B1C72[0] = stats->current.currentMP;
-	}
-
-	if (stats->base.off < MAIN_D_801B1C74[0]) {
-		MAIN_D_801B1C74[0] = stats->base.off;
-	}
-
-	if (stats->base.def < MAIN_D_801B1C76[0]) {
-		MAIN_D_801B1C76[0] = stats->base.def;
-	}
-
-	if (stats->base.speed < MAIN_D_801B1C78[0]) {
-		MAIN_D_801B1C78[0] = stats->base.speed;
-	}
-
-	if (stats->base.brain < MAIN_D_801B1C7A[0]) {
-		MAIN_D_801B1C7A[0] = stats->base.brain;
-	}
-}
-
-void VS__renderIntroStats(int32_t id)
-{
-	Stats *stats;
-	int32_t i;
-
-	for (i = 0; i < 6; ++i) {
-		renderString(0, -100, i * 16 - 28, 48, 12, 0, i * 12, 0, 1);
-		VS__renderIntroStatBar((int16_t)i, MAIN_D_801B1C70[i]);
-	}
-
-	stats = &((DigimonEntity *)ENTITY_TABLE[id])->stats;
-	if (MAIN_D_801B1C70[0] != stats->current.currentHP ||
-	    MAIN_D_801B1C72[0] != stats->current.currentMP ||
-	    MAIN_D_801B1C74[0] != stats->base.off ||
-	    MAIN_D_801B1C76[0] != stats->base.def ||
-	    MAIN_D_801B1C78[0] != stats->base.speed ||
-	    MAIN_D_801B1C7A[0] != stats->base.brain) {
-		playSound(0, 0x16);
-	} else {
-		for (i = 0; i < 6; ++i) {
-			VS__renderIntroStatNumber(52, (int16_t)(i * 16 - 28), 4,
-			                  MAIN_D_801B1C70[i], 3);
-		}
-	}
-}
-
-void VS__renderIntroStatNumber(int32_t x, int32_t y, int32_t digits, int32_t value,
-                       int32_t layer)
-{
-	POLY_FT4 *prim;
-	int32_t i;
-	uint32_t width;
-	int32_t count;
-	int32_t buf[6];
-
-	prim = (POLY_FT4 *)GsGetWorkBase();
-
-	width = digits;
-	convertValueToDigits(digits, value, &count, buf);
-
-	for (i = count - 1; i >= 0; i--) {
-		SetPolyFT4(prim);
-		setRGB0(prim, 0x80, 0x80, 0x80);
-		prim->tpage = getTPage(0, 0, 832, 0);
-		setClut(prim, 16, 480);
-		setUVDataPolyFT4(prim, buf[i] * 12, 32, 12, 12);
-		setPosDataPolyFT4(prim,
-		                  x + (((int32_t)width - 1) - i) * 12, y,
-		                  12, 12);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
-	}
-
-	GsSetWorkBase((PACKET *)prim);
-}
-
-void VS__tickIntroName(int32_t id)
-{
-	int32_t len;
-
-	++MAIN_D_80134F24;
-
-	len = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
-	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
-		len = 10;
-	}
-
-	if (len == MAIN_D_80134F26 && MAIN_D_80134F2E == 3) {
-		if (MAIN_D_801352A4.timer == 0) {
-			startAnimation(ENTITY_TABLE[id], 0x23);
-			MAIN_D_801352A4.timer = 20;
-		}
-
-		if (MAIN_D_80134F2C >= -71) {
-			MAIN_D_80134F2C -= 28;
-		} else {
-			VS__addIntroStats(ENTITY_TABLE[id], id);
-		}
-	}
-}
-
-void VS__renderIntroName(int32_t id)
-{
-	int32_t charCount;
-	uint32_t entityIndex;
-	int32_t charIndex;
-	int32_t i;
-	int16_t y;
-	int16_t size;
-	uint8_t character;
-
-	entityIndex = id;
-	charCount = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
-	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
-		charCount = 10;
-	}
-
-	if (MAIN_D_80134F24 % 4 == 0) {
-		if (MAIN_D_80134F26 < charCount) {
-			++MAIN_D_80134F26;
-			MAIN_D_80134F2E = 0;
-		}
-	} else if (MAIN_D_80134F2E != 3) {
-		++MAIN_D_80134F2E;
-	}
-
-	charIndex = 0;
-	for (i = 0; i < MAIN_D_80134F26; ++i) {
-		character = VS_D_8006FF20[ENTITY_TABLE[entityIndex]->type][charIndex++];
-		if (character == 0x3d) {
-			character = VS_D_8006FF20[ENTITY_TABLE[entityIndex]->type][charIndex++];
-		}
-
-		if (i == MAIN_D_80134F26 - 1) {
-			y = MAIN_D_80134F2C - MAIN_D_801344FC[MAIN_D_80134F2E];
-			size = MAIN_D_801344F8[MAIN_D_80134F2E];
-		} else {
-			size = 32;
-			y = MAIN_D_80134F2C;
-		}
-
-		VS__renderIntroNameChar((int16_t)(MAIN_D_80134F2A + i * 32), y,
-		                        size, character);
-
-		if (character == 0x1f || character == 0x25) {
-			character = VS_D_8006FF20[ENTITY_TABLE[entityIndex]->type][charIndex++];
-			VS__renderIntroNameChar((int16_t)(MAIN_D_80134F2A + i * 32),
-			                        y, size, character);
-		}
-	}
-}
+GARBAGE(VS__combatInit, 21);
 
 void VS__combatInit(void)
 {
@@ -1835,7 +1153,7 @@ int32_t VS__getDigitCount(int32_t value)
 }
 
 void VS__tickDigimonAttacking(Entity *entity, DigimonEntity *target,
-                         int32_t fighterId)
+                              int32_t fighterId)
 {
 	int32_t i;
 
@@ -1860,7 +1178,7 @@ void VS__tickDigimonAttacking(Entity *entity, DigimonEntity *target,
 }
 
 void VS__tickDigimonHitByAttack(Entity *entity, FighterData *fighter,
-                      int32_t fighterId)
+                                int32_t fighterId)
 {
 	VS__tickDigimonAttackingLogic(fighterId);
 	if ((entity->anim.animFlag & 1) == 0) {
@@ -1872,7 +1190,7 @@ void VS__tickDigimonHitByAttack(Entity *entity, FighterData *fighter,
 }
 
 void VS__tickDigimonFlat(DigimonEntity *entity, DigimonEntity *other,
-                       FighterData *data, int32_t fighterId)
+                         FighterData *data, int32_t fighterId)
 {
 	if (MAIN_D_80134D74 != 0) {
 		handleBattleIdle(entity, &entity->stats, data->flags);
@@ -1900,7 +1218,7 @@ void VS__tickDigimonStun(Entity *entity)
 }
 
 void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
-                           FighterData *data, int32_t fighterId)
+                              FighterData *data, int32_t fighterId)
 {
 	int32_t range;
 
@@ -1944,8 +1262,8 @@ void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
 		case 2:
 		case 3:
 			VS__tickDigimonAttackRanged(entity, other, data,
-			                     entityGetTechFromAnim(&entity->entity,
-			                                           data->queuedAnim));
+			                            entityGetTechFromAnim(&entity->entity,
+			                                                  data->queuedAnim));
 			break;
 		case 4:
 			handleBattleIdle(entity, &entity->stats, data->flags);
@@ -1966,7 +1284,7 @@ void VS__tickDigimonSenile(DigimonEntity *entity, FighterData *data)
 }
 
 void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
-                         FighterData *data)
+                               FighterData *data)
 {
 	int32_t result;
 	int16_t tech;
@@ -2035,7 +1353,7 @@ void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
 }
 
 void VS__tickDigimonOnCooldown(DigimonEntity *entity, DigimonEntity *other,
-                           FighterData *data)
+                               FighterData *data)
 {
 	if (MAIN_D_80134D74 != 0) {
 		handleBattleIdle(entity, &entity->stats, data->flags);
@@ -2060,7 +1378,7 @@ void VS__tickDigimonOnCooldown(DigimonEntity *entity, DigimonEntity *other,
 }
 
 void VS__tickDigimonOther(DigimonEntity *entity, DigimonEntity *other,
-                        FighterData *data, int32_t fighterId)
+                          FighterData *data, int32_t fighterId)
 {
 	int32_t range;
 
@@ -2084,7 +1402,7 @@ void VS__tickDigimonOther(DigimonEntity *entity, DigimonEntity *other,
 	case 2:
 	case 3:
 		VS__tickDigimonAttackRanged(entity, other, data,
-		                     DIGIMON_DATA[entity->entity.type].moves[data->queuedAnim - 0x2e]);
+		                            DIGIMON_DATA[entity->entity.type].moves[data->queuedAnim - 0x2e]);
 		break;
 	case 4:
 		handleBattleIdle(entity, &entity->stats, data->flags);
@@ -2094,7 +1412,7 @@ void VS__tickDigimonOther(DigimonEntity *entity, DigimonEntity *other,
 }
 
 int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
-                                     FighterData *data)
+                                    FighterData *data)
 {
 	int16_t id;
 	uint8_t command;
@@ -2144,7 +1462,7 @@ int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
 }
 
 int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
-                            FighterData *data, int16_t fighterId)
+                                   FighterData *data, int16_t fighterId)
 {
 	int16_t *rotation;
 	int16_t savedRotation;
@@ -2245,7 +1563,7 @@ int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
 }
 
 void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
-                          FighterData *data, int16_t move)
+                                 FighterData *data, int16_t move)
 {
 	uint32_t distance;
 	int32_t range;
@@ -2277,7 +1595,7 @@ void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
 	if (maxDistance + (minDistance = maxDistance * 3 / 10) < distance) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		VS__tickDigimonAttackLookAtTarget(entity, &other->entity.posData->location,
-		                       280, 200);
+		                                  280, 200);
 		++data->unk15;
 	} else if (distance < maxDistance - minDistance) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
@@ -2332,7 +1650,7 @@ void VS__setWalking(Entity *entity, Stats *stats, uint16_t flags)
 }
 
 void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *other,
-                            FighterData *data)
+                                       FighterData *data)
 {
 	int16_t *rotationY;
 	int16_t initRotation;
@@ -2354,7 +1672,7 @@ void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *oth
 		if (result != -1) {
 			data->unk16 = 1;
 			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rotationY, result,
-			                          initRotation);
+			                                             initRotation);
 		}
 
 		return;
@@ -2380,7 +1698,7 @@ void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *oth
 		result = entityCheckCollision(NULL, &entity->entity, 280, 200);
 		if (result != -1) {
 			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rotationY, result,
-			                          initRotation);
+			                                             initRotation);
 		}
 
 		return;
@@ -2419,12 +1737,12 @@ void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *oth
 	result = entityCheckCollision(NULL, &entity->entity, 280, 200);
 	if (result != -1) {
 		VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rotationY, result,
-		                          initRotation);
+		                                             initRotation);
 	}
 }
 
 void VS__tickDigimonAttackLookAtTarget(DigimonEntity *entity, VECTOR *location, int16_t dx,
-                            int16_t dy)
+                                       int16_t dy)
 {
 	int16_t rotationY;
 
@@ -2536,7 +1854,7 @@ void VS__confusedRotate(Entity *entity)
 }
 
 void VS__tickDigimonWaitingDistance(DigimonEntity *entity, DigimonEntity *other,
-                                FighterData *data)
+                                    FighterData *data)
 {
 	if ((entity->entity.anim.animId >= 0x23) &&
 	    (entity->entity.anim.animId < 0x25)) {
@@ -2547,7 +1865,7 @@ void VS__tickDigimonWaitingDistance(DigimonEntity *entity, DigimonEntity *other,
 }
 
 void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other,
-                               FighterData *data, int32_t min, int32_t max)
+                                     FighterData *data, int32_t min, int32_t max)
 {
 	uint32_t actualDistance;
 	uint32_t baseDistance;
@@ -2561,7 +1879,7 @@ void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other
 	} else if (baseDistance + max < actualDistance) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		VS__tickDigimonAttackLookAtTarget(entity, &other->entity.posData->location,
-		                       280, 200);
+		                                  280, 200);
 	} else {
 		data->unk16 = 0;
 		handleBattleIdle(entity, &entity->stats, data->flags);
@@ -2662,7 +1980,7 @@ void VS__clearFighterDataTables(FighterData *fighter)
 }
 
 void VS__tickDigimonRotationKeepDistanceCollision(Entity *entity, int16_t *rotationY, int16_t type,
-                               int16_t oldRotation)
+                                                  int16_t oldRotation)
 {
 	int16_t angles[3];
 	int32_t i;
@@ -2805,10 +2123,10 @@ void VS__renderTimeoutWindow(int32_t id)
 
 	digits = VS__getDigitCount(MAIN_D_80135280[1]);
 	VS__renderIntroStatNumber(x + 42 + (48 - digits * 12) / 2, y + 30, digits,
-	                  MAIN_D_80135280[1], layer);
+	                          MAIN_D_80135280[1], layer);
 	digits = VS__getDigitCount(MAIN_D_80135280[0]);
 	VS__renderIntroStatNumber(x + 174 + (48 - digits * 12) / 2, y + 30, digits,
-	                  MAIN_D_80135280[0], layer);
+	                          MAIN_D_80135280[0], layer);
 }
 
 void VS__renderPlayerMarker(int32_t id)
@@ -2944,1084 +2262,4 @@ void VS__tickDigimonP1(int32_t instanceId)
 void VS__tickDigimonP2(int32_t instanceId)
 {
 	tickAnimation(ENTITY_TABLE[instanceId]);
-}
-
-void VS__loadTextures(void)
-{
-	uint8_t *entries[2];
-	uint8_t *state;
-	uint8_t *p;
-	int32_t i;
-	int32_t j;
-	int32_t rows;
-
-	ENTITY_TABLE[0]->isOnScreen = 0;
-	loadTIMFile(MAIN_D_8012F48C, GENERAL_BUFFER);
-	loadTIMFile(MAIN_D_8012F4A4, GENERAL_BUFFER);
-	loadTIMFile(MAIN_D_8012F4B8, GENERAL_BUFFER);
-	loadTIMFile(MAIN_D_8012F4CC, GENERAL_BUFFER);
-	loadTIMFile(MAIN_D_8012F4E4, GENERAL_BUFFER);
-	loadTIMFile(MAIN_D_8012F4FC, GENERAL_BUFFER);
-
-	entries[0] = (uint8_t *)MAIN_D_8013526C;
-	entries[1] = (uint8_t *)MAIN_D_80135270;
-
-	for (i = 0; i < 5; ++i) {
-		VS_D_800716A8[i] = 0xff;
-		(&VS_D_800716A8[5])[i] = 0xff;
-	}
-
-	for (i = 0; i < 2; ++i) {
-		state = &MAIN_D_801B1C7C[i * 0x50];
-		state[0x2b] = 0;
-		state[0x28] = 0;
-		state[0x29] = 0;
-		state[0x2d] = 0;
-		state[0x2e] = 0;
-		state[0x2f] = 0;
-		state[0x30] = 0;
-		state[0x32] = 0;
-		state[0x31] = 0;
-		state[0x33] = 0;
-		state[0x2c] = 0;
-		state[0x35] = 0;
-		state[0x34] = 0;
-		state[0x36] = 0;
-		p = &state[0x37];
-		for (j = 0; j < 24; ++j) {
-			*p = 0;
-			++p;
-		}
-
-		for (j = 0; j < 40; ++j) {
-			if ((entries[i] + j * 64)[0x1c] != 0) {
-				state[state[0x2b]] = j;
-				++state[0x2b];
-			}
-		}
-
-		if (state[0x2b] % 4 == 0) {
-			state[0x2a] = state[0x2b] / 4;
-		} else {
-			rows = state[0x2b] / 4;
-			++rows;
-			state[0x2a] = rows;
-		}
-	}
-}
-
-void VS__tickSelectDigimon(void)
-{
-	int32_t i;
-
-	MAIN_D_80134F52[0] = -1;
-	MAIN_D_80134F52[1] = -1;
-
-	clearTextArea();
-
-	addObject(0x1a0, 0, (TickFunction)VS__tickSelectDigimonPlayer, VS__renderSelectDigimonPlayer);
-	addObject(0x1a0, 1, (TickFunction)VS__tickSelectDigimonPlayer, VS__renderSelectDigimonPlayer);
-
-	fadeFromBlack(10);
-
-	for (i = 0; i < 11; ++i) {
-		VS_tickFrame();
-	}
-
-	MAIN_D_80134F54 = 0;
-	while (MAIN_D_80134F54 == 0) {
-		VS_tickFrame();
-	}
-
-	i = 0;
-	fadeToBlack(20);
-	for (; i < 21; ++i) {
-		VS_tickFrame();
-	}
-
-	removeObject(0x1a0, 0);
-	removeObject(0x1a0, 1);
-}
-
-int32_t VS__isAlreadySelected(uint8_t player, int32_t value)
-{
-	int32_t i;
-	uint8_t *table;
-
-	if (player == 0) {
-		table = VS_D_800716A8;
-	} else {
-		table = (&VS_D_800716A8[5]);
-	}
-
-	for (i = 0; i < VS_D_800716A8[11]; ++i) {
-		if (value == table[i]) {
-			playSound(0, 0xb);
-			return 1;
-		}
-	}
-
-	return 0;
-}
-
-void VS__handleDigimonSelected(uint8_t *state)
-{
-	int32_t i;
-	int32_t count;
-
-	playSound(0, 3);
-
-	state[0x33] = 0;
-	state[0x32] = 0;
-	state[0x35] |= 1 << state[0x34];
-
-	count = VS_D_800716A8[11];
-	for (i = 0; i < count; ++i) {
-		if ((state[0x35] & (1 << i)) == 0) {
-			break;
-		}
-	}
-
-	if (i == VS_D_800716A8[11]) {
-		state[0x4f] = state[0x34];
-	}
-
-	if (state[0x34] < VS_D_800716A8[11] - 1) {
-		++state[0x34];
-	}
-}
-
-void VS__createPressStartToBeginBox(uint8_t id)
-{
-	RECT rect;
-
-	if (MAIN_D_80134F52[id] == -1) {
-		drawString(MAIN_D_8012F510, 0, 0);
-		drawString(MAIN_D_8012F51C, 0, 12);
-
-		setRECT(&rect, (id == 0) ? -132 : 22, 32, 108, 36);
-		createStaticUIBox(id, 0, 2, &rect, 0, VS__renderPressStartToBeginBox);
-
-		MAIN_D_80134F52[id] = 1;
-	}
-}
-
-void VS__removePressStartToBeginBox(uint8_t id)
-{
-	if (MAIN_D_80134F52[id] != -1) {
-		removeStaticUIBox(id);
-		MAIN_D_80134F52[id] = -1;
-	}
-}
-
-void VS__setPolyFT4White(POLY_FT4 *poly)
-{
-	SetPolyFT4(poly);
-	setRGB0(poly, 0x80, 0x80, 0x80);
-}
-
-void VS__initialize(char *namesP1, char *namesP2)
-{
-	int32_t done;
-
-	MAIN_D_8013526C = namesP1;
-	MAIN_D_80135270 = namesP2;
-	VS__loadTextures();
-
-	MAIN_D_80134F50 = 0;
-	done = 0;
-	while (done == 0) {
-		switch (MAIN_D_80134F50) {
-		case 0:
-			VS__tickSelectMode();
-			++MAIN_D_80134F50;
-			break;
-		case 1:
-			VS__tickSelectMap();
-			++MAIN_D_80134F50;
-			break;
-		case 2:
-			VS__tickSelectDigimon();
-			++MAIN_D_80134F50;
-			break;
-		case 3:
-			VS_initializeVS();
-			done = 1;
-			break;
-		}
-	}
-
-	loadStackedTIMFile(MAIN_D_8012F464);
-	loadTIMFile(MAIN_D_8012F478, GENERAL_BUFFER_PTR);
-}
-
-void VS__tickSelectDigimonPlayer(uint8_t id)
-{
-	uint8_t *state;
-	uint8_t *table;
-	uint32_t input;
-	uint32_t previous;
-	uint32_t pressed;
-	int32_t idx;
-	int32_t count;
-	int32_t last;
-	int32_t row;
-	int32_t i;
-	int32_t total;
-
-	if (id == 0) {
-		table = VS_D_800716A8;
-	} else {
-		table = (&VS_D_800716A8[5]);
-	}
-
-	if (id == 1) {
-		input = POLLED_INPUT;
-		previous = POLLED_INPUT_PREVIOUS;
-		POLLED_INPUT = (input >> 16) & 0xffff;
-		POLLED_INPUT_PREVIOUS = (previous >> 16) & 0xffff;
-	}
-
-	state = &MAIN_D_801B1C7C[id * 0x50];
-	++state[0x31];
-	if (state[0x31] % 8 == 0) {
-		state[0x30] = (state[0x30] + 1) & 1;
-	}
-
-	switch (state[0x28]) {
-	case 0:
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x8000) {
-			state[0x29]--;
-			if (state[0x29] == 0xff) {
-				state[0x29] = state[0x2a] - 1;
-			}
-		}
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x2000) {
-			++state[0x29];
-			state[0x29] %= state[0x2a];
-		}
-
-		if ((row = state[0x29]) == (last = state[0x2a] - 1)) {
-			count = state[0x2b] - last * 4;
-		} else {
-			count = 4;
-		}
-
-		idx = row * 4;
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x10) {
-			if (VS__isAlreadySelected(id, state[idx]) == 0) {
-				table[state[0x34]] = state[idx];
-				VS__handleDigimonSelected(state);
-			}
-		}
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) {
-			if (VS__isAlreadySelected(id, state[idx + 3]) == 0 &&
-			    count == 4) {
-				table[state[0x34]] = (state + idx)[3];
-				VS__handleDigimonSelected(state);
-			}
-		}
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x80) {
-			if (VS__isAlreadySelected(id, state[idx + 1]) == 0 &&
-			    count >= 2) {
-				table[state[0x34]] = (state + idx)[1];
-				VS__handleDigimonSelected(state);
-			}
-		}
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x20) {
-			if (VS__isAlreadySelected(id, state[idx + 2]) == 0 &&
-			    count >= 3) {
-				table[state[0x34]] = (state + idx)[2];
-				VS__handleDigimonSelected(state);
-			}
-		}
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x1000) {
-			playSound(0, 2);
-			if (state[0x34] != 0) {
-				state[0x33] = 0;
-			}
-			if (state[0x34] != 0) {
-				state[0x34]--;
-			}
-		}
-
-		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x4000) {
-			playSound(0, 2);
-			if (state[0x34] != VS_D_800716A8[11] - 1) {
-				state[0x33] = 0;
-			}
-			if (state[0x34] < VS_D_800716A8[11] - 1) {
-				++state[0x34];
-			}
-		}
-
-		if (state[0x2e] == state[0x2c] * 24) {
-			if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x4) {
-				state[0x2f] = 0xff;
-				if (state[0x2c] != 0) {
-					state[0x2c]--;
-				}
-			}
-
-			if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x8) {
-				state[0x2f] = 1;
-				if (state[0x2c] < 5) {
-					++state[0x2c];
-				}
-			}
-		}
-
-		if (state[0x2e] != state[0x2c] * 24) {
-			state[0x2e] += state[0x2f] * 4;
-		}
-
-		total = VS_D_800716A8[11];
-		for (i = 0; i < total; ++i) {
-			if ((state[0x35] & (1 << i)) == 0) {
-				break;
-			}
-		}
-
-		if (i == VS_D_800716A8[11]) {
-			VS__createPressStartToBeginBox(id);
-			++state[0x28];
-		}
-		break;
-	case 1:
-		if ((pressed = POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x800) {
-			playSound(0, 3);
-			++state[0x28];
-			state[0x36] = 1;
-			VS__removePressStartToBeginBox(id);
-		} else if ((pressed & 0x20) || (pressed & 0x80) ||
-		           (pressed & 0x10) || (pressed & 0x40) ||
-		           (pressed & 0x8000) || (pressed & 0x2000) ||
-		           (pressed & 0x1000) || (pressed & 0x4000)) {
-			playSound(0, 4);
-			state[0x28]--;
-			VS__removePressStartToBeginBox(id);
-			state[0x35] = state[0x35] & ~(uint8_t)(1 << state[0x4f]);
-			table[state[0x4f]] = 0xff;
-		}
-		break;
-	case 2:
-		if (MAIN_D_801B1CB2[0] == 1 && MAIN_D_801B1D02[0] == 1) {
-			MAIN_D_80134F54 = 1;
-		}
-		break;
-	}
-
-	if (id == 1) {
-		POLLED_INPUT = input;
-		POLLED_INPUT_PREVIOUS = previous;
-	}
-}
-
-// clang-format off
-void VS__renderSelectDigimonPlayer(id)
-	int16_t id;
-// clang-format on
-{
-	uint8_t baseIdx;
-	int16_t glyph;
-	int32_t clutId;
-	int32_t i;
-	int32_t j;
-	int32_t rowCount;
-	int32_t halfLen;
-	int16_t *stats;
-	uint16_t *text;
-	char *names;
-	uint8_t *rec;
-	int32_t uvX;
-	int32_t cursorY;
-	int32_t cursorX;
-	int32_t iconX;
-	int16_t glyphTop;
-	int16_t rowX;
-	int16_t y;
-	int16_t y4;
-	int16_t rowX4;
-	int16_t baseX;
-	POLY_F4 *bar;
-	POLY_FT4 *prim;
-	VsListPanel *panel;
-	uint8_t *st;
-	int32_t type;
-	int32_t spriteU;
-	int32_t spriteV;
-	int32_t ch;
-	int32_t rowY;
-	int32_t iconY;
-	int32_t glyphY;
-	int32_t barY;
-	int32_t dx;
-	int32_t mx;
-	int16_t value;
-	int16_t width;
-	int32_t swidth;
-	int16_t height;
-	int16_t posY;
-	int16_t moveRow;
-	int32_t l;
-	int32_t k;
-	char buf[24];
-	int32_t count;
-	int32_t digits[4];
-
-	baseX = (int16_t)(id * 154 - 152);
-	if (id == 0) {
-		names = MAIN_D_8013526C;
-	} else {
-		names = MAIN_D_80135270;
-	}
-	clutId = id;
-	st = &MAIN_D_801B1C7C[(int16_t)id * 0x50];
-
-	if (st[0x29] == st[0x2a] - 1) {
-		rowCount = st[0x2b] - (st[0x2a] - 1) * 4;
-	} else {
-		rowCount = 4;
-	}
-	baseIdx = st[0x29] * 4;
-
-	bar = (POLY_F4 *)GsGetWorkBase();
-	for (i = 0; i < rowCount; i++) {
-		panel = &MAIN_D_8012F620[i];
-		stats = (int16_t *)(names + (st + baseIdx)[i] * 64);
-		y = -109;
-		for (j = 0; j < 6; j++, stats++) {
-			width = (int16_t)(*stats * 34 / MAIN_D_8012F56C[j]);
-			if (st[0x2e] < MAIN_D_8012F578[j] + 2 &&
-			    st[0x2e] + 22 >= MAIN_D_8012F578[j]) {
-				SetPolyF4(bar);
-				setRGB0(bar, 0, 255, 255);
-				setXY4(bar,
-				       baseX + panel->x + 7,
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]),
-				       width + (baseX + panel->x + 7),
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]),
-				       baseX + panel->x + 7,
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]) + 2,
-				       width + (baseX + panel->x + 7),
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]) + 2);
-				AddPrim(ACTIVE_ORDERING_TABLE->org + 10, bar++);
-			}
-		}
-	}
-	GsSetWorkBase((PACKET *)bar);
-
-	prim = (POLY_FT4 *)GsGetWorkBase();
-	if (st[0x2a] != 1) {
-		dx = (int16_t)((baseX + 75) - st[0x2a] * 11 / 2);
-		y = -109;
-		for (i = 0; i < st[0x2a]; i++) {
-			VS__setPolyFT4White(prim);
-			prim->tpage = 6;
-			prim->clut = GetClut(0, clutId + 0x1e8);
-			setUVDataPolyFT4(prim, (i != st[0x29]) ? 0xc8 : 0xbe,
-			                 0x9c, 10, 6);
-			setPosDataPolyFT4(prim, dx + i * 11, y + 19, 10, 6);
-			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-		}
-		for (i = 0; i < 2; i++) {
-			VS__setPolyFT4White(prim);
-			prim->tpage = 6;
-			prim->clut = GetClut(0, clutId + 0x1e8);
-			setUVDataPolyFT4(prim, (i == 0) ? 0xd2 : 0xd6, 0x9c, 5,
-			                 8);
-			setPosDataPolyFT4(prim, (baseX + 7) + i * 132,
-			                  y + 18, 4, 7);
-			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-		}
-	}
-
-	uvX = 0x96;
-	cursorY = 5;
-	cursorX = baseX + 15;
-	iconX = baseX + 33;
-	glyphTop = 7;
-	i = 0;
-	rowX = baseX;
-	iconY = 3;
-	glyphY = 0;
-	barY = 1;
-	for (; i < VS_D_800716A8[11];
-	     i++, barY += 20, cursorY += 20, glyphY += 20, uvX += 12,
-	     iconY += 20) {
-		VS__setPolyFT4White(prim);
-		prim->tpage = 6;
-		prim->clut = GetClut(0, 0x1ef);
-		if (i == st[0x34] && st[0x36] == 0) {
-			setUVDataPolyFT4(prim, st[0x32] * 12 + 0x96, 0xb2, 12,
-			                 12);
-			if (st[0x33] % 5 == 0) {
-				st[0x32]++;
-			}
-			st[0x33]++;
-			if (st[0x33] >= 5) {
-				st[0x33] = 0;
-			}
-			st[0x32] &= 7;
-		} else {
-			setUVDataPolyFT4(prim, uvX, 0xa6, 12, 12);
-		}
-		setPosDataPolyFT4(prim, cursorX, cursorY, 12, 12);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-		if ((st[0x35] & (1 << i)) != 0) {
-			VS__setPolyFT4White(prim);
-			prim->tpage = 6;
-			prim->clut = GetClut(0, 0x1f1);
-			setUVDataPolyFT4(prim, 0x98, 0xc8, 16, 16);
-			setPosDataPolyFT4(prim, iconX, iconY, 16, 16);
-			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-			rowY = glyphTop + glyphY;
-			for (j = 0; j < 6; j++) {
-				VS__setPolyFT4White(prim);
-				prim->tpage = 7;
-				prim->clut = GetClut(0x30, 0x1e8);
-				setUVDataPolyFT4(prim, 0x70, 0x48, 8, 8);
-				setPosDataPolyFT4(prim, (rowX + 0x39) + j * 8,
-				                  rowY, 8, 8);
-				AddPrim(ACTIVE_ORDERING_TABLE->org + 10,
-				        prim++);
-			}
-		}
-		VS__setPolyFT4White(prim);
-		prim->tpage = 6;
-		prim->clut = GetClut(0, clutId + 0x1e8);
-		setUVDataPolyFT4(prim, 0,
-		                 ((st[0x35] & (1 << i)) != 0) ? 0xd8 : 0xec, 0x85,
-		                 ((st[0x35] & (1 << i)) != 0) ? 0x14 : 0x13);
-		setPosDataPolyFT4(prim, baseX + 8, barY, 0x85, 0x14);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-	}
-
-	y4 = -109;
-	rowX4 = baseX;
-	for (i = 0; i < rowCount; i++) {
-		panel = &MAIN_D_8012F620[i];
-		type = ((uint8_t *)names + (st + baseIdx)[i] * 64)[0x1c];
-		VS__setPolyFT4White(prim);
-		prim->tpage = 14;
-		prim->clut = GetClut(0x120, MAIN_D_8012F528[type] + 0x1e0);
-		if (type == 0x73) {
-			spriteU = (uint8_t)(st[0x30] * 16 + 0x3e0);
-			spriteV = 0xe0;
-		} else {
-			spriteU = (uint8_t)(((type - 3) % 32) * 32 +
-			                    st[0x30] * 16);
-			spriteV = (uint8_t)(((type - 3) / 8) * 32);
-		}
-		width = (int16_t)((spriteU != 0xf0) ? 16 : 15);
-		height = (spriteV != 0xf0) ? 16 : 15;
-		setUVDataPolyFT4(prim, spriteU, spriteV, width, height);
-		setPosDataPolyFT4(prim, rowX4 + MAIN_D_80134528[i],
-		                  y4 + MAIN_D_80134530[i], width, height);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-
-		text = (uint16_t *)(names + (st + baseIdx)[i] * 64 + 14);
-		halfLen = strlen((char *)text) / 2;
-		y = -109;
-		for (j = 0; j < halfLen; j++) {
-			VS__setPolyFT4White(prim);
-			prim->tpage = 7;
-			prim->clut = GetClut(0x30, 0x1e8);
-			ch = *text++;
-			ch = (uint16_t)(((ch & 0xff) << 8) +
-			                ((ch & 0xff00) >> 8));
-			for (k = 0; k < 216; k++) {
-				if (ch == VS_D_8006FBC0[k]) {
-					glyph = k;
-					break;
-				}
-			}
-			setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
-			                 (VS_D_8006FD70[glyph] / 15) * 8, 8, 8);
-			setPosDataPolyFT4(prim,
-			                  (baseX + MAIN_D_80134538[i]) + j * 8,
-			                  y + MAIN_D_80134540[i], 8, 8);
-		}
-
-		rec = (uint8_t *)(names + (st + baseIdx)[i] * 64);
-		for (j = 0; j < 3; j++) {
-			if ((rec + j)[0x1d] == 0xff) {
-				strcpy(buf, STR_SOUBINASHI);
-				text = (uint16_t *)buf;
-			} else {
-				text = (uint16_t *)MOVE_NAMES[DIGIMON_DATA[rec[0x1c]]
-				                                      .moves[(rec + j)[0x1d] -
-				                                             0x2e]];
-			}
-			halfLen = strlen((char *)text) / 2;
-			y = -109;
-			for (k = 0; k < halfLen; k++) {
-				ch = *text++;
-				if (k < 5) {
-					moveRow = j * 2 + 6;
-				} else {
-					moveRow = j * 2 + 7;
-				}
-				if (st[0x2e] <= MAIN_D_8012F578[moveRow] + 8 &&
-				    MAIN_D_8012F578[moveRow] <= st[0x2e] + 22) {
-					VS__setPolyFT4White(prim);
-					prim->tpage = 7;
-					prim->clut = GetClut(0x30, 0x1e8);
-					ch = (uint16_t)(((ch & 0xff) << 8) +
-					                ((ch & 0xff00) >> 8));
-					glyph = 0;
-					for (l = 0; l < 216; l++) {
-						if (ch == VS_D_8006FBC0[l]) {
-							glyph = l;
-							break;
-						}
-					}
-					if (st[0x2e] > MAIN_D_8012F578[moveRow]) {
-						height = st[0x2e] -
-						         MAIN_D_8012F578[moveRow];
-						value = VS_D_8006FD70[glyph];
-						setUVDataPolyFT4(
-							prim,
-							(value % 15) * 8,
-							height + (value / 15) * 8,
-							8, 8 - height);
-						height = 8 - height;
-						posY = y + panel->y;
-					} else if (st[0x2e] + 22 <
-					           MAIN_D_8012F578[moveRow] + 8) {
-						height = (MAIN_D_8012F578[moveRow] +
-						          8) -
-						         (st[0x2e] + 22);
-						setUVDataPolyFT4(
-							prim,
-							(VS_D_8006FD70[glyph] % 15) * 8,
-							(VS_D_8006FD70[glyph] / 15) * 8, 8,
-							8 - height);
-						height = 8 - height;
-						posY = MAIN_D_8012F578[moveRow] +
-						       (y + panel->y) -
-						       st[0x2e];
-					} else {
-						height = 8;
-						setUVDataPolyFT4(
-							prim,
-							(VS_D_8006FD70[glyph] % 15) * 8,
-							(VS_D_8006FD70[glyph] / 15) * 8, 8, 8);
-						posY = MAIN_D_8012F578[moveRow] +
-						       (y + panel->y) -
-						       st[0x2e];
-					}
-					if (k < 5) {
-						mx = ((baseX + panel->x) + 1) +
-						     k * 8;
-					} else {
-						mx = ((baseX + panel->x) + 1) +
-						     (k - 5) * 8;
-					}
-					setPosDataPolyFT4(prim, mx, posY, 8,
-					                  height);
-				}
-			}
-		}
-
-		stats = (int16_t *)(names + (st + baseIdx)[i] * 64);
-		for (j = 0; j < 6; j++, stats++) {
-			if (st[0x2e] <= MAIN_D_80134548[j] + 7 &&
-			    MAIN_D_80134548[j] <= st[0x2e] + 22) {
-				convertValueToDigits(4, *stats, &count, digits);
-				y = -109;
-				for (k = count - 1; k >= 0; k--) {
-					VS__setPolyFT4White(prim);
-					prim->tpage = 6;
-					prim->clut = GetClut(0, 0x1f1);
-					if (st[0x2e] > MAIN_D_80134548[j]) {
-						height = st[0x2e] -
-						         MAIN_D_80134548[j];
-						setUVDataPolyFT4(
-							prim,
-							digits[k] * 5 + 0x98,
-							height + 0xc0, 5,
-							7 - height);
-						height = 7 - height;
-						posY = y + panel->y;
-					} else if (st[0x2e] + 22 <
-					           MAIN_D_80134548[j] + 7) {
-						height = (MAIN_D_80134548[j] +
-						          7) -
-						         (st[0x2e] + 22);
-						setUVDataPolyFT4(
-							prim,
-							digits[k] * 5 + 0x98,
-							0xc0, 5, 7 - height);
-						height = 7 - height;
-						posY = MAIN_D_80134548[j] +
-						       (y + panel->y) -
-						       st[0x2e];
-					} else {
-						swidth = 7;
-						height = swidth;
-						setUVDataPolyFT4(
-							prim,
-							digits[k] * 5 + 0x98,
-							0xc0, 5, 7);
-						posY = MAIN_D_80134548[j] +
-						       (y + panel->y) -
-						       st[0x2e];
-					}
-					setPosDataPolyFT4(
-						prim,
-						((baseX + panel->x) + 22) +
-							(3 - k) * 5,
-						posY, 5, height);
-					AddPrim(ACTIVE_ORDERING_TABLE->org + 10,
-					        prim++);
-				}
-			}
-		}
-
-		VS__setPolyFT4White(prim);
-		prim->tpage = panel->tpage;
-		prim->clut = GetClut(panel->clutX, panel->clutY);
-		setUVDataPolyFT4(prim, panel->u,
-		                 panel->v +
-		                         (MAIN_D_801B1C7C + (int16_t)id * 0x50)[0x2e],
-		                 panel->w, panel->h);
-		setPosDataPolyFT4(prim, rowX4 + panel->x, y4 + panel->y,
-		                  panel->w, panel->h);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-	}
-
-	y = -109;
-	for (i = 5; i >= 0; i--) {
-		panel = &MAIN_D_8012F590[id * 6 + i];
-		VS__setPolyFT4White(prim);
-		prim->tpage = panel->tpage;
-		prim->clut = GetClut(panel->clutX, panel->clutY);
-		setUVDataPolyFT4(prim, panel->u, panel->v, panel->w,
-		                 panel->h);
-		setPosDataPolyFT4(prim, baseX + panel->x, y + panel->y,
-		                  panel->w, panel->h);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-	}
-	GsSetWorkBase((PACKET *)prim);
-}
-
-void VS__renderPressStartToBeginBox(int32_t id)
-{
-	renderString(0,
-	             UI_BOX_DATA[id].finalPos.x + 6,
-	             UI_BOX_DATA[id].finalPos.y + 6,
-	             96, 24, 0, 0, 6 - id, 1);
-}
-
-int32_t VS__isKeyPressedByAnyPlayer(uint32_t buttons)
-{
-	uint32_t input;
-	uint32_t previous;
-
-	if (buttons & ((input = POLLED_INPUT) & ~(previous = POLLED_INPUT_PREVIOUS))) {
-		return 1;
-	}
-
-	POLLED_INPUT = (input >> 16) & 0xffff;
-	POLLED_INPUT_PREVIOUS = (previous >> 16) & 0xffff;
-
-	if (buttons & (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS)) {
-		POLLED_INPUT = input;
-		POLLED_INPUT_PREVIOUS = previous;
-
-		return 2;
-	}
-
-	POLLED_INPUT = input;
-	POLLED_INPUT_PREVIOUS = previous;
-
-	return 0;
-}
-
-int32_t VS__tickSelectMode(void)
-{
-	RECT rect;
-	int32_t i;
-	int32_t count1;
-	int32_t count2;
-	int32_t j;
-
-	count2 = 0;
-	count1 = 0;
-
-	for (i = 0; i < 40; ++i) {
-		if (((uint8_t (*)[64])MAIN_D_8013526C)[i][0x1c] != 0) {
-			++count1;
-		}
-		if (((uint8_t (*)[64])MAIN_D_80135270)[i][0x1c] != 0) {
-			++count2;
-		}
-	}
-
-	if (count1 >= 3 && count2 >= 3) {
-		if (count1 >= 5 && count2 >= 5) {
-			MAIN_D_80134F58 = 2;
-		} else {
-			MAIN_D_80134F58 = 1;
-		}
-	} else {
-		MAIN_D_80134F58 = 0;
-	}
-
-	setRECT(&rect, -90, -70, 180, 128);
-	MAIN_D_80134F59 = 0;
-	MAIN_D_80134F5A = 0;
-	MAIN_D_80134F5B = 0;
-	MAIN_D_80134F5C = 0;
-	createStaticUIBox(0, 1, 0, &rect, VS__tickSelectBox,
-	                  VS__renderSelectModeBox);
-
-	fadeFromBlack(5);
-
-	for (j = 0; j < 6; ++j) {
-		VS_tickFrame();
-	}
-
-	while (MAIN_D_80134F5B == 0) {
-		VS_tickFrame();
-	}
-
-	fadeToBlack(5);
-
-	for (j = 0; j < 6; ++j) {
-		VS_tickFrame();
-	}
-
-	VS_D_800716A8[11] = MAIN_D_80134550[MAIN_D_80134F59];
-	removeStaticUIBox(0);
-
-	if (MAIN_D_80134F5B == 1) {
-		return 1;
-	}
-
-	return 0;
-}
-
-void VS__tickSelectBox(int32_t id)
-{
-	uint8_t previous;
-
-	if (MAIN_D_80134F5B != 0) {
-		return;
-	}
-
-	if (VS__isKeyPressedByAnyPlayer(0x40) != 0) {
-		playSound(0, 3);
-		MAIN_D_80134F5B = 1;
-		return;
-	}
-
-	++MAIN_D_80134F5C;
-	if (MAIN_D_80134F5C % 8 == 0) {
-		MAIN_D_80134F5A = (MAIN_D_80134F5A + 1) & 1;
-	}
-
-	if (VS__isKeyPressedByAnyPlayer(0x8000) != 0) {
-		previous = MAIN_D_80134F59--;
-		if (id == 1) {
-			if (MAIN_D_80134F59 == 0xff) {
-				MAIN_D_80134F59 = 2;
-			}
-
-			playSound(0, 2);
-			MAIN_D_80134F5A = 0;
-		} else {
-			if (MAIN_D_80134F59 == 0xff) {
-				MAIN_D_80134F59 = MAIN_D_80134F58;
-			}
-
-			if (previous != MAIN_D_80134F59) {
-				playSound(0, 2);
-				MAIN_D_80134F5A = 0;
-			}
-		}
-	}
-
-	if (VS__isKeyPressedByAnyPlayer(0x2000) != 0) {
-		previous = MAIN_D_80134F59++;
-		if (id == 1) {
-			MAIN_D_80134F59 %= 3;
-			playSound(0, 2);
-			MAIN_D_80134F5A = 0;
-		} else {
-			MAIN_D_80134F59 %= MAIN_D_80134F58 + 1;
-			if (previous != MAIN_D_80134F59) {
-				playSound(0, 2);
-				MAIN_D_80134F5A = 0;
-			}
-		}
-	}
-}
-
-void VS__renderSelectModeBox(int32_t depth)
-{
-	POLY_FT4 *prim;
-	VsUISprite *sprite;
-	int32_t i;
-	int32_t j;
-	int32_t x;
-
-	prim = (POLY_FT4 *)GsGetWorkBase();
-	sprite = MAIN_D_8012F650;
-
-	for (i = 0, j = -1; i < 8; ++sprite, ++i, ++j) {
-		SetPolyFT4(prim);
-		setRGB0(prim, 0x80, 0x80, 0x80);
-		prim->clut = GetClut(48, sprite->clut);
-
-		if (i > 0 && i < 4 && MAIN_D_80134F59 != j) {
-			setRGB0(prim, 0x40, 0x40, 0x40);
-		}
-
-		if (i == 4 && MAIN_D_80134F59 != 0) {
-			setClut(prim, 48, 501);
-		}
-
-		if (i == 5 && MAIN_D_80134F59 != 1) {
-			setClut(prim, 48, 501);
-		}
-
-		if (i == 6 && MAIN_D_80134F59 != 2) {
-			setClut(prim, 48, 501);
-		}
-
-		prim->tpage = getTPage(0, 0, 448, 0);
-
-		if (i == MAIN_D_80134F59 + 1 && i > 0 && i < 4) {
-			setUVDataPolyFT4(prim,
-			                 sprite->u + MAIN_D_80134F5A * 40,
-			                 sprite->v, sprite->w, sprite->h);
-
-			if (i == 3 && MAIN_D_80134F5A == 1) {
-				setClut(prim, 48, 495);
-			}
-		} else {
-			setUVDataPolyFT4(prim, sprite->u, sprite->v, sprite->w,
-			                 sprite->h);
-		}
-
-		if (i != 7) {
-			x = sprite->x - 90;
-		} else {
-			x = (sprite->x - 90) + MAIN_D_80134F59 * 56;
-		}
-
-		setPosDataPolyFT4(prim, x, sprite->y - 70, sprite->w,
-		                  sprite->h);
-
-		AddPrim((ACTIVE_ORDERING_TABLE->org + 6) - depth, prim++);
-	}
-
-	GsSetWorkBase((PACKET *)prim);
-}
-
-int32_t VS__tickSelectMap(void)
-{
-	RECT rect;
-	int32_t i;
-
-	setRECT(&rect, -90, -70, 180, 128);
-	MAIN_D_80134F59 = 0;
-	MAIN_D_80134F5A = 0;
-	MAIN_D_80134F5B = 0;
-	MAIN_D_80134F5C = 0;
-	createStaticUIBox(1, 1, 0, &rect, VS__tickSelectBox,
-	                  VS__renderSelectMapBox);
-
-	fadeFromBlack(5);
-
-	for (i = 0; i < 6; ++i) {
-		VS_tickFrame();
-	}
-
-	while (MAIN_D_80134F5B == 0) {
-		VS_tickFrame();
-	}
-
-	fadeToBlack(5);
-
-	for (i = 0; i < 6; ++i) {
-		VS_tickFrame();
-	}
-
-	VS_D_800716A8[10] = MAIN_D_80134F59;
-	removeStaticUIBox(1);
-
-	if (MAIN_D_80134F5B == 1) {
-		return 1;
-	}
-
-	return 0;
-}
-
-void VS__renderSelectMapBox(int32_t id)
-{
-	POLY_FT4 *prim;
-	VsUISprite *sprite;
-	int32_t i;
-	int32_t posX;
-
-	prim = (POLY_FT4 *)GsGetWorkBase();
-
-	if (id == 0) {
-		sprite = MAIN_D_8012F650;
-	} else {
-		sprite = MAIN_D_8012F690;
-	}
-
-	for (i = 0; i < 8; ++i) {
-		SetPolyFT4(prim);
-		setRGB0(prim, 0x80, 0x80, 0x80);
-		prim->clut = GetClut(48, sprite->clut);
-		setUVDataPolyFT4(prim, sprite->u, sprite->v, sprite->w,
-		                 sprite->h);
-
-		if (i == 1 && MAIN_D_80134F59 != 0) {
-			setUVDataPolyFT4(prim, sprite->u + 40, sprite->v,
-			                 sprite->w, sprite->h);
-			setClut(prim, 48, 499);
-		}
-
-		if (i == 2 && MAIN_D_80134F59 != 1) {
-			setUVDataPolyFT4(prim, sprite->u + 40, sprite->v,
-			                 sprite->w, sprite->h);
-			setClut(prim, 48, 499);
-		}
-
-		if (i == 3 && MAIN_D_80134F59 != 2) {
-			setUVDataPolyFT4(prim, sprite->u + 40, sprite->v,
-			                 sprite->w, sprite->h);
-			setClut(prim, 48, 499);
-		}
-
-		if (i >= 4 && i < 7 && MAIN_D_80134F59 != i - 4) {
-			setClut(prim, 48, 492);
-		}
-
-		prim->tpage = getTPage(0, 0, 448, 0);
-		if (i != 7) {
-			posX = sprite->x - 90;
-		} else {
-			posX = sprite->x - 90 + MAIN_D_80134F59 * 56;
-		}
-
-		setPosDataPolyFT4(prim, posX, sprite->y - 70, sprite->w,
-		                  sprite->h);
-		AddPrim(ACTIVE_ORDERING_TABLE->org + 6 - id, prim++);
-		++sprite;
-	}
-
-	GsSetWorkBase((PACKET *)prim);
 }
