@@ -238,7 +238,7 @@ SECTIONS
         BUILD_DIR/src/btl/battle_effect.c.o(.sdata .sdata.*);
         BUILD_DIR/src/std/std_setup.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/ADA28.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/std/std_main.c.o(.sdata .sdata.*);
         BUILD_DIR/src/std/std_hud.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/std/std_effect.c.o(.sdata .sdata.*);
@@ -332,7 +332,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/std/std_setup.c.o(.sbss.*);
         . = ALIGN(., 4);
-        BUILD_DIR/generated/unk_0x8013E37C.sbss.s.o(.sbss.*);
+        BUILD_DIR/src/std/std_main.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/std/std_hud.c.o(.sbss.*);
         . = ALIGN(., 4);

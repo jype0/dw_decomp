@@ -15,10 +15,8 @@ typedef struct {
 } StdArenaCfg;
 
 typedef struct {
-	int16_t unk0;
-	uint8_t pad2[0xe];
-	uint8_t unk10;
-	uint8_t pad11[0x7];
+	int16_t unk0[8];
+	uint8_t unk10[8];
 } StdSrcA598;
 
 typedef struct {

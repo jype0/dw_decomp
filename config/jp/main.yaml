@@ -209,7 +209,7 @@ segments:
       - [0xAD94C, .sdata, btl/battle_hud]
       - [0xAD9A4, .sdata, btl/battle_effect]
       - [0xADA24, .sdata, std/std_setup]
-      - [0xADA28, sdata]
+      - [0xADA28, .sdata, std/std_main]
       - [0xADAD4, .sdata, std/std_hud]
       - [0xADAF8, .sdata, std/std_effect]
       - [0xADB6C, .sdata, fish/fish]

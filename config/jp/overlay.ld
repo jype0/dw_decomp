@@ -193,13 +193,13 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/std/data/model_3.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/std/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/std/std_setup.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/std/5E80.s.o(.text .text.*));
+			BUILD_DIR/src/std/std_main.c.o(.text .text.*);
 			BUILD_DIR/src/std/std_hud.c.o(.text .text.*);
 			BUILD_DIR/src/std/std_effect.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/std/data/std.data.s.o(.data .data.*));
+			BUILD_DIR/src/std/std_main.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/std/std_setup.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/std/std_setup.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/std/data/317C0.data.s.o(.data .data.*));
+			BUILD_DIR/src/std/std_main.c.o(.data .data.*);
 			BUILD_DIR/src/std/std_hud.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/std/std_hud.c.o(.data .data.*);
 			BUILD_DIR/src/std/std_effect.c.o(.rodata .rodata.*);

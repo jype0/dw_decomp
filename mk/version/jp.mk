@@ -155,6 +155,7 @@ $(eval $(call overlay,SHOP,shop))
 STD_C_SRC := \
 	src/std/std_effect.c \
 	src/std/std_hud.c \
+	src/std/std_main.c \
 	src/std/std_setup.c \
 	src/std/std_bss_jp.c
 

@@ -97,12 +97,12 @@ segments:
     subalign: 4
     subsegments:
       - [0x41C8, c, std_setup]
-      - [0x5E80, asm]
+      - [0x5E80, c, std_main]
       - [0x1B258, c, std_hud]
       - [0x1F208, c, std_effect]
-      - [0x313F0, data, std]
+      - [0x313F0, .rodata, std_main]
       - [0x314B8, .data, std_setup]
-      - [0x317C0, data]
+      - [0x317C0, .data, std_main]
       - [0x3224C, .data, std_hud]
       - [0x3264C, .data, std_effect]
       - [0x331A8, .data, std_bss_jp]
