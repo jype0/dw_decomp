@@ -284,7 +284,7 @@ SECTIONS
 			BUILD_DIR/src/vs/vs_scene.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_intro.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_camera.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/vs/EDF8.s.o(.text .text.*));
+			BUILD_DIR/src/vs/vs_combat.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_main.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.text .text.*);
 			KEEP(BUILD_DIR/asm/vs/1F8FC.s.o(.text .text.*));
@@ -292,13 +292,13 @@ SECTIONS
 			BUILD_DIR/src/vs/vs_scene.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_intro.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_camera.c.o(.rodata .rodata.*);
-			KEEP(BUILD_DIR/asm/vs/data/3056C.data.s.o(.data .data.*));
+			BUILD_DIR/src/vs/vs_combat.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_select.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_scene.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_intro.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_camera.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/vs/data/31560.data.s.o(.data .data.*));
+			BUILD_DIR/src/vs/vs_combat.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_main.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.data .data.*);
 			KEEP(BUILD_DIR/asm/vs/data/319C0.data.s.o(.data .data.*));

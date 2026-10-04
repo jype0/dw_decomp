@@ -5,7 +5,6 @@
 #include <libgpu.h>
 #include <libgs.h>
 
-#include <dw/anim.h>
 #include <dw/attack_object.h>
 #include <dw/btl.h>
 #include <dw/combat.h>
@@ -13,6 +12,7 @@
 #include <dw/file_queue.h>
 #include <dw/font.h>
 #include <dw/garbage.h>
+#include <dw/input.h>
 #include <dw/main.h>
 #include <dw/math.h>
 #include <dw/model.h>
@@ -64,25 +64,27 @@ void handleBattleIdle(DigimonEntity *entity, Stats *stats, int32_t flags);
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 void collisionGrace(Entity *target, Entity *entity, int32_t dx, int32_t dy);
 void removeEntityText(int32_t id);
+void startAnimation(Entity *entity, uint8_t animId);
+void tickAnimation(Entity *entity);
 
 void VS__renderIntroStatNumber(int32_t x, int32_t y, int32_t digits, int32_t value,
                                int32_t layer);
 void VS__combatInit(void);
 void VS__combatSetup(void);
-int32_t VS__checkEndCondition(void);
-void VS__tickDigimonAi(uint8_t fighterId);
+int16_t VS__checkEndCondition(void);
+void VS__tickDigimonAi(int32_t fighterId);
 void VS__tickBattle(void);
 void VS__handlePause(void);
-int32_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2);
-int32_t VS__isButtonsPressed(int32_t buttons);
+int16_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2);
+uint8_t VS__isButtonsPressed(int32_t buttons);
 void VS__deinitializeStatusEffects(void);
 void VS__removePlayerMarker(void);
 void VS__resetFlatten(int16_t combatId);
 int32_t VS__areAllEnemyDigimonDead(void);
-void VS__tickBattleResultScreen(uint8_t hasLostP1, uint8_t hasLostP2);
+void VS__tickBattleResultScreen(int32_t hasLostP1, int32_t hasLostP2);
 void VS__addTimeoutWindow(void);
 void VS__faintDigimon(DigimonEntity *entity, FighterData *fighter,
-                      uint8_t fighterId);
+                      int16_t fighterId);
 int32_t VS__getDigitCount(int32_t value);
 void VS__tickDigimonAttacking(Entity *entity, DigimonEntity *target,
                               int32_t fighterId);
@@ -117,10 +119,10 @@ void VS__confusedRotate(Entity *entity);
 void VS__tickDigimonWaitingDistance(DigimonEntity *entity, DigimonEntity *other,
                                     FighterData *data);
 void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other,
-                                     FighterData *data, int32_t min, int32_t max);
+                                     FighterData *data, uint32_t min, uint32_t max);
 int32_t VS__getBaseDistance(Entity *a, Entity *b);
 void VS__increaseSpeedBuffer(FighterData *fighter, Stats *stats);
-int32_t VS__hasAffordableMoves2(uint16_t *array, uint8_t fighterId);
+int32_t VS__hasAffordableMoves2(uint16_t *array, int16_t fighterId);
 void VS___setWalking(Entity *entity, Stats *stats, uint16_t flags);
 void VS__initializePlayerMarker(void);
 void VS__clearFighterDataTables(FighterData *fighter);
@@ -136,10 +138,12 @@ void VS__tickDigimonP1(int32_t instanceId);
 void VS__tickDigimonP2(int32_t instanceId);
 
 static void *vs_combat_functions[] = {
+#if !defined(VERSION_JP)
 	VS__tickDigimonP2,
 	VS__tickDigimonP1,
 	VS__tickVSInput,
 	VS___tickVSInput,
+#endif
 	VS__renderPlayerMarker,
 	VS__renderTimeoutWindow,
 	VS__renderTimeoutText,
@@ -210,12 +214,13 @@ GARBAGE(VS__combatInit, 21);
 
 void VS__combatInit(void)
 {
-	Stats *stats;
-	FighterData *fighter;
-	int16_t *out;
-	int32_t i;
 	int32_t slot;
-	int32_t brain;
+	int16_t *out;
+	DigimonEntity *entity;
+	long i;
+	FighterData *fighter;
+	Stats *stats;
+	int16_t brain;
 
 	MAIN_D_80135280[0] = 0;
 	MAIN_D_80135280[1] = 0;
@@ -232,19 +237,23 @@ void VS__combatInit(void)
 	MAIN_D_80134F4C = -1;
 
 	for (i = 0; i < 2; ++i) {
-		(&MAIN_D_80134F3C)[i] =
-			((DigimonEntity *)(&ENTITY_TABLE[1])[i])->stats.current.chargeMode;
-		((int8_t *)COMBAT_DATA_PTR->player.remainingChargeupTime)[i] = -1;
+		(&MAIN_D_80134F3C)[i] = ((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.current.chargeMode;
+		COMBAT_DATA_PTR->player.remainingChargeupTime[i] = -1;
 	}
 
+#if !defined(VERSION_JP)
 	MAIN_D_80134D7C[1] = 0;
+#endif
 	MAIN_D_80134D7C[0] = 1;
-	MAIN_D_80134D66 = 1;
-	ENEMY_COUNT = 1;
 	MAIN_D_80134D74 = 0;
+	MAIN_D_80134D66 = 1;
 	MAIN_D_8013528C = 0;
 	MAIN_D_80135290 = 0;
+#if defined(VERSION_JP)
+	MAIN_D_80134D7C[1] = 0;
+#endif
 	MAIN_D_80134D84 = 0;
+	ENEMY_COUNT = 1;
 
 	COMBAT_DATA_PTR->player.entityIds[0] = 1;
 	COMBAT_DATA_PTR->player.entityIds[1] = 2;
@@ -266,7 +275,8 @@ void VS__combatInit(void)
 
 	fighter = COMBAT_DATA_PTR->fighter;
 	for (i = 0; i <= ENEMY_COUNT; ++i) {
-		stats = &((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]])->stats;
+		entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+		stats = &entity->stats;
 		stats->current.isHit = 0;
 
 		fighter->targetId = (i + 1) & 1;
@@ -293,20 +303,18 @@ void VS__combatInit(void)
 		}
 
 		fighter->buffPrioTimer = stats->base.brain / 10 + 5;
-		slot = 3000 - stats->base.speed;
-
-		fighter->finisherGoal = slot;
+		fighter->finisherGoal = 3000 - stats->base.speed;
 
 		for (slot = 0; slot < 150; ++slot) {
-			((int8_t *)fighter + slot)[0x3c] = -1;
-			((int8_t *)fighter + i)[0xd2] = -1;
+			fighter->table1[slot] = -1;
+			fighter->table2[i] = -1;
 		}
 
 		++fighter;
 	}
 
 	for (i = 0; i < 2; ++i) {
-		brain = ((DigimonEntity *)(&ENTITY_TABLE[1])[i])->stats.base.brain;
+		brain = ((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.base.brain;
 		if (brain < 500) {
 			COMBAT_DATA_PTR->player.numCommands[i] = MAIN_D_80134520[brain / 100];
 		} else {
@@ -346,15 +354,15 @@ void VS__combatInit(void)
 			COMBAT_DATA_PTR->player.availableCommands[i][2] = 5;
 			slot = 3;
 
-			if (((DigimonEntity *)(&ENTITY_TABLE[1])[i])->stats.base.moves[2] != 0xff) {
+			if (((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.base.moves[2] != 0xff) {
 				COMBAT_DATA_PTR->player.availableCommands[i][slot++] = 10;
 			}
 
-			if (((DigimonEntity *)(&ENTITY_TABLE[1])[i])->stats.base.moves[1] != 0xff) {
+			if (((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.base.moves[1] != 0xff) {
 				COMBAT_DATA_PTR->player.availableCommands[i][slot++] = 9;
 			}
 
-			if (((DigimonEntity *)(&ENTITY_TABLE[1])[i])->stats.base.moves[0] != 0xff) {
+			if (((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.base.moves[0] != 0xff) {
 				COMBAT_DATA_PTR->player.availableCommands[i][slot++] = 8;
 			}
 
@@ -365,8 +373,7 @@ void VS__combatInit(void)
 
 		COMBAT_DATA_PTR->player.hoveredCommand[i] =
 			COMBAT_DATA_PTR->player.numCommands[i] - 1;
-		COMBAT_DATA_PTR->player.bufferedCommand[i] = 3;
-		COMBAT_DATA_PTR->player.currentCommand[i] = 3;
+		COMBAT_DATA_PTR->player.currentCommand[i] = COMBAT_DATA_PTR->player.bufferedCommand[i] = 3;
 	}
 
 	VS_addCommandMenu(0);
@@ -375,16 +382,16 @@ void VS__combatInit(void)
 
 void VS__combatSetup(void)
 {
+	int32_t frames;
+	int32_t effect;
+	int32_t finished;
+	int32_t moveCount;
 	int16_t moves[18];
 	int16_t effectIds[18];
-	int8_t isBusy;
-	int32_t moveCount;
-	int32_t frames;
-	int32_t finished;
-	int32_t i;
-	int32_t j;
+	long i;
+	long j;
 	DigimonEntity *entity;
-	uint8_t move;
+	int8_t isBusy;
 
 	GAME_STATE = 5;
 	startAnimation(ENTITY_TABLE[1], 0x21);
@@ -400,9 +407,9 @@ void VS__combatSetup(void)
 		entity->stats.current.efeSubEffect = -1;
 
 		for (j = 0; j < 4; ++j) {
-			if ((move = entity->stats.base.moves[j]) != 0xff) {
-				moves[moveCount++] =
-					DIGIMON_DATA[entity->entity.type].moves[move - 0x2e] + 0x100;
+			if (entity->stats.base.moves[j] != 0xff) {
+				effect = DIGIMON_DATA[entity->entity.type].moves[entity->stats.base.moves[j] - 0x2e] + 0x100;
+				moves[moveCount++] = effect;
 			}
 		}
 	}
@@ -450,8 +457,7 @@ void VS__combatSetup(void)
 		entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 
 		for (j = 0; j < 4; ++j) {
-			move = entity->stats.base.moves[j];
-			if (move == 0xff) {
+			if (entity->stats.base.moves[j] == 0xff) {
 				COMBAT_DATA_PTR->fighter[i].effectSlot[j] = -1;
 			} else {
 				COMBAT_DATA_PTR->fighter[i].effectSlot[j] = effectIds[moveCount++];
@@ -465,11 +471,12 @@ void VS__combatSetup(void)
 	GAME_STATE = 4;
 }
 
-int32_t VS__checkEndCondition(void)
+int16_t VS__checkEndCondition(void)
 {
 	Entity *other;
 	int32_t i;
 
+#if !defined(VERSION_JP)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}
@@ -477,6 +484,7 @@ int32_t VS__checkEndCondition(void)
 	if (COMBAT_DATA_PTR->fighter[1].hpDamageBuffer != 0) {
 		return 0;
 	}
+#endif
 
 	if (ENTITY_TABLE[1]->anim.animId == 0x2b &&
 	    (ENTITY_TABLE[1]->anim.animFlag & 1) == 0) {
@@ -519,10 +527,8 @@ int32_t VS__checkEndCondition(void)
 	}
 
 	if (MAIN_D_80135288 == 0) {
-		FighterData *fighter = *(FighterData **)&COMBAT_DATA_PTR;
-
 		if ((*(DigimonEntity **)&ENTITY_TABLE[1])->stats.current.currentHP -
-		            fighter->hpDamageBuffer <=
+		            (*(FighterData **)&COMBAT_DATA_PTR)->hpDamageBuffer <=
 		    0) {
 			return 0;
 		}
@@ -555,41 +561,42 @@ int32_t VS__checkEndCondition(void)
 	return 0;
 }
 
-void VS__tickDigimonAi(uint8_t fighterId)
+// clang-format off
+void VS__tickDigimonAi(fighterId)
+	int16_t fighterId;
+// clang-format on
 {
 	DigimonEntity *entity;
-	DigimonEntity *other;
 	FighterData *data;
-	FighterData *otherData;
-	Stats *stats;
 	uint16_t *flags;
-	int16_t otherId;
-	unsigned long id;
 	int32_t move;
 	uint16_t array[4];
+	FighterData *otherData;
+	Stats *stats;
+	DigimonEntity *other;
+	int16_t otherId;
 
-	id = fighterId;
 	entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[fighterId]];
-	data = &COMBAT_DATA_PTR->fighter[id];
 	stats = &entity->stats;
+	data = &COMBAT_DATA_PTR->fighter[fighterId];
 	flags = &data->flags;
 
 	if (MAIN_D_80134D66 % 20 == 0 && data->buffPrioTimer != 0) {
 		data->buffPrioTimer--;
 	}
 
-	if (COMBAT_DATA_PTR->player.commandDelay[id] == 0) {
-		COMBAT_DATA_PTR->player.currentCommand[id] =
-			COMBAT_DATA_PTR->player.bufferedCommand[id];
+	if (COMBAT_DATA_PTR->player.commandDelay[fighterId] == 0) {
+		COMBAT_DATA_PTR->player.currentCommand[fighterId] =
+			COMBAT_DATA_PTR->player.bufferedCommand[fighterId];
 	} else if ((*flags & 0x800e) == 0 && data->flatTimer == 0) {
-		COMBAT_DATA_PTR->player.commandDelay[id]--;
+		COMBAT_DATA_PTR->player.commandDelay[fighterId]--;
 	}
 
 	if (MAIN_D_80134D74 == 0) {
 		if ((stats->current.currentHP > data->hpDamageBuffer) &&
 		    (stats->base.brain <= 300) &&
 		    (MAIN_D_80134D66 % ((stats->base.brain / 2 + 1) * 20) == 0) &&
-		    (70 - MAIN_D_80135278[id] > randomLimit(100))) {
+		    (70 - MAIN_D_80135278[fighterId] > randomLimit(100))) {
 			*flags |= 0x2000;
 			data->senileTimer = 100;
 		}
@@ -638,17 +645,17 @@ void VS__tickDigimonAi(uint8_t fighterId)
 	}
 
 	if ((*flags & 0x800e) == 0 && data->flatTimer == 0) {
-		switch (COMBAT_DATA_PTR->player.currentCommand[id]) {
+		switch (COMBAT_DATA_PTR->player.currentCommand[fighterId]) {
 		case 8:
 		case 9:
 		case 10:
-			if (VS_isMoveUsable((DigimonEntity *)&entity->entity, data,
-			                    COMBAT_DATA_PTR->player.currentCommand[id] - 8) != 0) {
+			if (VS_isMoveUsable(entity, data, COMBAT_DATA_PTR->player.currentCommand[fighterId] - 8) != 0) {
 				data->targetId = otherId;
-				if ((entity->stats.base.moves[COMBAT_DATA_PTR->player.currentCommand[id] - 8] != data->queuedAnim) ||
+				if ((entity->stats.base.moves[COMBAT_DATA_PTR->player.currentCommand[fighterId] - 8] !=
+				     data->queuedAnim) ||
 				    (data->moveRange <= 0)) {
-					VS_setupQueuedMove(entity, data, (uint8_t)fighterId,
-					                   (uint8_t)(COMBAT_DATA_PTR->player.currentCommand[id] - 8));
+					VS_setupQueuedMove(entity, data, fighterId,
+					                   COMBAT_DATA_PTR->player.currentCommand[fighterId] - 8);
 				}
 				VS_applyChargeRequirement(entity, data,
 				                          DIGIMON_DATA[entity->entity.type].moves[data->queuedAnim - 0x2e]);
@@ -657,17 +664,17 @@ void VS__tickDigimonAi(uint8_t fighterId)
 			break;
 		case 11:
 			data->targetId = otherId;
-			if ((entity->stats.base.moves[3] != data->queuedAnim) ||
-			    (data->moveRange <= 0)) {
-				VS_setupQueuedMove(entity, data, (uint8_t)fighterId, (uint8_t)3);
+			if ((entity->stats.base.moves[3] != data->queuedAnim) || (data->moveRange <= 0)) {
+				VS_setupQueuedMove(entity, data, fighterId, 3);
 			}
 			VS_applyChargeRequirement(entity, data,
 			                          DIGIMON_DATA[entity->entity.type].moves[data->queuedAnim - 0x2e]);
 			return;
 		}
 
-		if (COMBAT_DATA_PTR->player.currentCommand[id] != 2 && COMBAT_DATA_PTR->player.currentCommand[id] != 4) {
-			entity->stats.current.chargeMode = (&MAIN_D_80134F3C)[id];
+		if (COMBAT_DATA_PTR->player.currentCommand[fighterId] != 2 &&
+		    COMBAT_DATA_PTR->player.currentCommand[fighterId] != 4) {
+			entity->stats.current.chargeMode = (&MAIN_D_80134F3C)[fighterId];
 		}
 	}
 
@@ -689,7 +696,7 @@ void VS__tickDigimonAi(uint8_t fighterId)
 	}
 
 	if ((*flags & 0x2) != 0) {
-		VS_queueRandomMove(entity, data, id);
+		VS_queueRandomMove(entity, data, (long)fighterId);
 		return;
 	}
 
@@ -708,14 +715,14 @@ void VS__tickDigimonAi(uint8_t fighterId)
 	data->targetId = otherId;
 	move = -1;
 
-	switch (COMBAT_DATA_PTR->player.currentCommand[id]) {
+	switch (COMBAT_DATA_PTR->player.currentCommand[fighterId]) {
 	case 2:
 		if (VS__hasAffordableMoves2(array, fighterId) == 0) {
 			data->cooldown = 0x50;
 			data->flags |= 0x800;
 			return;
 		}
-		move = VS_selectMoveByPower((uint8_t)fighterId, array);
+		move = VS_selectMoveByPower((int16_t)fighterId, array);
 		entity->stats.current.chargeMode = 0;
 		break;
 	case 4:
@@ -724,7 +731,7 @@ void VS__tickDigimonAi(uint8_t fighterId)
 			data->flags |= 0x800;
 			return;
 		}
-		move = VS_selectMoveByMpCost((uint8_t)fighterId, array);
+		move = VS_selectMoveByMpCost((int16_t)fighterId, array);
 		entity->stats.current.chargeMode = 2;
 		break;
 	}
@@ -732,19 +739,19 @@ void VS__tickDigimonAi(uint8_t fighterId)
 	if (move == -1) {
 		VS_selectPartnerMove(entity, data, fighterId);
 	} else {
-		VS_setupQueuedMove(entity, data, (uint8_t)fighterId, (uint8_t)move);
+		VS_setupQueuedMove(entity, data, fighterId, move);
 	}
 }
 
 void VS__tickBattle(void)
 {
+	long id;
 	DigimonEntity *entity;
 	DigimonEntity *target;
+	CombatData *combat;
+	long i;
 	FighterData *fighter;
 	uint16_t *flags;
-	uint32_t combat;
-	int32_t id;
-	int32_t i;
 
 	if (MAIN_D_80134D7C[1] > 0) {
 		MAIN_D_80134D7C[1]--;
@@ -754,17 +761,16 @@ void VS__tickBattle(void)
 		MAIN_D_80134D84--;
 	}
 
-	combat = (uint32_t)COMBAT_DATA_PTR;
-	for (i = 0, fighter = (FighterData *)combat; ENEMY_COUNT >= i; i++, fighter = (FighterData *)((int32_t)fighter + 0x168)) {
+	combat = COMBAT_DATA_PTR;
+	for (i = 0; ENEMY_COUNT >= i; i++) {
+		fighter = &combat->fighter[i];
 		flags = &fighter->flags;
-		combat = (uint32_t)COMBAT_DATA_PTR;
-		entity = (DigimonEntity *)ENTITY_TABLE[((uint8_t *)((uint32_t)i + combat))[0x66c]];
+		entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 		VS_addFinisherProgress(fighter, 1);
 		id = fighter->targetId;
 
 		if (id != 0xff) {
-			combat = (uint32_t)COMBAT_DATA_PTR;
-			target = (DigimonEntity *)ENTITY_TABLE[((uint8_t *)((uint32_t)id + combat))[0x66c]];
+			target = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[id]];
 		} else {
 			target = NULL;
 		}
@@ -831,8 +837,8 @@ void VS__handlePause(void)
 {
 	while (MAIN_D_80134E78[1] != 0 && MAIN_D_80134E78[0] >= 2) {
 		if (MAIN_D_80134F30 == VS__isButtonsPressed(0x800)) {
-			MAIN_D_80134F30 = 0;
 			MAIN_D_80134E78[1] = (MAIN_D_80134E78[1] + 1) & 1;
+			MAIN_D_80134F30 = 0;
 		}
 	}
 
@@ -852,9 +858,10 @@ void VS__handlePause(void)
 	}
 }
 
-int32_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2)
+int16_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2)
 {
 	int32_t i;
+	int32_t j;
 	int16_t frames;
 	Stats *stats;
 
@@ -891,13 +898,13 @@ int32_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2)
 	if (lostP1 != lostP2) {
 		startAnimation(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[lostP1]], 0x2a);
 		ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[lostP1]]->anim.animFlag |= 2;
-		i = 0;
+		j = 0;
 
 		stopBGM();
 		stopSound();
 		playMusic(MAIN_D_80135274, 3);
 
-		for (; i < frames; ++i) {
+		for (; j < frames; ++j) {
 			VS_tickFrame();
 			if ((ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[lostP1]]->anim.animFlag & 1) == 0) {
 				startAnimation(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[lostP1]], 0x2a);
@@ -934,7 +941,7 @@ int32_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2)
 	return lostP1;
 }
 
-int32_t VS__isButtonsPressed(int32_t buttons)
+uint8_t VS__isButtonsPressed(int32_t buttons)
 {
 	uint32_t pad;
 	uint32_t prev;
@@ -942,13 +949,16 @@ int32_t VS__isButtonsPressed(int32_t buttons)
 	MAIN_D_80134F38 = MAIN_D_80134F34;
 	MAIN_D_80134F34 = PadRead(1);
 
-	if ((buttons & ((pad = MAIN_D_80134F34) & ~(prev = MAIN_D_80134F38))) != 0) {
+	if (buttons & (MAIN_D_80134F34 & ~MAIN_D_80134F38)) {
 		return 1;
 	}
 
-	MAIN_D_80134F34 = (uint16_t)(pad >> 16);
-	MAIN_D_80134F38 = (uint16_t)(prev >> 16);
-	if ((buttons & (MAIN_D_80134F34 & ~MAIN_D_80134F38)) != 0) {
+	pad = MAIN_D_80134F34;
+	prev = MAIN_D_80134F38;
+	MAIN_D_80134F34 = (MAIN_D_80134F34 >> 16) & 0xffff;
+	MAIN_D_80134F38 = (MAIN_D_80134F38 >> 16) & 0xffff;
+
+	if (buttons & (MAIN_D_80134F34 & ~MAIN_D_80134F38)) {
 		MAIN_D_80134F34 = pad;
 		MAIN_D_80134F38 = prev;
 
@@ -1019,7 +1029,11 @@ int32_t VS__areAllEnemyDigimonDead(void)
 	return 1;
 }
 
-void VS__tickBattleResultScreen(uint8_t hasLostP1, uint8_t hasLostP2)
+// clang-format off
+void VS__tickBattleResultScreen(hasLostP1, hasLostP2)
+	int16_t hasLostP1;
+	int16_t hasLostP2;
+// clang-format on
 {
 	MAIN_D_80134F44 = 0;
 	addObject(0x1a2, 0, NULL, (RenderFunction)VS__renderTimeoutText);
@@ -1043,7 +1057,7 @@ void VS__tickBattleResultScreen(uint8_t hasLostP1, uint8_t hasLostP2)
 		VS__addTimeoutWindow();
 
 		while (MAIN_D_80134F44 < 61) {
-			if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) != 0) {
+			if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & CONFIRM_BUTTON) != 0) {
 				break;
 			}
 			VS_tickFrame();
@@ -1061,7 +1075,6 @@ void VS__tickBattleResultScreen(uint8_t hasLostP1, uint8_t hasLostP2)
 	} else {
 		DigimonEntity *winner;
 		DigimonEntity *loser;
-		uint32_t timer;
 
 		winner = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[hasLostP1]];
 		loser = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[hasLostP2]];
@@ -1072,12 +1085,12 @@ void VS__tickBattleResultScreen(uint8_t hasLostP1, uint8_t hasLostP2)
 		VS__faintDigimon(loser, &COMBAT_DATA_PTR->fighter[hasLostP2],
 		                 hasLostP2);
 
-		while ((timer = MAIN_D_80134F44) < 121) {
-			if (timer >= 61 &&
-			    (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) != 0) {
+		while (MAIN_D_80134F44 < 121) {
+			if (MAIN_D_80134F44 >= 61 &&
+			    (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & CONFIRM_BUTTON) != 0) {
 				break;
 			}
-			if (timer == 60) {
+			if (MAIN_D_80134F44 == 60) {
 				VS__addTimeoutWindow();
 			}
 			VS_tickFrame();
@@ -1096,6 +1109,7 @@ void VS__addTimeoutWindow(void)
 {
 	RECT finalPos;
 	RECT startPos;
+	Stats *stats;
 	char *name1;
 	char *name2;
 
@@ -1110,6 +1124,7 @@ void VS__addTimeoutWindow(void)
 	DrawSync(0);
 	removeObject(0x1a2, 0);
 
+	stats = &((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats;
 	setRECT(&startPos, -10, -10, 20, 20);
 
 	setRECT(&finalPos, -132, -27, 264, 54);
@@ -1119,7 +1134,7 @@ void VS__addTimeoutWindow(void)
 }
 
 void VS__faintDigimon(DigimonEntity *entity, FighterData *fighter,
-                      uint8_t fighterId)
+                      int16_t fighterId)
 {
 	entity->stats.current.isHit = 1;
 	fighter->flags |= 0x8000;
@@ -1155,16 +1170,15 @@ int32_t VS__getDigitCount(int32_t value)
 void VS__tickDigimonAttacking(Entity *entity, DigimonEntity *target,
                               int32_t fighterId)
 {
-	int32_t i;
+	long i;
+	Entity *other;
 
 	if ((entity->anim.animFlag & 1) == 0) {
 		if (entity->anim.frameCount != entity->anim.animFrame) {
 			for (i = 0; i <= ENEMY_COUNT; ++i) {
 				if (i != fighterId) {
-					Entity *other = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
-					uint32_t moveIdx = other->anim.animId - 0x2e;
-
-					if (DIGIMON_DATA[other->type].moves[moveIdx] == 0x2d) {
+					other = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+					if (DIGIMON_DATA[other->type].moves[(uint32_t)(other->anim.animId - 0x2e)] == 0x2d) {
 						if (fighterId == COMBAT_DATA_PTR->fighter[i].targetId) {
 							return;
 						}
@@ -1220,8 +1234,6 @@ void VS__tickDigimonStun(Entity *entity)
 void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
                               FighterData *data, int32_t fighterId)
 {
-	int32_t range;
-
 	if (MAIN_D_80134D74 != 0) {
 		handleBattleIdle(entity, &entity->stats, data->flags);
 		return;
@@ -1251,8 +1263,7 @@ void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
 			VS_startFighterMove(entity, other, data);
 		}
 	} else {
-		range = data->moveRange;
-		switch (range) {
+		switch (data->moveRange) {
 		case 1:
 			if (VS__tickDigimonAttackClose(entity, other, data, fighterId) != 0) {
 				collisionGrace(&other->entity,
@@ -1380,8 +1391,6 @@ void VS__tickDigimonOnCooldown(DigimonEntity *entity, DigimonEntity *other,
 void VS__tickDigimonOther(DigimonEntity *entity, DigimonEntity *other,
                           FighterData *data, int32_t fighterId)
 {
-	int32_t range;
-
 	if (MAIN_D_80134D74 != 0 && MAIN_D_80134D60 != &entity->entity) {
 		handleBattleIdle(entity, &entity->stats, data->flags);
 		return;
@@ -1391,8 +1400,7 @@ void VS__tickDigimonOther(DigimonEntity *entity, DigimonEntity *other,
 		return;
 	}
 
-	range = data->moveRange;
-	switch (range) {
+	switch (data->moveRange) {
 	case 1:
 		if (VS__tickDigimonAttackClose(entity, other, data, fighterId) != 0) {
 			collisionGrace(&other->entity, &entity->entity, 280,
@@ -1415,9 +1423,7 @@ int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
                                     FighterData *data)
 {
 	int16_t id;
-	uint8_t command;
 	uint32_t threshold;
-	uint32_t distance;
 
 	if (MAIN_D_80134D74 != 0) {
 		return 0;
@@ -1429,8 +1435,7 @@ int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
 		id = 1;
 	}
 
-	command = COMBAT_DATA_PTR->player.currentCommand[id];
-	switch (command) {
+	switch (COMBAT_DATA_PTR->player.currentCommand[id]) {
 	case 6:
 		handleBattleIdle(entity, &entity->stats, data->flags);
 		entityLookAtLocation(&entity->entity,
@@ -1445,8 +1450,7 @@ int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
 			threshold += 160000;
 		}
 
-		distance = VS_getDistanceSquared(&entity->entity, &other->entity);
-		if (distance < threshold) {
+		if (VS_getDistanceSquared(&entity->entity, &other->entity) < threshold) {
 			VS__setWalking(&entity->entity, &entity->stats, data->flags);
 			VS__tickDigimonRotateKeepDistance(entity, other, data);
 		} else {
@@ -1465,110 +1469,88 @@ int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
                                    FighterData *data, int16_t fighterId)
 {
 	int16_t *rotation;
-	int16_t savedRotation;
+	PositionData *pos;
 	uint32_t distance;
 	int32_t radius;
-	int32_t tech;
+	int16_t savedRotation;
+	int16_t tech;
 
-	rotation = &entity->entity.posData->rotation.vy;
+	pos = entity->entity.posData;
+	rotation = &pos->rotation.vy;
 	entity->entity.anim.animFlag &= 0xfd;
 	savedRotation = *rotation;
-
 	if (other != NULL) {
 		distance = VS_getDistanceSquared(&entity->entity, &other->entity);
-		radius = DIGIMON_DATA[entity->entity.type].radius +
-		         DIGIMON_DATA[other->entity.type].radius;
-		if (radius * radius >= distance) {
+		radius = DIGIMON_DATA[entity->entity.type].radius + DIGIMON_DATA[other->entity.type].radius;
+		radius = radius * radius;
+		if (distance <= radius) {
 			handleBattleIdle(entity, &entity->stats, data->flags);
-
 			if (MAIN_D_80134D74 != 0) {
 				if (MAIN_D_80134D60 != &entity->entity) {
 					return 0;
 				}
-
 				if (MAIN_D_80134F48 > 0) {
 					MAIN_D_80134F48--;
-					entityLookAtLocation(&entity->entity,
-					                     &other->entity.posData->location);
-
+					entityLookAtLocation(&entity->entity, &other->entity.posData->location);
 					return 0;
 				}
 			} else {
-				tech = data->queuedAnim;
-				tech = (int16_t)entityGetTechFromAnim(&entity->entity,
-				                                      tech);
+				tech = entityGetTechFromAnim(&entity->entity, data->queuedAnim);
 				if (tech >= 0x3a && tech < 0x71) {
 					MAIN_D_80134D74 = 1;
 				}
-
 				if (MAIN_D_80134D74 != 0) {
 					MAIN_D_80134D60 = &entity->entity;
-					VS_addTargetCursor(fighterId);
-					startAnimation(&entity->entity,
-					               data->queuedAnim);
+					VS_addTargetCursor(fighterId, tech);
+					startAnimation(&entity->entity, data->queuedAnim);
 					entity->entity.anim.animFlag &= 0xfe;
 					MAIN_D_80134F4C = VS_addFinisherAura((int32_t)&entity->entity, 80);
 					MAIN_D_80134F48 = 80;
-
 					return 0;
 				}
 			}
-
 			if (VS_selectMoveTarget((Entity *)entity, data) != 0) {
 				return 0;
 			}
-
 			startAnimation(&entity->entity, data->queuedAnim);
 			data->flags |= 0x20;
 			VS_playMoveEffect(entity, other, data);
-
 			return 0;
 		}
-
 		if (MAIN_D_80134D74 == 0) {
-			VS__setWalking(&entity->entity, &entity->stats,
-			               data->flags);
-			entityLookAtLocation(&entity->entity,
-			                     &other->entity.posData->location);
-		} else {
-			if (MAIN_D_80134D60 != &entity->entity) {
-				return 0;
-			}
-
-			if (MAIN_D_80134F48 > 0) {
-				MAIN_D_80134F48--;
-				entityLookAtLocation(&entity->entity,
-				                     &other->entity.posData->location);
-
-				return 0;
-			}
-
-			startAnimation(&entity->entity, data->queuedAnim);
-			data->flags |= 0x20;
-			VS_playMoveEffect(entity, other, data);
-
+			VS__setWalking(&entity->entity, &entity->stats, data->flags);
+			entityLookAtLocation(&entity->entity, &other->entity.posData->location);
+			goto check;
+		}
+		if (MAIN_D_80134D60 != &entity->entity) {
 			return 0;
 		}
-	} else {
-		VS__setWalking(&entity->entity, &entity->stats, data->flags);
-	}
-
-	if (entityCheckCollision(NULL, &entity->entity, 280, 200) == -1) {
+		if (MAIN_D_80134F48 > 0) {
+			MAIN_D_80134F48--;
+			entityLookAtLocation(&entity->entity, &other->entity.posData->location);
+			return 0;
+		}
+		startAnimation(&entity->entity, data->queuedAnim);
+		data->flags |= 0x20;
+		VS_playMoveEffect(entity, other, data);
 		return 0;
 	}
 
-	*rotation = savedRotation;
-
-	return 1;
+	VS__setWalking(&entity->entity, &entity->stats, data->flags);
+check:
+	if (entityCheckCollision(NULL, &entity->entity, 280, 200) == -1) {
+		return 0;
+	} else {
+		*rotation = savedRotation;
+		return 1;
+	}
 }
 
 void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
                                  FighterData *data, int16_t move)
 {
 	uint32_t distance;
-	int32_t range;
-	uint32_t maxDistance;
-	uint32_t minDistance;
+	uint32_t total;
 
 	if (data->unk15 > 100) {
 		handleBattleIdle(entity, &entity->stats, data->flags);
@@ -1588,16 +1570,15 @@ void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
 	}
 
 	distance = VS_getDistanceSquared(&entity->entity, &other->entity);
-	range = (DIGIMON_DATA[entity->entity.type].radius +
-	         DIGIMON_DATA[other->entity.type].radius);
-	maxDistance = *(uint32_t *)&MOVE_DATA[move].distance + range * range;
+	total = DIGIMON_DATA[entity->entity.type].radius + DIGIMON_DATA[other->entity.type].radius;
+	total = *(uint32_t *)&MOVE_DATA[move].distance + total * total;
 
-	if (maxDistance + (minDistance = maxDistance * 3 / 10) < distance) {
+	if (distance > total + total * 3 / 10) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		VS__tickDigimonAttackLookAtTarget(entity, &other->entity.posData->location,
 		                                  280, 200);
 		++data->unk15;
-	} else if (distance < maxDistance - minDistance) {
+	} else if (distance < total - total * 3 / 10) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		VS__tickDigimonRotateKeepDistance(entity, other, data);
 		++data->unk15;
@@ -1623,8 +1604,8 @@ uint32_t VS__entityGetMoveWithHighestDistance(DigimonEntity *entity)
 {
 	uint32_t highest;
 	int32_t i;
-	uint8_t move;
 	uint8_t tech;
+	uint8_t move;
 
 	highest = 0;
 	for (i = 0; i < 4; ++i) {
@@ -1652,79 +1633,80 @@ void VS__setWalking(Entity *entity, Stats *stats, uint16_t flags)
 void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *other,
                                        FighterData *data)
 {
-	int16_t *rotationY;
-	int16_t initRotation;
-	int16_t reversedY;
-	int16_t result;
-	int16_t val1;
-	int16_t val2;
+	int16_t *targetRot;
+	int16_t *rot;
+	int16_t orig;
+	int16_t away;
+	int16_t ccw;
+	int16_t cw;
+	int16_t hit;
+	int16_t diff;
 
-	rotationY = &entity->entity.posData->rotation.vy;
-	initRotation = *rotationY;
-	entityLookAtLocation(&entity->entity,
-	                     &other->entity.posData->location);
-	reversedY = (*rotationY + 0x800) & 0xfff;
+	rot = &entity->entity.posData->rotation.vy;
+	orig = *rot;
+	entityLookAtLocation(&entity->entity, &other->entity.posData->location);
+	away = (*rot + 0x800) & 0xfff;
 
 	if (data->unk16 == 0) {
-		*rotationY = reversedY;
+		*rot = away;
 
-		result = entityCheckCollision(NULL, &entity->entity, 280, 200);
-		if (result != -1) {
+		hit = entityCheckCollision(NULL, &entity->entity, 280, 200);
+		if (hit != -1) {
 			data->unk16 = 1;
-			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rotationY, result,
-			                                             initRotation);
+			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rot, hit, orig);
 		}
 
 		return;
 	}
 
-	*rotationY = initRotation;
-	if (initRotation == other->entity.posData->rotation.vy) {
-		*rotationY = (*rotationY + 0x400) & 0xfff;
+	*rot = orig;
+	targetRot = &other->entity.posData->rotation.vy;
+	if (orig == *targetRot) {
+		*rot = (*rot + 0x400) & 0xfff;
 
 		if (entityCheckCollision(NULL, &entity->entity, 280, 200) == -1) {
 			return;
 		}
 
-		*rotationY = initRotation;
-		*rotationY = (*rotationY + 0xc00) & 0xfff;
+		*rot = orig;
+		*rot = (*rot + 0xc00) & 0xfff;
 
 		if (entityCheckCollision(NULL, &entity->entity, 280, 200) == -1) {
 			return;
 		}
 
-		*rotationY = initRotation;
+		*rot = orig;
 
-		result = entityCheckCollision(NULL, &entity->entity, 280, 200);
-		if (result != -1) {
-			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rotationY, result,
-			                                             initRotation);
+		hit = entityCheckCollision(NULL, &entity->entity, 280, 200);
+		if (hit != -1) {
+			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rot, hit, orig);
 		}
 
 		return;
 	}
 
-	val1 = initRotation - reversedY;
-	if (val1 < 0) {
-		val1 = (val1 + 0x1000) & 0xfff;
+	ccw = orig - away;
+	if (ccw < 0) {
+		ccw = (ccw + 0x1000) & 0xfff;
 	}
 
-	val2 = reversedY - initRotation;
-	if (val2 < 0) {
-		val2 = (val2 + 0x1000) & 0xfff;
+	cw = away - orig;
+	if (cw < 0) {
+		cw = (cw + 0x1000) & 0xfff;
 	}
 
-	if ((int16_t)(val1 - val2) < 0) {
-		if (val1 > 20) {
-			*rotationY = (*rotationY + 0xfec) & 0xfff;
+	diff = ccw - cw;
+	if (diff < 0) {
+		if (ccw > 20) {
+			*rot = (*rot + 0xfec) & 0xfff;
 		} else {
-			*rotationY = (*rotationY + 0x1000 - val1) & 0xfff;
+			*rot = (*rot + 0x1000 - ccw) & 0xfff;
 		}
 	} else {
-		if (val2 > 20) {
-			*rotationY = (*rotationY + 20) & 0xfff;
+		if (cw > 20) {
+			*rot = (*rot + 20) & 0xfff;
 		} else {
-			*rotationY = (*rotationY + val2) & 0xfff;
+			*rot = (*rot + cw) & 0xfff;
 		}
 	}
 
@@ -1732,12 +1714,11 @@ void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *oth
 		return;
 	}
 
-	*rotationY = initRotation;
+	*rot = orig;
 
-	result = entityCheckCollision(NULL, &entity->entity, 280, 200);
-	if (result != -1) {
-		VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rotationY, result,
-		                                             initRotation);
+	hit = entityCheckCollision(NULL, &entity->entity, 280, 200);
+	if (hit != -1) {
+		VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rot, hit, orig);
 	}
 }
 
@@ -1865,7 +1846,7 @@ void VS__tickDigimonWaitingDistance(DigimonEntity *entity, DigimonEntity *other,
 }
 
 void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other,
-                                     FighterData *data, int32_t min, int32_t max)
+                                     FighterData *data, uint32_t min, uint32_t max)
 {
 	uint32_t actualDistance;
 	uint32_t baseDistance;
@@ -1876,7 +1857,7 @@ void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other
 	if (actualDistance < baseDistance + min) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		VS__tickDigimonRotateKeepDistance(entity, other, data);
-	} else if (baseDistance + max < actualDistance) {
+	} else if (actualDistance > baseDistance + max) {
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		VS__tickDigimonAttackLookAtTarget(entity, &other->entity.posData->location,
 		                                  280, 200);
@@ -1911,7 +1892,7 @@ void VS__increaseSpeedBuffer(FighterData *fighter, Stats *stats)
 	}
 }
 
-int32_t VS__hasAffordableMoves2(uint16_t *array, uint8_t fighterId)
+int32_t VS__hasAffordableMoves2(uint16_t *array, int16_t fighterId)
 {
 	Entity *entity;
 	FighterData *fighter;
@@ -1965,17 +1946,13 @@ void VS__initializePlayerMarker(void)
 void VS__clearFighterDataTables(FighterData *fighter)
 {
 	int32_t i;
-	int32_t slot;
 
-	for (i = 0; i < 150; ++i) {
-		slot = i;
-
-		if (fighter->table1[slot] == -1) {
+	for (i = 0; i < 150; i++) {
+		if (fighter->table1[i] == -1) {
 			break;
 		}
-
-		fighter->table1[slot] = -1;
-		fighter->table2[slot] = -1;
+		fighter->table1[i] = -1;
+		fighter->table2[i] = -1;
 	}
 }
 
@@ -2112,32 +2089,34 @@ void VS__renderTimeoutWindow(int32_t id)
 {
 	int16_t x;
 	int16_t y;
-	int32_t layer;
 	int32_t digits;
 
 	x = UI_BOX_DATA[id].finalPos.x;
 	y = UI_BOX_DATA[id].finalPos.y;
-	renderString(0, x + 6, y + 6, 120, 12, 0, 24, (layer = 6 - id), 1);
-	renderString(0, x + 138, y + 6, 120, 12, 0, 36, layer, 1);
-	renderString(0, x + 108, y + 24, 48, 24, 0, 0, layer, 1);
+	renderString(0, x + 6, y + 6, 120, 12, 0, 24, 6 - id, 1);
+	renderString(0, x + 138, y + 6, 120, 12, 0, 36, 6 - id, 1);
+	renderString(0, x + 108, y + 24, 48, 24, 0, 0, 6 - id, 1);
 
 	digits = VS__getDigitCount(MAIN_D_80135280[1]);
 	VS__renderIntroStatNumber(x + 42 + (48 - digits * 12) / 2, y + 30, digits,
-	                          MAIN_D_80135280[1], layer);
+	                          MAIN_D_80135280[1], 6 - id);
 	digits = VS__getDigitCount(MAIN_D_80135280[0]);
 	VS__renderIntroStatNumber(x + 174 + (48 - digits * 12) / 2, y + 30, digits,
-	                          MAIN_D_80135280[0], layer);
+	                          MAIN_D_80135280[0], 6 - id);
 }
 
-void VS__renderPlayerMarker(int32_t id)
+// clang-format off
+void VS__renderPlayerMarker(id)
+	int16_t id;
+// clang-format on
 {
-	Entity *entity;
 	POLY_FT4 *prim;
 	MATRIX *m;
+	Entity *entity;
 	SVECTOR pos;
 	uint32_t otz;
+	int32_t offset;
 	int16_t sxy[2];
-	int32_t yOffset = 0;
 
 	entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[id]];
 	GsSetLsMatrix(&GsWSMATRIX);
@@ -2151,9 +2130,8 @@ void VS__renderPlayerMarker(int32_t id)
 	gte_stszotz(&otz);
 	sxy[0] -= (int16_t)(160 - DRAWING_OFFSET_X);
 	sxy[1] -= (int16_t)(120 - DRAWING_OFFSET_Y);
-	sxy[0] += (int16_t)(VIEWPORT_DISTANCE *
-	                    (DIGIMON_DATA[entity->type].radius / 2) /
-	                    (otz * 4));
+	offset = VIEWPORT_DISTANCE * (DIGIMON_DATA[entity->type].radius / 2) / (otz * 4);
+	sxy[0] += (int16_t)offset;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	SetPolyFT4(prim);
@@ -2161,12 +2139,13 @@ void VS__renderPlayerMarker(int32_t id)
 	setClut(prim, 0, 498);
 	setRGB0(prim, 0x80, 0x80, 0x80);
 	setUVWH(prim, id * 48 + 0x88, 0xd8, 48, 32);
-	setXY4(prim, sxy[0], sxy[1] - 32, sxy[0] + 48, sxy[1] - 32, sxy[0], sxy[1] + yOffset, sxy[0] + 48, sxy[1] + yOffset);
+	setXYWH(prim, sxy[0], sxy[1] - 32, 48, 32);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + otz, prim++);
 
 	GsSetWorkBase((PACKET *)prim);
 }
 
+#if !defined(VERSION_JP)
 void VS__tickVSInput(void)
 {
 	if (GAME_STATE == 4) {
@@ -2263,3 +2242,4 @@ void VS__tickDigimonP2(int32_t instanceId)
 {
 	tickAnimation(ENTITY_TABLE[instanceId]);
 }
+#endif

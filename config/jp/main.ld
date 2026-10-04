@@ -252,7 +252,7 @@ SECTIONS
         BUILD_DIR/src/vs/vs_scene.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_intro.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_camera.c.o(.sdata .sdata.*);
-        KEEP(BUILD_DIR/asm/main/data/ADD18.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/vs/vs_combat.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_main.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_hud.c.o(.sdata .sdata.*);
