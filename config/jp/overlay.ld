@@ -287,13 +287,14 @@ SECTIONS
 			BUILD_DIR/src/vs/vs_combat.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_main.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/vs/1F8FC.s.o(.text .text.*));
+			BUILD_DIR/src/vs/vs_effect.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_select.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_scene.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_intro.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_camera.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_combat.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_effect.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/vs/vs_select.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_scene.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_intro.c.o(.data .data.*);
@@ -301,7 +302,8 @@ SECTIONS
 			BUILD_DIR/src/vs/vs_combat.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_main.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/vs/data/319C0.data.s.o(.data .data.*));
+			BUILD_DIR/src/vs/vs_effect.c.o(.data .data.*);
+			KEEP(BUILD_DIR/asm/vs/data/3251C.data.s.o(.data .data.*));
 			LONG(0);
 		}
 	}

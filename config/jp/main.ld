@@ -257,7 +257,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_hud.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/ADD7C.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/vs/vs_effect.c.o(.sdata .sdata.*);
         BUILD_DIR/src/doo2/doo2.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/dooa/dooa.c.o(.sdata .sdata.*);
@@ -356,7 +356,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/vs/vs_hud.c.o(.sbss.*);
         . = ALIGN(., 4);
-        BUILD_DIR/generated/unk_0x8013E59C.sbss.s.o(.sbss.*);
+        BUILD_DIR/src/vs/vs_effect.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/mov/mov.c.o(.sbss.*);
         . = ALIGN(., 4);

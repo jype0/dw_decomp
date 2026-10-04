@@ -27,6 +27,9 @@
 
 #define EFE_SORT_WORKSPACE getScratchAddr(44)
 
+/* One entry of the EFE slot table at MAIN_D_80134D10. */
+typedef int32_t EfeSlot[10];
+
 typedef struct {
 	int32_t vx;
 	int32_t vy;
@@ -63,7 +66,13 @@ typedef struct {
 	int16_t startOffset;
 	int16_t startVelocity;
 	int16_t acceleration;
+#if defined(VERSION_JP)
+	struct {
+		int8_t r, g, b;
+	} color;
+#else
 	RGB8 color;
+#endif
 	int8_t type;
 	EfeParticle particles[21];
 } EfeParticleEffect;
@@ -85,7 +94,7 @@ typedef struct {
 	MATRIX m1;
 	MATRIX m2;
 	VECTOR *scale;
-	int32_t id;
+	long id;
 } EfeScratch;
 
 typedef struct {
@@ -129,7 +138,7 @@ typedef struct {
 	uint8_t pad0;
 	RGB8 colorHalf;
 	uint8_t pad1;
-	int32_t frame;
+	long frame;
 	int32_t width;
 } EfeRibbonScratch;
 
@@ -198,9 +207,9 @@ extern int32_t EFE_PARENT_INSTANCE;
 
 extern EfeParticleEffect *MAIN_D_80134CCC;
 extern int32_t MAIN_D_80134CD0;
-extern int32_t MAIN_D_80134CD4;
+extern long MAIN_D_80134CD4;
 extern int32_t MAIN_D_80134CD8;
-extern int32_t MAIN_D_80134CE0;
+extern long MAIN_D_80134CE0;
 extern int32_t MAIN_D_80134CE4;
 extern EfeSubEffect *MAIN_D_80134CE8;
 extern int32_t MAIN_D_80134CEC;

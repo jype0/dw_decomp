@@ -222,7 +222,7 @@ segments:
       - [0xADD18, .sdata, vs/vs_combat]
       - [0xADD30, .sdata, vs/vs_main]
       - [0xADD48, .sdata, vs/vs_hud]
-      - [0xADD7C, sdata]
+      - [0xADD7C, .sdata, vs/vs_effect]
       - [0xADDF0, .sdata, doo2/doo2]
       - [0xADE0C, .sdata, dooa/dooa]
       - [0xADE20, .sdata, trn/trn_reward]

@@ -101,7 +101,7 @@ segments:
       - [0xEDF8, c, vs_combat]
       - [0x14B90, c, vs_main]
       - [0x1A508, c, vs_hud]
-      - [0x1F8FC, asm]
+      - [0x1F8FC, c, vs_effect]
       - [0x3050C, .rodata, vs_scene]
       - [0x30524, .rodata, vs_intro]
       - [0x30540, .rodata, vs_camera]
@@ -114,6 +114,7 @@ segments:
       - [0x31560, .data, vs_combat]
       - [0x3156C, .data, vs_main]
       - [0x31650, .data, vs_hud]
-      - [0x319C0, data]
+      - [0x319C0, .data, vs_effect]
+      - [0x3251C, data]
 
   - [0x3417C]
