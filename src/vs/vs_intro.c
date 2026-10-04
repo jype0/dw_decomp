@@ -11,6 +11,7 @@
 #include <dw/file_queue.h>
 #include <dw/font.h>
 #include <dw/graphics.h>
+#include <dw/input.h>
 #include <dw/model.h>
 #include <dw/params.h>
 #include <dw/sound.h>
@@ -18,7 +19,7 @@
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
-extern char MAIN_D_80124C24[];
+extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern int16_t MAIN_D_80134F24;
 extern int16_t MAIN_D_80134F26;
@@ -116,7 +117,10 @@ RGB8 MAIN_D_8012F438[10] = {
 
 // clang-format on
 
-void VS__placePlayer1(int32_t stage)
+// clang-format off
+void VS__placePlayer1(stage)
+	int16_t stage;
+// clang-format on
 {
 	int16_t startX;
 
@@ -131,7 +135,10 @@ void VS__placePlayer1(int32_t stage)
 	startAnimation(ENTITY_TABLE[1], 33);
 }
 
-void VS__placePlayer2(int32_t stage)
+// clang-format off
+void VS__placePlayer2(stage)
+	int16_t stage;
+// clang-format on
 {
 	int16_t startX;
 
@@ -149,24 +156,24 @@ void VS__placePlayer2(int32_t stage)
 void VS__drawStatLabelText(void)
 {
 	int32_t i;
-	int32_t y;
-	char *text;
 
 	clearTextArea();
 	drawString(MAIN_D_80134500, 0, 0);
 	drawString(MAIN_D_80134508, 0, 12);
 
-	for (i = 2, y = 24, text = MAIN_D_80124C24;
-	     i < 6;
-	     ++i, text += 12, y += 12) {
-		drawString(text, 0, y);
+	for (i = 2; i < 6; i++) {
+		drawString(MAIN_D_80124C0C[i], 0, i * 12);
 		DrawSync(0);
 	}
 
 	drawString(MAIN_D_80124C54, 0, 0xf0);
 }
 
-void VS__addIntroText(Entity *entity, int32_t id)
+// clang-format off
+void VS__addIntroText(entity, id)
+	Entity *entity;
+	int16_t id;
+// clang-format on
 {
 	int32_t len;
 
@@ -222,12 +229,18 @@ void VS__setPostIntroPosition(Entity *entity)
 	}
 }
 
-void VS__removeIntroText(int32_t id)
+// clang-format off
+void VS__removeIntroText(id)
+	int16_t id;
+// clang-format on
 {
 	removeObject(0x1ab, id);
 }
 
-void VS__removeIntroStats(int32_t id)
+// clang-format off
+void VS__removeIntroStats(id)
+	int16_t id;
+// clang-format on
 {
 	if (MAIN_D_80134F20 != 0) {
 		MAIN_D_80134F20 = 0;
@@ -235,7 +248,11 @@ void VS__removeIntroStats(int32_t id)
 	}
 }
 
-void VS__addIntroStats(Entity *entity, int32_t id)
+// clang-format off
+void VS__addIntroStats(entity, id)
+	Entity *entity;
+	int16_t id;
+// clang-format on
 {
 	if (MAIN_D_80134F20 != 1) {
 		MAIN_D_80134F20 = 1;
@@ -262,6 +279,9 @@ void VS__renderIntroStatBar(int32_t stat, int32_t value)
 	       value * 100 / MAIN_D_8012F42C[stat] - 50, stat * 16 - 26,
 	       -50, stat * 16 - 18,
 	       value * 100 / MAIN_D_8012F42C[stat] - 50, stat * 16 - 18);
+#if defined(VERSION_JP)
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
+#endif
 
 	GsSetWorkBase((PACKET *)prim);
 }
@@ -293,11 +313,21 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 	}
 
 	setXYWH(prim, x, y, size, size);
+#if defined(VERSION_JP)
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
+#endif
 
 	GsSetWorkBase((PACKET *)prim);
 }
 
-void VS__runIntro(int32_t stage)
+// clang-format off
+void VS__runIntro(stage)
+#if defined(VERSION_JP)
+	int16_t stage;
+#else
+	int32_t stage;
+#endif
+// clang-format on
 {
 	int32_t x;
 	int32_t i;
@@ -330,7 +360,7 @@ void VS__runIntro(int32_t stage)
 		pad = PadRead(1);
 		VS_tickFrame();
 
-		if ((pad & ~prev) & 0x40) {
+		if ((pad & ~prev) & CONFIRM_BUTTON) {
 			VS__setPostIntroPosition(ENTITY_TABLE[1]);
 			prev = pad;
 			break;
@@ -355,7 +385,7 @@ void VS__runIntro(int32_t stage)
 
 		VS_tickFrame();
 
-		if ((pad & ~prev) & 0x40) {
+		if ((pad & ~prev) & CONFIRM_BUTTON) {
 			prev = pad;
 			VS__setPostIntroPosition(ENTITY_TABLE[2]);
 			break;
@@ -371,7 +401,10 @@ void VS__runIntro(int32_t stage)
 	stopSound();
 }
 
-void VS__tickIntroStats(int32_t id)
+// clang-format off
+void VS__tickIntroStats(id)
+	int16_t id;
+// clang-format on
 {
 	Stats *stats;
 
@@ -408,7 +441,10 @@ void VS__tickIntroStats(int32_t id)
 	}
 }
 
-void VS__renderIntroStats(int32_t id)
+// clang-format off
+void VS__renderIntroStats(id)
+	int16_t id;
+// clang-format on
 {
 	Stats *stats;
 	int32_t i;
@@ -434,18 +470,22 @@ void VS__renderIntroStats(int32_t id)
 	}
 }
 
-void VS__renderIntroStatNumber(int32_t x, int32_t y, int32_t digits, int32_t value,
-                               int32_t layer)
+// clang-format off
+void VS__renderIntroStatNumber(x, y, digits, value, layer)
+	int16_t x;
+	int16_t y;
+	int16_t digits;
+	int32_t value;
+	int32_t layer;
+// clang-format on
 {
 	POLY_FT4 *prim;
 	int32_t i;
-	uint32_t width;
 	int32_t count;
 	int32_t buf[6];
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 
-	width = digits;
 	convertValueToDigits(digits, value, &count, buf);
 
 	for (i = count - 1; i >= 0; i--) {
@@ -454,9 +494,7 @@ void VS__renderIntroStatNumber(int32_t x, int32_t y, int32_t digits, int32_t val
 		prim->tpage = getTPage(0, 0, 832, 0);
 		setClut(prim, 16, 480);
 		setUVDataPolyFT4(prim, buf[i] * 12, 32, 12, 12);
-		setPosDataPolyFT4(prim,
-		                  x + (((int32_t)width - 1) - i) * 12, y,
-		                  12, 12);
+		setPosDataPolyFT4(prim, x + ((digits - 1) - i) * 12, y, 12, 12);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 	}
 
@@ -488,17 +526,18 @@ void VS__tickIntroName(int32_t id)
 	}
 }
 
-void VS__renderIntroName(int32_t id)
+// clang-format off
+void VS__renderIntroName(id)
+	int16_t id;
+// clang-format on
 {
 	int32_t charCount;
-	uint32_t entityIndex;
-	int32_t charIndex;
 	int32_t i;
+	int32_t charIndex;
 	int16_t y;
 	int16_t size;
 	uint8_t character;
 
-	entityIndex = id;
 	charCount = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
 		charCount = 10;
@@ -515,26 +554,24 @@ void VS__renderIntroName(int32_t id)
 
 	charIndex = 0;
 	for (i = 0; i < MAIN_D_80134F26; ++i) {
-		character = VS_D_8006FF20[ENTITY_TABLE[entityIndex]->type][charIndex++];
+		character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
 		if (character == 0x3d) {
-			character = VS_D_8006FF20[ENTITY_TABLE[entityIndex]->type][charIndex++];
+			character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
 		}
 
 		if (i == MAIN_D_80134F26 - 1) {
 			y = MAIN_D_80134F2C - MAIN_D_801344FC[MAIN_D_80134F2E];
 			size = MAIN_D_801344F8[MAIN_D_80134F2E];
 		} else {
-			size = 32;
 			y = MAIN_D_80134F2C;
+			size = 32;
 		}
 
-		VS__renderIntroNameChar((int16_t)(MAIN_D_80134F2A + i * 32), y,
-		                        size, character);
+		VS__renderIntroNameChar((int16_t)MAIN_D_80134F2A + i * 32, y, size, character);
 
 		if (character == 0x1f || character == 0x25) {
-			character = VS_D_8006FF20[ENTITY_TABLE[entityIndex]->type][charIndex++];
-			VS__renderIntroNameChar((int16_t)(MAIN_D_80134F2A + i * 32),
-			                        y, size, character);
+			character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
+			VS__renderIntroNameChar((int16_t)MAIN_D_80134F2A + i * 32, y, size, character);
 		}
 	}
 }

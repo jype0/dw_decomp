@@ -281,12 +281,18 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/vs/data/model_3.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/vs/data/header.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/vs/vs.s.o(.text .text.*));
+			BUILD_DIR/src/vs/vs_intro.c.o(.text .text.*);
+			KEEP(BUILD_DIR/asm/vs/C2F4.s.o(.text .text.*));
 			BUILD_DIR/src/vs/vs_main.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.text .text.*);
 			KEEP(BUILD_DIR/asm/vs/1F8FC.s.o(.text .text.*));
 			KEEP(BUILD_DIR/asm/vs/data/vs.data.s.o(.data .data.*));
+			BUILD_DIR/src/vs/vs_intro.c.o(.rodata .rodata.*);
+			KEEP(BUILD_DIR/asm/vs/data/30540.data.s.o(.data .data.*));
 			BUILD_DIR/src/vs/vs_hud.c.o(.rodata .rodata.*);
 			KEEP(BUILD_DIR/asm/vs/data/305B4.data.s.o(.data .data.*));
+			BUILD_DIR/src/vs/vs_intro.c.o(.data .data.*);
+			KEEP(BUILD_DIR/asm/vs/data/3147C.data.s.o(.data .data.*));
 			BUILD_DIR/src/vs/vs_main.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.data .data.*);
 			KEEP(BUILD_DIR/asm/vs/data/319C0.data.s.o(.data .data.*));

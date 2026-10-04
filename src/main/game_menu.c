@@ -171,8 +171,7 @@ extern GsOT *FRAMEBUFFER_OT[2];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern GsF_LIGHT LIGHT_DATA[3];
-extern char MAIN_D_80124C24[];
-extern char MAIN_D_80124C30[][12];
+extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern char *MOVE_NAMES[];
 
@@ -3635,8 +3634,8 @@ int32_t drawDigimonStatsStrings(void)
 	case 0:
 		clearTextSubArea(&rect);
 		drawString(MAIN_D_80124C54, 0, 0xf0);
-		drawString(MAIN_D_80124C24, 0, 0x24);
-		drawString(MAIN_D_80124C30[0], 0x24, 0x24);
+		drawString(MAIN_D_80124C0C[2], 0, 0x24);
+		drawString(MAIN_D_80124C0C[3], 0x24, 0x24);
 		MENU_SUB_STATE = 1;
 		break;
 	case 1:

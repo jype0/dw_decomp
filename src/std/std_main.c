@@ -72,7 +72,7 @@ extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern Entity *MAIN_D_801350E8;
 extern uint8_t CURRENT_SCREEN;
-extern char MAIN_D_80124C24[];
+extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern int32_t COMBAT_AREA_CENTER_X;
 extern int32_t COMBAT_AREA_CENTER_Y;
@@ -1433,7 +1433,7 @@ void STD_func_8005858C(void)
 	drawString(STD_STR_HP, 0, 0);
 	drawString(STD_STR_MP, 0, 12);
 
-	for (i = 2, y = 24, text = MAIN_D_80124C24; i < 6; ++i, text += 12, y += 12) {
+	for (i = 2, y = 24, text = MAIN_D_80124C0C[2]; i < 6; ++i, text += 12, y += 12) {
 		drawString(text, 0, y);
 		DrawSync(0);
 	}

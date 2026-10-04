@@ -216,6 +216,8 @@ segments:
       - [0xADBF0, .sdata, evl/evl]
       - [0xADC14, .sdata, kar/kar]
       - [0xADC6C, sdata]
+      - [0xADCA8, .sdata, vs/vs_intro]
+      - [0xADCC0, sdata]
       - [0xADD30, .sdata, vs/vs_main]
       - [0xADD48, .sdata, vs/vs_hud]
       - [0xADD7C, sdata]

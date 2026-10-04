@@ -54,33 +54,23 @@ RGB8 UI_BOX_COLORS[5] = {
 	{ 0x00, 0x00, 0x00 },
 };
 
+char MAIN_D_80124C0C[6][12] = {
 #if defined(VERSION_JP)
-char MAIN_D_80124C0C[2][12] = {
 	"最大ＨＰ",
 	"最大ＭＰ",
-};
-
-char MAIN_D_80124C24[12] = "攻撃力";
-
-char MAIN_D_80124C30[3][12] = {
+	"攻撃力",
 	"防御力",
 	"すばやさ",
 	"かしこさ",
-};
 #else
-char MAIN_D_80124C0C[2][12] = {
 	"HP",
 	"MP",
-};
-
-char MAIN_D_80124C24[12] = "Off";
-
-char MAIN_D_80124C30[3][12] = {
+	"Off",
 	"Def",
 	"Speed",
 	"Brain",
-};
 #endif
+};
 
 char MAIN_D_80124C54[] = {
 	0x82, 0x4f, 0x82, 0x50, 0x82, 0x51, 0x82, 0x52,
