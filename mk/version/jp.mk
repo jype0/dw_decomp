@@ -66,6 +66,7 @@ MAIN_C_SRC := \
 	src/main/map_collision.c \
 	src/main/map_object.c \
 	src/main/math.c \
+	src/main/model.c \
 	src/main/new_game.c \
 	src/main/overworld.c \
 	src/main/particle.c \

@@ -19,6 +19,7 @@ SECTIONS
     {
         main_TEXT_START = .;
         KEEP(BUILD_DIR/asm/main/800.s.o(.text .text.*));
+        BUILD_DIR/src/main/model.c.o(.text .text.*);
         BUILD_DIR/src/main/world_object.c.o(.text .text.*);
         BUILD_DIR/src/main/file.c.o(.text .text.*);
         BUILD_DIR/src/main/math.c.o(.text .text.*);
@@ -104,6 +105,7 @@ SECTIONS
         BUILD_DIR/src/main/battle_ui.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/main.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/bubble.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/model.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/world_object.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/file.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/math.c.o(.rodata .rodata.*);
@@ -139,6 +141,7 @@ SECTIONS
 
         main_DATA_START = .;
         KEEP(BUILD_DIR/asm/main/data/8B9CC.data.s.o(.data .data.*));
+        BUILD_DIR/src/main/model.c.o(.data .data.*);
         BUILD_DIR/src/main/file_table.c.o(.data .data.*);
         BUILD_DIR/src/main/graphics.c.o(.data .data.*);
         BUILD_DIR/src/main/font.c.o(.data .data.*);
@@ -179,7 +182,7 @@ SECTIONS
         main_DATA_SIZE = ABSOLUTE(main_DATA_END - main_DATA_START);
 
         main_SDATA_START = .;
-        KEEP(BUILD_DIR/asm/main/data/ACE0C.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/main/model.c.o(.sdata .sdata.*);
         BUILD_DIR/src/main/file_table.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/font.c.o(.sdata .sdata.*);

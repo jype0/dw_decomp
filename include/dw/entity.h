@@ -52,7 +52,7 @@ typedef struct {
 typedef struct {
 	int32_t type;
 	PositionData *posData;
-	int32_t *animPtr;
+	long *animPtr;
 	EntityAnim anim;
 	int8_t isOnMap;
 	int8_t isOnScreen;

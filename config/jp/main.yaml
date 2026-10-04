@@ -61,6 +61,7 @@ segments:
     subalign: 4
     subsegments:
       - [0x800, asm]
+      - [0x10D18, c, model]
       - [0x13FB4, c, world_object]
       - [0x1443C, c, file]
       - [0x14A74, c, math]
@@ -139,6 +140,7 @@ segments:
       - [0x8B998, .rodata, battle_ui]
       - [0x8B9B0, .rodata, main]
       - [0x8B9CC, data]
+      - [0x92178, .data, model]
       - [0x93498, .data, file_table]
       - [0x9855C, .data, graphics]
       - [0x98578, .data, font]
@@ -175,7 +177,7 @@ segments:
       - [0xAA5D4, data]
       - [0xAA5FC, .data, bubble]
       - [0xAA8D4, .data, main]
-      - [0xACE0C, sdata]
+      - [0xACE0C, .sdata, model]
       - [0xAD3DC, .sdata, file_table]
       - [0xAD4BC, .sdata, font]
       - [0xAD4C0, .sdata, partner_impl]

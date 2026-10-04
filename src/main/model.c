@@ -72,12 +72,6 @@ static void *model_functions[] = {
 	initializePosData,
 };
 
-static inline int32_t applyTPageOffset(int32_t tpageOffset,
-                                       int32_t pixelOffset)
-{
-	return tpageOffset + pixelOffset;
-}
-
 // clang-format off
 SkeletonBone MAIN_D_80133B2C[3] = {
 	{ 0xff, 0xff },
@@ -2707,29 +2701,25 @@ static inline int8_t *model_s8ptr(uint8_t *arg0)
 
 void initializePosData(PositionData *posData)
 {
-	MATRIX *m;
-
-	RotMatrix(&posData->rotation, m = &posData->posMatrix.coord);
-	ScaleMatrix(m, &posData->scale);
-	TransMatrix(m, &posData->location);
+	RotMatrix(&posData->rotation, &posData->posMatrix.coord);
+	ScaleMatrix(&posData->posMatrix.coord, &posData->scale);
+	TransMatrix(&posData->posMatrix.coord, &posData->location);
 	posData->posMatrix.flg = 0;
 }
 
 void renderFlatDigimon(Entity *entity)
 {
+	int32_t half;
+	int32_t i;
+	VECTOR *loc;
 	MATRIX m;
 	SVECTOR in[4];
 	SVECTOR out[4];
 	ModelComponent *model;
 	POLY_FT4 *prim;
-	VECTOR *loc;
-	int32_t entityType;
-	int32_t i;
-	int32_t height;
-	int32_t half;
+	int16_t height;
 
-	entityType = getEntityType(entity);
-	model = getEntityModelComponent(entity->type, entityType);
+	model = getEntityModelComponent(entity->type, getEntityType(entity));
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	SetPolyFT4(prim);
 	setRGB0(prim, 0x80, 0x80, 0x80);
@@ -2745,7 +2735,8 @@ void renderFlatDigimon(Entity *entity)
 	        ((entity->flatSprite % 2) == 0) ? 0xE0 : 0xF0,
 	        (entity->flatSprite < 2) ? model->pixelOffsetY + 0x60 : model->pixelOffsetY + 0x70,
 	        0xF, 0xF);
-	half = (height = DIGIMON_DATA[entity->type].height) / 2;
+	height = DIGIMON_DATA[entity->type].height;
+	half = height / 2;
 	in[0].vx = 0;
 	in[0].vy = -height;
 	in[0].vz = -half;
@@ -2784,14 +2775,13 @@ void initializeDigimonObject(int32_t type, int32_t instanceId,
                              TickFunction tick)
 {
 	Entity *entity;
-	ModelComponent *model;
 	PositionData *pos;
-	SkeletonBone *bone;
 	int16_t *anim;
-	int32_t entityType;
-	int32_t boneCount;
+	SkeletonBone *bone;
+	ModelComponent *model;
 	int32_t i;
-	int32_t parent;
+	int32_t boneCount;
+	int32_t entityType;
 
 	if (instanceId < 0 || instanceId >= ENTITY_MAX) {
 		return;
@@ -2824,17 +2814,17 @@ void initializeDigimonObject(int32_t type, int32_t instanceId,
 		} else {
 			pos->obj.tmd = NULL;
 		}
-		if ((parent = bone->parentIndex) != -1) {
-			GsInitCoordinate2(&entity->posData[parent].posMatrix, &pos->posMatrix);
+		if (bone->parentIndex != -1) {
+			GsInitCoordinate2(&entity->posData[bone->parentIndex].posMatrix, &pos->posMatrix);
 		} else {
 			GsInitCoordinate2(NULL, &pos->posMatrix);
 		}
 		pos->obj.attribute = 0;
 		pos->obj.coord2 = &pos->posMatrix;
 	}
-	pos = entity->posData;
 	anim = (int16_t *)((char *)entity->animPtr + *entity->animPtr);
 	++anim;
+	pos = entity->posData;
 	if (type == 0x71) {
 		pos->scale.vx = 0x1800, pos->scale.vy = 0x1800, pos->scale.vz = 0x1800;
 	} else {
@@ -2865,24 +2855,22 @@ void initializeDigimonObject(int32_t type, int32_t instanceId,
 void renderDigimon(instanceId)
 	int16_t instanceId;
 {
-	Entity *entity;
 	PositionData *pos;
 	MATRIX lw;
 	MATRIX ls;
 	int32_t boneCount;
 	int32_t i;
 
-	entity = ENTITY_TABLE[instanceId];
-	if (entity->isOnMap != 2) {
-		if (entity->isOnMap == 0) {
+	if (ENTITY_TABLE[instanceId]->isOnMap != 2) {
+		if (ENTITY_TABLE[instanceId]->isOnMap == 0) {
 			return;
 		}
-		if (entity->isOnScreen == 0) {
+		if (ENTITY_TABLE[instanceId]->isOnScreen == 0) {
 			return;
 		}
 	}
-	boneCount = DIGIMON_DATA[entity->type].boneCount;
-	pos = entity->posData;
+	pos = ENTITY_TABLE[instanceId]->posData;
+	boneCount = DIGIMON_DATA[ENTITY_TABLE[instanceId]->type].boneCount;
 	for (i = 0; i < boneCount; pos++, i++) {
 		if (pos->obj.tmd == NULL) {
 			continue;
@@ -2943,14 +2931,13 @@ void removeEntity(int32_t objectId, int32_t entityId)
 
 void setupEntityMatrix(int32_t entityId)
 {
-	MATRIX *m;
 	PositionData *posData;
 
 	if ((entityId >= 0) && (entityId < ENTITY_MAX)) {
 		posData = ENTITY_TABLE[entityId]->posData;
-		RotMatrix(&posData->rotation, m = &posData->posMatrix.coord);
-		ScaleMatrix(m, &posData->scale);
-		TransMatrix(m, &posData->location);
+		RotMatrix(&posData->rotation, &posData->posMatrix.coord);
+		ScaleMatrix(&posData->posMatrix.coord, &posData->scale);
+		TransMatrix(&posData->posMatrix.coord, &posData->location);
 		posData->posMatrix.flg = 0;
 	}
 }
@@ -2986,6 +2973,133 @@ int16_t z;
 	}
 }
 
+#if defined(VERSION_JP)
+void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
+{
+	LINE_F4 *lf3;
+	u_char *quad;
+	u_char *tri;
+	struct TMD_STRUCT *tmd;
+	int32_t i;
+	u_char *prim;
+	int32_t primn;
+	SVECTOR *vert;
+	SVECTOR *normal;
+	u_char *pk;
+	CVECTOR col;
+	long p;
+	long flag;
+	long otz;
+	MATRIX m;
+	GsCOORDINATE2 *coord;
+	uint32_t gt3;
+	uint32_t gt4;
+	uint32_t lf2;
+	int8_t color;
+
+	color = WIREFRAME_COLOR_MIN + rand() % (WIREFRAME_COLOR_MAX - WIREFRAME_COLOR_MIN);
+	tmd = (struct TMD_STRUCT *)obj->tmd;
+	vert = (SVECTOR *)tmd->vertop;
+	normal = (SVECTOR *)tmd->nortop;
+	prim = (u_char *)tmd->primtop;
+	primn = tmd->primn;
+	pk = (u_char *)GsGetWorkBase();
+	col.r = col.g = col.b = 0x80;
+	coord = obj->coord2;
+	if (coord->flg == 0) {
+		coord->flg = 1;
+		MulMatrix0(&coord->coord, &coord->super->workm, &coord->workm);
+	}
+	MulMatrix0(&GsLIGHTWSMATRIX, &coord->workm, &m);
+	SetLightMatrix(&m);
+	CompMatrix(&GsWSMATRIX, &coord->workm, &m);
+	setRotTransMatrix(&m);
+	for (i = 0; i < primn; i++) {
+		if ((prim[3] & 0xFC) == 0x34) {
+			tri = prim;
+			if (WIREFRAME_RNG_TABLE[i & 0xF] < wireFrameShare) {
+				gt3 = (uint32_t)pk;
+				if (0 < RotNclip3(&vert[*(u_short *)(tri + 0x12)], &vert[*(u_short *)(tri + 0x16)],
+				                  &vert[*(u_short *)(tri + 0x1A)], (long *)&((POLY_GT3 *)gt3)->x0, (long *)&((POLY_GT3 *)gt3)->x1,
+				                  (long *)&((POLY_GT3 *)gt3)->x2, &p, &otz, &flag)) {
+					NormalColorCol3(&normal[*(u_short *)(tri + 0x10)],
+					                &normal[*(u_short *)(tri + 0x14)],
+					                &normal[*(u_short *)(tri + 0x18)], &col, (CVECTOR *)&((POLY_GT3 *)gt3)->r0,
+					                (CVECTOR *)&((POLY_GT3 *)gt3)->r1, (CVECTOR *)&((POLY_GT3 *)gt3)->r2);
+					setUV3((POLY_GT3 *)gt3, tri[4], tri[5], tri[8], tri[9], tri[0xC], tri[0xD]);
+					((POLY_GT3 *)gt3)->clut = *(u_short *)(tri + 6);
+					((POLY_GT3 *)gt3)->tpage = *(u_short *)(tri + 0xA);
+					setPolyGT3((POLY_GT3 *)gt3);
+					otz = otz >> 2;
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, (POLY_GT3 *)gt3);
+					pk = (u_char *)(gt3 += sizeof(POLY_GT3));
+				}
+			} else {
+				lf3 = (LINE_F4 *)pk;
+				if (0 < RotNclip3(&vert[*(u_short *)(tri + 0x12)], &vert[*(u_short *)(tri + 0x16)],
+				                  &vert[*(u_short *)(tri + 0x1A)], (long *)&lf3->x0, (long *)&lf3->x1,
+				                  (long *)&lf3->x2, &p, &otz, &flag)) {
+					lf3->x3 = lf3->x0;
+					lf3->y3 = lf3->y0;
+					setlen(lf3, 6);
+					setcode(lf3, 0x4C);
+					lf3->pad = 0x55555555;
+					lf3->r0 = lf3->g0 = lf3->b0 = color;
+					otz = otz >> 2;
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, lf3);
+					pk = (u_char *)(lf3 + 1);
+				}
+			}
+			prim = tri + 0x1C;
+		} else if ((prim[3] & 0xFC) == 0x3C) {
+			quad = prim;
+			if (WIREFRAME_RNG_TABLE[i & 0xF] < wireFrameShare) {
+				gt4 = (uint32_t)pk;
+				if (0 < RotNclip4(&vert[*(u_short *)(quad + 0x16)], &vert[*(u_short *)(quad + 0x1A)],
+				                  &vert[*(u_short *)(quad + 0x1E)], &vert[*(u_short *)(quad + 0x22)],
+				                  (long *)&((POLY_GT4 *)gt4)->x0, (long *)&((POLY_GT4 *)gt4)->x1, (long *)&((POLY_GT4 *)gt4)->x2, (long *)&((POLY_GT4 *)gt4)->x3, &p,
+				                  &otz, &flag)) {
+					NormalColorCol3(&normal[*(u_short *)(quad + 0x14)],
+					                &normal[*(u_short *)(quad + 0x18)],
+					                &normal[*(u_short *)(quad + 0x1C)], &col, (CVECTOR *)&((POLY_GT4 *)gt4)->r0,
+					                (CVECTOR *)&((POLY_GT4 *)gt4)->r1, (CVECTOR *)&((POLY_GT4 *)gt4)->r2);
+					NormalColorCol(&normal[*(u_short *)(quad + 0x20)], &col, (CVECTOR *)&((POLY_GT4 *)gt4)->r3);
+					setUV4((POLY_GT4 *)gt4, quad[4], quad[5], quad[8], quad[9], quad[0xC], quad[0xD], quad[0x10], quad[0x11]);
+					((POLY_GT4 *)gt4)->clut = *(u_short *)(quad + 6);
+					((POLY_GT4 *)gt4)->tpage = *(u_short *)(quad + 0xA);
+					setPolyGT4((POLY_GT4 *)gt4);
+					otz = otz >> 2;
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, (POLY_GT4 *)gt4);
+					pk = (u_char *)(gt4 += sizeof(POLY_GT4));
+				}
+			} else {
+				lf3 = (LINE_F4 *)pk;
+				if (0 < RotNclip4(&vert[*(u_short *)(quad + 0x16)], &vert[*(u_short *)(quad + 0x1A)],
+				                  &vert[*(u_short *)(quad + 0x1E)], &vert[*(u_short *)(quad + 0x22)],
+				                  (long *)&lf3->x0, (long *)&lf3->x1, (long *)&lf3->x3, (long *)&lf3->x2, &p,
+				                  &otz, &flag)) {
+					setlen(lf3, 6);
+					setcode(lf3, 0x4C);
+					lf3->pad = 0x55555555;
+					lf3->r0 = lf3->g0 = lf3->b0 = color;
+					otz = otz >> 2;
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, lf3);
+					lf2 = (uint32_t)(lf3 + 1);
+					setLineF2((LINE_F2 *)lf2);
+					((LINE_F2 *)lf2)->r0 = ((LINE_F2 *)lf2)->g0 = ((LINE_F2 *)lf2)->b0 = color;
+					setXY2((LINE_F2 *)lf2, lf3->x3, lf3->y3, lf3->x0, lf3->y0);
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, (LINE_F2 *)lf2);
+					pk = (u_char *)(lf2 += sizeof(LINE_F2));
+				}
+			}
+			prim = prim + 0x24;
+		} else {
+			break;
+		}
+	}
+	GsSetWorkBase((PACKET *)pk);
+}
+#else
 void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 {
 	int32_t primn;
@@ -3121,6 +3235,7 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 	}
 	GsSetWorkBase((PACKET *)pk);
 }
+#endif
 
 void resetFlattenGlobal(void)
 {
@@ -3141,9 +3256,14 @@ void loadDigimonTexture(int32_t digiType, char *path,
                         ModelComponent *component)
 {
 	void *buffer;
+	char *p;
 	char fileName[32];
 
-	strrchr(path, '\\');
+	if (NULL == (p = strrchr(path, '\\'))) {
+		p = path;
+	} else {
+		p++;
+	}
 	strcpy(fileName, MAIN_D_8011D190);
 
 	buffer = malloc3(0x4800);
@@ -3182,8 +3302,7 @@ void initializeModelComponents(void)
 	t.mmdPtr = NULL;
 	t.pixelPage = 0;
 	t.clutPage = 0;
-	t.pixelOffsetY = 0;
-	t.pixelOffsetX = 0;
+	t.pixelOffsetX = t.pixelOffsetY = 0;
 	t.modelId = -1;
 	t.digiType = -1;
 
@@ -3207,15 +3326,15 @@ void initializeModelComponents(void)
 ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 {
 	ModelComponent *m;
-	char *name;
 	char path[32];
+	char *name;
 	int32_t i;
 	int32_t slot;
 	int32_t k;
-	int32_t size;
 
+	m = NULL;
 	if (modelType == 1) {
-		return 0;
+		return m;
 	}
 	if (digiType < 0 || digiType >= 0xB4) {
 		return 0;
@@ -3258,35 +3377,34 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 		concatStrings(path, MAIN_D_8011D484, name);
 		concatStrings(path, path, MAIN_D_801340E4);
 		path[9] = digiType / 30 + '0';
-		size = lookupFileSize(path);
-		m->mmdPtr = malloc3((size + 0x7FF) & ~0x7FF);
+		m->mmdPtr = malloc3(((int32_t)lookupFileSize(path) + 0x7FF) & ~0x7FF);
 		if (m->mmdPtr == NULL) {
 			handleNullModel();
 		}
 		readFile(path, m->mmdPtr);
-		m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[0]);
-		m->animTablePtr = (int32_t *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[1]);
+		m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[0]);
+		m->animTablePtr = (long *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[1]);
 		GsMapModelingData((u_long *)&m->modelPtr->flags);
 		updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 		                     m->clutPage - 0x7A00);
 		return m;
 	}
 	if (modelType == 2) {
-		TAMER_MODEL.pixelPage = 0x15;
-		TAMER_MODEL.clutPage = 0x7A00;
-		TAMER_MODEL.pixelOffsetX = 0;
-		TAMER_MODEL.pixelOffsetY = 0;
-		TAMER_MODEL.modelId = 0;
 		m = &TAMER_MODEL;
-		TAMER_MODEL.mmdPtr = TAMER_MODEL_BUFFER;
+		m->pixelPage = 0x15;
+		m->clutPage = 0x7A00;
+		m->pixelOffsetX = 0;
+		m->pixelOffsetY = 0;
+		m->modelId = 0;
+		m->mmdPtr = TAMER_MODEL_BUFFER;
 	} else if (modelType == 3) {
-		PARTNER_MODEL.pixelPage = 0x15;
-		PARTNER_MODEL.clutPage = 0x7A01;
-		PARTNER_MODEL.pixelOffsetX = 0;
-		PARTNER_MODEL.pixelOffsetY = 0x80;
-		PARTNER_MODEL.modelId = 0;
 		m = &PARTNER_MODEL;
-		PARTNER_MODEL.mmdPtr = PARTNER_MODEL_BUFFER;
+		m->pixelPage = 0x15;
+		m->clutPage = 0x7A01;
+		m->pixelOffsetX = 0;
+		m->pixelOffsetY = 0x80;
+		m->modelId = 0;
+		m->mmdPtr = PARTNER_MODEL_BUFFER;
 	} else {
 		return 0;
 	}
@@ -3296,8 +3414,8 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 	concatStrings(path, path, MAIN_D_801340E4);
 	path[9] = digiType / 30 + '0';
 	readFile(path, m->mmdPtr);
-	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[0]);
-	m->animTablePtr = (int32_t *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[1]);
+	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[0]);
+	m->animTablePtr = (long *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[1]);
 	GsMapModelingData((u_long *)m->modelPtr + 1);
 	updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 	                     m->clutPage - 0x7A00);
@@ -3307,6 +3425,7 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 void unloadModel(int32_t digiType, int32_t modelType)
 {
 	int32_t i;
+	int32_t j;
 	ModelComponent *m;
 
 	if (modelType == 0) {
@@ -3332,12 +3451,12 @@ void unloadModel(int32_t digiType, int32_t modelType)
 			}
 		}
 	} else if (modelType == 1) {
-		for (m = UNKNOWN_MODEL, i = 0; i < 16; ++m, ++i) {
+		for (m = UNKNOWN_MODEL, j = 0; j < 16; ++m, ++j) {
 			if (m->useCount == digiType) {
 				break;
 			}
 		}
-		if (i != 16) {
+		if (j != 16) {
 			m->useCount = 0;
 			if (m->modelId != -1) {
 				UNKNOWN_MODEL_TAKEN[m->modelId] = 0;
@@ -3352,50 +3471,41 @@ ModelComponent *getEntityModelComponent(int32_t instance, int32_t type)
 	ModelComponent *p;
 	int32_t i;
 
-	i = type;
-	if (i == 2) {
-		return &TAMER_MODEL;
-	}
-	if (i == 3) {
-		return &PARTNER_MODEL;
-	}
-	if (i == 0) {
-		i = instance;
-		if ((i < 0) || (instance >= 0xB4)) {
-			return 0;
+	if (type == 2) {
+		p = &TAMER_MODEL;
+	} else if (type == 3) {
+		p = &PARTNER_MODEL;
+	} else if (type == 0) {
+		if ((instance < 0) || (instance >= 0xb4)) {
+			return NULL;
 		}
-		p = NPC_MODEL;
-		for (i = 0; i < 5; p++, i++) {
+		for (p = NPC_MODEL, i = 0; i < 5; p++, i++) {
 			if (p->digiType == instance) {
 				break;
 			}
 		}
 		if (i == 5) {
-			return 0;
+			return NULL;
 		}
-		if (p->useCount != 0) {
-			goto done;
-		}
-		return 0;
-	}
-	if (i == 1) {
-		i = instance;
-		if ((instance < 0) || (i >= 0x96)) {
-			return 0;
-		}
-		p = &UNKNOWN_MODEL[i];
 		if (p->useCount == 0) {
-			return 0;
+			return NULL;
+		}
+	} else if (type == 1) {
+		if ((instance < 0) || (instance >= 0x96)) {
+			return NULL;
+		}
+		p = &UNKNOWN_MODEL[instance];
+		if (p->useCount == 0) {
+			return NULL;
 		}
 	}
-done:
+
 	return p;
 }
 
 int32_t getEntityType(Entity *entity)
 {
 	int32_t i;
-	int32_t v;
 
 	for (i = 0; i < 10; i++) {
 		if (ENTITY_TABLE[i] == entity) {
@@ -3404,19 +3514,14 @@ int32_t getEntityType(Entity *entity)
 	}
 	switch (i) {
 	case 0:
-		v = 2;
-		break;
+		return 2;
 	case 1:
-		v = 3;
-		break;
+		return 3;
 	case 10:
-		v = -1;
-		break;
+		return -1;
 	default:
-		v = 0;
-		break;
+		return 0;
 	}
-	return v;
 }
 
 void uploadModelTexture(void *textureData, ModelComponent *component)
@@ -3426,10 +3531,8 @@ void uploadModelTexture(void *textureData, ModelComponent *component)
 
 	GsGetTimInfo((unsigned long *)textureData + 1, &img);
 
-	img.px = applyTPageOffset((component->pixelPage % 16) * 64,
-	                          component->pixelOffsetX);
-	img.py = applyTPageOffset((component->pixelPage / 16) * 256,
-	                          component->pixelOffsetY);
+	img.px = ((component->pixelPage % 16) << 6) + component->pixelOffsetX;
+	img.py = ((component->pixelPage / 16) << 8) + component->pixelOffsetY;
 	img.cx = (component->clutPage & 0x3f) << 4;
 	img.cy = component->clutPage >> 6;
 
@@ -3449,11 +3552,10 @@ int32_t loadMMDAsync(int32_t digimonType, int32_t entityType, int32_t buffer,
 {
 	ModelComponent *m;
 	char path[32];
-	char tim[32];
 	char *name;
 	int32_t i;
 	int32_t slot;
-	int32_t align;
+	char tim[32];
 
 	if (digimonType < 0 || digimonType >= 0xB4) {
 		return 0;
@@ -3478,14 +3580,17 @@ int32_t loadMMDAsync(int32_t digimonType, int32_t entityType, int32_t buffer,
 		if (m->useCount != 1) {
 			return 0;
 		}
-	} else if (entityType != 2 && entityType != 3) {
+	} else if (entityType == 2) {
+		m = &TAMER_MODEL;
+	} else if (entityType == 3) {
+		m = &PARTNER_MODEL;
+	} else {
 		return 0;
 	}
 	name = PTR_DIGIMON_FILE_NAMES[digimonType];
 	strcpy(tim, MAIN_D_8011D190);
-	align = buffer & 3;
-	if (align != 0) {
-		buffer += 4 - align;
+	if ((buffer & 3L) != 0) {
+		buffer += 4 - (buffer & 3);
 	}
 	readFileSectors(tim, (void *)buffer, digimonType * 9, 9);
 	modelData->imagePtr = (uint8_t *)buffer;
@@ -3494,9 +3599,8 @@ int32_t loadMMDAsync(int32_t digimonType, int32_t entityType, int32_t buffer,
 	concatStrings(path, MAIN_D_8011D484, name);
 	concatStrings(path, path, MAIN_D_801340E4);
 	path[9] = digimonType / 30 + '0';
-	align = buffer & 3;
-	if (align != 0) {
-		buffer += 4 - align;
+	if ((buffer & 3L) != 0) {
+		buffer += 4 - (buffer & 3);
 	}
 	addFileReadRequestPath(path, (uint8_t *)buffer, readComplete, 0, 0);
 	modelData->modelPtr = (uint8_t *)buffer;
@@ -3509,14 +3613,12 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
                          EvoModelData *modelData)
 {
 	ModelComponent *m;
-	char *name;
 	char path[32];
+	char *name;
+	int32_t i;
 	GsIMAGE img;
 	RECT rect;
-	int32_t i;
 	int32_t k;
-	int32_t size;
-	int32_t digit;
 
 	if (digimonType < 0 || digimonType >= 0xB4) {
 		return 0;
@@ -3547,41 +3649,40 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 		loadDigimonTexture(digimonType, name, m);
 		concatStrings(path, MAIN_D_8011D46C, name);
 		concatStrings(path, path, MAIN_D_801340EC);
-		path[9] = digit = digimonType / 30 + '0';
-		size = lookupFileSize(path);
-		m->modelPtr = malloc3((size + 0x7FF) & ~0x7FF);
+		path[9] = digimonType / 30 + '0';
+		m->modelPtr = malloc3(((int32_t)lookupFileSize(path) + 0x7FF) & ~0x7FF);
 		readFile(path, m->modelPtr);
 		GsMapModelingData((u_long *)m->modelPtr + 1);
 		updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 		                     m->clutPage - 0x7A00);
 		concatStrings(path, MAIN_D_8011D478, name);
 		concatStrings(path, path, MAIN_D_801340F4);
-		path[9] = digit;
-		size = lookupFileSize(path);
-		m->animTablePtr = malloc3((size + 0x7FF) & ~0x7FF);
+		path[9] = digimonType / 30 + '0';
+		m->animTablePtr = malloc3(((int32_t)lookupFileSize(path) + 0x7FF) & ~0x7FF);
 		readFile(path, m->animTablePtr);
 		return m;
 	}
 	if (entityType == 2) {
 	} else if (entityType == 3) {
-		PARTNER_MODEL.pixelPage = 0x15;
-		PARTNER_MODEL.clutPage = 0x7A01;
-		PARTNER_MODEL.pixelOffsetX = 0;
-		PARTNER_MODEL.pixelOffsetY = 0x80;
-		PARTNER_MODEL.modelId = 0;
-		PARTNER_MODEL.mmdPtr = PARTNER_MODEL_BUFFER;
 		m = &PARTNER_MODEL;
-		PARTNER_MODEL.useCount = 0;
+		m->pixelPage = 0x15;
+		m->clutPage = 0x7A01;
+		m->pixelOffsetX = 0;
+		m->pixelOffsetY = 0x80;
+		m->modelId = 0;
+		m->mmdPtr = PARTNER_MODEL_BUFFER;
+		m->useCount = 0;
 	} else {
 		return 0;
 	}
+	name = PTR_DIGIMON_FILE_NAMES[digimonType];
 	++m->useCount;
 	if (m->useCount != 1) {
 		return m;
 	}
 	GsGetTimInfo((unsigned long *)modelData->imagePtr + 1, &img);
-	img.px = applyTPageOffset((m->pixelPage % 16) * 64, m->pixelOffsetX);
-	img.py = applyTPageOffset((m->pixelPage / 16) * 256, m->pixelOffsetY);
+	img.px = ((m->pixelPage % 16) << 6) + m->pixelOffsetX;
+	img.py = ((m->pixelPage / 16) << 8) + m->pixelOffsetY;
 	img.cx = (m->clutPage & 0x3f) << 4;
 	img.cy = m->clutPage >> 6;
 	setRECT(&rect, img.px, img.py, img.pw, img.ph);
@@ -3591,8 +3692,8 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 		LoadImage(&rect, img.clut);
 	}
 	memcpy(m->mmdPtr, modelData->modelPtr, modelData->modelSize);
-	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[0]);
-	m->animTablePtr = (int32_t *)((char *)m->mmdPtr + ((int32_t *)m->mmdPtr)[1]);
+	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[0]);
+	m->animTablePtr = (long *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[1]);
 	GsMapModelingData((u_long *)m->modelPtr + 1);
 	updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 	                     m->clutPage - 0x7A00);

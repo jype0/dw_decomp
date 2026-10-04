@@ -22,7 +22,7 @@ typedef struct {
 typedef struct {
 	uint32_t useCount;
 	TMDModel *modelPtr;
-	int32_t *animTablePtr;
+	long *animTablePtr;
 	void *mmdPtr;
 	uint16_t pixelPage;
 	uint16_t clutPage;
