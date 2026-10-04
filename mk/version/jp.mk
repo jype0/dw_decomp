@@ -188,7 +188,8 @@ VS_C_SRC := \
 	src/vs/vs_hud.c \
 	src/vs/vs_intro.c \
 	src/vs/vs_main.c \
-	src/vs/vs_scene.c
+	src/vs/vs_scene.c \
+	src/vs/vs_select.c
 
 $(eval $(call overlay,VS,vs))
 

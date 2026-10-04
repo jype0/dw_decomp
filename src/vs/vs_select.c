@@ -10,6 +10,7 @@
 #include <dw/file_queue.h>
 #include <dw/font.h>
 #include <dw/garbage.h>
+#include <dw/input.h>
 #include <dw/main.h>
 #include <dw/params.h>
 #include <dw/sound.h>
@@ -66,13 +67,13 @@ void loadStackedTIMFile(char *path);
 
 void VS__loadTextures(void);
 void VS__tickSelectDigimon(void);
-int32_t VS__isAlreadySelected(uint8_t player, int32_t value);
+int32_t VS__isAlreadySelected(int16_t player, int16_t value);
 void VS__handleDigimonSelected(uint8_t *state);
-void VS__createPressStartToBeginBox(uint8_t id);
-void VS__removePressStartToBeginBox(uint8_t id);
+void VS__createPressStartToBeginBox(int16_t id);
+void VS__removePressStartToBeginBox(int16_t id);
 void VS__setPolyFT4White(POLY_FT4 *poly);
 void VS__initialize(char *namesP1, char *namesP2);
-void VS__tickSelectDigimonPlayer(uint8_t id);
+void VS__tickSelectDigimonPlayer(int32_t id);
 void VS__renderSelectDigimonPlayer();
 void VS__renderPressStartToBeginBox(int32_t id);
 int32_t VS__isKeyPressedByAnyPlayer(uint32_t buttons);
@@ -144,9 +145,15 @@ char MAIN_D_8012F4E4[] = "\\STDDAT\\TAISEN_F.TIM";
 
 char MAIN_D_8012F4FC[] = "\\STDDAT\\TIME.TIM";
 
+#if defined(VERSION_JP)
+char MAIN_D_8012F510[] = "スタートボタンで";
+
+char MAIN_D_8012F51C[] = "決定して下さい。";
+#else
 char MAIN_D_8012F510[12] = "Press Start";
 
 char MAIN_D_8012F51C[] = "to begin.";
+#endif
 
 uint8_t MAIN_D_8012F528[68] = {
 	0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x01,
@@ -224,9 +231,10 @@ void VS__loadTextures(void)
 	uint8_t *p;
 	int32_t i;
 	int32_t j;
-	int32_t rows;
 
+#if !defined(VERSION_JP)
 	ENTITY_TABLE[0]->isOnScreen = 0;
+#endif
 	loadTIMFile(MAIN_D_8012F48C, GENERAL_BUFFER);
 	loadTIMFile(MAIN_D_8012F4A4, GENERAL_BUFFER);
 	loadTIMFile(MAIN_D_8012F4B8, GENERAL_BUFFER);
@@ -271,13 +279,7 @@ void VS__loadTextures(void)
 			}
 		}
 
-		if (state[0x2b] % 4 == 0) {
-			state[0x2a] = state[0x2b] / 4;
-		} else {
-			rows = state[0x2b] / 4;
-			++rows;
-			state[0x2a] = rows;
-		}
+		state[0x2a] = (state[0x2b] % 4 == 0) ? state[0x2b] / 4 : state[0x2b] / 4 + 1;
 	}
 }
 
@@ -314,7 +316,7 @@ void VS__tickSelectDigimon(void)
 	removeObject(0x1a0, 1);
 }
 
-int32_t VS__isAlreadySelected(uint8_t player, int32_t value)
+int32_t VS__isAlreadySelected(int16_t player, int16_t value)
 {
 	int32_t i;
 	uint8_t *table;
@@ -338,7 +340,6 @@ int32_t VS__isAlreadySelected(uint8_t player, int32_t value)
 void VS__handleDigimonSelected(uint8_t *state)
 {
 	int32_t i;
-	int32_t count;
 
 	playSound(0, 3);
 
@@ -346,8 +347,7 @@ void VS__handleDigimonSelected(uint8_t *state)
 	state[0x32] = 0;
 	state[0x35] |= 1 << state[0x34];
 
-	count = VS_D_800716A8[11];
-	for (i = 0; i < count; ++i) {
+	for (i = 0; i < VS_D_800716A8[11]; ++i) {
 		if ((state[0x35] & (1 << i)) == 0) {
 			break;
 		}
@@ -362,7 +362,7 @@ void VS__handleDigimonSelected(uint8_t *state)
 	}
 }
 
-void VS__createPressStartToBeginBox(uint8_t id)
+void VS__createPressStartToBeginBox(int16_t id)
 {
 	RECT rect;
 
@@ -377,7 +377,7 @@ void VS__createPressStartToBeginBox(uint8_t id)
 	}
 }
 
-void VS__removePressStartToBeginBox(uint8_t id)
+void VS__removePressStartToBeginBox(int16_t id)
 {
 	if (MAIN_D_80134F52[id] != -1) {
 		removeStaticUIBox(id);
@@ -426,31 +426,31 @@ void VS__initialize(char *namesP1, char *namesP2)
 	loadTIMFile(MAIN_D_8012F478, GENERAL_BUFFER_PTR);
 }
 
-void VS__tickSelectDigimonPlayer(uint8_t id)
+// clang-format off
+void VS__tickSelectDigimonPlayer(id)
+	int16_t id;
+// clang-format on
 {
 	uint8_t *state;
+	long idx;
 	uint8_t *table;
+	int32_t i;
 	uint32_t input;
 	uint32_t previous;
-	uint32_t pressed;
-	int32_t idx;
 	int32_t count;
-	int32_t last;
-	int32_t row;
-	int32_t i;
-	int32_t total;
+	uint8_t mask;
 
 	if (id == 0) {
 		table = VS_D_800716A8;
 	} else {
-		table = (&VS_D_800716A8[5]);
+		table = &VS_D_800716A8[5];
 	}
 
 	if (id == 1) {
 		input = POLLED_INPUT;
 		previous = POLLED_INPUT_PREVIOUS;
-		POLLED_INPUT = (input >> 16) & 0xffff;
-		POLLED_INPUT_PREVIOUS = (previous >> 16) & 0xffff;
+		POLLED_INPUT = (POLLED_INPUT >> 16) & 0xffff;
+		POLLED_INPUT_PREVIOUS = (POLLED_INPUT_PREVIOUS >> 16) & 0xffff;
 	}
 
 	state = &MAIN_D_801B1C7C[id * 0x50];
@@ -473,13 +473,13 @@ void VS__tickSelectDigimonPlayer(uint8_t id)
 			state[0x29] %= state[0x2a];
 		}
 
-		if ((row = state[0x29]) == (last = state[0x2a] - 1)) {
-			count = state[0x2b] - last * 4;
+		if (state[0x29] == state[0x2a] - 1) {
+			count = state[0x2b] - (state[0x2a] - 1) * 4;
 		} else {
 			count = 4;
 		}
 
-		idx = row * 4;
+		idx = state[0x29] * 4;
 
 		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x10) {
 			if (VS__isAlreadySelected(id, state[idx]) == 0) {
@@ -489,25 +489,22 @@ void VS__tickSelectDigimonPlayer(uint8_t id)
 		}
 
 		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) {
-			if (VS__isAlreadySelected(id, state[idx + 3]) == 0 &&
-			    count == 4) {
-				table[state[0x34]] = (state + idx)[3];
+			if (VS__isAlreadySelected(id, state[idx + 3]) == 0 && count == 4) {
+				table[state[0x34]] = state[idx + 3];
 				VS__handleDigimonSelected(state);
 			}
 		}
 
 		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x80) {
-			if (VS__isAlreadySelected(id, state[idx + 1]) == 0 &&
-			    count >= 2) {
-				table[state[0x34]] = (state + idx)[1];
+			if (VS__isAlreadySelected(id, state[idx + 1]) == 0 && count >= 2) {
+				table[state[0x34]] = state[idx + 1];
 				VS__handleDigimonSelected(state);
 			}
 		}
 
 		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x20) {
-			if (VS__isAlreadySelected(id, state[idx + 2]) == 0 &&
-			    count >= 3) {
-				table[state[0x34]] = (state + idx)[2];
+			if (VS__isAlreadySelected(id, state[idx + 2]) == 0 && count >= 3) {
+				table[state[0x34]] = state[idx + 2];
 				VS__handleDigimonSelected(state);
 			}
 		}
@@ -552,8 +549,7 @@ void VS__tickSelectDigimonPlayer(uint8_t id)
 			state[0x2e] += state[0x2f] * 4;
 		}
 
-		total = VS_D_800716A8[11];
-		for (i = 0; i < total; ++i) {
+		for (i = 0; i < VS_D_800716A8[11]; ++i) {
 			if ((state[0x35] & (1 << i)) == 0) {
 				break;
 			}
@@ -565,19 +561,22 @@ void VS__tickSelectDigimonPlayer(uint8_t id)
 		}
 		break;
 	case 1:
-		if ((pressed = POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x800) {
+		if (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x800) {
 			playSound(0, 3);
 			++state[0x28];
 			state[0x36] = 1;
 			VS__removePressStartToBeginBox(id);
-		} else if ((pressed & 0x20) || (pressed & 0x80) ||
-		           (pressed & 0x10) || (pressed & 0x40) ||
-		           (pressed & 0x8000) || (pressed & 0x2000) ||
-		           (pressed & 0x1000) || (pressed & 0x4000)) {
+		} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x20) || (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x80) ||
+		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x10) || (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) ||
+		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x8000) ||
+		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x2000) ||
+		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x1000) ||
+		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x4000)) {
 			playSound(0, 4);
 			state[0x28]--;
 			VS__removePressStartToBeginBox(id);
-			state[0x35] = state[0x35] & ~(uint8_t)(1 << state[0x4f]);
+			mask = 1 << state[0x4f];
+			state[0x35] = state[0x35] & ~mask;
 			table[state[0x4f]] = 0xff;
 		}
 		break;
@@ -601,60 +600,45 @@ void VS__renderSelectDigimonPlayer(id)
 	int16_t id;
 // clang-format on
 {
-	uint8_t baseIdx;
-	int16_t glyph;
-	int32_t clutId;
-	int32_t i;
-	int32_t j;
+	POLY_FT4 *prim;
+	uint8_t *st;
+	VsListPanel *panel;
+	long i;
+	long j;
+	int32_t k;
+	int32_t l;
 	int32_t rowCount;
 	int32_t halfLen;
 	int16_t *stats;
 	uint16_t *text;
+	char buf[24];
+	POLY_F4 *bar;
 	char *names;
 	uint8_t *rec;
-	int32_t uvX;
-	int32_t cursorY;
-	int32_t cursorX;
-	int32_t iconX;
-	int16_t glyphTop;
-	int16_t rowX;
-	int16_t y;
-	int16_t y4;
-	int16_t rowX4;
-	int16_t baseX;
-	POLY_F4 *bar;
-	POLY_FT4 *prim;
-	VsListPanel *panel;
-	uint8_t *st;
-	int32_t type;
-	int32_t spriteU;
-	int32_t spriteV;
-	int32_t ch;
-	int32_t rowY;
-	int32_t iconY;
-	int32_t glyphY;
-	int32_t barY;
-	int32_t dx;
-	int32_t mx;
-	int16_t value;
-	int16_t width;
-	int32_t swidth;
-	int16_t height;
-	int16_t posY;
-	int16_t moveRow;
-	int32_t l;
-	int32_t k;
-	char buf[24];
 	int32_t count;
 	int32_t digits[4];
+	int16_t baseX;
+	int16_t y;
+	int16_t width;
+	int16_t height;
+	int16_t glyph;
+	int16_t moveRow;
+	int16_t moveId;
+	int16_t dx;
+	int16_t posY;
+	uint16_t ch;
+	uint8_t spriteU;
+	uint8_t spriteV;
+	uint8_t baseIdx;
+	uint8_t type;
 
-	baseX = (int16_t)(id * 154 - 152);
+	baseX = id * 154 - 152;
+	y = -109;
 	if (id == 0) {
 		names = MAIN_D_8013526C;
 	} else {
 		names = MAIN_D_80135270;
 	}
-	clutId = id;
 	st = &MAIN_D_801B1C7C[(int16_t)id * 0x50];
 
 	if (st[0x29] == st[0x2a] - 1) {
@@ -667,23 +651,21 @@ void VS__renderSelectDigimonPlayer(id)
 	bar = (POLY_F4 *)GsGetWorkBase();
 	for (i = 0; i < rowCount; i++) {
 		panel = &MAIN_D_8012F620[i];
-		stats = (int16_t *)(names + (st + baseIdx)[i] * 64);
-		y = -109;
+		stats = (int16_t *)(names + st[baseIdx + i] * 64);
 		for (j = 0; j < 6; j++, stats++) {
-			width = (int16_t)(*stats * 34 / MAIN_D_8012F56C[j]);
+			width = *stats * 34 / MAIN_D_8012F56C[j];
 			if (st[0x2e] < MAIN_D_8012F578[j] + 2 &&
-			    st[0x2e] + 22 >= MAIN_D_8012F578[j]) {
+			    MAIN_D_8012F578[j] <= st[0x2e] + 22) {
 				SetPolyF4(bar);
 				setRGB0(bar, 0, 255, 255);
-				setXY4(bar,
-				       baseX + panel->x + 7,
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]),
+				setXY4(bar, baseX + panel->x + 7,
+				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]),
 				       width + (baseX + panel->x + 7),
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]),
+				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]),
 				       baseX + panel->x + 7,
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]) + 2,
+				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]) + 2,
 				       width + (baseX + panel->x + 7),
-				       (y + panel->y) + (MAIN_D_8012F578[j] - (uint8_t)st[0x2e]) + 2);
+				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]) + 2);
 				AddPrim(ACTIVE_ORDERING_TABLE->org + 10, bar++);
 			}
 		}
@@ -692,48 +674,31 @@ void VS__renderSelectDigimonPlayer(id)
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	if (st[0x2a] != 1) {
-		dx = (int16_t)((baseX + 75) - st[0x2a] * 11 / 2);
-		y = -109;
+		dx = (baseX + 75) - st[0x2a] * 11 / 2;
 		for (i = 0; i < st[0x2a]; i++) {
 			VS__setPolyFT4White(prim);
 			prim->tpage = 6;
-			prim->clut = GetClut(0, clutId + 0x1e8);
-			setUVDataPolyFT4(prim, (i != st[0x29]) ? 0xc8 : 0xbe,
-			                 0x9c, 10, 6);
+			prim->clut = GetClut(0, id + 0x1e8);
+			setUVDataPolyFT4(prim, (i != st[0x29]) ? 0xc8 : 0xbe, 0x9c, 10, 6);
 			setPosDataPolyFT4(prim, dx + i * 11, y + 19, 10, 6);
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 		}
 		for (i = 0; i < 2; i++) {
 			VS__setPolyFT4White(prim);
 			prim->tpage = 6;
-			prim->clut = GetClut(0, clutId + 0x1e8);
-			setUVDataPolyFT4(prim, (i == 0) ? 0xd2 : 0xd6, 0x9c, 5,
-			                 8);
-			setPosDataPolyFT4(prim, (baseX + 7) + i * 132,
-			                  y + 18, 4, 7);
+			prim->clut = GetClut(0, id + 0x1e8);
+			setUVDataPolyFT4(prim, (i == 0) ? 0xd2 : 0xd6, 0x9c, 5, 8);
+			setPosDataPolyFT4(prim, (baseX + 7) + i * 132, y + 18, 4, 7);
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 		}
 	}
 
-	uvX = 0x96;
-	cursorY = 5;
-	cursorX = baseX + 15;
-	iconX = baseX + 33;
-	glyphTop = 7;
-	i = 0;
-	rowX = baseX;
-	iconY = 3;
-	glyphY = 0;
-	barY = 1;
-	for (; i < VS_D_800716A8[11];
-	     i++, barY += 20, cursorY += 20, glyphY += 20, uvX += 12,
-	     iconY += 20) {
+	for (i = 0; i < VS_D_800716A8[11]; i++) {
 		VS__setPolyFT4White(prim);
 		prim->tpage = 6;
 		prim->clut = GetClut(0, 0x1ef);
 		if (i == st[0x34] && st[0x36] == 0) {
-			setUVDataPolyFT4(prim, st[0x32] * 12 + 0x96, 0xb2, 12,
-			                 12);
+			setUVDataPolyFT4(prim, st[0x32] * 12 + 0x96, 0xb2, 12, 12);
 			if (st[0x33] % 5 == 0) {
 				st[0x32]++;
 			}
@@ -741,99 +706,87 @@ void VS__renderSelectDigimonPlayer(id)
 			if (st[0x33] >= 5) {
 				st[0x33] = 0;
 			}
-			st[0x32] &= 7;
+			st[0x32] = st[0x32] & 7;
 		} else {
-			setUVDataPolyFT4(prim, uvX, 0xa6, 12, 12);
+			setUVDataPolyFT4(prim, i * 12 + 0x96, 0xa6, 12, 12);
 		}
-		setPosDataPolyFT4(prim, cursorX, cursorY, 12, 12);
+		setPosDataPolyFT4(prim, baseX + 15, (y + 114) + i * 20, 12, 12);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 		if ((st[0x35] & (1 << i)) != 0) {
 			VS__setPolyFT4White(prim);
 			prim->tpage = 6;
 			prim->clut = GetClut(0, 0x1f1);
 			setUVDataPolyFT4(prim, 0x98, 0xc8, 16, 16);
-			setPosDataPolyFT4(prim, iconX, iconY, 16, 16);
+			setPosDataPolyFT4(prim, baseX + 33, (y + 112) + i * 20, 16, 16);
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
-			rowY = glyphTop + glyphY;
 			for (j = 0; j < 6; j++) {
 				VS__setPolyFT4White(prim);
 				prim->tpage = 7;
 				prim->clut = GetClut(0x30, 0x1e8);
 				setUVDataPolyFT4(prim, 0x70, 0x48, 8, 8);
-				setPosDataPolyFT4(prim, (rowX + 0x39) + j * 8,
-				                  rowY, 8, 8);
-				AddPrim(ACTIVE_ORDERING_TABLE->org + 10,
-				        prim++);
+				setPosDataPolyFT4(prim, (baseX + 0x39) + j * 8, (y + 116) + i * 20, 8, 8);
+				AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 			}
 		}
 		VS__setPolyFT4White(prim);
 		prim->tpage = 6;
-		prim->clut = GetClut(0, clutId + 0x1e8);
-		setUVDataPolyFT4(prim, 0,
-		                 ((st[0x35] & (1 << i)) != 0) ? 0xd8 : 0xec, 0x85,
+		prim->clut = GetClut(0, id + 0x1e8);
+		setUVDataPolyFT4(prim, 0, ((st[0x35] & (1 << i)) != 0) ? 0xd8 : 0xec, 0x85,
 		                 ((st[0x35] & (1 << i)) != 0) ? 0x14 : 0x13);
-		setPosDataPolyFT4(prim, baseX + 8, barY, 0x85, 0x14);
+		setPosDataPolyFT4(prim, baseX + 8, (y + 110) + i * 20, 0x85, 0x14);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 	}
 
-	y4 = -109;
-	rowX4 = baseX;
 	for (i = 0; i < rowCount; i++) {
-		panel = &MAIN_D_8012F620[i];
-		type = ((uint8_t *)names + (st + baseIdx)[i] * 64)[0x1c];
+		type = ((uint8_t *)names + st[baseIdx + i] * 64)[0x1c];
 		VS__setPolyFT4White(prim);
 		prim->tpage = 14;
 		prim->clut = GetClut(0x120, MAIN_D_8012F528[type] + 0x1e0);
 		if (type == 0x73) {
-			spriteU = (uint8_t)(st[0x30] * 16 + 0x3e0);
+			spriteU = st[0x30] * 16 + 0x3e0;
 			spriteV = 0xe0;
 		} else {
-			spriteU = (uint8_t)(((type - 3) % 32) * 32 +
-			                    st[0x30] * 16);
-			spriteV = (uint8_t)(((type - 3) / 8) * 32);
+			spriteU = ((type - 3) % 32) * 32 + st[0x30] * 16;
+			spriteV = ((type - 3) / 8) * 32;
 		}
-		width = (int16_t)((spriteU != 0xf0) ? 16 : 15);
+		width = (spriteU != 0xf0) ? 16 : 15;
 		height = (spriteV != 0xf0) ? 16 : 15;
 		setUVDataPolyFT4(prim, spriteU, spriteV, width, height);
-		setPosDataPolyFT4(prim, rowX4 + MAIN_D_80134528[i],
-		                  y4 + MAIN_D_80134530[i], width, height);
+		setPosDataPolyFT4(prim, baseX + MAIN_D_80134528[i], y + MAIN_D_80134530[i], width, height);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 
-		text = (uint16_t *)(names + (st + baseIdx)[i] * 64 + 14);
+		text = (uint16_t *)(names + st[baseIdx + i] * 64 + 14);
 		halfLen = strlen((char *)text) / 2;
-		y = -109;
 		for (j = 0; j < halfLen; j++) {
 			VS__setPolyFT4White(prim);
 			prim->tpage = 7;
 			prim->clut = GetClut(0x30, 0x1e8);
 			ch = *text++;
-			ch = (uint16_t)(((ch & 0xff) << 8) +
-			                ((ch & 0xff00) >> 8));
+			ch = ((ch & 0xff) << 8) + ((ch & 0xff00) >> 8);
 			for (k = 0; k < 216; k++) {
 				if (ch == VS_D_8006FBC0[k]) {
 					glyph = k;
 					break;
 				}
 			}
-			setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
-			                 (VS_D_8006FD70[glyph] / 15) * 8, 8, 8);
-			setPosDataPolyFT4(prim,
-			                  (baseX + MAIN_D_80134538[i]) + j * 8,
-			                  y + MAIN_D_80134540[i], 8, 8);
+			setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8, (VS_D_8006FD70[glyph] / 15) * 8, 8, 8);
+			setPosDataPolyFT4(prim, (baseX + MAIN_D_80134538[i]) + j * 8, y + MAIN_D_80134540[i], 8, 8);
+#if defined(VERSION_JP)
+			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
+#endif
 		}
 
-		rec = (uint8_t *)(names + (st + baseIdx)[i] * 64);
+		panel = &MAIN_D_8012F620[i];
+		rec = (uint8_t *)(names + st[baseIdx + i] * 64);
 		for (j = 0; j < 3; j++) {
 			if ((rec + j)[0x1d] == 0xff) {
 				strcpy(buf, STR_SOUBINASHI);
 				text = (uint16_t *)buf;
 			} else {
-				text = (uint16_t *)MOVE_NAMES[DIGIMON_DATA[rec[0x1c]]
-				                                      .moves[(rec + j)[0x1d] -
-				                                             0x2e]];
+				moveId = DIGIMON_DATA[rec[0x1c]].moves[(rec + j)[0x1d] - 0x2e];
+				text = (uint16_t *)MOVE_NAMES[moveId];
 			}
 			halfLen = strlen((char *)text) / 2;
-			y = -109;
 			for (k = 0; k < halfLen; k++) {
 				ch = *text++;
 				if (k < 5) {
@@ -841,13 +794,11 @@ void VS__renderSelectDigimonPlayer(id)
 				} else {
 					moveRow = j * 2 + 7;
 				}
-				if (st[0x2e] <= MAIN_D_8012F578[moveRow] + 8 &&
-				    MAIN_D_8012F578[moveRow] <= st[0x2e] + 22) {
+				if (st[0x2e] <= MAIN_D_8012F578[moveRow] + 8 && MAIN_D_8012F578[moveRow] <= st[0x2e] + 22) {
 					VS__setPolyFT4White(prim);
 					prim->tpage = 7;
 					prim->clut = GetClut(0x30, 0x1e8);
-					ch = (uint16_t)(((ch & 0xff) << 8) +
-					                ((ch & 0xff00) >> 8));
+					ch = ((ch & 0xff) << 8) + ((ch & 0xff00) >> 8);
 					glyph = 0;
 					for (l = 0; l < 216; l++) {
 						if (ch == VS_D_8006FBC0[l]) {
@@ -856,104 +807,59 @@ void VS__renderSelectDigimonPlayer(id)
 						}
 					}
 					if (st[0x2e] > MAIN_D_8012F578[moveRow]) {
-						height = st[0x2e] -
-						         MAIN_D_8012F578[moveRow];
-						value = VS_D_8006FD70[glyph];
-						setUVDataPolyFT4(
-							prim,
-							(value % 15) * 8,
-							height + (value / 15) * 8,
-							8, 8 - height);
+						height = st[0x2e] - MAIN_D_8012F578[moveRow];
+						setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
+						                 height + (VS_D_8006FD70[glyph] / 15) * 8, 8, 8 - height);
 						height = 8 - height;
 						posY = y + panel->y;
-					} else if (st[0x2e] + 22 <
-					           MAIN_D_8012F578[moveRow] + 8) {
-						height = (MAIN_D_8012F578[moveRow] +
-						          8) -
-						         (st[0x2e] + 22);
-						setUVDataPolyFT4(
-							prim,
-							(VS_D_8006FD70[glyph] % 15) * 8,
-							(VS_D_8006FD70[glyph] / 15) * 8, 8,
-							8 - height);
+					} else if (st[0x2e] + 22 < MAIN_D_8012F578[moveRow] + 8) {
+						height = (MAIN_D_8012F578[moveRow] + 8) - (st[0x2e] + 22);
+						setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
+						                 (VS_D_8006FD70[glyph] / 15) * 8, 8, 8 - height);
 						height = 8 - height;
-						posY = MAIN_D_8012F578[moveRow] +
-						       (y + panel->y) -
-						       st[0x2e];
+						posY = MAIN_D_8012F578[moveRow] + (y + panel->y) - st[0x2e];
 					} else {
 						height = 8;
-						setUVDataPolyFT4(
-							prim,
-							(VS_D_8006FD70[glyph] % 15) * 8,
-							(VS_D_8006FD70[glyph] / 15) * 8, 8, 8);
-						posY = MAIN_D_8012F578[moveRow] +
-						       (y + panel->y) -
-						       st[0x2e];
+						setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
+						                 (VS_D_8006FD70[glyph] / 15) * 8, 8, height);
+						posY = MAIN_D_8012F578[moveRow] + (y + panel->y) - st[0x2e];
 					}
-					if (k < 5) {
-						mx = ((baseX + panel->x) + 1) +
-						     k * 8;
-					} else {
-						mx = ((baseX + panel->x) + 1) +
-						     (k - 5) * 8;
-					}
-					setPosDataPolyFT4(prim, mx, posY, 8,
-					                  height);
+					setPosDataPolyFT4(prim,
+					                  (k < 5) ? ((baseX + panel->x) + 1) + k * 8
+					                          : ((baseX + panel->x) + 1) + (k - 5) * 8,
+					                  posY, 8, height);
+#if defined(VERSION_JP)
+					AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
+#endif
 				}
 			}
 		}
 
-		stats = (int16_t *)(names + (st + baseIdx)[i] * 64);
+		stats = (int16_t *)(names + st[baseIdx + i] * 64);
 		for (j = 0; j < 6; j++, stats++) {
-			if (st[0x2e] <= MAIN_D_80134548[j] + 7 &&
-			    MAIN_D_80134548[j] <= st[0x2e] + 22) {
+			if (st[0x2e] <= MAIN_D_80134548[j] + 7 && MAIN_D_80134548[j] <= st[0x2e] + 22) {
 				convertValueToDigits(4, *stats, &count, digits);
-				y = -109;
 				for (k = count - 1; k >= 0; k--) {
 					VS__setPolyFT4White(prim);
 					prim->tpage = 6;
 					prim->clut = GetClut(0, 0x1f1);
 					if (st[0x2e] > MAIN_D_80134548[j]) {
-						height = st[0x2e] -
-						         MAIN_D_80134548[j];
-						setUVDataPolyFT4(
-							prim,
-							digits[k] * 5 + 0x98,
-							height + 0xc0, 5,
-							7 - height);
+						height = st[0x2e] - MAIN_D_80134548[j];
+						setUVDataPolyFT4(prim, digits[k] * 5 + 0x98, height + 0xc0, 5, 7 - height);
 						height = 7 - height;
 						posY = y + panel->y;
-					} else if (st[0x2e] + 22 <
-					           MAIN_D_80134548[j] + 7) {
-						height = (MAIN_D_80134548[j] +
-						          7) -
-						         (st[0x2e] + 22);
-						setUVDataPolyFT4(
-							prim,
-							digits[k] * 5 + 0x98,
-							0xc0, 5, 7 - height);
+					} else if (st[0x2e] + 22 < MAIN_D_80134548[j] + 7) {
+						height = (MAIN_D_80134548[j] + 7) - (st[0x2e] + 22);
+						setUVDataPolyFT4(prim, digits[k] * 5 + 0x98, 0xc0, 5, 7 - height);
 						height = 7 - height;
-						posY = MAIN_D_80134548[j] +
-						       (y + panel->y) -
-						       st[0x2e];
+						posY = MAIN_D_80134548[j] + (y + panel->y) - st[0x2e];
 					} else {
-						swidth = 7;
-						height = swidth;
-						setUVDataPolyFT4(
-							prim,
-							digits[k] * 5 + 0x98,
-							0xc0, 5, 7);
-						posY = MAIN_D_80134548[j] +
-						       (y + panel->y) -
-						       st[0x2e];
+						height = 7;
+						setUVDataPolyFT4(prim, digits[k] * 5 + 0x98, 0xc0, 5, height);
+						posY = MAIN_D_80134548[j] + (y + panel->y) - st[0x2e];
 					}
-					setPosDataPolyFT4(
-						prim,
-						((baseX + panel->x) + 22) +
-							(3 - k) * 5,
-						posY, 5, height);
-					AddPrim(ACTIVE_ORDERING_TABLE->org + 10,
-					        prim++);
+					setPosDataPolyFT4(prim, ((baseX + panel->x) + 22) + (3 - k) * 5, posY, 5, height);
+					AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 				}
 			}
 		}
@@ -961,25 +867,18 @@ void VS__renderSelectDigimonPlayer(id)
 		VS__setPolyFT4White(prim);
 		prim->tpage = panel->tpage;
 		prim->clut = GetClut(panel->clutX, panel->clutY);
-		setUVDataPolyFT4(prim, panel->u,
-		                 panel->v +
-		                         (MAIN_D_801B1C7C + (int16_t)id * 0x50)[0x2e],
-		                 panel->w, panel->h);
-		setPosDataPolyFT4(prim, rowX4 + panel->x, y4 + panel->y,
-		                  panel->w, panel->h);
+		setUVDataPolyFT4(prim, panel->u, panel->v + (MAIN_D_801B1C7C + (int16_t)id * 0x50)[0x2e], panel->w, panel->h);
+		setPosDataPolyFT4(prim, baseX + panel->x, y + panel->y, panel->w, panel->h);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 	}
 
-	y = -109;
 	for (i = 5; i >= 0; i--) {
 		panel = &MAIN_D_8012F590[id * 6 + i];
 		VS__setPolyFT4White(prim);
 		prim->tpage = panel->tpage;
 		prim->clut = GetClut(panel->clutX, panel->clutY);
-		setUVDataPolyFT4(prim, panel->u, panel->v, panel->w,
-		                 panel->h);
-		setPosDataPolyFT4(prim, baseX + panel->x, y + panel->y,
-		                  panel->w, panel->h);
+		setUVDataPolyFT4(prim, panel->u, panel->v, panel->w, panel->h);
+		setPosDataPolyFT4(prim, baseX + panel->x, y + panel->y, panel->w, panel->h);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 	}
 	GsSetWorkBase((PACKET *)prim);
@@ -998,12 +897,14 @@ int32_t VS__isKeyPressedByAnyPlayer(uint32_t buttons)
 	uint32_t input;
 	uint32_t previous;
 
-	if (buttons & ((input = POLLED_INPUT) & ~(previous = POLLED_INPUT_PREVIOUS))) {
+	if (buttons & (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS)) {
 		return 1;
 	}
 
-	POLLED_INPUT = (input >> 16) & 0xffff;
-	POLLED_INPUT_PREVIOUS = (previous >> 16) & 0xffff;
+	input = POLLED_INPUT;
+	previous = POLLED_INPUT_PREVIOUS;
+	POLLED_INPUT = (POLLED_INPUT >> 16) & 0xffff;
+	POLLED_INPUT_PREVIOUS = (POLLED_INPUT_PREVIOUS >> 16) & 0xffff;
 
 	if (buttons & (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS)) {
 		POLLED_INPUT = input;
@@ -1048,11 +949,11 @@ int32_t VS__tickSelectMode(void)
 		MAIN_D_80134F58 = 0;
 	}
 
-	setRECT(&rect, -90, -70, 180, 128);
 	MAIN_D_80134F59 = 0;
 	MAIN_D_80134F5A = 0;
 	MAIN_D_80134F5B = 0;
 	MAIN_D_80134F5C = 0;
+	setRECT(&rect, -90, -70, 180, 128);
 	createStaticUIBox(0, 1, 0, &rect, VS__tickSelectBox,
 	                  VS__renderSelectModeBox);
 
@@ -1090,7 +991,7 @@ void VS__tickSelectBox(int32_t id)
 		return;
 	}
 
-	if (VS__isKeyPressedByAnyPlayer(0x40) != 0) {
+	if (VS__isKeyPressedByAnyPlayer(CONFIRM_BUTTON) != 0) {
 		playSound(0, 3);
 		MAIN_D_80134F5B = 1;
 		return;
@@ -1138,23 +1039,24 @@ void VS__tickSelectBox(int32_t id)
 	}
 }
 
-void VS__renderSelectModeBox(int32_t depth)
+// clang-format off
+void VS__renderSelectModeBox(depth)
+	int16_t depth;
+// clang-format on
 {
 	POLY_FT4 *prim;
 	VsUISprite *sprite;
 	int32_t i;
-	int32_t j;
-	int32_t x;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	sprite = MAIN_D_8012F650;
 
-	for (i = 0, j = -1; i < 8; ++sprite, ++i, ++j) {
+	for (i = 0; i < 8; ++sprite, ++i) {
 		SetPolyFT4(prim);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->clut = GetClut(48, sprite->clut);
 
-		if (i > 0 && i < 4 && MAIN_D_80134F59 != j) {
+		if (i > 0 && i < 4 && MAIN_D_80134F59 != i - 1) {
 			setRGB0(prim, 0x40, 0x40, 0x40);
 		}
 
@@ -1185,14 +1087,8 @@ void VS__renderSelectModeBox(int32_t depth)
 			                 sprite->h);
 		}
 
-		if (i != 7) {
-			x = sprite->x - 90;
-		} else {
-			x = (sprite->x - 90) + MAIN_D_80134F59 * 56;
-		}
-
-		setPosDataPolyFT4(prim, x, sprite->y - 70, sprite->w,
-		                  sprite->h);
+		setPosDataPolyFT4(prim, (i != 7) ? sprite->x - 90 : (sprite->x - 90) + MAIN_D_80134F59 * 56, sprite->y - 70,
+		                  sprite->w, sprite->h);
 
 		AddPrim((ACTIVE_ORDERING_TABLE->org + 6) - depth, prim++);
 	}
@@ -1205,11 +1101,11 @@ int32_t VS__tickSelectMap(void)
 	RECT rect;
 	int32_t i;
 
-	setRECT(&rect, -90, -70, 180, 128);
 	MAIN_D_80134F59 = 0;
 	MAIN_D_80134F5A = 0;
 	MAIN_D_80134F5B = 0;
 	MAIN_D_80134F5C = 0;
+	setRECT(&rect, -90, -70, 180, 128);
 	createStaticUIBox(1, 1, 0, &rect, VS__tickSelectBox,
 	                  VS__renderSelectMapBox);
 
@@ -1239,7 +1135,10 @@ int32_t VS__tickSelectMap(void)
 	return 0;
 }
 
-void VS__renderSelectMapBox(int32_t id)
+// clang-format off
+void VS__renderSelectMapBox(id)
+	int16_t id;
+// clang-format on
 {
 	POLY_FT4 *prim;
 	VsUISprite *sprite;

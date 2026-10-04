@@ -94,7 +94,7 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x41C8, asm, vs]
+      - [0x41C8, c, vs_select]
       - [0x7D88, c, vs_scene]
       - [0xAA44, c, vs_intro]
       - [0xC2F4, c, vs_camera]
@@ -107,7 +107,7 @@ segments:
       - [0x30540, .rodata, vs_camera]
       - [0x3056C, data]
       - [0x3058C, .rodata, vs_hud]
-      - [0x305B4, data]
+      - [0x305B4, .data, vs_select]
       - [0x30830, .data, vs_scene]
       - [0x31450, .data, vs_intro]
       - [0x3147C, .data, vs_camera]

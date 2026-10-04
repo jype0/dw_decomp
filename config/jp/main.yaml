@@ -215,7 +215,7 @@ segments:
       - [0xADB6C, .sdata, fish/fish]
       - [0xADBF0, .sdata, evl/evl]
       - [0xADC14, .sdata, kar/kar]
-      - [0xADC6C, sdata]
+      - [0xADC6C, .sdata, vs/vs_select]
       - [0xADC98, .sdata, vs/vs_scene]
       - [0xADCA8, .sdata, vs/vs_intro]
       - [0xADCC0, .sdata, vs/vs_camera]

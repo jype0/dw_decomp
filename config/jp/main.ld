@@ -248,7 +248,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/kar/kar.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/ADC6C.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/vs/vs_select.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_scene.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_intro.c.o(.sdata .sdata.*);
         BUILD_DIR/src/vs/vs_camera.c.o(.sdata .sdata.*);
