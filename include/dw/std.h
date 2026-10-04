@@ -96,7 +96,7 @@ extern PositionDataRaw STD_D_8007F528[8];
 extern int16_t STD_D_8007F968[];
 extern int16_t STD_D_8007FA08[];
 extern int16_t STD_D_8007FA1C[];
-extern char STD_D_8007FA5C[];
+extern uint8_t STD_D_8007FA5C[];
 extern void (*STD_jtbl_8007FA7C[])(void);
 extern MATRIXRaw STD_D_8007FC00;
 extern int16_t STD_D_8007FC20[12][6];

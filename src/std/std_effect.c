@@ -56,7 +56,19 @@ typedef struct {
 } EfeUvAnim;
 
 typedef struct {
-	int32_t w[13];
+	int32_t startScript;
+	int32_t initScript;
+	uint32_t uvAnims;
+	int32_t uvAnimsEnd;
+	uint32_t subEffects;
+	int32_t tmdStart;
+	int32_t tmdEnd;
+	int32_t timStart;
+	int32_t timEnd;
+	int32_t dataEnd;
+	int32_t unk28;
+	int32_t numSubEffects;
+	int32_t effectId;
 } EfeFileHeader;
 
 extern int32_t DRAWING_OFFSET_X;
@@ -82,11 +94,14 @@ void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void setMapLayerEnabled(int32_t enabled);
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
-void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance, int32_t width, int32_t height);
+void renderSprite(GsSPRITE *sprite, int32_t x, int32_t y, int32_t distance, int32_t width, int32_t height);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
 int32_t doSomethingWithSomePoints(int16_t *rect, DVECTOR *line);
 char *initializeFlashData(char *base);
-void renderParticleFlash(int16_t *params);
+void renderParticleFlash(ParticleFlashData *params);
+void getDrawingOffsetCopy(int32_t *x, int32_t *y);
+void getRViewCopy(GsRVIEW2 *view);
+void getViewportDistanceCopy(int32_t *out);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
 void STD_renderFinisherAura(int32_t idx);
 void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
@@ -129,7 +144,7 @@ void STD_stopEFESubEffect(int32_t a, int32_t b);
 int32_t STD_func_8006EA6C(void);
 char *STD_func_8006EA78(char *p);
 char *STD_func_8006EAAC(char *p);
-int32_t STD_getEFEFileId(int32_t *p);
+int32_t STD_getEFEFileId(int32_t p);
 void STD_isTargetUnhit(void);
 void STD_markEFEFinished(void);
 void STD_func_8006EB58(void);
@@ -227,30 +242,30 @@ void STD_loadEFEIndexedVariable(void);
 void STD_loadEFERandomValue(void);
 void STD_loadEFEVariable(void);
 void STD_loadEFEImmediate(void);
-int32_t STD_shiftRightInt32Variable(int32_t *p);
-int32_t STD_shiftLeftInt32Variable(int32_t *p);
-int32_t STD_moduloInt32Variable(int32_t *p);
-int32_t STD_divideInt32Variable(int32_t *p);
-int32_t STD_multiplyInt32Variable(int32_t *p);
-int32_t STD_subtractInt32Variable(int32_t *p);
-int32_t STD_addInt32Variable(int32_t *p);
-int32_t STD_setInt32Variable(int32_t *p);
-int32_t STD_shiftRightInt8Variable(int8_t *p);
-int32_t STD_shiftLeftInt8Variable(int8_t *p);
-int32_t STD_moduloInt8Variable(int8_t *p);
-int32_t STD_divideInt8Variable(int8_t *p);
-int32_t STD_multiplyInt8Variable(int8_t *p);
-int32_t STD_subtractInt8Variable(int8_t *p);
-int32_t STD_addInt8Variable(int8_t *p);
-int32_t STD_setInt8Variable(int8_t *p);
-int32_t STD_shiftRightInt16Variable(int16_t *p);
-int32_t STD_shiftLeftInt16Variable(int16_t *p);
-int32_t STD_moduloInt16Variable(int16_t *p);
-int32_t STD_divideInt16Variable(int16_t *p);
-int32_t STD_multiplyInt16Variable(int16_t *p);
-int32_t STD_subtractInt16Variable(int16_t *p);
-int32_t STD_addInt16Variable(int16_t *p);
-int32_t STD_setInt16Variable(int16_t *p);
+int32_t STD_shiftRightInt32Variable(int32_t p);
+int32_t STD_shiftLeftInt32Variable(int32_t p);
+int32_t STD_moduloInt32Variable(int32_t p);
+int32_t STD_divideInt32Variable(int32_t p);
+int32_t STD_multiplyInt32Variable(int32_t p);
+int32_t STD_subtractInt32Variable(int32_t p);
+int32_t STD_addInt32Variable(int32_t p);
+int32_t STD_setInt32Variable(int32_t p);
+int32_t STD_shiftRightInt8Variable(int32_t p);
+int32_t STD_shiftLeftInt8Variable(int32_t p);
+int32_t STD_moduloInt8Variable(int32_t p);
+int32_t STD_divideInt8Variable(int32_t p);
+int32_t STD_multiplyInt8Variable(int32_t p);
+int32_t STD_subtractInt8Variable(int32_t p);
+int32_t STD_addInt8Variable(int32_t p);
+int32_t STD_setInt8Variable(int32_t p);
+int32_t STD_shiftRightInt16Variable(int32_t p);
+int32_t STD_shiftLeftInt16Variable(int32_t p);
+int32_t STD_moduloInt16Variable(int32_t p);
+int32_t STD_divideInt16Variable(int32_t p);
+int32_t STD_multiplyInt16Variable(int32_t p);
+int32_t STD_subtractInt16Variable(int32_t p);
+int32_t STD_addInt16Variable(int32_t p);
+int32_t STD_setInt16Variable(int32_t p);
 int32_t STD_compareGreaterOrEqual(int32_t x);
 int32_t STD_compareGreater(int32_t x);
 int32_t STD_compareLessOrEqual(int32_t x);
@@ -258,7 +273,7 @@ int32_t STD_compareLess(int32_t x);
 int32_t STD_compareNotEqual(int32_t x);
 int32_t STD_compareEqual(int32_t x);
 int16_t STD_calculateAttackHitPosition(SVECTOR *out, int32_t *self, int32_t *other, int32_t y);
-int32_t STD_func_800770C0(int32_t lo, int32_t hi, int32_t t, int32_t start, int32_t end);
+int32_t STD_func_800770C0(int32_t lo, int32_t hi, long t, int32_t start, int32_t end);
 void STD_initializeEFESubOpcodeTable(void);
 void STD_dispatchEFEOpcode(int32_t op);
 int32_t STD_runEFEScript(int32_t script);
@@ -286,7 +301,7 @@ void STD_renderStunSubEffect(int32_t i);
 int32_t STD_addStunEffect(int32_t arg, int32_t val);
 void STD_removeStunEffect(int32_t i, int32_t arg);
 void STD_removeAllStunEffects(void);
-void STD_setTMDObjectColor(int32_t idx, int32_t *color, char *base);
+void STD_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base);
 void STD_tickFinisherAura(int32_t i);
 void STD_func_80078BBC(char *pos, int32_t scale, SVECTOR *dir, uint8_t *col);
 void STD_initializeFinisherAuraModel(char *tim, char *base);
@@ -313,7 +328,7 @@ CdlLOC *getEFEDATEntry(int32_t id);
 void STD_func_8006BFB4(void);
 void STD_func_8006C630(void);
 void STD_func_80079874(void);
-void swapByte(char *a, char *b);
+void swapByte(uint8_t *a, uint8_t *b);
 void STD_loadNextEFEFile(int16_t *arg);
 void STD_initializeStunEffect(char *base);
 void STD_tickEFEUVAnimation(int32_t idx);
@@ -331,7 +346,7 @@ void STD_tickRibbonPoints(void);
 long RotTransPers4(SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3, long *sxy0, long *sxy1, long *sxy2, long *sxy3, long *p, long *flag);
 void setRotTransMatrix(MATRIX *m);
 long RotTransPers(SVECTOR *v0, long *sxy, long *p, long *flag);
-int32_t STD_func_800770C0(int32_t lo, int32_t hi, int32_t t, int32_t a, int32_t b);
+int32_t STD_func_800770C0(int32_t lo, int32_t hi, long t, int32_t a, int32_t b);
 
 void EFECreateFlash();
 void EFERotateVector();
@@ -1008,6 +1023,10 @@ int16_t STD_D_8007B058[774] = {
 };
 // clang-format on
 
+#if defined(VERSION_JP)
+VECTOR STD_D_80085C78 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+#endif
+
 void STD_func_8006BFB4(void)
 {
 	MAIN_D_801350F4 = 0;
@@ -1024,16 +1043,15 @@ void STD_func_8006BFD4(void)
 	VECTOR out;
 	MATRIX m;
 	int32_t i;
-	int32_t n;
 	int32_t x;
 
 	switch (MAIN_D_801351B4) {
 	case 0:
 		MAIN_D_801351A4++;
 		for (i = 0; i < 9; i++) {
-			if (MAIN_D_801351A4 >= i + 0x3d && (n = STD_D_8007FA08[i]) < 0xb) {
-				if (n < 0xa) {
-					x = 0x378 - (n + 1) * 2;
+			if (MAIN_D_801351A4 >= i + 0x3d && STD_D_8007FA08[i] < 0xb) {
+				if (STD_D_8007FA08[i] < 0xa) {
+					x = 0x378 - (STD_D_8007FA08[i] + 1) * 2;
 				} else {
 					x = 0x378;
 				}
@@ -1183,48 +1201,44 @@ void STD_func_8006C6DC(void)
 
 void STD_func_8006C7D4(void)
 {
-	int32_t frame;
 	int32_t i;
-	int32_t j;
-	int32_t k;
-	PositionData *p;
+	long j;
 
 	if (MAIN_D_801351A4 < 0x8c) {
 		MAIN_D_801351A4++;
 	}
-	if ((frame = MAIN_D_801351A4) >= 0x3d && STD_D_8007FA08[0] < 0x16) {
+	if (MAIN_D_801351A4 >= 0x3d && STD_D_8007FA08[0] < 0x16) {
 		STD_D_8007FA08[0]++;
 	}
-	if (frame >= 0x40 && STD_D_8007FA08[1] < 0x16) {
+	if (MAIN_D_801351A4 >= 0x40 && STD_D_8007FA08[1] < 0x16) {
 		STD_D_8007FA08[1]++;
 	}
-	if (frame >= 0x43 && STD_D_8007FA08[2] < 0x16) {
+	if (MAIN_D_801351A4 >= 0x43 && STD_D_8007FA08[2] < 0x16) {
 		STD_D_8007FA08[2]++;
 	}
-	if (frame >= 0x46 && STD_D_8007FA08[3] < 0x16) {
+	if (MAIN_D_801351A4 >= 0x46 && STD_D_8007FA08[3] < 0x16) {
 		STD_D_8007FA08[3]++;
 	}
 	for (i = 0; i < 4; i++) {
 		if (STD_D_8007FA08[i] >= 0xb) {
 			for (j = 0; j < 8; j++) {
-				k = ((uint8_t *)STD_D_8007FA5C + j)[i * 8];
-				if (STD_D_8007FA1C[k] < 0xf0) {
-					STD_D_8007FA1C[k] += 0x3c;
+				if (STD_D_8007FA1C[STD_D_8007FA5C[j + i * 8]] < 0xf0) {
+					STD_D_8007FA1C[STD_D_8007FA5C[j + i * 8]] += 0x3c;
 				}
 			}
 		}
 	}
-	if (frame >= 0x74) {
-		if (frame < 0x82) {
-			STD_D_8007F528[4].data.rotation.vx = STD_D_8007AA70[frame - 0x74];
+	if (MAIN_D_801351A4 >= 0x74) {
+		if (MAIN_D_801351A4 < 0x82) {
+			STD_D_8007F528[4].data.rotation.vx = STD_D_8007AA70[MAIN_D_801351A4 - 0x74];
 			STD_D_8007F528[5].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
 			STD_D_8007F528[6].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
 			STD_D_8007F528[7].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
 		}
-		if (frame == 0x7f) {
+		if (MAIN_D_801351A4 == 0x7f) {
 			STD_D_8007FA08[0] = 0;
 		}
-		if (frame >= 0x80) {
+		if (MAIN_D_801351A4 >= 0x80) {
 			STD_D_8007F528[4].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[0]] + 0x320;
 			STD_D_8007F528[5].data.location.vy = STD_D_8007F528[4].data.location.vy;
 			STD_D_8007F528[6].data.location.vy = STD_D_8007F528[4].data.location.vy;
@@ -1237,8 +1251,7 @@ void STD_func_8006C7D4(void)
 		STD_D_8007F528[7].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[3]];
 	}
 	for (i = 4; i < 8; i++) {
-		p = &STD_D_8007F528[i].data;
-		setupModelMatrix(p);
+		setupModelMatrix(&STD_D_8007F528[i].data);
 	}
 }
 
@@ -1251,9 +1264,7 @@ void STD_func_8006CB10(void)
 
 	for (i = 0; i < 0x20; i++) {
 		box.attribute = 0x40000000;
-		box.b = 0;
-		box.g = 0;
-		box.r = 0;
+		box.r = box.g = box.b = 0;
 		setWH(&box, 0xa, STD_D_8007FA1C[i]);
 		box.x = (box.w * i) - 0xa0;
 		box.y = -0x78;
@@ -1283,9 +1294,9 @@ void STD_func_8006CCD4(void)
 
 void STD_func_8006CCE0(void)
 {
-	PositionData *p;
 	int32_t i;
 
+	MAIN_D_801351A4 = 0;
 	STD_D_8007F528[0].data.location.vx = -0xfa;
 	STD_D_8007F528[0].data.location.vy = 0;
 	STD_D_8007F528[0].data.location.vz = -0x30c;
@@ -1297,10 +1308,8 @@ void STD_func_8006CCE0(void)
 	STD_D_8007F528[2].data.location.vz = -0x30c;
 	STD_D_8007F528[3].data.location.vx = 0x104;
 	STD_D_8007F528[3].data.location.vy = 0;
-	MAIN_D_801351A4 = 0;
 	STD_D_8007F528[3].data.location.vz = -0x30c;
 	for (i = 0; i < 4; i++) {
-		p = &STD_D_8007F528[i].data;
 		STD_D_8007FA08[i] = 0;
 		STD_D_8007F528[i].data.scale.vx = 0x1000;
 		STD_D_8007F528[i].data.scale.vy = 0x1000;
@@ -1308,7 +1317,7 @@ void STD_func_8006CCE0(void)
 		STD_D_8007F528[i].data.rotation.vx = 0;
 		STD_D_8007F528[i].data.rotation.vy = 0;
 		STD_D_8007F528[i].data.rotation.vz = 0;
-		setupModelMatrix(p);
+		setupModelMatrix(&STD_D_8007F528[i].data);
 	}
 	addObject(0x19d, 0, (TickFunction)STD_func_8006CE68, (RenderFunction)STD_func_8006D018);
 }
@@ -1316,14 +1325,13 @@ void STD_func_8006CCE0(void)
 void STD_func_8006CE68(void)
 {
 	int32_t i;
-	int32_t threshold;
 
 	if (MAIN_D_801351A4 < 0xa0) {
 		MAIN_D_801351A4++;
 	}
 
-	for (i = 0, threshold = 0x3c; i < 4; i++, threshold += 6) {
-		if (MAIN_D_801351A4 > threshold) {
+	for (i = 0; i < 4; i++) {
+		if (MAIN_D_801351A4 > i * 6 + 0x3c) {
 			if (STD_D_8007F528[i].data.location.vz < 0xdc) {
 				STD_D_8007F528[i].data.location.vz += 0x32;
 			}
@@ -1384,13 +1392,10 @@ char *STD_initializeParticleEmitters(char *base)
 
 void STD_tickEFEEngine(void)
 {
+	int32_t n;
 	int32_t i;
 	int32_t j;
-	int32_t n;
-
 	int32_t (*p)[2];
-	int32_t v;
-	int32_t t;
 
 	setMapLayerEnabled(1);
 
@@ -1402,22 +1407,19 @@ void STD_tickEFEEngine(void)
 		MAIN_D_80134CD4++;
 	}
 
-	MAIN_D_80134CD4 = 0;
 	MAIN_D_80134D0C = (int32_t *)MAIN_D_80134D10;
+	MAIN_D_80134CD4 = 0;
 	while (MAIN_D_80134CD4 < 0x10) {
-		t = MAIN_D_80134D0C[2];
-		if (t != 0) {
-			MAIN_D_80134D08 = t;
+		if (MAIN_D_80134D0C[2] != 0L) {
+			MAIN_D_80134D08 = MAIN_D_80134D0C[2];
 			n = ((int16_t *)MAIN_D_80134D0C)[10];
 			MAIN_D_80134CD0 = 0;
 			while (MAIN_D_80134CD0 < n) {
-				if (MAIN_D_80134D0C == NULL) {
-				}
-				MAIN_D_80134CE8 = (EfeSubEffect *)((int32_t)((uint32_t)(int32_t)((uint32_t)(char *)(MAIN_D_80134CD0 * 28)) + (int32_t)MAIN_D_80134D0C[4]));
+				MAIN_D_80134CE8 = &((EfeSubEffect **)MAIN_D_80134D0C)[4][MAIN_D_80134CD0];
 				if ((int32_t)MAIN_D_80134CE8->inst != 0) {
 					EFE_INSTANCE = MAIN_D_80134CE8->instance;
 					EFE_PARENT_INSTANCE = (int32_t)MAIN_D_80134CE8->parentInstance;
-					EFE_INSTANCE->frame = EFE_INSTANCE->frame + 1;
+					((EfeInstance *)(int32_t)EFE_INSTANCE)->frame++;
 					STD_runEFEScript((int32_t)MAIN_D_80134CE8->inst);
 				}
 				MAIN_D_80134CD0++;
@@ -1435,9 +1437,8 @@ void STD_tickEFEEngine(void)
 
 	p = MAIN_D_80139AD0;
 	for (i = 0; i < 0xa; i++) {
-		v = (*p)[0];
-		if ((v >= 0) && (**(int32_t **)((char *)(*p)[1] + 8) < 0)) {
-			thunkStopSoundMask(v);
+		if (((*p)[0] >= 0L) && (**(int32_t **)((char *)(*p)[1] + 8) < 0)) {
+			thunkStopSoundMask((*p)[0]);
 			(*p)[0] = -1;
 		}
 		p++;
@@ -1449,22 +1450,18 @@ void STD_renderEFEEngine(void)
 	int32_t i;
 	int32_t j;
 	int32_t n;
-	int32_t off;
-	int32_t off2;
-	int32_t t;
 
 	MAIN_D_80134D0C = (int32_t *)MAIN_D_80134D10;
 	for (i = 0; i < 0x10; i++) {
 		n = MAIN_D_80134D0C[7];
-		for (j = 0, off = 0; j < n; j++, off += 0x20) {
-			*(int16_t *)((char *)off + MAIN_D_80134D0C[8] + 2) = 0;
+		for (j = 0; j < n; j++) {
+			((EfeUvAnim **)MAIN_D_80134D0C)[8][j].unk2 = 0;
 		}
-		t = MAIN_D_80134D0C[2];
-		if (t != 0) {
-			MAIN_D_80134D08 = t;
+		if (MAIN_D_80134D0C[2] != 0L) {
+			MAIN_D_80134D08 = MAIN_D_80134D0C[2];
 			n = ((int16_t *)MAIN_D_80134D0C)[10];
-			for (j = 0, off2 = 0; j < n; j++, off2 += 0x1c) {
-				MAIN_D_80134CE8 = (EfeSubEffect *)((char *)MAIN_D_80134D0C[4] + off2);
+			for (j = 0; j < n; j++) {
+				MAIN_D_80134CE8 = &((EfeSubEffect **)MAIN_D_80134D0C)[4][j];
 				if ((int32_t)MAIN_D_80134CE8->inst != 0) {
 					EFE_INSTANCE = MAIN_D_80134CE8->instance;
 					EFE_PARENT_INSTANCE = (int32_t)MAIN_D_80134CE8->parentInstance;
@@ -1491,13 +1488,11 @@ void STD_stopEFESounds(void)
 {
 	int32_t i;
 	int32_t *p;
-	int32_t v;
 
 	p = &MAIN_D_80139AD0[0][0];
 	for (i = 0; i < 10; i++) {
-		v = *p;
-		if (v >= 0) {
-			thunkStopSoundMask(v);
+		if (*p >= 0L) {
+			thunkStopSoundMask(*p);
 			*p = -1;
 		}
 	}
@@ -1508,12 +1503,11 @@ void STD_unloadEFESlot(int32_t idx)
 	int32_t i;
 	int32_t n;
 	int16_t *p;
-	int32_t off;
 
 	*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + (idx * 40);
 	n = MAIN_D_80134D0C[7];
-	for (i = 0, off = 0; i < n; i++, off += 0x20) {
-		p = (int16_t *)((char *)MAIN_D_80134D0C[8] + off);
+	for (i = 0; i < n; i++) {
+		p = (int16_t *)(((char **)MAIN_D_80134D0C)[8] + i * 32);
 		if (p[0] != 0) {
 			p[0] = 0;
 			p[6] = 0;
@@ -1537,74 +1531,78 @@ void STD_runEFESlotScript(int32_t idx)
 
 char *STD_func_8006EA78(char *p)
 {
-	int32_t a;
-	int32_t b;
 	char *base;
+	char *section;
 
 	base = p;
 	p = (char *)((uint32_t)p + 0x34);
-	a = ((int32_t *)base)[7];
-	b = ((int32_t *)base)[9];
-	if ((b - a) == 0) {
-		return NULL;
+	if (((int32_t *)base)[9] - ((int32_t *)base)[7] == 0) {
+		section = NULL;
+	} else {
+		section = p + ((int32_t *)base)[7];
 	}
 
-	return p + ((int32_t *)base)[7];
+	return section;
 }
 
 char *STD_func_8006EAAC(char *p)
 {
-	int32_t a;
-	int32_t b;
 	char *base;
+	char *section;
 
 	base = p;
 	p = (char *)((uint32_t)p + 0x34);
-	a = ((int32_t *)base)[5];
-	b = ((int32_t *)base)[6];
-	if ((b - a) == 0) {
-		return NULL;
+	if (((int32_t *)base)[6] - ((int32_t *)base)[5] == 0) {
+		section = NULL;
+	} else {
+		section = p + ((int32_t *)base)[5];
 	}
 
-	return p + ((int32_t *)base)[5];
+	return section;
 }
 
-int32_t STD_getEFEFileId(int32_t *p)
+int32_t STD_getEFEFileId(int32_t p)
 {
-	return p[12];
+	int32_t *header;
+
+	header = (int32_t *)p;
+	return header[12];
 }
 
 int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 {
+	ModelComponent *m;
+	EfeLoad *ld;
+	int32_t k;
+	int32_t fileMove;
+	int16_t *moves;
+	int32_t lastMove;
+	int32_t idx;
+	char *data;
+	int32_t fileId;
+	char *tim;
+	char *tmd;
+	int32_t i;
 	GsIMAGE im;
 	RECT rect;
 	GsIMAGE im2;
 	RECT rect2;
-	EfeFileHeader hdr;
-	EfeLoad *ld;
-	ModelComponent *m;
-	char *tim;
-	char *tmd;
-	char *data;
-	char *base;
-	int32_t i;
-	int32_t k;
-	int32_t s;
 	int32_t j;
 	int32_t n;
-	int32_t off;
-	int32_t off2;
+	EfeFileHeader hdr;
+	char *base;
+	int32_t heap;
 	int32_t *tmdp;
-	int32_t idx;
-	int32_t idx2;
 	int32_t ce;
+	int32_t s;
 
 	ld = ld = load;
+	moves = ld->moves;
 	m = ld->model;
 	data = (char *)m->mmdPtr;
 	tim = STD_func_8006EA78(data);
 	m->modelPtr = (TMDModel *)(tmd = STD_func_8006EAAC(data));
-	STD_getEFEFileId((int32_t *)data);
+	fileId = STD_getEFEFileId((int32_t)data);
 
 	switch (MAIN_D_801351B8) {
 	case 0:
@@ -1643,7 +1641,9 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 		}
 		MAIN_D_801351B8 = 2;
 	case 2:
-		if (((int32_t *)m->mmdPtr)[12] != ld->moves[-1]) {
+		fileMove = ((int32_t *)m->mmdPtr)[12];
+		lastMove = ld->moves[-1];
+		if (fileMove != lastMove) {
 			*ld->isLoaded = -3;
 			goto end;
 		}
@@ -1667,40 +1667,37 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 		}
 		return 1;
 	case 0x15:
-		*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + MAIN_D_801351BC * 40;
+		idx = MAIN_D_801351BC;
+		*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + idx * 40;
 		MAIN_D_80134D0C[6] = (int32_t)m;
 		hdr = *(EfeFileHeader *)m->mmdPtr;
-		base = (char *)m->mmdPtr;
-		MAIN_D_80134D14 += (uint32_t)hdr.w[6] + 0x34;
-		base = (char *)((uint32_t)base + 0x34);
+		base = (char *)m->mmdPtr + 0x34;
+		MAIN_D_80134D14 += (uint32_t)hdr.tmdEnd + 0x34;
 		MAIN_D_80134D0C[2] = (int32_t)base;
+		heap = MAIN_D_80134D14;
 		tmdp = (int32_t *)m->modelPtr;
-		if (hdr.w[6] - hdr.w[5] == 0) {
+		if (hdr.tmdEnd - hdr.tmdStart == 0) {
 			MAIN_D_80134D0C[7] = 0;
 		} else {
 			MAIN_D_80134D0C[7] = tmdp[2];
 		}
-		((int16_t *)MAIN_D_80134D0C)[10] = hdr.w[11];
-		MAIN_D_80134D0C[4] = (int32_t)(base + hdr.w[4]);
-		off = 0;
-		for (j = 0; j < hdr.w[11]; j++) {
-			*(int32_t *)((uint32_t)MAIN_D_80134D0C[4] + off) = 0;
-			off += 0x1c;
+		((int16_t *)MAIN_D_80134D0C)[10] = hdr.numSubEffects;
+		MAIN_D_80134D0C[4] = (uint32_t)base + hdr.subEffects;
+		for (j = 0; j < hdr.numSubEffects; j++) {
+			((EfeSubEffect **)MAIN_D_80134D0C)[4][j].inst = NULL;
 		}
 		n = MAIN_D_80134D0C[7];
 		if (n != 0) {
-			MAIN_D_80134D0C[8] = (int32_t)(base + hdr.w[2]);
-			off2 = 0;
+			MAIN_D_80134D0C[8] = (uint32_t)base + hdr.uvAnims;
 			for (j = 0; j < n; j++) {
-				*(int16_t *)((uint32_t)MAIN_D_80134D0C[8] + off2) = 0;
-				((int16_t *)(off2 + (uint32_t)MAIN_D_80134D0C[8]))[6] = 0;
-				off2 += 0x20;
+				((EfeUvAnim **)MAIN_D_80134D0C)[8][j].unk0 = 0;
+				((EfeUvAnim **)MAIN_D_80134D0C)[8][j].numKeyframes = 0;
 			}
 		}
-		MAIN_D_80134D0C[0] = hdr.w[12];
-		MAIN_D_80134D0C[3] = (int32_t)base + hdr.w[0];
-		MAIN_D_80134D0C[1] = (int32_t)base + hdr.w[1];
-		MAIN_D_80134D0C[9] = (int32_t)base + hdr.w[3];
+		MAIN_D_80134D0C[0] = hdr.effectId;
+		MAIN_D_80134D0C[3] = (int32_t)base + hdr.startScript;
+		MAIN_D_80134D0C[1] = (int32_t)base + hdr.initScript;
+		MAIN_D_80134D0C[9] = (int32_t)base + hdr.uvAnimsEnd;
 		EFE_INSTANCE = NULL;
 		MAIN_D_80134D08 = MAIN_D_80134D0C[2];
 		MAIN_D_80134CE8 = (EfeSubEffect *)MAIN_D_80134D0C[4];
@@ -1712,7 +1709,8 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 		MAIN_D_801351B8 = 0x16;
 		return 1;
 	case 0x16:
-		*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + MAIN_D_801351BC * 40;
+		idx = MAIN_D_801351BC;
+		*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + idx * 40;
 		for (s = 0; s < 4; s++) {
 			MAIN_D_80134D04 = *MAIN_D_80134D00;
 			STD_dispatchEFEOpcode(MAIN_D_80134D04 & 0xff);
@@ -1723,18 +1721,18 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 		if (s == 4) {
 			return 1;
 		}
-		if (*(int32_t *)MAIN_D_80134CE8->instance == -1) {
+		if (MAIN_D_80134CE8->instance->frame == -1) {
 			MAIN_D_80134CE8->inst = NULL;
 		}
-		ce = ce = MAIN_D_80134CE4;
+		ce = MAIN_D_80134CE4;
 		k = MAIN_D_801351BC;
-		idx = k;
-		if (ce >= -1) {
+		if (ce >= -1L) {
 			EFE_LOADED_MOVE_DATA[k] = MAIN_D_80134D0C[0];
 		} else {
 			EFE_LOADED_MOVE_DATA[k] = ce;
 		}
-		*ld->effectIds++ = idx;
+		k = MAIN_D_801351BC;
+		*ld->effectIds++ = k;
 		STD_loadNextEFEFile((int16_t *)load);
 		MAIN_D_801351B8 = 3;
 		return 0;
@@ -1744,6 +1742,13 @@ end:;
 
 void STD_handleEFEFileLoaded(int32_t arg)
 {
+	int32_t *header;
+	int32_t textureSize;
+	int32_t modelSize;
+
+	header = (int32_t *)arg;
+	textureSize = header[2];
+	modelSize = header[4];
 	MAIN_D_801351B8 = 0;
 	setFileReadCallback2(STD_setupLoadedEFEFile, arg);
 }
@@ -1752,12 +1757,12 @@ void STD_tickEFEUVAnimation(int32_t idx)
 {
 	EfeUvAnim *anim;
 
-	anim = (EfeUvAnim *)&((int32_t *)MAIN_D_80134D0C[8])[idx * 8];
+	anim = (EfeUvAnim *)(((char **)MAIN_D_80134D0C)[8] + idx * 32);
 	if (anim->numKeyframes != 0) {
 		++anim->uvFrame;
 		if (anim->uvFrame >= anim->uv->frames) {
 			anim->uvFrame = 0;
-			anim->keyframe = anim->keyframe + 1;
+			anim->keyframe++;
 			if (anim->keyframe >= anim->numKeyframes) {
 				anim->uv = anim->uvData;
 				anim->keyframe = 0;
@@ -1765,25 +1770,24 @@ void STD_tickEFEUVAnimation(int32_t idx)
 				anim->uv = anim->uv + 1;
 			}
 
-			STD_offsetEFEPrimitiveUVs((char *)((int32_t *)MAIN_D_80134D0C[6])[1], idx,
+			STD_offsetEFEPrimitiveUVs(((char **)MAIN_D_80134D0C[6])[1], idx,
 			                          *(int8_t *)((uint32_t)anim->uv + 2),
 			                          *(int8_t *)((uint32_t)anim->uv + 3));
 		}
-		anim->frame = anim->frame + 1;
-		anim->frame = anim->frame % anim->numFrames;
+		anim->frame++;
+		anim->frame %= anim->numFrames;
 	}
 }
 
 void STD_tickParticleEmitters(void)
 {
+	int32_t i;
+	EfeInstance *owner;
 	SVECTOR rot;
 	MATRIX m;
 	EfeParticleEffect *e;
-	EfeInstance *owner;
-	int32_t i;
 	EfeParticle *pt;
 	int32_t k;
-	int32_t t;
 
 	e = MAIN_D_80134CCC;
 	for (i = 0; i < 4; e++, i++) {
@@ -1811,8 +1815,7 @@ void STD_tickParticleEmitters(void)
 			rot.vx = (((rand() & 0x7f) - 0x40) << 12) / 64;
 			rot.vy = (((rand() & 0x7f) - 0x40) << 12) / 64;
 			rot.vz = (((rand() & 0x7f) - 0x40) << 12) / 64;
-			pt->direction.vy = 0;
-			pt->direction.vx = 0;
+			pt->direction.vx = pt->direction.vy = 0;
 			pt->direction.vz = e->startOffset;
 			RotMatrixZYX(&rot, &m);
 			ApplyMatrixSV(&m, &pt->direction, &pt->direction);
@@ -1825,14 +1828,12 @@ void STD_tickParticleEmitters(void)
 		for (k = 0; k < 0x14; k++) {
 			if (e->particles[k].distance > 0) {
 				pt = &e->particles[k];
-				pt->distance = pt->distance - pt->velocity;
+				pt->distance -= pt->velocity;
 				pt->velocity -= e->acceleration;
 			}
 		}
 
-		t = e->frames - 1;
-		e->frames = t;
-		if ((int16_t)t <= 0) {
+		if (--e->frames <= 0) {
 			e->transform = NULL;
 		}
 	}
@@ -1840,21 +1841,20 @@ void STD_tickParticleEmitters(void)
 
 void STD_renderParticleEmitters(void)
 {
+	int32_t i;
+	int32_t k;
 	int32_t f0;
 	int32_t f1;
-	int32_t mode;
+	EfeInstance *owner;
 	SVECTOR a;
 	SVECTOR b;
+	int32_t depth;
 	int32_t z;
 	DVECTOR s0v;
 	DVECTOR s1v;
+	int8_t kind;
 	EfeParticleEffect *e;
 	EfeParticle *pt;
-	int32_t i;
-	int32_t k;
-	int32_t kind;
-	int8_t kb;
-	int32_t depth;
 
 	e = MAIN_D_80134CCC;
 	for (i = 0; i < 4; e++, i++) {
@@ -1862,14 +1862,14 @@ void STD_renderParticleEmitters(void)
 			continue;
 		}
 
-		kb = kind = e->type;
+		owner = e->transform;
+		kind = e->type;
 		for (k = 0; k < 0x14; k++) {
 			if (e->particles[k].distance <= 0) {
 				continue;
 			}
 
 			pt = &e->particles[k];
-			mode = kb & 1;
 			switch (kind) {
 			case 0:
 				f0 = pt->distance << 4;
@@ -1907,15 +1907,15 @@ drawLine:
 			gte_rtps();
 			gte_stsxy(&s1v);
 			gte_stszotz(&z);
-			drawLine2P(e->color.r | (e->color.g << 8) | (e->color.b << 16),
+			drawLine2P((uint8_t)e->color.r | ((uint8_t)e->color.g << 8) | ((uint8_t)e->color.b << 16),
 			           s0v.vx, s0v.vy, s1v.vx, s1v.vy,
 			           (depth + z) >> 3, 0);
 			goto nextParticle;
 modeTest:
-			if (mode == 1) {
+			if ((kind & 1) == 1) {
 				goto drawLine;
 			}
-			renderFXParticle(&a, 0x19, &e->color);
+			renderFXParticle(&a, 0x19, (RGB8 *)&e->color);
 nextParticle:;
 		}
 	}
@@ -1925,12 +1925,15 @@ int16_t STD_offsetEFEPrimitiveUVs(char *base, int32_t idx, int8_t du, int8_t dv)
 {
 	uint8_t code;
 	char *p;
+	char *hdr;
 	int32_t i;
 	int32_t n;
 
-	base = (char *)((int32_t)base + 0xc + (idx * 28));
-	n = ((int32_t *)base)[5];
-	p = ((char **)base)[4];
+	base = (char *)((int32_t)base + 0xc);
+	hdr = base;
+	hdr += idx * 28;
+	n = ((int32_t *)hdr)[5];
+	p = ((char **)hdr)[4];
 	for (i = 0; i < n; i++) {
 		code = (*(int32_t *)p >> 24) & 0xff;
 		if (code & 1) {
@@ -2003,13 +2006,12 @@ next:;
 char *STD_initializeEFEEngine(char *base)
 {
 	int32_t i;
-	int32_t off;
 
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
 	MAIN_D_80134D10 = base;
-	for (i = 0, off = 0; i < 0x10; i++, off += 0x28) {
-		*(int32_t *)((char *)off + (int32_t)MAIN_D_80134D10 + 8) = 0;
-		*(int32_t *)((char *)off + (int32_t)MAIN_D_80134D10 + 0x1c) = 0;
+	for (i = 0; i < 0x10; i++) {
+		((EfeSlot *)MAIN_D_80134D10)[i][2] = 0;
+		((EfeSlot *)MAIN_D_80134D10)[i][7] = 0;
 	}
 
 	base = (char *)((int32_t)base + 0x280);
@@ -2020,7 +2022,11 @@ char *STD_initializeEFEEngine(char *base)
 	base = STD_initializeAuraProjectiles(base);
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
 	MAIN_D_80134D18 = (int32_t)base;
+#if defined(VERSION_JP)
+	MAIN_D_80134D14 = MAIN_D_80134D18;
+#else
 	MAIN_D_80134D14 = (int32_t)base;
+#endif
 	addObject(0x500, 0, (TickFunction)STD_tickEFEEngine, (RenderFunction)STD_renderEFEEngine);
 	STD_initializeEFESubOpcodeTable();
 	base = (char *)((int32_t)base + 0x41000);
@@ -2036,9 +2042,16 @@ void STD_removeEFEEngine(void)
 	removeObject(0x500, 0);
 }
 
-void STD_loadMoveEFE(int16_t *moves, int16_t *effectIds, int8_t *isLoaded)
+// clang-format off
+void STD_loadMoveEFE(moves, effectIds, isLoaded)
+	int16_t *moves;
+	int16_t *effectIds;
+	int8_t *isLoaded;
+// clang-format on
 {
+#if !defined(VERSION_JP)
 	downloadSomeImage(moves);
+#endif
 	MAIN_D_80139B20[0] = -1;
 	MAIN_D_80139B24[0] = isLoaded;
 	*MAIN_D_80139B24[0] = 1;
@@ -2077,8 +2090,10 @@ int32_t STD_startEFE(int32_t i)
 
 void STD_stopEFESubEffect(int32_t a, int32_t b)
 {
+#if !defined(VERSION_JP)
 	char *p;
 	char *q;
+#endif
 
 	if ((b < 0) || (a < 0) || (a >= 0x10)) {
 		return;
@@ -2087,9 +2102,13 @@ void STD_stopEFESubEffect(int32_t a, int32_t b)
 	if (MAIN_D_80134D10 != NULL) {
 	}
 
+#if defined(VERSION_JP)
+	MAIN_D_80134CE8 = (EfeSubEffect *)(((char **)(MAIN_D_80134D10 + a * 40))[4] + b * 28);
+#else
 	p = (char *)(a * 40) + (int32_t)MAIN_D_80134D10;
 	q = ((char **)p)[4];
 	MAIN_D_80134CE8 = (EfeSubEffect *)(q + (b * 28));
+#endif
 	MAIN_D_80134CE8->inst = NULL;
 	MAIN_D_80134CE8->instance->frame = -1;
 }
@@ -2104,11 +2123,13 @@ void STD_loadNextEFEFile(int16_t *arg)
 	EfeLoad *p;
 	ModelComponent *m;
 	int32_t id;
+	int16_t *moves;
 	int32_t i;
 	char path[32];
 	CdlLOC loc;
 
 	p = (EfeLoad *)(int32_t)arg;
+	moves = p->moves;
 	p->state++;
 	id = *p->moves++;
 	if (id < 0) {
@@ -2172,21 +2193,40 @@ void STD_disableMapLayer(void)
 
 void STD_renderScreenFade(void)
 {
+#if defined(VERSION_JP)
+	int32_t ofx;
+	int32_t ofy;
+	POLY_FT4 *p;
+	int32_t c;
+	int32_t z;
+
+	c = EFE_POP1(int32_t);
+	p = (POLY_FT4 *)GsGetWorkBase();
+	z = 0xffe;
+	getDrawingOffsetCopy(&ofx, &ofy);
+	SetPolyFT4(p);
+	SetSemiTrans(p, 1);
+	p->tpage = getTPage(1, 2, 832, 256);
+	p->clut = getClut(0, 487);
+	setXY4(p, -ofx, -ofy, 0x140 - ofx, -ofy, -ofx, 0xf0 - ofy, 0x140 - ofx, 0xf0 - ofy);
+	setUVWH(p, 0, 0x80, 3, 3);
+	setRGB0(p, c, c, c);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + z, p);
+	p++;
+	GsSetWorkBase((PACKET *)p);
+#else
 	modifySomeImage(EFE_POP1(int32_t));
+#endif
 }
 
 void STD_applyBoxAttackHit(void)
 {
+	int32_t r;
 	SVECTOR center;
 	AABB box;
-	int32_t r;
 	int32_t *out;
 	int32_t *ext;
-	int32_t id;
-	int32_t idx;
 	int32_t j;
-	Entity *e;
-	int32_t ent;
 
 	r = EFE_POP1(int32_t);
 	out = EFE_POP1(int32_t *);
@@ -2205,52 +2245,42 @@ void STD_applyBoxAttackHit(void)
 	box.extent.vz = ext[2];
 	MAIN_D_80134CD8 = 1;
 	while (1) {
-		id = findAABBHitEntity(&box, MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CD8);
-		MAIN_D_80134CD8 = id;
-		if (id == -1) {
+		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CD8)) == -1) {
 			return;
 		}
-		idx = (*(int32_t *)&MAIN_D_80134CD8);
-		e = ENTITY_TABLE[idx];
-		if (((int8_t *)e)[0x53] == 0) {
+		if (((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] == 0) {
 			for (j = 1; j < 10; j++) {
-				ent = (int32_t)ENTITY_TABLE[j];
-				if (ent == (int32_t)MAIN_D_80134CE8->sourceEntity) {
+				if (ENTITY_TABLE[j] == MAIN_D_80134CE8->sourceEntity) {
 					break;
 				}
 			}
-			((int8_t *)ENTITY_TABLE[idx])[0x53] = 1;
-
-			addAttackObject(MAIN_D_80134CD8, 1, &center, (int32_t)((uint32_t)(char *)MAIN_D_80134CD4), r, j);
+			((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] = 1;
+			addAttackObject(MAIN_D_80134CD8, 1, &center, MAIN_D_80134CD4, r, j);
 			*out = 1;
 			return;
 		}
-		MAIN_D_80134CD8 = idx + 1;
+		MAIN_D_80134CD8++;
 	}
 }
 
 void STD_applyRadiusAttackHit(void)
 {
-	SVECTOR pos;
-	int32_t *hitFlag;
-	int32_t r;
 	int32_t i;
+	int32_t r;
+	int32_t *hitFlag;
 	Entity *e;
-	Entity *e2;
-	int32_t dx;
 	int32_t dz;
 	int32_t radius;
-	int32_t lx;
-	int32_t lz;
+	int32_t dx;
+	SVECTOR pos;
 
 	hitFlag = EFE_POP1(int32_t *);
 	r = EFE_POP1(int32_t);
-	r = r * r;
 	*hitFlag = 0;
+	r = r * r;
 	MAIN_D_80134CD8 = 1;
 	while (MAIN_D_80134CD8 < 10) {
-		e = ENTITY_TABLE[(*(int32_t *)&MAIN_D_80134CD8)];
-		e2 = ENTITY_TABLE[(*(int32_t *)&MAIN_D_80134CD8)];
+		e = ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CD8];
 		if (e == MAIN_D_80134CE8->sourceEntity) {
 			goto next;
 		}
@@ -2264,12 +2294,12 @@ void STD_applyRadiusAttackHit(void)
 			goto next;
 		}
 		radius = DIGIMON_DATA[e->type].radius;
-		radius = radius * radius;
-		lx = e->posData->location.vx;
-		dx = *(int32_t *)((int32_t)EFE_INSTANCE + 4) - lx;
-		lz = e->posData->location.vz;
-		dz = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc) - lz;
-		if (radius + r < dz * dz + dx * dx) {
+		radius *= radius;
+		radius += r;
+		dx = *(int32_t *)((int32_t)EFE_INSTANCE + 4) - (int32_t)e->posData->location.vx;
+		dz = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc) - (int32_t)e->posData->location.vz;
+		dz = dz * dz + dx * dx;
+		if (radius < dz) {
 			goto next;
 		}
 		for (i = 1; i < 10; i++) {
@@ -2277,10 +2307,10 @@ void STD_applyRadiusAttackHit(void)
 				break;
 			}
 		}
-		((DigimonEntity *)e2)->stats.current.isHit = 1;
+		((DigimonEntity *)ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CD8])->stats.current.isHit = 1;
 		STD_calculateAttackHitPosition(&pos, (int32_t *)e, (int32_t *)MAIN_D_80134CE8->sourceEntity, DIGIMON_DATA[e->type].radius);
 		pos.vy = -DIGIMON_DATA[e->type].height / 2;
-		addAttackObject(MAIN_D_80134CD8, 1, &pos, (int32_t)((uint32_t)(char *)MAIN_D_80134CD4), MAIN_D_80134CD0, i);
+		addAttackObject(MAIN_D_80134CD8, 1, &pos, MAIN_D_80134CD4, MAIN_D_80134CD0, i);
 		*hitFlag = 1;
 next:
 		MAIN_D_80134CD8++;
@@ -2289,17 +2319,17 @@ next:
 
 void STD_applyLineAttackHit(void)
 {
-	DVECTOR line[2];
-	int16_t rect[4];
-	SVECTOR pos;
 	int32_t *out;
 	int32_t *arg;
-	int32_t j;
+	int32_t width;
+	DVECTOR line[2];
+	int16_t rect[4];
 	int32_t r;
+	SVECTOR pos;
+	int32_t j;
 	Entity *e;
-	int32_t ent;
 
-	EFE_DROP1();
+	width = EFE_POP1(int32_t);
 	out = EFE_POP1(int32_t *);
 	arg = EFE_POP1(int32_t *);
 	*out = 0;
@@ -2333,15 +2363,14 @@ void STD_applyLineAttackHit(void)
 			continue;
 		}
 		for (j = 1; j < 10; j++) {
-			ent = (int32_t)ENTITY_TABLE[j];
-			if (ent == (int32_t)MAIN_D_80134CE8->sourceEntity) {
+			if (ENTITY_TABLE[j] == MAIN_D_80134CE8->sourceEntity) {
 				break;
 			}
 		}
 		((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] = 1;
 		STD_calculateAttackHitPosition(&pos, (int32_t *)e, ((int32_t **)MAIN_D_80134CE8)[4], DIGIMON_DATA[*(int32_t *)e].radius);
 		pos.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 8);
-		addAttackObject(MAIN_D_80134CD8, 1, &pos, (int32_t)((uint32_t)(char *)MAIN_D_80134CD4), MAIN_D_80134CD0, j);
+		addAttackObject(MAIN_D_80134CD8, 1, &pos, MAIN_D_80134CD4, MAIN_D_80134CD0, j);
 		*out = 1;
 		return;
 	}
@@ -2350,14 +2379,12 @@ void STD_applyLineAttackHit(void)
 void STD_faceTargetEntity(void)
 {
 	PositionData *pd;
-	Entity *ent;
 
 	if (MAIN_D_80134CE8->targetEntity == NULL) {
 		return;
 	}
 
-	ent = MAIN_D_80134CE8->targetEntity;
-	entityLookAtLocation(MAIN_D_80134CE8->sourceEntity, &ent->posData->location);
+	entityLookAtLocation(MAIN_D_80134CE8->sourceEntity, &MAIN_D_80134CE8->targetEntity->posData->location);
 	pd = MAIN_D_80134CE8->sourceEntity->posData;
 	RotMatrix(&pd->rotation, &pd->posMatrix.coord);
 	ScaleMatrix(&pd->posMatrix.coord, &pd->scale);
@@ -2394,23 +2421,24 @@ void STD_renderScreenOverlay(void)
 
 void STD_renderRingTube(void)
 {
-	SVECTOR pos;
-	DVECTOR screen;
+	VECTOR *center;
 	int32_t n;
 	int32_t *radius;
 	int32_t *heights;
 	int32_t *colors;
 	int32_t start;
+	SVECTOR pos;
 	int16_t *pts;
-	POLY_FT4 *p;
-	ModelComponent *m;
-	int16_t *q;
-	VECTOR *center;
-	int32_t i;
-	int32_t j;
 	int32_t r;
+	int32_t ang;
 	int32_t z;
+	int32_t j;
+	int32_t i;
+	DVECTOR screen;
 	int16_t count;
+	POLY_FT4 *p;
+	int16_t *q;
+	ModelComponent *m;
 
 	start = EFE_POP1(int32_t);
 	colors = EFE_POP1(int32_t *);
@@ -2425,18 +2453,20 @@ void STD_renderRingTube(void)
 
 	p = (POLY_FT4 *)GsGetWorkBase();
 	count = (n - 1) * 10;
-	q = pts = (int16_t *)&p[count];
+	q = (int16_t *)&p[count];
+	pts = q;
 	m = (ModelComponent *)MAIN_D_80134D0C[6];
 	for (i = 0; i < n; i++) {
 		r = radius[i];
 		for (j = 0; j < 10; j++) {
-			pos.vx = center->vx + ((r * _cos(0x80 - j * 0x200 / 10)) >> 12);
+			ang = j * 0x200 / 10;
+			pos.vx = center->vx + ((r * _cos(0x80 - ang)) >> 12);
 			pos.vy = (int32_t)center->vy + heights[i];
-			pos.vz = center->vz + ((r * _sin(0x80 - j * 0x200 / 10)) >> 12);
+			pos.vz = center->vz + ((r * _sin(0x80 - ang)) >> 12);
 			z = worldPosToScreenPos(&pos, &screen);
+			z >>= 4;
 			*q++ = screen.vx;
 			*q++ = screen.vy;
-			z >>= 4;
 			if (z >= 0x21 && z < 0x1000) {
 				*q++ = z;
 			} else {
@@ -2449,7 +2479,7 @@ void STD_renderRingTube(void)
 	for (i = 0; i < n - 1; i++) {
 		for (j = 0; j < 10; q += 3, j++) {
 			SetPolyFT4(p);
-			setSemiTrans(p, 1);
+			p->code |= 2;
 			p->r0 = p->g0 = p->b0 = colors[i];
 			p->tpage = m->pixelPage | 0x20;
 			p->clut = GetClut((m->clutPage & 0x3f) << 4, m->clutPage >> 6);
@@ -2485,8 +2515,6 @@ void STD_tickRibbonPoints(void)
 	SVECTOR *q;
 	int32_t i;
 	int32_t t;
-	int32_t v;
-	int16_t w;
 
 	q = EFE_POP1(SVECTOR *);
 	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
@@ -2495,40 +2523,25 @@ void STD_tickRibbonPoints(void)
 			q[i].pad = customRandom(-0xf, 0xf);
 		}
 		q[i].vy += q[i].pad;
-		w = q[i].vy;
-		t = w;
-		if (w < -0x96) {
+		if (q[i].vy < -0x96) {
 			t = -0x96;
-		} else if (t >= 0x97) {
-			t = 0x96;
 		} else {
-			t = t;
+			t = q[i].vy > 0x96 ? 0x96 : q[i].vy;
 		}
 		q[i].vy = t;
 		q[i].vz += q[i].pad;
-		v = q[i].vz;
-		w = v;
-		t = w;
-		if (w < -0x96) {
-			t = -0x96;
-		} else if (t >= 0x97) {
-			t = 0x96;
-		} else {
-			t = t;
-		}
-		q[i].vz = t;
+		q[i].vz = q[i].vz < -0x96 ? -0x96 : (q[i].vz > 0x96 ? 0x96 : q[i].vz);
 	}
 }
 
 void STD_initializeRibbonPoints(void)
 {
-	SVECTOR *q;
 	int32_t i;
-	int32_t v;
+	SVECTOR *q;
 
 	q = EFE_POP1(SVECTOR *);
-	for (i = 0, v = -0x708; i < 10; i++, v += 0x190) {
-		q[i].vx = v;
+	for (i = 0; i < 10; i++) {
+		q[i].vx = i * 0x190 - 0x708;
 		q[i].vy = customRandom(-0x96, 0x96);
 		q[i].pad = customRandom(-0x1e, 0x1e);
 		q[i].vz = 0;
@@ -2540,7 +2553,6 @@ void STD_renderRadialWaves(void)
 	POLY_FT4 *prim;
 	int16_t *uv;
 	int32_t i;
-	int32_t w;
 
 	for (i = 0; i < 0x18U; i += 2) {
 		STD_D_8007AF30[i] += ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetX;
@@ -2558,7 +2570,7 @@ void STD_renderRadialWaves(void)
 	EFE_WAVE_SCRATCH->phase = EFE_INSTANCE->frame * -400;
 
 	for (EFE_WAVE_SCRATCH->ring = 0; EFE_WAVE_SCRATCH->ring < 6; (EFE_WAVE_SCRATCH->ring)++) {
-		EFE_SCRATCH->rot.vy = EFE_SCRATCH->rot.vy + 0x2aa;
+		EFE_SCRATCH->rot.vy += 0x2aa;
 		RotMatrixYXZ(&EFE_SCRATCH->rot, &EFE_SCRATCH->m1);
 		ScaleMatrix(&EFE_SCRATCH->m1, EFE_SCRATCH->scale);
 		GsMulCoord0(&GsWSMATRIX, &EFE_SCRATCH->m1, &EFE_SCRATCH->m0);
@@ -2567,12 +2579,11 @@ void STD_renderRadialWaves(void)
 		EFE_WAVE_SCRATCH->radius = 0xc8;
 		for (; EFE_WAVE_SCRATCH->radius < 0xbb8;
 		     EFE_WAVE_SCRATCH->radius += 0x64) {
-			w = (EFE_WAVE_SCRATCH->radius < 0x2ef)
-			            ? STD_func_800770C0(0xc8, 0x2ee, *(uint32_t *)&EFE_WAVE_SCRATCH->radius, 0xc8, 0xfa)
-			    : (EFE_WAVE_SCRATCH->radius < 0x8cb)
-			            ? STD_func_800770C0(0x2ee, 0x8ca, *(uint32_t *)&EFE_WAVE_SCRATCH->radius, 0xfa, 0x7d)
-			            : STD_func_800770C0(0x8ca, 0xbb8, *(uint32_t *)&EFE_WAVE_SCRATCH->radius, 0x7d, 0xa);
-			EFE_WAVE_SCRATCH->height = w;
+			EFE_WAVE_SCRATCH->height = (EFE_WAVE_SCRATCH->radius < 0x2ef)
+			                                   ? STD_func_800770C0(0xc8, 0x2ee, *(long *)&EFE_WAVE_SCRATCH->radius, 0xc8, 0xfa)
+			                           : (EFE_WAVE_SCRATCH->radius < 0x8cb)
+			                                   ? STD_func_800770C0(0x2ee, 0x8ca, *(long *)&EFE_WAVE_SCRATCH->radius, 0xfa, 0x7d)
+			                                   : STD_func_800770C0(0x8ca, 0xbb8, *(long *)&EFE_WAVE_SCRATCH->radius, 0x7d, 0xa);
 			i = EFE_WAVE_SCRATCH->phase + EFE_WAVE_SCRATCH->radius * 4 +
 			    EFE_WAVE_SCRATCH->ring * 0x309;
 			EFE_WAVE_SCRATCH->height =
@@ -2602,13 +2613,9 @@ void STD_renderRadialWaves(void)
 					((int32_t *)prim)[1] = MAIN_D_80134908;
 					prim->clut = EFE_WAVE_SCRATCH->clut;
 					prim->tpage = EFE_WAVE_SCRATCH->tpage;
-					if (EFE_WAVE_SCRATCH->radius == 0x12c) {
-						uv = (int16_t *)&STD_D_8007AF30[8];
-					} else if (EFE_WAVE_SCRATCH->radius >= 0xb54) {
-						uv = (int16_t *)&STD_D_8007AF30[16];
-					} else {
-						uv = (int16_t *)STD_D_8007AF30;
-					}
+					uv = (EFE_WAVE_SCRATCH->radius == 0x12c)   ? (int16_t *)&STD_D_8007AF30[8]
+					     : (EFE_WAVE_SCRATCH->radius >= 0xb54) ? (int16_t *)&STD_D_8007AF30[16]
+					                                           : (int16_t *)STD_D_8007AF30;
 					*(int16_t *)&prim->u0 = uv[0];
 					*(int16_t *)&prim->u1 = uv[1];
 					*(int16_t *)&prim->u2 = uv[2];
@@ -2643,11 +2650,11 @@ void STD_func_80070A40(void)
 
 void STD_addClutLoadPrim(void)
 {
-	RECT rect;
-	int32_t idx;
 	char *src;
-	int32_t y;
 	int32_t z;
+	int32_t y;
+	int32_t idx;
+	RECT rect;
 	DR_LOAD *prim;
 
 	idx = EFE_POP1(int32_t);
@@ -2687,14 +2694,14 @@ void STD_drawTMDScreenSpace(void)
 
 void STD_loadClutColors(void)
 {
-	uint16_t clut[16];
-	RECT rect;
 	int32_t y;
 	int32_t x;
 	int32_t count;
 	uint16_t *src;
 	ModelComponent *m;
 	int32_t i;
+	uint16_t clut[16];
+	RECT rect;
 
 	src = EFE_POP1(uint16_t *);
 	count = EFE_POP1(int32_t);
@@ -2788,13 +2795,13 @@ next:;
 
 void STD_convertToViewSpace(void)
 {
+	VECTOR *out1;
+	VECTOR *out2;
+	VECTOR *trans;
+	VECTOR *rotIn;
 	MATRIX m1;
 	MATRIX m2;
 	SVECTOR rot;
-	VECTOR *rotIn;
-	VECTOR *trans;
-	VECTOR *out2;
-	VECTOR *out1;
 
 	rotIn = EFE_POP1(VECTOR *);
 	trans = EFE_POP1(VECTOR *);
@@ -2847,23 +2854,23 @@ void STD_multiplyVectorByScalar(void)
 
 void STD_render3DTexturedQuad(void)
 {
-	SVECTOR a;
-	SVECTOR b;
-	SVECTOR c;
-	SVECTOR d;
 	POLY_FT4 *prim;
 	ModelComponent *m;
-	int32_t u0off;
-	int32_t v0off;
-	int32_t *col;
-	int32_t semi;
-	int32_t du;
-	int32_t dv;
-	int32_t clutY;
 	int32_t *p1;
 	int32_t *p2;
 	int32_t *p3;
 	int32_t *p4;
+	int32_t *col;
+	int32_t u0off;
+	int32_t v0off;
+	int32_t du;
+	int32_t dv;
+	int32_t clutY;
+	int32_t semi;
+	SVECTOR a;
+	SVECTOR b;
+	SVECTOR c;
+	SVECTOR d;
 
 	semi = EFE_POP1(int32_t);
 	clutY = EFE_POP1(int32_t);
@@ -2894,7 +2901,7 @@ void STD_render3DTexturedQuad(void)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	SetPolyFT4(prim);
 	if (semi != 0) {
-		setSemiTrans(prim, 1);
+		prim->code |= 2;
 	}
 
 	setRGB0(prim, col[0], col[1], col[2]);
@@ -2909,10 +2916,9 @@ void STD_setTransformToBoneMatrix(void)
 	MATRIX m;
 	SVECTOR v;
 	SVECTOR out;
-	int32_t *p;
-	int32_t *q;
+	long *p;
 
-	p = (int32_t *)((int32_t)EFE_INSTANCE + 4);
+	p = (long *)((int32_t)EFE_INSTANCE + 4);
 	calculateBoneMatrix(MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CE8->boneOffset->boneId, &m);
 	v.vx = MAIN_D_80134CE8->boneOffset->positionX;
 	v.vy = MAIN_D_80134CE8->boneOffset->positionY;
@@ -2921,12 +2927,9 @@ void STD_setTransformToBoneMatrix(void)
 	p[0] = out.vx;
 	p[1] = out.vy;
 	p[2] = out.vz;
-	q = p++;
-	*q = *q + m.t[0];
-	q = p++;
-	*q = *q + m.t[1];
-	q = p++;
-	*q = *q + m.t[2];
+	*p++ += m.t[0];
+	*p++ += m.t[1];
+	*p++ += m.t[2];
 	matrixToEuler2(&m, &out);
 	*p++ = out.vx;
 	*p++ = out.vy;
@@ -2935,27 +2938,27 @@ void STD_setTransformToBoneMatrix(void)
 
 void STD_renderWireframeBox(void)
 {
+	int32_t *base;
+	int32_t *ext;
+	int32_t *col;
 	SVECTOR p;
 	DVECTOR pts[8];
+	GsOT_TAG *ot;
+	int32_t k;
 	int32_t ox;
 	int32_t oy;
 	MATRIX m;
 	SVECTOR rot;
 	VECTOR scale;
-	int32_t *col;
-	int32_t *ext;
-	int32_t *base;
 	uint8_t *idx;
 	LINE_F4 *prim;
-	GsOT_TAG *ot;
 	int32_t i;
-	int32_t k;
-	int16_t ex;
-	int16_t ey;
-	int16_t ez;
 	int16_t bx;
 	int16_t by;
 	int16_t bz;
+	int16_t ex;
+	int16_t ey;
+	int16_t ez;
 
 	col = EFE_POP1(int32_t *);
 	ext = EFE_POP1(int32_t *);
@@ -2979,8 +2982,12 @@ void STD_renderWireframeBox(void)
 	by = base[1];
 	bz = base[2];
 	PushMatrix();
+#if defined(VERSION_JP)
+	getDrawingOffsetCopy(&ox, &oy);
+#else
 	ox = DRAWING_OFFSET_X;
 	oy = DRAWING_OFFSET_Y;
+#endif
 	for (i = 0; i < 8; i++) {
 		p.vx = ex * MAIN_D_801348F0[i];
 		p.vy = ey * MAIN_D_801348F8[i];
@@ -3014,11 +3021,23 @@ void STD_renderWireframeBox(void)
 
 void STD_discardEFEOperand(void)
 {
-	EFE_DROP1();
+	int32_t value;
+
+	value = EFE_POP1(int32_t);
 }
 
 void STD_renderWireframeGrid(void)
 {
+	int32_t *base;
+	int32_t *rotSrc;
+	int32_t y;
+	int32_t *col;
+	int32_t x1;
+	int32_t x2;
+	int32_t n1;
+	int32_t z1;
+	int32_t z2;
+	int32_t n2;
 	SVECTOR c0;
 	SVECTOR c1;
 	SVECTOR c2;
@@ -3028,16 +3047,6 @@ void STD_renderWireframeGrid(void)
 	SVECTOR p3;
 	MATRIX m;
 	SVECTOR rot;
-	int32_t *base;
-	int32_t *rotSrc;
-	int32_t y;
-	int32_t *col;
-	int32_t x1;
-	int32_t x2;
-	int32_t z1;
-	int32_t z2;
-	int32_t n1;
-	int32_t n2;
 
 	y = EFE_POP1(int32_t);
 	n2 = EFE_POP1(int32_t);
@@ -3088,20 +3097,20 @@ void STD_renderWireframeGrid(void)
 
 void STD_render2DTexturedQuad(void)
 {
-	int32_t depth;
-	int32_t *col;
-	int32_t du;
-	int32_t dv;
-	int32_t clutY;
 	int32_t a;
 	int32_t b;
-	POLY_FT4 *prim;
-	ModelComponent *m;
-	int32_t semi;
-	int32_t u0off;
-	int32_t v0off;
 	int32_t c;
 	int32_t d;
+	int32_t depth;
+	int32_t *col;
+	int32_t u0off;
+	int32_t v0off;
+	int32_t du;
+	int32_t dv;
+	POLY_FT4 *prim;
+	ModelComponent *m;
+	int32_t clutY;
+	int32_t semi;
 
 	semi = EFE_POP1(int32_t);
 	clutY = EFE_POP1(int32_t);
@@ -3127,7 +3136,7 @@ void STD_render2DTexturedQuad(void)
 			setXYWH(prim, a, b, c, d);
 		}
 		if (semi != 0) {
-			setSemiTrans(prim, 1);
+			prim->code |= 2;
 		}
 		setRGB0(prim, col[0], col[1], col[2]);
 		prim->tpage = m->pixelPage | semi;
@@ -3141,19 +3150,40 @@ void STD_render2DTexturedQuad(void)
 
 void STD_restoreCameraView(void)
 {
+#if defined(VERSION_JP)
+	GsRVIEW2 view;
+	int32_t dist;
+	int32_t x;
+	int32_t y;
+
+	getRViewCopy(&view);
+	getViewportDistanceCopy(&dist);
+	getDrawingOffsetCopy(&x, &y);
+	DRAWING_OFFSET_X = x;
+	DRAWING_OFFSET_Y = y;
+	GsSetProjection(dist);
+	GsSetRefView2(&view);
+#else
 	GsSetProjection(VIEWPORT_DISTANCE);
 	DRAWING_OFFSET_X = MAIN_D_801351C0;
 	DRAWING_OFFSET_Y = MAIN_D_801351C4;
 	GsWSMATRIX = STD_D_8007FC00.m;
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
+#endif
 }
 
 void STD_setupFixedCamera(void)
 {
+	int32_t ret;
+
+#if defined(VERSION_JP)
+	GsSetProjection(0x200);
+#else
 	STD_D_8007FC00.m = GsWSMATRIX;
 	MAIN_D_801351C0 = DRAWING_OFFSET_X;
 	MAIN_D_801351C4 = DRAWING_OFFSET_Y;
+#endif
 	MAIN_D_80139B34.vpx = 0;
 	MAIN_D_80139B34.vpz = -0x7d0;
 	MAIN_D_80139B34.vpy = 0;
@@ -3162,7 +3192,7 @@ void STD_setupFixedCamera(void)
 	MAIN_D_80139B34.vrz = 0;
 	MAIN_D_80139B34.rz = 0;
 	MAIN_D_80139B34.super = NULL;
-	GsSetRefView2(&MAIN_D_80139B34);
+	ret = GsSetRefView2(&MAIN_D_80139B34);
 	DRAWING_OFFSET_X = 0xa0;
 	DRAWING_OFFSET_Y = 0x78;
 }
@@ -3171,8 +3201,8 @@ void STD_getSourceBoneTransform(void)
 {
 	MATRIX m;
 	SVECTOR rot;
-	int32_t *rotOut;
 	int32_t *posOut;
+	int32_t *rotOut;
 	int32_t bone;
 
 	rotOut = EFE_POP1(int32_t *);
@@ -3269,9 +3299,9 @@ void STD_combineRotations(void)
 void STD_func_800728D4(void)
 {
 	MATRIX m;
-	SVECTOR rot;
-	int32_t *v;
 	int32_t *out;
+	int32_t *v;
+	SVECTOR rot;
 
 	v = EFE_POP1(int32_t *);
 	out = EFE_POP1(int32_t *);
@@ -3307,12 +3337,12 @@ void STD_rotateVectorByAngles(void)
 
 void STD_getTargetBoneTransform(void)
 {
-	MATRIX m;
-	SVECTOR rot;
 	int32_t *rotOut;
 	int32_t *posOut;
 	int32_t idx;
 	GsCOORDINATE2 *coord;
+	MATRIX m;
+	SVECTOR rot;
 	GsCOORDINATE2 *matrix;
 
 	rotOut = EFE_POP1(int32_t *);
@@ -3339,9 +3369,7 @@ void STD_centerTransformOnEntities(void)
 	int32_t i;
 	int32_t count;
 	int32_t *p;
-	Entity *e;
 
-	count = 0;
 	sum = (EfeTransform *)((int32_t)EFE_INSTANCE + 4);
 	sum->position.vx = 0;
 	sum->position.vy = 0;
@@ -3349,19 +3377,19 @@ void STD_centerTransformOnEntities(void)
 	*(int32_t *)((int32_t)EFE_INSTANCE + 0x10) = 0;
 	*(int32_t *)((int32_t)EFE_INSTANCE + 0x14) = 0;
 	*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) = 0;
+	count = 0;
 	for (i = 1; i < 10; i++) {
 		if (ENTITY_TABLE[i] == NULL) {
 			continue;
 		}
-		e = ENTITY_TABLE[i];
-		if (e == MAIN_D_80134CE8->sourceEntity) {
+		if (ENTITY_TABLE[i] == MAIN_D_80134CE8->sourceEntity) {
 			continue;
 		}
-		if (((int8_t *)e)[0x34] == 0) {
+		if (((int8_t *)ENTITY_TABLE[i])[0x34] == 0) {
 			continue;
 		}
 		count++;
-		p = (int32_t *)(((char **)e)[1] + 0x34);
+		p = (int32_t *)(((char **)ENTITY_TABLE[i])[1] + 0x34);
 		sum->position.vx = sum->position.vx + p[5];
 		sum->position.vy = sum->position.vy + p[6];
 		sum->position.vz = sum->position.vz + p[7];
@@ -3475,9 +3503,9 @@ void STD_func_80072FF8(void)
 {
 	SVECTOR in;
 	SVECTOR res;
+	int32_t *out;
 	MATRIX m;
 	int32_t *v;
-	int32_t *out;
 
 	v = EFE_POP1(int32_t *);
 	out = EFE_POP1(int32_t *);
@@ -3495,11 +3523,9 @@ void STD_findHitEntity(void)
 {
 	SVECTOR center;
 	AABB box;
+	int32_t *out;
 	int32_t *ext;
 	int32_t mode;
-	int32_t *out;
-	int32_t id;
-	int32_t idx;
 
 	ext = EFE_POP1(int32_t *);
 	mode = EFE_POP1(int32_t);
@@ -3514,19 +3540,16 @@ void STD_findHitEntity(void)
 	box.extent.vz = ext[2];
 	MAIN_D_80134CD8 = 1;
 	while (1) {
-		id = findAABBHitEntity(&box, MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CD8);
-		MAIN_D_80134CD8 = id;
-		if (id == -1) {
+		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CD8)) == -1) {
 			return;
 		}
 		switch (mode) {
 		case 0:
-			idx = (*(int32_t *)&MAIN_D_80134CD8);
-			if (((int8_t *)ENTITY_TABLE[idx])[0x53] == 0) {
+			if (((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] == 0) {
 				*out = 1;
 				return;
 			}
-			MAIN_D_80134CD8 = idx + 1;
+			MAIN_D_80134CD8++;
 			break;
 		case 1:
 			*out = 1;
@@ -3540,8 +3563,8 @@ void STD_findHitEntity(void)
 void STD_getVectorEulerAngles(void)
 {
 	SVECTOR rot;
-	int32_t *v;
 	int32_t *out;
+	int32_t *v;
 
 	v = EFE_POP1(int32_t *);
 	out = EFE_POP1(int32_t *);
@@ -3553,13 +3576,16 @@ void STD_getVectorEulerAngles(void)
 
 void STD_printDebugValue(void)
 {
-	printf(MAIN_D_801348E4, EFE_POP1(int32_t));
+	int32_t value;
+
+	value = EFE_POP1(int32_t);
+	printf(MAIN_D_801348E4, value);
 }
 
 void STD_getRandomInRange(void)
 {
-	int32_t a;
 	int32_t b;
+	int32_t a;
 	int32_t *out;
 
 	a = EFE_POP1(int32_t);
@@ -3607,9 +3633,9 @@ void STD_interpolateValue(void)
 
 void STD_func_800733CC(void)
 {
-	int32_t *out;
-	int32_t scale;
 	int32_t angle;
+	int32_t scale;
+	int32_t *out;
 
 	out = EFE_POP1(int32_t *);
 	scale = EFE_POP1(int32_t);
@@ -3619,9 +3645,9 @@ void STD_func_800733CC(void)
 
 void STD_func_80073440(void)
 {
-	int32_t *out;
-	int32_t scale;
 	int32_t angle;
+	int32_t scale;
+	int32_t *out;
 
 	out = EFE_POP1(int32_t *);
 	scale = EFE_POP1(int32_t);
@@ -3632,14 +3658,12 @@ void STD_func_80073440(void)
 void STD_func_800734B4(void)
 {
 	int32_t *out;
-	int32_t type;
 	int16_t radius;
 	int16_t height;
 
 	out = EFE_POP1(int32_t *);
-	type = *(int32_t *)(int32_t)MAIN_D_80134CE8->sourceEntity;
-	radius = DIGIMON_DATA[type].radius;
-	height = DIGIMON_DATA[type].height;
+	radius = DIGIMON_DATA[MAIN_D_80134CE8->sourceEntity->type].radius;
+	height = DIGIMON_DATA[MAIN_D_80134CE8->sourceEntity->type].height;
 	out[0] = radius;
 	out[1] = height;
 	out[2] = radius;
@@ -3647,26 +3671,25 @@ void STD_func_800734B4(void)
 
 void STD_applyHomingMovement(void)
 {
+	int32_t *target;
+	int32_t minSpeed;
+	int32_t maxSpeed;
+	int32_t unused;
+	int32_t limit;
+	int32_t dy;
+	int32_t dp;
+	int32_t *pos;
 	SVECTOR d;
 	SVECTOR rot;
 	SVECTOR out;
 	MATRIX m;
-	int32_t limit;
 	int32_t *speed;
-	int32_t maxSpeed;
-	int32_t minSpeed;
-	int32_t *target;
-	int32_t *pos;
-	int32_t ang;
-	int32_t dy;
-	int32_t dp;
-	int32_t v;
-	int32_t w;
-	int32_t lim2;
+	int32_t yaw;
+	int32_t pitch;
 
 	limit = EFE_POP1(int32_t);
 	speed = EFE_POP1(int32_t *);
-	EFE_DROP1();
+	unused = EFE_POP1(int32_t);
 	maxSpeed = EFE_POP1(int32_t);
 	minSpeed = EFE_POP1(int32_t);
 	target = EFE_POP1(int32_t *);
@@ -3681,57 +3704,58 @@ void STD_applyHomingMovement(void)
 	RotMatrixZYX(&rot, &m);
 	ApplyMatrixSV(&m, &d, &out);
 
-	ang = -(_atan(out.vx, out.vz) - 0x400) & 0xfff;
-	if (ang >= 0x801) {
-		ang -= 0x1000;
+	yaw = _atan(out.vx, out.vz);
+	yaw -= 0x400;
+	yaw = -yaw;
+	yaw &= 0xfff;
+	if (yaw >= 0x801) {
+		yaw -= 0x1000;
 	}
-	if (ang > 0) {
-		if (ang < limit) {
-			dy = ang;
+	if (yaw > 0) {
+		if (yaw < limit) {
+			dy = yaw;
 		} else {
 			dy = limit;
 		}
 	} else {
-		if (-ang < limit) {
-			dy = ang;
+		if (-yaw < limit) {
+			dy = yaw;
 		} else {
 			dy = -limit;
 		}
 	}
 	*(int32_t *)((int32_t)EFE_INSTANCE + 0x14) += dy;
 
-	ang = _atan(out.vy, out.vz);
-	ang = (ang - 0x400 - *(int32_t *)((int32_t)EFE_INSTANCE + 0x18)) & 0xfff;
-	if (ang >= 0x801) {
-		ang -= 0x1000;
+	pitch = _atan(out.vy, out.vz);
+	pitch -= 0x400;
+	pitch -= *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
+	pitch &= 0xfff;
+	if (pitch >= 0x801) {
+		pitch -= 0x1000;
 	}
-	if (ang > 0) {
-		if (ang < limit) {
-			dp = ang;
+	if (pitch > 0) {
+		if (pitch < limit) {
+			dp = pitch;
 		} else {
 			dp = limit;
 		}
 	} else {
-		if (-ang < limit) {
-			dp = ang;
+		if (-pitch < limit) {
+			dp = pitch;
 		} else {
 			dp = -limit;
 		}
 	}
 	*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) += dp;
 
-	w = *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
-	v = w;
-	w = w & 0xfff;
-	if ((w >= 0x400) && (w < 0xc00)) {
-		*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) = 0x800 - v;
+	if (((*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) & 0xfff) >= 0x400L) && ((*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) & 0xfff) < 0xc00)) {
+		*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) = 0x800 - *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
 	}
 
-	lim2 = limit * 40 / 100;
-	if (lim2 >= abs(dp) + abs(dy)) {
+	if (limit * 40 / 100 >= abs(dp) + abs(dy)) {
 		*speed = *speed * 130;
 		*speed = *speed / 100;
-		if (*speed > maxSpeed) {
+		if (maxSpeed < *speed) {
 			*speed = maxSpeed;
 		}
 	} else {
@@ -3762,29 +3786,27 @@ void STD_applyHomingMovement(void)
 
 void STD_getUVAnimTimer(void)
 {
-	int32_t off;
 	int32_t *out;
+	int16_t *anim;
 	int32_t idx;
-	char *base;
 
 	idx = EFE_POP1(int32_t);
 	out = EFE_POP1(int32_t *);
-	off = (uint32_t)idx;
-	base = (char *)MAIN_D_80134D0C[8];
-	*out = ((int16_t *)(base + (off * 32)))[9];
+	anim = (int16_t *)(((char **)MAIN_D_80134D0C)[8] + idx * 32);
+	*out = anim[9];
 }
 
 void STD_checkTargetCollision(void)
 {
-	int32_t r;
+	int32_t *out;
 	int32_t *flag;
 	int32_t *out2;
-	int32_t *out;
+	int32_t r;
 	char *tgt;
+	int32_t dist;
 	int32_t d0;
 	int32_t d1;
 	int16_t ang;
-	int32_t t;
 
 	r = EFE_POP1(int32_t);
 	flag = EFE_POP1(int32_t *);
@@ -3793,19 +3815,19 @@ void STD_checkTargetCollision(void)
 	tgt = ((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x48;
 	d0 = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx - *(int32_t *)tgt;
 	d1 = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc) - *(int32_t *)(tgt + 8);
-	if ((r * r) < ((d0 * d0) + (d1 * d1))) {
+	dist = d0 * d0 + d1 * d1;
+	if (r * r < dist) {
 		goto zero;
 	}
 
 	*flag = 1;
 	ang = _atan(d0, d1);
-	ang = ang - 0x400;
+	ang -= 0x400;
 	ang = -ang;
-	ang = ang & 0xfff;
-	t = ang + 0x800;
-	*out2 = t;
-	ang = t;
-	ang = ang >> 3;
+	ang &= 0xfff;
+	*out2 = ang + 0x800;
+	ang += 0x800;
+	ang >>= 3;
 	out[2] = (r * _sin(0x80 - ang)) >> 12;
 	out[0] = (r * _cos(0x80 - ang)) >> 12;
 	return;
@@ -3822,7 +3844,9 @@ void STD_rotateTransformTowardPoint(void)
 	p = EFE_POP1(int32_t *);
 	q = (EfeTransform *)((int32_t)EFE_INSTANCE + 4);
 	angle = _atan(p[0] - q->position.vx, p[2] - q->position.vz);
-	angle = -(angle - 0x400) & 0xfff;
+	angle -= 0x400;
+	angle = -angle;
+	angle &= 0xfff;
 	*(int32_t *)((int32_t)EFE_INSTANCE + (int32_t)&((EfeInstance *)0)->transform.rotation.vy) = angle;
 }
 
@@ -3877,16 +3901,16 @@ void STD_renderParallaxSprites(void)
 		setUVWH(prim, m->pixelOffsetX + p[4], m->pixelOffsetY, 0x1f, 0x1f);
 		x = (p[3] * (p[1] + ox)) >> 7;
 		y = (p[3] * (p[2] + oy)) >> 7;
-		x = x % 400;
-		y = y % 320;
+		x %= 400;
+		y %= 320;
 		if (x < 0) {
-			x = x + 360;
+			x += 360;
 		}
 		if (y < 0) {
-			y = y + 280;
+			y += 280;
 		}
-		y = y - 0xa0;
-		x = x - 0xc8;
+		x -= 0xc8;
+		y -= 0xa0;
 		sz = (p[0] * p[3]) >> 8;
 		setXYWH(prim, x, y, sz, sz);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim);
@@ -3900,22 +3924,20 @@ void STD_renderParallaxSprites(void)
 void STD_renderScrollingBackground(void)
 {
 	int16_t tx;
-	int16_t ux;
-	char *tiles;
-	int32_t color;
-	int16_t ux0;
-	int16_t uy;
-	int16_t bx;
-	int16_t ty;
-	int32_t sy;
-	int32_t sx;
-	int16_t *pal;
 	ModelComponent *model;
+	int16_t ty;
+	int16_t ux;
+	int16_t uy;
+	char *tiles;
+	int16_t col;
 	POLY_FT4 *prim;
+	int16_t row;
+	int16_t *pal;
+	int32_t sx;
+	int32_t sy;
+	int32_t color;
 	int16_t x0;
 	int16_t y0;
-	int16_t row;
-	int16_t col;
 
 	color = EFE_POP1(int32_t);
 	sy = EFE_POP1(int32_t);
@@ -3923,14 +3945,14 @@ void STD_renderScrollingBackground(void)
 	pal = EFE_POP1(int16_t *);
 	tiles = EFE_POP1(char *);
 
-	sx = sx % 0x140;
+	sx %= 0x140;
 	tx = (sx >> 5) % 11;
 	if (sx < 0) {
 		sx += 0x140;
 		tx += 10;
 	}
 
-	sy = sy % 0x100;
+	sy %= 0x100;
 	ty = (sy >> 5) % 9;
 	if (sy < 0) {
 		sy += 0x100;
@@ -3941,18 +3963,14 @@ void STD_renderScrollingBackground(void)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	y0 = (sy & 0x1f) - 0x98;
 	for (row = 0; row < 9; row++) {
-		bx = (sx & 0x1f) - 0xc0;
-		x0 = bx;
+		x0 = (sx & 0x1f) - 0xc0;
 		uy = ((ty + row) % 9) * 11;
-		ux0 = tx;
 		for (col = 0; col < 11; col++) {
-			ux = (ux0 + col) % 11;
+			ux = (tx + col) % 11;
 			SetPolyFT4(prim);
 			SetSemiTrans(prim, 1);
-			setSemiTrans(prim, 1);
-			prim->b0 = color;
-			prim->g0 = color;
-			prim->r0 = color;
+			prim->code |= 2;
+			prim->r0 = prim->g0 = prim->b0 = color;
 			prim->tpage = model->pixelPage | 0x20;
 			prim->clut = model->clutPage;
 			setUVWH(prim, model->pixelOffsetX + pal[tiles[uy + ux]], model->pixelOffsetY, 0x1f, 0x1f);
@@ -3972,11 +3990,11 @@ void STD_setTransformToBoneOffset(void)
 	MATRIX m;
 	SVECTOR in;
 	SVECTOR out;
-	int32_t *p;
-	int32_t *q;
+	long *p;
 
-	p = (int32_t *)((int32_t)EFE_INSTANCE + 4);
-	calculateBoneMatrix(MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CE8->boneOffset->boneId, &m);
+	p = (long *)((int32_t)EFE_INSTANCE + 4);
+	calculateBoneMatrix(MAIN_D_80134CE8->sourceEntity,
+	                    MAIN_D_80134CE8->boneOffset->boneId, &m);
 	in.vx = MAIN_D_80134CE8->boneOffset->positionX;
 	in.vy = MAIN_D_80134CE8->boneOffset->positionY;
 	in.vz = MAIN_D_80134CE8->boneOffset->positionZ;
@@ -3984,12 +4002,9 @@ void STD_setTransformToBoneOffset(void)
 	p[0] = out.vx;
 	p[1] = out.vy;
 	p[2] = out.vz;
-	q = p++;
-	*q = *q + m.t[0];
-	q = p++;
-	*q = *q + m.t[1];
-	q = p++;
-	*q = *q + m.t[2];
+	*p++ += m.t[0];
+	*p++ += m.t[1];
+	*p++ += m.t[2];
 	*p++ = 0;
 	*p++ = MAIN_D_80134CE8->sourceEntity->posData->rotation.vy;
 	*p = 0;
@@ -4062,8 +4077,8 @@ void STD_copyFromParentTransform(void)
 
 void STD_calculatePolarOffset(void)
 {
-	int32_t r;
 	int32_t ang;
+	int32_t r;
 	int32_t *out;
 
 	r = EFE_POP1(int32_t);
@@ -4079,8 +4094,6 @@ void STD_renderProjectedSprite(void)
 {
 	ModelComponent *m;
 	VECTOR *col;
-	int32_t zA;
-	int32_t zB;
 
 	m = (ModelComponent *)MAIN_D_80134D0C[6];
 	EFE_SPRITE_SCRATCH->sprite.tpage = m->pixelPage | 0x20;
@@ -4113,10 +4126,8 @@ void STD_renderProjectedSprite(void)
 		EFE_SPRITE_SCRATCH->sprite.scalex = ((uint32_t)(EFE_SPRITE_SCRATCH->sprite.scalex * VIEWPORT_DISTANCE) << 5) / (uint32_t)EFE_SPRITE_SCRATCH->otz;
 		EFE_SPRITE_SCRATCH->sprite.scaley = ((uint32_t)(EFE_SPRITE_SCRATCH->sprite.scaley * VIEWPORT_DISTANCE) << 5) / (uint32_t)EFE_SPRITE_SCRATCH->otz;
 		EFE_SPRITE_SCRATCH->otz = (EFE_SPRITE_SCRATCH->otz - 0xa) >> 2;
-		zA = EFE_SPRITE_SCRATCH->otz;
-		zB = zB = zA;
-		if (zA >= 0x20 && zB < 0x1000) {
-			GsSortSprite(&EFE_SPRITE_SCRATCH->sprite, ACTIVE_ORDERING_TABLE, (uint16_t)zA);
+		if (EFE_SPRITE_SCRATCH->otz >= 0x20 && EFE_SPRITE_SCRATCH->otz < 0x1000) {
+			GsSortSprite(&EFE_SPRITE_SCRATCH->sprite, ACTIVE_ORDERING_TABLE, (uint16_t)EFE_SPRITE_SCRATCH->otz);
 		}
 	}
 }
@@ -4124,14 +4135,12 @@ void STD_renderProjectedSprite(void)
 void STD_func_80074A70(void)
 {
 	int32_t *out;
-	int32_t type;
 	int16_t radius;
 	int16_t height;
 
 	out = EFE_POP1(int32_t *);
-	type = *(int32_t *)(int32_t)MAIN_D_80134CE8->targetEntity;
-	radius = DIGIMON_DATA[type].radius;
-	height = DIGIMON_DATA[type].height;
+	radius = DIGIMON_DATA[MAIN_D_80134CE8->targetEntity->type].radius;
+	height = DIGIMON_DATA[MAIN_D_80134CE8->targetEntity->type].height;
 	out[0] = radius;
 	out[1] = height;
 	out[2] = radius;
@@ -4139,33 +4148,32 @@ void STD_func_80074A70(void)
 
 void STD_renderParticleFlashSprite(void)
 {
-	int16_t p[14];
+	ParticleFlashData flash;
 	char *hdr;
 	int32_t n;
 
 	hdr = (char *)MAIN_D_80134D0C[6];
 	n = EFE_POP1(int32_t);
-	p[2] = EFE_POP1(int32_t);
-	*(int32_t *)&p[4] = EFE_POP1(int16_t);
-	p[7] = EFE_POP1(int32_t);
-	p[6] = EFE_POP1(int32_t);
-	((int8_t *)p)[0x13] = EFE_POP1(int32_t) + ((uint8_t *)hdr)[0x15];
-	((int8_t *)p)[0x12] = EFE_POP1(int32_t) + ((uint8_t *)hdr)[0x14];
-	p[1] = EFE_POP1(int32_t);
-	p[0] = EFE_POP1(int32_t);
-	if (p[2] < 0xa) {
+	flash.depth = EFE_POP1(int32_t);
+	flash.scale = EFE_POP1(int16_t);
+	flash.sizeY = EFE_POP1(int32_t);
+	flash.sizeX = EFE_POP1(int32_t);
+	flash.vBase = EFE_POP1(int32_t) + ((uint8_t *)hdr)[0x15];
+	flash.uBase = EFE_POP1(int32_t) + ((uint8_t *)hdr)[0x14];
+	flash.screenPos.vy = EFE_POP1(int32_t);
+	flash.screenPos.vx = EFE_POP1(int32_t);
+	if (flash.depth < 0xa) {
 		return;
 	}
 
-	if (p[2] >= 0x1000) {
+	if (flash.depth >= 0x1000) {
 		return;
 	}
 
-	p[8] = ((uint16_t *)hdr)[8] | 0x20;
-	p[10] = ((uint16_t *)hdr)[9] + (n << 6);
-
-	((uint8_t *)p)[0x16] = ((uint8_t *)p)[0x17] = ((uint8_t *)p)[0x18] = ((uint8_t *)p)[0x19] = 0x80;
-	renderParticleFlash(p);
+	flash.tpage = ((uint16_t *)hdr)[8] | 0x20;
+	flash.clut = ((uint16_t *)hdr)[9] + (n << 6);
+	flash.color.r = flash.color.g = flash.color.b = flash.colorScale = 0x80;
+	renderParticleFlash(&flash);
 }
 
 void STD_projectPositionToScreen(void)
@@ -4173,8 +4181,8 @@ void STD_projectPositionToScreen(void)
 	DVECTOR screen;
 	SVECTOR pos;
 	int32_t *depthOut;
-	int32_t *yOut;
 	int32_t *xOut;
+	int32_t *yOut;
 	int32_t *src;
 
 	depthOut = EFE_POP1(int32_t *);
@@ -4193,6 +4201,10 @@ void STD_projectPositionToScreen(void)
 void STD_renderScreenSprite(void)
 {
 	GsSPRITE sprite;
+#if defined(VERSION_JP)
+	int32_t ox;
+	int32_t oy;
+#endif
 	ModelComponent *m;
 	int32_t flip;
 	int32_t depth;
@@ -4213,8 +4225,14 @@ void STD_renderScreenSprite(void)
 	sprite.x = EFE_POP1(int32_t);
 
 	if (flip < 0) {
+#if defined(VERSION_JP)
+		getDrawingOffsetCopy(&ox, &oy);
+		sprite.x += (int16_t)(0xa0 - ox);
+		sprite.y += (int16_t)(0x78 - oy);
+#else
 		sprite.x += (int16_t)(0xa0 - DRAWING_OFFSET_X);
 		sprite.y += (int16_t)(0x78 - DRAWING_OFFSET_Y);
+#endif
 		sprite.cy = -flip + (m->clutPage >> 6);
 	} else {
 		sprite.cy = flip + (m->clutPage >> 6);
@@ -4225,9 +4243,13 @@ void STD_renderScreenSprite(void)
 	sprite.cx = (m->clutPage & 0x3f) << 4;
 	sprite.r = sprite.g = sprite.b = 0x80;
 
+#if defined(VERSION_JP)
+	GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
+#else
 	if ((depth >= 0) && (depth < 0x1000)) {
 		GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
 	}
+#endif
 }
 
 void STD_addCloudEffect(void)
@@ -4245,7 +4267,6 @@ void STD_addCloudEffect(void)
 void STD_selectNextTargetEntity(void)
 {
 	int32_t *out;
-	Entity *e;
 
 	out = EFE_POP1(int32_t *);
 	if (MAIN_D_80134CE0 >= 10) {
@@ -4257,17 +4278,16 @@ void STD_selectNextTargetEntity(void)
 		if (ENTITY_TABLE[MAIN_D_80134CE0] == NULL) {
 			continue;
 		}
-		e = ENTITY_TABLE[MAIN_D_80134CE0];
-		if (e == MAIN_D_80134CE8->sourceEntity) {
+		if (ENTITY_TABLE[MAIN_D_80134CE0] == MAIN_D_80134CE8->sourceEntity) {
 			continue;
 		}
-		if (((int8_t *)e)[0x34] == 0) {
+		if (((int8_t *)ENTITY_TABLE[MAIN_D_80134CE0])[0x34] == 0) {
 			continue;
 		}
-		if (((int8_t *)e)[0x35] == 0) {
+		if (((int8_t *)ENTITY_TABLE[MAIN_D_80134CE0])[0x35] == 0) {
 			continue;
 		}
-		if (((int16_t *)e)[0x26] > 0) {
+		if (((int16_t *)ENTITY_TABLE[MAIN_D_80134CE0])[0x26] > 0) {
 			break;
 		}
 	}
@@ -4277,16 +4297,16 @@ void STD_selectNextTargetEntity(void)
 		return;
 	}
 
-	MAIN_D_80134CE8->targetEntity = ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CE0];
+	MAIN_D_80134CE8->targetEntity = ENTITY_TABLE[MAIN_D_80134CE0];
 	*out = MAIN_D_80134CE0++;
 }
 
 void STD_addParticleEmitter(void)
 {
+	int32_t b;
 	int32_t n;
 	int32_t *vec;
 	int32_t a;
-	int32_t b;
 	int32_t i;
 	EfeParticleEffect *e;
 
@@ -4322,6 +4342,34 @@ void STD_addParticleEmitter(void)
 
 void STD_setEFEModelObjectColor(void)
 {
+#if defined(VERSION_JP)
+	char *prim;
+	int32_t *color;
+	int32_t *ent;
+	int32_t idx;
+	int32_t i;
+	int32_t count;
+	uint8_t t;
+
+	color = EFE_POP1(int32_t *);
+	idx = EFE_POP1(int32_t);
+	ent = (int32_t *)((uint32_t)((char **)MAIN_D_80134D0C[6])[1] + 0xc);
+	ent = (int32_t *)((int32_t)ent + (idx * 28));
+	count = ent[5];
+	prim = (char *)ent[4];
+	for (i = 0; i < count; i++) {
+		t = *(int32_t *)prim >> 24;
+		switch (t) {
+		case 0x2d:
+		case 0x2f:
+			prim[0x14] = (int16_t)color[0];
+			prim[0x15] = (int16_t)color[1];
+			prim[0x16] = (int16_t)color[2];
+			prim += 0x20;
+			break;
+		}
+	}
+#else
 	int32_t *rec;
 	int32_t *color;
 	int32_t idx;
@@ -4356,6 +4404,7 @@ void STD_setEFEModelObjectColor(void)
 			pb++;
 		}
 	}
+#endif
 }
 
 void STD_copyTargetEntityPosition(void)
@@ -4372,14 +4421,14 @@ void STD_copyTargetEntityPosition(void)
 
 void STD_steerTransformTowardPoint(void)
 {
+	int32_t *target;
+	int32_t speed;
 	MATRIX m;
 	SVECTOR in;
 	SVECTOR rot;
 	SVECTOR out;
 	EfeTransform *pos;
 	int32_t turn;
-	int32_t speed;
-	int32_t *target;
 	int32_t d;
 
 	turn = EFE_POP1(int32_t);
@@ -4395,7 +4444,9 @@ void STD_steerTransformTowardPoint(void)
 	RotMatrixZYX(&rot, &m);
 	ApplyMatrixSV(&m, &in, &out);
 	d = _atan(out.vx, out.vz);
-	d = -(d - 0x400) & 0xfff;
+	d -= 0x400;
+	d = -d;
+	d &= 0xfff;
 	if (d >= 0x801) {
 		d -= 0x1000;
 	}
@@ -4426,12 +4477,12 @@ void STD_steerTransformTowardPoint(void)
 
 void STD_interpolateVector(void)
 {
-	int32_t *out;
 	int32_t t0;
 	int32_t t1;
 	int32_t t;
-	int32_t *b;
 	int32_t *a;
+	int32_t *b;
+	int32_t *out;
 
 	out = EFE_POP1(int32_t *);
 	t = EFE_POP1(int32_t);
@@ -4446,8 +4497,11 @@ void STD_interpolateVector(void)
 
 void STD_discardEFEOperandPair(void)
 {
-	EFE_DROP1();
-	EFE_DROP1();
+	int32_t second;
+	int32_t first;
+
+	first = EFE_POP1(int32_t);
+	second = EFE_POP1(int32_t);
 }
 
 void STD_getScatteredSpawnPosition(void)
@@ -4493,7 +4547,6 @@ void STD_addAttackObjectToTarget(void)
 	int16_t pos[4];
 	int32_t i;
 	int32_t j;
-	int32_t e;
 
 	if (((int8_t *)(int32_t)MAIN_D_80134CE8->targetEntity)[0x53] != 0) {
 		return;
@@ -4510,8 +4563,7 @@ void STD_addAttackObjectToTarget(void)
 
 	((int8_t *)(int32_t)MAIN_D_80134CE8->targetEntity)[0x53] = 1;
 	for (j = 1; j < 10; j++) {
-		e = (int32_t)ENTITY_TABLE[j];
-		if (e == (int32_t)MAIN_D_80134CE8->sourceEntity) {
+		if (ENTITY_TABLE[j] == MAIN_D_80134CE8->sourceEntity) {
 			break;
 		}
 	}
@@ -4563,11 +4615,24 @@ void STD_renderCenteredSprite(void)
 
 void STD_initializeEFETransform(void)
 {
+#if defined(VERSION_JP)
+	int32_t *dst;
+	int32_t *src;
+#else
 	int32_t *src;
 	int32_t *dst;
 	int32_t *chk;
+#endif
 
 	dst = &((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
+#if defined(VERSION_JP)
+	if (EFE_PARENT_INSTANCE == NULL) {
+		STD_setTransformToBoneOffset();
+		return;
+	}
+
+	src = (int32_t *)((int32_t)EFE_PARENT_INSTANCE + 4);
+#else
 	chk = (int32_t *)EFE_PARENT_INSTANCE;
 	if (chk == NULL) {
 		STD_setTransformToBoneOffset();
@@ -4575,6 +4640,7 @@ void STD_initializeEFETransform(void)
 	}
 
 	src = (int32_t *)((int32_t)chk + 4);
+#endif
 	*dst++ = *src++;
 	*dst++ = *src++;
 	*dst++ = *src++;
@@ -4625,13 +4691,11 @@ void STD_initializeSubEffectInstructions(void)
 void STD_initializeUVAnim(void)
 {
 	int32_t val;
-	int32_t ptr;
 	int32_t idx;
-	int32_t nv;
-	int32_t *rec;
+	int32_t ptr;
+	EfeUvAnim *anim;
 	int32_t i;
-	int32_t *q;
-	int32_t t;
+	uint32_t q;
 
 	ptr = EFE_POP1(int32_t);
 	val = EFE_POP1(int32_t);
@@ -4642,32 +4706,30 @@ void STD_initializeUVAnim(void)
 		return;
 	}
 
-	nv = 8;
-	rec = (int32_t *)((char *)MAIN_D_80134D0C[nv] + (nv * (4 * idx)));
-	((int16_t *)rec)[0] = val;
+	anim = &((EfeUvAnim **)MAIN_D_80134D0C)[8][idx];
+	anim->unk0 = val;
 	if (ptr == -1) {
 		return;
 	}
 
-	((int16_t *)rec)[6] = *(int32_t *)ptr;
-	rec[6] = ptr + 4;
-	rec[7] = rec[6];
-	((int16_t *)rec)[8] = 0;
-	((int16_t *)rec)[7] = 0;
-	((int16_t *)rec)[9] = 1;
-	((int16_t *)rec)[10] = 0;
-	q = (int32_t *)rec[6];
-	for (i = 0; i < ((int16_t *)rec)[6]; i++) {
-		t = *(int16_t *)q;
-		((int16_t *)rec)[10] += t;
-		q++;
+	anim->numKeyframes = *(int32_t *)ptr;
+	anim->uvData = (EfeUvKeyframe *)(ptr + 4);
+	anim->uv = anim->uvData;
+	anim->uvFrame = 0;
+	anim->keyframe = 0;
+	anim->frame = 1;
+	anim->numFrames = 0;
+	q = (uint32_t)anim->uvData;
+	for (i = 0; i < anim->numKeyframes; i++) {
+		anim->numFrames += (int32_t)*(int16_t *)q;
+		q += 4;
 	}
 }
 
 void STD_checkTechCompatibility(void)
 {
 	int16_t *p;
-	int32_t type;
+	int16_t type;
 
 	p = EFE_POP1(int16_t *);
 	type = (int16_t)getOriginalType(*(int32_t *)MAIN_D_80134CE8->sourceEntity);
@@ -4686,17 +4748,16 @@ void STD_checkTechCompatibility(void)
 
 void STD_spawnEFESubEffect(void)
 {
-	int16_t stride;
-	int16_t i;
-	int16_t n;
 	Entity *src;
-	EfeSubEffect *sub;
-	int32_t *p;
-	int16_t *ip;
+	int16_t i;
 	Entity *tgt;
+	int16_t *ip;
+	int16_t n;
+	int16_t stride;
+	int32_t *p;
 
-	MAIN_D_80134CE0 = 1;
 	ip = MAIN_D_80134D00;
+	MAIN_D_80134CE0 = 1;
 	n = ip[1];
 	p = (int32_t *)(ip[2] + MAIN_D_80134D08);
 	stride = ip[4];
@@ -4716,9 +4777,8 @@ void STD_spawnEFESubEffect(void)
 		MAIN_D_80134CE4 = i;
 	}
 
-	sub = MAIN_D_80134CE8;
-	src = sub->sourceEntity;
-	tgt = sub->targetEntity;
+	src = MAIN_D_80134CE8->sourceEntity;
+	tgt = MAIN_D_80134CE8->targetEntity;
 	for (;;) {
 		if (MAIN_D_80134CE8->inst == NULL) {
 			break;
@@ -4732,7 +4792,7 @@ void STD_spawnEFESubEffect(void)
 
 	EFE_PARENT_INSTANCE = (int32_t)EFE_INSTANCE;
 	EFE_INSTANCE = (EfeInstance *)p;
-	MAIN_D_80134CE8->instance = (EfeInstance *)p;
+	MAIN_D_80134CE8->instance = EFE_INSTANCE;
 	MAIN_D_80134CE8->parentInstance = (EfeInstance *)EFE_PARENT_INSTANCE;
 	if (EFE_PARENT_INSTANCE == 0) {
 		MAIN_D_80134CE8->sourceEntity = (Entity *)MAIN_D_80134EF8;
@@ -4748,14 +4808,13 @@ void STD_spawnEFESubEffect(void)
 
 void STD_popEFEValueToVariable(void)
 {
-	int32_t val;
+	int16_t *pc;
 
-	if (MAIN_D_80134D00[2] == 0) {
-		val = EFE_POP1(int32_t);
-		*(int32_t *)(MAIN_D_80134D00[1] + (int32_t)EFE_INSTANCE) = val;
+	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	if (pc[2] == 0) {
+		*(int32_t *)(pc[1] + (int32_t)EFE_INSTANCE) = EFE_POP1(int32_t);
 	} else {
-		val = EFE_POP1(int32_t);
-		*(int32_t *)(MAIN_D_80134D00[1] + MAIN_D_80134D08) = val;
+		*(int32_t *)(pc[1] + MAIN_D_80134D08) = EFE_POP1(int32_t);
 	}
 
 	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
@@ -4807,16 +4866,18 @@ void STD_pushEFEVariableAddress(void)
 
 void STD_pushEFEVariable(void)
 {
-	int32_t *p;
+	int16_t *pc;
+	int32_t p;
 
-	if (MAIN_D_80134D00[2] == 0) {
-		p = (int32_t *)(MAIN_D_80134D00[1] + (int32_t)EFE_INSTANCE);
+	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	if (pc[2] == 0) {
+		p = pc[1] + (int32_t)EFE_INSTANCE;
 	} else {
-		p = (int32_t *)(MAIN_D_80134D00[1] + MAIN_D_80134D08);
+		p = pc[1] + MAIN_D_80134D08;
 	}
 
 	if ((MAIN_D_80134D04 & 0xf00) == 0x400) {
-		EFE_PUSH1(int32_t, *p);
+		EFE_PUSH1(int32_t, *(int32_t *)p);
 	} else if ((MAIN_D_80134D04 & 0xf00) == 0x200) {
 		EFE_PUSH1(int32_t, *(int16_t *)p);
 	} else {
@@ -4828,18 +4889,24 @@ void STD_pushEFEVariable(void)
 
 void STD_pushEFEImmediate(void)
 {
-	EFE_PUSH1(int32_t, MAIN_D_80134D00[1]);
+	int16_t *pc;
+
+	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	EFE_PUSH1(int32_t, pc[1]);
 	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
 }
 
 void STD_jumpEFEScript(void)
 {
-	MAIN_D_80134D00 = (int16_t *)(MAIN_D_80134D00[1] + MAIN_D_80134D08);
+	int16_t *pc;
+
+	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	MAIN_D_80134D00 = (int16_t *)(pc[1] + MAIN_D_80134D08);
 }
 
 void STD_stopEFEScript(void)
 {
-	MAIN_D_80134D04 &= 0xff;
+	MAIN_D_80134D04 = MAIN_D_80134D04 & 0xff;
 	MAIN_D_80134D00 = NULL;
 }
 
@@ -4878,10 +4945,13 @@ void STD_branchEFEOnComparison(void)
 
 void STD_applyEFEVariableOperator(void)
 {
-	if (MAIN_D_80134D00[2] == 0) {
-		STD_D_8007AE68[(MAIN_D_80134D04 >> 8) & 0xf][MAIN_D_80134D04 >> 12]((int32_t *)(MAIN_D_80134D00[1] + (int32_t)EFE_INSTANCE));
+	int16_t *pc;
+
+	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	if (pc[2] == 0) {
+		STD_D_8007AE68[(MAIN_D_80134D04 >> 8) & 0xf][MAIN_D_80134D04 >> 12](pc[1] + (int32_t)EFE_INSTANCE);
 	} else {
-		STD_D_8007AE68[(MAIN_D_80134D04 >> 8) & 0xf][MAIN_D_80134D04 >> 12]((int32_t *)(MAIN_D_80134D00[1] + MAIN_D_80134D08));
+		STD_D_8007AE68[(MAIN_D_80134D04 >> 8) & 0xf][MAIN_D_80134D04 >> 12](pc[1] + MAIN_D_80134D08);
 	}
 
 	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
@@ -4960,128 +5030,131 @@ void STD_loadEFEVariable(void)
 
 void STD_loadEFEImmediate(void)
 {
-	MAIN_D_80134CEC = MAIN_D_80134D00[1];
+	int16_t *pc;
+
+	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	MAIN_D_80134CEC = pc[1];
 	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
 }
 
-int32_t STD_shiftRightInt32Variable(int32_t *p)
+int32_t STD_shiftRightInt32Variable(int32_t p)
 {
-	*p >>= MAIN_D_80134CEC;
+	*(int32_t *)p >>= MAIN_D_80134CEC;
 }
 
-int32_t STD_shiftLeftInt32Variable(int32_t *p)
+int32_t STD_shiftLeftInt32Variable(int32_t p)
 {
-	*p <<= MAIN_D_80134CEC;
+	*(int32_t *)p <<= MAIN_D_80134CEC;
 }
 
-int32_t STD_moduloInt32Variable(int32_t *p)
+int32_t STD_moduloInt32Variable(int32_t p)
 {
-	*p %= MAIN_D_80134CEC;
+	*(int32_t *)p %= MAIN_D_80134CEC;
 }
 
-int32_t STD_divideInt32Variable(int32_t *p)
+int32_t STD_divideInt32Variable(int32_t p)
 {
-	*p /= MAIN_D_80134CEC;
+	*(int32_t *)p /= MAIN_D_80134CEC;
 }
 
-int32_t STD_multiplyInt32Variable(int32_t *p)
+int32_t STD_multiplyInt32Variable(int32_t p)
 {
-	*p *= MAIN_D_80134CEC;
+	*(int32_t *)p *= MAIN_D_80134CEC;
 }
 
-int32_t STD_subtractInt32Variable(int32_t *p)
+int32_t STD_subtractInt32Variable(int32_t p)
 {
-	*p -= MAIN_D_80134CEC;
+	*(int32_t *)p -= MAIN_D_80134CEC;
 }
 
-int32_t STD_addInt32Variable(int32_t *p)
+int32_t STD_addInt32Variable(int32_t p)
 {
-	*p += MAIN_D_80134CEC;
+	*(int32_t *)p += MAIN_D_80134CEC;
 }
 
-int32_t STD_setInt32Variable(int32_t *p)
+int32_t STD_setInt32Variable(int32_t p)
 {
-	*p = MAIN_D_80134CEC;
+	*(int32_t *)p = MAIN_D_80134CEC;
 }
 
-int32_t STD_shiftRightInt8Variable(int8_t *p)
+int32_t STD_shiftRightInt8Variable(int32_t p)
 {
-	*p >>= MAIN_D_80134CEC;
+	*(int8_t *)p >>= MAIN_D_80134CEC;
 }
 
-int32_t STD_shiftLeftInt8Variable(int8_t *p)
+int32_t STD_shiftLeftInt8Variable(int32_t p)
 {
-	*p <<= MAIN_D_80134CEC;
+	*(int8_t *)p <<= MAIN_D_80134CEC;
 }
 
-int32_t STD_moduloInt8Variable(int8_t *p)
+int32_t STD_moduloInt8Variable(int32_t p)
 {
-	*p %= MAIN_D_80134CEC;
+	*(int8_t *)p %= MAIN_D_80134CEC;
 }
 
-int32_t STD_divideInt8Variable(int8_t *p)
+int32_t STD_divideInt8Variable(int32_t p)
 {
-	*p /= MAIN_D_80134CEC;
+	*(int8_t *)p /= MAIN_D_80134CEC;
 }
 
-int32_t STD_multiplyInt8Variable(int8_t *p)
+int32_t STD_multiplyInt8Variable(int32_t p)
 {
-	*p *= MAIN_D_80134CEC;
+	*(int8_t *)p *= MAIN_D_80134CEC;
 }
 
-int32_t STD_subtractInt8Variable(int8_t *p)
+int32_t STD_subtractInt8Variable(int32_t p)
 {
-	*p -= MAIN_D_80134CEC;
+	*(int8_t *)p -= MAIN_D_80134CEC;
 }
 
-int32_t STD_addInt8Variable(int8_t *p)
+int32_t STD_addInt8Variable(int32_t p)
 {
-	*p += MAIN_D_80134CEC;
+	*(int8_t *)p += MAIN_D_80134CEC;
 }
 
-int32_t STD_setInt8Variable(int8_t *p)
+int32_t STD_setInt8Variable(int32_t p)
 {
-	*p = MAIN_D_80134CEC;
+	*(int8_t *)p = MAIN_D_80134CEC;
 }
 
-int32_t STD_shiftRightInt16Variable(int16_t *p)
+int32_t STD_shiftRightInt16Variable(int32_t p)
 {
-	*p >>= MAIN_D_80134CEC;
+	*(int16_t *)p >>= MAIN_D_80134CEC;
 }
 
-int32_t STD_shiftLeftInt16Variable(int16_t *p)
+int32_t STD_shiftLeftInt16Variable(int32_t p)
 {
-	*p <<= MAIN_D_80134CEC;
+	*(int16_t *)p <<= MAIN_D_80134CEC;
 }
 
-int32_t STD_moduloInt16Variable(int16_t *p)
+int32_t STD_moduloInt16Variable(int32_t p)
 {
-	*p %= MAIN_D_80134CEC;
+	*(int16_t *)p %= MAIN_D_80134CEC;
 }
 
-int32_t STD_divideInt16Variable(int16_t *p)
+int32_t STD_divideInt16Variable(int32_t p)
 {
-	*p /= MAIN_D_80134CEC;
+	*(int16_t *)p /= MAIN_D_80134CEC;
 }
 
-int32_t STD_multiplyInt16Variable(int16_t *p)
+int32_t STD_multiplyInt16Variable(int32_t p)
 {
-	*p *= MAIN_D_80134CEC;
+	*(int16_t *)p *= MAIN_D_80134CEC;
 }
 
-int32_t STD_subtractInt16Variable(int16_t *p)
+int32_t STD_subtractInt16Variable(int32_t p)
 {
-	*p -= MAIN_D_80134CEC;
+	*(int16_t *)p -= MAIN_D_80134CEC;
 }
 
-int32_t STD_addInt16Variable(int16_t *p)
+int32_t STD_addInt16Variable(int32_t p)
 {
-	*p += MAIN_D_80134CEC;
+	*(int16_t *)p += MAIN_D_80134CEC;
 }
 
-int32_t STD_setInt16Variable(int16_t *p)
+int32_t STD_setInt16Variable(int32_t p)
 {
-	*p = MAIN_D_80134CEC;
+	*(int16_t *)p = MAIN_D_80134CEC;
 }
 
 int32_t STD_compareGreaterOrEqual(int32_t x)
@@ -5140,18 +5213,14 @@ int32_t STD_compareEqual(int32_t x)
 
 int16_t STD_calculateAttackHitPosition(SVECTOR *out, int32_t *self, int32_t *other, int32_t y)
 {
+	SVECTOR diff;
 	SVECTOR rot;
 	MATRIX m;
-	char *sp2;
-	int32_t dx;
-	int32_t dz;
 
-	other = (int32_t *)other[1];
-	sp2 = (char *)self[1];
-	dx = (int16_t)(*(int32_t *)((char *)other + 0x78) - *(int32_t *)(sp2 + 0x78));
-	dz = (int16_t)(*(int32_t *)((char *)other + 0x80) - *(int32_t *)(sp2 + 0x80));
+	diff.vx = ((int32_t *)other[1])[30] - ((int32_t *)self[1])[30];
+	diff.vz = ((int32_t *)other[1])[32] - ((int32_t *)self[1])[32];
 	rot.vx = 0;
-	rot.vy = (_atan(dz, dx) + 0x800) & 0xfff;
+	rot.vy = (_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
 	rot.vz = 0;
 	RotMatrixZYX(&rot, &m);
 	out->vx = 0;
@@ -5165,13 +5234,13 @@ int16_t STD_calculateAttackHitPosition(SVECTOR *out, int32_t *self, int32_t *oth
 void STD_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, SVECTOR *to, int32_t *col)
 {
 	LINE_F2 *prim;
+	int32_t i;
+	int32_t depth;
+	int32_t ox;
+	int32_t oy;
 	int16_t dx;
 	int16_t dy;
 	int16_t dz;
-	int32_t ox;
-	int32_t oy;
-	int32_t depth;
-	int32_t i;
 
 	prim = (LINE_F2 *)GsGetWorkBase();
 	dx = (to->vx - from->vx) / n;
@@ -5183,8 +5252,12 @@ void STD_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, S
 		depth = worldPosToScreenPos(a, (DVECTOR *)&prim->x0);
 		if ((depth > 0x200) && (depth < 0x10000)) {
 			depth = worldPosToScreenPos(b, (DVECTOR *)&prim->x1);
+#if defined(VERSION_JP)
+			getDrawingOffsetCopy(&ox, &oy);
+#else
 			ox = DRAWING_OFFSET_X;
 			oy = DRAWING_OFFSET_Y;
+#endif
 			prim->x0 += (int16_t)(0xa0 - ox);
 			prim->x1 += (int16_t)(0xa0 - ox);
 			prim->y0 += (int16_t)(0x78 - oy);
@@ -5205,7 +5278,7 @@ void STD_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, S
 	GsSetWorkBase((PACKET *)prim);
 }
 
-int32_t STD_func_800770C0(int32_t lo, int32_t hi, int32_t t, int32_t start, int32_t end)
+int32_t STD_func_800770C0(int32_t lo, int32_t hi, long t, int32_t start, int32_t end)
 {
 	int32_t tmp;
 
@@ -5228,9 +5301,6 @@ void STD_renderRibbonStrip(void)
 	POLY_GT4 *prim;
 	SVECTOR *pts;
 	int32_t i;
-	int32_t f;
-	int32_t g;
-	uint32_t nxt;
 
 	EFE_RIBBON_SCRATCH->width = EFE_POP1(int32_t);
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
@@ -5244,19 +5314,17 @@ void STD_renderRibbonStrip(void)
 	EFE_RIBBON_SCRATCH->tpage = ((ModelComponent *)MAIN_D_80134D0C[6])->pixelPage | 0x20;
 	EFE_RIBBON_SCRATCH->clut = ((ModelComponent *)MAIN_D_80134D0C[6])->clutPage + 0x80;
 	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
-	g = f = i = EFE_RIBBON_SCRATCH->frame;
-	i = (int32_t)((uint32_t)(g / 10) % 3);
-	nxt = (uint32_t)(i + 1) % 3;
-	EFE_RIBBON_SCRATCH->color.r = STD_func_800770C0(0, 10, f % 10,
-	                                                (STD_D_8007AF48 + i * 4)[0], (STD_D_8007AF48 + nxt * 4)[0]);
-	EFE_RIBBON_SCRATCH->color.g = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10,
-	                                                (STD_D_8007AF48 + i * 4)[1], (STD_D_8007AF48 + nxt * 4)[1]);
-	EFE_RIBBON_SCRATCH->color.b = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10,
-	                                                (STD_D_8007AF48 + i * 4)[2], (STD_D_8007AF48 + nxt * 4)[2]);
+	i = (uint32_t)(EFE_RIBBON_SCRATCH->frame / 10) % 3;
+	EFE_RIBBON_SCRATCH->color.r = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10, (STD_D_8007AF48 + i * 4)[0],
+	                                                (STD_D_8007AF48 + (uint32_t)(i + 1) % 3 * 4)[0]);
+	EFE_RIBBON_SCRATCH->color.g = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10, (STD_D_8007AF48 + i * 4)[1],
+	                                                (STD_D_8007AF48 + (uint32_t)(i + 1) % 3 * 4)[1]);
+	EFE_RIBBON_SCRATCH->color.b = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10, (STD_D_8007AF48 + i * 4)[2],
+	                                                (STD_D_8007AF48 + (uint32_t)(i + 1) % 3 * 4)[2]);
 	if (EFE_RIBBON_SCRATCH->frame < 0xf) {
-		i = STD_func_800770C0(1, 7, *(uint32_t *)&EFE_RIBBON_SCRATCH->frame, 0, 0x1000);
+		i = STD_func_800770C0(1, 7, EFE_RIBBON_SCRATCH->frame, 0, 0x1000);
 	} else {
-		i = STD_func_800770C0(0x17, 0x1e, *(uint32_t *)&EFE_RIBBON_SCRATCH->frame, 0x1000, 0);
+		i = STD_func_800770C0(0x17, 0x1e, EFE_RIBBON_SCRATCH->frame, 0x1000, 0);
 	}
 	EFE_RIBBON_SCRATCH->color.r = EFE_RIBBON_SCRATCH->color.r * i >> 12;
 	EFE_RIBBON_SCRATCH->color.g = EFE_RIBBON_SCRATCH->color.g * i >> 12;
@@ -5346,9 +5414,9 @@ void STD_dispatchEFEOpcode(int32_t op)
 
 int32_t STD_runEFEScript(int32_t script)
 {
+	MAIN_D_80134D00 = (int16_t *)script;
 	EFE_DATA_STACK = EFE_SCRIPT_MEM1_DATA;
 	MAIN_D_80134CFC = MAIN_D_80139B54;
-	MAIN_D_80134D00 = (int16_t *)script;
 	EFE_PUSH2(int32_t, 0);
 	while (MAIN_D_80134D00 != NULL) {
 		MAIN_D_80134D04 = **(int16_t **)&MAIN_D_80134D00;
@@ -5412,6 +5480,7 @@ void STD_renderPoisonBubble(int32_t i)
 	int16_t frame;
 	int32_t otz;
 	int32_t d;
+	int16_t angle;
 
 	p = STD_D_8007FC20[i];
 	frame = p[0];
@@ -5420,8 +5489,9 @@ void STD_renderPoisonBubble(int32_t i)
 	pos.vy -= (int16_t)lerp(0x32, 0xc8, 0, 0x28, frame);
 	pos.vz += p[3];
 	otz = worldPosToScreenPos(&pos, &screen);
-	d = _sin((int16_t)lerp(0, 0x500, 0, 0x28, frame)) * 0x14 / 4096;
-	screen.vx += (int16_t)(d * VIEWPORT_DISTANCE / otz);
+	angle = lerp(0, 0x500, 0, 0x28, frame);
+	d = _sin(angle) * 0x14 / 4096;
+	screen.vx += (int16_t)(d * (int32_t)VIEWPORT_DISTANCE / otz);
 	if ((otz > 0x200) && (otz < 0x10000)) {
 		STD_POISON_BUBBLE_SPRITE.u = MAIN_D_80134914[(frame >> 1) % 6] + 0x20;
 		renderSprite(&STD_POISON_BUBBLE_SPRITE, screen.vx, screen.vy, otz, 0x4ea4, 0x4ea4);
@@ -5520,18 +5590,16 @@ void STD_renderConfusionEffect(int32_t idx)
 	int32_t ang;
 	int16_t *p;
 	int32_t i;
-	int32_t a;
-	int32_t b;
 
 	p = STD_D_8007FCD0[idx];
-	for (i = 0, a = 0, b = 0; i < 3; i++, b += 0x555, a += 0xaa) {
+	for (i = 0; i < 3; i++) {
 		translateConditionFXToEntity((Entity *)((int32_t *)p)[3], &pos);
-		ang = p[1] + a;
+		ang = p[1] + i * 0xaa;
 		trans.vx = pos.vx + (_sin(ang) * 0x78 / 4096);
 		trans.vy = pos.vy - 0x78;
 		trans.vz = pos.vz + (_cos(ang) * 0x78 / 4096);
 		rot.vx = 0;
-		rot.vy = (p + i)[3] + (p[2] - 0x400 + b);
+		rot.vy = (p + i)[3] + (p[2] - 0x400 + i * 0x555);
 		rot.vz = 0xe3;
 		renderTMDModel((uint8_t *)MAIN_D_801351C8, 0, &coord, NULL, &trans, &rot, &STD_D_8007AF78);
 	}
@@ -5584,7 +5652,10 @@ void STD_removeConfusionEffect(int32_t i, int32_t arg)
 	}
 }
 
-void STD_initializeStunEffect(char *base)
+// clang-format off
+void STD_initializeStunEffect(base)
+	char *base;
+// clang-format on
 {
 	int32_t i;
 
@@ -5594,7 +5665,7 @@ void STD_initializeStunEffect(char *base)
 
 	STD_resetStunSubEffects();
 	MAIN_D_801351CC = base;
-	GsMapModelingData((unsigned long *)(base + 4));
+	GsMapModelingData((unsigned long *)(MAIN_D_801351CC + 4));
 }
 
 void STD_resetStunSubEffects(void)
@@ -5611,7 +5682,7 @@ void STD_tickStunEffect(int32_t i)
 	int16_t *p;
 
 	p = STD_D_8007FD10[i];
-	p[0] = p[0] + 1;
+	p[0]++;
 	switch (p[2]) {
 	case 0:
 		if ((p[0] % 6) == 0) {
@@ -5640,6 +5711,7 @@ void STD_renderStunEffect(int32_t idx)
 {
 	SVECTOR pos;
 	DVECTOR screen;
+	int32_t otz;
 	int16_t *p;
 	int32_t scale;
 	int32_t value;
@@ -5667,7 +5739,7 @@ void STD_renderStunEffect(int32_t idx)
 	pos.vx = ((Entity *)((int32_t *)p)[2])->posData->location.vx;
 	pos.vy = -DIGIMON_DATA[((Entity *)((int32_t *)p)[2])->type].height * 113 / 100;
 	pos.vz = ((Entity *)((int32_t *)p)[2])->posData->location.vz;
-	worldPosToScreenPos(&pos, &screen);
+	otz = worldPosToScreenPos(&pos, &screen);
 
 	STD_D_8007AFD0.x = screen.vx;
 	STD_D_8007AFD0.y = screen.vy;
@@ -5753,20 +5825,18 @@ void STD_tickStunSubEffect(int32_t i)
 
 void STD_renderStunSubEffect(int32_t i)
 {
+	SVECTOR pos;
 	GsCOORDINATE2 coord;
 	VECTOR trans;
 	SVECTOR rot;
 	VECTOR scale;
 	int16_t *p;
-	int32_t z;
-	int32_t y;
-	int32_t x;
 	int32_t s;
 
 	p = STD_D_8007FD4C[i];
-	x = (int16_t)((Entity **)p)[1]->posData->location.vx;
-	y = (int16_t)lerp(-DIGIMON_DATA[((Entity **)p)[1]->type].height * 113 / 100, ((Entity **)p)[1]->posData->location.vy, 0, 0xf, p[0]);
-	z = (int16_t)((Entity **)p)[1]->posData->location.vz;
+	pos.vx = ((Entity **)p)[1]->posData->location.vx;
+	pos.vy = lerp(-DIGIMON_DATA[((Entity **)p)[1]->type].height * 113 / 100, ((Entity **)p)[1]->posData->location.vy, 0, 0xf, p[0]);
+	pos.vz = ((Entity **)p)[1]->posData->location.vz;
 	s = DIGIMON_DATA[((Entity **)p)[1]->type].radius * 0x4000 / 350;
 	if (p[0] < 4) {
 		s = lerp(s * 10 / 100, s, 0, 4, p[0]);
@@ -5774,14 +5844,18 @@ void STD_renderStunSubEffect(int32_t i)
 
 	rot = MAIN_D_8013491C;
 	scale = STD_D_8007B018;
-	trans.vx = x;
-	trans.vy = y;
-	trans.vz = z;
+	trans.vx = pos.vx;
+	trans.vy = pos.vy;
+	trans.vz = pos.vz;
 	scale.vx = scale.vz = s;
 	renderTMDModel((uint8_t *)MAIN_D_801351CC, 0, &coord, NULL, &trans, &rot, &scale);
 }
 
-int32_t STD_addStunEffect(int32_t arg, int32_t val)
+// clang-format off
+int32_t STD_addStunEffect(arg, val)
+	int32_t arg;
+	int16_t val;
+// clang-format on
 {
 	int32_t i;
 	int16_t *p;
@@ -5828,8 +5902,32 @@ void STD_removeAllStunEffects(void)
 	}
 }
 
-void STD_setTMDObjectColor(int32_t idx, int32_t *color, char *base)
+void STD_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base)
 {
+#if defined(VERSION_JP)
+	int32_t i;
+	int32_t count;
+	uint8_t t;
+	char *hdr;
+	char *prim;
+
+	hdr = (char *)((uint32_t)base + 0xc);
+	hdr = (char *)((int32_t)hdr + idx * 28);
+	count = ((int32_t *)hdr)[5];
+	prim = ((char **)hdr)[4];
+	for (i = 0; i < count; i++) {
+		t = *(int32_t *)prim >> 24;
+		switch (t) {
+		case 0x2d:
+		case 0x2f:
+			prim[0x14] = (int16_t)color[0];
+			prim[0x15] = (int16_t)color[1];
+			prim[0x16] = (int16_t)color[2];
+			prim = (char *)((int32_t)prim + 0x20);
+			break;
+		}
+	}
+#else
 	int32_t *rec;
 	int32_t i;
 	int32_t count;
@@ -5857,13 +5955,16 @@ void STD_setTMDObjectColor(int32_t idx, int32_t *color, char *base)
 			pb++;
 		}
 	}
+#endif
 }
 
 void STD_tickFinisherAura(int32_t i)
 {
 	int16_t *p;
+	int32_t entity;
 
 	p = STD_D_8007FE14[i];
+	entity = *(int32_t *)&p[2];
 	p[0]++;
 	if (p[0] > p[1]) {
 		removeObject(0x80d, i);
@@ -5873,23 +5974,23 @@ void STD_tickFinisherAura(int32_t i)
 
 void STD_renderFinisherAura(int32_t id)
 {
+	int32_t sx;
+	int32_t a;
+	int32_t t;
 	GsCOORDINATE2 coord;
 	SVECTOR rot;
 	VECTOR trans;
 	VECTOR scale;
-	RGB8 col;
 	int16_t *fa;
 	Entity *e;
-	int32_t sx;
 	int32_t sy;
-	int32_t t;
-	int32_t i;
 
 	fa = STD_D_8007FE14[id];
 	e = (Entity *)*(int32_t *)&fa[2];
 
 	if (fa[0] < 10) {
-		sx = (0x1000 - _cos(lerp(0, 0x80, 0, 9, fa[0]))) * 0xb34 / 0x1000 + 0x4cc;
+		a = lerp(0, 0x80, 0, 9, fa[0]);
+		sx = (0x1000 - _cos(a)) * 0xb34 / 0x1000 + 0x4cc;
 	} else {
 		sx = 0x1000;
 	}
@@ -5916,14 +6017,18 @@ void STD_renderFinisherAura(int32_t id)
 	renderTMDModel(*(uint8_t **)&MAIN_D_801351D0, 4, &coord, NULL, &trans, &rot, &scale);
 
 	if (fa[0] < 7) {
+		RGB8 col;
+		int32_t i;
+		int32_t s;
+
 		col = MAIN_D_80134934;
-		sx = fa[0] * 0x1000 / 7;
-		sx = sx * DIGIMON_DATA[e->type].radius / 150;
+		s = fa[0] * 0x1000 / 7;
+		s = s * DIGIMON_DATA[e->type].radius / 150;
 		col.r = (uint32_t)col.r * (7 - fa[0]) / 7;
 		col.g = (uint32_t)col.g * (7 - fa[0]) / 7;
 		col.b = (uint32_t)col.b * (7 - fa[0]) / 7;
 		for (i = 0; i < 20; i += 2) {
-			STD_func_80078BBC((char *)&e->posData->location, sx, &STD_D_8007FE24[i], (uint8_t *)&col);
+			STD_func_80078BBC((char *)&e->posData->location, s, &STD_D_8007FE24[i], (uint8_t *)&col);
 		}
 	}
 }
@@ -5957,7 +6062,7 @@ void STD_func_80078BBC(char *pos, int32_t scale, SVECTOR *dir, uint8_t *col)
 	b.vx += (int16_t)((int32_t *)pos)[0];
 	b.vy += (int16_t)((int32_t *)pos)[1];
 	b.vz += (int16_t)((int32_t *)pos)[2];
-	setSemiTrans(prim, 1);
+	prim->code |= 2;
 	addScreenPolyFT3(prim, &c, &a, &b);
 }
 
@@ -5966,6 +6071,8 @@ void STD_initializeFinisherAuraModel(char *tim, char *base)
 	MATRIX m;
 	SVECTOR v;
 	SVECTOR rot;
+	unsigned long *timp;
+	unsigned long *timq;
 	GsIMAGE image;
 	RECT rect;
 	VECTOR ca;
@@ -5974,7 +6081,8 @@ void STD_initializeFinisherAuraModel(char *tim, char *base)
 	int32_t i;
 	SVECTOR *p;
 
-	GsGetTimInfo((unsigned long *)tim + 1, &image);
+	timq = timp = (unsigned long *)tim;
+	GsGetTimInfo(timp + 1, &image);
 	setRECT(&rect, image.px, image.py, image.pw, image.ph);
 	LoadImage(&rect, image.pixel);
 	GetTPage(image.pmode & 3, 0, image.px, image.py);
@@ -5988,11 +6096,11 @@ void STD_initializeFinisherAuraModel(char *tim, char *base)
 	GsMapModelingData((unsigned long *)((char *)MAIN_D_801351D0 + 4));
 	ca = STD_D_8007B028;
 	cb = STD_D_8007B038;
-	STD_setTMDObjectColor(0, (int32_t *)&ca, (char *)MAIN_D_801351D0);
-	STD_setTMDObjectColor(1, (int32_t *)&ca, (char *)MAIN_D_801351D0);
-	STD_setTMDObjectColor(2, (int32_t *)&ca, (char *)MAIN_D_801351D0);
-	STD_setTMDObjectColor(3, (int32_t *)&cb, (char *)MAIN_D_801351D0);
-	STD_setTMDObjectColor(4, (int32_t *)&ca, (char *)MAIN_D_801351D0);
+	STD_setTMDObjectColor(0, (int32_t *)&ca, MAIN_D_801351D0);
+	STD_setTMDObjectColor(1, (int32_t *)&ca, MAIN_D_801351D0);
+	STD_setTMDObjectColor(2, (int32_t *)&ca, MAIN_D_801351D0);
+	STD_setTMDObjectColor(3, (int32_t *)&cb, MAIN_D_801351D0);
+	STD_setTMDObjectColor(4, (int32_t *)&ca, MAIN_D_801351D0);
 
 	for (j = 0; j < 2; j++) {
 		STD_D_8007FE14[j][0] = -1;
@@ -6008,7 +6116,7 @@ void STD_initializeFinisherAuraModel(char *tim, char *base)
 		rot.vz = 0;
 		RotMatrixZYX(&rot, &m);
 		ApplyMatrixSV(&m, &v, p++);
-		v.vx = -v.vx;
+		v.vx *= -1;
 		ApplyMatrixSV(&m, &v, p++);
 	}
 }
@@ -6057,10 +6165,7 @@ void STD_tickAuraProjectile(int32_t id)
 	AABB box;
 	EfeAura *a;
 	int32_t hit;
-	uint32_t idx;
 	int32_t j;
-	Entity *e;
-	int32_t ent;
 
 	a = &((EfeAura *)MAIN_D_801351D4)[id];
 	a->frame++;
@@ -6074,23 +6179,19 @@ void STD_tickAuraProjectile(int32_t id)
 	box.extent.vx = 0x2d;
 	box.extent.vy = 0xc8;
 	box.extent.vz = 0x2d;
-	hit = findAABBHitEntity(&box, a->owner, 1);
-	idx = hit;
-	if (hit == -1) {
+	if ((hit = findAABBHitEntity(&box, a->owner, 1)) == -1) {
 		return;
 	}
-	e = ENTITY_TABLE[idx];
-	if (((int8_t *)e)[0x53] != 0) {
+	if (((int8_t *)ENTITY_TABLE[hit])[0x53] != 0) {
 		return;
 	}
 	for (j = 1; j < 10; j++) {
-		ent = (int32_t)ENTITY_TABLE[j];
-		if (ent == (int32_t)a->owner) {
+		if (ENTITY_TABLE[j] == a->owner) {
 			break;
 		}
 	}
-	((int8_t *)e)[0x53] = 1;
-	addAttackObject(idx, 1, &a->position, 0x179, 0, j);
+	((int8_t *)ENTITY_TABLE[hit])[0x53] = 1;
+	addAttackObject(hit, 1, &a->position, 0x179, 0, j);
 	a->frame = -1;
 	removeObject(0x179, (int16_t)id);
 }
@@ -6098,6 +6199,9 @@ void STD_tickAuraProjectile(int32_t id)
 void STD_renderAuraProjectile(int32_t i)
 {
 	MATRIX m;
+#if defined(VERSION_JP)
+	VECTOR scale;
+#endif
 	SVECTOR a;
 	SVECTOR b;
 	SVECTOR c;
@@ -6107,6 +6211,9 @@ void STD_renderAuraProjectile(int32_t i)
 
 	p = MAIN_D_801351D4 + (i * 36);
 	prim = (POLY_FT4 *)GsGetWorkBase();
+#if defined(VERSION_JP)
+	scale = STD_D_80085C78;
+#endif
 	RotMatrix((SVECTOR *)(p + 0xc), &m);
 	ApplyMatrixSV(&m, &MAIN_D_80134938, &a);
 	ApplyMatrixSV(&m, &MAIN_D_80134940, &b);
@@ -6125,7 +6232,7 @@ void STD_renderAuraProjectile(int32_t i)
 	d.vy += ((int16_t *)p)[3];
 	d.vz += ((int16_t *)p)[4];
 	SetPolyFT4(prim);
-	setSemiTrans(prim, 1);
+	prim->code |= 2;
 	prim->r0 = prim->g0 = prim->b0 = 0x80;
 	prim->tpage = getTPage(0, 1, 768, 256);
 	prim->clut = getClut(192, 492);
@@ -6136,13 +6243,12 @@ void STD_renderAuraProjectile(int32_t i)
 char *STD_initializeAuraProjectiles(char *base)
 {
 	int32_t i;
-	int32_t off;
 
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
 	MAIN_D_801351D4 = base;
 	base = (char *)((int32_t)base + 0x120);
-	for (i = 0, off = 0; i < 8; i++, off += 0x24) {
-		*(int32_t *)(MAIN_D_801351D4 + off) = -1;
+	for (i = 0; i < 8; i++) {
+		*(int32_t *)(MAIN_D_801351D4 + i * 0x24) = -1;
 	}
 
 	return base;
@@ -6151,11 +6257,12 @@ char *STD_initializeAuraProjectiles(char *base)
 int32_t STD_addAuraProjectile(Entity *e)
 {
 	EfeAura *p;
-	MATRIX *q;
-	char *tbl;
 	int32_t i;
+	char *tbl;
+	MATRIX *q;
 
 	p = (EfeAura *)MAIN_D_801351D4;
+	tbl = (char *)STD_D_8007B058;
 	tbl = (char *)STD_D_8007B058 + (getOriginalType(e->type) * 12);
 	for (i = 0; i < 8; i++) {
 		if (p[i].frame < 0) {
@@ -6167,7 +6274,7 @@ int32_t STD_addAuraProjectile(Entity *e)
 		return -1;
 	}
 
-	p = (EfeAura *)((int32_t)p + (i * 36));
+	p = p + i;
 	p->frame = 0;
 	p->owner = e;
 	p->typeData = tbl;
@@ -6194,11 +6301,10 @@ int32_t STD_addAuraProjectile(Entity *e)
 void STD_func_80079874(void)
 {
 	int32_t i;
-	int32_t off;
 
-	for (i = 0, off = 0; i < 8; i++, off += 0x24) {
-		if (*(int32_t *)(MAIN_D_801351D4 + off) >= 0) {
-			*(int32_t *)(MAIN_D_801351D4 + off) = -1;
+	for (i = 0; i < 8; i++) {
+		if (*(int32_t *)(MAIN_D_801351D4 + i * 0x24) >= 0) {
+			*(int32_t *)(MAIN_D_801351D4 + i * 0x24) = -1;
 			removeObject(0x179, (int16_t)i);
 		}
 	}

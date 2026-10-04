@@ -241,7 +241,7 @@ SECTIONS
         KEEP(BUILD_DIR/asm/main/data/ADA28.sdata.s.o(.sdata .sdata.*));
         BUILD_DIR/src/std/std_hud.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
-        KEEP(BUILD_DIR/asm/main/data/ADAF8.sdata.s.o(.sdata .sdata.*));
+        BUILD_DIR/src/std/std_effect.c.o(.sdata .sdata.*);
         BUILD_DIR/src/fish/fish.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/evl/evl.c.o(.sdata .sdata.*);
@@ -336,7 +336,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/std/std_hud.c.o(.sbss.*);
         . = ALIGN(., 4);
-        BUILD_DIR/generated/unk_0x8013E438.sbss.s.o(.sbss.*);
+        BUILD_DIR/src/std/std_effect.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/fish/fish.c.o(.sbss.*);
         . = ALIGN(., 4);
