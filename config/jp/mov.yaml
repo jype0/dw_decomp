@@ -61,6 +61,6 @@ segments:
     subsegments:
       - [0x40, c, mov]
       - [0xB70, .data, mov]
-      - [0xC10, data]
+      - [0xC10, .data, mov_bss_jp]
 
-  - [0x73648]
+  - [0x7364C]

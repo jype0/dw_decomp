@@ -140,7 +140,8 @@ KAR_C_SRC := \
 
 $(eval $(call overlay,KAR,kar))
 MOV_C_SRC := \
-	src/mov/mov.c
+	src/mov/mov.c \
+	src/mov/mov_bss_jp.c
 
 $(eval $(call overlay,MOV,mov))
 MURD_C_SRC := \
