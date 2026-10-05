@@ -4,6 +4,10 @@ rom:0x0000A9F4 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x800
 rom:0x0000A9FC reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x800
 rom:0x0000AA18 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1800
 rom:0x0000AA20 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1800
+rom:0x00084028 reloc:MIPS_NONE symbol:NONE
+rom:0x0008402C reloc:MIPS_NONE symbol:NONE
+rom:0x0008403C reloc:MIPS_NONE symbol:NONE
+rom:0x00084040 reloc:MIPS_NONE symbol:NONE
 rom:0x0004105C reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
 rom:0x00041060 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
 rom:0x000410E4 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
