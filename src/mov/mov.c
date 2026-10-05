@@ -12,7 +12,7 @@ typedef struct {
 	int32_t frameCount;
 } MovieEntry;
 
-extern int32_t MAIN_D_80139BA0[];
+extern int32_t StCdIntrFlag[];
 
 void MOV_initEnvironment(MovieEnv *env, int32_t x0, int32_t y0, int32_t x1, int32_t y1);
 void MOV_onSliceDecoded(void);
@@ -68,9 +68,9 @@ void MOV_onSliceDecoded(void)
 	RECT rect;
 	int32_t index;
 
-	if (MAIN_D_80139BA0[0] != 0) {
+	if (StCdIntrFlag[0] != 0) {
 		StCdInterrupt();
-		MAIN_D_80139BA0[0] = 0;
+		StCdIntrFlag[0] = 0;
 	}
 
 	index = MOV_ENV.sliceIndex;

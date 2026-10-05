@@ -93,6 +93,11 @@ MAIN_C_SRC := \
 	src/main/vecmath.c \
 	src/main/world_object.c
 
+# PsyQ library code and data is one section per file, so a library file is
+# kept whenever anything in it is referenced
+$(BUILD_DIR)/asm/main/psyq/%.s.o $(BUILD_DIR)/asm/main/data/psyq/%.s.o: \
+	ASFLAGS += -Wa,--defsym,PLAIN_SECTIONS=1
+
 MAIN_ASM_EXCLUDE := shop vs
 
 $(eval $(call unit,MAIN,main))

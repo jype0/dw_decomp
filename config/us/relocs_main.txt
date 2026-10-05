@@ -3,20 +3,20 @@ rom:0x00000018 reloc:MIPS_32 symbol:main_TEXT_START
 rom:0x0000001C reloc:MIPS_32 symbol:main_ROM_SIZE
 rom:0x00000028 reloc:MIPS_32 symbol:main_SBSS_START
 rom:0x0000002C reloc:MIPS_32 symbol:main_MEMFILL_ALIGNED_SIZE
-rom:0x00000B34 reloc:MIPS_HI16 symbol:MAIN_jtbl_801353FC
-rom:0x00000B38 reloc:MIPS_LO16 symbol:MAIN_jtbl_801353FC
-rom:0x00000B48 reloc:MIPS_HI16 symbol:MAIN_jtbl_80135400
-rom:0x00000B4C reloc:MIPS_LO16 symbol:MAIN_jtbl_80135400
-rom:0x00000B88 reloc:MIPS_HI16 symbol:MAIN_jtbl_801353FC
-rom:0x00000B8C reloc:MIPS_LO16 symbol:MAIN_jtbl_801353FC
-rom:0x00000B94 reloc:MIPS_HI16 symbol:MAIN_jtbl_80135400
-rom:0x00000B98 reloc:MIPS_LO16 symbol:MAIN_jtbl_80135400
-rom:0x0000A6C8 reloc:MIPS_HI16 symbol:MAIN_D_80116CDC addend:-0x1000
-rom:0x0000A6D0 reloc:MIPS_LO16 symbol:MAIN_D_80116CDC addend:-0x1000
-rom:0x0000A72C reloc:MIPS_HI16 symbol:MAIN_D_80116CDC addend:-0x800
-rom:0x0000A734 reloc:MIPS_LO16 symbol:MAIN_D_80116CDC addend:-0x800
-rom:0x0000A750 reloc:MIPS_HI16 symbol:MAIN_D_80116CDC addend:-0x1800
-rom:0x0000A758 reloc:MIPS_LO16 symbol:MAIN_D_80116CDC addend:-0x1800
+rom:0x00000B34 reloc:MIPS_HI16 symbol:_start_pad
+rom:0x00000B38 reloc:MIPS_LO16 symbol:_start_pad
+rom:0x00000B48 reloc:MIPS_HI16 symbol:_stop_pad
+rom:0x00000B4C reloc:MIPS_LO16 symbol:_stop_pad
+rom:0x00000B88 reloc:MIPS_HI16 symbol:_start_pad
+rom:0x00000B8C reloc:MIPS_LO16 symbol:_start_pad
+rom:0x00000B94 reloc:MIPS_HI16 symbol:_stop_pad
+rom:0x00000B98 reloc:MIPS_LO16 symbol:_stop_pad
+rom:0x0000A6C8 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1000
+rom:0x0000A6D0 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1000
+rom:0x0000A72C reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x800
+rom:0x0000A734 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x800
+rom:0x0000A750 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1800
+rom:0x0000A758 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1800
 rom:0x00019A50 reloc:MIPS_26 symbol:STD_tickTamerTournament
 rom:0x00019D74 reloc:MIPS_26 symbol:KAR_tick
 rom:0x0001ACE0 reloc:MIPS_26 symbol:ENDI_tickEnding

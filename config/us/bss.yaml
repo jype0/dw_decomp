@@ -21,7 +21,7 @@ subsegments:
   - [0x80150F00, map_object]
   - [0x80154700, file_queue]
   - [0x80154F80, unk_0x80154F80]
-  - [0x80155428, libds]
+  - [0x80155424, libds]
   - [0x80155430, butterfly]
   - [0x80155440, libmrcd]
   - [0x80155560, bubble]

@@ -8,7 +8,9 @@
 
 # A function symbol.
 .macro glabel label, visibility=global
+.ifndef PLAIN_SECTIONS
     .section .text.\label
+.endif
     .\visibility \label
     .type \label, @function
     \label:
@@ -59,7 +61,9 @@
 
 # A data symbol in a section of its own.
 .macro dlabel_section label, visibility=global
+.ifndef PLAIN_SECTIONS
     .pushsection %S.\label
+.endif
     .\visibility \label
     .type \label, @object
     \label:
@@ -68,7 +72,9 @@
 # End of a data symbol in a section of its own.
 .macro enddlabel_section label
     .size \label, . - \label
+.ifndef PLAIN_SECTIONS
     .popsection
+.endif
 .endm
 
 
