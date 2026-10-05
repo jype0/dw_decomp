@@ -62,24 +62,24 @@ static void *tamer_data_order[] = {
 #endif
 };
 
-RECT MAIN_D_801341F4 = {0, 12, 256, 200};
+RECT ITEM_PICKUP_TEXT_AREA = {0, 12, 256, 200};
 #if !defined(VERSION_JP)
 char MAIN_D_801341FC[] = "Woah!";
 #endif
-RECT MAIN_D_80134204 = {0, 12, 256, 200};
-RECT MAIN_D_8013420C = {0, 12, 256, 200};
+RECT TAKE_CHEST_TEXT_AREA = {0, 12, 256, 200};
+RECT AWARD_SOMETHING_TEXT_AREA = {0, 12, 256, 200};
 
 extern int8_t GAME_STATE;
 extern int8_t TAMER_STATE;
-extern int8_t TAMER_SUBSTATE;
+extern int8_t TAMER_SUB_STATE;
 extern int32_t TRAINING_COMPLETE;
 extern int32_t HAS_BUTTERFLY;
 extern int32_t BUTTERFLY_ID;
-extern int32_t HAS_LEVELS_AWARD_PENDING;
-extern int32_t HAS_MEDAL_AWARD_PENDING;
+extern int32_t TAMER_LEVEL_AWARD_PENDING;
+extern int32_t MEDAL_AWARD_PENDING;
 extern int32_t SOME_SCRIPT_SYNC_BIT;
 extern uint8_t TEXTBOX_OPEN_TIMER;
-extern int8_t INTERACTED_CHEST_STATE;
+extern int8_t TAKE_CHEST_STATE;
 extern uint8_t TARGET_MAP;
 extern uint8_t CURRENT_EXIT;
 extern uint8_t PREVIOUS_EXIT;
@@ -89,18 +89,18 @@ extern int32_t MAIN_D_80185BB0[3];
 extern int32_t MAIN_D_80185BB4[3];
 extern int32_t MAIN_D_80185BBC[3];
 
-extern uint8_t PICKUP_ITEM_TYPE;
-extern uint8_t RECEIVED_ITEM_TYPE;
+extern uint8_t PICKED_UP_DROP_ID;
+extern uint8_t TAKE_CHEST_ITEM;
 extern int8_t INTERACTED_CHEST;
-extern int8_t LEVELS_INCREASED;
-extern int8_t TAKE_ITEM_FRAME_COUNT;
+extern int8_t TAMER_LEVELS_AWARDED;
+extern int8_t TAKE_ITEM_FRAME_COUNTER;
 extern int8_t TALKED_TO_ENTITY;
 extern int8_t PREVIOUS_CAMERA_POS_INITIALIZED;
 extern VECTOR PREVIOUS_CAMERA_POS;
-extern int32_t IS_STANDING_ON_DROP;
+extern int32_t HAS_PICKED_UP_ITEM;
 extern int32_t IS_IN_MENU;
 extern int16_t MOVE_TO_DELTA_X;
-extern int16_t MAIN_D_80134C9A;
+extern int16_t MOVE_TO_DELTA_Z;
 extern int8_t MAIN_D_80134DF9;
 extern int16_t MAIN_D_801386A4[16];
 extern uint32_t POLLED_INPUT;
@@ -123,7 +123,7 @@ extern int16_t DAY;
 extern uint8_t YEAR;
 extern int32_t MONEY;
 extern int32_t NPC_IS_WALKING_TOWARDS[8];
-extern VECTOR MAIN_D_801386A0[8];
+extern VECTOR ROTATION_DATA[8];
 
 typedef struct {
 	VECTOR location;
@@ -335,12 +335,12 @@ void initializeTamer(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
 	}
 
 	PREVIOUS_CAMERA_POS_INITIALIZED = 0;
-	IS_STANDING_ON_DROP = 0;
+	HAS_PICKED_UP_ITEM = 0;
 	STORED_TAMER_POS = TAMER_ENTITY.entity.posData->location;
-	HAS_LEVELS_AWARD_PENDING = 0;
-	HAS_MEDAL_AWARD_PENDING = 0;
+	TAMER_LEVEL_AWARD_PENDING = 0;
+	MEDAL_AWARD_PENDING = 0;
 	IS_IN_MENU = 0;
-	LEVELS_INCREASED = 1;
+	TAMER_LEVELS_AWARDED = 1;
 }
 
 // clang-format off
@@ -583,7 +583,7 @@ void checkItemPickup(void)
 
 	getModelTile(&TAMER_ENTITY.entity.posData->location, &tileX, &tileY);
 	item = DROPPED_ITEMS;
-	PICKUP_ITEM_TYPE = 0xff;
+	PICKED_UP_DROP_ID = 0xff;
 	for (i = 0; i < 11; ++i) {
 		if (item->worldItem.type == 0xff) {
 			++item;
@@ -600,19 +600,19 @@ void checkItemPickup(void)
 			goto next;
 		}
 
-		PICKUP_ITEM_TYPE = i;
+		PICKED_UP_DROP_ID = i;
 
-		if (IS_STANDING_ON_DROP != 1) {
+		if (HAS_PICKED_UP_ITEM != 1) {
 			tamerSetState(7);
-			IS_STANDING_ON_DROP = 1;
+			HAS_PICKED_UP_ITEM = 1;
 		}
 		break;
 next:
 		++item;
 	}
 
-	if (PICKUP_ITEM_TYPE == 0xff) {
-		IS_STANDING_ON_DROP = 0;
+	if (PICKED_UP_DROP_ID == 0xff) {
+		HAS_PICKED_UP_ITEM = 0;
 	}
 }
 
@@ -690,7 +690,7 @@ void checkMedalConditions(void)
 
 		if (i == 0x39) {
 			unlockMedal(5);
-			HAS_MEDAL_AWARD_PENDING = 1;
+			MEDAL_AWARD_PENDING = 1;
 		}
 	}
 
@@ -700,18 +700,18 @@ void checkMedalConditions(void)
 		    (bs->off == 999) && (bs->def == 999) &&
 		    (bs->brain == 999) && (bs->speed == 999)) {
 			unlockMedal(7);
-			HAS_MEDAL_AWARD_PENDING = 1;
+			MEDAL_AWARD_PENDING = 1;
 		}
 	}
 
 	if ((hasMedal(0xD) == 0) && (MONEY == 999999)) {
 		unlockMedal(0xD);
-		HAS_MEDAL_AWARD_PENDING = 1;
+		MEDAL_AWARD_PENDING = 1;
 	}
 
 	if ((hasMedal(0xE) == 0) && (YEAR == 10)) {
 		unlockMedal(0xE);
-		HAS_MEDAL_AWARD_PENDING = 1;
+		MEDAL_AWARD_PENDING = 1;
 	}
 
 	if (hasMedal(6) == 0) {
@@ -723,7 +723,7 @@ void checkMedalConditions(void)
 
 		if (i == 62) {
 			unlockMedal(6);
-			HAS_MEDAL_AWARD_PENDING = 1;
+			MEDAL_AWARD_PENDING = 1;
 
 			++TAMER_ENTITY.tamerLevel;
 			if (TAMER_ENTITY.tamerLevel >= 11) {
@@ -733,7 +733,7 @@ void checkMedalConditions(void)
 	}
 	if ((hasMedal(9) == 0) && (PARTNER_PARA.fishCaught >= 100)) {
 		unlockMedal(9);
-		HAS_MEDAL_AWARD_PENDING = 1;
+		MEDAL_AWARD_PENDING = 1;
 	}
 	if (hasMedal(0xC) == 0) {
 		for (i = 0; i < 66; ++i) {
@@ -744,14 +744,14 @@ void checkMedalConditions(void)
 
 		if (i == 66) {
 			unlockMedal(0xC);
-			HAS_MEDAL_AWARD_PENDING = 1;
+			MEDAL_AWARD_PENDING = 1;
 		}
 	}
 }
 
 void checkPendingAwards(void)
 {
-	if ((HAS_LEVELS_AWARD_PENDING == 1) || (HAS_MEDAL_AWARD_PENDING == 1)) {
+	if ((TAMER_LEVEL_AWARD_PENDING == 1) || (MEDAL_AWARD_PENDING == 1)) {
 		tamerSetState(0x14);
 		stopGameTime();
 	}
@@ -764,17 +764,17 @@ void renderItemPickupTextbox(int32_t instanceId)
 
 	renderString(0xf, -0x7d, 0x2d, 0x48, 0xc, 0, 0xc, 5, 0);
 #endif
-	if (INTERACTED_CHEST_STATE == 0) {
+	if (TAKE_CHEST_STATE == 0) {
 #if defined(VERSION_JP)
 		renderString(0, -0x7d, 0x39, 0x30, 0xc, 0, 0x24, 5, 0);
 		renderString(0xf, -0x4d, 0x39, 0x60, 0xc, 0, 0x18, 5, 0);
-		halfLength = strlen(ITEM_PARA[RECEIVED_ITEM_TYPE].name) / 2;
+		halfLength = strlen(ITEM_PARA[TAKE_CHEST_ITEM].name) / 2;
 		renderString(0, halfLength * 12 - 0x4d, 0x39, 0x24, 0xc, 0x30, 0x24, 5, 0);
 #else
 		renderString(0, 0xffffff83, 0x39, 0x5a, 0xc, 0, 0x24, 5, 0);
 		renderString(0xf, 0xffffff83, 0x2d, 0x60, 0xc, 0, 0x18, 5, 0);
 #endif
-	} else if (INTERACTED_CHEST_STATE == 1) {
+	} else if (TAKE_CHEST_STATE == 1) {
 		renderString(0, 0xffffff83, 0x39, 0xf0, 0xc, 0, 0x18, 5, 0);
 	} else {
 		renderString(0, 0xffffff83, 0x39, 0x90, 0xc, 0, 0x18, 5, 0);
@@ -926,7 +926,7 @@ void tamerSetFullState(state, substate)
 // clang-format on
 {
 	TAMER_STATE = state;
-	TAMER_SUBSTATE = substate;
+	TAMER_SUB_STATE = substate;
 }
 
 int32_t tamerGetState(void)
@@ -1038,13 +1038,13 @@ int32_t tickLookAtEntity(uint8_t scriptId1, uint8_t scriptId2)
 	switch (HAS_ROTATION_DATA[entityId]) {
 	case 0:
 		target = getEntityFromScriptId(&scriptId2);
-		MAIN_D_801386A0[entityId] = target->posData->location;
+		ROTATION_DATA[entityId] = target->posData->location;
 		HAS_ROTATION_DATA[entityId] = 1;
 		break;
 	case 1:
 		entity = getEntityFromScriptId(&scriptId1);
 		getRotationDifference(entity->posData,
-		                      &MAIN_D_801386A0[entityId],
+		                      &ROTATION_DATA[entityId],
 		                      &rotX, &rotY, &rotZ);
 		result = rotateEntity(&entity->posData->rotation, &rotX,
 				      &rotY, &rotZ, 0x200);
@@ -1088,14 +1088,14 @@ int32_t tickEntityMoveTo(scriptId1, scriptId2, targetX, targetZ, speed,
 		if (scriptId2 == 0xff) {
 			MOVE_TO_DELTA_X =
 				(targetX - entity->posData->location.vx) / speed;
-			MAIN_D_80134C9A =
+			MOVE_TO_DELTA_Z =
 				(targetZ - entity->posData->location.vz) / speed;
 		} else {
 			targetEntity = getEntityFromScriptId(&scriptId2);
 			MOVE_TO_DELTA_X =
 				(targetEntity->posData->location.vx -
 				 entity->posData->location.vx) / speed;
-			MAIN_D_80134C9A =
+			MOVE_TO_DELTA_Z =
 				(targetEntity->posData->location.vz -
 				 entity->posData->location.vz) / speed;
 		}
@@ -1105,7 +1105,7 @@ int32_t tickEntityMoveTo(scriptId1, scriptId2, targetX, targetZ, speed,
 		setEntityPosition(scriptId1,
 		                  entity->posData->location.vx + MOVE_TO_DELTA_X,
 		                  entity->posData->location.vy,
-		                  entity->posData->location.vz + MAIN_D_80134C9A);
+		                  entity->posData->location.vz + MOVE_TO_DELTA_Z);
 		setupEntityMatrix(scriptId1);
 
 		finishedX = finishedZ = 0;
@@ -1119,7 +1119,7 @@ int32_t tickEntityMoveTo(scriptId1, scriptId2, targetX, targetZ, speed,
 			finishedX = 1;
 		}
 
-		if (MAIN_D_80134C9A < 0) {
+		if (MOVE_TO_DELTA_Z < 0) {
 			if (entity->posData->location.vz <= targetZ) {
 				entity->posData->location.vz = targetZ;
 				finishedZ = 1;
@@ -1276,12 +1276,12 @@ void addTamerLevel(chance, amount)
 			clearTextArea();
 
 			if (amount >= 1) {
-				LEVELS_INCREASED = 1;
+				TAMER_LEVELS_AWARDED = 1;
 			} else {
-				LEVELS_INCREASED = -1;
+				TAMER_LEVELS_AWARDED = -1;
 			}
 
-			HAS_LEVELS_AWARD_PENDING = 1;
+			TAMER_LEVEL_AWARD_PENDING = 1;
 		}
 
 		if (TAMER_ENTITY.tamerLevel < 0) {
@@ -1316,16 +1316,16 @@ void tamerSetState(state)
 // clang-format on
 {
 	TAMER_STATE = state;
-	TAMER_SUBSTATE = 0;
+	TAMER_SUB_STATE = 0;
 }
 
 void tamerTickChangeMap(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		fadeToBlack(0x14);
 		startAnimationTamer(2);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (FADE_OUT_CURRENT == 10) {
@@ -1336,7 +1336,7 @@ void tamerTickChangeMap(void)
 			STORED_TAMER_POS = TAMER_ENTITY.entity.posData->location;
 			fadeFromBlack(0x14);
 			removeObject(0xfa1, TARGET_MAP);
-			TAMER_SUBSTATE = 2;
+			TAMER_SUB_STATE = 2;
 		}
 		break;
 	case 2:
@@ -1359,20 +1359,20 @@ void tamerTickPickupItem(void)
 	RECT sourceRect;
 	int16_t screenPos[2];
 
-	textRect = MAIN_D_801341F4;
+	textRect = ITEM_PICKUP_TEXT_AREA;
 
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		startAnimation(ENTITY_TABLE[0], 0xc);
 		unsetCameraFollowPlayer();
 		clearTextSubArea(&textRect);
 		drawString(DIGIMON_DATA[0].name, 0, 0xc);
-		drawString(ITEM_PARA[DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type].name,
+		drawString(ITEM_PARA[DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type].name,
 		           0, 0x18);
 		drawString(MAIN_D_801341FC, 0, 0x24);
-		INTERACTED_CHEST_STATE = 0;
-		TAKE_ITEM_FRAME_COUNT = 0;
-		TAMER_SUBSTATE = 1;
+		TAKE_CHEST_STATE = 0;
+		TAKE_ITEM_FRAME_COUNTER = 0;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (isUIBoxAvailable(1) == 1) {
@@ -1382,37 +1382,37 @@ void tamerTickPickupItem(void)
 				screenPos[0] - 5,
 				screenPos[1] - 5,
 				10, 10);
-			RECEIVED_ITEM_TYPE =
-				DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type;
+			TAKE_CHEST_ITEM =
+				DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type;
 			createAnimatedUIBox(1, 0, 2, &targetRect, &sourceRect, 0,
 			                    renderItemPickupTextbox);
-			TAMER_SUBSTATE = 2;
+			TAMER_SUB_STATE = 2;
 		}
 		break;
 	case 2:
-		++TAKE_ITEM_FRAME_COUNT;
-		if ((isKeyDown(CONFIRM_BUTTON) != 0) && (4 < TAKE_ITEM_FRAME_COUNT)) {
-			if (TAKE_ITEM_FRAME_COUNT < 0x3c) {
+		++TAKE_ITEM_FRAME_COUNTER;
+		if ((isKeyDown(CONFIRM_BUTTON) != 0) && (4 < TAKE_ITEM_FRAME_COUNTER)) {
+			if (TAKE_ITEM_FRAME_COUNTER < 0x3c) {
 				playSound(0, 3);
 			}
-			if (giveItem(DROPPED_ITEMS[PICKUP_ITEM_TYPE].worldItem.type, 0) == 0) {
+			if (giveItem(DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type, 0) == 0) {
 				drawString(MAIN_D_80122D68, 0, 0x18);
-				TAKE_ITEM_FRAME_COUNT = 0;
-				INTERACTED_CHEST_STATE = 1;
-				TAMER_SUBSTATE = 3;
+				TAKE_ITEM_FRAME_COUNTER = 0;
+				TAKE_CHEST_STATE = 1;
+				TAMER_SUB_STATE = 3;
 			} else {
 				playSound(0, 7);
-				TAMER_SUBSTATE = 4;
+				TAMER_SUB_STATE = 4;
 			}
 		}
 		break;
 	case 3:
-		++TAKE_ITEM_FRAME_COUNT;
-		if ((isKeyDown(CONFIRM_BUTTON) != 0) && (4 < TAKE_ITEM_FRAME_COUNT)) {
-			if (TAKE_ITEM_FRAME_COUNT < 0x3c) {
+		++TAKE_ITEM_FRAME_COUNTER;
+		if ((isKeyDown(CONFIRM_BUTTON) != 0) && (4 < TAKE_ITEM_FRAME_COUNTER)) {
+			if (TAKE_ITEM_FRAME_COUNTER < 0x3c) {
 				playSound(0, 3);
 			}
-			TAMER_SUBSTATE = 4;
+			TAMER_SUB_STATE = 4;
 		}
 		break;
 	case 4:
@@ -1422,8 +1422,8 @@ void tamerTickPickupItem(void)
 			screenPos[1] - 5,
 			10, 10);
 		removeAnimatedUIBox(1, &textRect);
-		if (INTERACTED_CHEST_STATE == 0) {
-			pickupItem(PICKUP_ITEM_TYPE);
+		if (TAKE_CHEST_STATE == 0) {
+			pickupItem(PICKED_UP_DROP_ID);
 		}
 		tamerSetState(0);
 		setCameraFollowPlayer();
@@ -1431,8 +1431,8 @@ void tamerTickPickupItem(void)
 		break;
 	}
 
-	if (9 < TAKE_ITEM_FRAME_COUNT) {
-		TAKE_ITEM_FRAME_COUNT = 10;
+	if (9 < TAKE_ITEM_FRAME_COUNTER) {
+		TAKE_ITEM_FRAME_COUNTER = 10;
 	}
 }
 
@@ -1443,9 +1443,9 @@ void tamerTickTakeChest(void)
 	RECT sourceRect;
 	int16_t screenPos[2];
 
-	textRect = MAIN_D_80134204;
+	textRect = TAKE_CHEST_TEXT_AREA;
 
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		startAnimation(ENTITY_TABLE[0], 0);
 		partnerSetState(0xb);
@@ -1458,12 +1458,12 @@ void tamerTickTakeChest(void)
 			drawString(ITEM_PARA[CHEST_ARRAY[INTERACTED_CHEST].item].name,
 			           0, 0x18);
 			drawString(MAIN_D_801341FC, 0, 0x24);
-			INTERACTED_CHEST_STATE = 0;
+			TAKE_CHEST_STATE = 0;
 		} else {
 			drawString(MAIN_D_80122D80, 0, 0x18);
-			INTERACTED_CHEST_STATE = 2;
+			TAKE_CHEST_STATE = 2;
 		}
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (isUIBoxAvailable(1) == 1) {
@@ -1475,44 +1475,44 @@ void tamerTickTakeChest(void)
 					screenPos[0] - 5,
 					screenPos[1] - 5,
 					10, 10);
-				RECEIVED_ITEM_TYPE =
+				TAKE_CHEST_ITEM =
 					CHEST_ARRAY[INTERACTED_CHEST].item;
 				createAnimatedUIBox(1, 0, 2, &targetRect,
 						    &sourceRect, 0,
 				                    renderItemPickupTextbox);
-				TAKE_ITEM_FRAME_COUNT = 0;
-				if (INTERACTED_CHEST_STATE == 0) {
-					TAMER_SUBSTATE = 2;
+				TAKE_ITEM_FRAME_COUNTER = 0;
+				if (TAKE_CHEST_STATE == 0) {
+					TAMER_SUB_STATE = 2;
 				} else {
-					TAMER_SUBSTATE = 4;
+					TAMER_SUB_STATE = 4;
 				}
 			}
 		}
 		break;
 	case 2:
-		++TAKE_ITEM_FRAME_COUNT;
+		++TAKE_ITEM_FRAME_COUNTER;
 		if (((POLLED_INPUT & CONFIRM_BUTTON) != 0) &&
-		    (5 < TAKE_ITEM_FRAME_COUNT)) {
-			TAKE_ITEM_FRAME_COUNT = 0;
-			if (giveItem(RECEIVED_ITEM_TYPE, 0) == 0) {
+		    (5 < TAKE_ITEM_FRAME_COUNTER)) {
+			TAKE_ITEM_FRAME_COUNTER = 0;
+			if (giveItem(TAKE_CHEST_ITEM, 0) == 0) {
 				drawString(MAIN_D_80122D68, 0, 0x18);
-				INTERACTED_CHEST_STATE = 1;
-				TAMER_SUBSTATE = 3;
+				TAKE_CHEST_STATE = 1;
+				TAMER_SUB_STATE = 3;
 			} else {
 				setTrigger(CHEST_ARRAY[INTERACTED_CHEST].trigger);
-				TAMER_SUBSTATE = 4;
+				TAMER_SUB_STATE = 4;
 			}
 		}
 		break;
 	case 3:
 		if (tickCloseChestTray(INTERACTED_CHEST) == 1) {
-			TAMER_SUBSTATE = 4;
+			TAMER_SUB_STATE = 4;
 		}
 		break;
 	case 4:
-		++TAKE_ITEM_FRAME_COUNT;
+		++TAKE_ITEM_FRAME_COUNTER;
 		if (((POLLED_INPUT & CONFIRM_BUTTON) != 0) &&
-		    (5 < TAKE_ITEM_FRAME_COUNT)) {
+		    (5 < TAKE_ITEM_FRAME_COUNTER)) {
 			getEntityScreenPos(&TAMER_ENTITY.entity, 1,
 					   screenPos);
 			setRECT(&textRect,
@@ -1520,8 +1520,8 @@ void tamerTickTakeChest(void)
 				screenPos[1] - 5,
 				10, 10);
 			removeAnimatedUIBox(1, &textRect);
-			if (INTERACTED_CHEST_STATE == 0) {
-				giveItem(RECEIVED_ITEM_TYPE, 1);
+			if (TAKE_CHEST_STATE == 0) {
+				giveItem(TAKE_CHEST_ITEM, 1);
 			}
 			tamerSetState(0);
 			partnerSetState(1);
@@ -1531,25 +1531,25 @@ void tamerTickTakeChest(void)
 		break;
 	}
 
-	if (9 < TAKE_ITEM_FRAME_COUNT) {
-		TAKE_ITEM_FRAME_COUNT = 10;
+	if (9 < TAKE_ITEM_FRAME_COUNTER) {
+		TAKE_ITEM_FRAME_COUNTER = 10;
 	}
 }
 
 void tamerTickIdle(void)
 {
-	if (TAMER_SUBSTATE == 0) {
+	if (TAMER_SUB_STATE == 0) {
 		startAnimation(&TAMER_ENTITY.entity, 0);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 	}
 }
 
 void tamerTickTraining(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		startAnimation(&TAMER_ENTITY.entity, 10);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		entityLookAtLocation(&TAMER_ENTITY.entity,
@@ -1563,7 +1563,7 @@ void tamerTickPraiseScold(int8_t state)
 {
 	int32_t type;
 
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		if (state == 0xd) {
 			type = PARTNER_ENTITY.digimonEntity.entity.type;
@@ -1578,7 +1578,7 @@ void tamerTickPraiseScold(int8_t state)
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity,
 				       0xb);
 
-			TAMER_SUBSTATE = 1;
+			TAMER_SUB_STATE = 1;
 		} else {
 			playSound(0, 0xd);
 			startAnimation(&TAMER_ENTITY.entity, 7);
@@ -1590,7 +1590,7 @@ void tamerTickPraiseScold(int8_t state)
 					       0xc);
 			}
 		}
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (TAMER_ENTITY.entity.anim.animFrame >=
@@ -1604,9 +1604,9 @@ void tamerTickPraiseScold(int8_t state)
 
 void tamerTickOpening(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		setMapLayerEnabled(1);
@@ -1618,11 +1618,11 @@ void tamerTickOpening(void)
 
 void tamerTickEnding(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		isSoundLoaded(0, 8);
 		ENDI_tickEnding(ENTITY_TABLE[0], 0);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (0 > ENDI_tickEnding(ENTITY_TABLE[0], 1)) {
@@ -1635,11 +1635,11 @@ void tamerTickEnding(void)
 
 void tamerTickSicknessLostLife(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		loadDynamicLibrary(MURD_REL, 0, 0, 0, 0);
 		MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 0);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if ((0 > MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 1)) &&
@@ -1654,10 +1654,10 @@ void tamerTickSicknessLostLife(void)
 
 void tamerTickMachinedramonSpawn(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		EAB_tick(ENTITY_TABLE[2], 0);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (0 > EAB_tick(ENTITY_TABLE[2], 1)) {
@@ -1670,11 +1670,11 @@ void tamerTickMachinedramonSpawn(void)
 
 void tamerTickBattleLostLife(void)
 {
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		loadDynamicLibrary(MURD_REL, 0, 0, 0, 0);
 		MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 0);
-		TAMER_SUBSTATE = 1;
+		TAMER_SUB_STATE = 1;
 		break;
 	case 1:
 		if (0 > MURD_tick((PartnerEntity *)ENTITY_TABLE[1], 1)) {
@@ -1692,19 +1692,19 @@ void tamerTickAwardSomething(void)
 	RECT sourceRect;
 	int16_t screenPos[2];
 
-	textRect = MAIN_D_8013420C;
+	textRect = AWARD_SOMETHING_TEXT_AREA;
 
-	switch (TAMER_SUBSTATE) {
+	switch (TAMER_SUB_STATE) {
 	case 0:
 		stopGameTime();
 		startAnimation(&TAMER_ENTITY.entity, 0);
 		partnerSetState(0xb);
 		unsetCameraFollowPlayer();
-		if (HAS_MEDAL_AWARD_PENDING == 1) {
-			TAMER_SUBSTATE = 1;
-		} else if (HAS_LEVELS_AWARD_PENDING == 1) {
+		if (MEDAL_AWARD_PENDING == 1) {
+			TAMER_SUB_STATE = 1;
+		} else if (TAMER_LEVEL_AWARD_PENDING == 1) {
 			clearTextArea();
-			if (LEVELS_INCREASED == 1) {
+			if (TAMER_LEVELS_AWARDED == 1) {
 				setTextColor(7);
 				drawString(MAIN_D_80122D94, 0, 0x78);
 			} else {
@@ -1712,25 +1712,25 @@ void tamerTickAwardSomething(void)
 				drawString(MAIN_D_80122DAC, 0, 0x78);
 			}
 			setTextColor(1);
-			TAMER_SUBSTATE = 4;
+			TAMER_SUB_STATE = 4;
 		} else {
-			TAMER_SUBSTATE = 4;
+			TAMER_SUB_STATE = 4;
 		}
 		break;
 	case 1:
 		clearTextArea();
 		setTextColor(7);
 		drawString(MAIN_D_80122DC8, 0, 0x78);
-		TAMER_SUBSTATE = 2;
+		TAMER_SUB_STATE = 2;
 		break;
 	case 2:
 		drawString(MAIN_D_80122DDC, 0, 0x84);
-		TAMER_SUBSTATE = 3;
+		TAMER_SUB_STATE = 3;
 		break;
 	case 3:
 		drawString(MAIN_D_80122DF4, 0, 0x90);
 		setTextColor(1);
-		TAMER_SUBSTATE = 4;
+		TAMER_SUB_STATE = 4;
 		break;
 	case 4:
 		if (isUIBoxAvailable(1) == 1) {
@@ -1740,17 +1740,17 @@ void tamerTickAwardSomething(void)
 				screenPos[0] - 5,
 				screenPos[1] - 5,
 				10, 10);
-			RECEIVED_ITEM_TYPE =
+			TAKE_CHEST_ITEM =
 				CHEST_ARRAY[INTERACTED_CHEST].item;
 			createAnimatedUIBox(1, 0, 2, &targetRect, &sourceRect,
 					    0, renderAwardSomethingTextbox);
-			TAMER_SUBSTATE = 5;
+			TAMER_SUB_STATE = 5;
 			playSound(0, 7);
 		}
 		break;
 	case 5:
 		if ((POLLED_INPUT & CONFIRM_BUTTON) != 0) {
-			TAKE_ITEM_FRAME_COUNT = 0;
+			TAKE_ITEM_FRAME_COUNTER = 0;
 			getEntityScreenPos(&TAMER_ENTITY.entity, 1,
 					   screenPos);
 			setRECT(&textRect,
@@ -1762,8 +1762,8 @@ void tamerTickAwardSomething(void)
 			partnerSetState(1);
 			setCameraFollowPlayer();
 			startGameTime();
-			HAS_MEDAL_AWARD_PENDING = 0;
-			HAS_LEVELS_AWARD_PENDING = 0;
+			MEDAL_AWARD_PENDING = 0;
+			TAMER_LEVEL_AWARD_PENDING = 0;
 			startGameTime();
 			setTextColor(1);
 		}

@@ -26,7 +26,7 @@ typedef struct
 
 extern MapEntry MAP_ENTRIES[];
 
-extern VECTOR TOILET_POS1;
-extern VECTOR TOILET_POS2;
+extern VECTOR TOILET_TARGET_POS1;
+extern VECTOR TOILET_TARGET_POS2;
 
 #endif

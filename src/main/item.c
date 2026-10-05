@@ -993,7 +993,7 @@ char STR_ITEM_DESC_DIGIVOLVE_TO_PANJYAMON[24] = "Digivolve to Panjyamon!";
 char STR_ITEM_DESC_DIGIVOLVE_TO_METALETEMON[] = "Digivolve to MetalEtemon!";
 #endif
 
-InventoryTable DEFAULT_ITEM_AMOUNTS = {
+InventoryTable INITIAL_INVENTORY_AMOUNTS = {
 	{
 		0x28, 0x19, 0x32, 0x1e, 0x14, 0x1e, 0x1e, 0x12,
 		0x1e, 0x1e, 0x1e, 0x14, 0x1e, 0x14, 0x1e, 0x32,
@@ -1002,7 +1002,7 @@ InventoryTable DEFAULT_ITEM_AMOUNTS = {
 	},
 };
 
-InventoryTable DEFAULT_ITEM_TYPES = {
+InventoryTable INITIAL_INVENTORY_TYPES = {
 	{
 		0x02, 0x09, 0x0c, 0x13, 0x14, 0x15, 0x30, 0x2b,
 		0x0e, 0x4b, 0x4f, 0x50, 0x55, 0x57, 0x58, 0x5b,
@@ -1017,7 +1017,7 @@ char IS_SICK_SUFFIX[] = "は病気になってしまった！";
 char IS_SICK_SUFFIX[] = " is sick!";
 #endif
 
-uint8_t MAIN_D_80125F70[7][7] = {
+uint8_t TYPE_FACTORS[7][7] = {
 	{ 0x0a, 0x0f, 0x05, 0x14, 0x14, 0x0f, 0x14 },
 	{ 0x0a, 0x0a, 0x02, 0x0f, 0x0a, 0x0a, 0x05 },
 	{ 0x0f, 0x0f, 0x0f, 0x05, 0x0f, 0x0f, 0x05 },
@@ -4367,7 +4367,7 @@ char *ITEM_DESC_PTR[128] = {
 };
 #endif
 
-uint8_t MAIN_D_80127BDC[128] = {
+uint8_t ITEM_CLUT_DATA[128] = {
 	0x00, 0x01, 0x12, 0x03, 0x04, 0x08, 0x06, 0x00,
 	0x08, 0x06, 0x07, 0x04, 0x08, 0x09, 0x09, 0x0a,
 	0x04, 0x0b, 0x08, 0x0c, 0x08, 0x0b, 0x0d, 0x0a,
@@ -4527,7 +4527,7 @@ ItemFunction ITEM_FUNCTIONS[128] = {
 };
 // clang-format on
 
-int16_t HEAL_AMOUNTS[4] = { 500, 1500, 5000, 9999 };
+int16_t HEALING_VALUES[4] = { 500, 1500, 5000, 9999 };
 uint8_t HEAL_EFFECT_VARIANT[4] = { 0, 0, 1, 1 };
 #if !defined(VERSION_JP)
 char NAME_FORMAT[] = "%s";
@@ -4758,9 +4758,9 @@ void handleDoubleFloppy(int32_t itemId)
 void handleMPHealingItem(uint8_t idx)
 {
 	if (PARTNER_ENTITY.digimonEntity.stats.current.currentHP != 0) {
-		addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.current.currentMP, HEAL_AMOUNTS[idx - 4], PARTNER_ENTITY.digimonEntity.stats.base.mp);
+		addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.current.currentMP, HEALING_VALUES[idx - 4], PARTNER_ENTITY.digimonEntity.stats.base.mp);
 		if (GAME_STATE == 1) {
-			addEntityText(ENTITY_TABLE[1], 0, 0xb, HEAL_AMOUNTS[idx - 4], 2);
+			addEntityText(ENTITY_TABLE[1], 0, 0xb, HEALING_VALUES[idx - 4], 2);
 		}
 		addHealingParticleEffect(ENTITY_TABLE[1], HEAL_EFFECT_VARIANT[idx - 4]);
 	}
@@ -4769,9 +4769,9 @@ void handleMPHealingItem(uint8_t idx)
 void handleHPHealingItem(uint8_t idx)
 {
 	if (PARTNER_ENTITY.digimonEntity.stats.current.currentHP != 0) {
-		addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.current.currentHP, HEAL_AMOUNTS[idx], PARTNER_ENTITY.digimonEntity.stats.base.hp);
+		addWithLimit(&PARTNER_ENTITY.digimonEntity.stats.current.currentHP, HEALING_VALUES[idx], PARTNER_ENTITY.digimonEntity.stats.base.hp);
 		if (GAME_STATE == 1) {
-			addEntityText(ENTITY_TABLE[1], 0, 0xb, HEAL_AMOUNTS[idx], 1);
+			addEntityText(ENTITY_TABLE[1], 0, 0xb, HEALING_VALUES[idx], 1);
 		}
 		addHealingParticleEffect(ENTITY_TABLE[1], HEAL_EFFECT_VARIANT[idx]);
 	}
@@ -5054,8 +5054,8 @@ void initializeInventory(void)
 	}
 
 	INVENTORY.size = 10;
-	amounts = DEFAULT_ITEM_AMOUNTS;
-	types = DEFAULT_ITEM_TYPES;
+	amounts = INITIAL_INVENTORY_AMOUNTS;
+	types = INITIAL_INVENTORY_TYPES;
 
 	for (i = 0; i < 30; ++i) {
 		INVENTORY.types.array[i] = types.array[i];

@@ -33,16 +33,16 @@ static void *trn_def_functions[] = {
 int16_t MAIN_D_80135380;
 uint32_t MAIN_D_80135384;
 int32_t MAIN_D_80135388;
-uint16_t MAIN_D_8013538C;
-int16_t MAIN_D_8013538E;
-int16_t MAIN_D_80135390;
+uint16_t TRN_CURRENT_FRAME;
+int16_t TRN_CURRENT_HOUR;
+int16_t TRN_CURRENT_MINUTE;
 uint8_t MAIN_D_80135392;
 
 static void *trn_def_sbss_order[] = {
 	&MAIN_D_80135392,
-	&MAIN_D_80135390,
-	&MAIN_D_8013538E,
-	&MAIN_D_8013538C,
+	&TRN_CURRENT_MINUTE,
+	&TRN_CURRENT_HOUR,
+	&TRN_CURRENT_FRAME,
 	&MAIN_D_80135388,
 	&MAIN_D_80135384,
 	&MAIN_D_80135380,
@@ -80,7 +80,7 @@ int16_t arg;
 
 	MAIN_D_80135370 = readPStat(0xf6);
 	TRN_saveTrainingStartTime();
-	MAIN_D_80135371 = 0;
+	TRAINING_STATE = 0;
 }
 
 void TRN_tickDefenseTraining(instanceId)
@@ -92,7 +92,7 @@ int16_t instanceId;
 	int32_t done;
 
 	loc = &PARTNER_ENTITY.digimonEntity.entity.posData->location;
-	switch (MAIN_D_80135371) {
+	switch (TRAINING_STATE) {
 	case 0:
 		storeMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
 		tamerSetState(8);
@@ -102,7 +102,7 @@ int16_t instanceId;
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
 		MAIN_D_8013537A = 0;
-		MAIN_D_80135371 = 1;
+		TRAINING_STATE = 1;
 		TRN_startSlotSessionIfEnabled(3);
 		break;
 	case 1:
@@ -110,7 +110,7 @@ int16_t instanceId;
 			PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0x400;
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x25);
 			MAIN_D_80135380 = 0;
-			MAIN_D_80135371 = 2;
+			TRAINING_STATE = 2;
 			if (MAIN_D_80135370 == 1) {
 				TRN_startSlotSpin();
 			}
@@ -127,7 +127,7 @@ int16_t instanceId;
 			createParticleFX(0, 0, &TRN_D_8008F340[1], NULL, 0);
 			createParticleFX(0, 0, &TRN_D_8008F340[2], NULL, 0);
 			MAIN_D_80135384 = playSound2(8, 4);
-			MAIN_D_80135371 = 3;
+			TRAINING_STATE = 3;
 		}
 		break;
 	case 3:
@@ -144,7 +144,7 @@ int16_t instanceId;
 		createCloudFX(pos);
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, -0x32, 0, TRN_D_8008F368[0] + 0x32, 0);
 		if (done == 1) {
-			MAIN_D_80135371 = 4;
+			TRAINING_STATE = 4;
 		}
 		break;
 	case 4:
@@ -161,7 +161,7 @@ int16_t instanceId;
 		createCloudFX(pos);
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, 0x32, 0, TRN_D_8008F368[0] + 0x5a, 0);
 		if (done == 1) {
-			MAIN_D_80135371 = 5;
+			TRAINING_STATE = 5;
 		}
 		break;
 	case 5:
@@ -171,7 +171,7 @@ int16_t instanceId;
 		}
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, -0x1e, 0, TRN_D_8008F368[0] + 0x3c, 0);
 		if (done == 1) {
-			MAIN_D_80135371 = 6;
+			TRAINING_STATE = 6;
 		}
 		break;
 	case 6:
@@ -181,7 +181,7 @@ int16_t instanceId;
 		}
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, 0x14, 0, TRN_D_8008F368[0] + 0x5a, 0);
 		if (done == 1) {
-			MAIN_D_80135371 = 7;
+			TRAINING_STATE = 7;
 		}
 		break;
 	case 7:
@@ -191,7 +191,7 @@ int16_t instanceId;
 		}
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, -0xa, 0, TRN_D_8008F368[0] + 0x46, 0);
 		if (done == 1) {
-			MAIN_D_80135371 = 8;
+			TRAINING_STATE = 8;
 		}
 		break;
 	case 8:
@@ -201,7 +201,7 @@ int16_t instanceId;
 		}
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, 5, 0, TRN_D_8008F368[0] + 0x5a, 0);
 		if (done == 1) {
-			MAIN_D_80135371 = 9;
+			TRAINING_STATE = 9;
 		}
 		break;
 	case 9:
@@ -213,7 +213,7 @@ int16_t instanceId;
 		if (done == 1) {
 			loadMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
-			MAIN_D_80135371 = 0xa;
+			TRAINING_STATE = 0xa;
 		}
 		break;
 	case 10:
@@ -231,18 +231,18 @@ int16_t instanceId;
 				playSound(8, 0xa);
 				thunkStopSoundMask(MAIN_D_80135384);
 				createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
-				MAIN_D_80135371 = 0xc;
+				TRAINING_STATE = 0xc;
 			} else {
 				PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0x400;
 				startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x25);
-				MAIN_D_80135371 = 2;
+				TRAINING_STATE = 2;
 			}
 		}
 		break;
 	case 12:
 		if (TRN_statGainsAreZero() == 1) {
 			MAIN_D_8013537C = 0;
-			MAIN_D_80135371 = 0xd;
+			TRAINING_STATE = 0xd;
 		}
 		break;
 	case 13:
@@ -250,7 +250,7 @@ int16_t instanceId;
 		if (MAIN_D_8013537C >= 0x14) {
 			MAIN_D_8013537C = 0;
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
-			MAIN_D_80135371 = 0xe;
+			TRAINING_STATE = 0xe;
 		}
 		break;
 	case 14:
@@ -262,7 +262,7 @@ int16_t instanceId;
 			setCameraFollowPlayer();
 			partnerSetState(1);
 			MAIN_D_8013537A = 0;
-			MAIN_D_80135371 = 0;
+			TRAINING_STATE = 0;
 			removeObject(0xfae, instanceId, TRN_tickDefenseTraining, NULL);
 			TRAINING_COMPLETE = 1;
 		}

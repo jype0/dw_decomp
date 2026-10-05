@@ -18,19 +18,19 @@ typedef struct {
 	TextBoxData box[6];
 } TextBoxTable;
 
-extern TextBoxTable MAIN_D_801BE80C;
+extern TextBoxTable TEXTBOX_LINES_USED;
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern int32_t MAIN_D_80134F94;
-extern uint16_t MAIN_D_801BE952[];
+extern uint16_t SELECTION_CURRENT[];
 extern uint16_t MAIN_D_801BE954[];
 extern uint16_t MAIN_D_801BE956[];
-extern uint16_t MAIN_D_801BE950[];
-extern int32_t MAIN_D_801BE948[];
-extern int32_t MAIN_D_801BE94C[];
+extern uint16_t SELECTION_COUNT[];
+extern int32_t SELECTION_POINTER[];
+extern int32_t SELECTION_END_POINTER[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
-extern int8_t MAIN_D_80134F98;
-extern int32_t CURRENT_SCRIPT_PTR;
+extern int8_t DRAW_STRING2_IS_FIXED_WIDTH;
+extern int32_t ACTIVE_SCRIPT;
 extern char *BGM_TRACK_NAMES[];
 extern char *TOURNAMENT_NAMES[];
 
@@ -104,8 +104,8 @@ void renderScriptDialogueBox(void)
 	int16_t y;
 	int16_t ySave;
 
-	rowPx = TEXT_BOX_DATA[0].vramRow * 12;
-	rowPx += (TEXT_BOX_DATA[0].backPage * 48);
+	rowPx = TEXTBOX_DATA[0].vramRow * 12;
+	rowPx += (TEXTBOX_DATA[0].backPage * 48);
 	x = UI_BOX_DATA[0].finalPos.x + 5;
 	y = UI_BOX_DATA[0].finalPos.y + 4;
 	ySave = y;
@@ -120,7 +120,7 @@ void renderScriptDialogueBox(void)
 
 	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
 		renderDialogueSelectionCursor(x, ySave);
-	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE && SCRIPT_STATE_3 == 2) {
+	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE && SCRIPT_TEXTBOX_MODE == 2) {
 		renderDialogueSelectionCursor(x, ySave);
 	}
 
@@ -149,7 +149,7 @@ int32_t drawTextboxStrings(boxId, flag)
 	int16_t row;
 	uint8_t *buf;
 
-	box = &MAIN_D_801BE80C.box[boxId];
+	box = &TEXTBOX_LINES_USED.box[boxId];
 	if (box->writeCount == box->renderCount) {
 		return 0;
 	}
@@ -157,7 +157,7 @@ int32_t drawTextboxStrings(boxId, flag)
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	px = x;
 	row = box->vramRow + box->writeRow;
-	buf = TEXT_BUFFERS_PTR + (row << 6);
+	buf = TEXTBOX_LINES_PTR + (row << 6);
 	if (x != 0) {
 		buf += 0x20;
 	}
@@ -198,7 +198,7 @@ void clearTextboxLineCount(boxId)
 	TextBoxData *entry;
 	int32_t rows;
 
-	entry = &MAIN_D_801BE80C.box[boxId];
+	entry = &TEXTBOX_LINES_USED.box[boxId];
 
 	rows = ((int32_t *)entry)[9];
 	if (entry->doubleBuffered == 1) {
@@ -207,7 +207,7 @@ void clearTextboxLineCount(boxId)
 
 	((int32_t *)entry)[9] = 0;
 	entry->registered = 1;
-	MAIN_D_801BE80C.usedRows -= rows;
+	TEXTBOX_LINES_USED.usedRows -= rows;
 }
 
 int32_t tickSelectionDialogue(void)
@@ -224,40 +224,40 @@ int32_t tickSelectionDialogue(void)
 		advanceTextbox(0);
 		playSound(0, 3);
 
-		return MAIN_D_801BE952[0];
+		return SELECTION_CURRENT[0];
 	}
 
 	if (isKeyDown(CANCEL_BUTTON)) {
 		if (isTriggerSet(0x31) == 0) {
 			if (ACTIVE_INSTRUCTION != SCRIPT_OP_CALL_ROUTINE) {
 				advanceTextbox(0);
-				MAIN_D_80134FDC =
-					(uint8_t *)MAIN_D_801BE94C[0];
+				SCRIPT_POINTER =
+					(uint8_t *)SELECTION_END_POINTER[0];
 				playSound(0, 4);
 
 				return 0xffff;
 			}
 
 			advanceTextbox(0);
-			MAIN_D_801BE952[0] = MAIN_D_801BE950[0] - 1;
+			SELECTION_CURRENT[0] = SELECTION_COUNT[0] - 1;
 			playSound(0, 4);
 
-			return MAIN_D_801BE952[0];
+			return SELECTION_CURRENT[0];
 		}
 
 		playSound(0, 0xb);
 	} else if (isKeyDown(0x1000)) {
-		if (MAIN_D_801BE952[0] == 0) {
-			MAIN_D_801BE952[0] = MAIN_D_801BE950[0] - 1;
+		if (SELECTION_CURRENT[0] == 0) {
+			SELECTION_CURRENT[0] = SELECTION_COUNT[0] - 1;
 		} else {
-			MAIN_D_801BE952[0] -= 1;
+			SELECTION_CURRENT[0] -= 1;
 		}
 
 		playSound(0, 2);
 	} else if (isKeyDown(0x4000)) {
-		MAIN_D_801BE952[0] += 1;
-		if (MAIN_D_801BE952[0] == MAIN_D_801BE950[0]) {
-			MAIN_D_801BE952[0] = 0;
+		SELECTION_CURRENT[0] += 1;
+		if (SELECTION_CURRENT[0] == SELECTION_COUNT[0]) {
+			SELECTION_CURRENT[0] = 0;
 		}
 
 		playSound(0, 2);
@@ -271,7 +271,7 @@ int32_t tickConfirmDialogue(void)
 		return 0;
 	}
 
-	if (MAIN_D_80134FE5 == 0) {
+	if (TEXTBOX_CLOSE_MODE == 0) {
 		MAIN_D_80134F94 = 1;
 	}
 
@@ -279,7 +279,7 @@ int32_t tickConfirmDialogue(void)
 		return 0;
 	}
 
-	switch (MAIN_D_80134FE5) {
+	switch (TEXTBOX_CLOSE_MODE) {
 	case 0:
 		if (isKeyDown(CONFIRM_BUTTON) == 0) {
 			goto ret0;
@@ -289,7 +289,7 @@ int32_t tickConfirmDialogue(void)
 			goto ret0;
 		}
 
-		if (TEXT_BOX_DATA[0].doubleBuffered == 1) {
+		if (TEXTBOX_DATA[0].doubleBuffered == 1) {
 			advanceTextbox(0);
 			playSound(0, 3);
 			return 1;
@@ -299,12 +299,12 @@ int32_t tickConfirmDialogue(void)
 			return 1;
 		}
 	case 2:
-		if (MAIN_D_80135010 != 0) {
+		if (AUTOCLOSE_FRAMES != 0) {
 			goto ret0;
 		}
 		/* fall through */
 	case 1:
-		if (TEXT_BOX_DATA[0].doubleBuffered == 1) {
+		if (TEXTBOX_DATA[0].doubleBuffered == 1) {
 			advanceTextbox(0);
 			return 1;
 		} else {
@@ -322,16 +322,16 @@ void renderDialogueSelectionCursor(x, y)
 	int16_t y;
 // clang-format on
 {
-	if (TEXT_BOX_DATA[0].idle == 1) {
+	if (TEXTBOX_DATA[0].idle == 1) {
 		return;
 	}
 
 #if defined(VERSION_JP)
-	renderSelectionCursor(x - 1, (long)y + MAIN_D_801BE954[0] + MAIN_D_801BE952[0] * 13,
+	renderSelectionCursor(x - 1, (long)y + MAIN_D_801BE954[0] + SELECTION_CURRENT[0] * 13,
 	                      MAIN_D_801BE956[0], 0xd, 6);
 #else
 	renderSelectionCursor(x - 1,
-	                      y + MAIN_D_801BE954[0] + MAIN_D_801BE952[0] * 13 - 2,
+	                      y + MAIN_D_801BE954[0] + SELECTION_CURRENT[0] * 13 - 2,
 	                      MAIN_D_801BE956[0], 0xd, 6);
 #endif
 }
@@ -365,12 +365,12 @@ void tickCustomSizedTextbox(void)
 	}
 
 	if (UI_BOX_DATA[0].state == 1) {
-		while (TEXT_BOX_DATA[0].pageReady == 0) {
+		while (TEXTBOX_DATA[0].pageReady == 0) {
 			showTextbox(0, 0xff);
 		}
 
 		ACTIVE_INSTRUCTION = 0;
-		TEXT_BOX_DATA[0].idle = 1;
+		TEXTBOX_DATA[0].idle = 1;
 		triggerBoxCloseFlag(0);
 		playSound(0, 4);
 	}
@@ -385,7 +385,7 @@ void renderCustomSizedTextbox(void)
 	int16_t y;
 	int32_t i;
 
-	box = MAIN_D_801BE80C.box;
+	box = TEXTBOX_LINES_USED.box;
 	pagePx = box->vramRows * 12;
 	rowPx = box->vramRow * 12;
 	rowPx += (int16_t)(box->backPage * pagePx);
@@ -402,15 +402,15 @@ void initializeTextbox(void)
 	TextBoxData *box;
 	int32_t i;
 
-	for (i = 0, box = TEXT_BOX_DATA; i < 6; i++, box++) {
+	for (i = 0, box = TEXTBOX_DATA; i < 6; i++, box++) {
 		box->flags = 0;
 		box->vramRows = 0;
 		box->registered = 1;
 	}
 
-	MAIN_D_801BE80C.usedRows = 0;
-	MAIN_D_80134FFC = 0;
-	MAIN_D_80135010 = 0;
+	TEXTBOX_LINES_USED.usedRows = 0;
+	DELAY_FRAMES = 0;
+	AUTOCLOSE_FRAMES = 0;
 	TEXTBOX_OPEN_TIMER = 0;
 }
 
@@ -432,7 +432,7 @@ void tickTextboxHandling(int32_t flag)
 
 	drew = 0;
 	if (ACTIVE_INSTRUCTION != 0xff) {
-		for (i = 0, box = TEXT_BOX_DATA; i < 6; i++, box++) {
+		for (i = 0, box = TEXTBOX_DATA; i < 6; i++, box++) {
 			if (box->vramRows != 0) {
 				if (box->registered == 1 && box->writeCount != box->renderCount) {
 					if (box->doubleBuffered == 1) {
@@ -478,11 +478,11 @@ void tickTextboxHandling(int32_t flag)
 				}
 			}
 		}
-		if (MAIN_D_80134FFC != 0) {
-			MAIN_D_80134FFC--;
+		if (DELAY_FRAMES != 0) {
+			DELAY_FRAMES--;
 		}
-		if (MAIN_D_80135010 != 0) {
-			MAIN_D_80135010--;
+		if (AUTOCLOSE_FRAMES != 0) {
+			AUTOCLOSE_FRAMES--;
 		}
 		TEXTBOX_OPEN_TIMER++;
 		MAIN_D_80134F94 = 0;
@@ -518,7 +518,7 @@ void closeTextbox(boxId, target)
 // clang-format on
 {
 	if (UI_BOX_DATA[boxId].state != 0 && UI_BOX_DATA[boxId].state != 3) {
-		if ((MAIN_D_801BE80C.box[boxId].flags & 0x40) == 0) {
+		if ((TEXTBOX_LINES_USED.box[boxId].flags & 0x40) == 0) {
 			removeStaticUIBox(boxId);
 		} else {
 			removeAnimatedUIBox(boxId, target);
@@ -534,7 +534,7 @@ void closeAllTextboxes(void)
 	uint8_t flags;
 
 	for (i = 0; i < 6; i++) {
-		flags = MAIN_D_801BE80C.box[i].flags;
+		flags = TEXTBOX_LINES_USED.box[i].flags;
 		if ((flags & 0xf) != 0) {
 			if (flags & 0x40) {
 				ACTIVE_INSTRUCTION = 0xff;
@@ -558,7 +558,7 @@ void createTextbox(boxId, flags, rect, origin, tick, render)
 {
 	TextBoxData *entry;
 
-	entry = &MAIN_D_801BE80C.box[boxId];
+	entry = &TEXTBOX_LINES_USED.box[boxId];
 
 	if ((entry->flags & 0xf) == 1) {
 		closeTextbox(boxId, 0);
@@ -578,7 +578,7 @@ void triggerBoxCloseFlag(boxId)
 	uint8_t boxId;
 // clang-format on
 {
-	TextBoxData *e = &MAIN_D_801BE80C.box[boxId];
+	TextBoxData *e = &TEXTBOX_LINES_USED.box[boxId];
 	uint8_t val = e->flags;
 
 	if ((val & 0xf) != 0) {
@@ -602,7 +602,7 @@ void registerTextbox(boxId, row, rows, doubleBuffer, mode)
 	int32_t vramX;
 	int32_t vramW;
 
-	entry = &MAIN_D_801BE80C.box[boxId];
+	entry = &TEXTBOX_LINES_USED.box[boxId];
 	entry->vramRow = row;
 	entry->vramRows = rows;
 	entry->writeRow = 0;
@@ -621,7 +621,7 @@ void registerTextbox(boxId, row, rows, doubleBuffer, mode)
 		usedRows = usedRows << 1;
 	}
 
-	MAIN_D_801BE80C.usedRows += usedRows;
+	TEXTBOX_LINES_USED.usedRows += usedRows;
 	setTextColor(1);
 	getVRAMModeCoords(entry->vramMode, &vramX, &vramW);
 	setRECT(&rect, vramX, entry->vramRow * 12, vramW, usedRows * 12);
@@ -758,7 +758,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 #else
 				y2 = y;
 				adv = drawGlyph(glyph, x + pos, y2);
-				if (MAIN_D_80134F98 != 0) {
+				if (DRAW_STRING2_IS_FIXED_WIDTH != 0) {
 					adv = 0xc;
 				}
 #endif
@@ -781,7 +781,7 @@ int32_t flipIdleTextboxPage(boxId)
 {
 	TextBoxData *entry;
 
-	entry = &MAIN_D_801BE80C.box[boxId];
+	entry = &TEXTBOX_LINES_USED.box[boxId];
 
 	if (entry->doubleBuffered == 0) {
 		return 0;
@@ -826,7 +826,7 @@ int32_t tickBackgroundDialogue(void)
 {
 	TextBoxData *entry;
 
-	entry = TEXT_BOX_DATA;
+	entry = TEXTBOX_DATA;
 
 	if (flipIdleTextboxPage(0) != 0) {
 		return 0;
@@ -848,7 +848,7 @@ int32_t advanceTextbox(boxId)
 {
 	TextBoxData *entry;
 
-	entry = &MAIN_D_801BE80C.box[boxId];
+	entry = &TEXTBOX_LINES_USED.box[boxId];
 	if (entry->registered == 0) {
 		return 0;
 	}
@@ -898,12 +898,12 @@ int32_t setupBoxOrigin(int32_t ownerId, RECT *origin)
 		return 0;
 	}
 
-	if (MAIN_D_80134FD2 != -0x270f) {
-		worldPosToScreenPos2(&MAIN_D_80134FD2, &MAIN_D_80134FD4,
-		                     &MAIN_D_80134FD6);
-		pos[0] = MAIN_D_80134FD2 - 5;
-		pos[1] = MAIN_D_80134FD4 - 5;
-		MAIN_D_80134FD2 = -0x270f;
+	if (TEXTBOX_ORIGIN_X != -0x270f) {
+		worldPosToScreenPos2(&TEXTBOX_ORIGIN_X, &TEXTBOX_ORIGIN_Y,
+		                     &TEXTBOX_ORIGIN_Z);
+		pos[0] = TEXTBOX_ORIGIN_X - 5;
+		pos[1] = TEXTBOX_ORIGIN_Y - 5;
+		TEXTBOX_ORIGIN_X = -0x270f;
 	} else {
 		int32_t entityId = scriptIdToEntityId(ownerId) & 0xff;
 		if (entityId == 0xff) {
@@ -922,37 +922,37 @@ void tickScriptDialogueBox(void)
 {
 	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
 		if (tickSelectionDialogue() != 0xffff) {
-			MAIN_D_80134FDC =
-				(uint8_t *)((uint32_t)MAIN_D_801BE948[0] +
-			                    MAIN_D_801BE952[0] * 2);
-			MAIN_D_80134FDC =
-				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
-			                    *(uint16_t *)MAIN_D_80134FDC);
+			SCRIPT_POINTER =
+				(uint8_t *)((uint32_t)SELECTION_POINTER[0] +
+			                    SELECTION_CURRENT[0] * 2);
+			SCRIPT_POINTER =
+				(uint8_t *)((uint32_t)ACTIVE_SCRIPT +
+			                    *(uint16_t *)SCRIPT_POINTER);
 		}
 	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_SHOW_TEXTBOX) {
 		tickConfirmDialogue();
 	} else if (ACTIVE_INSTRUCTION == SCRIPT_OP_CALL_ROUTINE) {
-		switch (SCRIPT_STATE_3) {
+		switch (SCRIPT_TEXTBOX_MODE) {
 		case 0:
 			break;
 		case 1:
 			if (tickConfirmDialogue() == 1) {
-				SELECTION_MENU_STATE = SCRIPT_STATE_4;
+				SCRIPT_STATE_2 = SCRIPT_NEXT_STATE_2;
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-				SCRIPT_STATE_3 = 0;
+				SCRIPT_TEXTBOX_MODE = 0;
 			}
 			break;
 		case 2:
 			if (tickSelectionDialogue() != 0xffff) {
-				SELECTION_MENU_STATE = (long)SCRIPT_STATE_4 + MAIN_D_801BE952[0];
+				SCRIPT_STATE_2 = (long)SCRIPT_NEXT_STATE_2 + SELECTION_CURRENT[0];
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-				SCRIPT_STATE_3 = 0;
+				SCRIPT_TEXTBOX_MODE = 0;
 			}
 			break;
 		case 3:
 			if (tickBackgroundDialogue() == 1) {
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-				SCRIPT_STATE_3 = 0;
+				SCRIPT_TEXTBOX_MODE = 0;
 			}
 			break;
 		}
@@ -989,11 +989,11 @@ void scriptShowSelection(void)
 
 	pollNextScriptUByte(&optionCount);
 
-	MAIN_D_801BE950[0] = optionCount;
-	MAIN_D_801BE952[0] = 0;
-	MAIN_D_801BE948[0] = (int32_t)MAIN_D_80134FDC;
-	MAIN_D_80134FDC = MAIN_D_80134FDC + (optionCount + 1) * 2;
-	MAIN_D_801BE956[0] = showTextbox(0, MAIN_D_80134FE6);
+	SELECTION_COUNT[0] = optionCount;
+	SELECTION_CURRENT[0] = 0;
+	SELECTION_POINTER[0] = (int32_t)SCRIPT_POINTER;
+	SCRIPT_POINTER = SCRIPT_POINTER + (optionCount + 1) * 2;
+	MAIN_D_801BE956[0] = showTextbox(0, CURRENT_DIALOGUE_OWNER);
 	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
 #if !defined(VERSION_JP)
 	height = MAIN_D_801BE956[0];
@@ -1003,10 +1003,10 @@ void scriptShowSelection(void)
 	}
 #endif
 
-	MAIN_D_80134FDC += 2;
-	MAIN_D_801BE94C[0] = (int32_t)MAIN_D_80134FDC;
+	SCRIPT_POINTER += 2;
+	SELECTION_END_POINTER[0] = (int32_t)SCRIPT_POINTER;
 
-	if (MAIN_D_80134FE6 != 0xff) {
+	if (CURRENT_DIALOGUE_OWNER != 0xff) {
 		MAIN_D_801BE954[0] = 0xd;
 	} else {
 		MAIN_D_801BE954[0] = 0;
@@ -1028,8 +1028,8 @@ uint16_t showTextbox(uint8_t boxId, uint8_t speakerId)
 	int32_t lines;
 	uint8_t ctrl;
 
-	entry = &MAIN_D_801BE80C.box[boxId];
-	base = TEXT_BUFFERS_PTR + (entry->vramRow << 6);
+	entry = &TEXTBOX_LINES_USED.box[boxId];
+	base = TEXTBOX_LINES_PTR + (entry->vramRow << 6);
 	if (entry->vramMode == 2) {
 		base += 0x20;
 	}
@@ -1060,34 +1060,34 @@ uint16_t showTextbox(uint8_t boxId, uint8_t speakerId)
 		out = base + (row << 6);
 	}
 top: {
-	ctrl = *MAIN_D_80134FDC++;
+	ctrl = *SCRIPT_POINTER++;
 	{
 		switch (ctrl) {
 		case 3:
 			*out++ = ctrl;
-			*out++ = *MAIN_D_80134FDC++;
-			*out++ = *MAIN_D_80134FDC++;
-			*out++ = *MAIN_D_80134FDC++;
+			*out++ = *SCRIPT_POINTER++;
+			*out++ = *SCRIPT_POINTER++;
+			*out++ = *SCRIPT_POINTER++;
 			goto top;
 		case 4:
-			ctrl = *MAIN_D_80134FDC++;
+			ctrl = *SCRIPT_POINTER++;
 			ctrl = readPStat(ctrl);
 			out = intToStringSJIS(out, ctrl, 3, 1);
 			goto top;
 		case 5:
-			MAIN_D_80134FDC++;
+			SCRIPT_POINTER++;
 			lines = getSpeakerName(0xfd, out);
 			out += lines;
 			col += (uint16_t)(lines >> 1);
 			goto top;
 		case 6:
-			MAIN_D_80134FDC++;
+			SCRIPT_POINTER++;
 			lines = getSpeakerName(0xfc, out);
 			out += lines;
 			col += (uint16_t)(lines >> 1);
 			goto top;
 		case 7:
-			ctrl = *MAIN_D_80134FDC++;
+			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
 				strcpy(out,
@@ -1099,7 +1099,7 @@ top: {
 			}
 			goto top;
 		case 8:
-			ctrl = *MAIN_D_80134FDC++;
+			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
 				strcpy(out, MOVE_NAMES[ctrl]);
@@ -1109,7 +1109,7 @@ top: {
 			}
 			goto top;
 		case 9:
-			ctrl = *MAIN_D_80134FDC++;
+			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
 				strcpy(out,
@@ -1121,31 +1121,31 @@ top: {
 			}
 			goto top;
 		case 10:
-			MAIN_D_80134FDC++;
+			SCRIPT_POINTER++;
 			out = intToStringSJIS(out, MONEY, 6, 0);
 			goto top;
 		case 11:
-			MAIN_D_80134FDC++;
+			SCRIPT_POINTER++;
 			out = intToStringSJIS(out, MERIT, 4, 0);
 			goto top;
 		case 16:
-			MAIN_D_80134FDC++;
-			out = intToStringSJIS(out, MAIN_D_8013500C, 5, 1);
+			SCRIPT_POINTER++;
+			out = intToStringSJIS(out, SHOP_VARIABLE, 5, 1);
 			goto top;
 		case 19:
-			MAIN_D_80134FDC++;
-			out = intToStringSJIS(out, MAIN_D_80134FCC, 3, 1);
+			SCRIPT_POINTER++;
+			out = intToStringSJIS(out, TOURNAMENTS_WON, 3, 1);
 			goto top;
 		case 20:
-			MAIN_D_80134FDC++;
-			out = intToStringSJIS(out, TOURNAMENTS_LOST, 3, 1);
+			SCRIPT_POINTER++;
+			out = intToStringSJIS(out, TOURNAMENT_WINS, 3, 1);
 			goto top;
 		case 21:
-			MAIN_D_80134FDC++;
-			out = intToStringSJIS(out, MAIN_D_80134FD0, 3, 1);
+			SCRIPT_POINTER++;
+			out = intToStringSJIS(out, TOURNAMENTS_LOST, 3, 1);
 			goto top;
 		case 17:
-			ctrl = *MAIN_D_80134FDC++;
+			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
 				strcpy(out, BGM_TRACK_NAMES[ctrl]);
@@ -1155,7 +1155,7 @@ top: {
 			}
 			goto top;
 		case 18:
-			ctrl = *MAIN_D_80134FDC++;
+			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
 				strcpy(out, TOURNAMENT_NAMES[ctrl]);
@@ -1166,25 +1166,25 @@ top: {
 			goto top;
 		case 12:
 			*out++ = ctrl;
-			*out++ = *MAIN_D_80134FDC++;
+			*out++ = *SCRIPT_POINTER++;
 			goto top;
 		case 14:
 			*out++ = ctrl;
-			*out++ = *MAIN_D_80134FDC++;
+			*out++ = *SCRIPT_POINTER++;
 			goto top;
 		case 13:
 			*out++ = ctrl;
-			*out++ = *MAIN_D_80134FDC++;
+			*out++ = *SCRIPT_POINTER++;
 			if (col > maxCol) {
 				maxCol = col;
 			}
 			col = 0;
-			ctrl = *MAIN_D_80134FDC;
+			ctrl = *SCRIPT_POINTER;
 			if (ctrl == 0) {
-				MAIN_D_80134FDC += 2;
+				SCRIPT_POINTER += 2;
 				out -= 2;
 				*out = ctrl;
-				ctrl = *MAIN_D_80134FDC;
+				ctrl = *SCRIPT_POINTER;
 				if (ctrl == SCRIPT_OP_SHOW_TEXTBOX) {
 					goto done;
 				}
@@ -1197,12 +1197,12 @@ top: {
 		case 1:
 		case 2:
 			*out++ = ctrl;
-			*out++ = *MAIN_D_80134FDC++;
+			*out++ = *SCRIPT_POINTER++;
 			goto top;
 		case 15:
 		default:
 			*out++ = ctrl;
-			*out++ = *MAIN_D_80134FDC++;
+			*out++ = *SCRIPT_POINTER++;
 			col++;
 			goto top;
 		}
@@ -1244,7 +1244,7 @@ void scriptSetTextboxSize(void)
 
 uint16_t showTextboxReady(uint8_t boxId, uint8_t speakerId)
 {
-	MAIN_D_801BE80C.box[boxId].pageReady = 1;
+	TEXTBOX_LINES_USED.box[boxId].pageReady = 1;
 
 	return showTextbox(boxId, speakerId);
 }

@@ -18,7 +18,7 @@ int32_t lookupFileTable(FileLookup *lookup, char *path)
 	char *filename;
 	FileEntry *entry;
 
-	entry = (FileEntry *)&FILE_TABLE;
+	entry = (FileEntry *)&FILE_OFFSET_TABLE;
 	if (NULL == (filename = strrchr(path, '\\'))) {
 		filename = path;
 	} else {

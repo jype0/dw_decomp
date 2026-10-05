@@ -39,13 +39,13 @@ extern uint8_t INVENTORY_POINTER;
 extern StatsGains INITIAL_COMBAT_STATS[];
 
 
-extern GsOT_TAG GS_ORDERING_TABLE_0[];
-extern GsOT_TAG GS_ORDERING_TABLE_1[];
+extern GsOT_TAG GS_OT_TAGS_0[];
+extern GsOT_TAG GS_OT_TAGS_1[];
 extern GsOT GS_ORDERING_TABLE[2];
 
 extern int32_t ACTIVE_FRAMEBUFFER;
 
-extern int32_t MAIN_D_80134EAC;
+extern int32_t FIRST_SCREEN_FRAME_COUNTER;
 typedef struct {
 	int16_t spawnX[10];
 	int16_t spawnY[10];
@@ -78,7 +78,7 @@ extern int16_t FADE_OUT_CURRENT;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 
-extern DR_OFFSET DRAW_OFFSETS[];
+extern DR_OFFSET DR_OFFSETS[];
 
 extern uint8_t MAP_LAYER_ENABLED;
 
@@ -168,17 +168,17 @@ void initializeFadeData(void);
 int32_t loadTIMFile(char *path, void *buffer);
 
 extern int8_t MAIN_STATE;
-extern int32_t MAIN_D_80134EB0;
-extern int32_t MAIN_D_80155670[];
-extern uint8_t MAIN_D_80155725[];
+extern int32_t FIRST_SCREEN_PRESSED_START;
+extern int32_t SAVED_PARTNER_TYPE[];
+extern uint8_t SAVED_CURRENT_SCREEN[];
 
 int32_t main(void);
 void applyDrawOffset(int32_t offset);
 extern int32_t POLLED_INPUT;
 extern int32_t POLLED_INPUT_PREVIOUS;
 extern int32_t CHANGED_INPUT;
-extern int32_t MAIN_D_80134EA4;
-extern int32_t MAIN_D_80134EA8;
+extern int32_t GAME_INPUT_REPEAT_TIMER;
+extern int32_t MENU_INPUT_REPEAT_TIMER;
 void pollInputGame(void);
 void pollInputMenu(void);
 void renderPressStartToContinue(void);
@@ -215,9 +215,9 @@ void *main_order_anchor[] = {
 
 // clang-format off
 #if !defined(VERSION_JP)
-DVECTOR MAIN_D_801344DC = { 0x00a0, 0x0078 };
+DVECTOR DRAW_OFFSET_0 = { 0x00a0, 0x0078 };
 
-DVECTOR MAIN_D_801344E0 = { 0x00a0, 0x0168 };
+DVECTOR DRAW_OFFSET_1 = { 0x00a0, 0x0168 };
 #endif
 
 GsOT_TAG *FRAMEBUFFER0_ORIGIN = (GsOT_TAG *)(TEXTURE_BUFFER + 0x28);
@@ -6018,7 +6018,7 @@ Entity *ENTITY_TABLE[10] = {
 	NULL,
 };
 
-int16_t MAIN_D_8012F36C[24] = {
+int16_t ITEM_THROW_HEIGHT[24] = {
 	0xff10, 0xfea7, 0xfe48, 0xfdf3, 0xfda8, 0xfd67, 0xfd30, 0xfd03,
 	0xfce0, 0xfcc7, 0xfcb8, 0xfcb3, 0xfcb8, 0xfcc7, 0xfce0, 0xfd03,
 	0xfd30, 0xfd67, 0xfda8, 0xfdf3, 0xfe48, 0xfea7, 0xff10, 0xff83,
@@ -6059,8 +6059,8 @@ int32_t main(void)
 
 	for (;;) {
 		loadTIMFile(MAIN_D_8012CE78, GENERAL_BUFFER_PTR);
-		MAIN_D_80134EB0 = 0;
-		while (MAIN_D_80134EB0 == 0) {
+		FIRST_SCREEN_PRESSED_START = 0;
+		while (FIRST_SCREEN_PRESSED_START == 0) {
 			playMovie(0, 1);
 			initializeMusic();
 			runLandingScreen();
@@ -6095,10 +6095,10 @@ int32_t main(void)
 		case 1:
 			loadStackedTIMFile(MAIN_D_8012CE8C);
 			initializeTamer(0, 0, 0, 0, 0, 0, 0);
-			initializePartner(MAIN_D_80155670[0], 0, 0, 0, 0, 0, 0);
+			initializePartner(SAVED_PARTNER_TYPE[0], 0, 0, 0, 0, 0, 0);
 			initializeMap();
 			initializeChest();
-			runMapHeadScript(MAIN_D_80155725[0]);
+			runMapHeadScript(SAVED_CURRENT_SCREEN[0]);
 			initializeLoadedMap();
 			addClock();
 #if !defined(VERSION_JP)
@@ -6113,10 +6113,10 @@ int32_t main(void)
 			initializeMusic();
 			loadStackedTIMFile(MAIN_D_8012CE8C);
 			initializeTamer(0, 0, 0, 0, 0, 0, 0);
-			initializePartner(MAIN_D_80155670[0], 0, 0, 0, 0, 0, 0);
+			initializePartner(SAVED_PARTNER_TYPE[0], 0, 0, 0, 0, 0, 0);
 			initializeMap();
 			initializeChest();
-			runMapHeadScript(MAIN_D_80155725[0]);
+			runMapHeadScript(SAVED_CURRENT_SCREEN[0]);
 			initializeLoadedMap();
 			addClock();
 #if !defined(VERSION_JP)
@@ -6166,8 +6166,8 @@ void initializeFramebuffer(void)
 	DVECTOR ofs1;
 	RECT rect;
 
-	ofs0 = MAIN_D_801344DC;
-	ofs1 = MAIN_D_801344E0;
+	ofs0 = DRAW_OFFSET_0;
+	ofs1 = DRAW_OFFSET_1;
 #endif
 
 	SetDispMask(0);
@@ -6178,17 +6178,17 @@ void initializeFramebuffer(void)
 	ClearImage(&rect, 0, 0, 0);
 
 	GS_ORDERING_TABLE[0].length = 12;
-	GS_ORDERING_TABLE[0].org = GS_ORDERING_TABLE_0;
+	GS_ORDERING_TABLE[0].org = GS_OT_TAGS_0;
 	GS_ORDERING_TABLE[1].length = 12;
-	GS_ORDERING_TABLE[1].org = GS_ORDERING_TABLE_1;
+	GS_ORDERING_TABLE[1].org = GS_OT_TAGS_1;
 
 	GsInit3D();
 
 	DRAWING_OFFSET_X = 160;
 	DRAWING_OFFSET_Y = 120;
 
-	SetDrawOffset(&DRAW_OFFSETS[0], (u_short *)&ofs1);
-	SetDrawOffset(&DRAW_OFFSETS[1], (u_short *)&ofs0);
+	SetDrawOffset(&DR_OFFSETS[0], (u_short *)&ofs1);
+	SetDrawOffset(&DR_OFFSETS[1], (u_short *)&ofs0);
 
 	MAP_LAYER_ENABLED = 1;
 
@@ -6212,7 +6212,7 @@ void runLandingScreen(void)
 		if ((POLLED_INPUT & 0x800) != 0) {
 			if ((FADE_OUT_CURRENT == 0) && (FADE_IN_CURRENT == 0)) {
 				playSound(0, 3);
-				MAIN_D_80134EB0 = 1;
+				FIRST_SCREEN_PRESSED_START = 1;
 				goto fade;
 			}
 		}
@@ -6273,7 +6273,7 @@ void runMainMenu(void)
 		GsSetWorkBase(&GS_WORK_BASES[ACTIVE_FRAMEBUFFER * 0x14000]);
 		GsClearOt(0, 0, &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER]);
 		AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80,
-			&DRAW_OFFSETS[ACTIVE_FRAMEBUFFER]);
+			&DR_OFFSETS[ACTIVE_FRAMEBUFFER]);
 		pollInputMenu();
 		tickObjects();
 		renderObjects();
@@ -6341,8 +6341,8 @@ void newGameScene(void)
 	unloadNewGameScene();
 }
 
-extern VECTOR SAVE_TAMER_POS;
-extern VECTOR SAVE_PARTNER_POS;
+extern VECTOR SAVED_PLAYER_POS;
+extern VECTOR SAVED_PARTNER_POS;
 extern VECTOR STORED_TAMER_POS;
 typedef struct {
 	uint8_t *imagePtr;
@@ -6357,28 +6357,28 @@ typedef struct {
 extern MapTileData MAP_TILE_DATA[];
 void initializeDrawingOffsets(MapTileData *tiles);
 int32_t entityCheckCollision(Entity *source, Entity *entity, int32_t arg2, int32_t arg3);
-extern uint8_t SAVE_CURRENT_EXIT[];
-extern Stats SAVE_STATS;
-extern int8_t MAIN_D_8015571C[];
-extern int32_t MAIN_D_80155674[];
+extern uint8_t SAVED_CURRENT_EXIT[];
+extern Stats SAVED_PARTNER_STATS;
+extern int8_t SAVED_LIVES[];
+extern int32_t SAVED_MONEY[];
 extern int32_t MONEY;
-extern PartnerPara SAVE_PARTNER_PARA;
-extern uint8_t SAVE_PREVIOUS_SCREEN[];
+extern PartnerPara SAVED_PARTNER_PARA;
+extern uint8_t SAVED_PREVIOUS_SCREEN[];
 extern uint8_t PREVIOUS_SCREEN;
-extern uint8_t SAVE_PREVIOUS_EXIT[];
+extern uint8_t SAVED_PREVIOUS_EXIT[];
 extern uint8_t PREVIOUS_EXIT;
-extern int8_t SAVE_TAMER_WAYPOINT_X[];
-extern int8_t SAVE_TAMER_WAYPOINT_Y[];
-extern int8_t SAVE_TAMER_PREVIOUS_TILE_X[];
-extern int8_t SAVE_TAMER_PREVIOUS_TILE_Y[];
+extern int8_t SAVED_TAMER_WAYPOINT_X[];
+extern int8_t SAVED_TAMER_WAYPOINT_Y[];
+extern int8_t SAVED_TAMER_PREVIOUS_TILE_X[];
+extern int8_t SAVED_TAMER_PREVIOUS_TILE_Y[];
 extern int8_t TAMER_PREVIOUS_TILE_X;
 extern int8_t TAMER_PREVIOUS_TILE_Y;
-extern int8_t SAVE_TAMER_WAYPOINT_CURRENT[];
+extern int8_t SAVED_TAMER_WAYPOINT_CURRENT[];
 extern int8_t TAMER_WAYPOINT_CURRENT;
-extern int8_t SAVE_TAMER_WAYPOINT_COUNT[];
-extern int8_t SAVE_TAMER_START_TILE_X[];
-extern int8_t SAVE_TAMER_START_TILE_Y[];
-extern int8_t SAVE_TAMER_WAYPOINT_ACTIVE[];
+extern int8_t SAVED_TAMER_WAYPOINT_COUNT[];
+extern int8_t SAVED_TAMER_START_TILE_X[];
+extern int8_t SAVED_TAMER_START_TILE_Y[];
+extern int8_t SAVED_TAMER_WAYPOINT_ACTIVE[];
 extern int8_t TAMER_WAYPOINT_ACTIVE;
 extern int32_t CAMERA_UPDATE_TILES;
 void createCameraMovement(VECTOR *target, int32_t instanceId);
@@ -6405,8 +6405,8 @@ void initializeLoadedMap(void)
 	int16_t idx;
 	int16_t exit;
 
-	STORED_TAMER_POS = TAMER_ENTITY.entity.posData->location = SAVE_TAMER_POS;
-	PARTNER_ENTITY.digimonEntity.entity.posData->location = SAVE_PARTNER_POS;
+	STORED_TAMER_POS = TAMER_ENTITY.entity.posData->location = SAVED_PLAYER_POS;
+	PARTNER_ENTITY.digimonEntity.entity.posData->location = SAVED_PARTNER_POS;
 	initializeDrawingOffsets(MAP_TILE_DATA);
 
 	for (i = 0; i < 8; i++) {
@@ -6428,11 +6428,11 @@ void initializeLoadedMap(void)
 	if ((idx >= 2) && (idx < 10)) {
 		type = ENTITY_TABLE[idx]->type;
 		if ((type == 0x6d) || (type >= 0x75) ||
-		    ((type == 0x5c) && (MAIN_D_80155725[0] == 0x9b)) ||
-		    ((type == 0x6a) && (MAIN_D_80155725[0] == 0x55)) ||
+		    ((type == 0x5c) && (SAVED_CURRENT_SCREEN[0] == 0x9b)) ||
+		    ((type == 0x6a) && (SAVED_CURRENT_SCREEN[0] == 0x55)) ||
 		    (type == 1) || (type == 2) || (type == 0xf) || (type == 0x10) ||
 		    (type == 0x1d) || (type == 0x1e) || (type == 0x2b) || (type == 0x2c)) {
-			exit = SAVE_CURRENT_EXIT[0];
+			exit = SAVED_CURRENT_EXIT[0];
 			x = MAP_WARPS.spawnX[exit];
 			y = MAP_WARPS.spawnY[exit];
 			z = MAP_WARPS.spawnZ[exit];
@@ -6463,22 +6463,22 @@ void initializeLoadedMap(void)
 		}
 	}
 
-	PARTNER_ENTITY.digimonEntity.stats = SAVE_STATS;
-	PARTNER_ENTITY.lives = MAIN_D_8015571C[0];
-	MONEY = MAIN_D_80155674[0];
-	PARTNER_PARA = SAVE_PARTNER_PARA;
-	PREVIOUS_SCREEN = SAVE_PREVIOUS_SCREEN[0];
-	CURRENT_EXIT = SAVE_CURRENT_EXIT[0];
-	PREVIOUS_EXIT = SAVE_PREVIOUS_EXIT[0];
-	memcpy((uint8_t *)TAMER_WAYPOINT_X, (uint8_t *)SAVE_TAMER_WAYPOINT_X, 0x1e);
-	memcpy((uint8_t *)TAMER_WAYPOINT_Y, (uint8_t *)SAVE_TAMER_WAYPOINT_Y, 0x1e);
-	TAMER_PREVIOUS_TILE_X = SAVE_TAMER_PREVIOUS_TILE_X[0];
-	TAMER_PREVIOUS_TILE_Y = SAVE_TAMER_PREVIOUS_TILE_Y[0];
-	TAMER_WAYPOINT_CURRENT = SAVE_TAMER_WAYPOINT_CURRENT[0];
-	TAMER_WAYPOINT_COUNT = SAVE_TAMER_WAYPOINT_COUNT[0];
-	TAMER_START_TILE_X = SAVE_TAMER_START_TILE_X[0];
-	TAMER_START_TILE_Y = SAVE_TAMER_START_TILE_Y[0];
-	TAMER_WAYPOINT_ACTIVE = SAVE_TAMER_WAYPOINT_ACTIVE[0];
+	PARTNER_ENTITY.digimonEntity.stats = SAVED_PARTNER_STATS;
+	PARTNER_ENTITY.lives = SAVED_LIVES[0];
+	MONEY = SAVED_MONEY[0];
+	PARTNER_PARA = SAVED_PARTNER_PARA;
+	PREVIOUS_SCREEN = SAVED_PREVIOUS_SCREEN[0];
+	CURRENT_EXIT = SAVED_CURRENT_EXIT[0];
+	PREVIOUS_EXIT = SAVED_PREVIOUS_EXIT[0];
+	memcpy((uint8_t *)TAMER_WAYPOINT_X, (uint8_t *)SAVED_TAMER_WAYPOINT_X, 0x1e);
+	memcpy((uint8_t *)TAMER_WAYPOINT_Y, (uint8_t *)SAVED_TAMER_WAYPOINT_Y, 0x1e);
+	TAMER_PREVIOUS_TILE_X = SAVED_TAMER_PREVIOUS_TILE_X[0];
+	TAMER_PREVIOUS_TILE_Y = SAVED_TAMER_PREVIOUS_TILE_Y[0];
+	TAMER_WAYPOINT_CURRENT = SAVED_TAMER_WAYPOINT_CURRENT[0];
+	TAMER_WAYPOINT_COUNT = SAVED_TAMER_WAYPOINT_COUNT[0];
+	TAMER_START_TILE_X = SAVED_TAMER_START_TILE_X[0];
+	TAMER_START_TILE_Y = SAVED_TAMER_START_TILE_Y[0];
+	TAMER_WAYPOINT_ACTIVE = SAVED_TAMER_WAYPOINT_ACTIVE[0];
 	CAMERA_UPDATE_TILES = 1;
 	createCameraMovement(&TAMER_ENTITY.entity.posData->location, 2);
 	setImmortalHour();
@@ -6571,7 +6571,7 @@ void gameLoop(void)
 void applyDrawOffset(int32_t offset)
 {
 	AddPrim((char *)GS_ORDERING_TABLE[offset].org + 0x80,
-		&DRAW_OFFSETS[offset]);
+		&DR_OFFSETS[offset]);
 }
 
 void pollInputGame(void)
@@ -6584,13 +6584,13 @@ void pollInputGame(void)
 	held = POLLED_INPUT & POLLED_INPUT_PREVIOUS;
 	held &= 0xf000f000;
 	if (held != 0) {
-		if (++MAIN_D_80134EA4 >= 5) {
-			MAIN_D_80134EA4 -= 2;
+		if (++GAME_INPUT_REPEAT_TIMER >= 5) {
+			GAME_INPUT_REPEAT_TIMER -= 2;
 		} else {
 			held = 0;
 		}
 	} else {
-		MAIN_D_80134EA4 = 0;
+		GAME_INPUT_REPEAT_TIMER = 0;
 	}
 	CHANGED_INPUT |= held;
 }
@@ -6605,13 +6605,13 @@ void pollInputMenu(void)
 	held = POLLED_INPUT & POLLED_INPUT_PREVIOUS;
 	held &= 0xf000f000;
 	if (held != 0) {
-		if (++MAIN_D_80134EA8 >= 0xf) {
-			MAIN_D_80134EA8 -= 6;
+		if (++MENU_INPUT_REPEAT_TIMER >= 0xf) {
+			MENU_INPUT_REPEAT_TIMER -= 6;
 		} else {
 			held = 0;
 		}
 	} else {
-		MAIN_D_80134EA8 = 0;
+		MENU_INPUT_REPEAT_TIMER = 0;
 	}
 	CHANGED_INPUT |= held;
 }
@@ -6623,15 +6623,15 @@ void renderPressStartToContinue(void)
 
 	ot = ACTIVE_ORDERING_TABLE->org;
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	MAIN_D_80134EAC = MAIN_D_80134EAC + 1;
+	FIRST_SCREEN_FRAME_COUNTER = FIRST_SCREEN_FRAME_COUNTER + 1;
 
-	if (MAIN_D_80134EB0 == 1) {
-		MAIN_D_80134EAC = MAIN_D_80134EAC + 0x1d;
+	if (FIRST_SCREEN_PRESSED_START == 1) {
+		FIRST_SCREEN_FRAME_COUNTER = FIRST_SCREEN_FRAME_COUNTER + 0x1d;
 	}
 
-	MAIN_D_80134EAC = MAIN_D_80134EAC % 0x3c;
+	FIRST_SCREEN_FRAME_COUNTER = FIRST_SCREEN_FRAME_COUNTER % 0x3c;
 
-	if (MAIN_D_80134EAC < 0x1e) {
+	if (FIRST_SCREEN_FRAME_COUNTER < 0x1e) {
 		SetPolyFT4(prim);
 		setXYWH(prim, -0x36, 0x32, 121, 10);
 		setUVWH(prim, 0, 0xf1, 121, 10);
@@ -6689,7 +6689,7 @@ void renderMainMenuBackground(void)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-GARBAGE_ARRAY(view_init, MAIN_D_80155670, 1, 1);
+GARBAGE_ARRAY(view_init, SAVED_PARTNER_TYPE, 1, 1);
 
 void view_init(void)
 {
@@ -6771,11 +6771,11 @@ void tickThrownItem(int32_t instanceId)
 	diff.vz = loc->vz - TAMER_ITEM.worldItem.spriteLocation.vz;
 	if (TAMER_ITEM.time == 0) {
 		step.vx = 0;
-		step.vy = MAIN_D_8012F36C[TAMER_ITEM.time];
+		step.vy = ITEM_THROW_HEIGHT[TAMER_ITEM.time];
 		step.vz = 0;
 	} else {
 		step.vx = diff.vx / (0x19 - TAMER_ITEM.time);
-		step.vy = MAIN_D_8012F36C[TAMER_ITEM.time];
+		step.vy = ITEM_THROW_HEIGHT[TAMER_ITEM.time];
 		step.vz = diff.vz / (0x19 - TAMER_ITEM.time);
 	}
 

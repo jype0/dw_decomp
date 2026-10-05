@@ -23,9 +23,9 @@ typedef struct FileRequest {
 	uint32_t size;
 } FileRequest;
 
-FileRequest FILE_REQUEST_TABLE[FILE_QUEUE_SIZE];
+FileRequest FILE_REQUEST_QUEUE[FILE_QUEUE_SIZE];
 
-static int32_t FILE_QUEUE_CALLBACK_ENABLED;
+static int32_t FILE_REQUEST_CALLBACK2;
 static FileRequestCallback FILE_QUEUE_CALLBACK;
 static void *FILE_QUEUE_CALLBACK_PARAM;
 static FileRequest *FILE_READ_QUEUE_HEAD;
@@ -37,7 +37,7 @@ void _renderFileReadQueue(int32_t instanceId);
 
 static void file_queue__garbage__(void)
 {
-	FILE_QUEUE_CALLBACK_ENABLED = 0;
+	FILE_REQUEST_CALLBACK2 = 0;
 	FILE_QUEUE_CALLBACK = NULL;
 	FILE_QUEUE_CALLBACK_PARAM = NULL;
 	FILE_READ_QUEUE_HEAD = NULL;
@@ -52,8 +52,8 @@ void initFileReadQueueTable(void)
 	FILE_READ_QUEUE_TAIL = NULL;
 
 	for (i = 0; i < FILE_QUEUE_SIZE; ++i) {
-		FILE_REQUEST_TABLE[i].next = NULL;
-		FILE_REQUEST_TABLE[i].state = -1;
+		FILE_REQUEST_QUEUE[i].next = NULL;
+		FILE_REQUEST_QUEUE[i].state = -1;
 	}
 }
 
@@ -127,11 +127,11 @@ void tickFileReadQueue(int32_t unused)
 	if (req->state == 1) {
 		result = CdReadSync(1, NULL);
 		if (result == 0) {
-			FILE_QUEUE_CALLBACK_ENABLED = 0;
+			FILE_REQUEST_CALLBACK2 = 0;
 			if (req->finishCallback != NULL) {
 				req->finishCallback(req->finishCallbackParam);
 			}
-			if (FILE_QUEUE_CALLBACK_ENABLED == 0) {
+			if (FILE_REQUEST_CALLBACK2 == 0) {
 				goto done;
 			}
 			req->state = 10;
@@ -159,7 +159,7 @@ err:
 
 void setFileReadCallback2(FileRequestCallback callback, void *param)
 {
-	FILE_QUEUE_CALLBACK_ENABLED = 1;
+	FILE_REQUEST_CALLBACK2 = 1;
 	FILE_QUEUE_CALLBACK = callback;
 	FILE_QUEUE_CALLBACK_PARAM = param;
 }
@@ -183,7 +183,7 @@ int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning,
 	char ch;
 
 	while (1) {
-		for (slot = &FILE_REQUEST_TABLE[0], result = 0;
+		for (slot = &FILE_REQUEST_QUEUE[0], result = 0;
 		     result < FILE_QUEUE_SIZE;
 		     ++slot, ++result) {
 			if (slot->next != NULL) {

@@ -76,11 +76,11 @@ typedef struct {
 	void (*handler)(void);
 } EFESubOpcode;
 
-extern DigimonEntity *MAIN_D_80134EF4;
-extern DigimonEntity *MAIN_D_80134EF8;
+extern DigimonEntity *BATTLE_TARGETED_DIGIMON;
+extern DigimonEntity *BATTLE_ATTACKING_DIGIMON;
 extern int16_t MAIN_D_80134CDC;
 extern char *MAIN_D_80139B24[];
-extern int32_t MAIN_D_80139AD0[][2];
+extern int32_t EFE_SOUND_DATA[][2];
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern int16_t EFE_LOAD_STATE[];
@@ -602,16 +602,16 @@ uint8_t MAIN_D_801347F8[4] = { 255, 255, 220, 180 };
 
 int32_t MAIN_D_801350CC;
 int32_t MAIN_D_801350D0;
-int32_t MAIN_D_801350D4;
-char *MAIN_D_801350D8;
+int32_t CONFUSION_MODEL;
+char *STUN_MODEL;
 int32_t MAIN_D_801350DC;
 char *MAIN_D_801350E0;
 
 static void *battle_effect_sbss_order[] = {
 	&MAIN_D_801350E0,
 	&MAIN_D_801350DC,
-	&MAIN_D_801350D8,
-	&MAIN_D_801350D4,
+	&STUN_MODEL,
+	&CONFUSION_MODEL,
 	&MAIN_D_801350D0,
 	&MAIN_D_801350CC,
 };
@@ -1273,43 +1273,43 @@ void BTL_tickEFEEngine(void)
 
 	setMapLayerEnabled(1);
 
-	MAIN_D_80134CD4 = 0;
-	while (MAIN_D_80134CD4 < 0x10) {
-		if (MAIN_D_80139AB0[MAIN_D_80134CD4] == 0) {
-			MAIN_D_80139AB0[MAIN_D_80134CD4] = 1;
+	COMBAT_EFFECT_ITR = 0;
+	while (COMBAT_EFFECT_ITR < 0x10) {
+		if (UNUSED_EFE_ARRAY[COMBAT_EFFECT_ITR] == 0) {
+			UNUSED_EFE_ARRAY[COMBAT_EFFECT_ITR] = 1;
 		}
-		MAIN_D_80134CD4++;
+		COMBAT_EFFECT_ITR++;
 	}
 
-	MAIN_D_80134D0C = (int32_t *)MAIN_D_80134D10;
-	MAIN_D_80134CD4 = 0;
-	while (MAIN_D_80134CD4 < 0x10) {
-		if (MAIN_D_80134D0C[2] != 0L) {
-			MAIN_D_80134D08 = MAIN_D_80134D0C[2];
-			n = ((int16_t *)MAIN_D_80134D0C)[10];
+	EFE_DATA_ITERATOR = (int32_t *)EFE_DATA_PTR;
+	COMBAT_EFFECT_ITR = 0;
+	while (COMBAT_EFFECT_ITR < 0x10) {
+		if (EFE_DATA_ITERATOR[2] != 0L) {
+			EFE_SCRIPT_HEAD = EFE_DATA_ITERATOR[2];
+			n = ((int16_t *)EFE_DATA_ITERATOR)[10];
 			MAIN_D_80134CD0 = 0;
 			while (MAIN_D_80134CD0 < n) {
-				MAIN_D_80134CE8 = &((EfeSubEffect **)MAIN_D_80134D0C)[4][MAIN_D_80134CD0];
-				if ((int32_t)MAIN_D_80134CE8->inst != 0) {
-					EFE_INSTANCE = MAIN_D_80134CE8->instance;
-					EFE_PARENT_INSTANCE = (int32_t)MAIN_D_80134CE8->parentInstance;
-					((EfeInstance *)(int32_t)EFE_INSTANCE)->frame++;
-					BTL_runEFEScript((int32_t)MAIN_D_80134CE8->inst);
+				EFE_SCRIPT_CONTEXT = &((EfeSubEffect **)EFE_DATA_ITERATOR)[4][MAIN_D_80134CD0];
+				if ((int32_t)EFE_SCRIPT_CONTEXT->inst != 0) {
+					EFE_CURRENT_DATA_SEGMENT = EFE_SCRIPT_CONTEXT->instance;
+					EFE_PREVIOUS_DATA_SEGMENT = (int32_t)EFE_SCRIPT_CONTEXT->parentInstance;
+					((EfeInstance *)(int32_t)EFE_CURRENT_DATA_SEGMENT)->frame++;
+					BTL_runEFEScript((int32_t)EFE_SCRIPT_CONTEXT->inst);
 				}
 				MAIN_D_80134CD0++;
 			}
-			n = MAIN_D_80134D0C[7];
+			n = EFE_DATA_ITERATOR[7];
 			for (j = 0; j < n; j++) {
 				BTL_tickEFEUVAnimation(j);
 			}
 		}
-		MAIN_D_80134D0C = (int32_t *)((char *)MAIN_D_80134D0C + 0x28);
-		MAIN_D_80134CD4++;
+		EFE_DATA_ITERATOR = (int32_t *)((char *)EFE_DATA_ITERATOR + 0x28);
+		COMBAT_EFFECT_ITR++;
 	}
 
 	BTL_tickParticleEmitters();
 
-	p = MAIN_D_80139AD0;
+	p = EFE_SOUND_DATA;
 	for (i = 0; i < 0xa; i++) {
 		if (((*p)[0] >= 0L) && (**(int32_t **)((char *)(*p)[1] + 8) < 0)) {
 			thunkStopSoundMask((*p)[0]);
@@ -1325,25 +1325,25 @@ void BTL_renderEFEEngine(void)
 	int32_t j;
 	int32_t n;
 
-	MAIN_D_80134D0C = (int32_t *)MAIN_D_80134D10;
+	EFE_DATA_ITERATOR = (int32_t *)EFE_DATA_PTR;
 	for (i = 0; i < 0x10; i++) {
-		n = MAIN_D_80134D0C[7];
+		n = EFE_DATA_ITERATOR[7];
 		for (j = 0; j < n; j++) {
-			((EfeUvAnim **)MAIN_D_80134D0C)[8][j].unk2 = 0;
+			((EfeUvAnim **)EFE_DATA_ITERATOR)[8][j].unk2 = 0;
 		}
-		if (MAIN_D_80134D0C[2] != 0L) {
-			MAIN_D_80134D08 = MAIN_D_80134D0C[2];
-			n = ((int16_t *)MAIN_D_80134D0C)[10];
+		if (EFE_DATA_ITERATOR[2] != 0L) {
+			EFE_SCRIPT_HEAD = EFE_DATA_ITERATOR[2];
+			n = ((int16_t *)EFE_DATA_ITERATOR)[10];
 			for (j = 0; j < n; j++) {
-				MAIN_D_80134CE8 = &((EfeSubEffect **)MAIN_D_80134D0C)[4][j];
-				if ((int32_t)MAIN_D_80134CE8->inst != 0) {
-					EFE_INSTANCE = MAIN_D_80134CE8->instance;
-					EFE_PARENT_INSTANCE = (int32_t)MAIN_D_80134CE8->parentInstance;
-					BTL_runEFEScript((int32_t)MAIN_D_80134CE8->someInst);
+				EFE_SCRIPT_CONTEXT = &((EfeSubEffect **)EFE_DATA_ITERATOR)[4][j];
+				if ((int32_t)EFE_SCRIPT_CONTEXT->inst != 0) {
+					EFE_CURRENT_DATA_SEGMENT = EFE_SCRIPT_CONTEXT->instance;
+					EFE_PREVIOUS_DATA_SEGMENT = (int32_t)EFE_SCRIPT_CONTEXT->parentInstance;
+					BTL_runEFEScript((int32_t)EFE_SCRIPT_CONTEXT->someInst);
 				}
 			}
 		}
-		MAIN_D_80134D0C = (int32_t *)((char *)MAIN_D_80134D0C + 0x28);
+		EFE_DATA_ITERATOR = (int32_t *)((char *)EFE_DATA_ITERATOR + 0x28);
 	}
 
 	BTL_renderParticleEmitters();
@@ -1354,7 +1354,7 @@ void BTL_clearEFESoundChannels(void)
 	int32_t i;
 
 	for (i = 0; i < 0xa; i++) {
-		MAIN_D_80139AD0[i][0] = -1;
+		EFE_SOUND_DATA[i][0] = -1;
 	}
 }
 
@@ -1363,7 +1363,7 @@ void BTL_stopEFESounds(void)
 	int32_t i;
 	int32_t *p;
 
-	p = &MAIN_D_80139AD0[0][0];
+	p = &EFE_SOUND_DATA[0][0];
 	for (i = 0; i < 10; i++) {
 		if (*p >= 0L) {
 			thunkStopSoundMask(*p);
@@ -1426,29 +1426,29 @@ void BTL_unloadEFESlot(int32_t idx)
 	int32_t n;
 	int16_t *p;
 
-	*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + (idx * 40);
-	n = MAIN_D_80134D0C[7];
+	*(char **)&EFE_DATA_ITERATOR = EFE_DATA_PTR + (idx * 40);
+	n = EFE_DATA_ITERATOR[7];
 	for (i = 0; i < n; i++) {
-		p = (int16_t *)(((char **)MAIN_D_80134D0C)[8] + i * 32);
+		p = (int16_t *)(((char **)EFE_DATA_ITERATOR)[8] + i * 32);
 		if (p[0] != 0) {
 			p[0] = 0;
 			p[6] = 0;
 		}
 	}
 
-	unloadModel(MAIN_D_80134D0C[0], 1);
-	MAIN_D_80134D0C[2] = 0;
+	unloadModel(EFE_DATA_ITERATOR[0], 1);
+	EFE_DATA_ITERATOR[2] = 0;
 }
 
 void BTL_runEFESlotScript(int32_t idx)
 {
-	EFE_INSTANCE = NULL;
+	EFE_CURRENT_DATA_SEGMENT = NULL;
 
-	*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + (idx * 40);
-	MAIN_D_80134D08 = MAIN_D_80134D0C[2];
-	MAIN_D_80134CE8 = (EfeSubEffect *)MAIN_D_80134D0C[4];
-	MAIN_D_80134CE4 = -1;
-	BTL_runEFEScript(((int32_t *)(MAIN_D_80134D10 + (idx * 40)))[3]);
+	*(char **)&EFE_DATA_ITERATOR = EFE_DATA_PTR + (idx * 40);
+	EFE_SCRIPT_HEAD = EFE_DATA_ITERATOR[2];
+	EFE_SCRIPT_CONTEXT = (EfeSubEffect *)EFE_DATA_ITERATOR[4];
+	EFE_ACTIVE_SECTION = -1;
+	BTL_runEFEScript(((int32_t *)(EFE_DATA_PTR + (idx * 40)))[3]);
 }
 
 char *BTL_getEFETextureSection(char *p)
@@ -1590,66 +1590,66 @@ int32_t BTL_setupLoadedEFEFile(EfeLoad *load)
 		return 1;
 	case 0x15:
 		idx = MAIN_D_801350D0;
-		*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + idx * 40;
-		MAIN_D_80134D0C[6] = (int32_t)m;
+		*(char **)&EFE_DATA_ITERATOR = EFE_DATA_PTR + idx * 40;
+		EFE_DATA_ITERATOR[6] = (int32_t)m;
 		hdr = *(EfeFileHeader *)m->mmdPtr;
 		base = (char *)m->mmdPtr + 0x34;
 		MAIN_D_80134D14 += (uint32_t)hdr.tmdEnd + 0x34;
-		MAIN_D_80134D0C[2] = (int32_t)base;
+		EFE_DATA_ITERATOR[2] = (int32_t)base;
 		heap = MAIN_D_80134D14;
 		tmdp = (int32_t *)m->modelPtr;
 		if (hdr.tmdEnd - hdr.tmdStart == 0) {
-			MAIN_D_80134D0C[7] = 0;
+			EFE_DATA_ITERATOR[7] = 0;
 		} else {
-			MAIN_D_80134D0C[7] = tmdp[2];
+			EFE_DATA_ITERATOR[7] = tmdp[2];
 		}
-		((int16_t *)MAIN_D_80134D0C)[10] = hdr.numSubEffects;
-		MAIN_D_80134D0C[4] = (uint32_t)base + hdr.subEffects;
+		((int16_t *)EFE_DATA_ITERATOR)[10] = hdr.numSubEffects;
+		EFE_DATA_ITERATOR[4] = (uint32_t)base + hdr.subEffects;
 		for (j = 0; j < hdr.numSubEffects; j++) {
-			((EfeSubEffect **)MAIN_D_80134D0C)[4][j].inst = NULL;
+			((EfeSubEffect **)EFE_DATA_ITERATOR)[4][j].inst = NULL;
 		}
-		n = MAIN_D_80134D0C[7];
+		n = EFE_DATA_ITERATOR[7];
 		if (n != 0) {
-			MAIN_D_80134D0C[8] = (uint32_t)base + hdr.uvAnims;
+			EFE_DATA_ITERATOR[8] = (uint32_t)base + hdr.uvAnims;
 			for (j = 0; j < n; j++) {
-				((EfeUvAnim **)MAIN_D_80134D0C)[8][j].unk0 = 0;
-				((EfeUvAnim **)MAIN_D_80134D0C)[8][j].numKeyframes = 0;
+				((EfeUvAnim **)EFE_DATA_ITERATOR)[8][j].unk0 = 0;
+				((EfeUvAnim **)EFE_DATA_ITERATOR)[8][j].numKeyframes = 0;
 			}
 		}
-		MAIN_D_80134D0C[0] = hdr.effectId;
-		MAIN_D_80134D0C[3] = (int32_t)base + hdr.startScript;
-		MAIN_D_80134D0C[1] = (int32_t)base + hdr.initScript;
-		MAIN_D_80134D0C[9] = (int32_t)base + hdr.uvAnimsEnd;
-		EFE_INSTANCE = NULL;
-		MAIN_D_80134D08 = MAIN_D_80134D0C[2];
-		MAIN_D_80134CE8 = (EfeSubEffect *)MAIN_D_80134D0C[4];
-		MAIN_D_80134CE4 = -1;
-		MAIN_D_80134D00 = (int16_t *)MAIN_D_80134D0C[1];
+		EFE_DATA_ITERATOR[0] = hdr.effectId;
+		EFE_DATA_ITERATOR[3] = (int32_t)base + hdr.startScript;
+		EFE_DATA_ITERATOR[1] = (int32_t)base + hdr.initScript;
+		EFE_DATA_ITERATOR[9] = (int32_t)base + hdr.uvAnimsEnd;
+		EFE_CURRENT_DATA_SEGMENT = NULL;
+		EFE_SCRIPT_HEAD = EFE_DATA_ITERATOR[2];
+		EFE_SCRIPT_CONTEXT = (EfeSubEffect *)EFE_DATA_ITERATOR[4];
+		EFE_ACTIVE_SECTION = -1;
+		EFE_SCRIPT_PTR = (int16_t *)EFE_DATA_ITERATOR[1];
 		EFE_DATA_STACK = EFE_SCRIPT_MEM1_DATA;
-		MAIN_D_80134CFC = MAIN_D_80139B54;
-		*MAIN_D_80134CFC++ = 0;
+		EFE_CALL_STACK = EFE_SCRIPT_RETURN0;
+		*EFE_CALL_STACK++ = 0;
 		MAIN_D_801350CC = 0x16;
 		return 1;
 	case 0x16:
 		idx = MAIN_D_801350D0;
-		*(char **)&MAIN_D_80134D0C = MAIN_D_80134D10 + idx * 40;
+		*(char **)&EFE_DATA_ITERATOR = EFE_DATA_PTR + idx * 40;
 		for (s = 0; s < 4; s++) {
-			MAIN_D_80134D04 = *MAIN_D_80134D00;
-			BTL_dispatchEFEOpcode(MAIN_D_80134D04 & 0xff);
-			if (MAIN_D_80134D00 == NULL) {
+			EFE_SCRIPT_CURRENT_VALUE = *EFE_SCRIPT_PTR;
+			BTL_dispatchEFEOpcode(EFE_SCRIPT_CURRENT_VALUE & 0xff);
+			if (EFE_SCRIPT_PTR == NULL) {
 				break;
 			}
 		}
 		if (s == 4) {
 			return 1;
 		}
-		if (MAIN_D_80134CE8->instance->frame == -1) {
-			MAIN_D_80134CE8->inst = NULL;
+		if (EFE_SCRIPT_CONTEXT->instance->frame == -1) {
+			EFE_SCRIPT_CONTEXT->inst = NULL;
 		}
-		ce = MAIN_D_80134CE4;
+		ce = EFE_ACTIVE_SECTION;
 		k = MAIN_D_801350D0;
 		if (ce >= -1L) {
-			EFE_LOADED_MOVE_DATA[k] = MAIN_D_80134D0C[0];
+			EFE_LOADED_MOVE_DATA[k] = EFE_DATA_ITERATOR[0];
 		} else {
 			EFE_LOADED_MOVE_DATA[k] = ce;
 		}
@@ -1679,7 +1679,7 @@ void BTL_tickEFEUVAnimation(int32_t idx)
 {
 	EfeUvAnim *anim;
 
-	anim = (EfeUvAnim *)(((char **)MAIN_D_80134D0C)[8] + idx * 32);
+	anim = (EfeUvAnim *)(((char **)EFE_DATA_ITERATOR)[8] + idx * 32);
 	if (anim->numKeyframes != 0) {
 		++anim->uvFrame;
 		if (anim->uvFrame >= anim->uv->frames) {
@@ -1692,7 +1692,7 @@ void BTL_tickEFEUVAnimation(int32_t idx)
 				anim->uv = anim->uv + 1;
 			}
 
-			BTL_offsetEFEPrimitiveUVs(((char **)MAIN_D_80134D0C[6])[1], idx,
+			BTL_offsetEFEPrimitiveUVs(((char **)EFE_DATA_ITERATOR[6])[1], idx,
 			                          *(int8_t *)((uint32_t)anim->uv + 2),
 			                          *(int8_t *)((uint32_t)anim->uv + 3));
 		}
@@ -1930,10 +1930,10 @@ char *BTL_initializeEFEEngine(char *base)
 	int32_t i;
 
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
-	MAIN_D_80134D10 = base;
+	EFE_DATA_PTR = base;
 	for (i = 0; i < 0x10; i++) {
-		((EfeSlot *)MAIN_D_80134D10)[i][2] = 0;
-		((EfeSlot *)MAIN_D_80134D10)[i][7] = 0;
+		((EfeSlot *)EFE_DATA_PTR)[i][2] = 0;
+		((EfeSlot *)EFE_DATA_PTR)[i][7] = 0;
 	}
 
 	base = (char *)((int32_t)base + 0x280);
@@ -1998,7 +1998,7 @@ int32_t BTL_startEFE(int32_t i)
 		return -1;
 	}
 
-	MAIN_D_80139AB0[i] = -1;
+	UNUSED_EFE_ARRAY[i] = -1;
 	BTL_runEFESlotScript(i);
 }
 
@@ -2013,18 +2013,18 @@ void BTL_stopEFESubEffect(int32_t a, int32_t b)
 		return;
 	}
 
-	if (MAIN_D_80134D10 != NULL) {
+	if (EFE_DATA_PTR != NULL) {
 	}
 
 #if defined(VERSION_JP)
-	MAIN_D_80134CE8 = (EfeSubEffect *)(((char **)(MAIN_D_80134D10 + a * 40))[4] + b * 28);
+	EFE_SCRIPT_CONTEXT = (EfeSubEffect *)(((char **)(EFE_DATA_PTR + a * 40))[4] + b * 28);
 #else
-	p = (char *)(a * 40) + (int32_t)MAIN_D_80134D10;
+	p = (char *)(a * 40) + (int32_t)EFE_DATA_PTR;
 	q = ((char **)p)[4];
-	MAIN_D_80134CE8 = (EfeSubEffect *)(q + (b * 28));
+	EFE_SCRIPT_CONTEXT = (EfeSubEffect *)(q + (b * 28));
 #endif
-	MAIN_D_80134CE8->inst = NULL;
-	MAIN_D_80134CE8->instance->frame = -1;
+	EFE_SCRIPT_CONTEXT->inst = NULL;
+	EFE_SCRIPT_CONTEXT->instance->frame = -1;
 }
 
 void BTL_isTargetUnhit(void)
@@ -2032,7 +2032,7 @@ void BTL_isTargetUnhit(void)
 	int32_t *out;
 
 	out = EFE_POP1(int32_t *);
-	if (((DigimonEntity *)MAIN_D_80134CE8->targetEntity)->stats.current.isHit == 0) {
+	if (((DigimonEntity *)EFE_SCRIPT_CONTEXT->targetEntity)->stats.current.isHit == 0) {
 		*out = 1;
 	} else {
 		*out = 0;
@@ -2041,7 +2041,7 @@ void BTL_isTargetUnhit(void)
 
 void BTL_markEFEFinished(void)
 {
-	MAIN_D_80139AB0[MAIN_D_80134CD4] = 0;
+	UNUSED_EFE_ARRAY[COMBAT_EFFECT_ITR] = 0;
 }
 
 void BTL_getViewportDistance2(void)
@@ -2098,26 +2098,26 @@ void BTL_applyBoxAttackHit(void)
 		r = MAIN_D_80134CD0;
 	}
 
-	center.vx = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	center.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 8);
-	center.vz = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc);
+	center.vx = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	center.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 8);
+	center.vz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
 	box.center = &center;
 	box.extent.vx = ext[0];
 	box.extent.vy = ext[1];
 	box.extent.vz = ext[2];
 	MAIN_D_80134CD8 = 1;
 	while (1) {
-		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CD8)) == -1) {
+		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, EFE_SCRIPT_CONTEXT->sourceEntity, MAIN_D_80134CD8)) == -1) {
 			return;
 		}
 		if (((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] == 0) {
 			for (j = 1; j < 10; j++) {
-				if (ENTITY_TABLE[j] == MAIN_D_80134CE8->sourceEntity) {
+				if (ENTITY_TABLE[j] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 					break;
 				}
 			}
 			((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] = 1;
-			addAttackObject(MAIN_D_80134CD8, 1, &center, MAIN_D_80134CD4, r, j);
+			addAttackObject(MAIN_D_80134CD8, 1, &center, COMBAT_EFFECT_ITR, r, j);
 			*out = 1;
 			return;
 		}
@@ -2143,7 +2143,7 @@ void BTL_applyRadiusAttackHit(void)
 	MAIN_D_80134CD8 = 1;
 	while (MAIN_D_80134CD8 < 10) {
 		e = ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CD8];
-		if (e == MAIN_D_80134CE8->sourceEntity) {
+		if (e == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			goto next;
 		}
 		if (e == NULL) {
@@ -2158,21 +2158,21 @@ void BTL_applyRadiusAttackHit(void)
 		radius = DIGIMON_DATA[e->type].radius;
 		radius *= radius;
 		radius += r;
-		dx = *(int32_t *)((int32_t)EFE_INSTANCE + 4) - (int32_t)e->posData->location.vx;
-		dz = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc) - (int32_t)e->posData->location.vz;
+		dx = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4) - (int32_t)e->posData->location.vx;
+		dz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc) - (int32_t)e->posData->location.vz;
 		dz = dz * dz + dx * dx;
 		if (radius < dz) {
 			goto next;
 		}
 		for (i = 1; i < 10; i++) {
-			if (ENTITY_TABLE[i] == MAIN_D_80134CE8->sourceEntity) {
+			if (ENTITY_TABLE[i] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 				break;
 			}
 		}
 		((DigimonEntity *)ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CD8])->stats.current.isHit = 1;
-		BTL_calculateAttackHitPosition(&pos, (int32_t *)e, (int32_t *)MAIN_D_80134CE8->sourceEntity, DIGIMON_DATA[e->type].radius);
+		BTL_calculateAttackHitPosition(&pos, (int32_t *)e, (int32_t *)EFE_SCRIPT_CONTEXT->sourceEntity, DIGIMON_DATA[e->type].radius);
 		pos.vy = -DIGIMON_DATA[e->type].height / 2;
-		addAttackObject(MAIN_D_80134CD8, 1, &pos, MAIN_D_80134CD4, MAIN_D_80134CD0, i);
+		addAttackObject(MAIN_D_80134CD8, 1, &pos, COMBAT_EFFECT_ITR, MAIN_D_80134CD0, i);
 		*hitFlag = 1;
 next:
 		MAIN_D_80134CD8++;
@@ -2195,13 +2195,13 @@ void BTL_applyLineAttackHit(void)
 	out = EFE_POP1(int32_t *);
 	arg = EFE_POP1(int32_t *);
 	*out = 0;
-	line[0].vx = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	line[0].vy = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc);
-	line[1].vx = *(int32_t *)((char *)((int32_t *)(int32_t)MAIN_D_80134CE8->sourceEntity)[1] + 0x78);
-	line[1].vy = *(int32_t *)((char *)((int32_t *)(int32_t)MAIN_D_80134CE8->sourceEntity)[1] + 0x80);
+	line[0].vx = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	line[0].vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
+	line[1].vx = *(int32_t *)((char *)((int32_t *)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity)[1] + 0x78);
+	line[1].vy = *(int32_t *)((char *)((int32_t *)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity)[1] + 0x80);
 	for (MAIN_D_80134CD8 = 1; MAIN_D_80134CD8 < 10; MAIN_D_80134CD8++) {
 		e = ENTITY_TABLE[(*(int32_t *)&MAIN_D_80134CD8)];
-		if (e == MAIN_D_80134CE8->sourceEntity) {
+		if (e == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			continue;
 		}
 		if (e == NULL) {
@@ -2221,18 +2221,18 @@ void BTL_applyLineAttackHit(void)
 		if (doSomethingWithSomePoints(rect, line) != -1) {
 			continue;
 		}
-		if (*(int32_t *)((int32_t)EFE_INSTANCE + 8) < (-DIGIMON_DATA[*(int32_t *)e].height - arg[1])) {
+		if (*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 8) < (-DIGIMON_DATA[*(int32_t *)e].height - arg[1])) {
 			continue;
 		}
 		for (j = 1; j < 10; j++) {
-			if (ENTITY_TABLE[j] == MAIN_D_80134CE8->sourceEntity) {
+			if (ENTITY_TABLE[j] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 				break;
 			}
 		}
 		((int8_t *)ENTITY_TABLE[MAIN_D_80134CD8])[0x53] = 1;
-		BTL_calculateAttackHitPosition(&pos, (int32_t *)e, ((int32_t **)MAIN_D_80134CE8)[4], DIGIMON_DATA[*(int32_t *)e].radius);
-		pos.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 8);
-		addAttackObject(MAIN_D_80134CD8, 1, &pos, MAIN_D_80134CD4, MAIN_D_80134CD0, j);
+		BTL_calculateAttackHitPosition(&pos, (int32_t *)e, ((int32_t **)EFE_SCRIPT_CONTEXT)[4], DIGIMON_DATA[*(int32_t *)e].radius);
+		pos.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 8);
+		addAttackObject(MAIN_D_80134CD8, 1, &pos, COMBAT_EFFECT_ITR, MAIN_D_80134CD0, j);
 		*out = 1;
 		return;
 	}
@@ -2242,12 +2242,12 @@ void BTL_faceTargetEntity(void)
 {
 	PositionData *pd;
 
-	if (MAIN_D_80134CE8->targetEntity == NULL) {
+	if (EFE_SCRIPT_CONTEXT->targetEntity == NULL) {
 		return;
 	}
 
-	entityLookAtLocation(MAIN_D_80134CE8->sourceEntity, &MAIN_D_80134CE8->targetEntity->posData->location);
-	pd = MAIN_D_80134CE8->sourceEntity->posData;
+	entityLookAtLocation(EFE_SCRIPT_CONTEXT->sourceEntity, &EFE_SCRIPT_CONTEXT->targetEntity->posData->location);
+	pd = EFE_SCRIPT_CONTEXT->sourceEntity->posData;
 	RotMatrix(&pd->rotation, &pd->posMatrix.coord);
 	ScaleMatrix(&pd->posMatrix.coord, &pd->scale);
 	TransMatrix(&pd->posMatrix.coord, &pd->location);
@@ -2317,7 +2317,7 @@ void BTL_renderRingTube(void)
 	count = (n - 1) * 10;
 	q = (int16_t *)&p[count];
 	pts = q;
-	m = (ModelComponent *)MAIN_D_80134D0C[6];
+	m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 	for (i = 0; i < n; i++) {
 		r = radius[i];
 		for (j = 0; j < 10; j++) {
@@ -2389,7 +2389,7 @@ void BTL_tickRibbonPoints(void)
 	int32_t t;
 
 	q = EFE_POP1(SVECTOR *);
-	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
+	EFE_RIBBON_SCRATCH->frame = EFE_CURRENT_DATA_SEGMENT->frame;
 	for (i = 0; i < 10; i++) {
 		if (((EFE_RIBBON_SCRATCH->frame + i * 8) % 10) == 0) {
 			q[i].pad = customRandom(-0xf, 0xf);
@@ -2427,19 +2427,19 @@ void BTL_renderRadialWaves(void)
 	int32_t i;
 
 	for (i = 0; i < 0x18U; i += 2) {
-		BTL_D_80073714[i] += ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetX;
-		BTL_D_80073714[i + 1] += ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetY;
+		BTL_D_80073714[i] += ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetX;
+		BTL_D_80073714[i + 1] += ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetY;
 	}
-	EFE_WAVE_SCRATCH->tpage = ((ModelComponent *)MAIN_D_80134D0C[6])->pixelPage | 0x20;
-	EFE_WAVE_SCRATCH->clut = ((ModelComponent *)MAIN_D_80134D0C[6])->clutPage + 0x40;
+	EFE_WAVE_SCRATCH->tpage = ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelPage | 0x20;
+	EFE_WAVE_SCRATCH->clut = ((ModelComponent *)EFE_DATA_ITERATOR[6])->clutPage + 0x40;
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
-	EFE_SCRATCH->rot.vx = ((int32_t *)((int32_t)EFE_INSTANCE + 0x10))[0];
-	EFE_SCRATCH->rot.vy = ((int32_t *)((int32_t)EFE_INSTANCE + 0x10))[1];
-	EFE_SCRATCH->rot.vz = ((int32_t *)((int32_t)EFE_INSTANCE + 0x10))[2];
-	EFE_SCRATCH->m1.t[0] = ((int32_t *)((int32_t)EFE_INSTANCE + 4))[0];
-	EFE_SCRATCH->m1.t[1] = ((int32_t *)((int32_t)EFE_INSTANCE + 4))[1];
-	EFE_SCRATCH->m1.t[2] = ((int32_t *)((int32_t)EFE_INSTANCE + 4))[2];
-	EFE_WAVE_SCRATCH->phase = EFE_INSTANCE->frame * -400;
+	EFE_SCRATCH->rot.vx = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10))[0];
+	EFE_SCRATCH->rot.vy = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10))[1];
+	EFE_SCRATCH->rot.vz = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10))[2];
+	EFE_SCRATCH->m1.t[0] = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))[0];
+	EFE_SCRATCH->m1.t[1] = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))[1];
+	EFE_SCRATCH->m1.t[2] = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))[2];
+	EFE_WAVE_SCRATCH->phase = EFE_CURRENT_DATA_SEGMENT->frame * -400;
 
 	for (EFE_WAVE_SCRATCH->ring = 0; EFE_WAVE_SCRATCH->ring < 6; (EFE_WAVE_SCRATCH->ring)++) {
 		EFE_SCRATCH->rot.vy += 0x2aa;
@@ -2507,8 +2507,8 @@ void BTL_renderRadialWaves(void)
 		}
 	}
 	for (i = 0; i < 0x18U; i += 2) {
-		BTL_D_80073714[i] -= ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetX;
-		BTL_D_80073714[i + 1] -= ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetY;
+		BTL_D_80073714[i] -= ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetX;
+		BTL_D_80073714[i + 1] -= ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetY;
 	}
 }
 
@@ -2536,7 +2536,7 @@ void BTL_addClutLoadPrim(void)
 	src += idx * 2;
 	prim = (DR_LOAD *)GsGetWorkBase();
 	GsSetWorkBase((PACKET *)(prim + 1));
-	setRECT(&rect, (((uint16_t *)MAIN_D_80134D0C[6])[9] & 0x3f) << 4, ((((uint16_t *)MAIN_D_80134D0C[6])[9] >> 6) & 0x1ff) + y, 0x10, 1);
+	setRECT(&rect, (((uint16_t *)EFE_DATA_ITERATOR[6])[9] & 0x3f) << 4, ((((uint16_t *)EFE_DATA_ITERATOR[6])[9] >> 6) & 0x1ff) + y, 0x10, 1);
 	SetDrawLoad(prim, &rect);
 	memcpy(prim->p, src, 0x20);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + (z >> 4), prim);
@@ -2546,19 +2546,19 @@ void BTL_drawTMDScreenSpace(void)
 {
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
 	EFE_SCRATCH->id = EFE_POP1(int32_t);
-	copyVector(&EFE_SCRATCH->rot, (VECTOR *)((int32_t)EFE_INSTANCE + 0x10));
+	copyVector(&EFE_SCRATCH->rot, (VECTOR *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10));
 	RotMatrixYXZ(&EFE_SCRATCH->rot, &EFE_SCRATCH->m0);
 	ScaleMatrix(&EFE_SCRATCH->m0, EFE_SCRATCH->scale);
-	EFE_SCRATCH->m0.t[0] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	EFE_SCRATCH->m0.t[1] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vy;
-	EFE_SCRATCH->m0.t[2] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vz;
+	EFE_SCRATCH->m0.t[0] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	EFE_SCRATCH->m0.t[1] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vy;
+	EFE_SCRATCH->m0.t[2] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vz;
 	EFE_SCRATCH->m0.t[0] += -DRAWING_OFFSET_X + 0xa0;
 	EFE_SCRATCH->m0.t[1] += -DRAWING_OFFSET_Y + 0x78;
 	TransposeMatrix(&GsWSMATRIX, &EFE_SCRATCH->m2);
 	MulMatrix0(&EFE_SCRATCH->m2, &EFE_SCRATCH->m0, &EFE_SCRATCH->m1);
 	GsSetLightMatrix(&EFE_SCRATCH->m1);
 	GsSetLsMatrix(&EFE_SCRATCH->m0);
-	GsLinkObject4((unsigned long)(((char **)MAIN_D_80134D0C[6])[1] + 0xc), &EFE_SCRATCH->obj, EFE_SCRATCH->id);
+	GsLinkObject4((unsigned long)(((char **)EFE_DATA_ITERATOR[6])[1] + 0xc), &EFE_SCRATCH->obj, EFE_SCRATCH->id);
 	EFE_SCRATCH->obj.coord2 = NULL;
 	EFE_SCRATCH->obj.attribute = 0;
 	GsSortObject4(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
@@ -2581,7 +2581,7 @@ void BTL_loadClutColors(void)
 	y = EFE_POP1(int32_t);
 
 	if ((count > 0) && (count <= 16)) {
-		m = (ModelComponent *)MAIN_D_80134D0C[6];
+		m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 		for (i = 0; i < count; i++) {
 			clut[i] = *src++;
 			clut[i] += *src++ << 5;
@@ -2598,14 +2598,14 @@ void BTL_drawTMDYXZ(void)
 {
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
 	EFE_SCRATCH->id = EFE_POP1(int32_t);
-	EFE_SCRATCH->rot.vx = ((int32_t *)((int32_t)EFE_INSTANCE + 0x10))[0];
-	EFE_SCRATCH->rot.vy = ((int32_t *)((int32_t)EFE_INSTANCE + 0x10))[1];
-	EFE_SCRATCH->rot.vz = ((int32_t *)((int32_t)EFE_INSTANCE + 0x10))[2];
+	EFE_SCRATCH->rot.vx = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10))[0];
+	EFE_SCRATCH->rot.vy = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10))[1];
+	EFE_SCRATCH->rot.vz = ((int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10))[2];
 	RotMatrixYXZ(&EFE_SCRATCH->rot, &EFE_SCRATCH->m1);
 	ScaleMatrix(&EFE_SCRATCH->m1, EFE_SCRATCH->scale);
-	EFE_SCRATCH->m1.t[0] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	EFE_SCRATCH->m1.t[1] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vy;
-	EFE_SCRATCH->m1.t[2] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vz;
+	EFE_SCRATCH->m1.t[0] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	EFE_SCRATCH->m1.t[1] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vy;
+	EFE_SCRATCH->m1.t[2] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vz;
 	GsMulCoord0(&GsWSMATRIX, &EFE_SCRATCH->m1, &EFE_SCRATCH->m0);
 	if (EFE_SCRATCH->m0.t[2] < -0x12c) {
 		return;
@@ -2617,7 +2617,7 @@ void BTL_drawTMDYXZ(void)
 
 	GsSetLightMatrix(&EFE_SCRATCH->m1);
 	GsSetLsMatrix(&EFE_SCRATCH->m0);
-	GsLinkObject4((unsigned long)(((char **)MAIN_D_80134D0C[6])[1] + 0xc), &EFE_SCRATCH->obj, EFE_SCRATCH->id);
+	GsLinkObject4((unsigned long)(((char **)EFE_DATA_ITERATOR[6])[1] + 0xc), &EFE_SCRATCH->obj, EFE_SCRATCH->id);
 	EFE_SCRATCH->obj.coord2 = NULL;
 	EFE_SCRATCH->obj.attribute = 0;
 	GsSortObject4(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
@@ -2650,7 +2650,7 @@ void BTL_selectRandomTargetEntity(void)
 			while (MAIN_D_80134CE0 < 10) {
 				entity = ENTITY_TABLE[MAIN_D_80134CE0];
 				if (entity != NULL && entity->isOnMap != 0 && ((DigimonEntity *)entity)->stats.current.currentHP > 0) {
-					if (excludeSelf != 0 || entity != MAIN_D_80134CE8->sourceEntity) {
+					if (excludeSelf != 0 || entity != EFE_SCRIPT_CONTEXT->sourceEntity) {
 						goto next;
 					}
 				}
@@ -2662,7 +2662,7 @@ void BTL_selectRandomTargetEntity(void)
 		}
 next:;
 	}
-	MAIN_D_80134CE8->targetEntity = entity;
+	EFE_SCRIPT_CONTEXT->targetEntity = entity;
 }
 
 void BTL_convertToViewSpace(void)
@@ -2755,7 +2755,7 @@ void BTL_render3DTexturedQuad(void)
 	p3 = EFE_POP1(int32_t *);
 	p2 = EFE_POP1(int32_t *);
 	p1 = EFE_POP1(int32_t *);
-	m = (ModelComponent *)MAIN_D_80134D0C[6];
+	m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 
 	a.vx = p1[0];
 	a.vy = p1[1];
@@ -2790,11 +2790,11 @@ void BTL_setTransformToBoneMatrix(void)
 	SVECTOR out;
 	long *p;
 
-	p = (long *)((int32_t)EFE_INSTANCE + 4);
-	calculateBoneMatrix(MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CE8->boneOffset->boneId, &m);
-	v.vx = MAIN_D_80134CE8->boneOffset->positionX;
-	v.vy = MAIN_D_80134CE8->boneOffset->positionY;
-	v.vz = MAIN_D_80134CE8->boneOffset->positionZ;
+	p = (long *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4);
+	calculateBoneMatrix(EFE_SCRIPT_CONTEXT->sourceEntity, EFE_SCRIPT_CONTEXT->boneOffset->boneId, &m);
+	v.vx = EFE_SCRIPT_CONTEXT->boneOffset->positionX;
+	v.vy = EFE_SCRIPT_CONTEXT->boneOffset->positionY;
+	v.vz = EFE_SCRIPT_CONTEXT->boneOffset->positionZ;
 	ApplyMatrixSV(&m, &v, &out);
 	p[0] = out.vx;
 	p[1] = out.vy;
@@ -2837,9 +2837,9 @@ void BTL_renderWireframeBox(void)
 	base = EFE_POP1(int32_t *);
 
 	PushMatrix();
-	rot.vx = *(int32_t *)((int32_t)EFE_INSTANCE + 0x10);
-	rot.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 0x14);
-	rot.vz = *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
+	rot.vx = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10);
+	rot.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14);
+	rot.vz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18);
 	RotMatrixZYX(&rot, &m);
 	scale.vx = 0x1000;
 	scale.vy = 0x1000;
@@ -2993,7 +2993,7 @@ void BTL_render2DTexturedQuad(void)
 	a = EFE_POP1(int32_t);
 
 	if ((depth > 0x20) && (depth < 0x1000)) {
-		m = (ModelComponent *)MAIN_D_80134D0C[6];
+		m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 		prim = (POLY_FT4 *)GsGetWorkBase();
 		SetPolyFT4(prim);
 		if (semi < 0) {
@@ -3060,7 +3060,7 @@ void BTL_getSourceBoneTransform(void)
 	rotOut = EFE_POP1(int32_t *);
 	posOut = EFE_POP1(int32_t *);
 	bone = EFE_POP1(int32_t);
-	calculateBoneMatrix(MAIN_D_80134CE8->sourceEntity, bone, &m);
+	calculateBoneMatrix(EFE_SCRIPT_CONTEXT->sourceEntity, bone, &m);
 	matrixToEuler2(&m, &rot);
 	rotOut[0] = rot.vx;
 	rotOut[1] = rot.vy;
@@ -3080,7 +3080,7 @@ void BTL_copyToParentTransform(void)
 	size = EFE_POP1(int32_t);
 	off = EFE_POP1(int32_t);
 	src = EFE_POP1(int32_t);
-	dst = (int32_t *)(EFE_PARENT_INSTANCE + off);
+	dst = (int32_t *)(EFE_PREVIOUS_DATA_SEGMENT + off);
 	switch (size) {
 	case 0xc:
 		*dst++ = *(int32_t *)src;
@@ -3200,11 +3200,11 @@ void BTL_getTargetBoneTransform(void)
 	rotOut = EFE_POP1(int32_t *);
 	posOut = EFE_POP1(int32_t *);
 	idx = EFE_POP1(int32_t);
-	matrix = (GsCOORDINATE2 *)(((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x10);
-	coord = (GsCOORDINATE2 *)(((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + (idx * 136) + 0x10);
-	RotMatrix((SVECTOR *)(((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x70), &matrix->coord);
-	ScaleMatrix(&matrix->coord, (VECTOR *)(((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x60));
-	TransMatrix(&matrix->coord, (VECTOR *)(((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x78));
+	matrix = (GsCOORDINATE2 *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + 0x10);
+	coord = (GsCOORDINATE2 *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + (idx * 136) + 0x10);
+	RotMatrix((SVECTOR *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + 0x70), &matrix->coord);
+	ScaleMatrix(&matrix->coord, (VECTOR *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + 0x60));
+	TransMatrix(&matrix->coord, (VECTOR *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + 0x78));
 	calculatePosition(coord, &m);
 	matrixToEuler2(&m, &rot);
 	rotOut[0] = rot.vx;
@@ -3222,19 +3222,19 @@ void BTL_centerTransformOnEntities(void)
 	int32_t count;
 	int32_t *p;
 
-	sum = (EfeTransform *)((int32_t)EFE_INSTANCE + 4);
+	sum = (EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4);
 	sum->position.vx = 0;
 	sum->position.vy = 0;
 	sum->position.vz = 0;
-	*(int32_t *)((int32_t)EFE_INSTANCE + 0x10) = 0;
-	*(int32_t *)((int32_t)EFE_INSTANCE + 0x14) = 0;
-	*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) = 0;
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10) = 0;
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14) = 0;
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18) = 0;
 	count = 0;
 	for (i = 1; i < 10; i++) {
 		if (ENTITY_TABLE[i] == NULL) {
 			continue;
 		}
-		if (ENTITY_TABLE[i] == MAIN_D_80134CE8->sourceEntity) {
+		if (ENTITY_TABLE[i] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			continue;
 		}
 		if (((int8_t *)ENTITY_TABLE[i])[0x34] == 0) {
@@ -3348,7 +3348,7 @@ void BTL_getVectorLength(void)
 
 void BTL_setTargetToHitEntity(void)
 {
-	MAIN_D_80134CE8->targetEntity = ENTITY_TABLE[MAIN_D_80134CD8];
+	EFE_SCRIPT_CONTEXT->targetEntity = ENTITY_TABLE[MAIN_D_80134CD8];
 }
 
 void BTL_normalizeRotationAngles(void)
@@ -3383,16 +3383,16 @@ void BTL_findHitEntity(void)
 	mode = EFE_POP1(int32_t);
 	out = EFE_POP1(int32_t *);
 	*out = 0;
-	center.vx = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	center.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 8);
-	center.vz = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc);
+	center.vx = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	center.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 8);
+	center.vz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
 	box.center = &center;
 	box.extent.vx = ext[0];
 	box.extent.vy = ext[1];
 	box.extent.vz = ext[2];
 	MAIN_D_80134CD8 = 1;
 	while (1) {
-		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, MAIN_D_80134CE8->sourceEntity, MAIN_D_80134CD8)) == -1) {
+		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, EFE_SCRIPT_CONTEXT->sourceEntity, MAIN_D_80134CD8)) == -1) {
 			return;
 		}
 		switch (mode) {
@@ -3514,8 +3514,8 @@ void BTL_getSourceDigimonSize(void)
 	int16_t height;
 
 	out = EFE_POP1(int32_t *);
-	radius = DIGIMON_DATA[MAIN_D_80134CE8->sourceEntity->type].radius;
-	height = DIGIMON_DATA[MAIN_D_80134CE8->sourceEntity->type].height;
+	radius = DIGIMON_DATA[EFE_SCRIPT_CONTEXT->sourceEntity->type].radius;
+	height = DIGIMON_DATA[EFE_SCRIPT_CONTEXT->sourceEntity->type].height;
 	out[0] = radius;
 	out[1] = height;
 	out[2] = radius;
@@ -3546,12 +3546,12 @@ void BTL_applyHomingMovement(void)
 	minSpeed = EFE_POP1(int32_t);
 	target = EFE_POP1(int32_t *);
 
-	pos = (int32_t *)((int32_t)EFE_INSTANCE + 4);
+	pos = (int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4);
 	d.vx = target[0] - pos[0];
 	d.vy = target[1] - pos[1];
 	d.vz = target[2] - pos[2];
 	rot.vx = 0;
-	rot.vy = -*(int32_t *)((int32_t)EFE_INSTANCE + 0x14);
+	rot.vy = -*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14);
 	rot.vz = 0;
 	RotMatrixZYX(&rot, &m);
 	ApplyMatrixSV(&m, &d, &out);
@@ -3576,11 +3576,11 @@ void BTL_applyHomingMovement(void)
 			dy = -limit;
 		}
 	}
-	*(int32_t *)((int32_t)EFE_INSTANCE + 0x14) += dy;
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14) += dy;
 
 	pitch = _atan(out.vy, out.vz);
 	pitch -= 0x400;
-	pitch -= *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
+	pitch -= *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18);
 	pitch &= 0xfff;
 	if (pitch >= 0x801) {
 		pitch -= 0x1000;
@@ -3598,10 +3598,10 @@ void BTL_applyHomingMovement(void)
 			dp = -limit;
 		}
 	}
-	*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) += dp;
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18) += dp;
 
-	if (((*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) & 0xfff) >= 0x400L) && ((*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) & 0xfff) < 0xc00)) {
-		*(int32_t *)((int32_t)EFE_INSTANCE + 0x18) = 0x800 - *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
+	if (((*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18) & 0xfff) >= 0x400L) && ((*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18) & 0xfff) < 0xc00)) {
+		*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18) = 0x800 - *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18);
 	}
 
 	if (limit * 40 / 100 >= abs(dp) + abs(dy)) {
@@ -3621,13 +3621,13 @@ void BTL_applyHomingMovement(void)
 	d.vx = 0;
 	d.vy = 0;
 	d.vz = -*speed << 3;
-	rot.vx = *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
+	rot.vx = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18);
 	rot.vy = 0;
 	rot.vz = 0;
 	RotMatrixZYX(&rot, &m);
 	ApplyMatrixSV(&m, &d, &out);
 	rot.vx = 0;
-	rot.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 0x14);
+	rot.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14);
 	rot.vz = 0;
 	RotMatrixZYX(&rot, &m);
 	ApplyMatrixSV(&m, &out, &out);
@@ -3644,7 +3644,7 @@ void BTL_getUVAnimTimer(void)
 
 	idx = EFE_POP1(int32_t);
 	out = EFE_POP1(int32_t *);
-	anim = (int16_t *)(((char **)MAIN_D_80134D0C)[8] + idx * 32);
+	anim = (int16_t *)(((char **)EFE_DATA_ITERATOR)[8] + idx * 32);
 	*out = anim[9];
 }
 
@@ -3664,9 +3664,9 @@ void BTL_checkTargetCollision(void)
 	flag = EFE_POP1(int32_t *);
 	out2 = EFE_POP1(int32_t *);
 	out = EFE_POP1(int32_t *);
-	tgt = ((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x48;
-	d0 = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx - *(int32_t *)tgt;
-	d1 = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc) - *(int32_t *)(tgt + 8);
+	tgt = ((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + 0x48;
+	d0 = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx - *(int32_t *)tgt;
+	d1 = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc) - *(int32_t *)(tgt + 8);
 	dist = d0 * d0 + d1 * d1;
 	if (r * r < dist) {
 		goto zero;
@@ -3694,12 +3694,12 @@ void BTL_rotateTransformTowardPoint(void)
 	int32_t angle;
 
 	p = EFE_POP1(int32_t *);
-	q = (EfeTransform *)((int32_t)EFE_INSTANCE + 4);
+	q = (EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4);
 	angle = _atan(p[0] - q->position.vx, p[2] - q->position.vz);
 	angle -= 0x400;
 	angle = -angle;
 	angle &= 0xfff;
-	*(int32_t *)((int32_t)EFE_INSTANCE + (int32_t)&((EfeInstance *)0)->transform.rotation.vy) = angle;
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + (int32_t)&((EfeInstance *)0)->transform.rotation.vy) = angle;
 }
 
 void BTL_setTransformToSourceBone(void)
@@ -3711,13 +3711,13 @@ void BTL_setTransformToSourceBone(void)
 	int32_t s2;
 
 	idx = EFE_POP1(int32_t);
-	p = &((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	src = ((char **)(int32_t)MAIN_D_80134CE8->sourceEntity)[1] + (idx * 136) + 0x34;
+	p = &((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	src = ((char **)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity)[1] + (idx * 136) + 0x34;
 	*p++ = *(int32_t *)(src + 0x14);
 	*p++ = *(int32_t *)(src + 0x18);
 	*p++ = *(int32_t *)(src + 0x1c);
 	*p++ = 0;
-	*p++ = ((int16_t *)((char **)(int32_t)MAIN_D_80134CE8->sourceEntity)[1])[0x39];
+	*p++ = ((int16_t *)((char **)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity)[1])[0x39];
 	*p = 0;
 	s1 = _sin(-(p[-1] >> 3));
 	s2 = _sin(-(((p[-1] >> 3) + 0x80) & 0x1ff));
@@ -3739,7 +3739,7 @@ void BTL_renderParallaxSprites(void)
 	oy = EFE_POP1(int32_t);
 	ox = EFE_POP1(int32_t);
 	p = EFE_POP1(int16_t *);
-	m = (ModelComponent *)MAIN_D_80134D0C[6];
+	m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 	prim = (POLY_FT4 *)GsGetWorkBase();
 
 	while (1) {
@@ -3811,7 +3811,7 @@ void BTL_renderScrollingBackground(void)
 		ty += 8;
 	}
 
-	model = (ModelComponent *)MAIN_D_80134D0C[6];
+	model = (ModelComponent *)EFE_DATA_ITERATOR[6];
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	y0 = (sy & 0x1f) - 0x98;
 	for (row = 0; row < 9; row++) {
@@ -3844,12 +3844,12 @@ void BTL_setTransformToBoneOffset(void)
 	SVECTOR out;
 	long *p;
 
-	p = (long *)((int32_t)EFE_INSTANCE + 4);
-	calculateBoneMatrix(MAIN_D_80134CE8->sourceEntity,
-	                    MAIN_D_80134CE8->boneOffset->boneId, &m);
-	in.vx = MAIN_D_80134CE8->boneOffset->positionX;
-	in.vy = MAIN_D_80134CE8->boneOffset->positionY;
-	in.vz = MAIN_D_80134CE8->boneOffset->positionZ;
+	p = (long *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4);
+	calculateBoneMatrix(EFE_SCRIPT_CONTEXT->sourceEntity,
+	                    EFE_SCRIPT_CONTEXT->boneOffset->boneId, &m);
+	in.vx = EFE_SCRIPT_CONTEXT->boneOffset->positionX;
+	in.vy = EFE_SCRIPT_CONTEXT->boneOffset->positionY;
+	in.vz = EFE_SCRIPT_CONTEXT->boneOffset->positionZ;
 	ApplyMatrixSV(&m, &in, &out);
 	p[0] = out.vx;
 	p[1] = out.vy;
@@ -3858,7 +3858,7 @@ void BTL_setTransformToBoneOffset(void)
 	*p++ += m.t[1];
 	*p++ += m.t[2];
 	*p++ = 0;
-	*p++ = MAIN_D_80134CE8->sourceEntity->posData->rotation.vy;
+	*p++ = EFE_SCRIPT_CONTEXT->sourceEntity->posData->rotation.vy;
 	*p = 0;
 }
 
@@ -3879,11 +3879,11 @@ void BTL_playEFESound(void)
 		return;
 	}
 
-	p = MAIN_D_80139AD0;
+	p = EFE_SOUND_DATA;
 	for (i = 0; i < 10; i++) {
 		if ((*p)[0] < 0) {
 			(*p)[0] = playSound2(8, id);
-			(*p)[1] = (int32_t)MAIN_D_80134CE8;
+			(*p)[1] = (int32_t)EFE_SCRIPT_CONTEXT;
 			return;
 		}
 		p++;
@@ -3895,7 +3895,7 @@ void BTL_addSourceEntityParticleFX(void)
 	int32_t timer;
 
 	timer = EFE_POP1(int32_t);
-	addEntityParticleFX((int32_t *)(int32_t)MAIN_D_80134CE8->sourceEntity, timer);
+	addEntityParticleFX((int32_t *)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity, timer);
 }
 
 void BTL_copyFromParentTransform(void)
@@ -3908,7 +3908,7 @@ void BTL_copyFromParentTransform(void)
 	size = EFE_POP1(int32_t);
 	off = EFE_POP1(int32_t);
 	dst = EFE_POP1(int32_t);
-	src = (int32_t *)(EFE_PARENT_INSTANCE + off);
+	src = (int32_t *)(EFE_PREVIOUS_DATA_SEGMENT + off);
 	switch (size) {
 	case 0xc:
 		*(int32_t *)dst = *src++;
@@ -3947,7 +3947,7 @@ void BTL_renderProjectedSprite(void)
 	ModelComponent *m;
 	VECTOR *col;
 
-	m = (ModelComponent *)MAIN_D_80134D0C[6];
+	m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 	EFE_SPRITE_SCRATCH->sprite.tpage = m->pixelPage | 0x20;
 	EFE_SPRITE_SCRATCH->sprite.cx = (m->clutPage & 0x3f) << 4;
 	EFE_SPRITE_SCRATCH->sprite.cy = m->clutPage >> 6;
@@ -3991,8 +3991,8 @@ void BTL_getTargetDigimonSize(void)
 	int16_t height;
 
 	out = EFE_POP1(int32_t *);
-	radius = DIGIMON_DATA[MAIN_D_80134CE8->targetEntity->type].radius;
-	height = DIGIMON_DATA[MAIN_D_80134CE8->targetEntity->type].height;
+	radius = DIGIMON_DATA[EFE_SCRIPT_CONTEXT->targetEntity->type].radius;
+	height = DIGIMON_DATA[EFE_SCRIPT_CONTEXT->targetEntity->type].height;
 	out[0] = radius;
 	out[1] = height;
 	out[2] = radius;
@@ -4004,7 +4004,7 @@ void BTL_renderParticleFlashSprite(void)
 	char *hdr;
 	int32_t n;
 
-	hdr = (char *)MAIN_D_80134D0C[6];
+	hdr = (char *)EFE_DATA_ITERATOR[6];
 	n = EFE_POP1(int32_t);
 	flash.depth = EFE_POP1(int32_t);
 	flash.scale = EFE_POP1(int16_t);
@@ -4059,7 +4059,7 @@ void BTL_renderScreenSprite(void)
 	int32_t flip;
 	int32_t depth;
 
-	m = (ModelComponent *)MAIN_D_80134D0C[6];
+	m = (ModelComponent *)EFE_DATA_ITERATOR[6];
 	flip = EFE_POP1(int32_t);
 	sprite.scaley = EFE_POP1(int32_t);
 	sprite.scalex = EFE_POP1(int32_t);
@@ -4123,7 +4123,7 @@ void BTL_selectNextTargetEntity(void)
 		if (ENTITY_TABLE[MAIN_D_80134CE0] == NULL) {
 			continue;
 		}
-		if (ENTITY_TABLE[MAIN_D_80134CE0] == MAIN_D_80134CE8->sourceEntity) {
+		if (ENTITY_TABLE[MAIN_D_80134CE0] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			continue;
 		}
 		if (((int8_t *)ENTITY_TABLE[MAIN_D_80134CE0])[0x34] == 0) {
@@ -4142,7 +4142,7 @@ void BTL_selectNextTargetEntity(void)
 		return;
 	}
 
-	MAIN_D_80134CE8->targetEntity = ENTITY_TABLE[MAIN_D_80134CE0];
+	EFE_SCRIPT_CONTEXT->targetEntity = ENTITY_TABLE[MAIN_D_80134CE0];
 	*out = MAIN_D_80134CE0++;
 }
 
@@ -4175,7 +4175,7 @@ void BTL_addParticleEmitter(void)
 		e->particles[i].distance = 0;
 	}
 
-	e->transform = EFE_INSTANCE;
+	e->transform = EFE_CURRENT_DATA_SEGMENT;
 	e->frames = a;
 	e->color.r = vec[0];
 	e->color.g = vec[1];
@@ -4198,7 +4198,7 @@ void BTL_setEFEModelObjectColor(void)
 
 	color = EFE_POP1(int32_t *);
 	idx = EFE_POP1(int32_t);
-	ent = (int32_t *)((uint32_t)((char **)MAIN_D_80134D0C[6])[1] + 0xc);
+	ent = (int32_t *)((uint32_t)((char **)EFE_DATA_ITERATOR[6])[1] + 0xc);
 	ent = (int32_t *)((int32_t)ent + (idx * 28));
 	count = ent[5];
 	prim = (char *)ent[4];
@@ -4229,7 +4229,7 @@ void BTL_setEFEModelObjectColor(void)
 
 	color = EFE_POP1(int32_t *);
 	idx = EFE_POP1(int32_t);
-	ent = (int32_t *)((uint32_t)((char **)MAIN_D_80134D0C[6])[1] + 0xc);
+	ent = (int32_t *)((uint32_t)((char **)EFE_DATA_ITERATOR[6])[1] + 0xc);
 	ent = (int32_t *)((int32_t)ent + (idx * 28));
 	rec = (int32_t *)ent[4];
 	count = ent[5];
@@ -4258,7 +4258,7 @@ void BTL_copyTargetEntityPosition(void)
 	int32_t *m;
 
 	out = EFE_POP1(int32_t *);
-	m = (int32_t *)(((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + 0x34);
+	m = (int32_t *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + 0x34);
 	out[0] = m[5];
 	out[1] = m[6];
 	out[2] = m[7];
@@ -4279,9 +4279,9 @@ void BTL_steerTransformTowardPoint(void)
 	turn = EFE_POP1(int32_t);
 	speed = EFE_POP1(int32_t);
 	target = EFE_POP1(int32_t *);
-	pos = (EfeTransform *)((int32_t)EFE_INSTANCE + 4);
+	pos = (EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4);
 	rot.vx = 0;
-	rot.vy = -*(int32_t *)((int32_t)EFE_INSTANCE + 0x14);
+	rot.vy = -*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14);
 	rot.vz = 0;
 	in.vx = target[0] - pos->position.vx;
 	in.vy = 0;
@@ -4309,10 +4309,10 @@ void BTL_steerTransformTowardPoint(void)
 	in.vx = 0;
 	in.vy = 0;
 	in.vz = -speed * 8;
-	rot.vx = *(int32_t *)((int32_t)EFE_INSTANCE + 0x10);
-	*(int32_t *)((int32_t)EFE_INSTANCE + 0x14) += turn;
-	rot.vy = *(int32_t *)((int32_t)EFE_INSTANCE + 0x14);
-	rot.vz = *(int32_t *)((int32_t)EFE_INSTANCE + 0x18);
+	rot.vx = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10);
+	*(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14) += turn;
+	rot.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x14);
+	rot.vz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x18);
 	RotMatrixZYX(&rot, &m);
 	ApplyMatrixSV(&m, &in, &out);
 	pos->position.vx += out.vx >> 3;
@@ -4359,16 +4359,16 @@ void BTL_getScatteredSpawnPosition(void)
 	r = EFE_POP1(int32_t);
 	out = EFE_POP1(int32_t *);
 
-	if (EFE_PARENT_INSTANCE == 0) {
+	if (EFE_PREVIOUS_DATA_SEGMENT == 0) {
 	}
 
-	if (EFE_PARENT_INSTANCE == 0) {
-		p = (int32_t *)(((char **)(int32_t)MAIN_D_80134CE8->sourceEntity)[1] + (*(int16_t *)(int32_t)MAIN_D_80134CE8->boneOffset * 136) + 0x34);
+	if (EFE_PREVIOUS_DATA_SEGMENT == 0) {
+		p = (int32_t *)(((char **)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity)[1] + (*(int16_t *)(int32_t)EFE_SCRIPT_CONTEXT->boneOffset * 136) + 0x34);
 		out[0] = p[5];
 		out[1] = p[6];
 		out[2] = p[7];
 	} else {
-		src = (int32_t *)(EFE_PARENT_INSTANCE + 4);
+		src = (int32_t *)(EFE_PREVIOUS_DATA_SEGMENT + 4);
 		out[0] = *src++;
 		out[1] = *src++;
 		out[2] = *src;
@@ -4393,27 +4393,27 @@ void BTL_addAttackObjectToTarget(void)
 	int32_t i;
 	int32_t j;
 
-	if (((int8_t *)(int32_t)MAIN_D_80134CE8->targetEntity)[0x53] != 0) {
+	if (((int8_t *)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[0x53] != 0) {
 		return;
 	}
 
-	pos[0] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	pos[1] = *(int32_t *)((int32_t)EFE_INSTANCE + 8);
-	pos[2] = *(int32_t *)((int32_t)EFE_INSTANCE + 0xc);
+	pos[0] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	pos[1] = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 8);
+	pos[2] = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
 	for (i = 1; i < 10; i++) {
-		if ((int32_t)ENTITY_TABLE[i] == (int32_t)MAIN_D_80134CE8->targetEntity) {
+		if ((int32_t)ENTITY_TABLE[i] == (int32_t)EFE_SCRIPT_CONTEXT->targetEntity) {
 			break;
 		}
 	}
 
-	((int8_t *)(int32_t)MAIN_D_80134CE8->targetEntity)[0x53] = 1;
+	((int8_t *)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[0x53] = 1;
 	for (j = 1; j < 10; j++) {
-		if (ENTITY_TABLE[j] == MAIN_D_80134CE8->sourceEntity) {
+		if (ENTITY_TABLE[j] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			break;
 		}
 	}
 
-	addAttackObject(i, 1, (SVECTOR *)pos, MAIN_D_80134CD4, MAIN_D_80134CD0, j);
+	addAttackObject(i, 1, (SVECTOR *)pos, COMBAT_EFFECT_ITR, MAIN_D_80134CD0, j);
 }
 
 void BTL_setTransformToTargetBone(void)
@@ -4427,13 +4427,13 @@ void BTL_setTransformToTargetBone(void)
 
 	r = EFE_POP1(int32_t);
 	idx = EFE_POP1(int32_t);
-	p = &((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	src = ((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1] + (idx * 136) + 0x34;
+	p = &((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	src = ((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1] + (idx * 136) + 0x34;
 	*p++ = *(int32_t *)(src + 0x14);
 	*p++ = *(int32_t *)(src + 0x18);
 	*p++ = *(int32_t *)(src + 0x1c);
 	*p++ = 0;
-	*p++ = ((int16_t *)((char **)(int32_t)MAIN_D_80134CE8->targetEntity)[1])[0x39];
+	*p++ = ((int16_t *)((char **)(int32_t)EFE_SCRIPT_CONTEXT->targetEntity)[1])[0x39];
 	*p = 0;
 	s1 = _sin(-(p[-1] >> 3));
 	s2 = _sin(-(((p[-1] >> 3) + 0x80) & 0x1ff));
@@ -4469,16 +4469,16 @@ void BTL_initializeEFETransform(void)
 	int32_t *chk;
 #endif
 
-	dst = &((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
+	dst = &((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
 #if defined(VERSION_JP)
-	if (EFE_PARENT_INSTANCE == NULL) {
+	if (EFE_PREVIOUS_DATA_SEGMENT == NULL) {
 		BTL_setTransformToBoneOffset();
 		return;
 	}
 
-	src = (int32_t *)((int32_t)EFE_PARENT_INSTANCE + 4);
+	src = (int32_t *)((int32_t)EFE_PREVIOUS_DATA_SEGMENT + 4);
 #else
-	chk = (int32_t *)EFE_PARENT_INSTANCE;
+	chk = (int32_t *)EFE_PREVIOUS_DATA_SEGMENT;
 	if (chk == NULL) {
 		BTL_setTransformToBoneOffset();
 		return;
@@ -4498,12 +4498,12 @@ void BTL_drawTMD(void)
 {
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
 	EFE_SCRATCH->id = EFE_POP1(int32_t);
-	copyVector(&EFE_SCRATCH->rot, (VECTOR *)((int32_t)EFE_INSTANCE + 0x10));
+	copyVector(&EFE_SCRATCH->rot, (VECTOR *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10));
 	RotMatrix(&EFE_SCRATCH->rot, &EFE_SCRATCH->m1);
 	ScaleMatrix(&EFE_SCRATCH->m1, EFE_SCRATCH->scale);
-	EFE_SCRATCH->m1.t[0] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	EFE_SCRATCH->m1.t[1] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vy;
-	EFE_SCRATCH->m1.t[2] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vz;
+	EFE_SCRATCH->m1.t[0] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	EFE_SCRATCH->m1.t[1] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vy;
+	EFE_SCRATCH->m1.t[2] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vz;
 	GsMulCoord0(&GsWSMATRIX, &EFE_SCRATCH->m1, &EFE_SCRATCH->m0);
 	if (EFE_SCRATCH->m0.t[2] < -0x12c) {
 		return;
@@ -4515,7 +4515,7 @@ void BTL_drawTMD(void)
 
 	GsSetLightMatrix(&EFE_SCRATCH->m1);
 	GsSetLsMatrix(&EFE_SCRATCH->m0);
-	GsLinkObject4((unsigned long)(((char **)MAIN_D_80134D0C[6])[1] + 0xc), &EFE_SCRATCH->obj, EFE_SCRATCH->id);
+	GsLinkObject4((unsigned long)(((char **)EFE_DATA_ITERATOR[6])[1] + 0xc), &EFE_SCRATCH->obj, EFE_SCRATCH->id);
 	EFE_SCRATCH->obj.coord2 = NULL;
 	EFE_SCRATCH->obj.attribute = 0;
 	GsSortObject4(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
@@ -4528,9 +4528,9 @@ void BTL_initializeSubEffectInstructions(void)
 
 	a = EFE_POP1(int32_t);
 	b = EFE_POP1(int32_t);
-	EFE_INSTANCE->frame = 0;
-	MAIN_D_80134CE8->inst = (int16_t *)b;
-	MAIN_D_80134CE8->someInst = (int16_t *)a;
+	EFE_CURRENT_DATA_SEGMENT->frame = 0;
+	EFE_SCRIPT_CONTEXT->inst = (int16_t *)b;
+	EFE_SCRIPT_CONTEXT->someInst = (int16_t *)a;
 }
 
 void BTL_initializeUVAnim(void)
@@ -4545,13 +4545,13 @@ void BTL_initializeUVAnim(void)
 	ptr = EFE_POP1(int32_t);
 	val = EFE_POP1(int32_t);
 	idx = EFE_POP1(int32_t);
-	if ((idx < 0) || (idx >= MAIN_D_80134D0C[7])) {
-		MAIN_D_80134CE4 = -2;
-		MAIN_D_80134D00 = NULL;
+	if ((idx < 0) || (idx >= EFE_DATA_ITERATOR[7])) {
+		EFE_ACTIVE_SECTION = -2;
+		EFE_SCRIPT_PTR = NULL;
 		return;
 	}
 
-	anim = &((EfeUvAnim **)MAIN_D_80134D0C)[8][idx];
+	anim = &((EfeUvAnim **)EFE_DATA_ITERATOR)[8][idx];
 	anim->unk0 = val;
 	if (ptr == -1) {
 		return;
@@ -4577,18 +4577,18 @@ void BTL_checkTechCompatibility(void)
 	int16_t type;
 
 	p = EFE_POP1(int16_t *);
-	type = (int16_t)getOriginalType(*(int32_t *)MAIN_D_80134CE8->sourceEntity);
+	type = (int16_t)getOriginalType(*(int32_t *)EFE_SCRIPT_CONTEXT->sourceEntity);
 	while (*p != type) {
 		if (*p < 0) {
-			MAIN_D_80134CE4 = -1;
-			MAIN_D_80134D00 = NULL;
+			EFE_ACTIVE_SECTION = -1;
+			EFE_SCRIPT_PTR = NULL;
 			break;
 		}
 		p = (int16_t *)((int32_t)p + 0xa);
 	}
 
 	MAIN_D_80134CF0 = (int32_t)(p + 1);
-	MAIN_D_80134CE8->boneOffset = (EfeBoneOffset *)MAIN_D_80134CF0;
+	EFE_SCRIPT_CONTEXT->boneOffset = (EfeBoneOffset *)MAIN_D_80134CF0;
 }
 
 void BTL_spawnEFESubEffect(void)
@@ -4601,10 +4601,10 @@ void BTL_spawnEFESubEffect(void)
 	int16_t stride;
 	int32_t *p;
 
-	ip = MAIN_D_80134D00;
+	ip = EFE_SCRIPT_PTR;
 	MAIN_D_80134CE0 = 1;
 	n = ip[1];
-	p = (int32_t *)(ip[2] + MAIN_D_80134D08);
+	p = (int32_t *)(ip[2] + EFE_SCRIPT_HEAD);
 	stride = ip[4];
 	for (i = 0; i < n; i++) {
 		if (*p == -1) {
@@ -4618,95 +4618,95 @@ void BTL_spawnEFESubEffect(void)
 		return;
 	}
 
-	if (MAIN_D_80134CE4 == -1) {
-		MAIN_D_80134CE4 = i;
+	if (EFE_ACTIVE_SECTION == -1) {
+		EFE_ACTIVE_SECTION = i;
 	}
 
-	src = MAIN_D_80134CE8->sourceEntity;
-	tgt = MAIN_D_80134CE8->targetEntity;
+	src = EFE_SCRIPT_CONTEXT->sourceEntity;
+	tgt = EFE_SCRIPT_CONTEXT->targetEntity;
 	for (;;) {
-		if (MAIN_D_80134CE8->inst == NULL) {
+		if (EFE_SCRIPT_CONTEXT->inst == NULL) {
 			break;
 		}
-		MAIN_D_80134CE8++;
-		if ((int32_t)MAIN_D_80134CE8 >= ((int32_t *)MAIN_D_80134D0C[6])[1]) {
+		EFE_SCRIPT_CONTEXT++;
+		if ((int32_t)EFE_SCRIPT_CONTEXT >= ((int32_t *)EFE_DATA_ITERATOR[6])[1]) {
 			BTL_returnFromEFESubroutine();
 			return;
 		}
 	}
 
-	EFE_PARENT_INSTANCE = (int32_t)EFE_INSTANCE;
-	EFE_INSTANCE = (EfeInstance *)p;
-	MAIN_D_80134CE8->instance = EFE_INSTANCE;
-	MAIN_D_80134CE8->parentInstance = (EfeInstance *)EFE_PARENT_INSTANCE;
-	if (EFE_PARENT_INSTANCE == 0) {
-		MAIN_D_80134CE8->sourceEntity = (Entity *)MAIN_D_80134EF8;
-		MAIN_D_80134CE8->targetEntity = (Entity *)MAIN_D_80134EF4;
+	EFE_PREVIOUS_DATA_SEGMENT = (int32_t)EFE_CURRENT_DATA_SEGMENT;
+	EFE_CURRENT_DATA_SEGMENT = (EfeInstance *)p;
+	EFE_SCRIPT_CONTEXT->instance = EFE_CURRENT_DATA_SEGMENT;
+	EFE_SCRIPT_CONTEXT->parentInstance = (EfeInstance *)EFE_PREVIOUS_DATA_SEGMENT;
+	if (EFE_PREVIOUS_DATA_SEGMENT == 0) {
+		EFE_SCRIPT_CONTEXT->sourceEntity = (Entity *)BATTLE_ATTACKING_DIGIMON;
+		EFE_SCRIPT_CONTEXT->targetEntity = (Entity *)BATTLE_TARGETED_DIGIMON;
 	} else {
-		MAIN_D_80134CE8->sourceEntity = src;
-		MAIN_D_80134CE8->targetEntity = tgt;
+		EFE_SCRIPT_CONTEXT->sourceEntity = src;
+		EFE_SCRIPT_CONTEXT->targetEntity = tgt;
 	}
 
 	MAIN_D_80134CDC = 1;
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xc);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 0xc);
 }
 
 void BTL_popEFEValueToVariable(void)
 {
 	int16_t *pc;
 
-	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
 	if (pc[2] == 0) {
-		*(int32_t *)(pc[1] + (int32_t)EFE_INSTANCE) = EFE_POP1(int32_t);
+		*(int32_t *)(pc[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT) = EFE_POP1(int32_t);
 	} else {
-		*(int32_t *)(pc[1] + MAIN_D_80134D08) = EFE_POP1(int32_t);
+		*(int32_t *)(pc[1] + EFE_SCRIPT_HEAD) = EFE_POP1(int32_t);
 	}
 
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 void BTL_returnFromEFESubroutine(void)
 {
-	MAIN_D_80134D00 = EFE_POP2(int16_t *);
-	if (MAIN_D_80134D00 != NULL) {
-		MAIN_D_80134CE8 = EFE_POP2(EfeSubEffect *);
-		EFE_INSTANCE = MAIN_D_80134CE8->instance;
-		EFE_PARENT_INSTANCE = (int32_t)MAIN_D_80134CE8->parentInstance;
+	EFE_SCRIPT_PTR = EFE_POP2(int16_t *);
+	if (EFE_SCRIPT_PTR != NULL) {
+		EFE_SCRIPT_CONTEXT = EFE_POP2(EfeSubEffect *);
+		EFE_CURRENT_DATA_SEGMENT = EFE_SCRIPT_CONTEXT->instance;
+		EFE_PREVIOUS_DATA_SEGMENT = (int32_t)EFE_SCRIPT_CONTEXT->parentInstance;
 		MAIN_D_80134CE0 = EFE_POP2(int32_t);
 	}
 }
 
 void BTL_dispatchEFESubOpcode(void)
 {
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 2);
-	BTL_D_80074EBC[MAIN_D_80134D04 >> 8]();
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 2);
+	BTL_D_80074EBC[EFE_SCRIPT_CURRENT_VALUE >> 8]();
 }
 
 void BTL_callEFESubroutine(void)
 {
 	int16_t *ip;
 
-	ip = MAIN_D_80134D00;
+	ip = EFE_SCRIPT_PTR;
 	EFE_PUSH2(int32_t, MAIN_D_80134CE0);
-	EFE_PUSH2(EfeSubEffect *, MAIN_D_80134CE8);
-	EFE_PUSH2(int16_t *, MAIN_D_80134D00 + 3);
-	MAIN_D_80134D00 = (int16_t *)(ip[1] + MAIN_D_80134D08);
+	EFE_PUSH2(EfeSubEffect *, EFE_SCRIPT_CONTEXT);
+	EFE_PUSH2(int16_t *, EFE_SCRIPT_PTR + 3);
+	EFE_SCRIPT_PTR = (int16_t *)(ip[1] + EFE_SCRIPT_HEAD);
 }
 
 void BTL_pushEFEVariableAddress(void)
 {
 	int32_t ip;
 
-	ip = (int32_t)MAIN_D_80134D00;
+	ip = (int32_t)EFE_SCRIPT_PTR;
 
 	*EFE_DATA_STACK = ((int16_t *)ip)[1];
 	if (((int16_t *)ip)[2] == 0) {
-		*EFE_DATA_STACK++ += (int32_t)EFE_INSTANCE;
+		*EFE_DATA_STACK++ += (int32_t)EFE_CURRENT_DATA_SEGMENT;
 	} else {
-		*EFE_DATA_STACK++ += MAIN_D_80134D08;
+		*EFE_DATA_STACK++ += EFE_SCRIPT_HEAD;
 	}
 
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 void BTL_pushEFEVariable(void)
@@ -4714,45 +4714,45 @@ void BTL_pushEFEVariable(void)
 	int16_t *pc;
 	int32_t p;
 
-	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
 	if (pc[2] == 0) {
-		p = pc[1] + (int32_t)EFE_INSTANCE;
+		p = pc[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT;
 	} else {
-		p = pc[1] + MAIN_D_80134D08;
+		p = pc[1] + EFE_SCRIPT_HEAD;
 	}
 
-	if ((MAIN_D_80134D04 & 0xf00) == 0x400) {
+	if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x400) {
 		EFE_PUSH1(int32_t, *(int32_t *)p);
-	} else if ((MAIN_D_80134D04 & 0xf00) == 0x200) {
+	} else if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x200) {
 		EFE_PUSH1(int32_t, *(int16_t *)p);
 	} else {
 		EFE_PUSH1(int32_t, *(int8_t *)p);
 	}
 
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 void BTL_pushEFEImmediate(void)
 {
 	int16_t *pc;
 
-	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
 	EFE_PUSH1(int32_t, pc[1]);
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 void BTL_jumpEFEScript(void)
 {
 	int16_t *pc;
 
-	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
-	MAIN_D_80134D00 = (int16_t *)(pc[1] + MAIN_D_80134D08);
+	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
+	EFE_SCRIPT_PTR = (int16_t *)(pc[1] + EFE_SCRIPT_HEAD);
 }
 
 void BTL_stopEFEScript(void)
 {
-	MAIN_D_80134D04 = MAIN_D_80134D04 & 0xff;
-	MAIN_D_80134D00 = NULL;
+	EFE_SCRIPT_CURRENT_VALUE = EFE_SCRIPT_CURRENT_VALUE & 0xff;
+	EFE_SCRIPT_PTR = NULL;
 }
 
 void BTL_branchEFEOnComparison(void)
@@ -4760,31 +4760,31 @@ void BTL_branchEFEOnComparison(void)
 	int16_t *ip;
 	int32_t res;
 
-	ip = MAIN_D_80134D00;
-	if ((MAIN_D_80134D04 & 0xf00) == 0x400) {
+	ip = EFE_SCRIPT_PTR;
+	if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x400) {
 		if (ip[2] == 0) {
-			res = BTL_D_800736EC[MAIN_D_80134D04 >> 12](*(int32_t *)(ip[1] + (int32_t)EFE_INSTANCE));
+			res = BTL_D_800736EC[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int32_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
 		} else {
-			res = BTL_D_800736EC[MAIN_D_80134D04 >> 12](*(int32_t *)(ip[1] + MAIN_D_80134D08));
+			res = BTL_D_800736EC[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int32_t *)(ip[1] + EFE_SCRIPT_HEAD));
 		}
-	} else if ((MAIN_D_80134D04 & 0xf00) == 0x200) {
+	} else if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x200) {
 		if (ip[2] == 0) {
-			res = BTL_D_800736EC[MAIN_D_80134D04 >> 12](*(int16_t *)(ip[1] + (int32_t)EFE_INSTANCE));
+			res = BTL_D_800736EC[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int16_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
 		} else {
-			res = BTL_D_800736EC[MAIN_D_80134D04 >> 12](*(int16_t *)(ip[1] + MAIN_D_80134D08));
+			res = BTL_D_800736EC[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int16_t *)(ip[1] + EFE_SCRIPT_HEAD));
 		}
 	} else {
 		if (ip[2] == 0) {
-			res = BTL_D_800736EC[MAIN_D_80134D04 >> 12](*(int8_t *)(ip[1] + (int32_t)EFE_INSTANCE));
+			res = BTL_D_800736EC[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int8_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
 		} else {
-			res = BTL_D_800736EC[MAIN_D_80134D04 >> 12](*(int8_t *)(ip[1] + MAIN_D_80134D08));
+			res = BTL_D_800736EC[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int8_t *)(ip[1] + EFE_SCRIPT_HEAD));
 		}
 	}
 
 	if (res == 0) {
-		MAIN_D_80134D00 = (int16_t *)(ip[3] + MAIN_D_80134D08);
+		EFE_SCRIPT_PTR = (int16_t *)(ip[3] + EFE_SCRIPT_HEAD);
 	} else {
-		MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xa);
+		EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 0xa);
 	}
 }
 
@@ -4792,14 +4792,14 @@ void BTL_applyEFEVariableOperator(void)
 {
 	int16_t *pc;
 
-	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
+	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
 	if (pc[2] == 0) {
-		BTL_D_8007364C[(MAIN_D_80134D04 >> 8) & 0xf][MAIN_D_80134D04 >> 12](pc[1] + (int32_t)EFE_INSTANCE);
+		BTL_D_8007364C[(EFE_SCRIPT_CURRENT_VALUE >> 8) & 0xf][EFE_SCRIPT_CURRENT_VALUE >> 12](pc[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 	} else {
-		BTL_D_8007364C[(MAIN_D_80134D04 >> 8) & 0xf][MAIN_D_80134D04 >> 12](pc[1] + MAIN_D_80134D08);
+		BTL_D_8007364C[(EFE_SCRIPT_CURRENT_VALUE >> 8) & 0xf][EFE_SCRIPT_CURRENT_VALUE >> 12](pc[1] + EFE_SCRIPT_HEAD);
 	}
 
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 void BTL_loadEFEIndexedVariable(void)
@@ -4807,204 +4807,204 @@ void BTL_loadEFEIndexedVariable(void)
 	int16_t *ip;
 	int32_t idx;
 
-	ip = MAIN_D_80134D00;
-	if ((MAIN_D_80134D04 & 0xf000) == 0x4000) {
+	ip = EFE_SCRIPT_PTR;
+	if ((EFE_SCRIPT_CURRENT_VALUE & 0xf000) == 0x4000) {
 		if (ip[4] == 0) {
-			idx = *(int32_t *)(ip[3] + (int32_t)EFE_INSTANCE);
+			idx = *(int32_t *)(ip[3] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 		} else {
-			idx = *(int32_t *)(ip[3] + MAIN_D_80134D08);
+			idx = *(int32_t *)(ip[3] + EFE_SCRIPT_HEAD);
 		}
-	} else if ((MAIN_D_80134D04 & 0xf000) == 0x2000) {
+	} else if ((EFE_SCRIPT_CURRENT_VALUE & 0xf000) == 0x2000) {
 		if (ip[4] == 0) {
-			idx = *(int16_t *)(ip[3] + (int32_t)EFE_INSTANCE);
+			idx = *(int16_t *)(ip[3] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 		} else {
-			idx = *(int16_t *)(ip[3] + MAIN_D_80134D08);
+			idx = *(int16_t *)(ip[3] + EFE_SCRIPT_HEAD);
 		}
 	} else {
 		if (ip[4] == 0) {
-			idx = *(int8_t *)(ip[3] + (int32_t)EFE_INSTANCE);
+			idx = *(int8_t *)(ip[3] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 		} else {
-			idx = *(int8_t *)(ip[3] + MAIN_D_80134D08);
+			idx = *(int8_t *)(ip[3] + EFE_SCRIPT_HEAD);
 		}
 	}
 
-	if ((MAIN_D_80134D04 & 0xf00) == 0x400) {
-		(*(int32_t *)&MAIN_D_80134CEC) = *(int32_t *)(ip[1] + (idx * 4) + MAIN_D_80134D08);
-	} else if ((MAIN_D_80134D04 & 0xf00) == 0x200) {
-		MAIN_D_80134CEC = *(int16_t *)(ip[1] + (idx * 2) + MAIN_D_80134D08);
+	if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x400) {
+		(*(int32_t *)&EFE_SCRIPT_REGISTER) = *(int32_t *)(ip[1] + (idx * 4) + EFE_SCRIPT_HEAD);
+	} else if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x200) {
+		EFE_SCRIPT_REGISTER = *(int16_t *)(ip[1] + (idx * 2) + EFE_SCRIPT_HEAD);
 	} else {
-		MAIN_D_80134CEC = *(int8_t *)(ip[1] + idx + MAIN_D_80134D08);
+		EFE_SCRIPT_REGISTER = *(int8_t *)(ip[1] + idx + EFE_SCRIPT_HEAD);
 	}
 
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 0xa);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 0xa);
 }
 
 void BTL_loadEFERandomValue(void)
 {
-	MAIN_D_80134CEC = rand();
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 2);
+	EFE_SCRIPT_REGISTER = rand();
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 2);
 }
 
 void BTL_loadEFEVariable(void)
 {
 	int16_t *ip;
 
-	ip = MAIN_D_80134D00;
-	if ((MAIN_D_80134D04 & 0xf00) == 0x400) {
+	ip = EFE_SCRIPT_PTR;
+	if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x400) {
 		if (ip[2] == 0) {
-			(*(int32_t *)&MAIN_D_80134CEC) = *(int32_t *)(ip[1] + (int32_t)EFE_INSTANCE);
+			(*(int32_t *)&EFE_SCRIPT_REGISTER) = *(int32_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 		} else {
-			MAIN_D_80134CEC = *(int32_t *)(ip[1] + MAIN_D_80134D08);
+			EFE_SCRIPT_REGISTER = *(int32_t *)(ip[1] + EFE_SCRIPT_HEAD);
 		}
-	} else if ((MAIN_D_80134D04 & 0xf00) == 0x200) {
+	} else if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x200) {
 		if (ip[2] == 0) {
-			MAIN_D_80134CEC = *(int16_t *)(ip[1] + (int32_t)EFE_INSTANCE);
+			EFE_SCRIPT_REGISTER = *(int16_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 		} else {
-			MAIN_D_80134CEC = *(int16_t *)(ip[1] + MAIN_D_80134D08);
+			EFE_SCRIPT_REGISTER = *(int16_t *)(ip[1] + EFE_SCRIPT_HEAD);
 		}
 	} else {
 		if (ip[2] == 0) {
-			MAIN_D_80134CEC = *(int8_t *)(ip[1] + (int32_t)EFE_INSTANCE);
+			EFE_SCRIPT_REGISTER = *(int8_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 		} else {
-			MAIN_D_80134CEC = *(int8_t *)(ip[1] + MAIN_D_80134D08);
+			EFE_SCRIPT_REGISTER = *(int8_t *)(ip[1] + EFE_SCRIPT_HEAD);
 		}
 	}
 
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 void BTL_loadEFEImmediate(void)
 {
 	int16_t *pc;
 
-	pc = (int16_t *)(int32_t)MAIN_D_80134D00;
-	MAIN_D_80134CEC = pc[1];
-	MAIN_D_80134D00 = (int16_t *)((int32_t)MAIN_D_80134D00 + 6);
+	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
+	EFE_SCRIPT_REGISTER = pc[1];
+	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
 }
 
 int32_t BTL_shiftRightInt32Variable(int32_t p)
 {
-	*(int32_t *)p >>= MAIN_D_80134CEC;
+	*(int32_t *)p >>= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_shiftLeftInt32Variable(int32_t p)
 {
-	*(int32_t *)p <<= MAIN_D_80134CEC;
+	*(int32_t *)p <<= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_moduloInt32Variable(int32_t p)
 {
-	*(int32_t *)p %= MAIN_D_80134CEC;
+	*(int32_t *)p %= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_divideInt32Variable(int32_t p)
 {
-	*(int32_t *)p /= MAIN_D_80134CEC;
+	*(int32_t *)p /= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_multiplyInt32Variable(int32_t p)
 {
-	*(int32_t *)p *= MAIN_D_80134CEC;
+	*(int32_t *)p *= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_subtractInt32Variable(int32_t p)
 {
-	*(int32_t *)p -= MAIN_D_80134CEC;
+	*(int32_t *)p -= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_addInt32Variable(int32_t p)
 {
-	*(int32_t *)p += MAIN_D_80134CEC;
+	*(int32_t *)p += EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_setInt32Variable(int32_t p)
 {
-	*(int32_t *)p = MAIN_D_80134CEC;
+	*(int32_t *)p = EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_shiftRightInt8Variable(int32_t p)
 {
-	*(int8_t *)p >>= MAIN_D_80134CEC;
+	*(int8_t *)p >>= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_shiftLeftInt8Variable(int32_t p)
 {
-	*(int8_t *)p <<= MAIN_D_80134CEC;
+	*(int8_t *)p <<= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_moduloInt8Variable(int32_t p)
 {
-	*(int8_t *)p %= MAIN_D_80134CEC;
+	*(int8_t *)p %= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_divideInt8Variable(int32_t p)
 {
-	*(int8_t *)p /= MAIN_D_80134CEC;
+	*(int8_t *)p /= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_multiplyInt8Variable(int32_t p)
 {
-	*(int8_t *)p *= MAIN_D_80134CEC;
+	*(int8_t *)p *= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_subtractInt8Variable(int32_t p)
 {
-	*(int8_t *)p -= MAIN_D_80134CEC;
+	*(int8_t *)p -= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_addInt8Variable(int32_t p)
 {
-	*(int8_t *)p += MAIN_D_80134CEC;
+	*(int8_t *)p += EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_setInt8Variable(int32_t p)
 {
-	*(int8_t *)p = MAIN_D_80134CEC;
+	*(int8_t *)p = EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_shiftRightInt16Variable(int32_t p)
 {
-	*(int16_t *)p >>= MAIN_D_80134CEC;
+	*(int16_t *)p >>= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_shiftLeftInt16Variable(int32_t p)
 {
-	*(int16_t *)p <<= MAIN_D_80134CEC;
+	*(int16_t *)p <<= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_moduloInt16Variable(int32_t p)
 {
-	*(int16_t *)p %= MAIN_D_80134CEC;
+	*(int16_t *)p %= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_divideInt16Variable(int32_t p)
 {
-	*(int16_t *)p /= MAIN_D_80134CEC;
+	*(int16_t *)p /= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_multiplyInt16Variable(int32_t p)
 {
-	*(int16_t *)p *= MAIN_D_80134CEC;
+	*(int16_t *)p *= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_subtractInt16Variable(int32_t p)
 {
-	*(int16_t *)p -= MAIN_D_80134CEC;
+	*(int16_t *)p -= EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_addInt16Variable(int32_t p)
 {
-	*(int16_t *)p += MAIN_D_80134CEC;
+	*(int16_t *)p += EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_setInt16Variable(int32_t p)
 {
-	*(int16_t *)p = MAIN_D_80134CEC;
+	*(int16_t *)p = EFE_SCRIPT_REGISTER;
 }
 
 int32_t BTL_compareGreaterOrEqual(int32_t x)
 {
-	if (x >= MAIN_D_80134CEC) {
+	if (x >= EFE_SCRIPT_REGISTER) {
 		return 0;
 	}
 
@@ -5013,7 +5013,7 @@ int32_t BTL_compareGreaterOrEqual(int32_t x)
 
 int32_t BTL_compareGreater(int32_t x)
 {
-	if (x > MAIN_D_80134CEC) {
+	if (x > EFE_SCRIPT_REGISTER) {
 		return 0;
 	}
 
@@ -5022,7 +5022,7 @@ int32_t BTL_compareGreater(int32_t x)
 
 int32_t BTL_compareLessOrEqual(int32_t x)
 {
-	if (x <= MAIN_D_80134CEC) {
+	if (x <= EFE_SCRIPT_REGISTER) {
 		return 0;
 	}
 
@@ -5031,7 +5031,7 @@ int32_t BTL_compareLessOrEqual(int32_t x)
 
 int32_t BTL_compareLess(int32_t x)
 {
-	if (x < MAIN_D_80134CEC) {
+	if (x < EFE_SCRIPT_REGISTER) {
 		return 0;
 	}
 
@@ -5040,7 +5040,7 @@ int32_t BTL_compareLess(int32_t x)
 
 int32_t BTL_compareNotEqual(int32_t x)
 {
-	if (x != MAIN_D_80134CEC) {
+	if (x != EFE_SCRIPT_REGISTER) {
 		return 0;
 	}
 
@@ -5049,7 +5049,7 @@ int32_t BTL_compareNotEqual(int32_t x)
 
 int32_t BTL_compareEqual(int32_t x)
 {
-	if (x == MAIN_D_80134CEC) {
+	if (x == EFE_SCRIPT_REGISTER) {
 		return 0;
 	}
 
@@ -5147,13 +5147,13 @@ void BTL_renderRibbonStrip(void)
 	pts = EFE_POP1(SVECTOR *);
 
 	for (i = 0; i < 8U; i += 2) {
-		MAIN_D_801347A4[i] += ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetX;
-		MAIN_D_801347A4[i + 1] += ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetY;
+		MAIN_D_801347A4[i] += ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetX;
+		MAIN_D_801347A4[i + 1] += ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetY;
 	}
 
-	EFE_RIBBON_SCRATCH->tpage = ((ModelComponent *)MAIN_D_80134D0C[6])->pixelPage | 0x20;
-	EFE_RIBBON_SCRATCH->clut = ((ModelComponent *)MAIN_D_80134D0C[6])->clutPage + 0x80;
-	EFE_RIBBON_SCRATCH->frame = EFE_INSTANCE->frame;
+	EFE_RIBBON_SCRATCH->tpage = ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelPage | 0x20;
+	EFE_RIBBON_SCRATCH->clut = ((ModelComponent *)EFE_DATA_ITERATOR[6])->clutPage + 0x80;
+	EFE_RIBBON_SCRATCH->frame = EFE_CURRENT_DATA_SEGMENT->frame;
 	i = (uint32_t)(EFE_RIBBON_SCRATCH->frame / 10) % 3;
 	EFE_RIBBON_SCRATCH->color.r = BTL_interpolateClamped(0, 10, EFE_RIBBON_SCRATCH->frame % 10, (BTL_D_8007372C + i * 4)[0],
 	                                                     (BTL_D_8007372C + (uint32_t)(i + 1) % 3 * 4)[0]);
@@ -5173,12 +5173,12 @@ void BTL_renderRibbonStrip(void)
 	EFE_RIBBON_SCRATCH->colorHalf.g = EFE_RIBBON_SCRATCH->color.g >> 1;
 	EFE_RIBBON_SCRATCH->colorHalf.b = EFE_RIBBON_SCRATCH->color.b >> 1;
 
-	copyVector(&EFE_SCRATCH->rot, (VECTOR *)((int32_t)EFE_INSTANCE + 0x10));
+	copyVector(&EFE_SCRATCH->rot, (VECTOR *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0x10));
 	RotMatrixYXZ(&EFE_SCRATCH->rot, &EFE_SCRATCH->m1);
 	ScaleMatrix(&EFE_SCRATCH->m1, EFE_SCRATCH->scale);
-	EFE_SCRATCH->m1.t[0] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vx;
-	EFE_SCRATCH->m1.t[1] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vy;
-	EFE_SCRATCH->m1.t[2] = ((EfeTransform *)((int32_t)EFE_INSTANCE + 4))->position.vz;
+	EFE_SCRATCH->m1.t[0] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
+	EFE_SCRATCH->m1.t[1] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vy;
+	EFE_SCRATCH->m1.t[2] = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vz;
 	GsMulCoord0(&GsWSMATRIX, &EFE_SCRATCH->m1, &EFE_SCRATCH->m0);
 	GsSetLightMatrix(&EFE_SCRATCH->m1);
 	GsSetLsMatrix(&EFE_SCRATCH->m0);
@@ -5230,8 +5230,8 @@ void BTL_renderRibbonStrip(void)
 	}
 
 	for (i = 0; i < 8U; i += 2) {
-		MAIN_D_801347A4[i] -= ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetX;
-		MAIN_D_801347A4[i + 1] -= ((ModelComponent *)MAIN_D_80134D0C[6])->pixelOffsetY;
+		MAIN_D_801347A4[i] -= ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetX;
+		MAIN_D_801347A4[i + 1] -= ((ModelComponent *)EFE_DATA_ITERATOR[6])->pixelOffsetY;
 	}
 }
 
@@ -5254,20 +5254,20 @@ void BTL_dispatchEFEOpcode(int32_t op)
 
 int32_t BTL_runEFEScript(int32_t script)
 {
-	MAIN_D_80134D00 = (int16_t *)script;
+	EFE_SCRIPT_PTR = (int16_t *)script;
 	EFE_DATA_STACK = EFE_SCRIPT_MEM1_DATA;
-	MAIN_D_80134CFC = MAIN_D_80139B54;
+	EFE_CALL_STACK = EFE_SCRIPT_RETURN0;
 	EFE_PUSH2(int32_t, 0);
-	while (MAIN_D_80134D00 != NULL) {
-		MAIN_D_80134D04 = **(int16_t **)&MAIN_D_80134D00;
-		BTL_jtbl_80073604[MAIN_D_80134D04 & 0xff]();
+	while (EFE_SCRIPT_PTR != NULL) {
+		EFE_SCRIPT_CURRENT_VALUE = **(int16_t **)&EFE_SCRIPT_PTR;
+		BTL_jtbl_80073604[EFE_SCRIPT_CURRENT_VALUE & 0xff]();
 	}
 
-	if (MAIN_D_80134CE8->instance->frame == -1) {
-		MAIN_D_80134CE8->inst = NULL;
+	if (EFE_SCRIPT_CONTEXT->instance->frame == -1) {
+		EFE_SCRIPT_CONTEXT->inst = NULL;
 	}
 
-	return MAIN_D_80134CE4;
+	return EFE_ACTIVE_SECTION;
 }
 
 void BTL_resetPoisonBubbles(void)
@@ -5441,14 +5441,14 @@ void BTL_renderConfusionEffect(int32_t idx)
 		rot.vx = 0;
 		rot.vy = (p + i)[3] + (p[2] - 0x400 + i * 0x555);
 		rot.vz = 0xe3;
-		renderTMDModel((uint8_t *)MAIN_D_801350D4, 0, &coord, NULL, &trans, &rot, &BTL_D_8007375C);
+		renderTMDModel((uint8_t *)CONFUSION_MODEL, 0, &coord, NULL, &trans, &rot, &BTL_D_8007375C);
 	}
 }
 
 void BTL_initializeConfusionEffect(char *base)
 {
-	MAIN_D_801350D4 = (int32_t)base;
-	GsMapModelingData((unsigned long *)((char *)MAIN_D_801350D4 + 4));
+	CONFUSION_MODEL = (int32_t)base;
+	GsMapModelingData((unsigned long *)((char *)CONFUSION_MODEL + 4));
 	setInt16WithStride((int16_t *)BTL_D_800750F0, -1, 4, 0x10);
 }
 
@@ -5504,8 +5504,8 @@ void BTL_initializeStunEffect(base)
 	}
 
 	BTL_resetStunSubEffects();
-	MAIN_D_801350D8 = base;
-	GsMapModelingData((unsigned long *)(MAIN_D_801350D8 + 4));
+	STUN_MODEL = base;
+	GsMapModelingData((unsigned long *)(STUN_MODEL + 4));
 }
 
 void BTL_resetStunSubEffects(void)
@@ -5688,7 +5688,7 @@ void BTL_renderStunSubEffect(int32_t i)
 	trans.vy = pos.vy;
 	trans.vz = pos.vz;
 	scale.vx = scale.vz = s;
-	renderTMDModel((uint8_t *)MAIN_D_801350D8, 0, &coord, NULL, &trans, &rot, &scale);
+	renderTMDModel((uint8_t *)STUN_MODEL, 0, &coord, NULL, &trans, &rot, &scale);
 }
 
 // clang-format off

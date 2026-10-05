@@ -5,10 +5,10 @@
 
 #define TOURNAMENT_ARRAY_SIZE	30
 
-extern uint8_t TOURNAMENT_DATA[];
+extern uint8_t TOURNAMENT_SCHEDULE[];
 extern char *TOURNAMENT_GRADES[];
 
-extern uint8_t *TOURNAMENT_ARRAY;
+extern uint8_t *DGET_BUFFER;
 extern uint8_t TOURNAMENT_SELECTED_COLUMN;
 extern uint8_t TOURNAMENT_SELECTED_ROW;
 

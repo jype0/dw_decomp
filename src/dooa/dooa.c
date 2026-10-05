@@ -177,7 +177,7 @@ static void *dooa_functions[] = {
 	DOOA_tickDissolve,
 };
 
-int16_t EGG_DIGIMON_TYPES[4] = { 1, 15, 29, 43 };
+int16_t REINCARNATE_BABY_TYPE[4] = { 1, 15, 29, 43 };
 SVECTOR MAIN_D_80134BB4 = { 0 };
 int8_t DOOA_ENTITIES_VISIBLE = 1;
 
@@ -187,7 +187,7 @@ int32_t MAIN_D_8013532C;
 int32_t MAIN_D_80135330;
 int32_t MAIN_D_80135334;
 SVECTOR MAIN_D_80135338;
-int32_t MAIN_D_80135340;
+int32_t DEATH_MAP_TARGET;
 int8_t DOO2_LOADING_COMPLETE;
 int32_t MAIN_D_80135348;
 int32_t MAIN_D_8013534C;
@@ -206,7 +206,7 @@ static void *dooa_sbss_order[] = {
 	&MAIN_D_8013534C,
 	&MAIN_D_80135348,
 	&DOO2_LOADING_COMPLETE,
-	&MAIN_D_80135340,
+	&DEATH_MAP_TARGET,
 	&MAIN_D_80135338,
 	&MAIN_D_80135334,
 	&MAIN_D_80135330,
@@ -329,7 +329,7 @@ void DOOA_tickDissolve(int32_t instanceId)
 		MAIN_D_80135348 = DRAWING_OFFSET_X;
 		MAIN_D_8013534C = DRAWING_OFFSET_Y;
 		DOOA_SAVED_VIEW = GS_VIEWPOINT;
-		if (MAIN_D_80135340 == 0xcd) {
+		if (DEATH_MAP_TARGET == 0xcd) {
 			MAIN_D_80135350 = 0xbc;
 			MAIN_D_80135354 = 0x78;
 		} else {
@@ -1026,8 +1026,8 @@ void DOOA_tickRebirth(int32_t instanceId)
 		}
 		seq->phase = 0xce;
 		DOOA_removeShardEffect();
-		loadVLALL(EGG_DIGIMON_TYPES[seq->eggSlot], GENERAL_BUFFER_PTR);
-		loadMMDAsync(EGG_DIGIMON_TYPES[seq->eggSlot], 3, DOOA_MMD_BUFFER, (EvoModelData *)seq->modelData,
+		loadVLALL(REINCARNATE_BABY_TYPE[seq->eggSlot], GENERAL_BUFFER_PTR);
+		loadMMDAsync(REINCARNATE_BABY_TYPE[seq->eggSlot], 3, DOOA_MMD_BUFFER, (EvoModelData *)seq->modelData,
 		             (uint8_t *)&seq->isModelLoading);
 		DOO2_resetShardSets(DOOA_SHARD_BUFFER);
 		playSound(8, 6);
@@ -1056,7 +1056,7 @@ void DOOA_tickRebirth(int32_t instanceId)
 			while (seq->isModelLoading != 0) {
 				tickFileReadQueue(0);
 			}
-			reincarnatePartner((int32_t)ENTITY_TABLE[1], &PARTNER_ENTITY.digimonEntity.stats, &PARTNER_PARA, EGG_DIGIMON_TYPES[seq->eggSlot]);
+			reincarnatePartner((int32_t)ENTITY_TABLE[1], &PARTNER_ENTITY.digimonEntity.stats, &PARTNER_PARA, REINCARNATE_BABY_TYPE[seq->eggSlot]);
 			waitForSoundBufferLoading(3);
 			entity = (Entity *)&PARTNER_ENTITY;
 			seq->entity = entity;
@@ -1692,7 +1692,7 @@ int32_t DOOA_tick(partner, buffer, isInitialized)
 	} else {
 		messageId = 0xda;
 	}
-	MAIN_D_80135340 = messageId;
+	DEATH_MAP_TARGET = messageId;
 	setDeathMap(messageId, 1);
 	return (intptr_t)buffer;
 }

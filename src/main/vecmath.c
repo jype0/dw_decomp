@@ -13,7 +13,7 @@ extern int32_t VIEWPORT_DISTANCE;
 void transposeRefMatrix(SVECTOR *pos, VECTOR *out);
 
 // clang-format off
-const uint8_t MAIN_D_80114D68[256] = {
+const uint8_t DISTANCE_SQRT_LOOKUP[256] = {
 	0x00, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02, 0x02,
 	0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,
 	0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,
@@ -160,11 +160,11 @@ int32_t getDistance(int32_t deltaX, int32_t deltaY, int32_t deltaZ)
 	deltaX = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
 
 	gte_ldlzc(deltaX);
-	deltaY = MAIN_D_80114D68[deltaX & 0xff];
+	deltaY = DISTANCE_SQRT_LOOKUP[deltaX & 0xff];
 	if (deltaX >= 0x100) {
 		gte_stlzc(&leadingZeroes);
 		deltaY = (leadingZeroes & 1) + 24 - leadingZeroes;
-		deltaY = MAIN_D_80114D68[deltaX >> deltaY] << (deltaY >> 1);
+		deltaY = DISTANCE_SQRT_LOOKUP[deltaX >> deltaY] << (deltaY >> 1);
 
 		deltaY += ((deltaX / deltaY) - deltaY) >> 1;
 		deltaY += ((deltaX / deltaY) - deltaY) >> 1;

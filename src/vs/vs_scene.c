@@ -49,10 +49,10 @@ typedef struct {
 	uint8_t tpage;
 } VsTextPiece;
 
-extern GsVIEW2 MAIN_D_801B1B98;
+extern GsVIEW2 STDVS_VIEW;
 extern GsCOORDINATE2 MAIN_D_801B1BBC;
-extern SVECTOR MAIN_D_801B1C0C[];
-extern VECTOR MAIN_D_801B1C14;
+extern SVECTOR STDVS_VIEW_ROTATION[];
+extern VECTOR STDVS_VIEW_TRANSLATION;
 extern int32_t VIEWPORT_DISTANCE;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern GsF_LIGHT LIGHT_DATA[];
@@ -169,40 +169,40 @@ int16_t MAIN_D_8013525E;
 uint8_t MAIN_D_80135260;
 uint8_t MAIN_D_80135261;
 uint8_t MAIN_D_80135262;
-int16_t MAIN_D_80135264;
-int32_t MAIN_D_80135268;
-char *MAIN_D_8013526C;
-char *MAIN_D_80135270;
-uint8_t MAIN_D_80135274;
-int16_t MAIN_D_80135278[2];
-int16_t MAIN_D_8013527C[2];
-int16_t MAIN_D_80135280[2];
+int16_t VS_CURRENT_BATTLE;
+int32_t VS_CAMERA_STATE;
+char *VS_DIGIMON_P1_PTR;
+char *VS_DIGIMON_P2_PTR;
+uint8_t VS_MUSIC;
+int16_t VS_DISCIPLINE[2];
+int16_t VS_STARTING_HP[2];
+int16_t VS_DAMAGE[2];
 int32_t MAIN_D_80135284;
-uint8_t MAIN_D_80135288;
-int32_t MAIN_D_8013528C;
-int32_t MAIN_D_80135290;
-int16_t MAIN_D_80135294;
-char **MAIN_D_80135298;
-int8_t MAIN_D_8013529C;
-void *MAIN_D_801352A0;
+uint8_t VS_TIMER;
+int32_t VS_TIMER_ACTIVE;
+int32_t VS_DISABLE_HITTING;
+int16_t VS_DEFAULT_CAM_MIN_DISTANCE;
+char **VS_FOCUSED_ENTITY;
+int8_t VS_CAMERA_TIMER;
+void *VS_STAGE_MODEL_PTR;
 
 static void *vs_scene_sbss_order[] = {
-	&MAIN_D_801352A0,
-	&MAIN_D_8013529C,
-	&MAIN_D_80135298,
-	&MAIN_D_80135294,
-	&MAIN_D_80135290,
-	&MAIN_D_8013528C,
-	&MAIN_D_80135288,
+	&VS_STAGE_MODEL_PTR,
+	&VS_CAMERA_TIMER,
+	&VS_FOCUSED_ENTITY,
+	&VS_DEFAULT_CAM_MIN_DISTANCE,
+	&VS_DISABLE_HITTING,
+	&VS_TIMER_ACTIVE,
+	&VS_TIMER,
 	&MAIN_D_80135284,
-	&MAIN_D_80135280,
-	&MAIN_D_8013527C,
-	&MAIN_D_80135278,
-	&MAIN_D_80135274,
-	&MAIN_D_80135270,
-	&MAIN_D_8013526C,
-	&MAIN_D_80135268,
-	&MAIN_D_80135264,
+	&VS_DAMAGE,
+	&VS_STARTING_HP,
+	&VS_DISCIPLINE,
+	&VS_MUSIC,
+	&VS_DIGIMON_P2_PTR,
+	&VS_DIGIMON_P1_PTR,
+	&VS_CAMERA_STATE,
+	&VS_CURRENT_BATTLE,
 	&MAIN_D_80135262,
 	&MAIN_D_80135261,
 	&MAIN_D_80135260,
@@ -1054,14 +1054,14 @@ void VS_initializeVS(void)
 	VS_resetMatchState();
 	VS_loadVSAssets(VS_D_800716A8[10]);
 	VS_addInputObjects();
-	MAIN_D_80135264 = -1;
+	VS_CURRENT_BATTLE = -1;
 	VS_playVersusIntroSequence();
-	MAIN_D_80135264 = 0;
-	while (MAIN_D_80135264 < VS_D_800716A8[11]) {
+	VS_CURRENT_BATTLE = 0;
+	while (VS_CURRENT_BATTLE < VS_D_800716A8[11]) {
 #if !defined(VERSION_JP)
 		PLAYTIME_FRAMES = 0;
 #endif
-		VS_loadFighterEntities(MAIN_D_80135264);
+		VS_loadFighterEntities(VS_CURRENT_BATTLE);
 		ENTITY_TABLE[1]->isOnScreen = 1;
 		ENTITY_TABLE[2]->isOnScreen = 1;
 		VSLoadSounds();
@@ -1074,33 +1074,33 @@ void VS_initializeVS(void)
 		VS_setVSPhase(0xa);
 		VS_addArenaRenderers();
 		VS__runIntro(VS_D_800716A8[10]);
-		MAIN_D_80135268 = 1;
+		VS_CAMERA_STATE = 1;
 		result = VS__combatMain();
 		VS_removeCameraIntro();
 		VS_removeVSPhase();
 		VS_removeArenaRenderers();
 		if (result == 1) {
-			VS_D_80071690[0][MAIN_D_80135264] = 1;
-			VS_D_8007169C[1][MAIN_D_80135264] = 1;
+			VS_D_80071690[0][VS_CURRENT_BATTLE] = 1;
+			VS_D_8007169C[1][VS_CURRENT_BATTLE] = 1;
 			MAIN_D_80135258[0]++;
 			MAIN_D_8013525A[1]++;
 		}
 		if (result == -1) {
-			VS_D_80071690[1][MAIN_D_80135264] = 1;
-			VS_D_8007169C[0][MAIN_D_80135264] = 1;
+			VS_D_80071690[1][VS_CURRENT_BATTLE] = 1;
+			VS_D_8007169C[0][VS_CURRENT_BATTLE] = 1;
 			MAIN_D_80135258[1]++;
 			MAIN_D_8013525A[0]++;
 		}
 		if (result == 2) {
-			VS_D_8007169C[0][MAIN_D_80135264] = 1;
-			VS_D_8007169C[1][MAIN_D_80135264] = 1;
+			VS_D_8007169C[0][VS_CURRENT_BATTLE] = 1;
+			VS_D_8007169C[1][VS_CURRENT_BATTLE] = 1;
 			MAIN_D_8013525A[0]++;
 			MAIN_D_8013525A[1]++;
 		}
 		ENTITY_TABLE[1]->isOnScreen = 0;
 		ENTITY_TABLE[2]->isOnScreen = 0;
 		VS_playVersusIntroSequence();
-		MAIN_D_80135264++;
+		VS_CURRENT_BATTLE++;
 	}
 
 	VS_unloadFighterEntities();
@@ -1129,13 +1129,13 @@ void VS_loadVSAssets(int32_t arena)
 {
 	switch (arena) {
 	case 0:
-		MAIN_D_80135274 = 0x1e;
+		VS_MUSIC = 0x1e;
 		break;
 	case 1:
-		MAIN_D_80135274 = 0x20;
+		VS_MUSIC = 0x20;
 		break;
 	case 2:
-		MAIN_D_80135274 = 0x1f;
+		VS_MUSIC = 0x1f;
 		break;
 	}
 
@@ -1181,8 +1181,8 @@ void VS_loadFighterEntities(uint8_t slot)
 	int32_t type2;
 	int32_t prev;
 
-	card1 = (VsFighterCard *)(MAIN_D_8013526C + VS_D_800716A8[slot] * 64);
-	card2 = (VsFighterCard *)(MAIN_D_80135270 + (&VS_D_800716A8[5])[slot] * 64);
+	card1 = (VsFighterCard *)(VS_DIGIMON_P1_PTR + VS_D_800716A8[slot] * 64);
+	card2 = (VsFighterCard *)(VS_DIGIMON_P2_PTR + (&VS_D_800716A8[5])[slot] * 64);
 
 	type1 = card1->type;
 	if (ENTITY_TABLE[1] == NULL || ENTITY_TABLE[1]->type != type1) {
@@ -1218,7 +1218,7 @@ void VS_loadFighterEntities(uint8_t slot)
 	stats->base.mp = card1->mp;
 	stats->current.currentHP = card1->hp;
 	stats->current.currentMP = card1->mp;
-	MAIN_D_80135278[0] = card1->weight;
+	VS_DISCIPLINE[0] = card1->weight;
 	stats->base.moves[0] = card1->moves[0];
 	stats->base.moves[1] = card1->moves[1];
 	stats->base.moves[2] = card1->moves[2];
@@ -1234,7 +1234,7 @@ void VS_loadFighterEntities(uint8_t slot)
 	stats->base.mp = card2->mp;
 	stats->current.currentHP = card2->hp;
 	stats->current.currentMP = card2->mp;
-	MAIN_D_80135278[1] = card2->weight;
+	VS_DISCIPLINE[1] = card2->weight;
 	stats->base.moves[0] = card2->moves[0];
 	stats->base.moves[1] = card2->moves[1];
 	stats->base.moves[2] = card2->moves[2];
@@ -1313,10 +1313,10 @@ void VS_renderFighterNamePlate(int16_t side)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	for (i = 0; i < VS_D_800716A8[11]; i++) {
 		if (side == 0) {
-			card1 = MAIN_D_8013526C + VS_D_800716A8[i] * 64;
+			card1 = VS_DIGIMON_P1_PTR + VS_D_800716A8[i] * 64;
 			type = ((VsFighterCard *)card1)->type;
 		} else {
-			card2 = MAIN_D_80135270 + (&VS_D_800716A8[5])[i] * 64;
+			card2 = VS_DIGIMON_P2_PTR + (&VS_D_800716A8[5])[i] * 64;
 			type = ((VsFighterCard *)card2)->type;
 		}
 		SetPolyFT4(prim);
@@ -1541,7 +1541,7 @@ void VS_playVersusIntroSequence(void)
 	drawString(MAIN_D_80124C54, 0, 0xf0);
 	fadeFromBlack(3);
 	i = 3;
-	if (MAIN_D_80135264 == VS_D_800716A8[11] - 1) {
+	if (VS_CURRENT_BATTLE == VS_D_800716A8[11] - 1) {
 		if (MAIN_D_80135258[0] > MAIN_D_80135258[1]) {
 			VS_addResultModelScene(ENTITY_TABLE[1]);
 			VS_setVersusModelSceneTimer(0x3c);
@@ -1568,7 +1568,7 @@ void VS_playVersusIntroSequence(void)
 	}
 	MAIN_D_80135262 = 0;
 	removeObject(0x19d, 0);
-	if (MAIN_D_80135264 == VS_D_800716A8[11] - 1) {
+	if (VS_CURRENT_BATTLE == VS_D_800716A8[11] - 1) {
 		if (MAIN_D_80135258[0] != MAIN_D_80135258[1]) {
 			VS_removeResultModelScene();
 		}
@@ -1576,7 +1576,7 @@ void VS_playVersusIntroSequence(void)
 			VS_removeVersusModelScene();
 		}
 	}
-	if (MAIN_D_80135264 != VS_D_800716A8[11] - 1) {
+	if (VS_CURRENT_BATTLE != VS_D_800716A8[11] - 1) {
 		fadeToBlack(3);
 		for (i = 0; i < 4; i++) {
 			VS_tickFrame();
@@ -1659,11 +1659,11 @@ void VS_loadArenaAssets(void)
 	int32_t i;
 
 	VS_loadArenaTIMToVRAM(VS_D_800705FC[VS_D_800716A8[10]], MAIN_D_80134A60[VS_D_800716A8[10]]);
-	MAIN_D_801352A0 = TAMER_MODEL_BUFFER;
-	readFile(VS_D_800705B4[VS_D_800716A8[10]], MAIN_D_801352A0);
-	GsMapModelingData((u_long *)MAIN_D_801352A0 + 1);
+	VS_STAGE_MODEL_PTR = TAMER_MODEL_BUFFER;
+	readFile(VS_D_800705B4[VS_D_800716A8[10]], VS_STAGE_MODEL_PTR);
+	GsMapModelingData((u_long *)VS_STAGE_MODEL_PTR + 1);
 	for (i = 0; i < MAIN_D_80134A5C[VS_D_800716A8[10]]; i++) {
-		GsLinkObject4((u_long)((char *)MAIN_D_801352A0 + 0xc), &VS_D_800719CC[i], i);
+		GsLinkObject4((u_long)((char *)VS_STAGE_MODEL_PTR + 0xc), &VS_D_800719CC[i], i);
 		GsInitCoordinate2(NULL, &VS_D_8007188C[i].coord);
 		VS_D_800719CC[i].attribute = 0;
 		VS_D_800719CC[i].coord2 = &VS_D_8007188C[i].coord;
@@ -1828,15 +1828,15 @@ void VS_initializeCamera(void)
 {
 	VIEWPORT_DISTANCE = 500;
 	GsSetProjection(VIEWPORT_DISTANCE);
-	MAIN_D_801B1C0C[0].vx = 100;
-	MAIN_D_801B1C0C[0].vy = 0;
-	MAIN_D_801B1C0C[0].vz = 0;
-	MAIN_D_801B1C14.vx = 0;
-	MAIN_D_801B1C14.vy = 500;
-	MAIN_D_801B1C14.vz = 3000;
-	MAIN_D_801B1B98.super = NULL;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
+	STDVS_VIEW_ROTATION[0].vx = 100;
+	STDVS_VIEW_ROTATION[0].vy = 0;
+	STDVS_VIEW_ROTATION[0].vz = 0;
+	STDVS_VIEW_TRANSLATION.vx = 0;
+	STDVS_VIEW_TRANSLATION.vy = 500;
+	STDVS_VIEW_TRANSLATION.vz = 3000;
+	STDVS_VIEW.super = NULL;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }

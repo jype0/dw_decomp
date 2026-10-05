@@ -7,7 +7,7 @@
 #include <dw/model.h>
 #include <dw/script.h>
 
-extern int16_t MAIN_D_80134F10;
+extern int16_t NEW_GAME_JIJIMON_TICK_COUNT;
 extern GsF_LIGHT LIGHT_DATA[3];
 
 void tickNewGameJijimon(int32_t instanceId);
@@ -24,7 +24,7 @@ void tickNewGameJijimon(int32_t instanceId)
 {
 	int16_t *p;
 
-	p = &MAIN_D_80134F10;
+	p = &NEW_GAME_JIJIMON_TICK_COUNT;
 	if (*p < 0x7530) {
 		*p += 1;
 	}
@@ -49,7 +49,7 @@ void loadNewGameScene(void)
 	initializeDigimonObject(0x75, 2, tickNewGameJijimon);
 	ENTITY_TABLE[2]->isOnMap = 1;
 	ENTITY_TABLE[2]->isOnScreen = 1;
-	MAIN_D_80134F10 = 0;
+	NEW_GAME_JIJIMON_TICK_COUNT = 0;
 	setEntityPosition(2, 0x320, 0x96, 0);
 	setEntityRotation(2, 0, 0x400, 0);
 	setupEntityMatrix(2);

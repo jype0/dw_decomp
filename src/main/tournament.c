@@ -11,11 +11,11 @@
 #include "common.h"
 
 extern uint16_t ACTIVE_MAP_SCRIPT;
-extern uint16_t SELECTION_MENU_STATE;
+extern uint16_t SCRIPT_STATE_2;
 extern uint8_t ACTIVE_INSTRUCTION;
-extern uint8_t SCRIPT_STATE_3;
-extern uint16_t SCRIPT_STATE_4;
-extern int16_t TOURNAMENTS_LOST;
+extern uint8_t SCRIPT_TEXTBOX_MODE;
+extern uint16_t SCRIPT_NEXT_STATE_2;
+extern int16_t TOURNAMENT_WINS;
 
 uint8_t *getScript(uint32_t scriptId);
 uint8_t *getScriptSection(uint8_t *ptr, int32_t section);
@@ -127,9 +127,9 @@ uint32_t minutesOfDay(void)
 
 void scriptStartTournament(void)
 {
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
-		SELECTION_MENU_STATE = 2;
+		SCRIPT_STATE_2 = 2;
 		break;
 	case 1:
 		break;
@@ -210,7 +210,7 @@ loop4:
 	goto check_medal;
 
 level_check:
-	if (TOURNAMENTS_LOST >= 100) {
+	if (TOURNAMENT_WINS >= 100) {
 		result = 4;
 		goto check_medal;
 	}
@@ -243,7 +243,7 @@ void scriptCheckTournamentMedal(void)
 {
 	int32_t result;
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		result = checkTournamentMedalConditions();
 		if (result == -1) {
@@ -253,9 +253,9 @@ void scriptCheckTournamentMedal(void)
 
 		unlockMedal(TOURNAMENT_MEDAL_IDS[result]);
 		showMapHeadTextbox(result, 0xff, 0, 0x4db);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 0;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 0;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 1:
 		break;

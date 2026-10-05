@@ -42,7 +42,7 @@ typedef struct {
 
 extern RGB8 UI_BOX_COLORS[];
 extern UIBoxData UI_BOX_DATA[6];
-extern TextBoxData TEXT_BOX_DATA[6];
+extern TextBoxData TEXTBOX_DATA[6];
 
 void initializeUIBoxData(void);
 void createStaticUIBox(int32_t id, uint8_t color, uint8_t features, RECT *pos,

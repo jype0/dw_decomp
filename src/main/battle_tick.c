@@ -26,9 +26,9 @@ extern int8_t TAMER_START_TILE_Y;
 extern int8_t TAMER_WAYPOINT_COUNT;
 extern int8_t TAMER_WAYPOINT_X[];
 extern int8_t TAMER_WAYPOINT_Y[];
-extern uint8_t MAIN_D_80134D64;
-extern int32_t MAIN_D_80134D78;
-extern int32_t MAIN_D_80134F0C;
+extern uint8_t BATTLE_TOGGLE_LIFEBAR;
+extern int32_t IS_TAMERLESS_BATTLE;
+extern int32_t PLAYER_COMBAT_IDLE_TIMER;
 
 void BTL_getRemainingEnemies(Entity *self, int16_t *out, int16_t *count);
 void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY);
@@ -61,7 +61,7 @@ void handleCommands(void)
 	int16_t tileY;
 	int16_t count;
 
-	if (MAIN_D_80134D78 == 1) {
+	if (IS_TAMERLESS_BATTLE == 1) {
 		return;
 	}
 
@@ -70,14 +70,14 @@ void handleCommands(void)
 	}
 
 	if (COMBAT_DATA_PTR->player.currentCommand[0] == 1) {
-		if ((MAIN_D_80134D68 == 0x14) &&
+		if ((FLEE_TIMER == 0x14) &&
 		    ((PARTNER_ENTITY.digimonEntity.stats.current.currentHP -
 		      COMBAT_DATA_PTR->fighter[0].hpDamageBuffer) > 0)) {
 			fadeToBlack(0x14);
 		}
 
 		handleFleeing();
-		MAIN_D_80134D68++;
+		FLEE_TIMER++;
 
 		return;
 	}
@@ -86,14 +86,14 @@ void handleCommands(void)
 		playSound(0, 2);
 		COMBAT_DATA_PTR->player.hoveredCommand[0]++;
 
-		if ((MAIN_D_80134D7C[0] != 0) &&
+		if ((FLEE_DISABLED[0] != 0) &&
 		    (COMBAT_DATA_PTR->player.hoveredCommand[0] == 1)) {
 			COMBAT_DATA_PTR->player.hoveredCommand[0]++;
 		}
 
 		if (COMBAT_DATA_PTR->player.hoveredCommand[0] >
 		    (COMBAT_DATA_PTR->player.numCommands[0] - 1)) {
-			if (MAIN_D_80134D7C[0] != 0) {
+			if (FLEE_DISABLED[0] != 0) {
 				COMBAT_DATA_PTR->player.hoveredCommand[0] = 2;
 			} else {
 				COMBAT_DATA_PTR->player.hoveredCommand[0] = 1;
@@ -105,7 +105,7 @@ void handleCommands(void)
 		playSound(0, 2);
 		COMBAT_DATA_PTR->player.hoveredCommand[0]--;
 
-		if ((MAIN_D_80134D7C[0] != 0) &&
+		if ((FLEE_DISABLED[0] != 0) &&
 		    (COMBAT_DATA_PTR->player.hoveredCommand[0] == 1)) {
 			COMBAT_DATA_PTR->player.hoveredCommand[0]--;
 		}
@@ -244,7 +244,7 @@ void tamerTickBattle(instanceId)
 		if (((uint8_t *)COMBAT_DATA_PTR)[0x64e] != 1) {
 			partner = ENTITY_TABLE[1];
 
-			if (MAIN_D_80134D78 == 0) {
+			if (IS_TAMERLESS_BATTLE == 0) {
 				if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x10) != 0) {
 					addInventoryUI();
 				}
@@ -256,7 +256,7 @@ void tamerTickBattle(instanceId)
 			entityLookAtLocation(tamer, &partner->posData->location);
 
 			if (UI_BOX_DATA[0].state == 0) {
-				if ((MAIN_D_80134D74 == 0) || (MAIN_D_80134D60 != ENTITY_TABLE[1])) {
+				if ((NO_AI_FLAG == 0) || (FINISHING_ENTITY != ENTITY_TABLE[1])) {
 					if ((tamer->anim.animId == 6) || (tamer->anim.animId == 0xe)) {
 						if ((tamer->anim.animFlag & 1) == 0) {
 							startAnimation(tamer, 1);
@@ -271,21 +271,21 @@ void tamerTickBattle(instanceId)
 		}
 
 		if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x100) != 0) {
-			MAIN_D_80134D64 = (MAIN_D_80134D64 + 1) & 1;
+			BATTLE_TOGGLE_LIFEBAR = (BATTLE_TOGGLE_LIFEBAR + 1) & 1;
 		}
 
 		handleCommands();
 	}
 
 	if (ENTITY_TABLE[0]->anim.animId == 1) {
-		MAIN_D_80134F0C = MAIN_D_80134F0C + 1;
+		PLAYER_COMBAT_IDLE_TIMER = PLAYER_COMBAT_IDLE_TIMER + 1;
 	} else {
-		MAIN_D_80134F0C = 0;
+		PLAYER_COMBAT_IDLE_TIMER = 0;
 	}
 
-	if (MAIN_D_80134F0C >= 0xab) {
+	if (PLAYER_COMBAT_IDLE_TIMER >= 0xab) {
 		startAnimation(ENTITY_TABLE[0], 1);
-		MAIN_D_80134F0C = 0;
+		PLAYER_COMBAT_IDLE_TIMER = 0;
 	}
 
 	tickAnimation(tamer);

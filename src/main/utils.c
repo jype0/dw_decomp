@@ -37,7 +37,7 @@ void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width,
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
 extern PACKET GS_WORK_BASES[];
-extern char DRAW_OFFSETS[];
+extern char DR_OFFSETS[];
 
 // clang-format off
 RGB8 TEXT_COLORS[17] = {
@@ -61,7 +61,7 @@ RGB8 TEXT_COLORS[17] = {
 };
 
 /* six 5-byte formats: "%01d" to "%06d" */
-char MAIN_D_8012B94C[32] = "%01d\0%02d\0%03d\0%04d\0%05d\0%06d";
+char NUMBER_FORMATS[32] = "%01d\0%02d\0%03d\0%04d\0%05d\0%06d";
 // clang-format on
 
 void pauseFrame(void)
@@ -73,7 +73,7 @@ void pauseFrame(void)
 	tickObjects();
 	renderObjects();
 	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80,
-		&DRAW_OFFSETS[ACTIVE_FRAMEBUFFER * 0xC]);
+		&DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xC]);
 	DrawSync(0);
 	VSync(3);
 	GsSetOrign(DRAWING_OFFSET_X, DRAWING_OFFSET_Y);
@@ -238,7 +238,7 @@ void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
 	char buf[8];
 	int32_t i;
 
-	sprintf(buf, &MAIN_D_8012B94C[(n - 1) * 5], value);
+	sprintf(buf, &NUMBER_FORMATS[(n - 1) * 5], value);
 	for (i = 0; i < n; i++) {
 		*(digits + n - 1 - i) = buf[i] - '0';
 	}
@@ -264,7 +264,7 @@ void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
 	char *base;
 	int32_t cnt;
 
-	sprintf(buf, &MAIN_D_8012B94C[(j = n - 1) * 5], value);
+	sprintf(buf, &NUMBER_FORMATS[(j = n - 1) * 5], value);
 	i = 0;
 	off = 0;
 	n = cnt = n;

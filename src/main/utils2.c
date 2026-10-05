@@ -72,12 +72,12 @@ void drawEntityTextIcon(int16_t x, int16_t y, uint8_t u, int32_t otOffset);
 int32_t STD_func_800579D8(uint8_t *arg);
 
 extern MapLightUpdateData MAP_LIGHT_UPDATE_DATA[];
-extern uint8_t MAIN_D_80127BDC[];
+extern uint8_t ITEM_CLUT_DATA[];
 extern uint8_t MAP_LAYER_ENABLED;
 extern RGB8 TEXT_COLORS[];
-extern uint32_t MAIN_D_80134E70;
-extern uint32_t MAIN_D_80134E74;
-extern uint8_t MAIN_D_80134E78[2];
+extern uint32_t PAUSE_INPUT;
+extern uint32_t PAUSE_INPUT_PREVIOUS;
+extern uint8_t PAUSE_BOX_VISIBLE[2];
 extern int32_t MAIN_D_80134E7C;
 extern char btl_START[];
 extern char dget_START[];
@@ -96,7 +96,7 @@ extern char trn2_START[];
 extern char vs_START[];
 
 // clang-format off
-void *MAIN_D_8012B96C[16] = {
+void *REL_BIN_OFFSETS[16] = {
 	btl_START,
 	std_START,
 	fish_START,
@@ -147,7 +147,7 @@ char MAIN_D_8012BA70[] = "ENDI_REL.BIN";
 
 char MAIN_D_8012BA80[12] = "EAB_REL.BIN";
 
-char *MAIN_D_8012BA8C[16] = {
+char *REL_BIN_FILES[16] = {
 	MAIN_D_8012B9AC,
 	MAIN_D_8012B9B8,
 	MAIN_D_8012B9C4,
@@ -305,7 +305,7 @@ void setItemTexture(POLY_FT4 *prim, uint8_t type)
 		h = 16;
 	}
 	setUVDataPolyFT4(prim, u, v, w, h);
-	setClut(prim, 0xe0, MAIN_D_80127BDC[type] + 0x1e8);
+	setClut(prim, 0xe0, ITEM_CLUT_DATA[type] + 0x1e8);
 }
 
 int32_t hasMove(int32_t move)
@@ -379,10 +379,10 @@ void loadDynamicLibrary(Overlay lib, uint8_t *isComplete, uint8_t isAsync,
 	uint8_t *nv;
 
 	if (!isAsync) {
-		readFile(MAIN_D_8012BA8C[lib - 1], (nv = MAIN_D_8012B96C[lib - 1]));
+		readFile(REL_BIN_FILES[lib - 1], (nv = REL_BIN_OFFSETS[lib - 1]));
 	} else {
-		addFileReadRequestPath(MAIN_D_8012BA8C[lib - 1],
-				       (nv = MAIN_D_8012B96C[lib - 1]), isComplete,
+		addFileReadRequestPath(REL_BIN_FILES[lib - 1],
+				       (nv = REL_BIN_OFFSETS[lib - 1]), isComplete,
 				       (FileRequestCallback)callback, param);
 	}
 }
@@ -401,9 +401,9 @@ void startMovie(int32_t movieId)
 
 void handlePause(void)
 {
-	if (MAIN_D_80134E78[0] != 0) {
+	if (PAUSE_BOX_VISIBLE[0] != 0) {
 		removePauseBox();
-		MAIN_D_80134E78[0] = 0;
+		PAUSE_BOX_VISIBLE[0] = 0;
 	}
 	if ((readPStat(0) == 3 || IS_GAMETIME_RUNNING == 0) && GAME_STATE == 0) {
 		return;
@@ -411,23 +411,23 @@ void handlePause(void)
 	if (FADE_PROTECTION == 1) {
 		return;
 	}
-	MAIN_D_80134E70 = PadRead(1);
-	if ((MAIN_D_80134E70 & 0x800) && !(MAIN_D_80134E74 & 0x800)) {
-		MAIN_D_80134E78[1] = (MAIN_D_80134E78[1] + 1) & 1;
+	PAUSE_INPUT = PadRead(1);
+	if ((PAUSE_INPUT & 0x800) && !(PAUSE_INPUT_PREVIOUS & 0x800)) {
+		PAUSE_BOX_VISIBLE[1] = (PAUSE_BOX_VISIBLE[1] + 1) & 1;
 	}
-	MAIN_D_80134E74 = MAIN_D_80134E70;
-	if (MAIN_D_80134E78[1] != 0) {
+	PAUSE_INPUT_PREVIOUS = PAUSE_INPUT;
+	if (PAUSE_BOX_VISIBLE[1] != 0) {
 		createPauseBox();
 		pauseFrame();
 		pauseFrame();
-		MAIN_D_80134E78[0]++;
+		PAUSE_BOX_VISIBLE[0]++;
 	}
-	while (MAIN_D_80134E78[1] != 0) {
-		MAIN_D_80134E70 = PadRead(1);
-		if ((MAIN_D_80134E70 & 0x800) && !(MAIN_D_80134E74 & 0x800)) {
-			MAIN_D_80134E78[1] = (MAIN_D_80134E78[1] + 1) & 1;
+	while (PAUSE_BOX_VISIBLE[1] != 0) {
+		PAUSE_INPUT = PadRead(1);
+		if ((PAUSE_INPUT & 0x800) && !(PAUSE_INPUT_PREVIOUS & 0x800)) {
+			PAUSE_BOX_VISIBLE[1] = (PAUSE_BOX_VISIBLE[1] + 1) & 1;
 		}
-		MAIN_D_80134E74 = MAIN_D_80134E70;
+		PAUSE_INPUT_PREVIOUS = PAUSE_INPUT;
 	}
 }
 
@@ -553,7 +553,7 @@ void updateMapLightState(void)
 
 	p = MAP_LIGHT_UPDATE_DATA;
 	for (i = 0; i <= 0; i++, p++) {
-		if ((p->mapId == (CURRENT_MAP_ID & 0xFF)) &&
+		if ((p->mapId == (CURRENT_SCREEN_ID & 0xFF)) &&
 		    ((p->trigger == 0xFFFF) || (isTriggerSet(p->trigger) != 0))) {
 			if ((HOUR >= 7) && (HOUR < 0x13)) {
 				if (p->mode == 0) {
@@ -665,14 +665,14 @@ void startTournament(void)
 		expected = 2;
 	}
 	if (result == expected) {
-		MAIN_D_80134FCC++;
-		MAIN_D_80134FCC = enforceStatsLimits(0x11, MAIN_D_80134FCC);
+		TOURNAMENTS_WON++;
+		TOURNAMENTS_WON = enforceStatsLimits(0x11, TOURNAMENTS_WON);
 		setTrigger(id + 15);
 	} else {
-		MAIN_D_80134FD0++;
+		TOURNAMENTS_LOST++;
 	}
-	TOURNAMENTS_LOST += result;
-	TOURNAMENTS_LOST = enforceStatsLimits(0x12, TOURNAMENTS_LOST);
-	MAIN_D_80134FD0 = enforceStatsLimits(0x13, MAIN_D_80134FD0);
+	TOURNAMENT_WINS += result;
+	TOURNAMENT_WINS = enforceStatsLimits(0x12, TOURNAMENT_WINS);
+	TOURNAMENTS_LOST = enforceStatsLimits(0x13, TOURNAMENTS_LOST);
 	writePStat(0xff, result);
 }

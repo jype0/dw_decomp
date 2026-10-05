@@ -24,7 +24,7 @@ extern int32_t BUTTERFLY_ID;
 extern int8_t PARTNER_STATE;
 extern int8_t PARTNER_SUB_STATE;
 extern int8_t PARTNER_ANIMATION;
-extern int8_t PARTNER_IS_STANDING_STILL;
+extern int8_t IS_STANDING_STILL;
 extern int16_t MAIN_D_80134E28;
 extern int16_t EVOLUTION_TARGET;
 extern int8_t EMOTION_ANIM_TIMEOUT;
@@ -33,7 +33,7 @@ extern uint8_t HEALTH_SHOE_FRAMES;
 extern int16_t WILD_POOP_ID;
 extern uint8_t POOP_TO_EAT;
 extern int32_t SOME_SCRIPT_SYNC_BIT;
-extern int16_t MAIN_D_80134E34;
+extern int16_t EVO_SEQUENCE_UNUSED;
 
 extern int8_t MAIN_STATE;
 extern int8_t GAME_STATE;
@@ -509,27 +509,27 @@ void tickPartnerToilet(void)
 	case 0:
 		tamerSetState(6);
 		unsetCameraFollowPlayer();
-		TOILET_POS1.vx = TOILET_DATA[toiletId].posX1;
-		TOILET_POS1.vy = location->vy;
-		TOILET_POS1.vz = TOILET_DATA[toiletId].posY1;
-		TOILET_POS2.vx = TOILET_DATA[toiletId].posX2;
-		TOILET_POS2.vy = location->vy;
-		TOILET_POS2.vz = TOILET_DATA[toiletId].posY2;
-		createCameraMovement(&TOILET_POS2, 20);
+		TOILET_TARGET_POS1.vx = TOILET_DATA[toiletId].posX1;
+		TOILET_TARGET_POS1.vy = location->vy;
+		TOILET_TARGET_POS1.vz = TOILET_DATA[toiletId].posY1;
+		TOILET_TARGET_POS2.vx = TOILET_DATA[toiletId].posX2;
+		TOILET_TARGET_POS2.vy = location->vy;
+		TOILET_TARGET_POS2.vz = TOILET_DATA[toiletId].posY2;
+		createCameraMovement(&TOILET_TARGET_POS2, 20);
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
 		PARTNER_SUB_STATE = 1;
 		break;
 	case 1:
 		entityLookAtLocation(&TAMER_ENTITY.entity, location);
-		if (tickEntityWalkTo(0xfc, 0xff, TOILET_POS1.vx,
-                                            TOILET_POS1.vz, 0) == 1) {
+		if (tickEntityWalkTo(0xfc, 0xff, TOILET_TARGET_POS1.vx,
+                                            TOILET_TARGET_POS1.vz, 0) == 1) {
 			PARTNER_SUB_STATE = 2;
 		}
 		break;
 	case 2:
 		entityLookAtLocation(&TAMER_ENTITY.entity, location);
-		if (tickEntityWalkTo(0xfc, 0xff, TOILET_POS2.vx,
-                                            TOILET_POS2.vz, 0) == 1) {
+		if (tickEntityWalkTo(0xfc, 0xff, TOILET_TARGET_POS2.vx,
+                                            TOILET_TARGET_POS2.vz, 0) == 1) {
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 10);
 			PARTNER_SUB_STATE = 3;
 		}
@@ -545,8 +545,8 @@ void tickPartnerToilet(void)
 		break;
 	case 4:
 		entityLookAtLocation(&TAMER_ENTITY.entity, (VECTOR*)&location); // BUG: this shouldn't be a pointer?
-		if (tickEntityWalkTo(0xfc, 0xff, TOILET_POS1.vx,
-                                            TOILET_POS1.vz, 0) == 1) {
+		if (tickEntityWalkTo(0xfc, 0xff, TOILET_TARGET_POS1.vx,
+                                            TOILET_TARGET_POS1.vz, 0) == 1) {
 			SOME_SCRIPT_SYNC_BIT = 1;
 		}
 	default:
@@ -726,7 +726,7 @@ void partnerTickEvolving(void)
 			getEvoSequenceState((PartnerEntity*)ENTITY_TABLE[1],
                                             GENERAL_BUFFER_PTR, &PARTNER_PARA,
                                             EVOLUTION_TARGET, 0);
-			MAIN_D_80134E34 = 0;
+			EVO_SEQUENCE_UNUSED = 0;
 			PARTNER_SUB_STATE = 2;
 		}
 		break;
@@ -825,7 +825,7 @@ void partnerTickWalking(void)
 			}
 		}
 #if !defined(VERSION_JP)
-		PARTNER_IS_STANDING_STILL = 1;
+		IS_STANDING_STILL = 1;
 #endif
 	}
 	else if (closeness == 1) {
@@ -846,15 +846,15 @@ void partnerTickWalking(void)
 
 		EMOTION_ANIM_TIMEOUT = -1;
 #if !defined(VERSION_JP)
-		PARTNER_IS_STANDING_STILL = 1;
+		IS_STANDING_STILL = 1;
 #endif
 	}
 	else if (closeness == 2) {
 		if ((anim->animId == 0) || (anim->animId == 1)) {
 #if defined(VERSION_JP)
-			if (PARTNER_IS_STANDING_STILL != 0) {
+			if (IS_STANDING_STILL != 0) {
 #else
-			if (PARTNER_IS_STANDING_STILL != 2) {
+			if (IS_STANDING_STILL != 2) {
 #endif
 				updateConditionAnimation();
 			}
@@ -871,7 +871,7 @@ void partnerTickWalking(void)
 				EMOTION_ANIM_TIMEOUT = randomLimit(5) + 1;
 				setPartnerIdle();
 #if defined(VERSION_JP)
-				PARTNER_IS_STANDING_STILL = 0;
+				IS_STANDING_STILL = 0;
 #endif
 				STOP_DISTANCE_TIMER = 0;
 			}
@@ -900,7 +900,7 @@ void partnerTickWalking(void)
 
 		STOP_DISTANCE_TIMER++;
 #if !defined(VERSION_JP)
-		PARTNER_IS_STANDING_STILL = 2;
+		IS_STANDING_STILL = 2;
 #endif
 	}
 
@@ -1031,7 +1031,7 @@ void setPartnerIdle(void)
 	if (((PARTNER_ANIMATION != 1) &&
 	     (PARTNER_ANIMATION != 0))
 #if !defined(VERSION_JP)
-	    || (PARTNER_IS_STANDING_STILL != 2)
+	    || (IS_STANDING_STILL != 2)
 #endif
 	) {
 		if ((((PARTNER_PARA.condition & 0x1) != 0) ||

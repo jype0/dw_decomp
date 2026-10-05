@@ -3,8 +3,8 @@
 #include <dw/model.h>
 #include <dw/world_object.h>
 
-extern int32_t buffModelValue[2];
-extern int32_t buffModelFrame;
+extern int32_t BUFF_MODEL_MORPH_VALUE[2];
+extern int32_t BUFF_MODEL_FRAME;
 extern TMDModel *BUFF_MODEL[];
 
 void tickBuffModel(int32_t instanceId);
@@ -25,8 +25,8 @@ static void *buff_model_functions[] = {
 
 void tickBuffModel(int32_t instanceId)
 {
-	morphBuffModel((int32_t)BUFF_MODEL[0], 5, buffModelValue[buffModelFrame & 1]);
-	buffModelFrame += 1;
+	morphBuffModel((int32_t)BUFF_MODEL[0], 5, BUFF_MODEL_MORPH_VALUE[BUFF_MODEL_FRAME & 1]);
+	BUFF_MODEL_FRAME += 1;
 }
 
 void renderBuffModel(void)
@@ -69,13 +69,13 @@ void initializeBuffModel(TMDModel *model)
 {
 	BUFF_MODEL[0] = model;
 	GsMapModelingData((unsigned long *)&BUFF_MODEL[0]->flags);
-	buffModelValue[0] = 0x7acc;
-	buffModelValue[1] = 0x7b0c;
+	BUFF_MODEL_MORPH_VALUE[0] = 0x7acc;
+	BUFF_MODEL_MORPH_VALUE[1] = 0x7b0c;
 }
 
 int32_t initializeBuffModelObject(void)
 {
-	buffModelFrame = 0;
+	BUFF_MODEL_FRAME = 0;
 	return addObject(0x501, 0, tickBuffModel,
 			 (RenderFunction)renderBuffModel);
 }

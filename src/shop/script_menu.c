@@ -30,18 +30,18 @@ typedef struct {
 } TextBoxTable;
 
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern uint8_t MAIN_D_80135007;
-extern uint8_t MAIN_D_80134F82;
+extern uint8_t ACTIVE_BGM_TRACK;
+extern uint8_t NAMING_CURRENT_LETTER;
 extern uint8_t MAIN_D_80134F8F;
 extern uint8_t MAIN_D_80134F90;
-extern int32_t MAIN_D_8012FFC4[];
+extern int32_t CARD_PRICES[];
 extern uint8_t SHOP_AMOUNT;
 extern uint32_t POLLED_INPUT;
 extern int16_t ITEM_MENU_DESCRIPTION_RECTS[];
-extern TextBoxTable MAIN_D_801BE80C;
+extern TextBoxTable TEXTBOX_LINES_USED;
 extern char MAIN_D_801B1D26[];
 extern int16_t SELECTION_CURSOR_WIDTHS[];
-extern uint8_t *CURRENT_SCRIPT_PTR;
+extern uint8_t *ACTIVE_SCRIPT;
 
 void renderItemMenuSprite(uint8_t boxId, int32_t idx, int16_t x, int16_t y);
 void renderItemMenuScrollBar(ItemMenuBox *box);
@@ -202,12 +202,12 @@ uint8_t MAIN_D_801303B8[128] = {
 	0x21, 0x01, 0x21, 0x02, 0x21, 0x03, 0x00, 0x00,
 };
 
-uint8_t MAIN_D_80130438[12] = {
+uint8_t MOJYAMON_ITEMS_GIVE[12] = {
 	0x2c, 0x29, 0x45, 0x27, 0x41, 0x11, 0x09, 0x01,
 	0x3e, 0x00, 0x00, 0x00,
 };
 
-uint8_t MAIN_D_80130444[12] = {
+uint8_t MOJYAMON_ITEMS_GET[12] = {
 	0x01, 0x09, 0x61, 0x16, 0x0b, 0x0e, 0x13, 0x14,
 	0x15, 0x00, 0x00, 0x00,
 };
@@ -244,7 +244,7 @@ char MAIN_D_801304A4[] = "や　ゆ　よ";
 
 char MAIN_D_801304B0[] = "らりるれろ";
 
-char *MAIN_D_801304BC[9] = {
+char *CHAR_PAGE3_LEFT[9] = {
 	MAIN_D_80130450,
 	MAIN_D_8013045C,
 	MAIN_D_80130468,
@@ -274,7 +274,7 @@ char MAIN_D_80130534[] = "っゃゅょー";
 
 char MAIN_D_80130540[] = "　　　　　";
 
-char *MAIN_D_8013054C[9] = {
+char *CHAR_PAGE3_RIGHT[9] = {
 	MAIN_D_801304E0,
 	MAIN_D_801304EC,
 	MAIN_D_801304F8,
@@ -304,7 +304,7 @@ char MAIN_D_801305C4[] = "ヤ　ユ　ヨ";
 
 char MAIN_D_801305D0[] = "ラリルレロ";
 
-char *MAIN_D_801305DC[9] = {
+char *CHAR_PAGE2_LEFT[9] = {
 	MAIN_D_80130570,
 	MAIN_D_8013057C,
 	MAIN_D_80130588,
@@ -332,7 +332,7 @@ char MAIN_D_80130648[] = "ァィゥェォ";
 
 char MAIN_D_80130654[] = "ッャュョー";
 
-char *MAIN_D_80130660[9] = {
+char *CHAR_PAGE2_RIGHT[9] = {
 	MAIN_D_80130600,
 	MAIN_D_8013060C,
 	MAIN_D_80130618,
@@ -356,7 +356,7 @@ char MAIN_D_801306B4[] = "ＵＶＷＸＹ";
 
 char MAIN_D_801306C0[] = "Ｚ　　　　";
 
-char *MAIN_D_801306CC[9] = {
+char *CHAR_PAGE1_LEFT[9] = {
 	MAIN_D_80130684,
 	MAIN_D_80130690,
 	MAIN_D_8013069C,
@@ -387,7 +387,7 @@ char MAIN_D_80130738[] = "０１２３４";
 char MAIN_D_80130744[] = "５６７８９";
 
 #if defined(VERSION_JP)
-char *MAIN_D_80130750[9] = {
+char *CHAR_PAGE1_RIGHT[9] = {
 	MAIN_D_80130738,
 	MAIN_D_80130744,
 	MAIN_D_80130540,
@@ -399,31 +399,31 @@ char *MAIN_D_80130750[9] = {
 	MAIN_D_80130540,
 };
 
-char **MAIN_D_80130774[6] = {
-	MAIN_D_801304BC,
-	MAIN_D_8013054C,
-	MAIN_D_801305DC,
-	MAIN_D_80130660,
-	MAIN_D_801306CC,
-	MAIN_D_80130750,
+char **NAMING_CHAR_PAGES[6] = {
+	CHAR_PAGE3_LEFT,
+	CHAR_PAGE3_RIGHT,
+	CHAR_PAGE2_LEFT,
+	CHAR_PAGE2_RIGHT,
+	CHAR_PAGE1_LEFT,
+	CHAR_PAGE1_RIGHT,
 };
 
-int16_t MAIN_D_8013078C[18] = {
+int16_t NAMING_CTRL_BOXES[18] = {
 	0x000e, 0x0006, 0x0030, 0x001a, 0x0022, 0x0018, 0x001a, 0x0030,
 	0x0018, 0x001a, 0x003e, 0x0018, 0x001a, 0x005a, 0x0018, 0x001a,
 	0x0076, 0x0018,
 };
 
-uint16_t MAIN_D_801307A0[10] = {
+uint16_t NAMING_ROLLOVER_CHARS[10] = {
 	0x8000, 0x8000, 0x8000, 0x8001, 0x8002, 0x8003, 0x8003, 0x8004,
 	0x8004, 0x0000,
 };
 
-uint16_t MAIN_D_80134608[6] = {
+uint16_t NAMING_ROLLOVER_CTRL[6] = {
 	0x000a, 0x000f, 0x0014, 0x001e, 0x0028, 0x0000,
 };
 #else
-char *MAIN_D_80130750[9] = {
+char *CHAR_PAGE1_RIGHT[9] = {
 	MAIN_D_801306F0,
 	MAIN_D_801306FC,
 	MAIN_D_80130708,
@@ -435,21 +435,21 @@ char *MAIN_D_80130750[9] = {
 	MAIN_D_80130540,
 };
 
-char **MAIN_D_80130774[6] = {
-	MAIN_D_801306CC,
-	MAIN_D_80130750,
-	MAIN_D_801305DC,
-	MAIN_D_80130660,
-	MAIN_D_801304BC,
-	MAIN_D_8013054C,
+char **NAMING_CHAR_PAGES[6] = {
+	CHAR_PAGE1_LEFT,
+	CHAR_PAGE1_RIGHT,
+	CHAR_PAGE2_LEFT,
+	CHAR_PAGE2_RIGHT,
+	CHAR_PAGE3_LEFT,
+	CHAR_PAGE3_RIGHT,
 };
 
-int16_t MAIN_D_8013078C[10] = {
+int16_t NAMING_CTRL_BOXES[10] = {
 	0x000e, 0x0006, 0x0030, 0x000e, 0x005a, 0x0030, 0x000e, 0x0076,
 	0x0018, 0x0000,
 };
 
-uint16_t MAIN_D_801307A0[10] = {
+uint16_t NAMING_ROLLOVER_CHARS[10] = {
 	0x8000, 0x8000, 0x8000, 0x8000, 0x8000, 0x8000, 0x8000, 0x8000,
 	0x8000, 0x0000,
 };
@@ -468,44 +468,44 @@ char MAIN_D_801345F8[] = "Name";
 
 char MAIN_D_80134600[8] = "BackOK";
 
-uint16_t MAIN_D_80134608[2] = {
+uint16_t NAMING_ROLLOVER_CTRL[2] = {
 	0x0019, 0x0019,
 };
 #endif
 
-SelectionBoxUVData MAIN_D_8013460C = { {
+SelectionBoxUVData NAMING_U02 = { {
 	0x00, 0x04, 0x00, 0x04, 0x04, 0x04, 0x08, 0x08,
 } };
 
-SelectionBoxUVData MAIN_D_80134614 = { {
+SelectionBoxUVData NAMING_U13 = { {
 	0x04, 0x00, 0x04, 0x00, 0x08, 0x08, 0x0c, 0x0c,
 } };
 
-SelectionBoxUVData MAIN_D_8013461C = { {
+SelectionBoxUVData NAMING_V01 = { {
 	0xfb, 0xfb, 0xff, 0xff, 0xfb, 0xfb, 0xfb, 0xfb,
 } };
 
-SelectionBoxUVData MAIN_D_80134624 = { {
+SelectionBoxUVData NAMING_V23 = { {
 	0xff, 0xff, 0xfb, 0xfb, 0xff, 0xff, 0xff, 0xff,
 } };
 
-SelectionBoxOffsetData MAIN_D_8013462C = { {
+SelectionBoxOffsetData NAMING_CTRL_X = { {
 	0x00, 0x10, 0x00, 0x10, 0x04, 0x04, 0x00, 0x11,
 } };
 
-SelectionBoxOffsetData MAIN_D_80134634 = { {
+SelectionBoxOffsetData NAMING_Y = { {
 	0x00, 0x00, 0x0e, 0x0e, 0x00, 0x0e, 0x00, 0x00,
 } };
 
-SelectionBoxOffsetData MAIN_D_8013463C = { {
+SelectionBoxOffsetData NAMING_CTRL_WIDTH = { {
 	0x04, 0x04, 0x04, 0x04, 0x10, 0x10, 0x04, 0x04,
 } };
 
-SelectionBoxOffsetData MAIN_D_80134644 = { {
+SelectionBoxOffsetData NAMING_HEIGHT = { {
 	0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x0e, 0x0e,
 } };
 
-SelectionBoxOffsetData MAIN_D_8013464C = { {
+SelectionBoxOffsetData NAMING_CHAR_X = { {
 #if defined(VERSION_JP)
 	0x00, 0x1b, 0x00, 0x1b, 0x04, 0x04, 0x00, 0x1c,
 #else
@@ -513,7 +513,7 @@ SelectionBoxOffsetData MAIN_D_8013464C = { {
 #endif
 } };
 
-SelectionBoxOffsetData MAIN_D_80134654 = { {
+SelectionBoxOffsetData NAMING_CHAR_WIDTH = { {
 #if defined(VERSION_JP)
 	0x04, 0x04, 0x04, 0x04, 0x1b, 0x1b, 0x04, 0x04,
 #else
@@ -545,24 +545,24 @@ void openRecycleShop(void)
 	uint8_t owner = readPStat(PSTAT_254);
 	int32_t hasItems;
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0x9c, 6, 0xd2,
 		                    0x18, 6, 0x5a);
 		hasItems = fillRecycleShopItemList();
-		MAIN_D_80134F70 = 0;
+		SHOP_ACTION_SELECTED = 0;
 		MAIN_D_80134F74 = 0;
 
 		if (hasItems != 0) {
 			showShopkeeperTextbox(0, owner, 0);
-			SELECTION_MENU_STATE = 1;
-			SCRIPT_STATE_4 = 3;
-			SCRIPT_STATE_3 = 1;
+			SCRIPT_STATE_2 = 1;
+			SCRIPT_NEXT_STATE_2 = 3;
+			SCRIPT_TEXTBOX_MODE = 1;
 		} else {
 			showShopkeeperTextbox(1, owner, 0);
-			SELECTION_MENU_STATE = 1;
-			SCRIPT_STATE_4 = 2;
-			SCRIPT_STATE_3 = 1;
+			SCRIPT_STATE_2 = 1;
+			SCRIPT_NEXT_STATE_2 = 2;
+			SCRIPT_TEXTBOX_MODE = 1;
 		}
 		/* fall through */
 	case 1:
@@ -573,18 +573,18 @@ void openRecycleShop(void)
 		break;
 	case 3:
 		createShopBitsBox(1);
-		showShopkeepSelection(3, 0xfd, 2, &MAIN_D_80134F70);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 4;
-		SCRIPT_STATE_3 = 2;
+		showShopkeepSelection(3, 0xfd, 2, &SHOP_ACTION_SELECTED);
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 4;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 4:
 		setInputRepeatMask(0x5000);
 		ITEM_MENU_TYPE = 2;
 		createItemMenu();
 		showShopkeeperTextbox(8, owner, 0);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 5:
 	case 6:
@@ -594,9 +594,9 @@ void openRecycleShop(void)
 		} else {
 			showShopkeeperTextbox(5, owner, 0);
 		}
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 7:
 		setInputRepeatMask(0);
@@ -609,57 +609,57 @@ void openRecycleShop(void)
 		MAIN_D_80134F74 = 1;
 		hasItems = fillRecycleShopItemList();
 		if (hasItems != 0) {
-			SCRIPT_STATE_4 = 3;
+			SCRIPT_NEXT_STATE_2 = 3;
 		} else {
-			SCRIPT_STATE_4 = 9;
+			SCRIPT_NEXT_STATE_2 = 9;
 		}
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 8:
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 		showShopkeeperTextbox(0xb, owner, 0);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 9:
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 		showShopkeeperTextbox(0xc, owner, 0);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 6;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 6;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	}
 }
 
 void rollCardPack(void)
 {
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		writePStat(PSTAT_249, rollCard());
 		showCardTextbox();
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 1:
 		break;
 	case 2:
 		writePStat(PSTAT_249, rollCard());
 		showCardTextbox();
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 3:
 		writePStat(PSTAT_249, rollCard());
 		showCardTextbox();
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 4;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 4;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 4:
 		ACTIVE_INSTRUCTION = 0;
@@ -672,19 +672,19 @@ void openBuyCardMenu(void)
 	uint8_t owner = readPStat(PSTAT_254);
 	int32_t hasItems;
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0xc, 6, 0xb2, 0x18, 6,
 		                    0x5a);
 		hasItems = hasAnyCardToBuy();
 		if (hasItems != 0) {
-			SELECTION_MENU_STATE = 3;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_STATE_2 = 3;
+			SCRIPT_TEXTBOX_MODE = 0;
 		} else {
 			showMapHeadTextbox(1, owner, 0, 0x4d3);
-			SELECTION_MENU_STATE = 1;
-			SCRIPT_STATE_4 = 2;
-			SCRIPT_STATE_3 = 1;
+			SCRIPT_STATE_2 = 1;
+			SCRIPT_NEXT_STATE_2 = 2;
+			SCRIPT_TEXTBOX_MODE = 1;
 		}
 		break;
 	case 1:
@@ -698,13 +698,13 @@ void openBuyCardMenu(void)
 		ITEM_MENU_TYPE = 3;
 		createCardMenu();
 		showMapHeadTextbox(0, owner, 0, 0x4d3);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 4:
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
-		SELECTION_MENU_STATE = 2;
+		SCRIPT_STATE_2 = 2;
 		break;
 	}
 }
@@ -714,13 +714,13 @@ void openSellCardMenu(void)
 	uint8_t owner = readPStat(PSTAT_254);
 	int32_t hasItems;
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0x84, 6, 0xd2, 0x18,
 		                    6, 0x5a);
 		hasItems = shopFillSellCardList();
-		SELECTION_MENU_STATE = 3;
-		SCRIPT_STATE_3 = 0;
+		SCRIPT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 0;
 		/* fall through */
 	case 1:
 		break;
@@ -733,13 +733,13 @@ void openSellCardMenu(void)
 		ITEM_MENU_TYPE = 4;
 		createCardMenu();
 		showMapHeadTextbox(8, owner, 0, 0x4d3);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 4:
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
-		SELECTION_MENU_STATE = 2;
+		SCRIPT_STATE_2 = 2;
 		break;
 	}
 }
@@ -749,16 +749,16 @@ void openMeritShop(void)
 	int32_t selection = 0;
 	uint8_t owner = readPStat(PSTAT_254);
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0x84, 6, 0x9a, 0x18,
 		                    6, 0x5a);
 		allocateItemMenuBox(&ITEM_MENU_RIGHT, 0x100, 6, 0xb2, 0x18,
 		                    6, 0x5a);
 		showMapHeadTextbox(0, owner, 0, 0x4d4);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		/* fall through */
 	case 1:
 		break;
@@ -771,9 +771,9 @@ void openMeritShop(void)
 		setInputRepeatMask(0);
 		createShopBitsBox(0);
 		showMapheadSelection(1, 0xfd, 3, &selection, 0x4d4);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 4;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 4;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 4:
 		setInputRepeatMask(0x5000);
@@ -781,8 +781,8 @@ void openMeritShop(void)
 		shopFillSellCardList();
 		createCardMenu();
 		showMapHeadTextbox(5, owner, 0, 0x4d4);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 5:
 		setInputRepeatMask(0x5000);
@@ -790,25 +790,25 @@ void openMeritShop(void)
 		shopFillMeritItemList();
 		createItemMenu();
 		showMapHeadTextbox(6, owner, 0, 0x4d4);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 6:
 		triggerBoxCloseFlag(2);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 7:
 		setInputRepeatMask(0);
 		showMapheadSelection(2, 0xfd, 2, &selection, 0x4d4);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 8;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 8;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 8:
 		triggerBoxCloseFlag(1);
-		MERIT += MAIN_D_8013500C;
+		MERIT += SHOP_VARIABLE;
 		if (MERIT > 9999) {
 			MERIT = 9999;
 		}
@@ -816,8 +816,8 @@ void openMeritShop(void)
 		owner = getCardAmount(SHOP_ITEM_TYPE);
 		owner -= 1;
 		setCardAmount(SHOP_ITEM_TYPE, owner);
-		SELECTION_MENU_STATE = 3;
-		SCRIPT_STATE_3 = 0;
+		SCRIPT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 0;
 		playShopSoundOnlyInSavannah();
 		return;
 	case 10:
@@ -826,23 +826,23 @@ void openMeritShop(void)
 	case 9:
 	case 0xd:
 		triggerBoxCloseFlag(1);
-		SELECTION_MENU_STATE = 3;
-		SCRIPT_STATE_3 = 0;
+		SCRIPT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 0;
 		break;
 	case 0xb:
 		setInputRepeatMask(0);
 		showMapheadSelection(3, 0xfd, 2, &selection, 0x4d4);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 0xc;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 0xc;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 0xc:
 		triggerBoxCloseFlag(1);
-		MERIT -= MAIN_D_8013500C;
+		MERIT -= SHOP_VARIABLE;
 		UPDATE_SHOP_BIT_BOX = 1;
 		giveItem(SHOP_ITEM_TYPE, 1);
-		SELECTION_MENU_STATE = 3;
-		SCRIPT_STATE_3 = 0;
+		SCRIPT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 0;
 		playShopSoundOnlyInSavannah();
 		break;
 	}
@@ -853,7 +853,7 @@ void tickItemKeeper(void)
 	int32_t selection = 0;
 	uint8_t owner = readPStat(PSTAT_254);
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0x100, 5, 0x88, 0x28,
 		                    6, 0x4a);
@@ -861,9 +861,9 @@ void tickItemKeeper(void)
 		                    INVENTORY.size << 1, 5, 0x88, 0x28,
 		                    6, 0x4a);
 		showMapHeadTextbox(0, owner, 0, 0x4d5);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 1:
 		break;
@@ -875,9 +875,9 @@ void tickItemKeeper(void)
 	case 3:
 		MAIN_D_80134F90 = 0;
 		showMapheadSelection(1, 0xfd, 2, &selection, 0x4d5);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 4;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 4;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 4:
 #if defined(VERSION_JP)
@@ -889,20 +889,20 @@ void tickItemKeeper(void)
 		itemKeeperFillItemList();
 		createItemKeepWindow();
 		showMapHeadTextbox(3, owner, 0, 0x4d5);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 6:
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 		triggerBoxCloseFlag(2);
-		SELECTION_MENU_STATE = 5;
+		SCRIPT_STATE_2 = 5;
 		break;
 	case 5:
 		showMapHeadTextbox(2, owner, 0, 0x4d5);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	}
 }
@@ -911,38 +911,38 @@ void openJukebox(void)
 {
 	uint8_t owner = readPStat(PSTAT_254);
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0x7e, 6, 0xd2, 0x18,
 		                    6, 0x5a);
 		jukeboxFillTitleList();
 		showMapHeadTextbox(3, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 1:
 		break;
 	case 2:
 		destroyItemMenuBox(&ITEM_MENU_LEFT);
 		playBGM(ACTIVE_BGM_FONT);
-		readMapTFS(CURRENT_MAP_ID);
+		readMapTFS(CURRENT_SCREEN_ID);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 3:
 		setInputRepeatMask(0x5000);
 		createJukeboxMenu();
 		showMapHeadTextbox(0, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 4:
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 		showMapHeadTextbox(1, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	}
 }
@@ -952,15 +952,15 @@ void tickBirdraTransport(void)
 	int32_t selection = 0;
 	uint8_t owner = readPStat(PSTAT_254);
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 0xc, 6, 0xd2, 0x18, 6,
 		                    0x5a);
 		birdraFillTargetList();
 		showMapHeadTextbox(4, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 1:
 		break;
@@ -972,14 +972,14 @@ void tickBirdraTransport(void)
 		createShopBitsBox(1);
 		createBirdraTransportMenu();
 		setInputRepeatMask(0x5000);
-		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_2 = 1;
 		break;
 	case 4:
 		setInputRepeatMask(0);
 		showMapheadSelection(7, 0xfd, 2, &selection, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 5;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 5;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 5: {
 		uint8_t idx;
@@ -991,12 +991,12 @@ void tickBirdraTransport(void)
 		row = (ITEM_MENU_LEFT->topRow + ITEM_MENU_LEFT->cursor) * 2;
 		idx = ITEM_MENU_LEFT->buf[row];
 		idx &= 0x7f;
-		writePStat(PSTAT_247, MAIN_D_8013024C[idx].mapId);
-		writePStat(PSTAT_248, MAIN_D_8013024C[idx].unk_0x1);
-		CURRENT_SCRIPT_PTR = getScript(0);
-		MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, 0x4e3);
-		MONEY -= MAIN_D_8013500C;
-		SELECTION_MENU_STATE = 2;
+		writePStat(PSTAT_247, BIRDRA_TRANSPORT_TARGETS[idx].mapId);
+		writePStat(PSTAT_248, BIRDRA_TRANSPORT_TARGETS[idx].unk_0x1);
+		ACTIVE_SCRIPT = getScript(0);
+		SCRIPT_POINTER = getScriptSection(ACTIVE_SCRIPT, 0x4e3);
+		MONEY -= SHOP_VARIABLE;
+		SCRIPT_STATE_2 = 2;
 		break;
 	}
 	case 6:
@@ -1004,9 +1004,9 @@ void tickBirdraTransport(void)
 		triggerBoxCloseFlag(2);
 		triggerBoxCloseFlag(1);
 		showMapHeadTextbox(5, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	}
 }
@@ -1016,16 +1016,16 @@ void openMojyamonShop(void)
 	int32_t selection = 0;
 	uint8_t owner = readPStat(PSTAT_254);
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		allocateItemMenuBox(&ITEM_MENU_LEFT, 6, 3, 0, 0, 0, 0);
 		allocateItemMenuBox(&ITEM_MENU_RIGHT, 6, 3, 0, 0, 0, 0);
 		mojyaTradeFillItemList();
 		writePStat(PSTAT_249, 255);
 		showMapHeadTextbox(8, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 3;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 3;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	case 1:
 		break;
@@ -1038,15 +1038,15 @@ void openMojyamonShop(void)
 		setInputRepeatMask(0x5000);
 		createMojyaTradeMenu();
 		showMapHeadTextbox(9, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		break;
 	case 4:
 		setInputRepeatMask(0);
 		showMapheadSelection(0xc, 0xfd, 2, &selection, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 5;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 5;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 5: {
 		uint8_t itemId;
@@ -1065,9 +1065,9 @@ void openMojyamonShop(void)
 			showMapHeadTextbox(0xe, owner, 0, 0x4d6);
 		}
 
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		playShopSoundOnlyInSavannah();
 		break;
 	}
@@ -1075,9 +1075,9 @@ void openMojyamonShop(void)
 		setInputRepeatMask(0);
 		triggerBoxCloseFlag(1);
 		showMapHeadTextbox(10, owner, 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_4 = 2;
-		SCRIPT_STATE_3 = 1;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_NEXT_STATE_2 = 2;
+		SCRIPT_TEXTBOX_MODE = 1;
 		break;
 	}
 }
@@ -1085,15 +1085,15 @@ void openMojyamonShop(void)
 void initializeNamingBuffer(uint8_t flags)
 {
 	if ((flags & 2) == 0) {
-		MAIN_D_80134F8E = 0;
-		SELECTION_MENU_STATE = 0;
+		NAMING_BOX_FLAG = 0;
+		SCRIPT_STATE_2 = 0;
 		MAIN_D_801B1D1C[0] = 0;
 	} else {
 		closeBox(0);
-		MAIN_D_80134F8E = flags;
-		SELECTION_MENU_STATE = 0x14;
+		NAMING_BOX_FLAG = flags;
+		SCRIPT_STATE_2 = 0x14;
 
-		if ((MAIN_D_80134F8E & 1) == 0) {
+		if ((NAMING_BOX_FLAG & 1) == 0) {
 			strcpy(MAIN_D_801B1D1C, DIGIMON_DATA[0].name);
 		} else {
 			strcpy(MAIN_D_801B1D1C, PARTNER_ENTITY.name);
@@ -1101,14 +1101,14 @@ void initializeNamingBuffer(uint8_t flags)
 	}
 
 	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-	SCRIPT_STATE_3 = 0;
+	SCRIPT_TEXTBOX_MODE = 0;
 }
 
 int32_t newGameStateMachine(void)
 {
 	int32_t i;
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		setTrigger(TRIGGER_49);
 #if defined(VERSION_JP)
@@ -1119,7 +1119,7 @@ int32_t newGameStateMachine(void)
 		setupNewGameDialogueBox();
 		showNewGameDialogue(0x10, 2);
 #if !defined(VERSION_JP)
-		MAIN_D_80134F98 = 0;
+		DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
 		break;
 #if defined(VERSION_JP)
@@ -1146,11 +1146,11 @@ int32_t newGameStateMachine(void)
 		break;
 	case 8:
 		writePStat(PSTAT_254, 0);
-		SELECTION_MENU_STATE = 0x11;
+		SCRIPT_STATE_2 = 0x11;
 		break;
 	case 9:
 		writePStat(PSTAT_254, 1);
-		SELECTION_MENU_STATE = 0x11;
+		SCRIPT_STATE_2 = 0x11;
 		break;
 	case 10:
 		showNewGameDialogue(0x17, 0xb);
@@ -1166,44 +1166,44 @@ int32_t newGameStateMachine(void)
 		break;
 	case 0x13:
 		closeBox(0);
-		SELECTION_MENU_STATE = 0x14;
+		SCRIPT_STATE_2 = 0x14;
 		break;
 	case 0x14:
 		setInputRepeatMask(0xf000);
 		setupNameSelectorBox();
 		setupNameDisplayBox();
 #if !defined(VERSION_JP)
-		MAIN_D_80134F98 = 1;
+		DRAW_STRING2_IS_FIXED_WIDTH = 1;
 #endif
-		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_2 = 1;
 		break;
 	case 0x15:
 		setInputRepeatMask(0);
 
-		if ((MAIN_D_80134F8E & 1) == 0) {
+		if ((NAMING_BOX_FLAG & 1) == 0) {
 			strcpy(DIGIMON_DATA[0].name, MAIN_D_801B1D1C);
 		} else {
 			strcpy(PARTNER_ENTITY.name, MAIN_D_801B1D1C);
 		}
 
-		if ((MAIN_D_80134F8E & 2) != 0) {
+		if ((NAMING_BOX_FLAG & 2) != 0) {
 			triggerBoxCloseFlag(1);
 			triggerBoxCloseFlag(2);
 #if !defined(VERSION_JP)
-			MAIN_D_80134F98 = 0;
+			DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
-			SELECTION_MENU_STATE = 0x16;
+			SCRIPT_STATE_2 = 0x16;
 		} else {
 			triggerBoxCloseFlag(1);
 			triggerBoxCloseFlag(2);
 #if !defined(VERSION_JP)
-			MAIN_D_80134F98 = 0;
+			DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
-			SELECTION_MENU_STATE = 0x16;
+			SCRIPT_STATE_2 = 0x16;
 		}
 		break;
 	case 0x16:
-		if ((MAIN_D_80134F8E & 2) != 0) {
+		if ((NAMING_BOX_FLAG & 2) != 0) {
 			for (i = 0; i < 6; i++) {
 				if (UI_BOX_DATA[1].state != 0) {
 					return 0;
@@ -1215,7 +1215,7 @@ int32_t newGameStateMachine(void)
 
 		setupNewGameDialogueBox();
 
-		if ((MAIN_D_80134F8E & 1) == 0) {
+		if ((NAMING_BOX_FLAG & 1) == 0) {
 			showNewGameDialogue(0x1b, 0x17);
 		} else {
 			showNewGameDialogue(0x1e, 0x1b);
@@ -1228,12 +1228,12 @@ int32_t newGameStateMachine(void)
 		showNewGameDialogue(0x1d, 0x1a);
 		break;
 	case 0x19:
-		SELECTION_MENU_STATE = 0x13;
+		SCRIPT_STATE_2 = 0x13;
 		break;
 	case 0x1a:
-		MAIN_D_80134F8E |= 1;
+		NAMING_BOX_FLAG |= 1;
 		MAIN_D_801B1D1C[0] = 0;
-		SELECTION_MENU_STATE = 0x13;
+		SCRIPT_STATE_2 = 0x13;
 		break;
 	case 0x1b:
 		showNewGameSelection(0x1c, 0x1c);
@@ -1242,7 +1242,7 @@ int32_t newGameStateMachine(void)
 		showNewGameDialogue(0x1f, 0x1e);
 		break;
 	case 0x1d:
-		SELECTION_MENU_STATE = 0x13;
+		SCRIPT_STATE_2 = 0x13;
 		break;
 	case 0x1e:
 		showNewGameDialogue(0x20, 0x1f);
@@ -1273,7 +1273,7 @@ int32_t hasAnyCardToBuy(void)
 		*buf++ = id;
 		if (id != 0xff) {
 			spriteId = CARD_DATA[id].spriteId;
-			if ((MAIN_D_8012FFC4[spriteId] <= MONEY) && ((uint32_t)getCardAmount(id) < 9)) {
+			if ((CARD_PRICES[spriteId] <= MONEY) && ((uint32_t)getCardAmount(id) < 9)) {
 				*buf++ = 1;
 			} else {
 				*buf++ = 0;
@@ -1358,7 +1358,7 @@ int32_t fillRecycleShopItemList(void)
 		count = SCRIPT_STATE_PTR->smth[i + 6];
 		if (count != 0) {
 			ITEM_MENU_LEFT->itemCount++;
-			itemId = MAIN_D_8012FE78[i];
+			itemId = RECYCLABLE_ITEMS[i];
 			*buf++ = itemId;
 			if (ITEM_PARA[itemId].value <= MONEY) {
 				count |= 0x80;
@@ -1436,7 +1436,7 @@ void createCardMenu(void)
 	registerTextbox(1, 9, 6, 1, 0);
 	initItemMenuBox(result, 1, 9);
 	updateItemMenuStrings(result, 9, 1);
-	MAIN_D_8013500C = 0;
+	SHOP_VARIABLE = 0;
 }
 
 int32_t shopFillMeritItemList(void)
@@ -1593,7 +1593,7 @@ static inline int32_t getActiveBGMFont(void)
 
 static inline int32_t getActiveBGMVariant(void)
 {
-	return MAIN_D_80135007;
+	return ACTIVE_BGM_TRACK;
 }
 
 void jukeboxFillTitleList(void)
@@ -1689,9 +1689,9 @@ void birdraFillTargetList(void)
 	buf = ITEM_MENU_LEFT->buf;
 	ITEM_MENU_LEFT->itemCount = 0;
 	for (i = 0; i < 6; i++) {
-		if (isTriggerSet(MAIN_D_8013024C[i].trigger) != 0) {
+		if (isTriggerSet(BIRDRA_TRANSPORT_TARGETS[i].trigger) != 0) {
 			ITEM_MENU_LEFT->itemCount++;
-			if (MAIN_D_8013024C[i].cost <= MONEY) {
+			if (BIRDRA_TRANSPORT_TARGETS[i].cost <= MONEY) {
 				*buf++ = i | 0x80;
 				buf++;
 			} else {
@@ -1715,7 +1715,7 @@ void createBirdraTransportMenu(void)
 	registerTextbox(1, 9, 6, 1, 0);
 	initItemMenuBox(ITEM_MENU_LEFT, 1, 9);
 	updateItemMenuStrings(ITEM_MENU_LEFT, 9, 3);
-	MAIN_D_8013500C = 0;
+	SHOP_VARIABLE = 0;
 }
 
 void mojyaTradeFillItemList(void)
@@ -1733,7 +1733,7 @@ void mojyaTradeFillItemList(void)
 	buf2 = ITEM_MENU_RIGHT->buf;
 	ITEM_MENU_RIGHT->itemCount = 3;
 	for (i = 0; i < 3; i++, idx++) {
-		item = MAIN_D_80130438[idx];
+		item = MOJYAMON_ITEMS_GIVE[idx];
 		if (getItemCount(item) != 0) {
 			*buf++ = item | 0x80;
 			buf++;
@@ -1741,7 +1741,7 @@ void mojyaTradeFillItemList(void)
 			*buf++ = item;
 			buf++;
 		}
-		*buf2++ = MAIN_D_80130444[idx];
+		*buf2++ = MOJYAMON_ITEMS_GET[idx];
 		buf2++;
 	}
 }
@@ -1799,7 +1799,7 @@ void tickCardMenu(void)
 		return;
 	}
 
-	if (MAIN_D_8013500C != 0) {
+	if (SHOP_VARIABLE != 0) {
 		return;
 	}
 
@@ -1816,9 +1816,9 @@ void tickCardMenu(void)
 		}
 	} else if (isKeyDown(CANCEL_BUTTON)) {
 		if (ITEM_MENU_TYPE != 6) {
-			SELECTION_MENU_STATE = 4;
+			SCRIPT_STATE_2 = 4;
 		} else {
-			SELECTION_MENU_STATE = 0xa;
+			SCRIPT_STATE_2 = 0xa;
 		}
 		playSound(0, 4);
 	} else if (isKeyDown(0x1000)) {
@@ -1884,12 +1884,12 @@ int32_t createMeritCardTradeDialogue(void)
 	if (SHOP_ITEM_TYPE != 0xff) {
 		kind = box->buf[off + 1];
 		if (kind != 0) {
-			MAIN_D_8013500C = CARD_DATA[SHOP_ITEM_TYPE].meritValue;
+			SHOP_VARIABLE = CARD_DATA[SHOP_ITEM_TYPE].meritValue;
 			kind = CARD_DATA[SHOP_ITEM_TYPE].spriteId + 7;
 			showMapHeadTextbox(kind, readPStat(0xfe), 0, 0x4d4);
-			SELECTION_MENU_STATE = 1;
-			SCRIPT_STATE_4 = 7;
-			SCRIPT_STATE_3 = 1;
+			SCRIPT_STATE_2 = 1;
+			SCRIPT_NEXT_STATE_2 = 7;
+			SCRIPT_TEXTBOX_MODE = 1;
 			playSound(0, 3);
 
 			return 1;
@@ -1934,7 +1934,7 @@ void tickItemKeeperWindow(void)
 		return;
 	}
 
-	if (SELECTION_MENU_STATE != 1) {
+	if (SCRIPT_STATE_2 != 1) {
 		return;
 	}
 
@@ -1945,7 +1945,7 @@ void tickItemKeeperWindow(void)
 	}
 
 	if (isKeyDown(CANCEL_BUTTON)) {
-		SELECTION_MENU_STATE = 6;
+		SCRIPT_STATE_2 = 6;
 		playSound(0, 4);
 	} else if (isKeyDown(0x8000)) {
 		MAIN_D_80134F90 = 0;
@@ -1999,15 +1999,15 @@ void updateKeeperTextbox(int32_t boxIndex)
 {
 	if (boxIndex == 0) {
 		showMapHeadTextbox(4, 0xff, 1, 0x4d5);
-		TEXT_BOX_DATA[1].writeCount--;
-		TEXT_BUFFERS_PTR[0x246] = 0xd;
-		TEXT_BUFFERS_PTR[0x3c6] = 0xd;
+		TEXTBOX_DATA[1].writeCount--;
+		TEXTBOX_LINES_PTR[0x246] = 0xd;
+		TEXTBOX_LINES_PTR[0x3c6] = 0xd;
 		updateItemMenuStrings(ITEM_MENU_LEFT, 0xa, 0);
 	} else {
 		showMapHeadTextbox(5, 0xff, 2, 0x4d5);
-		TEXT_BOX_DATA[2].writeCount--;
-		TEXT_BUFFERS_PTR[0x266] = 0xd;
-		TEXT_BUFFERS_PTR[0x3e6] = 0xd;
+		TEXTBOX_DATA[2].writeCount--;
+		TEXTBOX_LINES_PTR[0x266] = 0xd;
+		TEXTBOX_LINES_PTR[0x3e6] = 0xd;
 		updateItemMenuStrings(ITEM_MENU_RIGHT, 0xa, 0);
 	}
 }
@@ -2323,7 +2323,7 @@ void renderKeeperBox(ItemMenuBox *box, int8_t flag)
 	y = by + box->cursor * 0x12 + 0x21;
 draw:
 	renderSelectionCursor(bx + 5, y, 0x80, 0x12, 6 - boxId);
-	tbox = &MAIN_D_801BE80C.box[boxId];
+	tbox = &TEXTBOX_LINES_USED.box[boxId];
 	getVRAMModeCoords(tbox->vramMode, &x, &clut);
 	y = 0x6c;
 	y += tbox->backPage * tbox->vramRows * 12;
@@ -2387,12 +2387,12 @@ void tickJukeboxMenu(void)
 		cur = ITEM_MENU_LEFT->buf[offset];
 		writePStat(PSTAT_249, cur);
 		showMapHeadTextbox(2, readPStat(PSTAT_254), 0, 0x4d6);
-		SELECTION_MENU_STATE = 1;
-		SCRIPT_STATE_3 = 3;
+		SCRIPT_STATE_2 = 1;
+		SCRIPT_TEXTBOX_MODE = 3;
 		updateItemMenuStrings(ITEM_MENU_LEFT, 9, 2);
 		playSound(0, 3);
 	} else if (isKeyDown(CANCEL_BUTTON)) {
-		SELECTION_MENU_STATE = 4;
+		SCRIPT_STATE_2 = 4;
 		playSound(0, 4);
 	} else if (isKeyDown(0x1000)) {
 		if (POLLED_INPUT & 8) {
@@ -2450,7 +2450,7 @@ void tickBirdraTransportMenu(void)
 		return;
 	}
 
-	if (MAIN_D_8013500C != 0) {
+	if (SHOP_VARIABLE != 0) {
 		return;
 	}
 
@@ -2459,16 +2459,16 @@ void tickBirdraTransportMenu(void)
 		item = ITEM_MENU_LEFT->buf[offset];
 		if ((item & 0x80) != 0) {
 			showMapHeadTextbox(6, readPStat(PSTAT_254), 0, 0x4d6);
-			MAIN_D_8013500C = MAIN_D_8013024C[item & 0x7f].cost;
-			SELECTION_MENU_STATE = 1;
-			SCRIPT_STATE_4 = 4;
-			SCRIPT_STATE_3 = 1;
+			SHOP_VARIABLE = BIRDRA_TRANSPORT_TARGETS[item & 0x7f].cost;
+			SCRIPT_STATE_2 = 1;
+			SCRIPT_NEXT_STATE_2 = 4;
+			SCRIPT_TEXTBOX_MODE = 1;
 			playSound(0, 3);
 		} else {
 			playSound(0, 0xb);
 		}
 	} else if (isKeyDown(CANCEL_BUTTON)) {
-		SELECTION_MENU_STATE = 6;
+		SCRIPT_STATE_2 = 6;
 		playSound(0, 4);
 	} else if (isKeyDown(0x1000)) {
 		if (POLLED_INPUT & 8) {
@@ -2536,15 +2536,15 @@ void tickMojyaTradeMenu(void)
 		if ((item & 0x80) != 0) {
 			writePStat(PSTAT_249, (item & 0x7f));
 			showMapHeadTextbox(0xb, readPStat(PSTAT_254), 0, 0x4d6);
-			SELECTION_MENU_STATE = 1;
-			SCRIPT_STATE_4 = 4;
-			SCRIPT_STATE_3 = 1;
+			SCRIPT_STATE_2 = 1;
+			SCRIPT_NEXT_STATE_2 = 4;
+			SCRIPT_TEXTBOX_MODE = 1;
 			playSound(0, 3);
 		} else {
 			playSound(0, 0xb);
 		}
 	} else if (isKeyDown(CANCEL_BUTTON)) {
-		SELECTION_MENU_STATE = 6;
+		SCRIPT_STATE_2 = 6;
 		playSound(0, 4);
 	} else if (isKeyDown(0x1000)) {
 		if (POLLED_INPUT & 8) {
@@ -2578,7 +2578,7 @@ void renderMojyaTradeMenu(void)
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
 	renderHorizontalLine(1, 4, 0x15, 0xd7);
-	box = &MAIN_D_801BE80C.box[id];
+	box = &TEXTBOX_LINES_USED.box[id];
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	y = 0x6c;
 	y += box->backPage * box->vramRows * 12;
@@ -2602,9 +2602,9 @@ void updateMojyaTradeStrings(void)
 {
 	showMapHeadTextbox(0xf, 0xff, 1, 0x4d6);
 
-	--TEXT_BOX_DATA[1].writeCount;
-	TEXT_BUFFERS_PTR[0x254] = 0xd;
-	TEXT_BUFFERS_PTR[0x354] = 0xd;
+	--TEXTBOX_DATA[1].writeCount;
+	TEXTBOX_LINES_PTR[0x254] = 0xd;
+	TEXTBOX_LINES_PTR[0x354] = 0xd;
 
 	updateItemMenuStrings(ITEM_MENU_LEFT, 0xa, 4);
 }
@@ -2619,7 +2619,7 @@ void setupNewGameDialogueBox(void)
 
 	flags = 0x81;
 #if !defined(VERSION_JP)
-	MAIN_D_80134F98 = 0;
+	DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
 	for (i = 2; i < 10; i++) {
 		if (ENTITY_TABLE[i]->type == 0x75) {
@@ -2637,9 +2637,9 @@ void showNewGameDialogue(int32_t textId, uint16_t nextState)
 {
 	showMapHeadTextbox(textId, 0xfe, 0, 0x4d6);
 
-	SELECTION_MENU_STATE = 1;
-	SCRIPT_STATE_4 = nextState;
-	SCRIPT_STATE_3 = 1;
+	SCRIPT_STATE_2 = 1;
+	SCRIPT_NEXT_STATE_2 = nextState;
+	SCRIPT_TEXTBOX_MODE = 1;
 }
 
 void showNewGameSelection(int32_t textId, uint16_t nextState)
@@ -2648,9 +2648,9 @@ void showNewGameSelection(int32_t textId, uint16_t nextState)
 
 	showMapheadSelection(textId, 0xfe, 2, &sel, 0x4d6);
 
-	SELECTION_MENU_STATE = 1;
-	SCRIPT_STATE_4 = nextState;
-	SCRIPT_STATE_3 = 2;
+	SCRIPT_STATE_2 = 1;
+	SCRIPT_NEXT_STATE_2 = nextState;
+	SCRIPT_TEXTBOX_MODE = 2;
 }
 
 void setupNameSelectorBox(void)
@@ -2662,9 +2662,9 @@ void setupNameSelectorBox(void)
 	int16_t screenPos[2];
 
 #if !defined(VERSION_JP)
-	MAIN_D_80134F98 = 1;
+	DRAW_STRING2_IS_FIXED_WIDTH = 1;
 #endif
-	if ((MAIN_D_80134F8E & 2) == 0) {
+	if ((NAMING_BOX_FLAG & 2) == 0) {
 		flags = 0xc1;
 	} else {
 		flags = 0xe1;
@@ -2682,7 +2682,7 @@ void setupNameSelectorBox(void)
 	registerTextbox(1, 1, 7, 1, 0);
 
 	SHOP_AMOUNT = 0;
-	MAIN_D_80134F8C = 0;
+	NAMING_SELECTOR = 0;
 	fillNamingMenuStrings();
 }
 
@@ -2694,7 +2694,7 @@ void setupNameDisplayBox(void)
 	RECT rect1;
 	int16_t screenPos[2];
 
-	if ((MAIN_D_80134F8E & 2) == 0) {
+	if ((NAMING_BOX_FLAG & 2) == 0) {
 		flags = 0xc1;
 	} else {
 		flags = 0xe1;
@@ -2711,9 +2711,9 @@ void setupNameDisplayBox(void)
 	createTextbox(2, flags, &rect2, &rect1, 0, renderNameDisplayBox);
 	registerTextbox(2, 0, 1, 0, 0);
 
-	MAIN_D_80134F82 = strlen(MAIN_D_801B1D1C) >> 1;
-	if (MAIN_D_80134F82 == 6) {
-		--MAIN_D_80134F82;
+	NAMING_CURRENT_LETTER = strlen(MAIN_D_801B1D1C) >> 1;
+	if (NAMING_CURRENT_LETTER == 6) {
+		--NAMING_CURRENT_LETTER;
 	}
 
 	updateNamingPreview();
@@ -2742,42 +2742,42 @@ void tickNamingBox(void)
 	if (isXPressedAfterDialogue() == 0) {
 		return;
 	}
-	row = MAIN_D_80134F8C / 5;
-	col = MAIN_D_80134F8C % 5;
-	special = MAIN_D_80134F8C & 0x7fff;
+	row = NAMING_SELECTOR / 5;
+	col = NAMING_SELECTOR % 5;
+	special = NAMING_SELECTOR & 0x7fff;
 	if (isKeyDown(0x80)) {
 		MAIN_D_801B1D1C[0] = 0;
-		MAIN_D_80134F82 = 0;
+		NAMING_CURRENT_LETTER = 0;
 		updateNamingPreview();
 		playSound(0, 3);
 		return;
 	}
 	if (isKeyDown(CONFIRM_BUTTON)) {
-		if ((MAIN_D_80134F8C & 0x8000) == 0) {
+		if ((NAMING_SELECTOR & 0x8000) == 0) {
 			if (row < 9) {
-				rows = MAIN_D_80130774[SHOP_AMOUNT * 2];
+				rows = NAMING_CHAR_PAGES[SHOP_AMOUNT * 2];
 			} else {
 				row -= 9;
-				rows = MAIN_D_80130774[SHOP_AMOUNT * 2 + 1];
+				rows = NAMING_CHAR_PAGES[SHOP_AMOUNT * 2 + 1];
 			}
 			str = rows[row];
 			col *= 2;
 			hi = str[col + 0];
 			lo = str[col + 1];
-			if (hi == 0x81 && lo == 0x40 && MAIN_D_80134F82 == 0) {
+			if (hi == 0x81 && lo == 0x40 && NAMING_CURRENT_LETTER == 0) {
 				playSound(0, 0xb);
 				return;
 			}
-			idx = MAIN_D_80134F82 * 2;
+			idx = NAMING_CURRENT_LETTER * 2;
 			MAIN_D_801B1D1C[idx + 0] = hi;
 			MAIN_D_801B1D1C[idx + 1] = lo;
 			MAIN_D_801B1D1C[idx + 2] = 0;
-			if (MAIN_D_80134F82 != 5) {
-				MAIN_D_80134F82++;
+			if (NAMING_CURRENT_LETTER != 5) {
+				NAMING_CURRENT_LETTER++;
 			}
 			updateNamingPreview();
-			if (MAIN_D_801B1D26[0] != 0 && MAIN_D_80134F82 == 5) {
-				MAIN_D_80134F8C = 0x8000 | NAMING_OK;
+			if (MAIN_D_801B1D26[0] != 0 && NAMING_CURRENT_LETTER == 5) {
+				NAMING_SELECTOR = 0x8000 | NAMING_OK;
 			}
 			playSound(0, 3);
 			return;
@@ -2802,16 +2802,16 @@ void tickNamingBox(void)
 			}
 			terminateNamingBuffer();
 			playSound(0, 3);
-			SELECTION_MENU_STATE = 0x15;
+			SCRIPT_STATE_2 = 0x15;
 			break;
 		}
 	} else if (isKeyDown(ALT_BUTTON)) {
-		MAIN_D_80134F8C = 0x8000;
+		NAMING_SELECTOR = 0x8000;
 		playSound(0, 2);
 	} else if (isKeyDown(CANCEL_BUTTON)) {
 		namingDeleteLast();
 	} else if (isKeyDown(0x800)) {
-		MAIN_D_80134F8C = 0x8000 | NAMING_OK;
+		NAMING_SELECTOR = 0x8000 | NAMING_OK;
 		playSound(0, 2);
 	} else if (isKeyDown(0x8000)) {
 		namingSelectionLeft(col, row, special);
@@ -2844,11 +2844,11 @@ void renderNamingBox(void)
 	renderSelectionBox();
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
-	box = &TEXT_BOX_DATA[1];
+	box = &TEXTBOX_DATA[1];
 	texY = box->backPage * box->vramRows * 12;
 	texY += box->vramRow * 12;
 	texX = 0;
-	lbl = MAIN_D_8013078C;
+	lbl = NAMING_CTRL_BOXES;
 	for (j = 0; j < NAMING_LABELS; j++, lbl += 3) {
 		renderString(0, bx + lbl[0], by + lbl[1], lbl[2], 12, texX, texY, 5, 1);
 		texX += lbl[2];
@@ -2893,8 +2893,8 @@ void fillNamingMenuStrings(void)
 	TextBoxData *box;
 	uint8_t *line;
 
-	box = &TEXT_BOX_DATA[1];
-	buf = TEXT_BUFFERS_PTR + box->vramRow * 64;
+	box = &TEXTBOX_DATA[1];
+	buf = TEXTBOX_LINES_PTR + box->vramRow * 64;
 	buf = (uint8_t *)((uint32_t)buf + (box->backPage ^ 1) * box->vramRows * 64);
 	line = buf;
 	*buf++ = 1;
@@ -2912,7 +2912,7 @@ void fillNamingMenuStrings(void)
 	line += 0x40;
 	page = SHOP_AMOUNT * 2;
 	for (row = 0; row < 2; row++) {
-		table = MAIN_D_80130774[page + row];
+		table = NAMING_CHAR_PAGES[page + row];
 		for (j = 0; j < 9; j += 3) {
 			buf = line + row * 0xc0 + (j / 3) * 64;
 			strcpy(buf, table[j]);
@@ -2939,11 +2939,11 @@ void updateNamingPreview(void)
 	uint8_t *out;
 	int32_t len;
 
-	out = TEXT_BUFFERS_PTR;
+	out = TEXTBOX_LINES_PTR;
 	*out++ = 1;
 	*out++ = 1;
 
-	if ((MAIN_D_80134F8E & 1) == 0) {
+	if ((NAMING_BOX_FLAG & 1) == 0) {
 		strcpy(out, NAMING_PROMPT_TAMER);
 		len = strlen(NAMING_PROMPT_TAMER);
 	} else {
@@ -2961,7 +2961,7 @@ void updateNamingPreview(void)
 	out += len;
 	out = padWithSpaces(out, 6, len);
 	terminateString(out, 1);
-	out = TEXT_BUFFERS_PTR;
+	out = TEXTBOX_LINES_PTR;
 #if defined(VERSION_JP)
 	drawString2(out, 0, 0);
 #else
@@ -2972,15 +2972,15 @@ void updateNamingPreview(void)
 void namingDeleteLast(void)
 {
 	if (MAIN_D_801B1D1C[0] != 0) {
-		if (MAIN_D_80134F82 == 0) {
+		if (NAMING_CURRENT_LETTER == 0) {
 			MAIN_D_801B1D1C[0] = 0;
 		} else {
 #if defined(VERSION_JP)
-			MAIN_D_801B1D1C[MAIN_D_80134F82 * 2] = 0;
-			MAIN_D_80134F82--;
+			MAIN_D_801B1D1C[NAMING_CURRENT_LETTER * 2] = 0;
+			NAMING_CURRENT_LETTER--;
 #else
-			MAIN_D_80134F82--;
-			MAIN_D_801B1D1C[MAIN_D_80134F82 * 2] = 0;
+			NAMING_CURRENT_LETTER--;
+			MAIN_D_801B1D1C[NAMING_CURRENT_LETTER * 2] = 0;
 #endif
 		}
 
@@ -3016,13 +3016,13 @@ void terminateNamingBuffer(void)
 
 void namingSelectionLeft(int16_t col, int16_t row, int16_t specialIdx)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_SELECTOR & 0x8000) == 0) {
 		if (row < 9) {
 			if (col == 0) {
-				MAIN_D_80134F8C = MAIN_D_801307A0[row];
+				NAMING_SELECTOR = NAMING_ROLLOVER_CHARS[row];
 			} else {
 				--col;
-				MAIN_D_80134F8C = col + (row * 5);
+				NAMING_SELECTOR = col + (row * 5);
 			}
 		} else {
 			if (col == 0) {
@@ -3032,10 +3032,10 @@ void namingSelectionLeft(int16_t col, int16_t row, int16_t specialIdx)
 				--col;
 			}
 
-			MAIN_D_80134F8C = col + (row * 5);
+			NAMING_SELECTOR = col + (row * 5);
 		}
 	} else {
-		MAIN_D_80134F8C = MAIN_D_80134608[specialIdx] + 0x31;
+		NAMING_SELECTOR = NAMING_ROLLOVER_CTRL[specialIdx] + 0x31;
 	}
 
 	playSound(0, 2);
@@ -3043,7 +3043,7 @@ void namingSelectionLeft(int16_t col, int16_t row, int16_t specialIdx)
 
 void namingSelectionRight(int16_t col, int16_t row, int16_t specialIdx)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_SELECTOR & 0x8000) == 0) {
 		if (row < 9) {
 			if (col == 4) {
 				row += 9;
@@ -3052,15 +3052,15 @@ void namingSelectionRight(int16_t col, int16_t row, int16_t specialIdx)
 				++col;
 			}
 
-			MAIN_D_80134F8C = col + (row * 5);
+			NAMING_SELECTOR = col + (row * 5);
 		} else if (col == 4) {
-			MAIN_D_80134F8C = MAIN_D_801307A0[row - 9];
+			NAMING_SELECTOR = NAMING_ROLLOVER_CHARS[row - 9];
 		} else {
 			++col;
-			MAIN_D_80134F8C = col + (row * 5);
+			NAMING_SELECTOR = col + (row * 5);
 		}
 	} else {
-		MAIN_D_80134F8C = MAIN_D_80134608[specialIdx];
+		NAMING_SELECTOR = NAMING_ROLLOVER_CTRL[specialIdx];
 	}
 
 	playSound(0, 2);
@@ -3068,7 +3068,7 @@ void namingSelectionRight(int16_t col, int16_t row, int16_t specialIdx)
 
 void namingSelectionUp(int16_t column, int16_t row)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_SELECTOR & 0x8000) == 0) {
 		if (row < 9) {
 			if (row == 0) {
 				row = 8;
@@ -3081,11 +3081,11 @@ void namingSelectionUp(int16_t column, int16_t row)
 			--row;
 		}
 
-		MAIN_D_80134F8C = column + row * 5;
-	} else if (MAIN_D_80134F8C == 0x8000) {
-		MAIN_D_80134F8C = 0x8000 | NAMING_OK;
+		NAMING_SELECTOR = column + row * 5;
+	} else if (NAMING_SELECTOR == 0x8000) {
+		NAMING_SELECTOR = 0x8000 | NAMING_OK;
 	} else {
-		--MAIN_D_80134F8C;
+		--NAMING_SELECTOR;
 	}
 
 	playSound(0, 2);
@@ -3093,7 +3093,7 @@ void namingSelectionUp(int16_t column, int16_t row)
 
 void namingSelectionDown(int16_t column, int16_t row)
 {
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
+	if ((NAMING_SELECTOR & 0x8000) == 0) {
 		if (row < 9) {
 			if (row == 8) {
 				row = 0;
@@ -3106,11 +3106,11 @@ void namingSelectionDown(int16_t column, int16_t row)
 			++row;
 		}
 
-		MAIN_D_80134F8C = column + row * 5;
-	} else if (MAIN_D_80134F8C == (0x8000 | NAMING_OK)) {
-		MAIN_D_80134F8C = 0x8000;
+		NAMING_SELECTOR = column + row * 5;
+	} else if (NAMING_SELECTOR == (0x8000 | NAMING_OK)) {
+		NAMING_SELECTOR = 0x8000;
 	} else {
-		++MAIN_D_80134F8C;
+		++NAMING_SELECTOR;
 	}
 
 	playSound(0, 2);
@@ -3141,23 +3141,23 @@ void renderSelectionBox(void)
 
 	tpage = GetTPage(0, 0, 896, 448);
 	clut = GetClut(256, 508);
-	u0 = MAIN_D_8013460C;
-	u1 = MAIN_D_80134614;
-	v0 = MAIN_D_8013461C;
-	v1 = MAIN_D_80134624;
-	xOffset = MAIN_D_8013462C;
-	yOffset = MAIN_D_80134634;
-	width = MAIN_D_8013463C;
-	height = MAIN_D_80134644;
-	altXOffset = MAIN_D_8013464C;
-	altWidth = MAIN_D_80134654;
+	u0 = NAMING_U02;
+	u1 = NAMING_U13;
+	v0 = NAMING_V01;
+	v1 = NAMING_V23;
+	xOffset = NAMING_CTRL_X;
+	yOffset = NAMING_Y;
+	width = NAMING_CTRL_WIDTH;
+	height = NAMING_HEIGHT;
+	altXOffset = NAMING_CHAR_X;
+	altWidth = NAMING_CHAR_WIDTH;
 
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
 
-	if ((MAIN_D_80134F8C & 0x8000) == 0) {
-		baseY = MAIN_D_80134F8C / 5;
-		baseX = MAIN_D_80134F8C % 5;
+	if ((NAMING_SELECTOR & 0x8000) == 0) {
+		baseY = NAMING_SELECTOR / 5;
+		baseX = NAMING_SELECTOR % 5;
 
 		if (baseY < 9) {
 			baseX = (bx + (baseX * 18)) + 0x4a;
@@ -3167,12 +3167,12 @@ void renderSelectionBox(void)
 			baseY = (by + ((baseY - 9) * 14)) + 2;
 		}
 	} else {
-		idx = ((MAIN_D_80134F8C & 0x7fff) * 3) + 3;
-		baseX = (bx + MAIN_D_8013078C[idx]) - 4;
+		idx = ((NAMING_SELECTOR & 0x7fff) * 3) + 3;
+		baseX = (bx + NAMING_CTRL_BOXES[idx]) - 4;
 #if defined(VERSION_JP)
-		baseY = (by + MAIN_D_8013078C[idx + 1]) - 4;
+		baseY = (by + NAMING_CTRL_BOXES[idx + 1]) - 4;
 #else
-		baseY = (by + (&MAIN_D_8013078C[1])[idx]) - 4;
+		baseY = (by + (&NAMING_CTRL_BOXES[1])[idx]) - 4;
 #endif
 	}
 
@@ -3183,7 +3183,7 @@ void renderSelectionBox(void)
 		SetPolyFT4(prim);
 		setUV4(prim, u0.data[i], v0.data[i], u1.data[i], v0.data[i], u0.data[i], v1.data[i], u1.data[i], v1.data[i]);
 
-		if ((MAIN_D_80134F8C & 0x8000) == 0) {
+		if ((NAMING_SELECTOR & 0x8000) == 0) {
 			setPosDataPolyFT4(prim, baseX + xOffset.data[i], baseY + yOffset.data[i], width.data[i], height.data[i]);
 		} else {
 			setPosDataPolyFT4(prim, baseX + altXOffset.data[i], baseY + yOffset.data[i], altWidth.data[i], height.data[i]);
@@ -3211,7 +3211,7 @@ void renderNameDisplayBox(void)
 	y = UI_BOX_DATA[2].finalPos.y;
 	sx = x + 7;
 	y6 = y + 6;
-	if ((MAIN_D_80134F8E & 1) == 0) {
+	if ((NAMING_BOX_FLAG & 1) == 0) {
 		v = 0x48;
 	} else {
 		v = 0x54;
@@ -3223,9 +3223,9 @@ void renderNameDisplayBox(void)
 		renderString(0, sx, y6, 0xc, 0xc, v, 0, 4, 1);
 	}
 #if defined(VERSION_JP)
-	renderNamingUnderscore(2, MAIN_D_80134F82 * 0xe + 0x3b, 0x22, 0xc);
+	renderNamingUnderscore(2, NAMING_CURRENT_LETTER * 0xe + 0x3b, 0x22, 0xc);
 #else
-	renderNamingUnderscore(2, MAIN_D_80134F82 * 0xc + 4, 0x10, 0xc);
+	renderNamingUnderscore(2, NAMING_CURRENT_LETTER * 0xc + 4, 0x10, 0xc);
 #endif
 }
 

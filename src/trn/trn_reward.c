@@ -130,9 +130,9 @@ char TRN_D_8008F19C[] = "was mastered!";
 
 void TRN_saveTrainingStartTime(void)
 {
-	MAIN_D_8013538C = CURRENT_FRAME;
-	MAIN_D_8013538E = HOUR;
-	MAIN_D_80135390 = MINUTE;
+	TRN_CURRENT_FRAME = CURRENT_FRAME;
+	TRN_CURRENT_HOUR = HOUR;
+	TRN_CURRENT_MINUTE = MINUTE;
 }
 
 void TRN_startSlotSessionIfEnabled(int16_t arg)
@@ -149,7 +149,7 @@ void TRN_func_800888A0(int8_t arg)
 		if (TRN_getSlotSessionResult() == -2) {
 			startAnimation(ENTITY_TABLE[1], 4);
 			createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
-			MAIN_D_80135371 = arg;
+			TRAINING_STATE = arg;
 		}
 	}
 }
@@ -760,8 +760,8 @@ void TRN_advanceTrainingTime(int16_t tiredGain, int16_t energyLoss, int16_t happ
 		PARTNER_PARA.discipline -= 3;
 	}
 
-	CURRENT_FRAME = MAIN_D_8013538C + 0x4b0;
-	HOUR = MAIN_D_8013538E + 1;
+	CURRENT_FRAME = TRN_CURRENT_FRAME + 0x4b0;
+	HOUR = TRN_CURRENT_HOUR + 1;
 	if (HOUR >= 0x18) {
 		PARTNER_PARA.age++;
 		DAY++;

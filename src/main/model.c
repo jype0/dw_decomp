@@ -15,7 +15,7 @@
 #include <dw/params.h>
 #include <dw/world_object.h>
 
-extern ModelComponent NPC_MODEL[5];
+extern ModelComponent NPC_MODELS[5];
 extern ModelComponent TAMER_MODEL;
 extern ModelComponent PARTNER_MODEL;
 extern int32_t NPC_MODEL_TAKEN[5];
@@ -73,7 +73,7 @@ static void *model_functions[] = {
 };
 
 // clang-format off
-SkeletonBone MAIN_D_80133B2C[3] = {
+SkeletonBone SKELETON_BOTAMON[3] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -455,7 +455,7 @@ char MAIN_D_801340EC[] = ".TMD";
 
 char MAIN_D_801340F4[] = ".MTN";
 
-SkeletonBone MAIN_D_8011C170[17] = {
+SkeletonBone SKELETON_HIRO[17] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -475,7 +475,7 @@ SkeletonBone MAIN_D_8011C170[17] = {
 	{ 0x0d, 0x0f },
 };
 
-SkeletonBone MAIN_D_8011C194[22] = {
+SkeletonBone SKELETON_GABUMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -500,7 +500,7 @@ SkeletonBone MAIN_D_8011C194[22] = {
 	{ 0x0f, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011C1C0[24] = {
+SkeletonBone SKELETON_BETAMON[24] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0xff, 0x01 },
@@ -527,7 +527,7 @@ SkeletonBone MAIN_D_8011C1C0[24] = {
 	{ 0x0f, 0x16 },
 };
 
-SkeletonBone MAIN_D_8011C1F0[26] = {
+SkeletonBone SKELETON_GREYMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -556,7 +556,7 @@ SkeletonBone MAIN_D_8011C1F0[26] = {
 	{ 0x0f, 0x18 },
 };
 
-SkeletonBone MAIN_D_8011C224[28] = {
+SkeletonBone SKELETON_DEVIMON[28] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -587,7 +587,7 @@ SkeletonBone MAIN_D_8011C224[28] = {
 	{ 0x12, 0x1a },
 };
 
-SkeletonBone MAIN_D_8011C25C[27] = {
+SkeletonBone SKELETON_TYRANNOMON[27] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x01, 0x01 },
@@ -617,7 +617,7 @@ SkeletonBone MAIN_D_8011C25C[27] = {
 	{ 0x18, 0x19 },
 };
 
-SkeletonBone MAIN_D_8011C294[22] = {
+SkeletonBone SKELETON_MERAMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -642,7 +642,7 @@ SkeletonBone MAIN_D_8011C294[22] = {
 	{ 0x0e, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011C2C0[30] = {
+SkeletonBone SKELETON_METALGREYMON[30] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -675,7 +675,7 @@ SkeletonBone MAIN_D_8011C2C0[30] = {
 	{ 0x15, 0x1c },
 };
 
-SkeletonBone MAIN_D_8011C2FC[14] = {
+SkeletonBone SKELETON_MONZAEMON[14] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -772,7 +772,7 @@ SkeletonBone MAIN_D_8011C374[27] = {
 	{ 0x12, 0x19 },
 };
 
-SkeletonBone MAIN_D_8011C3AC[19] = {
+SkeletonBone SKELETON_FRIGIMON[19] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -832,7 +832,7 @@ SkeletonBone MAIN_D_8011C400[11] = {
 	{ 0x06, 0x09 },
 };
 
-SkeletonBone MAIN_D_8011C418[26] = {
+SkeletonBone SKELETON_ANGEMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -925,7 +925,7 @@ SkeletonBone MAIN_D_8011C48C[27] = {
 	{ 0x18, 0x19 },
 };
 
-SkeletonBone MAIN_D_8011C4C4[20] = {
+SkeletonBone SKELETON_VEGIEMON[20] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0xff, 0x01 },
@@ -1048,7 +1048,7 @@ SkeletonBone MAIN_D_8011C568[27] = {
 	{ 0x16, 0x19 },
 };
 
-SkeletonBone MAIN_D_8011C5A0[7] = {
+SkeletonBone SKELETON_KOROMON[7] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1081,7 +1081,7 @@ SkeletonBone MAIN_D_8011C5B0[20] = {
 	{ 0x0c, 0x12 },
 };
 
-SkeletonBone MAIN_D_8011C5D8[26] = {
+SkeletonBone SKELETON_SKULLGREYMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1110,7 +1110,7 @@ SkeletonBone MAIN_D_8011C5D8[26] = {
 	{ 0x0d, 0x18 },
 };
 
-SkeletonBone MAIN_D_8011C60C[22] = {
+SkeletonBone SKELETON_NUMEMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1148,7 +1148,7 @@ SkeletonBone MAIN_D_8011C638[10] = {
 	{ 0x07, 0x02 },
 };
 
-SkeletonBone MAIN_D_8011C64C[24] = {
+SkeletonBone SKELETON_BIRDRAMON[24] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1247,7 +1247,7 @@ SkeletonBone MAIN_D_8011C6C4[28] = {
 	{ 0x15, 0x1a },
 };
 
-SkeletonBone MAIN_D_8011C6FC[12] = {
+SkeletonBone SKELETON_WHAMON[12] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x01, 0x01 },
@@ -1425,7 +1425,7 @@ SkeletonBone MAIN_D_8011C80C[20] = {
 	{ 0x11, 0x0c },
 };
 
-SkeletonBone MAIN_D_8011C834[16] = {
+SkeletonBone SKELETON_VADEMON[16] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0xff, 0x01 },
@@ -1444,7 +1444,7 @@ SkeletonBone MAIN_D_8011C834[16] = {
 	{ 0x00, 0x01 },
 };
 
-SkeletonBone MAIN_D_8011C854[17] = {
+SkeletonBone SKELETON_SEADRAMON[17] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x04, 0x01 },
@@ -1503,7 +1503,7 @@ SkeletonBone MAIN_D_8011C898[18] = {
 	{ 0x0f, 0x10 },
 };
 
-SkeletonBone MAIN_D_8011C8BC[25] = {
+SkeletonBone SKELETON_ELECMON[25] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1531,7 +1531,7 @@ SkeletonBone MAIN_D_8011C8BC[25] = {
 	{ 0x15, 0x0f },
 };
 
-SkeletonBone MAIN_D_8011C8F0[28] = {
+SkeletonBone SKELETON_KABUTERIMON[28] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1866,7 +1866,7 @@ SkeletonBone MAIN_D_8011CB3C[5] = {
 	{ 0x02, 0x01 },
 };
 
-SkeletonBone MAIN_D_8011CB48[19] = {
+SkeletonBone SKELETON_MAMEMON[19] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0xff, 0x01 },
@@ -1888,7 +1888,7 @@ SkeletonBone MAIN_D_8011CB48[19] = {
 	{ 0x0c, 0x11 },
 };
 
-SkeletonBone MAIN_D_8011CB70[19] = {
+SkeletonBone SKELETON_METALMAMEMON[19] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0xff, 0x01 },
@@ -2070,7 +2070,7 @@ SkeletonBone MAIN_D_8011CC88[25] = {
 	{ 0x16, 0x17 },
 };
 
-SkeletonBone MAIN_D_8011CCBC[26] = {
+SkeletonBone SKELETON_GARURUMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2189,7 +2189,7 @@ SkeletonBone MAIN_D_8011CD80[7] = {
 	{ 0x04, 0x01 },
 };
 
-SkeletonBone MAIN_D_8011CD90[20] = {
+SkeletonBone SKELETON_AIRDRAMON[20] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2307,36 +2307,36 @@ SkeletonBone MAIN_D_8011CE3C[18] = {
 };
 
 SkeletonBone *DIGIMON_SKELETONS[180] = {
-	MAIN_D_8011C170,
-	MAIN_D_80133B2C,
-	MAIN_D_8011C5A0,
-	MAIN_D_8011C194,
-	MAIN_D_8011C1C0,
-	MAIN_D_8011C1F0,
-	MAIN_D_8011C224,
-	MAIN_D_8011CD90,
-	MAIN_D_8011C25C,
-	MAIN_D_8011C294,
-	MAIN_D_8011C854,
-	MAIN_D_8011C60C,
-	MAIN_D_8011C2C0,
-	MAIN_D_8011CB48,
-	MAIN_D_8011C2FC,
-	MAIN_D_80133B2C,
-	MAIN_D_80133B2C,
-	MAIN_D_8011C194,
-	MAIN_D_8011C8BC,
-	MAIN_D_8011C8F0,
-	MAIN_D_8011C418,
-	MAIN_D_8011C64C,
-	MAIN_D_8011CCBC,
-	MAIN_D_8011C3AC,
-	MAIN_D_8011C6FC,
-	MAIN_D_8011C4C4,
-	MAIN_D_8011C5D8,
-	MAIN_D_8011CB70,
-	MAIN_D_8011C834,
-	MAIN_D_80133B2C,
+	SKELETON_HIRO,
+	SKELETON_BOTAMON,
+	SKELETON_KOROMON,
+	SKELETON_GABUMON,
+	SKELETON_BETAMON,
+	SKELETON_GREYMON,
+	SKELETON_DEVIMON,
+	SKELETON_AIRDRAMON,
+	SKELETON_TYRANNOMON,
+	SKELETON_MERAMON,
+	SKELETON_SEADRAMON,
+	SKELETON_NUMEMON,
+	SKELETON_METALGREYMON,
+	SKELETON_MAMEMON,
+	SKELETON_MONZAEMON,
+	SKELETON_BOTAMON,
+	SKELETON_BOTAMON,
+	SKELETON_GABUMON,
+	SKELETON_ELECMON,
+	SKELETON_KABUTERIMON,
+	SKELETON_ANGEMON,
+	SKELETON_BIRDRAMON,
+	SKELETON_GARURUMON,
+	SKELETON_FRIGIMON,
+	SKELETON_WHAMON,
+	SKELETON_VEGIEMON,
+	SKELETON_SKULLGREYMON,
+	SKELETON_METALMAMEMON,
+	SKELETON_VADEMON,
+	SKELETON_BOTAMON,
 	MAIN_D_8011C550,
 	MAIN_D_8011CAE0,
 	MAIN_D_8011C518,
@@ -2365,7 +2365,7 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	MAIN_D_8011C690,
 	MAIN_D_8011CA7C,
 	MAIN_D_8011C7A0,
-	MAIN_D_8011CB48,
+	SKELETON_MAMEMON,
 	MAIN_D_8011CA3C,
 	MAIN_D_8011C9F0,
 	MAIN_D_8011C878,
@@ -2378,23 +2378,23 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	MAIN_D_8011C750,
 	MAIN_D_8011CB10,
 	MAIN_D_8011CA24,
-	MAIN_D_8011C194,
+	SKELETON_GABUMON,
 	MAIN_D_8011C898,
 	MAIN_D_8011C348,
 	MAIN_D_8011C518,
 	MAIN_D_8011C48C,
 	MAIN_D_8011CCF0,
-	MAIN_D_8011C4C4,
+	SKELETON_VEGIEMON,
 	MAIN_D_8011C7D4,
 	MAIN_D_8011C6C4,
 	MAIN_D_8011C318,
-	MAIN_D_8011C3AC,
-	MAIN_D_8011C194,
-	MAIN_D_8011C1C0,
-	MAIN_D_8011C194,
-	MAIN_D_8011C418,
+	SKELETON_FRIGIMON,
+	SKELETON_GABUMON,
+	SKELETON_BETAMON,
+	SKELETON_GABUMON,
+	SKELETON_ANGEMON,
 	MAIN_D_8011C44C,
-	MAIN_D_8011C60C,
+	SKELETON_NUMEMON,
 	MAIN_D_8011C984,
 	MAIN_D_8011C898,
 	MAIN_D_8011C400,
@@ -2405,17 +2405,17 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	MAIN_D_8011CA94,
 	MAIN_D_8011CAE0,
 	MAIN_D_8011C318,
-	MAIN_D_8011C194,
-	MAIN_D_8011C4C4,
-	MAIN_D_8011C224,
+	SKELETON_GABUMON,
+	SKELETON_VEGIEMON,
+	SKELETON_DEVIMON,
 	MAIN_D_8011CB10,
 	MAIN_D_8011C714,
 	MAIN_D_8011C318,
-	MAIN_D_8011C294,
-	MAIN_D_8011CCBC,
-	MAIN_D_8011C64C,
+	SKELETON_MERAMON,
+	SKELETON_GARURUMON,
+	SKELETON_BIRDRAMON,
 	MAIN_D_8011C638,
-	MAIN_D_8011C3AC,
+	SKELETON_FRIGIMON,
 	MAIN_D_8011CE1C,
 	MAIN_D_8011CDF0,
 	MAIN_D_8011CDB8,
@@ -2431,33 +2431,33 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	MAIN_D_8011CD4C,
 	MAIN_D_8011CB3C,
 	MAIN_D_8011CD80,
-	MAIN_D_8011C25C,
+	SKELETON_TYRANNOMON,
 	MAIN_D_8011C318,
 	MAIN_D_8011C928,
-	MAIN_D_80133B2C,
-	MAIN_D_8011C1C0,
-	MAIN_D_8011C1F0,
-	MAIN_D_8011C224,
-	MAIN_D_8011CD90,
-	MAIN_D_8011C25C,
-	MAIN_D_8011C294,
-	MAIN_D_8011C854,
-	MAIN_D_8011C60C,
-	MAIN_D_8011C2C0,
-	MAIN_D_8011CB48,
-	MAIN_D_8011C2FC,
-	MAIN_D_8011C194,
-	MAIN_D_8011C8BC,
-	MAIN_D_8011C8F0,
-	MAIN_D_8011C418,
-	MAIN_D_8011C64C,
-	MAIN_D_8011CCBC,
-	MAIN_D_8011C3AC,
-	MAIN_D_8011C6FC,
-	MAIN_D_8011C4C4,
-	MAIN_D_8011C5D8,
-	MAIN_D_8011CB70,
-	MAIN_D_8011C834,
+	SKELETON_BOTAMON,
+	SKELETON_BETAMON,
+	SKELETON_GREYMON,
+	SKELETON_DEVIMON,
+	SKELETON_AIRDRAMON,
+	SKELETON_TYRANNOMON,
+	SKELETON_MERAMON,
+	SKELETON_SEADRAMON,
+	SKELETON_NUMEMON,
+	SKELETON_METALGREYMON,
+	SKELETON_MAMEMON,
+	SKELETON_MONZAEMON,
+	SKELETON_GABUMON,
+	SKELETON_ELECMON,
+	SKELETON_KABUTERIMON,
+	SKELETON_ANGEMON,
+	SKELETON_BIRDRAMON,
+	SKELETON_GARURUMON,
+	SKELETON_FRIGIMON,
+	SKELETON_WHAMON,
+	SKELETON_VEGIEMON,
+	SKELETON_SKULLGREYMON,
+	SKELETON_METALMAMEMON,
+	SKELETON_VADEMON,
 	MAIN_D_8011CAE0,
 	MAIN_D_8011C518,
 	MAIN_D_8011C48C,
@@ -2482,11 +2482,11 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	MAIN_D_8011CC4C,
 	MAIN_D_8011C690,
 	MAIN_D_8011CA7C,
-	MAIN_D_8011CB48,
+	SKELETON_MAMEMON,
 	MAIN_D_8011C7A0,
 	MAIN_D_8011CC88,
-	MAIN_D_8011C1F0,
-	MAIN_D_8011C2C0,
+	SKELETON_GREYMON,
+	SKELETON_METALGREYMON,
 };
 
 int16_t PARTNER_WIREFRAME_SUB[40] = {
@@ -3307,7 +3307,7 @@ void initializeModelComponents(void)
 	t.digiType = -1;
 
 	for (i = 0; i < 5; ++i) {
-		NPC_MODEL[i] = t;
+		NPC_MODELS[i] = t;
 	}
 
 	for (i = 0; i < 5; ++i) {
@@ -3341,7 +3341,7 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 	}
 	if (modelType == 0) {
 		slot = -1;
-		for (m = NPC_MODEL, i = 0; i < 5; m++, i++) {
+		for (m = NPC_MODELS, i = 0; i < 5; m++, i++) {
 			if (m->useCount == 0) {
 				slot = i;
 			} else if (m->digiType == digiType) {
@@ -3352,7 +3352,7 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 			if (slot == -1) {
 				return 0;
 			}
-			m = &NPC_MODEL[slot];
+			m = &NPC_MODELS[slot];
 			m->digiType = digiType;
 		}
 		++m->useCount;
@@ -3429,7 +3429,7 @@ void unloadModel(int32_t digiType, int32_t modelType)
 	ModelComponent *m;
 
 	if (modelType == 0) {
-		for (m = NPC_MODEL, i = 0; i < 5; ++m, ++i) {
+		for (m = NPC_MODELS, i = 0; i < 5; ++m, ++i) {
 			if (m->digiType == digiType) {
 				break;
 			}
@@ -3479,7 +3479,7 @@ ModelComponent *getEntityModelComponent(int32_t instance, int32_t type)
 		if ((instance < 0) || (instance >= 0xb4)) {
 			return NULL;
 		}
-		for (p = NPC_MODEL, i = 0; i < 5; p++, i++) {
+		for (p = NPC_MODELS, i = 0; i < 5; p++, i++) {
 			if (p->digiType == instance) {
 				break;
 			}
@@ -3562,7 +3562,7 @@ int32_t loadMMDAsync(int32_t digimonType, int32_t entityType, int32_t buffer,
 	}
 	if (entityType == 0) {
 		slot = -1;
-		for (m = NPC_MODEL, i = 0; i < 5; m++, i++) {
+		for (m = NPC_MODELS, i = 0; i < 5; m++, i++) {
 			if (m->useCount == 0) {
 				slot = i;
 			} else if (m->digiType == digimonType) {
@@ -3573,7 +3573,7 @@ int32_t loadMMDAsync(int32_t digimonType, int32_t entityType, int32_t buffer,
 			if (slot == -1) {
 				return 0;
 			}
-			m = &NPC_MODEL[slot];
+			m = &NPC_MODELS[slot];
 			m->digiType = digimonType;
 		}
 		++m->useCount;
@@ -3624,7 +3624,7 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 		return 0;
 	}
 	if (entityType == 0) {
-		for (m = NPC_MODEL, i = 0; i < 5; m++, i++) {
+		for (m = NPC_MODELS, i = 0; i < 5; m++, i++) {
 			if (m->digiType == digimonType) {
 				break;
 			}

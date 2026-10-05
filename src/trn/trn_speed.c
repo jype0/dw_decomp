@@ -50,14 +50,14 @@ int16_t arg;
 	MAIN_D_80135370 = readPStat(0xf6);
 	TRAINING_COMPLETE = 0;
 	TRN_saveTrainingStartTime();
-	MAIN_D_80135371 = 0;
+	TRAINING_STATE = 0;
 }
 
 void TRN_tickSpeedTraining(int32_t instanceId)
 {
 	int32_t r;
 
-	switch (MAIN_D_80135371) {
+	switch (TRAINING_STATE) {
 	case 0:
 		tamerSetState(8);
 		unsetCameraFollowPlayer();
@@ -66,7 +66,7 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
 		MAIN_D_8013537A = 0;
-		MAIN_D_80135371 = 1;
+		TRAINING_STATE = 1;
 		TRN_startSlotSessionIfEnabled(4);
 		break;
 	case 1:
@@ -78,7 +78,7 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 				PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0;
 			}
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
-			MAIN_D_80135371 = 2;
+			TRAINING_STATE = 2;
 			if (MAIN_D_80135370 == 1) {
 				TRN_startSlotSpin();
 			}
@@ -105,13 +105,13 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x12);
 			playSound(8, 0xa);
 			createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
-			MAIN_D_80135371 = 3;
+			TRAINING_STATE = 3;
 		}
 		break;
 	case 3:
 		if (TRN_statGainsAreZero() == 1) {
 			MAIN_D_8013537C = 0;
-			MAIN_D_80135371 = 4;
+			TRAINING_STATE = 4;
 		}
 		break;
 	case 4:
@@ -119,7 +119,7 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 		if (MAIN_D_8013537C >= 0x14) {
 			MAIN_D_8013537C = 0;
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
-			MAIN_D_80135371 = 5;
+			TRAINING_STATE = 5;
 		}
 		break;
 	case 5:
@@ -129,7 +129,7 @@ void TRN_tickSpeedTraining(int32_t instanceId)
 			partnerSetState(1);
 			setCameraFollowPlayer();
 			MAIN_D_8013537A = 0;
-			MAIN_D_80135371 = 0;
+			TRAINING_STATE = 0;
 			removeObject(0xfad, instanceId, TRN_tickSpeedTraining, NULL);
 			TRAINING_COMPLETE = 1;
 		}

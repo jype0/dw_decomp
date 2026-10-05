@@ -34,13 +34,13 @@ uint8_t CLOCK_TEXCOORD_V[2][4] = {
 	{ 208, 224, 208, 224 }
 };
 
-uint8_t CLOCK_HOUR_X[24] = {
+uint8_t HOUR_POINT_X[24] = {
 	20, 23, 26, 31, 34, 36, 36, 36,
 	34, 31, 26, 23, 20, 17, 14,  9,
 	 6,  4,  4,  4,  6,  9, 14, 17,
 };
 
-uint8_t CLOCK_HOUR_Y[24] = {
+uint8_t HOUR_POINT_Y[24] = {
 	 5,  6 , 6 , 8, 12, 15, 19, 23,
 	26, 30, 32, 32, 33, 32, 32, 30,
 	26, 23, 19, 15, 12,  8,  6,  6,
@@ -59,8 +59,8 @@ static void *clock_text_order[] = {
 };
 
 static void *clock_data_order[] = {
-	CLOCK_HOUR_Y,
-	CLOCK_HOUR_X,
+	HOUR_POINT_Y,
+	HOUR_POINT_X,
 };
 
 void addClock(void)
@@ -258,8 +258,8 @@ void renderGameClock(int32_t instanceId)
 	CLOCK_SPRITE.x = CLOCK_OFFSET_X + 23;
 	GsSortSprite(&CLOCK_SPRITE, ACTIVE_ORDERING_TABLE, 9);
 
-	renderRectPolyFT4(CLOCK_OFFSET_X + CLOCK_HOUR_X[HOUR],
-			  CLOCK_HOUR_Y[HOUR] - 88,
+	renderRectPolyFT4(CLOCK_OFFSET_X + HOUR_POINT_X[HOUR],
+			  HOUR_POINT_Y[HOUR] - 88,
 			  6, 6, 203, 216,
 			  GetTPage(0, 0, 896, 448), GetClut(256, 497), 9, 0);
 

@@ -206,11 +206,11 @@ int8_t ITEM_TAKE_DISTANCE[66] = {
 	10, 10, 10, 10, 10, 10, 10, 10, 15, 15, 10, 10, 10, 10, 10,
 };
 
-extern uint8_t MAIN_D_80137C00[2048];
-extern uint8_t MAIN_D_80127BDC[];
+extern uint8_t POOP_MODEL_BUFFER[2048];
+extern uint8_t ITEM_CLUT_DATA[];
 extern uint8_t EVOLUTION_ITEM_TARGET[];
 extern GsDOBJ2 POOP_OBJECT;
-extern GsCOORDINATE2 POOP_COORDINATES;
+extern GsCOORDINATE2 POOP_POSITION;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
 extern int8_t GAME_STATE;
@@ -229,9 +229,9 @@ SVECTOR POOP_ROTATION = { 0, 0, 0, 0 };
 extern int8_t PARTNER_AREA_RESPONSE[];
 extern uint16_t CURRENT_FRAME;
 extern uint16_t LAST_HANDLED_FRAME;
-extern int32_t MAIN_D_80134C6C;
-extern int32_t MAIN_D_80134C70;
-extern int32_t MAIN_D_80134C74;
+extern int32_t CONDITION_BUBBLE_TYPE;
+extern int32_t CONDITION_BUBBLE_ID;
+extern int32_t CONDITION_BUBBLE_TIMER;
 extern int32_t BUTTERFLY_ID;
 extern int32_t IS_SCRIPT_PAUSED;
 extern Stats DEATH_STATS;
@@ -361,15 +361,15 @@ void initializePoop(void)
 {
 	char *buf;
 
-	buf = (char *)MAIN_D_80137C00;
+	buf = (char *)POOP_MODEL_BUFFER;
 	readFile(MAIN_D_801225AC, buf);
 
 	GsMapModelingData((unsigned long *)&buf[4]);
 	GsLinkObject4((unsigned long)&buf[0xc], &POOP_OBJECT, 0);
 
-	GsInitCoordinate2(NULL, &POOP_COORDINATES);
+	GsInitCoordinate2(NULL, &POOP_POSITION);
 	POOP_OBJECT.attribute = 0;
-	POOP_OBJECT.coord2 = &POOP_COORDINATES;
+	POOP_OBJECT.coord2 = &POOP_POSITION;
 }
 
 GARBAGE(initializePartner, 14);
@@ -487,7 +487,7 @@ void renderPoop(int32_t instanceId)
 			scale.vx = scaleValue;
 			scale.vy = scaleValue;
 			scale.vz = scaleValue;
-			projectPosition(&POOP_COORDINATES, &pos, &rotation, &scale);
+			projectPosition(&POOP_POSITION, &pos, &rotation, &scale);
 			drawObject(&POOP_OBJECT, GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
 		}
 	}
@@ -1360,7 +1360,7 @@ void tickTirednessMechanics(void)
 #if defined(VERSION_JP)
 #define ITEM_EVOLUTION_TARGET(item) EVOLUTION_ITEM_TARGET[(item) - 0x47]
 #else
-#define ITEM_EVOLUTION_TARGET(item) (&MAIN_D_80127BDC[0x39])[item]
+#define ITEM_EVOLUTION_TARGET(item) (&ITEM_CLUT_DATA[0x39])[item]
 #endif
 
 int32_t partnerWillRefuseItem(void)
@@ -1496,38 +1496,38 @@ void handleConditionBubble(void)
 
 	cond = PARTNER_PARA.condition;
 
-	if ((cond & 0x40) && (MAIN_D_80134C6C != 2)) {
+	if ((cond & 0x40) && (CONDITION_BUBBLE_TYPE != 2)) {
 		newBubble = 2;
 	}
 
-	if ((cond & 0x20) && (MAIN_D_80134C6C != 6)) {
+	if ((cond & 0x20) && (CONDITION_BUBBLE_TYPE != 6)) {
 		newBubble = 6;
 	}
 
-	if ((cond & 0x08) && (MAIN_D_80134C6C != 1)) {
+	if ((cond & 0x08) && (CONDITION_BUBBLE_TYPE != 1)) {
 		newBubble = 1;
 	}
 
-	if ((cond & 0x04) && (MAIN_D_80134C6C != 0)) {
+	if ((cond & 0x04) && (CONDITION_BUBBLE_TYPE != 0)) {
 		newBubble = 0;
 	}
 
-	if ((cond & 0x02) && (MAIN_D_80134C6C != 4)) {
+	if ((cond & 0x02) && (CONDITION_BUBBLE_TYPE != 4)) {
 		newBubble = 4;
 	}
 
-	if ((cond & 0x01) && (MAIN_D_80134C6C != 3)) {
+	if ((cond & 0x01) && (CONDITION_BUBBLE_TYPE != 3)) {
 		newBubble = 3;
 	}
 
 	if ((cond & 0x10) && (newBubble == -1) &&
 	    (HAS_BUTTERFLY != 0) && (cond == 0x10)) {
-		removeConditionBubble(MAIN_D_80134C70);
+		removeConditionBubble(CONDITION_BUBBLE_ID);
 		BUTTERFLY_ID = setButterfly(ENTITY_TABLE[1]);
 		HAS_BUTTERFLY = 0;
 		return;
-	} else if ((newBubble != MAIN_D_80134C6C) && (newBubble != -1) &&
-		   (MAIN_D_80134C74 >= 50)) {
+	} else if ((newBubble != CONDITION_BUBBLE_TYPE) && (newBubble != -1) &&
+		   (CONDITION_BUBBLE_TIMER >= 50)) {
 		if (HAS_BUTTERFLY == 0) {
 			unsetButterfly(BUTTERFLY_ID);
 			HAS_BUTTERFLY = -1;
@@ -1535,15 +1535,15 @@ void handleConditionBubble(void)
 			PARTNER_ENTITY.digimonEntity.entity.anim.loopCount = 1;
 		}
 
-		removeConditionBubble(MAIN_D_80134C70);
-		MAIN_D_80134C70 = addConditionBubble(newBubble, ENTITY_TABLE[1]);
-		MAIN_D_80134C74 = 0;
-		MAIN_D_80134C6C = newBubble;
+		removeConditionBubble(CONDITION_BUBBLE_ID);
+		CONDITION_BUBBLE_ID = addConditionBubble(newBubble, ENTITY_TABLE[1]);
+		CONDITION_BUBBLE_TIMER = 0;
+		CONDITION_BUBBLE_TYPE = newBubble;
 	}
 
-	MAIN_D_80134C74 += 1;
-	if (MAIN_D_80134C74 >= 60) {
-		MAIN_D_80134C6C = -1;
+	CONDITION_BUBBLE_TIMER += 1;
+	if (CONDITION_BUBBLE_TIMER >= 60) {
+		CONDITION_BUBBLE_TYPE = -1;
 	}
 }
 

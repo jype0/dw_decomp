@@ -57,18 +57,18 @@ void removeBattleEndBox(int32_t id);
 
 extern uint8_t MOVE_LEARN_CHANCES[58][3];
 extern int16_t ENEMY_COUNT;
-extern int32_t MAIN_D_80134D70;
+extern int32_t HAS_TAKEN_DAMAGE;
 extern uint16_t BITS_TO_GAIN;
 extern int32_t SHOULD_SKIP_BIT_COUNTING;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern POLY_FT4 BIT_BOX;
+extern POLY_FT4 BIT_TEXT;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern int16_t STATS_GAINS[6];
 extern int16_t POST_BATTLE_STATS_TIMER;
 extern int8_t BTL_END_BOX_TEXTBUFFER[];
-extern int8_t HAS_STAT_GAIN[6];
+extern int8_t STAT_BOX_HAS_GAIN[6];
 extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 extern uint8_t GAME_STATE;
@@ -328,7 +328,7 @@ void handleBattleEndBox(void)
 #endif
 
 	if (!(PARTNER_PARA.condition & 0x20)) {
-		if (MAIN_D_80134D70 == 1) {
+		if (HAS_TAKEN_DAMAGE == 1) {
 			handleBattleInjury();
 		}
 
@@ -473,8 +473,8 @@ void renderBitBox(uint8_t layer)
 {
 	renderNumber(2, -18, 28, 5, BITS_TO_GAIN, 6 - layer);
 
-	setXYWH(&BIT_BOX, 52, 28, 24, 12);
-	GsSortPoly(&BIT_BOX, ACTIVE_ORDERING_TABLE, 6 - layer);
+	setXYWH(&BIT_TEXT, 52, 28, 24, 12);
+	GsSortPoly(&BIT_TEXT, ACTIVE_ORDERING_TABLE, 6 - layer);
 
 	renderString(4, -78, 28, 48, 12, 0, 72, 6 - layer, 0);
 
@@ -492,8 +492,8 @@ void renderFinalBalance(int32_t layer)
 		     UI_BOX_DATA[2].finalPos.y + 10,
 		     6, MONEY, 6 - layer);
 
-	setXYWH(&BIT_BOX, UI_BOX_DATA[2].finalPos.x + 140, UI_BOX_DATA[2].finalPos.y + 10, 24, 12);
-	GsSortPoly(&BIT_BOX, ACTIVE_ORDERING_TABLE, 6 - layer);
+	setXYWH(&BIT_TEXT, UI_BOX_DATA[2].finalPos.x + 140, UI_BOX_DATA[2].finalPos.y + 10, 24, 12);
+	GsSortPoly(&BIT_TEXT, ACTIVE_ORDERING_TABLE, 6 - layer);
 
 	renderString(0,
 		     UI_BOX_DATA[2].finalPos.x + 10,
@@ -527,9 +527,9 @@ void createPostBattleStatsBox(void)
 
 	for (i = 0; i < 6; i++) {
 		if (STATS_GAINS[i] == 0) {
-			HAS_STAT_GAIN[i] = 0;
+			STAT_BOX_HAS_GAIN[i] = 0;
 		} else {
-			HAS_STAT_GAIN[i] = 1;
+			STAT_BOX_HAS_GAIN[i] = 1;
 		}
 	}
 	for (i = 0; i < 4; i++) {
@@ -693,7 +693,7 @@ void renderPostBattleStatsBox(int16_t depth)
 			rect.w = INITIAL_COMBAT_STATS[0][i] * 50 / 999;
 		}
 
-		switch (HAS_STAT_GAIN[i]) {
+		switch (STAT_BOX_HAS_GAIN[i]) {
 		case 0:
 			rect.r = rect.g = rect.b = 0x78;
 			GsSortBoxFill(&rect, ACTIVE_ORDERING_TABLE,
@@ -739,10 +739,10 @@ void removeBattleEndBox(id)
 
 void initializeBitText(void)
 {
-	initStringFT4(&BIT_BOX);
+	initStringFT4(&BIT_TEXT);
 
-	setRGB0(&BIT_BOX, 0x80, 0x80, 0x80);
-	setUVDataPolyFT4(&BIT_BOX, 156, 240, 24, 12);
+	setRGB0(&BIT_TEXT, 0x80, 0x80, 0x80);
+	setUVDataPolyFT4(&BIT_TEXT, 156, 240, 24, 12);
 }
 
 void createFinalBalanceBox(void)

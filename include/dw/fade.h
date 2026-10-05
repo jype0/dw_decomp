@@ -3,7 +3,7 @@
 
 #include <dw/types.h>
 
-extern int16_t FADE_OUT_TARGET;
+extern int16_t FADE_DATA;
 extern int16_t FADE_IN_TARGET;
 extern int16_t FADE_OUT_CURRENT;
 extern int16_t FADE_IN_CURRENT;

@@ -50,9 +50,9 @@ typedef struct {
 } CameraChase;
 
 extern int16_t ENEMY_COUNT;
-extern int16_t MAIN_D_80134D66;
-extern Entity *MAIN_D_80134D60;
-extern int32_t MAIN_D_80134D74;
+extern int16_t BATTLE_FRAME_COUNT;
+extern Entity *FINISHING_ENTITY;
+extern int32_t NO_AI_FLAG;
 extern uint8_t *GENERAL_BUFFER_PTR;
 extern int8_t GAME_STATE;
 extern int32_t DRAWING_OFFSET_X;
@@ -60,33 +60,33 @@ extern int32_t DRAWING_OFFSET_Y;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern uint8_t MAIN_D_80125F70[][7];
+extern uint8_t TYPE_FACTORS[][7];
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
 extern PACKET GS_WORK_BASES[];
-extern char DRAW_OFFSETS[];
+extern char DR_OFFSETS[];
 extern int32_t MAIN_D_801350EC;
-extern SVECTOR MAIN_D_801B1C0C[];
-extern VECTOR MAIN_D_801B1C14;
+extern SVECTOR STDVS_VIEW_ROTATION[];
+extern VECTOR STDVS_VIEW_TRANSLATION;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern Entity *MAIN_D_801350E8;
 extern uint8_t CURRENT_SCREEN;
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
-extern int32_t COMBAT_AREA_CENTER_X;
-extern int32_t COMBAT_AREA_CENTER_Y;
+extern int32_t COMBAT_AREA_X;
+extern int32_t COMBAT_AREA_Y;
 extern uint8_t MAIN_D_801350F8;
-extern GsVIEW2 MAIN_D_801B1B98;
+extern GsVIEW2 STDVS_VIEW;
 extern GsCOORDINATE2 MAIN_D_801B1BBC;
-extern int32_t MAIN_D_80134D7C[2];
-extern int32_t MAIN_D_80134D84;
+extern int32_t FLEE_DISABLED[2];
+extern int32_t VS_P2_AOE_TIMER;
 extern char *MOVE_NAMES[];
 extern int16_t MAIN_D_801350E4;
-extern int8_t MAIN_D_80134D64;
+extern int8_t BATTLE_TOGGLE_LIFEBAR;
 extern int16_t INITIAL_COMBAT_STATS[][6];
-extern DigimonEntity *MAIN_D_80134EF4;
-extern DigimonEntity *MAIN_D_80134EF8;
+extern DigimonEntity *BATTLE_TARGETED_DIGIMON;
+extern DigimonEntity *BATTLE_ATTACKING_DIGIMON;
 
 void STD_initializeBattleStartText(void);
 void STD_func_8006A044(void);
@@ -603,7 +603,7 @@ CameraChase MAIN_D_80135144;
 int32_t MAIN_D_80135148;
 uint8_t MAIN_D_8013514C;
 uint8_t MAIN_D_8013514D;
-uint8_t MAIN_D_80135150[8];
+uint8_t PARTICIPANT_TYPES[8];
 uint8_t MAIN_D_80135158[4];
 uint8_t MAIN_D_8013515C;
 uint8_t MAIN_D_8013515D;
@@ -646,7 +646,7 @@ static void *std_main_sbss_order[] = {
 	&MAIN_D_8013515D,
 	&MAIN_D_8013515C,
 	&MAIN_D_80135158,
-	&MAIN_D_80135150,
+	&PARTICIPANT_TYPES,
 	&MAIN_D_8013514D,
 	&MAIN_D_8013514C,
 	&MAIN_D_80135148,
@@ -1930,52 +1930,52 @@ void STD_func_80059658(id)
 void STD_func_80059908(void)
 {
 	if (MAIN_D_80135124 & 0x1000) {
-		MAIN_D_801B1C14.vy += 0x14;
+		STDVS_VIEW_TRANSLATION.vy += 0x14;
 	}
 	if (MAIN_D_80135124 & 0x4000) {
-		MAIN_D_801B1C14.vy -= 0x14;
+		STDVS_VIEW_TRANSLATION.vy -= 0x14;
 	}
 	if (MAIN_D_80135124 & 0x8000) {
-		MAIN_D_801B1C14.vx += 0x14;
+		STDVS_VIEW_TRANSLATION.vx += 0x14;
 	}
 	if (MAIN_D_80135124 & 0x2000) {
-		MAIN_D_801B1C14.vx -= 0x14;
+		STDVS_VIEW_TRANSLATION.vx -= 0x14;
 	}
 	if (MAIN_D_80135124 & 0x4) {
-		MAIN_D_801B1C14.vz -= 0x14;
+		STDVS_VIEW_TRANSLATION.vz -= 0x14;
 	}
 	if (MAIN_D_80135124 & 0x1) {
-		MAIN_D_801B1C14.vz += 0x14;
+		STDVS_VIEW_TRANSLATION.vz += 0x14;
 	}
 	if (MAIN_D_80135124 & ALT_BUTTON) {
-		MAIN_D_801B1C0C[0].vx += 0x20;
-		MAIN_D_801B1C0C[0].vx &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vx += 0x20;
+		STDVS_VIEW_ROTATION[0].vx &= 0xfff;
 	}
 	if (MAIN_D_80135124 & CANCEL_BUTTON) {
-		MAIN_D_801B1C0C[0].vx -= 0x20;
-		MAIN_D_801B1C0C[0].vx &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vx -= 0x20;
+		STDVS_VIEW_ROTATION[0].vx &= 0xfff;
 	}
 	if (MAIN_D_80135124 & 0x80) {
-		MAIN_D_801B1C0C[0].vy -= 0x20;
-		MAIN_D_801B1C0C[0].vy &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vy -= 0x20;
+		STDVS_VIEW_ROTATION[0].vy &= 0xfff;
 	}
 	if (MAIN_D_80135124 & CONFIRM_BUTTON) {
-		MAIN_D_801B1C0C[0].vy += 0x20;
-		MAIN_D_801B1C0C[0].vy &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vy += 0x20;
+		STDVS_VIEW_ROTATION[0].vy &= 0xfff;
 	}
 	if (MAIN_D_80135124 & 0x800) {
-		MAIN_D_801B1C0C[0].vx = 0;
-		MAIN_D_801B1C0C[0].vy = 0;
-		MAIN_D_801B1C0C[0].vz = 0;
-		MAIN_D_801B1C14.vx = 0;
-		MAIN_D_801B1C14.vy = 0;
-		MAIN_D_801B1C14.vz = 0xbb8;
+		STDVS_VIEW_ROTATION[0].vx = 0;
+		STDVS_VIEW_ROTATION[0].vy = 0;
+		STDVS_VIEW_ROTATION[0].vz = 0;
+		STDVS_VIEW_TRANSLATION.vx = 0;
+		STDVS_VIEW_TRANSLATION.vy = 0;
+		STDVS_VIEW_TRANSLATION.vz = 0xbb8;
 	}
-	MAIN_D_801B1B98.super = NULL;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
+	STDVS_VIEW.super = NULL;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void STD_func_80059B70(void)
@@ -2006,18 +2006,18 @@ void STD_func_80059B70(void)
 		d = 0x1068;
 	}
 	ang = 0x1000 - _atan(diff.vx, diff.vz);
-	MAIN_D_801B1C14.vx = b->vx + (int32_t)diff.vx / 2 + (d * diff.vz) / dist;
-	MAIN_D_801B1C14.vy = -0x3e8;
-	MAIN_D_801B1C14.vz = b->vz + diff.vz / 2 - (d * diff.vx) / dist;
-	MAIN_D_801B1C0C[0].vx = _atan(d, -0x2bc) + 0x800;
-	MAIN_D_801B1C0C[0].vy = ang + 0x800;
-	MAIN_D_801B1C0C[0].vz = 0;
-	MAIN_D_801B1B98.view = GsIDMATRIX;
-	MAIN_D_801B1B98.super = &MAIN_D_801B1BBC;
-	RotMatrixYXZ(MAIN_D_801B1C0C, &MAIN_D_801B1BBC.coord);
-	TransMatrix(&MAIN_D_801B1BBC.coord, &MAIN_D_801B1C14);
+	STDVS_VIEW_TRANSLATION.vx = b->vx + (int32_t)diff.vx / 2 + (d * diff.vz) / dist;
+	STDVS_VIEW_TRANSLATION.vy = -0x3e8;
+	STDVS_VIEW_TRANSLATION.vz = b->vz + diff.vz / 2 - (d * diff.vx) / dist;
+	STDVS_VIEW_ROTATION[0].vx = _atan(d, -0x2bc) + 0x800;
+	STDVS_VIEW_ROTATION[0].vy = ang + 0x800;
+	STDVS_VIEW_ROTATION[0].vz = 0;
+	STDVS_VIEW.view = GsIDMATRIX;
+	STDVS_VIEW.super = &MAIN_D_801B1BBC;
+	RotMatrixYXZ(STDVS_VIEW_ROTATION, &MAIN_D_801B1BBC.coord);
+	TransMatrix(&MAIN_D_801B1BBC.coord, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void STD_func_80059DBC(void)
@@ -2027,17 +2027,17 @@ void STD_func_80059DBC(void)
 
 	a = &PARTNER_ENTITY.digimonEntity.entity.posData->location;
 	b = &MAIN_D_801350E8->posData->location;
-	MAIN_D_801B1B98.view = GsIDMATRIX;
-	MAIN_D_801B1B98.super = &MAIN_D_801B1BBC;
-	MAIN_D_801B1C14.vx = a->vx + (b->vx - a->vx) / 2;
-	MAIN_D_801B1C14.vz = a->vz + (b->vz - a->vz) / 2;
-	MAIN_D_801B1C14.vy = -0x1f40;
-	MAIN_D_801B1C0C[0].vy = MAIN_D_801B1C0C[0].vz = 0;
-	MAIN_D_801B1C0C[0].vx = -0x400;
-	RotMatrixYXZ(MAIN_D_801B1C0C, &MAIN_D_801B1BBC.coord);
-	TransMatrix(&MAIN_D_801B1BBC.coord, &MAIN_D_801B1C14);
+	STDVS_VIEW.view = GsIDMATRIX;
+	STDVS_VIEW.super = &MAIN_D_801B1BBC;
+	STDVS_VIEW_TRANSLATION.vx = a->vx + (b->vx - a->vx) / 2;
+	STDVS_VIEW_TRANSLATION.vz = a->vz + (b->vz - a->vz) / 2;
+	STDVS_VIEW_TRANSLATION.vy = -0x1f40;
+	STDVS_VIEW_ROTATION[0].vy = STDVS_VIEW_ROTATION[0].vz = 0;
+	STDVS_VIEW_ROTATION[0].vx = -0x400;
+	RotMatrixYXZ(STDVS_VIEW_ROTATION, &MAIN_D_801B1BBC.coord);
+	TransMatrix(&MAIN_D_801B1BBC.coord, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void STD_setCameraToEntity(void)
@@ -2046,18 +2046,18 @@ void STD_setCameraToEntity(void)
 	VECTOR v;
 	VECTOR out;
 
-	rot = MAIN_D_801B1C0C[0];
+	rot = STDVS_VIEW_ROTATION[0];
 	rot.vy -= ((Entity *)MAIN_D_80135128)->posData->rotation.vy;
 	rot.vy &= 0xfff;
-	RotMatrix(&rot, &MAIN_D_801B1B98.view);
-	v = MAIN_D_801B1C14;
-	ApplyMatrixLV(&MAIN_D_801B1B98.view, &((Entity *)MAIN_D_80135128)->posData->location, &out);
+	RotMatrix(&rot, &STDVS_VIEW.view);
+	v = STDVS_VIEW_TRANSLATION;
+	ApplyMatrixLV(&STDVS_VIEW.view, &((Entity *)MAIN_D_80135128)->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
-	TransMatrix(&MAIN_D_801B1B98.view, &v);
+	TransMatrix(&STDVS_VIEW.view, &v);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void STD_func_8005A44C(void)
@@ -2131,15 +2131,15 @@ void STD_func_8005A054(void)
 	diff.vx = otherPos->vx - selfPos->vx;
 	diff.vy = 0;
 	diff.vz = otherPos->vz - selfPos->vz;
-	MAIN_D_801B1C0C[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	v = MAIN_D_801B1C14;
-	ApplyMatrixLV(&MAIN_D_801B1B98.view, &((Entity *)MAIN_D_80135128)->posData->location, &out);
+	STDVS_VIEW_ROTATION[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	v = STDVS_VIEW_TRANSLATION;
+	ApplyMatrixLV(&STDVS_VIEW.view, &((Entity *)MAIN_D_80135128)->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
-	TransMatrix(&MAIN_D_801B1B98.view, &v);
-	GsSetView2(&MAIN_D_801B1B98);
+	TransMatrix(&STDVS_VIEW.view, &v);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void STD_applyViewpoint(void)
@@ -2151,52 +2151,52 @@ void STD_applyViewpoint(void)
 void STD_func_8005A1BC(void)
 {
 	if (MAIN_D_80135124 & 0x1000) {
-		MAIN_D_801B1C14.vy += 0x14;
+		STDVS_VIEW_TRANSLATION.vy += 0x14;
 	}
 	if (MAIN_D_80135124 & 0x4000) {
-		MAIN_D_801B1C14.vy -= 0x14;
+		STDVS_VIEW_TRANSLATION.vy -= 0x14;
 	}
 	if (MAIN_D_80135124 & 0x8000) {
-		MAIN_D_801B1C14.vx += 0x14;
+		STDVS_VIEW_TRANSLATION.vx += 0x14;
 	}
 	if (MAIN_D_80135124 & 0x2000) {
-		MAIN_D_801B1C14.vx -= 0x14;
+		STDVS_VIEW_TRANSLATION.vx -= 0x14;
 	}
 	if (MAIN_D_80135124 & 0x4) {
-		MAIN_D_801B1C14.vz -= 0x14;
+		STDVS_VIEW_TRANSLATION.vz -= 0x14;
 	}
 	if (MAIN_D_80135124 & 0x1) {
-		MAIN_D_801B1C14.vz += 0x14;
+		STDVS_VIEW_TRANSLATION.vz += 0x14;
 	}
 	if (MAIN_D_80135124 & ALT_BUTTON) {
-		MAIN_D_801B1C0C[0].vx += 0x20;
-		MAIN_D_801B1C0C[0].vx &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vx += 0x20;
+		STDVS_VIEW_ROTATION[0].vx &= 0xfff;
 	}
 	if (MAIN_D_80135124 & CANCEL_BUTTON) {
-		MAIN_D_801B1C0C[0].vx -= 0x20;
-		MAIN_D_801B1C0C[0].vx &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vx -= 0x20;
+		STDVS_VIEW_ROTATION[0].vx &= 0xfff;
 	}
-	MAIN_D_801B1C0C[0].vy += 2;
-	MAIN_D_801B1C0C[0].vy &= 0xfff;
+	STDVS_VIEW_ROTATION[0].vy += 2;
+	STDVS_VIEW_ROTATION[0].vy &= 0xfff;
 	if (MAIN_D_80135124 & CONFIRM_BUTTON) {
-		MAIN_D_801B1C0C[0].vy += 0x20;
-		MAIN_D_801B1C0C[0].vy &= 0xfff;
+		STDVS_VIEW_ROTATION[0].vy += 0x20;
+		STDVS_VIEW_ROTATION[0].vy &= 0xfff;
 	}
-	MAIN_D_801B1B98.super = NULL;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
+	STDVS_VIEW.super = NULL;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void STD_setCameraParams(int16_t a, int16_t b, int16_t c, int16_t d, int16_t e, int16_t f)
 {
-	MAIN_D_801B1C0C[0].vx = a;
-	MAIN_D_801B1C0C[0].vy = b;
-	MAIN_D_801B1C0C[0].vz = c;
-	MAIN_D_801B1C14.vx = d;
-	MAIN_D_801B1C14.vy = e;
-	MAIN_D_801B1C14.vz = f;
+	STDVS_VIEW_ROTATION[0].vx = a;
+	STDVS_VIEW_ROTATION[0].vy = b;
+	STDVS_VIEW_ROTATION[0].vz = c;
+	STDVS_VIEW_TRANSLATION.vx = d;
+	STDVS_VIEW_TRANSLATION.vy = e;
+	STDVS_VIEW_TRANSLATION.vz = f;
 }
 
 void STD_setVSPhase(int32_t arg)
@@ -2221,7 +2221,7 @@ void STD_func_8005A55C(DigimonEntity *entity, int32_t mode, uint8_t sub)
 		}
 	}
 	MAIN_D_80135128 = (char **)entity;
-	MAIN_D_801B1B98.super = NULL;
+	STDVS_VIEW.super = NULL;
 	if (sub != 3) {
 		p = &STD_D_8007A390[mode];
 	} else {
@@ -2677,10 +2677,10 @@ void STD_addFighterCounter(int32_t arg)
 void STD_tickFighterCounter(void)
 {
 	if (MAIN_D_80135114 == 1) {
-		MAIN_D_80134D66++;
+		BATTLE_FRAME_COUNT++;
 		if (ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[0]]->anim.animId != 0x2b) {
 			if (ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->anim.animId != 0x2b) {
-				if (MAIN_D_80134D66 % 0x14 == 0) {
+				if (BATTLE_FRAME_COUNT % 0x14 == 0) {
 					if (MAIN_D_80135110 != 0) {
 						MAIN_D_80135110--;
 					}
@@ -2979,8 +2979,8 @@ void STD_func_8005CE9C(void)
 	int16_t shift;
 
 	for (i = 0; i < 8; i++) {
-		len = strlen(DIGIMON_DATA[MAIN_D_80135150[i]].name) / 2;
-		if (MAIN_D_80135150[i] == 0x4e || MAIN_D_80135150[i] == 0x3c) {
+		len = strlen(DIGIMON_DATA[PARTICIPANT_TYPES[i]].name) / 2;
+		if (PARTICIPANT_TYPES[i] == 0x4e || PARTICIPANT_TYPES[i] == 0x3c) {
 			len = 10;
 		}
 		p = 0;
@@ -2988,25 +2988,25 @@ void STD_func_8005CE9C(void)
 		small = 0;
 		for (j = 0; j < len; j++) {
 			if (len < 8) {
-				c = STD_D_80079CBC[MAIN_D_80135150[i]][p++];
+				c = STD_D_80079CBC[PARTICIPANT_TYPES[i]][p++];
 				STD_func_8005D814((int16_t)(STD_D_8007A598[i].unk0[0] + 4),
 				                  (int16_t)(STD_D_8007A48C[0] + 0x12 + j * 8), c, 5);
 				if (c == 0x1f || c == 0x25) {
-					c = STD_D_80079CBC[MAIN_D_80135150[i]][p++];
+					c = STD_D_80079CBC[PARTICIPANT_TYPES[i]][p++];
 					STD_func_8005D814((int16_t)(STD_D_8007A598[i].unk0[0] + 4),
 					                  (int16_t)(STD_D_8007A48C[0] + 0x12 + j * 8), c, 5);
 				}
 			} else {
-				c = STD_D_80079CBC[MAIN_D_80135150[i]][p++];
+				c = STD_D_80079CBC[PARTICIPANT_TYPES[i]][p++];
 				if (c == 0x3d) {
 					small = 1;
-					c = STD_D_80079CBC[MAIN_D_80135150[i]][p++];
+					c = STD_D_80079CBC[PARTICIPANT_TYPES[i]][p++];
 					shift = -((j - 1) * 8);
 				}
 				STD_func_8005D814((int16_t)((small == 0) ? STD_D_8007A598[i].unk0[0] + 8 : STD_D_8007A598[i].unk0[0]),
 				                  (int16_t)(shift + (STD_D_8007A48C[0] + 0x12 + j * 8)), c, 5);
 				if (c == 0x1f || c == 0x25) {
-					c = STD_D_80079CBC[MAIN_D_80135150[i]][p++];
+					c = STD_D_80079CBC[PARTICIPANT_TYPES[i]][p++];
 					STD_func_8005D814((int16_t)((small == 0) ? STD_D_8007A598[i].unk0[0] + 8 : STD_D_8007A598[i].unk0[0]),
 					                  (int16_t)(shift + (STD_D_8007A48C[0] + 0x12 + j * 8)), c, 5);
 				}
@@ -3078,7 +3078,7 @@ void STD_func_8005D550(int16_t id)
 	int32_t h2;
 #endif
 
-	tile = MAIN_D_80135150[id];
+	tile = PARTICIPANT_TYPES[id];
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	SetPolyFT4(prim);
 	if (MAIN_D_80135164 != 0) {
@@ -3193,7 +3193,7 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 	uint8_t *p;
 
 	MAIN_D_8013514D = randomLimit(8);
-	MAIN_D_80135150[MAIN_D_8013514D] = ENTITY_TABLE[1]->type;
+	PARTICIPANT_TYPES[MAIN_D_8013514D] = ENTITY_TABLE[1]->type;
 
 	for (i = 1; i < 8; i++) {
 		j = randomLimit(7) + 1;
@@ -3203,12 +3203,12 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 	p = list + 1;
 	for (i = 0; i < 8; i++) {
 		if (i != MAIN_D_8013514D) {
-			MAIN_D_80135150[i] = *p++;
+			PARTICIPANT_TYPES[i] = *p++;
 		}
 	}
 
 	for (i = 0; i < 4; i++) {
-		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[i * 2]].level - 3][DIGIMON_DATA[MAIN_D_80135150[i * 2 + 1L]].level - 3]) {
+		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[PARTICIPANT_TYPES[i * 2]].level - 3][DIGIMON_DATA[PARTICIPANT_TYPES[i * 2 + 1L]].level - 3]) {
 			MAIN_D_80135158[i] = i * 2;
 		} else {
 			MAIN_D_80135158[i] = i * 2 + 1;
@@ -3221,13 +3221,13 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 		} else {
 			MAIN_D_8013515C = MAIN_D_80135158[0];
 		}
-		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[2]]].level - 3][DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[3]]].level - 3]) {
+		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[2]]].level - 3][DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[3]]].level - 3]) {
 			MAIN_D_8013515D = MAIN_D_80135158[2];
 		} else {
 			MAIN_D_8013515D = MAIN_D_80135158[3];
 		}
 	} else {
-		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[0]]].level - 3][DIGIMON_DATA[MAIN_D_80135150[MAIN_D_80135158[1]]].level - 3]) {
+		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[0]]].level - 3][DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[1]]].level - 3]) {
 			MAIN_D_8013515C = MAIN_D_80135158[0];
 		} else {
 			MAIN_D_8013515C = MAIN_D_80135158[1];
@@ -3240,27 +3240,27 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 	}
 
 	if (MAIN_D_8013514D % 2 == 0) {
-		out[0] = MAIN_D_80135150[MAIN_D_8013514D + 1];
+		out[0] = PARTICIPANT_TYPES[MAIN_D_8013514D + 1];
 	} else {
-		out[0] = MAIN_D_80135150[MAIN_D_8013514D - 1];
+		out[0] = PARTICIPANT_TYPES[MAIN_D_8013514D - 1];
 	}
 
 	switch (MAIN_D_8013514D / 2) {
 	case 0:
-		out[1] = MAIN_D_80135150[MAIN_D_80135158[1]];
-		out[2] = MAIN_D_80135150[MAIN_D_8013515D];
+		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[1]];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515D];
 		break;
 	case 1:
-		out[1] = MAIN_D_80135150[MAIN_D_80135158[0]];
-		out[2] = MAIN_D_80135150[MAIN_D_8013515D];
+		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[0]];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515D];
 		break;
 	case 2:
-		out[1] = MAIN_D_80135150[MAIN_D_80135158[3]];
-		out[2] = MAIN_D_80135150[MAIN_D_8013515C];
+		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[3]];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C];
 		break;
 	case 3:
-		out[1] = MAIN_D_80135150[MAIN_D_80135158[2]];
-		out[2] = MAIN_D_80135150[MAIN_D_8013515C];
+		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[2]];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C];
 		break;
 	}
 }
@@ -3353,8 +3353,8 @@ void STD_func_8005E1E4(int16_t id)
 	setRGB0(prim, 0x80, 0x80, 0x80);
 	prim->tpage = GetTPage(0, 2, 0x3c0, 0);
 	prim->clut = GetClut(0x130,
-	                     STD_D_8007A57C[STD_D_8007A50C[MAIN_D_80135150[id]] - 1] + 0x1e0);
-	setUVDataPolyFT4(prim, STD_D_8007A50C[MAIN_D_80135150[id]] * 8 - 8, 0xc0, 8, 8);
+	                     STD_D_8007A57C[STD_D_8007A50C[PARTICIPANT_TYPES[id]] - 1] + 0x1e0);
+	setUVDataPolyFT4(prim, STD_D_8007A50C[PARTICIPANT_TYPES[id]] * 8 - 8, 0xc0, 8, 8);
 	setPosDataPolyFT4(prim, STD_D_8007BB64[id].x, STD_D_8007BB64[id].y, 8, 8);
 	if (STD_D_8007BAF4[id].unk6 == 1) {
 		swapShort(&prim->x0, &prim->x1);
@@ -3368,8 +3368,8 @@ void STD_func_8005E1E4(int16_t id)
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->tpage = GetTPage(0, 2, 0x3c0, 0);
 		prim->clut = GetClut(0x130,
-		                     STD_D_8007A57C[STD_D_8007A50C[MAIN_D_80135150[id]] - 1] + 0x1e0);
-		setUVDataPolyFT4(prim, STD_D_8007A50C[MAIN_D_80135150[id]] * 8 - 8, 0xc0, 8, 8);
+		                     STD_D_8007A57C[STD_D_8007A50C[PARTICIPANT_TYPES[id]] - 1] + 0x1e0);
+		setUVDataPolyFT4(prim, STD_D_8007A50C[PARTICIPANT_TYPES[id]] * 8 - 8, 0xc0, 8, 8);
 		setPosDataPolyFT4(prim, STD_D_8007BB64[id].x, STD_D_8007BB64[id].y + 8, 8, 8);
 		if (STD_D_8007BAF4[id].unk6 == 1) {
 			swapShort(&prim->x0, &prim->x1);
@@ -3480,10 +3480,10 @@ void STD_func_8005F650(void)
 		COMBAT_DATA_PTR->player.commandDelay[0]--;
 	}
 
-	if (MAIN_D_80134D74 == 0) {
+	if (NO_AI_FLAG == 0) {
 		if (stats->current.currentHP > fighter->hpDamageBuffer) {
 			if (stats->base.brain < 0x12d) {
-				if ((MAIN_D_80134D66 % (((stats->base.brain / 2) + 1) * 20)) == 0) {
+				if ((BATTLE_FRAME_COUNT % (((stats->base.brain / 2) + 1) * 20)) == 0) {
 					if ((0x46 - PARTNER_PARA.discipline) > randomLimit(100)) {
 						*flagsPtr |= 0x2000;
 						fighter->senileTimer = 100;
@@ -3523,7 +3523,7 @@ void STD_func_8005F650(void)
 		return;
 	}
 
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		return;
 	}
 
@@ -3591,7 +3591,7 @@ void STD_func_8005F650(void)
 		}
 	}
 
-	if ((*flagsPtr & 8) && ((MAIN_D_80134D66 % 100) == 0)) {
+	if ((*flagsPtr & 8) && ((BATTLE_FRAME_COUNT % 100) == 0)) {
 		fighter->targetId = enemies[randomLimit(count)];
 	}
 
@@ -3869,21 +3869,21 @@ void STD_func_8005E8A4(Entity *entity, Entity *other)
 	COMBAT_DATA_PTR->player.remainingChargeupTime[0] = -1;
 	MAIN_D_80135168 = PARTNER_ENTITY.digimonEntity.stats.current.chargeMode;
 #if defined(VERSION_JP)
-	MAIN_D_80134D60 = NULL;
+	FINISHING_ENTITY = NULL;
 	MAIN_D_80135174 = 0;
-	MAIN_D_80134D7C[1] = 0;
+	FLEE_DISABLED[1] = 0;
 #else
-	MAIN_D_80134D7C[1] = 0;
-	MAIN_D_80134D60 = NULL;
+	FLEE_DISABLED[1] = 0;
+	FINISHING_ENTITY = NULL;
 	MAIN_D_80135174 = 0;
 #endif
-	MAIN_D_80134D84 = 0;
+	VS_P2_AOE_TIMER = 0;
 	COMBAT_DATA_PTR->player.unk7 = 0;
 	COMBAT_DATA_PTR->player.changeTarget = 0;
-	MAIN_D_80134D74 = 0;
-	MAIN_D_80134D64 = 0;
-	MAIN_D_80134D7C[0] = 1;
-	MAIN_D_80134D66 = 1;
+	NO_AI_FLAG = 0;
+	BATTLE_TOGGLE_LIFEBAR = 0;
+	FLEE_DISABLED[0] = 1;
+	BATTLE_FRAME_COUNT = 1;
 	MAIN_D_80135114 = 0;
 	MAIN_D_80135118 = 0;
 	for (i = 0; i < 2; i++) {
@@ -4035,7 +4035,7 @@ void STD_func_8005FDDC(void)
 
 	combat = COMBAT_DATA_PTR;
 	partner = ENTITY_TABLE[1];
-	if ((MAIN_D_80134D66 % 20) == 0) {
+	if ((BATTLE_FRAME_COUNT % 20) == 0) {
 		for (i = 0; i <= ENEMY_COUNT; i++) {
 			if (combat->fighter[i].buffPrioTimer != 0) {
 				combat->fighter[i].buffPrioTimer--;
@@ -4052,10 +4052,10 @@ void STD_func_8005FDDC(void)
 		stats->base.movesPrio[1] = 30;
 		stats->base.movesPrio[2] = 30;
 		stats->base.movesPrio[3] = 0;
-		if (MAIN_D_80134D74 == 0) {
+		if (NO_AI_FLAG == 0) {
 			if (stats->current.currentHP > fighter->hpDamageBuffer) {
 				if (stats->base.brain < 0x12d) {
-					if ((MAIN_D_80134D66 % (((stats->base.brain / 2) + 1) * 20)) == 0) {
+					if ((BATTLE_FRAME_COUNT % (((stats->base.brain / 2) + 1) * 20)) == 0) {
 						if (((0x12c - stats->base.brain) / 4) > randomLimit(100)) {
 							*flagsPtr |= 0x2000;
 							fighter->senileTimer = 100;
@@ -4097,7 +4097,7 @@ void STD_func_8005FDDC(void)
 			fighter->moveRange = -1;
 			continue;
 		}
-		if (MAIN_D_80134D74 != 0) {
+		if (NO_AI_FLAG != 0) {
 			return;
 		}
 		if (*flagsPtr & 0x40) {
@@ -4162,12 +4162,12 @@ void STD_func_800602A8(void)
 	FighterData *fighter;
 	uint16_t *flags;
 
-	if (MAIN_D_80134D7C[1] > 0) {
-		MAIN_D_80134D7C[1]--;
+	if (FLEE_DISABLED[1] > 0) {
+		FLEE_DISABLED[1]--;
 	}
 
-	if (MAIN_D_80134D84 > 0) {
-		MAIN_D_80134D84--;
+	if (VS_P2_AOE_TIMER > 0) {
+		VS_P2_AOE_TIMER--;
 	}
 
 	combat = COMBAT_DATA_PTR;
@@ -4215,7 +4215,7 @@ void STD_func_800602A8(void)
 				MAIN_D_801350EC = 1;
 			}
 		}
-		if ((MAIN_D_80134D66 % 600) == 0 && randomLimit(2) == 1) {
+		if ((BATTLE_FRAME_COUNT % 600) == 0 && randomLimit(2) == 1) {
 			MAIN_D_801350EC = 6;
 			STD_setRandomViewpoint(ENTITY_TABLE[1], 4);
 			MAIN_D_8013512C = randomLimit(0x29) + 0x3c;
@@ -4508,7 +4508,7 @@ void STD_tickHitState(Entity *entity, FighterData *fighter, int32_t arg2)
 
 void STD_tickFlatState(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int32_t arg3)
 {
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -4532,7 +4532,7 @@ void STD_tickStunState(Entity *entity)
 
 void STD_tickConfusedState(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int32_t arg3)
 {
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -4596,7 +4596,7 @@ void STD_tickChargeState(DigimonEntity *digimon, DigimonEntity *target, FighterD
 	int32_t r;
 	int16_t tech;
 
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -4658,7 +4658,7 @@ void STD_tickChargeState(DigimonEntity *digimon, DigimonEntity *target, FighterD
 
 void STD_tickCooldownState(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter)
 {
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -4682,7 +4682,7 @@ void STD_tickCooldownState(DigimonEntity *digimon, DigimonEntity *target, Fighte
 
 void STD_tickQueuedMove(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int32_t arg3)
 {
-	if ((MAIN_D_80134D74 != 0) && (MAIN_D_80134D60 != &digimon->entity)) {
+	if ((NO_AI_FLAG != 0) && (FINISHING_ENTITY != &digimon->entity)) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -4710,7 +4710,7 @@ int32_t STD_func_80061AA8(DigimonEntity *digimon, DigimonEntity *target, Fighter
 {
 	uint32_t range;
 
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		return 0;
 	}
 
@@ -4762,8 +4762,8 @@ int32_t STD_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, Fight
 		radius = radius * radius;
 		if (dist <= radius) {
 			handleBattleIdle(digimon, &digimon->stats, fighter->flags);
-			if (MAIN_D_80134D74 != 0) {
-				if (MAIN_D_80134D60 != &digimon->entity) {
+			if (NO_AI_FLAG != 0) {
+				if (FINISHING_ENTITY != &digimon->entity) {
 					return 0;
 				}
 				if (MAIN_D_80135174 > 0) {
@@ -4774,10 +4774,10 @@ int32_t STD_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, Fight
 			} else {
 				tech = entityGetTechFromAnim(&digimon->entity, fighter->queuedAnim);
 				if ((tech >= 0x3a) && (tech < 0x71)) {
-					MAIN_D_80134D74 = 1;
+					NO_AI_FLAG = 1;
 				}
-				if (MAIN_D_80134D74 != 0) {
-					MAIN_D_80134D60 = &digimon->entity;
+				if (NO_AI_FLAG != 0) {
+					FINISHING_ENTITY = &digimon->entity;
 					if (digimon == (DigimonEntity *)ENTITY_TABLE[1]) {
 						STD_func_80069134(tech);
 					}
@@ -4796,12 +4796,12 @@ int32_t STD_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, Fight
 			STD_func_800658B4(digimon, target, fighter);
 			return 0;
 		}
-		if (MAIN_D_80134D74 == 0) {
+		if (NO_AI_FLAG == 0) {
 			STD_setWalking(&digimon->entity, &digimon->stats, fighter->flags);
 			entityLookAtLocation(&digimon->entity, &target->entity.posData->location);
 			goto check;
 		}
-		if (MAIN_D_80134D60 != &digimon->entity) {
+		if (FINISHING_ENTITY != &digimon->entity) {
 			return 0;
 		}
 		if (MAIN_D_80135174 > 0) {
@@ -4843,7 +4843,7 @@ void STD_func_80061F44(DigimonEntity *entity, DigimonEntity *other,
 		return;
 	}
 
-	if (MAIN_D_80134D74 != 0 && &entity->entity == MAIN_D_80134D60) {
+	if (NO_AI_FLAG != 0 && &entity->entity == FINISHING_ENTITY) {
 		STD_func_80065540(entity, other, data);
 		return;
 	}
@@ -4867,7 +4867,7 @@ void STD_func_80061F44(DigimonEntity *entity, DigimonEntity *other,
 		handleBattleIdle(entity, &entity->stats, data->flags);
 
 		if ((data->flags & 8) != 0) {
-			if (MAIN_D_80134D66 % 40 == 0) {
+			if (BATTLE_FRAME_COUNT % 40 == 0) {
 				STD_func_80065540(entity, other, data);
 			} else {
 				entityLookAtLocation(&entity->entity,
@@ -5023,7 +5023,7 @@ void STD_tickFighterAction(int32_t index)
 		digimon->entity.anim.animFlag &= 5;
 	}
 
-	if ((MAIN_D_80134D74 != 0) && (MAIN_D_80134D60 == &digimon->entity) && (MAIN_D_80135174 > 0)) {
+	if ((NO_AI_FLAG != 0) && (FINISHING_ENTITY == &digimon->entity) && (MAIN_D_80135174 > 0)) {
 		return;
 	}
 
@@ -5046,9 +5046,9 @@ void STD_tickFighterAction(int32_t index)
 		return;
 	}
 
-	if (MAIN_D_80134D60 == &digimon->entity) {
-		MAIN_D_80134D74 = 0;
-		MAIN_D_80134D60 = NULL;
+	if (FINISHING_ENTITY == &digimon->entity) {
+		NO_AI_FLAG = 0;
+		FINISHING_ENTITY = NULL;
 	}
 
 	fighter->unk16 = 0;
@@ -5143,7 +5143,7 @@ int32_t STD_getContactRangeSquared(int32_t *a, int32_t *b)
 void STD_increaseSpeedBuffer(FighterData *fighter, Stats *stats)
 {
 	if (fighter->speedBuffer < 0x64) {
-		if ((MAIN_D_80134D66 % 2) == 0) {
+		if ((BATTLE_FRAME_COUNT % 2) == 0) {
 			fighter->speedBuffer += (stats->base.speed / 100) + 1;
 		}
 		if (fighter->speedBuffer >= 0x65) {
@@ -5307,8 +5307,8 @@ int16_t STD_func_8006314C(Entity *entity, Entity *other)
 {
 	int16_t result;
 
-	COMBAT_AREA_CENTER_X = 0;
-	COMBAT_AREA_CENTER_Y = 0;
+	COMBAT_AREA_X = 0;
+	COMBAT_AREA_Y = 0;
 	stopBGM();
 	playMusic(MAIN_D_801350F8, 2);
 	STD_func_8005E8A4(entity, other);
@@ -5475,15 +5475,15 @@ void STD_func_800647F8(void)
 		fighter->flags &= 0xff8f;
 		attacker = ENTITY_TABLE[attack.casterId];
 		chance = STD_applyPartnerStatsToFighter((DigimonEntity *)attacker, (DigimonEntity *)entity, fighter, tech);
-		if (entity == MAIN_D_80134D60) {
+		if (entity == FINISHING_ENTITY) {
 			if (i == 0) {
 				STD_removeFinisherChargeup();
 			}
 			if (MAIN_D_80135178 != -1L) {
 				STD_removeFinisherAura(MAIN_D_80135178);
 			}
-			MAIN_D_80134D74 = 0;
-			MAIN_D_80134D60 = NULL;
+			NO_AI_FLAG = 0;
+			FINISHING_ENTITY = NULL;
 		}
 		if (randomLimit(100) < chance) {
 			if (MAIN_D_801350EC == 6 && MOVE_DATA[tech].range == 1 && MAIN_D_801350EC == 3) {
@@ -5699,7 +5699,7 @@ int32_t STD_calculateDamage(DigimonEntity *attacker, DigimonEntity *defender, in
 
 	for (i = 0; i < 3; i++) {
 		if (DIGIMON_DATA[defender->entity.type].special[i] != 0xff) {
-			mult[i] = MAIN_D_80125F70[MOVE_DATA[move].special][DIGIMON_DATA[defender->entity.type].special[i]];
+			mult[i] = TYPE_FACTORS[MOVE_DATA[move].special][DIGIMON_DATA[defender->entity.type].special[i]];
 		} else {
 			mult[i] = 10;
 		}
@@ -5924,7 +5924,7 @@ void STD_battleTickFrame(void)
 	GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 	tickObjects();
 	renderObjects();
-	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80, &DRAW_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
+	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80, &DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
 	DrawSync(0);
 	VSync(3);
 	POLLED_INPUT_PREVIOUS = POLLED_INPUT;
@@ -6324,8 +6324,8 @@ void STD_func_80065540(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 {
 	int16_t tech;
 
-	if (MAIN_D_80134D74 != 0) {
-		if (MAIN_D_80134D60 != &digimon->entity) {
+	if (NO_AI_FLAG != 0) {
+		if (FINISHING_ENTITY != &digimon->entity) {
 			return;
 		}
 		if (MAIN_D_80135174 > 0) {
@@ -6336,10 +6336,10 @@ void STD_func_80065540(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 	} else {
 		tech = entityGetTechFromAnim(&digimon->entity, fighter->queuedAnim);
 		if (tech >= 0x3a && tech < 0x71) {
-			MAIN_D_80134D74 = 1;
+			NO_AI_FLAG = 1;
 		}
-		if (MAIN_D_80134D74 != 0) {
-			MAIN_D_80134D60 = &digimon->entity;
+		if (NO_AI_FLAG != 0) {
+			FINISHING_ENTITY = &digimon->entity;
 			if (&digimon->entity == ENTITY_TABLE[1]) {
 				STD_func_80069134(tech);
 			}
@@ -6367,9 +6367,9 @@ void STD_func_80065540(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 	}
 	if ((MOVE_DATA[tech].unk3 & 2) != 0) {
 		if (&digimon->entity == ENTITY_TABLE[1]) {
-			MAIN_D_80134D7C[1] = 0x6e;
+			FLEE_DISABLED[1] = 0x6e;
 		} else {
-			MAIN_D_80134D84 = 0x6e;
+			VS_P2_AOE_TIMER = 0x6e;
 		}
 	}
 	startAnimation(&digimon->entity, fighter->queuedAnim);
@@ -6392,11 +6392,11 @@ int32_t STD_selectMoveTarget(Entity *entity, FighterData *fighter)
 	tech = entityGetTechFromAnim(entity, fighter->queuedAnim);
 	if ((MOVE_DATA[tech].unk3 & 2) != 0) {
 		if (entity == ENTITY_TABLE[1]) {
-			if (MAIN_D_80134D7C[1] > 0) {
+			if (FLEE_DISABLED[1] > 0) {
 				return 1;
 			}
 		} else {
-			if (MAIN_D_80134D84 > 0) {
+			if (VS_P2_AOE_TIMER > 0) {
 				return 1;
 			}
 		}
@@ -6429,23 +6429,23 @@ void STD_func_800658B4(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 	int16_t cost;
 	int16_t brain;
 
-	MAIN_D_80134EF8 = digimon;
+	BATTLE_ATTACKING_DIGIMON = digimon;
 	tech = entityGetTechFromAnim(&digimon->entity, fighter->queuedAnim);
 	if (fighter->moveRange != 4) {
-		MAIN_D_80134EF4 = target;
+		BATTLE_TARGETED_DIGIMON = target;
 		if (target == NULL) {
 			if (MOVE_DATA[tech].unk3 & 1) {
 				if (digimon != (DigimonEntity *)ENTITY_TABLE[1]) {
-					MAIN_D_80134EF4 = (DigimonEntity *)ENTITY_TABLE[1];
+					BATTLE_TARGETED_DIGIMON = (DigimonEntity *)ENTITY_TABLE[1];
 					fighter->targetId = 0;
 				} else {
-					MAIN_D_80134EF4 = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]];
+					BATTLE_TARGETED_DIGIMON = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]];
 					fighter->targetId = 1;
 				}
 			}
 		}
 	} else {
-		MAIN_D_80134EF4 = digimon;
+		BATTLE_TARGETED_DIGIMON = digimon;
 	}
 
 	STD_removeMoveEffect(digimon, fighter);
@@ -6582,7 +6582,7 @@ void STD_applyMoveResult(void)
 		entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 		stats = &((DigimonEntity *)entity)->stats;
 		if (fighter->flags & 1) {
-			if (MAIN_D_80134D74 == 0) {
+			if (NO_AI_FLAG == 0) {
 				fighter->poisonTimer--;
 			}
 			if (fighter->poisonTimer == 0) {
@@ -6599,7 +6599,7 @@ void STD_applyMoveResult(void)
 			}
 		}
 		if (fighter->flags & 2) {
-			if ((MAIN_D_80134D74 == 0) && (fighter->confusionTimer != 0)) {
+			if ((NO_AI_FLAG == 0) && (fighter->confusionTimer != 0)) {
 				fighter->confusionTimer--;
 			}
 			if ((fighter->confusionTimer == 0) && !(combat->fighter[0].flags & 0x20)) {
@@ -6607,7 +6607,7 @@ void STD_applyMoveResult(void)
 			}
 		}
 		if (fighter->flags & 4) {
-			if (MAIN_D_80134D74 == 0) {
+			if (NO_AI_FLAG == 0) {
 				fighter->stunTimer--;
 			}
 			if (fighter->stunTimer == 0) {
@@ -6617,7 +6617,7 @@ void STD_applyMoveResult(void)
 		if (fighter->flatTimer <= 0) {
 			continue;
 		}
-		if ((MAIN_D_80134D74 == 0) || (fighter->flatTimer < 0x42)) {
+		if ((NO_AI_FLAG == 0) || (fighter->flatTimer < 0x42)) {
 			fighter->flatTimer--;
 		}
 		STD_applyFlattenScale(&entity->posData->scale, fighter->flatTimer);
@@ -6937,7 +6937,7 @@ int16_t STD_getMostEffectiveMove(index, flags)
 	for (i = 0; i < 3; i++) {
 		if (flags[i] == 1) {
 			tech = entityGetTechFromAnim(&digimon->entity, moves[i]);
-			score[i] = MAIN_D_80125F70[MOVE_DATA[tech].special][DIGIMON_DATA[target->type].special[0]];
+			score[i] = TYPE_FACTORS[MOVE_DATA[tech].special][DIGIMON_DATA[target->type].special[0]];
 		} else {
 			score[i] = -1;
 		}
@@ -7083,7 +7083,7 @@ void STD_sortScoresAscending(int32_t *values, int32_t *keys, int32_t *groups, in
 
 int16_t STD_calculateElementBonus(int16_t arg0, int16_t arg1)
 {
-	switch (MAIN_D_80125F70[arg0][arg1]) {
+	switch (TYPE_FACTORS[arg0][arg1]) {
 	case 20:
 		return 10;
 	case 15:

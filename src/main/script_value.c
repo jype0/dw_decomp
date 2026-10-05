@@ -55,20 +55,20 @@ char MAIN_D_801345E0[8] = "Tanemon";
 char MAIN_D_801345E8[] = "Palmon";
 #endif
 
-int16_t MAIN_D_80130318[22] = {
+int16_t STATS_LIMIT_ARRAY[22] = {
 	0x03e7, 0x03e7, 0x03e7, 0x03e7, 0x270f, 0x270f, 0x270f, 0x270f,
 	0x0064, 0x0064, 0x03e7, 0x03e7, 0x03e7, 0x03e7, 0x270f, 0x270f,
 	0x270f, 0x03e7, 0x03e7, 0x03e7, 0x0063, 0x000a,
 };
 
-Pow10Table MAIN_D_80130344 = {
+Pow10Table MULTIPLE_OF_10 = {
 	{
 		0x00000001, 0x0000000a, 0x00000064, 0x000003e8,
 		0x00002710, 0x000186a0,
 	},
 };
 
-char *MAIN_D_8013035C[6] = {
+char *SPECIAL_SPEAKERS[6] = {
 	MAIN_D_801345CC,
 	MAIN_D_801345D4,
 	MAIN_D_801345D8,
@@ -106,9 +106,9 @@ int32_t getSpeakerName(speakerId, buf)
 	}
 
 	speakerId = speakerId - 0xc8;
-	strcpy((char *)buf, MAIN_D_8013035C[speakerId]);
+	strcpy((char *)buf, SPECIAL_SPEAKERS[speakerId]);
 
-	return strlen(MAIN_D_8013035C[speakerId]);
+	return strlen(SPECIAL_SPEAKERS[speakerId]);
 
 digimon:
 	strcpy((char *)buf, DIGIMON_DATA[speakerId].name);
@@ -123,7 +123,7 @@ uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t fl
 	int32_t started;
 	uint16_t c;
 
-	divs = MAIN_D_80130344;
+	divs = MULTIPLE_OF_10;
 	started = 0;
 	base = 0x824f;
 	while (digits != 0) {
@@ -190,7 +190,7 @@ void scriptCompareDate(void)
 	pollNextTwoScriptBytes(&days, &hours);
 	pollNextScriptUByte(&minutes);
 
-	MAIN_D_80134FDC = (uint8_t *)(MAIN_D_80134FDC + 1);
+	SCRIPT_POINTER = (uint8_t *)(SCRIPT_POINTER + 1);
 	now = dateToSeconds(readPStat(statIdx + 0), readPStat(statIdx + 1), readPStat(statIdx + 2), readPStat(statIdx + 3));
 	date = dateToSeconds(years, days, hours, minutes);
 	res = scriptCompareValue(op, now, date);
@@ -280,30 +280,30 @@ int16_t *getStatsPointer(stat)
 		ptr = &MERIT;
 		break;
 	case SCRIPT_STAT_STARTED_BATTLES:
-		ptr = &MAIN_D_80134FC8;
+		ptr = &BATTLES_STARTED;
 		break;
 	case SCRIPT_STAT_FLED_BATTLES:
-		ptr = &MAIN_D_80134FCA;
+		ptr = &BATTLES_FLED;
 		break;
 	case SCRIPT_STAT_TOURNAMENTS_WON:
-		ptr = &MAIN_D_80134FCC;
+		ptr = &TOURNAMENTS_WON;
 		break;
 	case SCRIPT_STAT_TOURNAMENT_WINS:
-		ptr = &TOURNAMENTS_LOST;
+		ptr = &TOURNAMENT_WINS;
 		break;
 	case SCRIPT_STAT_TOURNAMENTS_LOST:
-		ptr = &MAIN_D_80134FD0;
+		ptr = &TOURNAMENTS_LOST;
 		break;
 	case SCRIPT_STAT_WEIGHT:
 		ptr = &PARTNER_PARA.weight;
 		break;
 	case SCRIPT_STAT_TAMER_LEVEL:
-		MAIN_D_80135002 = (int32_t)TAMER_ENTITY.tamerLevel;
-		ptr = &MAIN_D_80135002;
+		TMP_TAMER_LEVEL = (int32_t)TAMER_ENTITY.tamerLevel;
+		ptr = &TMP_TAMER_LEVEL;
 		break;
 	case SCRIPT_STAT_LIVES:
-		MAIN_D_80135004 = (int32_t)PARTNER_ENTITY.lives;
-		ptr = &MAIN_D_80135004;
+		TMP_LIVES = (int32_t)PARTNER_ENTITY.lives;
+		ptr = &TMP_LIVES;
 		break;
 	}
 
@@ -384,7 +384,7 @@ int16_t enforceStatsLimits(uint8_t stat, int16_t value)
 	} else if (stat == SCRIPT_STAT_CURRENT_MP) {
 		cap = PARTNER_ENTITY.digimonEntity.stats.base.mp;
 	} else {
-		cap = MAIN_D_80130318[stat];
+		cap = STATS_LIMIT_ARRAY[stat];
 	}
 
 	if (cap < value) {
@@ -399,7 +399,7 @@ int32_t scriptCompareMoney(void)
 	int32_t value;
 	uint8_t op;
 
-	MAIN_D_80134FDC = (uint8_t *)(MAIN_D_80134FDC + 1);
+	SCRIPT_POINTER = (uint8_t *)(SCRIPT_POINTER + 1);
 
 	pollNextScriptUByte(&op);
 	pollNextInt(&value);

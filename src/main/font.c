@@ -1272,8 +1272,8 @@ uint16_t FONT_CLUT[NUM_FONT_CLUT_ENTRIES] = {
 uint8_t COLORCODE_LOWBITS = 0x01;
 uint8_t COLORCODE_HIGHBITS = 0x10;
 
-int32_t RENDER_AREA_POINTER;
-uint8_t RENDER_AREA[NUM_RENDER_SLOTS * RENDER_SLOT_SIZE];
+int32_t GLYPH_DRAWING_AREA_INDEX;
+uint8_t GLYPH_DRAWING_AREAS[NUM_RENDER_SLOTS * RENDER_SLOT_SIZE];
 
 void initializeFontCLUT(void)
 {
@@ -1284,7 +1284,7 @@ void initializeFontCLUT(void)
 	setRECT(&rect, FONT_CLUT_VRAM_X, FONT_CLUT_VRAM_Y, NUM_FONT_CLUT_ENTRIES, 1);
 	LoadImage(&rect, (u_long *)FONT_CLUT);
 
-	RENDER_AREA_POINTER = 0;
+	GLYPH_DRAWING_AREA_INDEX = 0;
 }
 
 void clearTextArea(void)
@@ -1362,8 +1362,8 @@ int32_t drawGlyph(codepoint, x, y)
 	}
 
 	p = GLYPH_DATA[n].pixelData;
-	RENDER_AREA_POINTER = (RENDER_AREA_POINTER + 1) % NUM_RENDER_SLOTS;
-	drawRow = RENDER_AREA + RENDER_AREA_POINTER * RENDER_SLOT_SIZE;
+	GLYPH_DRAWING_AREA_INDEX = (GLYPH_DRAWING_AREA_INDEX + 1) % NUM_RENDER_SLOTS;
+	drawRow = GLYPH_DRAWING_AREAS + GLYPH_DRAWING_AREA_INDEX * RENDER_SLOT_SIZE;
 
 	for (i = 0; i < GLYPH_HEIGHT; i++) {
 		rowData = *p++;
@@ -1437,7 +1437,7 @@ int32_t drawGlyph(codepoint, x, y)
 	}
 
 	setRECT(&rect, (x / 4) + TEXT_VRAM_X, y + TEXT_VRAM_Y, GLYPH_WIDTH / 4, GLYPH_HEIGHT);
-	LoadImage(&rect, (u_long *)(RENDER_AREA + RENDER_AREA_POINTER * RENDER_SLOT_SIZE));
+	LoadImage(&rect, (u_long *)(GLYPH_DRAWING_AREAS + GLYPH_DRAWING_AREA_INDEX * RENDER_SLOT_SIZE));
 #if !defined(VERSION_JP)
 
 	return *p;

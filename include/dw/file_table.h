@@ -12,6 +12,6 @@ typedef struct {
     char *filename;
 } FileEntry;
 
-extern FileEntry FILE_TABLE[];
+extern FileEntry FILE_OFFSET_TABLE[];
 
 #endif

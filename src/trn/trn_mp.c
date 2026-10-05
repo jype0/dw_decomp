@@ -51,7 +51,7 @@ int16_t instanceId;
 	SVECTOR screen;
 	int32_t r;
 
-	switch (MAIN_D_80135371) {
+	switch (TRAINING_STATE) {
 	case 0:
 		storeMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
 		tamerSetState(8);
@@ -60,12 +60,12 @@ int16_t instanceId;
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
 		MAIN_D_8013537A = 0;
-		MAIN_D_80135371 = 1;
+		TRAINING_STATE = 1;
 		TRN_startSlotSessionIfEnabled(1);
 		break;
 	case 1:
 		if (tickEntityWalkTo(0xfc, 0xff, TRN_D_8008F330.vx, TRN_D_8008F330.vz, 0) == 1) {
-			MAIN_D_80135371 = 2;
+			TRAINING_STATE = 2;
 		}
 		break;
 	case 2:
@@ -80,7 +80,7 @@ int16_t instanceId;
 			PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0;
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0);
 			MAIN_D_80135384 = playSound2(8, 2);
-			MAIN_D_80135371 = 3;
+			TRAINING_STATE = 3;
 			if (MAIN_D_80135370 == 1) {
 				TRN_startSlotSpin();
 			}
@@ -101,19 +101,19 @@ int16_t instanceId;
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 2);
 			playSound(8, 0xa);
 			thunkStopSoundMask(MAIN_D_80135384);
-			MAIN_D_80135371 = 4;
+			TRAINING_STATE = 4;
 		}
 		break;
 	case 4:
 		if (tickEntityWalkTo(0xfc, 0xff, TRN_D_8008F330.vx, TRN_D_8008F330.vz, 0) == 1) {
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x12);
-			MAIN_D_80135371 = 5;
+			TRAINING_STATE = 5;
 		}
 		break;
 	case 5:
 		if (TRN_statGainsAreZero() == 1) {
 			MAIN_D_8013537C = 0;
-			MAIN_D_80135371 = 6;
+			TRAINING_STATE = 6;
 		}
 		break;
 	case 6:
@@ -124,7 +124,7 @@ int16_t instanceId;
 			tamerSetState(0);
 			partnerSetState(1);
 			MAIN_D_8013537A = 0;
-			MAIN_D_80135371 = 0;
+			TRAINING_STATE = 0;
 			removeObject(0xfaf, instanceId, TRN_tickMpTraining, NULL);
 			TRAINING_COMPLETE = 1;
 		}
@@ -159,5 +159,5 @@ int16_t arg;
 
 	MAIN_D_80135370 = readPStat(0xf6);
 	TRN_saveTrainingStartTime();
-	MAIN_D_80135371 = 0;
+	TRAINING_STATE = 0;
 }

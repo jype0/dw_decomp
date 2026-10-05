@@ -17,12 +17,12 @@
 
 extern uint16_t ACTIVE_MAP_SCRIPT;
 
-extern uint16_t SELECTION_MENU_STATE;
+extern uint16_t SCRIPT_STATE_2;
 
 extern uint8_t ACTIVE_INSTRUCTION;
-extern uint8_t SCRIPT_STATE_3;
-extern uint16_t SCRIPT_STATE_4;
-extern uint8_t *MAIN_D_80134FDC;
+extern uint8_t SCRIPT_TEXTBOX_MODE;
+extern uint16_t SCRIPT_NEXT_STATE_2;
+extern uint8_t *SCRIPT_POINTER;
 extern uint8_t ACTIVE_INSTRUCTION;
 
 
@@ -73,7 +73,7 @@ static void *dget_functions[] = {
 	fillEnabledTournamentTable,
 };
 
-uint8_t *TOURNAMENT_ARRAY;
+uint8_t *DGET_BUFFER;
 uint8_t TOURNAMENT_SELECTED_COLUMN;
 uint8_t TOURNAMENT_SELECTED_ROW;
 int32_t MAIN_D_801353B0;
@@ -82,7 +82,7 @@ static void *dget_sbss_order[] = {
 	&MAIN_D_801353B0,
 	&TOURNAMENT_SELECTED_ROW,
 	&TOURNAMENT_SELECTED_COLUMN,
-	&TOURNAMENT_ARRAY,
+	&DGET_BUFFER,
 };
 
 void fillEnabledTournamentTable(void)
@@ -96,8 +96,8 @@ void fillEnabledTournamentTable(void)
 
 	day = DAY;
 	for (j = 0; j < 5; j++, day++) {
-		data = &TOURNAMENT_DATA[(day % 30) * 6];
-		ptr = &TOURNAMENT_ARRAY[j * 6];
+		data = &TOURNAMENT_SCHEDULE[(day % 30) * 6];
+		ptr = &DGET_BUFFER[j * 6];
 		for (i = 0; i < 6; i++) {
 			tournament = *data++;
 			if (tournament == 0xff) {
@@ -115,7 +115,7 @@ void fillEnabledTournamentTable(void)
 		j = 1;
 	}
 	for (; j < 2; j++) {
-		ptr = &TOURNAMENT_ARRAY[j * 6];
+		ptr = &DGET_BUFFER[j * 6];
 		for (i = 0; i < 6; i++, ptr++) {
 			tournament = *ptr;
 			if (tournament == 0xff) {
@@ -151,9 +151,9 @@ void buildScheduleLabels(void)
 	registerTextbox(1, 8, 2, 0, 0);
 	showMapHeadTextbox(1, 0xff, 1, 0x4d8);
 
-	TEXT_BUFFERS_PTR[0x210] = 0xd;
+	TEXTBOX_LINES_PTR[0x210] = 0xd;
 
-	str = (uint8_t *)TEXT_BUFFERS_PTR + 0x240;
+	str = (uint8_t *)TEXTBOX_LINES_PTR + 0x240;
 	*str++ = 0x01;
 	*str++ = 0x01;
 	day = DAY;
@@ -201,10 +201,10 @@ void buildScheduleEntries(void)
 		      renderTournamentSchedule);
 	registerTextbox(2, 10, 6, 0, 1);
 
-	textPtr = (uint8_t *)TEXT_BUFFERS_PTR + 0x280;
+	textPtr = (uint8_t *)TEXTBOX_LINES_PTR + 0x280;
 	for (i = 0; i < 6; ++i) {
 		textStart = textPtr;
-		entryPtr = (uint8_t *)(TOURNAMENT_ARRAY + i);
+		entryPtr = (uint8_t *)(DGET_BUFFER + i);
 		for (col = 0; col < 5; ++col, entryPtr += 6) {
 			*textPtr++ = '\x01';
 			entry = *entryPtr;
@@ -248,14 +248,14 @@ void buildScheduleEntries(void)
 		textPtr = textStart + 0x40;
 	}
 
-	textBox = &TEXT_BOX_DATA[2];
+	textBox = &TEXTBOX_DATA[2];
 	textBox->pageReady = 1;
 	++textBox->writeCount;
 }
 
 extern void showTextboxReady(int32_t, int32_t);
 
-GARBAGE_ARRAY(initTournamentInfo, TOURNAMENT_ARRAY, 3, 9);
+GARBAGE_ARRAY(initTournamentInfo, DGET_BUFFER, 3, 9);
 
 void initTournamentInfo(int32_t arg)
 {
@@ -291,16 +291,16 @@ void initTournamentInfo(int32_t arg)
 		      renderTournamentInfo);
 	registerTextbox(3, slot, 7, 0, 0);
 
-	entry = *(uint8_t *)(TOURNAMENT_ARRAY +
+	entry = *(uint8_t *)(DGET_BUFFER +
 			     (uint32_t)TOURNAMENT_SELECTED_COLUMN * 6 +
 			     (uint32_t)TOURNAMENT_SELECTED_ROW);
 	entry &= 0x3f;
-	saved = MAIN_D_80134FDC;
+	saved = SCRIPT_POINTER;
 	jumpTable = getCupDataJumpTable(10, entry);
-	MAIN_D_80134FDC = getCupDataJumpTableEntry(jumpTable, 0) + 2;
+	SCRIPT_POINTER = getCupDataJumpTableEntry(jumpTable, 0) + 2;
 	showTextboxReady(3, 0xff);
 	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-	MAIN_D_80134FDC = saved;
+	SCRIPT_POINTER = saved;
 }
 
 int32_t tournamentCheckFair(uint8_t value)
@@ -426,7 +426,7 @@ void renderTournamentTextbox(void)
 	int16_t posX;
 	int16_t posY;
 
-	uvY = TEXT_BOX_DATA[1].vramRow * 12;
+	uvY = TEXTBOX_DATA[1].vramRow * 12;
 	posX = UI_BOX_DATA[1].finalPos.x + 6;
 	posY = UI_BOX_DATA[1].finalPos.y + 3;
 
@@ -449,18 +449,18 @@ void tickTournamentSchedule(void)
 	}
 
 	if (isKeyDown(CANCEL_BUTTON) != 0) {
-		SELECTION_MENU_STATE = 3;
+		SCRIPT_STATE_2 = 3;
 		playSound(0, 4);
 		return;
 	}
 
 	if (isKeyDown(CONFIRM_BUTTON) != 0) {
-		entry = *(uint8_t *)(TOURNAMENT_ARRAY +
+		entry = *(uint8_t *)(DGET_BUFFER +
 				     (uint32_t)TOURNAMENT_SELECTED_COLUMN * 6 +
 				     (uint32_t)TOURNAMENT_SELECTED_ROW);
 		if ((entry != 0xff) && ((entry & 0xc0) != 0)) {
 			writePStat(PSTAT_TOURNAMENT_ID, entry & 0x3f);
-			SELECTION_MENU_STATE = 3;
+			SCRIPT_STATE_2 = 3;
 			playSound(0, 3);
 		} else {
 			playSound(0, 0xb);
@@ -512,7 +512,7 @@ void tickTournamentSchedule(void)
 	}
 
 	if (isKeyDown(PADstart) != 0) {
-		entry = *(uint8_t *)(TOURNAMENT_ARRAY +
+		entry = *(uint8_t *)(DGET_BUFFER +
 				     (uint32_t)TOURNAMENT_SELECTED_COLUMN * 6 +
 				     (uint32_t)TOURNAMENT_SELECTED_ROW);
 		if (entry != 0xff) {
@@ -608,7 +608,7 @@ void renderTournamentInfo(void)
 	int16_t posX;
 	int16_t posY;
 
-	uvY = TEXT_BOX_DATA[3].vramRow * 12;
+	uvY = TEXTBOX_DATA[3].vramRow * 12;
 	posX = UI_BOX_DATA[3].finalPos.x + 6;
 	posY = UI_BOX_DATA[3].finalPos.y + 3;
 
@@ -628,24 +628,24 @@ void initTournamentSchedule(void)
 
 	selectionResult = 0;
 
-	switch (SELECTION_MENU_STATE) {
+	switch (SCRIPT_STATE_2) {
 	case 0:
 		if (isTriggerSet(TRIGGER_TOURNAMENT_REGISTERED) != 0) {
 			ACTIVE_INSTRUCTION = 0;
 		} else {
-			TOURNAMENT_ARRAY = allocateArray(TOURNAMENT_ARRAY_SIZE);
-			memset(TOURNAMENT_ARRAY, 0xff, TOURNAMENT_ARRAY_SIZE);
+			DGET_BUFFER = allocateArray(TOURNAMENT_ARRAY_SIZE);
+			memset(DGET_BUFFER, 0xff, TOURNAMENT_ARRAY_SIZE);
 			writePStat(PSTAT_TOURNAMENT_ID, 0xff);
 			fillEnabledTournamentTable();
 			triggerBoxCloseFlag(0);
 			setInputRepeatMask(0xf000);
 			buildScheduleLabels();
 			buildScheduleEntries();
-			SELECTION_MENU_STATE = 2;
+			SCRIPT_STATE_2 = 2;
 		}
 		break;
 	case 1:
-		freeArray(TOURNAMENT_ARRAY);
+		freeArray(DGET_BUFFER);
 		ACTIVE_INSTRUCTION = 0;
 		break;
 	case 2:
@@ -657,7 +657,7 @@ void initTournamentSchedule(void)
 
 		value = readPStat(PSTAT_TOURNAMENT_ID);
 		if (value == 0xff) {
-			SELECTION_MENU_STATE = 1;
+			SCRIPT_STATE_2 = 1;
 		} else {
 			initTournamentInfo(1);
 			if (tournamentCheckFair(value) != 0) {
@@ -667,16 +667,16 @@ void initTournamentSchedule(void)
 				showMapHeadTextbox(2, readPStat(PSTAT_254), 0, 0x4d8);
 				unsetTrigger(TRIGGER_TOURNAMENT_OVERLEVELED);
 			}
-			SELECTION_MENU_STATE = 2;
-			SCRIPT_STATE_4 = 4;
-			SCRIPT_STATE_3 = 1;
+			SCRIPT_STATE_2 = 2;
+			SCRIPT_NEXT_STATE_2 = 4;
+			SCRIPT_TEXTBOX_MODE = 1;
 		}
 		break;
 	case 4:
 		showMapheadSelection(4, 0xfd, 2, (int32_t *)&selectionResult, 0x4d8);
-		SELECTION_MENU_STATE = 2;
-		SCRIPT_STATE_4 = 5;
-		SCRIPT_STATE_3 = 2;
+		SCRIPT_STATE_2 = 2;
+		SCRIPT_NEXT_STATE_2 = 5;
+		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 5:
 		triggerBoxCloseFlag(3);
@@ -690,11 +690,11 @@ void initTournamentSchedule(void)
 		writePStat(PSTAT_TOURNAMENT_DAY, value);
 		writePStat(PSTAT_TOURNAMENT_DIGIMON,
 			   PARTNER_ENTITY.digimonEntity.entity.type);
-		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_2 = 1;
 		break;
 	case 6:
 		triggerBoxCloseFlag(3);
-		SELECTION_MENU_STATE = 1;
+		SCRIPT_STATE_2 = 1;
 	default:
 		break;
 	}

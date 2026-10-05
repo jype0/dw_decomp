@@ -41,12 +41,12 @@ typedef struct {
 	uint8_t y;
 } VsUISprite;
 
-extern char *MAIN_D_8013526C;
-extern char *MAIN_D_80135270;
+extern char *VS_DIGIMON_P1_PTR;
+extern char *VS_DIGIMON_P2_PTR;
 extern uint8_t MAIN_D_801B1C7C[];
-extern int8_t MAIN_D_80134F52[2];
-extern int32_t MAIN_D_80134F54;
-extern int16_t MAIN_D_80134F50;
+extern int8_t VS__PRESS_START_BOX_CREATED[2];
+extern int32_t VS__BOTH_SELECTED;
+extern int16_t VS__MODE_STATE;
 extern uint8_t MAIN_D_801B1CB2[];
 extern uint8_t MAIN_D_801B1D02[];
 extern uint8_t MAIN_D_80134F58;
@@ -105,11 +105,11 @@ static void *vs_select_functions[] = {
 
 // clang-format off
 
-int16_t MAIN_D_80134528[4] = {
+int16_t SPRITE_POS_X[4] = {
 	0x0036, 0x0036, 0x0050, 0x0050,
 };
 
-int16_t MAIN_D_80134530[4] = {
+int16_t SPRITE_POS_Y[4] = {
 	0x0020, 0x0055, 0x0020, 0x0055,
 };
 
@@ -155,7 +155,7 @@ char MAIN_D_8012F510[12] = "Press Start";
 char MAIN_D_8012F51C[] = "to begin.";
 #endif
 
-uint8_t MAIN_D_8012F528[68] = {
+uint8_t DIGIMON_SPRITE_CLUT[68] = {
 	0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x01,
 	0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00,
@@ -167,11 +167,11 @@ uint8_t MAIN_D_8012F528[68] = {
 	0x04, 0x03, 0x00, 0x00,
 };
 
-int16_t MAIN_D_8012F56C[6] = {
+int16_t STAT_LIMITS[6] = {
 	0x270f, 0x270f, 0x03e7, 0x03e7, 0x03e7, 0x03e7,
 };
 
-uint8_t MAIN_D_8012F578[12] = {
+uint8_t STAT_OFFSETS[12] = {
 	0x08, 0x14, 0x20, 0x2c, 0x38, 0x44, 0x4a, 0x54,
 	0x62, 0x6c, 0x7a, 0x84,
 };
@@ -201,7 +201,7 @@ VsListPanel MAIN_D_8012F620[4] = {
 	{ 0x0040, 0x01e8, 0x00, 0x00, 0x29, 0x16, 0x05, 0x62, 0x51 },
 };
 
-VsUISprite MAIN_D_8012F650[8] = {
+VsUISprite MODE_SELECT_SPRITES[8] = {
 	{ 0x01e9, 0x78, 0x00, 0x7c, 0x0e, 0x1c, 0x07 },
 	{ 0x01ee, 0x00, 0x88, 0x28, 0x30, 0x0e, 0x25 },
 	{ 0x01ee, 0x50, 0x88, 0x28, 0x30, 0x46, 0x25 },
@@ -212,7 +212,7 @@ VsUISprite MAIN_D_8012F650[8] = {
 	{ 0x01ee, 0x78, 0x4c, 0x34, 0x3c, 0x08, 0x1f },
 };
 
-VsUISprite MAIN_D_8012F690[8] = {
+VsUISprite MAP_SELECT_SPRITES[8] = {
 	{ 0x01ea, 0x78, 0x0e, 0x7c, 0x0e, 0x1c, 0x07 },
 	{ 0x01f0, 0x00, 0xb8, 0x28, 0x30, 0x0e, 0x25 },
 	{ 0x01f1, 0x50, 0xb8, 0x28, 0x30, 0x46, 0x25 },
@@ -242,8 +242,8 @@ void VS__loadTextures(void)
 	loadTIMFile(MAIN_D_8012F4E4, GENERAL_BUFFER);
 	loadTIMFile(MAIN_D_8012F4FC, GENERAL_BUFFER);
 
-	entries[0] = (uint8_t *)MAIN_D_8013526C;
-	entries[1] = (uint8_t *)MAIN_D_80135270;
+	entries[0] = (uint8_t *)VS_DIGIMON_P1_PTR;
+	entries[1] = (uint8_t *)VS_DIGIMON_P2_PTR;
 
 	for (i = 0; i < 5; ++i) {
 		VS_D_800716A8[i] = 0xff;
@@ -287,8 +287,8 @@ void VS__tickSelectDigimon(void)
 {
 	int32_t i;
 
-	MAIN_D_80134F52[0] = -1;
-	MAIN_D_80134F52[1] = -1;
+	VS__PRESS_START_BOX_CREATED[0] = -1;
+	VS__PRESS_START_BOX_CREATED[1] = -1;
 
 	clearTextArea();
 
@@ -301,8 +301,8 @@ void VS__tickSelectDigimon(void)
 		VS_tickFrame();
 	}
 
-	MAIN_D_80134F54 = 0;
-	while (MAIN_D_80134F54 == 0) {
+	VS__BOTH_SELECTED = 0;
+	while (VS__BOTH_SELECTED == 0) {
 		VS_tickFrame();
 	}
 
@@ -366,22 +366,22 @@ void VS__createPressStartToBeginBox(int16_t id)
 {
 	RECT rect;
 
-	if (MAIN_D_80134F52[id] == -1) {
+	if (VS__PRESS_START_BOX_CREATED[id] == -1) {
 		drawString(MAIN_D_8012F510, 0, 0);
 		drawString(MAIN_D_8012F51C, 0, 12);
 
 		setRECT(&rect, (id == 0) ? -132 : 22, 32, 108, 36);
 		createStaticUIBox(id, 0, 2, &rect, 0, VS__renderPressStartToBeginBox);
 
-		MAIN_D_80134F52[id] = 1;
+		VS__PRESS_START_BOX_CREATED[id] = 1;
 	}
 }
 
 void VS__removePressStartToBeginBox(int16_t id)
 {
-	if (MAIN_D_80134F52[id] != -1) {
+	if (VS__PRESS_START_BOX_CREATED[id] != -1) {
 		removeStaticUIBox(id);
-		MAIN_D_80134F52[id] = -1;
+		VS__PRESS_START_BOX_CREATED[id] = -1;
 	}
 }
 
@@ -395,25 +395,25 @@ void VS__initialize(char *namesP1, char *namesP2)
 {
 	int32_t done;
 
-	MAIN_D_8013526C = namesP1;
-	MAIN_D_80135270 = namesP2;
+	VS_DIGIMON_P1_PTR = namesP1;
+	VS_DIGIMON_P2_PTR = namesP2;
 	VS__loadTextures();
 
-	MAIN_D_80134F50 = 0;
+	VS__MODE_STATE = 0;
 	done = 0;
 	while (done == 0) {
-		switch (MAIN_D_80134F50) {
+		switch (VS__MODE_STATE) {
 		case 0:
 			VS__tickSelectMode();
-			++MAIN_D_80134F50;
+			++VS__MODE_STATE;
 			break;
 		case 1:
 			VS__tickSelectMap();
-			++MAIN_D_80134F50;
+			++VS__MODE_STATE;
 			break;
 		case 2:
 			VS__tickSelectDigimon();
-			++MAIN_D_80134F50;
+			++VS__MODE_STATE;
 			break;
 		case 3:
 			VS_initializeVS();
@@ -582,7 +582,7 @@ void VS__tickSelectDigimonPlayer(id)
 		break;
 	case 2:
 		if (MAIN_D_801B1CB2[0] == 1 && MAIN_D_801B1D02[0] == 1) {
-			MAIN_D_80134F54 = 1;
+			VS__BOTH_SELECTED = 1;
 		}
 		break;
 	}
@@ -635,9 +635,9 @@ void VS__renderSelectDigimonPlayer(id)
 	baseX = id * 154 - 152;
 	y = -109;
 	if (id == 0) {
-		names = MAIN_D_8013526C;
+		names = VS_DIGIMON_P1_PTR;
 	} else {
-		names = MAIN_D_80135270;
+		names = VS_DIGIMON_P2_PTR;
 	}
 	st = &MAIN_D_801B1C7C[(int16_t)id * 0x50];
 
@@ -653,19 +653,19 @@ void VS__renderSelectDigimonPlayer(id)
 		panel = &MAIN_D_8012F620[i];
 		stats = (int16_t *)(names + st[baseIdx + i] * 64);
 		for (j = 0; j < 6; j++, stats++) {
-			width = *stats * 34 / MAIN_D_8012F56C[j];
-			if (st[0x2e] < MAIN_D_8012F578[j] + 2 &&
-			    MAIN_D_8012F578[j] <= st[0x2e] + 22) {
+			width = *stats * 34 / STAT_LIMITS[j];
+			if (st[0x2e] < STAT_OFFSETS[j] + 2 &&
+			    STAT_OFFSETS[j] <= st[0x2e] + 22) {
 				SetPolyF4(bar);
 				setRGB0(bar, 0, 255, 255);
 				setXY4(bar, baseX + panel->x + 7,
-				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]),
+				       (y + panel->y) + (STAT_OFFSETS[j] - st[0x2e]),
 				       width + (baseX + panel->x + 7),
-				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]),
+				       (y + panel->y) + (STAT_OFFSETS[j] - st[0x2e]),
 				       baseX + panel->x + 7,
-				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]) + 2,
+				       (y + panel->y) + (STAT_OFFSETS[j] - st[0x2e]) + 2,
 				       width + (baseX + panel->x + 7),
-				       (y + panel->y) + (MAIN_D_8012F578[j] - st[0x2e]) + 2);
+				       (y + panel->y) + (STAT_OFFSETS[j] - st[0x2e]) + 2);
 				AddPrim(ACTIVE_ORDERING_TABLE->org + 10, bar++);
 			}
 		}
@@ -741,7 +741,7 @@ void VS__renderSelectDigimonPlayer(id)
 		type = ((uint8_t *)names + st[baseIdx + i] * 64)[0x1c];
 		VS__setPolyFT4White(prim);
 		prim->tpage = 14;
-		prim->clut = GetClut(0x120, MAIN_D_8012F528[type] + 0x1e0);
+		prim->clut = GetClut(0x120, DIGIMON_SPRITE_CLUT[type] + 0x1e0);
 		if (type == 0x73) {
 			spriteU = st[0x30] * 16 + 0x3e0;
 			spriteV = 0xe0;
@@ -752,7 +752,7 @@ void VS__renderSelectDigimonPlayer(id)
 		width = (spriteU != 0xf0) ? 16 : 15;
 		height = (spriteV != 0xf0) ? 16 : 15;
 		setUVDataPolyFT4(prim, spriteU, spriteV, width, height);
-		setPosDataPolyFT4(prim, baseX + MAIN_D_80134528[i], y + MAIN_D_80134530[i], width, height);
+		setPosDataPolyFT4(prim, baseX + SPRITE_POS_X[i], y + SPRITE_POS_Y[i], width, height);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 
 		text = (uint16_t *)(names + st[baseIdx + i] * 64 + 14);
@@ -794,7 +794,7 @@ void VS__renderSelectDigimonPlayer(id)
 				} else {
 					moveRow = j * 2 + 7;
 				}
-				if (st[0x2e] <= MAIN_D_8012F578[moveRow] + 8 && MAIN_D_8012F578[moveRow] <= st[0x2e] + 22) {
+				if (st[0x2e] <= STAT_OFFSETS[moveRow] + 8 && STAT_OFFSETS[moveRow] <= st[0x2e] + 22) {
 					VS__setPolyFT4White(prim);
 					prim->tpage = 7;
 					prim->clut = GetClut(0x30, 0x1e8);
@@ -806,23 +806,23 @@ void VS__renderSelectDigimonPlayer(id)
 							break;
 						}
 					}
-					if (st[0x2e] > MAIN_D_8012F578[moveRow]) {
-						height = st[0x2e] - MAIN_D_8012F578[moveRow];
+					if (st[0x2e] > STAT_OFFSETS[moveRow]) {
+						height = st[0x2e] - STAT_OFFSETS[moveRow];
 						setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
 						                 height + (VS_D_8006FD70[glyph] / 15) * 8, 8, 8 - height);
 						height = 8 - height;
 						posY = y + panel->y;
-					} else if (st[0x2e] + 22 < MAIN_D_8012F578[moveRow] + 8) {
-						height = (MAIN_D_8012F578[moveRow] + 8) - (st[0x2e] + 22);
+					} else if (st[0x2e] + 22 < STAT_OFFSETS[moveRow] + 8) {
+						height = (STAT_OFFSETS[moveRow] + 8) - (st[0x2e] + 22);
 						setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
 						                 (VS_D_8006FD70[glyph] / 15) * 8, 8, 8 - height);
 						height = 8 - height;
-						posY = MAIN_D_8012F578[moveRow] + (y + panel->y) - st[0x2e];
+						posY = STAT_OFFSETS[moveRow] + (y + panel->y) - st[0x2e];
 					} else {
 						height = 8;
 						setUVDataPolyFT4(prim, (VS_D_8006FD70[glyph] % 15) * 8,
 						                 (VS_D_8006FD70[glyph] / 15) * 8, 8, height);
-						posY = MAIN_D_8012F578[moveRow] + (y + panel->y) - st[0x2e];
+						posY = STAT_OFFSETS[moveRow] + (y + panel->y) - st[0x2e];
 					}
 					setPosDataPolyFT4(prim,
 					                  (k < 5) ? ((baseX + panel->x) + 1) + k * 8
@@ -931,10 +931,10 @@ int32_t VS__tickSelectMode(void)
 	count1 = 0;
 
 	for (i = 0; i < 40; ++i) {
-		if (((uint8_t (*)[64])MAIN_D_8013526C)[i][0x1c] != 0) {
+		if (((uint8_t (*)[64])VS_DIGIMON_P1_PTR)[i][0x1c] != 0) {
 			++count1;
 		}
-		if (((uint8_t (*)[64])MAIN_D_80135270)[i][0x1c] != 0) {
+		if (((uint8_t (*)[64])VS_DIGIMON_P2_PTR)[i][0x1c] != 0) {
 			++count2;
 		}
 	}
@@ -1049,7 +1049,7 @@ void VS__renderSelectModeBox(depth)
 	int32_t i;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	sprite = MAIN_D_8012F650;
+	sprite = MODE_SELECT_SPRITES;
 
 	for (i = 0; i < 8; ++sprite, ++i) {
 		SetPolyFT4(prim);
@@ -1148,9 +1148,9 @@ void VS__renderSelectMapBox(id)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 
 	if (id == 0) {
-		sprite = MAIN_D_8012F650;
+		sprite = MODE_SELECT_SPRITES;
 	} else {
-		sprite = MAIN_D_8012F690;
+		sprite = MAP_SELECT_SPRITES;
 	}
 
 	for (i = 0; i < 8; ++i) {

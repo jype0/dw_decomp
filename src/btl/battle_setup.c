@@ -7,9 +7,9 @@
 #include <dw/params.h>
 #include <dw/script.h>
 
-extern int8_t MAIN_D_80134D64;
-extern int16_t MAIN_D_80134D6A;
-extern int32_t MAIN_D_80134D78;
+extern int8_t BATTLE_TOGGLE_LIFEBAR;
+extern int16_t DEATH_COUNTDOWN;
+extern int32_t IS_TAMERLESS_BATTLE;
 extern int8_t TAMER_START_TILE_X;
 extern int8_t TAMER_START_TILE_Y;
 extern int8_t TAMER_WAYPOINT_ACTIVE;
@@ -28,7 +28,7 @@ void playSound(int32_t soundId, uint32_t flag);
 void clearTamerWaypoints(void);
 
 int16_t MAIN_D_801346D8[4] = { 0, 1024, 2048, 3072 };
-uint8_t MAIN_D_801346E0[5] = { 3, 4, 5, 7, 8 };
+uint8_t BRAIN_TO_COMMAND_MAP[5] = { 3, 4, 5, 7, 8 };
 
 uint8_t MAIN_D_80135078;
 long MAIN_D_8013507C;
@@ -57,17 +57,17 @@ void BTL_initializeCombat(void)
 	BTL_initializeEnemyHPBarSprites();
 	COMBAT_DATA_PTR->player.remainingChargeupTime[0] = -1;
 	MAIN_D_80135078 = PARTNER_ENTITY.digimonEntity.stats.current.chargeMode;
-	MAIN_D_80134D60 = NULL;
-	MAIN_D_80134D7C[1] = 0;
+	FINISHING_ENTITY = NULL;
+	FLEE_DISABLED[1] = 0;
 	MAIN_D_80135080 = 0;
-	MAIN_D_80134D6A = MAIN_D_80134D68 = 0;
-	MAIN_D_80134D64 = 0;
-	MAIN_D_80134D66 = 1;
+	DEATH_COUNTDOWN = FLEE_TIMER = 0;
+	BATTLE_TOGGLE_LIFEBAR = 0;
+	BATTLE_FRAME_COUNT = 1;
 	COMBAT_DATA_PTR->player.unk7 = 0;
 	COMBAT_DATA_PTR->player.changeTarget = 0;
-	MAIN_D_80134D74 = 0;
-	MAIN_D_80134D70 = 0;
-	MAIN_D_80134D78 = isTriggerSet(2);
+	NO_AI_FLAG = 0;
+	HAS_TAKEN_DAMAGE = 0;
+	IS_TAMERLESS_BATTLE = isTriggerSet(2);
 	for (i = 0; i < 2; i++) {
 		COMBAT_DATA_PTR->player.unk5[i] = 0xff;
 	}
@@ -123,7 +123,7 @@ void BTL_initializeCombat(void)
 
 	brains = PARTNER_ENTITY.digimonEntity.stats.base.brain;
 	if (brains < 0x1f4) {
-		COMBAT_DATA_PTR->player.numCommands[0] = MAIN_D_801346E0[brains / 100];
+		COMBAT_DATA_PTR->player.numCommands[0] = BRAIN_TO_COMMAND_MAP[brains / 100];
 	} else {
 		COMBAT_DATA_PTR->player.numCommands[0] = 9;
 	}
@@ -335,21 +335,21 @@ int32_t BTL_isBattleFinished(void)
 	int32_t i;
 
 	entity = ENTITY_TABLE[1];
-	if ((MAIN_D_80134D68 >= 0x29) && ((PARTNER_ENTITY.digimonEntity.stats.current.currentHP - COMBAT_DATA_PTR->fighter[0].hpDamageBuffer) > 0)) {
+	if ((FLEE_TIMER >= 0x29) && ((PARTNER_ENTITY.digimonEntity.stats.current.currentHP - COMBAT_DATA_PTR->fighter[0].hpDamageBuffer) > 0)) {
 		return 1;
 	}
 
 	if (entity->anim.animId == 0x2c) {
-		MAIN_D_80134D6A = 0;
+		DEATH_COUNTDOWN = 0;
 		if (!(entity->anim.animFlag & 1)) {
 			COMBAT_DATA_PTR->fighter[0].flags &= 0x7fff;
 			PARTNER_ENTITY.digimonEntity.stats.current.isHit = 0;
-			if (MAIN_D_80134D74 != 0) {
+			if (NO_AI_FLAG != 0) {
 				if (MAIN_D_8013507C != -1) {
 					BTL_removeFinisherAura(MAIN_D_8013507C);
 				}
-				MAIN_D_80134D74 = 0;
-				MAIN_D_80134D60 = NULL;
+				NO_AI_FLAG = 0;
+				FINISHING_ENTITY = NULL;
 			}
 			for (i = 0; ENEMY_COUNT >= i; i++) {
 				COMBAT_DATA_PTR->fighter[i].cooldown = 0;
@@ -364,12 +364,12 @@ int32_t BTL_isBattleFinished(void)
 
 	if ((entity->anim.animId == 0x2b) && !(entity->anim.animFlag & 1)) {
 		if (TAMER_ITEM.worldItem.type == 0xff) {
-			MAIN_D_80134D6A++;
+			DEATH_COUNTDOWN++;
 		}
-		if (MAIN_D_80134D6A == 0x14) {
+		if (DEATH_COUNTDOWN == 0x14) {
 			BTL_addDeathCountdown(ENTITY_TABLE[1]);
 		}
-		if (MAIN_D_80134D6A >= 0xab) {
+		if (DEATH_COUNTDOWN >= 0xab) {
 			return 1;
 		}
 		return 0;

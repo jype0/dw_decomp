@@ -10,7 +10,7 @@
 void triggerSeadramonCutscene(VECTOR *v);
 int32_t isTriggerSet(uint16_t trigger);
 
-extern int32_t MAIN_D_801349E0;
+extern int32_t FISHING_MAP_COUNT;
 
 int32_t getBestFishingRod(void)
 {
@@ -119,7 +119,7 @@ void checkFishingMap(uint32_t mapId)
 	if (mapId == 8 || mapId == 6) {
 		loadDynamicLibrary(FISH_REL, &loadComplete, 0, NULL, NULL);
 
-		for (i = 0; i < MAIN_D_801349E0; i++) {
+		for (i = 0; i < FISHING_MAP_COUNT; i++) {
 			if (FISHING_MAP_DATA[i].mapId == mapId) break;
 		}
 

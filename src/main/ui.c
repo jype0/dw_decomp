@@ -38,11 +38,11 @@ static void *ui_functions[] = {
 };
 
 // clang-format off
-uint8_t MAIN_D_80134330[4] = {
+uint8_t BOX_BORDER_CORNERS_U[4] = {
 	0x78, 0x7c, 0x78, 0x7c,
 };
 
-uint8_t MAIN_D_80134334[4] = {
+uint8_t BOX_BORDER_CORNERS_V[4] = {
 	0x10, 0x10, 0x14, 0x14,
 };
 
@@ -263,7 +263,7 @@ void renderUIBoxBorder(RECT *rect, int32_t layer)
 		p->tpage = getTPage(0, 0, 320, 0);
 		setClut(p, 0x60, 0x1EC);
 		setRGB0(p, 0x80, 0x80, 0x80);
-		setUVDataPolyFT4((PACKET *)p, MAIN_D_80134330[i], MAIN_D_80134334[i] + 0x80, 4, 4);
+		setUVDataPolyFT4((PACKET *)p, BOX_BORDER_CORNERS_U[i], BOX_BORDER_CORNERS_V[i] + 0x80, 4, 4);
 		setPosDataPolyFT4((PACKET *)p, (i % 2 == 0) ? rect->x : rect->x + rect->w - 4,
 				  (i < 2) ? rect->y : rect->y + rect->h - 4, 4, 4);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, p++);

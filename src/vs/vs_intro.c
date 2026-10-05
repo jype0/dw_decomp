@@ -26,15 +26,15 @@ extern int16_t MAIN_D_80134F26;
 extern uint8_t MAIN_D_80134F28;
 extern int16_t MAIN_D_80134F2A;
 extern int16_t MAIN_D_80134F2C;
-extern CameraChase MAIN_D_801352A4;
-extern int32_t MAIN_D_80134F20;
+extern CameraChase INTRO_CAMERA_FRAME_COUNT;
+extern int32_t VS__INTRO_STATS_ACTIVE;
 extern int16_t MAIN_D_801B1C70[];
 extern int16_t MAIN_D_801B1C72[];
 extern int16_t MAIN_D_801B1C74[];
 extern int16_t MAIN_D_801B1C76[];
 extern int16_t MAIN_D_801B1C78[];
 extern int16_t MAIN_D_801B1C7A[];
-extern uint8_t MAIN_D_80135274;
+extern uint8_t VS_MUSIC;
 extern uint8_t MAIN_D_80134F2E;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
@@ -98,7 +98,7 @@ char MAIN_D_80134500[] = "ＨＰ";
 
 char MAIN_D_80134508[] = "ＭＰ";
 
-int16_t MAIN_D_8012F42C[6] = {
+int16_t VS__STAT_BAR_LIMITS[6] = {
 	0x270f, 0x270f, 0x03e7, 0x03e7, 0x03e7, 0x03e7,
 };
 
@@ -219,13 +219,13 @@ void VS__addIntroText(entity, id)
 
 void VS__setPostIntroPosition(Entity *entity)
 {
-	if (MAIN_D_801352A4.timer != -1) {
+	if (INTRO_CAMERA_FRAME_COUNT.timer != -1) {
 		entity->posData->location = VS_D_80071744;
 		entity->anim.locX = VS_D_80071744.vx << 15;
 		entity->anim.locY = VS_D_80071744.vy << 15;
 		entity->anim.locZ = VS_D_80071744.vz << 15;
 		startAnimation(entity, 0x21);
-		MAIN_D_801352A4.timer = -1;
+		INTRO_CAMERA_FRAME_COUNT.timer = -1;
 	}
 }
 
@@ -242,8 +242,8 @@ void VS__removeIntroStats(id)
 	int16_t id;
 // clang-format on
 {
-	if (MAIN_D_80134F20 != 0) {
-		MAIN_D_80134F20 = 0;
+	if (VS__INTRO_STATS_ACTIVE != 0) {
+		VS__INTRO_STATS_ACTIVE = 0;
 		removeObject(0x1a9, id);
 	}
 }
@@ -254,8 +254,8 @@ void VS__addIntroStats(entity, id)
 	int16_t id;
 // clang-format on
 {
-	if (MAIN_D_80134F20 != 1) {
-		MAIN_D_80134F20 = 1;
+	if (VS__INTRO_STATS_ACTIVE != 1) {
+		VS__INTRO_STATS_ACTIVE = 1;
 		MAIN_D_801B1C70[0] = -100;
 		MAIN_D_801B1C72[0] = -100;
 		MAIN_D_801B1C74[0] = -10;
@@ -276,9 +276,9 @@ void VS__renderIntroStatBar(int32_t stat, int32_t value)
 	setRGB0(prim, 80, 200, 80);
 	setXY4(prim,
 	       -50, stat * 16 - 26,
-	       value * 100 / MAIN_D_8012F42C[stat] - 50, stat * 16 - 26,
+	       value * 100 / VS__STAT_BAR_LIMITS[stat] - 50, stat * 16 - 26,
 	       -50, stat * 16 - 18,
-	       value * 100 / MAIN_D_8012F42C[stat] - 50, stat * 16 - 18);
+	       value * 100 / VS__STAT_BAR_LIMITS[stat] - 50, stat * 16 - 18);
 #if defined(VERSION_JP)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
@@ -347,7 +347,7 @@ void VS__runIntro(stage)
 	VS__addIntroText(ENTITY_TABLE[1], 1);
 	stopBGM();
 	stopSound();
-	playMusic(MAIN_D_80135274, 0);
+	playMusic(VS_MUSIC, 0);
 
 	i = 0;
 	fadeFromBlack(5);
@@ -376,7 +376,7 @@ void VS__runIntro(stage)
 	VS__addIntroText(ENTITY_TABLE[2], 2);
 	stopBGM();
 	stopSound();
-	playMusic(MAIN_D_80135274, 1);
+	playMusic(VS_MUSIC, 1);
 
 	while (ENTITY_TABLE[2]->anim.animFlag & 1) {
 		pad = PadRead(1);
@@ -513,9 +513,9 @@ void VS__tickIntroName(int32_t id)
 	}
 
 	if (len == MAIN_D_80134F26 && MAIN_D_80134F2E == 3) {
-		if (MAIN_D_801352A4.timer == 0) {
+		if (INTRO_CAMERA_FRAME_COUNT.timer == 0) {
 			startAnimation(ENTITY_TABLE[id], 0x23);
-			MAIN_D_801352A4.timer = 20;
+			INTRO_CAMERA_FRAME_COUNT.timer = 20;
 		}
 
 		if (MAIN_D_80134F2C >= -71) {

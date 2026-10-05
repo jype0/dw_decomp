@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-extern int8_t EVL_LOADING_COMPLETE;
+extern int8_t IS_LOAD_EVL_COMPLETE;
 
 void stopBGM(void);
 void stopSound(void);
@@ -40,7 +40,7 @@ void tickEvoSequenceLoading(int32_t instanceId)
 		}
 		break;
 	case 1:
-		if ((data->timer > 55) && (EVL_LOADING_COMPLETE == 0)) {
+		if ((data->timer > 55) && (IS_LOAD_EVL_COMPLETE == 0)) {
 			removeObject(0x809, instanceId);
 			stopBGM();
 			EVL_initEvoSequence();
@@ -86,7 +86,7 @@ int16_t isInitialized;
 	data->partner = partner;
 	data->unk_0x8 = 0;
 	data->state = 0;
-	data->digimonId = EVO_GAINS_DATA[target].targetDigimon;
+	data->digimonId = EVOLUTION_STATS_GAINS[target].targetDigimon;
 	data->para = para;
 	data->evoTarget = target;
 	data->heightFactor = (DIGIMON_DATA[data->digimonId].height << 12) /
@@ -97,8 +97,8 @@ int16_t isInitialized;
 	loadMapSounds2(18);
 	isSoundLoaded(0, 8);
 	loadVLALL(data->digimonId, GENERAL_BUFFER_PTR);
-	loadDynamicLibrary(EVL_REL, (uint8_t *)&EVL_LOADING_COMPLETE, 0, 0, 0);
-	EVL_LOADING_COMPLETE = 0;
+	loadDynamicLibrary(EVL_REL, (uint8_t *)&IS_LOAD_EVL_COMPLETE, 0, 0, 0);
+	IS_LOAD_EVL_COMPLETE = 0;
 	addObject(0x809, instanceId, tickEvoSequenceLoading, renderEvoSequenceLoading);
 
 	return (int32_t)buffer;

@@ -40,7 +40,7 @@ typedef struct {
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern uint8_t MAIN_D_80134D64;
+extern uint8_t BATTLE_TOGGLE_LIFEBAR;
 extern int8_t GAME_STATE;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t ACTIVE_FRAMEBUFFER;
@@ -489,7 +489,7 @@ void STD_func_80069468(void)
 void STD_tickTamerTournament(int32_t instanceId)
 {
 	if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x100) {
-		MAIN_D_80134D64 = (MAIN_D_80134D64 + 1) & 1;
+		BATTLE_TOGGLE_LIFEBAR = (BATTLE_TOGGLE_LIFEBAR + 1) & 1;
 	}
 	if (GAME_STATE == 4) {
 		STD_func_80069468();

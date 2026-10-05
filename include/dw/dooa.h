@@ -57,7 +57,7 @@ extern int8_t DOOA_SAVED_ENTITY_VISIBILITY[];
 extern DooaShardEffect DOOA_SHARD_EFFECT;
 extern DooaSequence DOOA_REINCARNATION_SEQ;
 
-extern int16_t EGG_DIGIMON_TYPES[4];
+extern int16_t REINCARNATE_BABY_TYPE[4];
 extern SVECTOR MAIN_D_80134BB4;
 extern int8_t DOOA_ENTITIES_VISIBLE;
 

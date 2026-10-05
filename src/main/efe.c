@@ -81,7 +81,7 @@ typedef struct {
 	int8_t a;
 } FlashParams;
 
-uint8_t MAIN_D_80123370[54] = {
+uint8_t ENTITY_PARTICLE_FX_MODES[54] = {
 	0x78, 0x50, 0x80, 0x80, 0x0f, 0x0f, 0x78, 0x50,
 	0xc0, 0x80, 0x0f, 0x0f, 0xc8, 0x50, 0x80, 0x90,
 	0x1f, 0x07, 0xc8, 0x96, 0x80, 0x80, 0x0f, 0x0f,
@@ -104,34 +104,34 @@ GsSPRITE CLOUD_FX_SPRITE = {
 	0,
 };
 
-int8_t MAIN_D_801233CC[16] = {
+int8_t CLOUD_FX_U[16] = {
 	0x00, 0x00, 0x20, 0x20, 0x20, 0x40, 0x40, 0x40,
 	0x40, 0x40, 0x60, 0x60, 0x60, 0x60, 0x00, 0x00,
 };
-int16_t MAIN_D_801233DC[18] = {
+int16_t CLOUD_FX_Y[18] = {
 	-50, -54, -58, -62, -66, -70, -74, -78, -82,
 	-86, -90, -93, -96, -99, -50, -50, -50, -994,
 };
-int16_t MAIN_D_80123400[14] = {
+int16_t CLOUD_FX_SCALE[14] = {
 	0x2000, 0x2ee0, 0x3840, 0x4000, 0x4000, 0x5000, 0x5000,
 	0x5000, 0x5000, 0x5400, 0x5800, 0x5c00, 0x6000, 0x6400,
 };
-uint8_t MAIN_D_8012341C[16] = {
+uint8_t CLOUD_FX_COLOR[16] = {
 	0x80, 0x80, 0x80, 0x80, 0x79, 0x73, 0x6c, 0x66,
 	0x60, 0x59, 0x53, 0x4c, 0x46, 0x40, 0x00, 0x00,
 };
 char MAIN_D_8012342C[16] = "ETCHI\\EFEDAT.EFE";
-uint32_t MAIN_D_8012343C[4] = {0};
+uint32_t EFEDAT_CD_LOCATION[4] = {0};
 
 static void *efe_data_order[] = {
-	MAIN_D_8012343C,
+	EFEDAT_CD_LOCATION,
 	MAIN_D_8012342C,
-	MAIN_D_8012341C,
-	MAIN_D_80123400,
-	MAIN_D_801233DC,
-	MAIN_D_801233CC,
+	CLOUD_FX_COLOR,
+	CLOUD_FX_SCALE,
+	CLOUD_FX_Y,
+	CLOUD_FX_U,
 	&CLOUD_FX_SPRITE,
-	MAIN_D_80123370,
+	ENTITY_PARTICLE_FX_MODES,
 };
 
 void setInt16WithStride();
@@ -174,13 +174,13 @@ void initializeEFE();
 void getEFEDATEntry();
 void renderParticleFlash();
 
-extern int16_t MAIN_D_80138AA4[];
-extern int16_t MAIN_D_801389B4[];
+extern int16_t CLOUD_FX_DATA[];
+extern int16_t ENTITY_PARTICLE_FX_DATA[];
 #if !defined(VERSION_JP)
 extern u_long SOME_IMAGE_DATA[];
 #endif
-extern uint8_t MAIN_D_801387B8[];
-extern EfeParticleField MAIN_D_80138888[];
+extern uint8_t PARTICLE_FX_DATA[];
+extern EfeParticleField FX_PARTICLE_DATA[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t FLASH_INSTANCE;
 extern int32_t DRAWING_OFFSET_X;
@@ -219,11 +219,11 @@ static void *efe_functions[] = {
 };
 
 // clang-format off
-int8_t MAIN_D_80134214[4] = {
+int8_t PARTICLE_FX_FLASH_COUNT[4] = {
 	0x02, 0x03, 0x02, 0x00,
 };
 
-int8_t MAIN_D_80134218[4] = {
+int8_t PARTICLE_FX_PARTICLE_COUNT[4] = {
 	0x19, 0x30, 0x14, 0x00,
 };
 
@@ -243,7 +243,7 @@ void initializeParticleFX(void)
 	SVECTOR vec;
 	MATRIX m;
 
-	setInt16WithStride(MAIN_D_801387B8, -1, 4, 0x34);
+	setInt16WithStride(PARTICLE_FX_DATA, -1, 4, 0x34);
 	for (i = 0; i < 0x32; i++) {
 		ang.vx = (((rand() & 0x7F) - 0x40) << 12) / 64;
 		ang.vy = (((rand() & 0x7F) - 0x40) << 12) / 64;
@@ -252,9 +252,9 @@ void initializeParticleFX(void)
 		vec.vz = ((rand() % 150) + 0xFA) * 0x10;
 		RotMatrixZYX(&ang, &m);
 		ApplyMatrixSV(&m, &vec, &vec);
-		MAIN_D_80138888[i].vx = vec.vx;
-		MAIN_D_80138888[i].vy = vec.vy;
-		MAIN_D_80138888[i].vz = vec.vz;
+		FX_PARTICLE_DATA[i].vx = vec.vx;
+		FX_PARTICLE_DATA[i].vy = vec.vy;
+		FX_PARTICLE_DATA[i].vz = vec.vz;
 	}
 }
 
@@ -268,14 +268,14 @@ void createParticleFX(int32_t kind, int32_t count, SVECTOR *pos, Entity *entity,
 	int16_t p3;
 
 	for (i = 0; i < 4; i++) {
-		if (((ParticleFX *)MAIN_D_801387B8)[i].state == -1) {
+		if (((ParticleFX *)PARTICLE_FX_DATA)[i].state == -1) {
 			break;
 		}
 	}
 	if (i == 4) {
 		return;
 	}
-	fx = &((ParticleFX *)MAIN_D_801387B8)[i];
+	fx = &((ParticleFX *)PARTICLE_FX_DATA)[i];
 	fx->spread[0][0] = (rand() % 200) - 100;
 	fx->spread[1][0] = (rand() % 200) - 100;
 	fx->spread[2][0] = (rand() % 200) - 100;
@@ -364,7 +364,7 @@ void tickParticleFX(int32_t id)
 	int16_t baseX;
 	int16_t baseZ;
 
-	fx = &((ParticleFX *)MAIN_D_801387B8)[id];
+	fx = &((ParticleFX *)PARTICLE_FX_DATA)[id];
 	entity = fx->entity;
 	fx->state++;
 	fx->endFrame--;
@@ -439,9 +439,9 @@ void renderParticleFX(int32_t id)
 	int32_t i;
 	int32_t state;
 
-	fx = &((ParticleFX *)MAIN_D_801387B8)[id];
-	flashCount = MAIN_D_80134214[fx->mode];
-	particleCount = MAIN_D_80134218[fx->mode];
+	fx = &((ParticleFX *)PARTICLE_FX_DATA)[id];
+	flashCount = PARTICLE_FX_FLASH_COUNT[fx->mode];
+	particleCount = PARTICLE_FX_PARTICLE_COUNT[fx->mode];
 	entity = fx->entity;
 	if (fx->state == 2) {
 		for (i = 0; i < flashCount; i++) {
@@ -478,9 +478,9 @@ void renderParticleFX(int32_t id)
 	state = lerp(0, 0x6e, 0, timer, state);
 	state = _sin(state) >> 7;
 	for (i = 0; i < particleCount; i++) {
-		world.vx = fx->position.vx + ((state * MAIN_D_80138888[i].vx) >> 9);
-		world.vy = fx->position.vy + ((state * MAIN_D_80138888[i].vy) >> 9);
-		world.vz = fx->position.vz + ((state * MAIN_D_80138888[i].vz) >> 9);
+		world.vx = fx->position.vx + ((state * FX_PARTICLE_DATA[i].vx) >> 9);
+		world.vy = fx->position.vy + ((state * FX_PARTICLE_DATA[i].vy) >> 9);
+		world.vz = fx->position.vz + ((state * FX_PARTICLE_DATA[i].vz) >> 9);
 		renderFXParticle(&world, 0x28, color);
 	}
 }
@@ -491,14 +491,14 @@ int32_t addEntityParticleFX(Entity *owner, int32_t timer)
 	EntityParticleFX *fx;
 
 	for (i = 0; i < 20; i++) {
-		if (((EntityParticleFX *)MAIN_D_801389B4)[i].timer < 0) {
+		if (((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[i].timer < 0) {
 			break;
 		}
 	}
 	if (i == 20) {
 		return -1;
 	}
-	fx = &((EntityParticleFX *)MAIN_D_801389B4)[i];
+	fx = &((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[i];
 	fx->timer = timer;
 	fx->boneId = ((int32_t)rand() % (DIGIMON_DATA[owner->type].boneCount - 1)) + 1;
 	fx->unk8 = 0;
@@ -509,14 +509,14 @@ int32_t addEntityParticleFX(Entity *owner, int32_t timer)
 
 void initializeEntityParticleFX(void)
 {
-	setInt16WithStride(MAIN_D_801389B4, -1, 0x14, 0xC);
+	setInt16WithStride(ENTITY_PARTICLE_FX_DATA, -1, 0x14, 0xC);
 }
 
 void tickEntityParticleFX(int32_t id)
 {
 	EntityParticleFX *fx;
 
-	fx = &((EntityParticleFX *)MAIN_D_801389B4)[id];
+	fx = &((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[id];
 	if (fx->timer <= 0) {
 		removeEntityParticleFX(id);
 		return;
@@ -540,12 +540,12 @@ void renderEntityParticleFX(int32_t id)
 	POLY_FT4 *prim;
 	EntityParticleSprite *sprite;
 
-	fx = &((EntityParticleFX *)MAIN_D_801389B4)[id];
+	fx = &((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[id];
 	owner = fx->owner;
 	owner = fx->owner;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	boneId = fx->boneId;
-	sprite = &((EntityParticleSprite *)MAIN_D_80123370)[fx->unk8];
+	sprite = &((EntityParticleSprite *)ENTITY_PARTICLE_FX_MODES)[fx->unk8];
 	bone = &owner->posData[boneId];
 	worldPos.vx = bone->posMatrix.workm.t[0];
 	worldPos.vy = bone->posMatrix.workm.t[1];
@@ -563,13 +563,13 @@ void renderEntityParticleFX(int32_t id)
 
 void removeEntityParticleFX(int32_t id)
 {
-	((EntityParticleFX *)MAIN_D_801389B4)[id].timer = -1;
+	((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[id].timer = -1;
 	removeObject(0x502, id);
 }
 
 void initializeCloudFXData(void)
 {
-	setInt16WithStride(MAIN_D_80138AA4, -1, 0x3C, 6);
+	setInt16WithStride(CLOUD_FX_DATA, -1, 0x3C, 6);
 }
 
 void removeAllCloudFX(void)
@@ -577,8 +577,8 @@ void removeAllCloudFX(void)
 	int32_t i;
 
 	for (i = 0; i < 0x3C; i++) {
-		if (((CloudFXEntry *)MAIN_D_80138AA4)[i].state != -1) {
-			((CloudFXEntry *)MAIN_D_80138AA4)[i].state = -1;
+		if (((CloudFXEntry *)CLOUD_FX_DATA)[i].state != -1) {
+			((CloudFXEntry *)CLOUD_FX_DATA)[i].state = -1;
 			removeObject(0x601, i);
 		}
 	}
@@ -590,12 +590,12 @@ void createCloudFX(int16_t *pos)
 	int32_t i;
 
 	for (i = 0; i < 0x3C; i++) {
-		if (((CloudFXEntry *)MAIN_D_80138AA4)[i].state < 0) {
+		if (((CloudFXEntry *)CLOUD_FX_DATA)[i].state < 0) {
 			break;
 		}
 	}
 	if (i != 0x3C) {
-		e = &((CloudFXEntry *)MAIN_D_80138AA4)[i];
+		e = &((CloudFXEntry *)CLOUD_FX_DATA)[i];
 		e->state = 0;
 		e->unk2 = pos[0];
 		e->unk4 = pos[2];
@@ -607,7 +607,7 @@ void tickCloudFX(int32_t id)
 {
 	int16_t *p;
 
-	p = &MAIN_D_80138AA4[id * 3];
+	p = &CLOUD_FX_DATA[id * 3];
 	*p += 1;
 	if (*p >= 0xE) {
 		*p = -1;
@@ -622,15 +622,15 @@ void renderCloudFX(int32_t id)
 	DVECTOR screenPos;
 	int32_t depth;
 
-	cloud = &((CloudFXEntry *)MAIN_D_80138AA4)[id];
+	cloud = &((CloudFXEntry *)CLOUD_FX_DATA)[id];
 	worldPos.vx = cloud->unk2;
-	worldPos.vy = MAIN_D_801233DC[cloud->state];
+	worldPos.vy = CLOUD_FX_Y[cloud->state];
 	worldPos.vz = cloud->unk4;
 	depth = worldPosToScreenPos((int16_t *)&worldPos, (int16_t *)&screenPos);
-	CLOUD_FX_SPRITE.u = MAIN_D_801233CC[cloud->state];
-	CLOUD_FX_SPRITE.r = CLOUD_FX_SPRITE.g = CLOUD_FX_SPRITE.b = MAIN_D_8012341C[cloud->state];
+	CLOUD_FX_SPRITE.u = CLOUD_FX_U[cloud->state];
+	CLOUD_FX_SPRITE.r = CLOUD_FX_SPRITE.g = CLOUD_FX_SPRITE.b = CLOUD_FX_COLOR[cloud->state];
 	renderSprite(&CLOUD_FX_SPRITE, screenPos.vx, screenPos.vy, depth,
-	             MAIN_D_80123400[cloud->state], MAIN_D_80123400[cloud->state]);
+	             CLOUD_FX_SCALE[cloud->state], CLOUD_FX_SCALE[cloud->state]);
 }
 
 void EFERotateVector(void)
@@ -896,7 +896,7 @@ void findEFEDATFile(void)
 	while (CdSearchFile(&file, name) == (CdlFILE *)-1) {
 	}
 	CdControl(0xE, &mode, 0);
-	MAIN_D_8012343C[i] = CdPosToInt(&file.pos);
+	EFEDAT_CD_LOCATION[i] = CdPosToInt(&file.pos);
 }
 
 void initializeEFE(void)
@@ -912,7 +912,7 @@ void getEFEDATEntry(int32_t id)
 	CdlLOC loc;
 
 	id -= 0x100;
-	sector = MAIN_D_8012343C[0] + (id * 0xA);
+	sector = EFEDAT_CD_LOCATION[0] + (id * 0xA);
 	CdIntToPos(sector, &loc);
 }
 

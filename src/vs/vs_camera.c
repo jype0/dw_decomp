@@ -10,21 +10,21 @@
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
-extern GsVIEW2 MAIN_D_801B1B98;
+extern GsVIEW2 STDVS_VIEW;
 extern GsCOORDINATE2 MAIN_D_801B1BBC;
-extern SVECTOR MAIN_D_801B1C0C[];
-extern VECTOR MAIN_D_801B1C14;
+extern SVECTOR STDVS_VIEW_ROTATION[];
+extern VECTOR STDVS_VIEW_TRANSLATION;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
-extern int16_t MAIN_D_80134D66;
+extern int16_t BATTLE_FRAME_COUNT;
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern int32_t MAIN_D_80135268;
+extern int32_t VS_CAMERA_STATE;
 extern int32_t MAIN_D_80135284;
-extern uint8_t MAIN_D_80135288;
-extern int32_t MAIN_D_8013528C;
-extern int16_t MAIN_D_80135294;
-extern char **MAIN_D_80135298;
-extern int8_t MAIN_D_8013529C;
+extern uint8_t VS_TIMER;
+extern int32_t VS_TIMER_ACTIVE;
+extern int16_t VS_DEFAULT_CAM_MIN_DISTANCE;
+extern char **VS_FOCUSED_ENTITY;
+extern int8_t VS_CAMERA_TIMER;
 
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t processSomeArenaArrays(int32_t count, int32_t t, int32_t *keys, int32_t *values, int32_t *slopes);
@@ -94,24 +94,24 @@ static void *vs_camera_functions[] = {
 	VS_applyCamera,
 };
 
-CameraChase MAIN_D_801352A4;
-int32_t MAIN_D_801352A8;
+CameraChase INTRO_CAMERA_FRAME_COUNT;
+int32_t VS_IS_TIMER_INITIALIZED;
 
 static void *vs_camera_sbss_order[] = {
-	&MAIN_D_801352A8,
-	&MAIN_D_801352A4,
+	&VS_IS_TIMER_INITIALIZED,
+	&INTRO_CAMERA_FRAME_COUNT,
 };
 
-SVECTOR MAIN_D_80134A64 = { 0 };
-SVECTOR MAIN_D_80134A6C = { 0, -1592, 0, 0 };
+SVECTOR INTRO_CAMERA_STAGE1_POS = { 0 };
+SVECTOR INTRO_CAMERA_STAGE1_ROT = { 0, -1592, 0, 0 };
 SVECTOR MAIN_D_80134A74 = { 0 };
 SVECTOR MAIN_D_80134A7C = { 0, -1592, 0, 0 };
 SVECTOR MAIN_D_80134A84 = { 0 };
 SVECTOR MAIN_D_80134A8C = { 0 };
 SVECTOR MAIN_D_80134A94 = { 0 };
 SVECTOR MAIN_D_80134A9C = { 0 };
-SVECTOR MAIN_D_80134AA4 = { 0 };
-SVECTOR MAIN_D_80134AAC = { -227, 1479, 0, 0 };
+SVECTOR INTRO_CAMERA_STAGE2_POS = { 0 };
+SVECTOR INTRO_CAMERA_STAGE2_ROT = { -227, 1479, 0, 0 };
 SVECTOR MAIN_D_80134AB4 = { 0 };
 
 // clang-format off
@@ -149,11 +149,11 @@ int32_t VS_D_800706C8[22] = {
 
 void VS_applyCamera(void)
 {
-	MAIN_D_801B1B98.super = NULL;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
+	STDVS_VIEW.super = NULL;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void VS_setCameraOrbit(void)
@@ -172,10 +172,10 @@ void VS_setCameraOrbit(void)
 	diff.vz = a->vz - b->vz;
 	dist = SquareRoot0(diff.vx * diff.vx + diff.vz * diff.vz);
 	d = (dist * VIEWPORT_DISTANCE) / 200u;
-	if (d < (int16_t)MAIN_D_80135294) {
-		d = MAIN_D_80135294;
+	if (d < (int16_t)VS_DEFAULT_CAM_MIN_DISTANCE) {
+		d = VS_DEFAULT_CAM_MIN_DISTANCE;
 	}
-	if (d < (int16_t)MAIN_D_80135294 + 0x12c) {
+	if (d < (int16_t)VS_DEFAULT_CAM_MIN_DISTANCE + 0x12c) {
 		MAIN_D_80135284 = 1;
 	} else {
 		MAIN_D_80135284 = 0;
@@ -184,18 +184,18 @@ void VS_setCameraOrbit(void)
 		d = 0x1068;
 	}
 	ang = 0x1000 - _atan(diff.vx, diff.vz);
-	MAIN_D_801B1C14.vx = b->vx + (int32_t)diff.vx / 2 + (d * diff.vz) / dist;
-	MAIN_D_801B1C14.vy = -0x3e8;
-	MAIN_D_801B1C14.vz = b->vz + diff.vz / 2 - (d * diff.vx) / dist;
-	MAIN_D_801B1C0C[0].vx = _atan(d, -0x2bc) + 0x800;
-	MAIN_D_801B1C0C[0].vy = ang + 0x800;
-	MAIN_D_801B1C0C[0].vz = 0;
-	MAIN_D_801B1B98.view = GsIDMATRIX;
-	MAIN_D_801B1B98.super = &MAIN_D_801B1BBC;
-	RotMatrixYXZ(MAIN_D_801B1C0C, &MAIN_D_801B1BBC.coord);
-	TransMatrix(&MAIN_D_801B1BBC.coord, &MAIN_D_801B1C14);
+	STDVS_VIEW_TRANSLATION.vx = b->vx + (int32_t)diff.vx / 2 + (d * diff.vz) / dist;
+	STDVS_VIEW_TRANSLATION.vy = -0x3e8;
+	STDVS_VIEW_TRANSLATION.vz = b->vz + diff.vz / 2 - (d * diff.vx) / dist;
+	STDVS_VIEW_ROTATION[0].vx = _atan(d, -0x2bc) + 0x800;
+	STDVS_VIEW_ROTATION[0].vy = ang + 0x800;
+	STDVS_VIEW_ROTATION[0].vz = 0;
+	STDVS_VIEW.view = GsIDMATRIX;
+	STDVS_VIEW.super = &MAIN_D_801B1BBC;
+	RotMatrixYXZ(STDVS_VIEW_ROTATION, &MAIN_D_801B1BBC.coord);
+	TransMatrix(&MAIN_D_801B1BBC.coord, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void VS_setCameraYXZ(void)
@@ -205,24 +205,24 @@ void VS_setCameraYXZ(void)
 
 	a = &ENTITY_TABLE[1]->posData->location;
 	b = &ENTITY_TABLE[2]->posData->location;
-	MAIN_D_801B1B98.view = GsIDMATRIX;
-	MAIN_D_801B1B98.super = &MAIN_D_801B1BBC;
-	MAIN_D_801B1C14.vx = a->vx + (b->vx - a->vx) / 2;
-	MAIN_D_801B1C14.vz = a->vz + (b->vz - a->vz) / 2;
-	MAIN_D_801B1C14.vy = -0x1f40;
-	MAIN_D_801B1C0C[0].vy = MAIN_D_801B1C0C[0].vz = 0;
-	MAIN_D_801B1C0C[0].vx = -0x400;
-	RotMatrixYXZ(MAIN_D_801B1C0C, &MAIN_D_801B1BBC.coord);
-	TransMatrix(&MAIN_D_801B1BBC.coord, &MAIN_D_801B1C14);
+	STDVS_VIEW.view = GsIDMATRIX;
+	STDVS_VIEW.super = &MAIN_D_801B1BBC;
+	STDVS_VIEW_TRANSLATION.vx = a->vx + (b->vx - a->vx) / 2;
+	STDVS_VIEW_TRANSLATION.vz = a->vz + (b->vz - a->vz) / 2;
+	STDVS_VIEW_TRANSLATION.vy = -0x1f40;
+	STDVS_VIEW_ROTATION[0].vy = STDVS_VIEW_ROTATION[0].vz = 0;
+	STDVS_VIEW_ROTATION[0].vx = -0x400;
+	RotMatrixYXZ(STDVS_VIEW_ROTATION, &MAIN_D_801B1BBC.coord);
+	TransMatrix(&MAIN_D_801B1BBC.coord, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void VS_setViewpointRotationFromEntity(void)
 {
 	MATRIX *m;
 
-	m = (MATRIX *)(MAIN_D_80135298[1] + 0xbc);
+	m = (MATRIX *)(VS_FOCUSED_ENTITY[1] + 0xbc);
 	GS_VIEWPOINT.vrx = m->t[0];
 	GS_VIEWPOINT.vry = m->t[1];
 	GS_VIEWPOINT.vrz = m->t[2];
@@ -238,8 +238,8 @@ void VS_setCameraLookAtEntity(void)
 	VECTOR *otherPos;
 	Entity *other;
 
-	selfPos = &((Entity *)MAIN_D_80135298)->posData->location;
-	if ((Entity *)MAIN_D_80135298 == ENTITY_TABLE[1]) {
+	selfPos = &((Entity *)VS_FOCUSED_ENTITY)->posData->location;
+	if ((Entity *)VS_FOCUSED_ENTITY == ENTITY_TABLE[1]) {
 		other = ENTITY_TABLE[2];
 	} else {
 		other = ENTITY_TABLE[1];
@@ -248,15 +248,15 @@ void VS_setCameraLookAtEntity(void)
 	diff.vx = otherPos->vx - selfPos->vx;
 	diff.vy = 0;
 	diff.vz = otherPos->vz - selfPos->vz;
-	MAIN_D_801B1C0C[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	v = MAIN_D_801B1C14;
-	ApplyMatrixLV(&MAIN_D_801B1B98.view, &((Entity *)MAIN_D_80135298)->posData->location, &out);
+	STDVS_VIEW_ROTATION[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	v = STDVS_VIEW_TRANSLATION;
+	ApplyMatrixLV(&STDVS_VIEW.view, &((Entity *)VS_FOCUSED_ENTITY)->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
-	TransMatrix(&MAIN_D_801B1B98.view, &v);
-	GsSetView2(&MAIN_D_801B1B98);
+	TransMatrix(&STDVS_VIEW.view, &v);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void VS_applyViewpoint(void)
@@ -267,35 +267,35 @@ void VS_applyViewpoint(void)
 
 void VS_setCameraSimple(void)
 {
-	MAIN_D_801B1C0C[0].vy += 2;
-	MAIN_D_801B1C0C[0].vy &= 0xfff;
-	MAIN_D_801B1B98.super = NULL;
-	RotMatrix(MAIN_D_801B1C0C, &MAIN_D_801B1B98.view);
-	TransMatrix(&MAIN_D_801B1B98.view, &MAIN_D_801B1C14);
+	STDVS_VIEW_ROTATION[0].vy += 2;
+	STDVS_VIEW_ROTATION[0].vy &= 0xfff;
+	STDVS_VIEW.super = NULL;
+	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
+	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 void VS_setCameraParams(int16_t a, int16_t b, int16_t c, int16_t d, int16_t e, int16_t f)
 {
-	MAIN_D_801B1C0C[0].vx = a;
-	MAIN_D_801B1C0C[0].vy = b;
-	MAIN_D_801B1C0C[0].vz = c;
-	MAIN_D_801B1C14.vx = d;
-	MAIN_D_801B1C14.vy = e;
-	MAIN_D_801B1C14.vz = f;
+	STDVS_VIEW_ROTATION[0].vx = a;
+	STDVS_VIEW_ROTATION[0].vy = b;
+	STDVS_VIEW_ROTATION[0].vz = c;
+	STDVS_VIEW_TRANSLATION.vx = d;
+	STDVS_VIEW_TRANSLATION.vy = e;
+	STDVS_VIEW_TRANSLATION.vz = f;
 }
 
 void VS_setVSPhase(int32_t arg)
 {
 	addObject(0x1a8, 0, (TickFunction)VS_tickVSPhase, NULL);
-	MAIN_D_80135268 = arg;
-	MAIN_D_8013529C = 0;
+	VS_CAMERA_STATE = arg;
+	VS_CAMERA_TIMER = 0;
 }
 
 void VS_tickVSPhase(void)
 {
-	switch (MAIN_D_80135268) {
+	switch (VS_CAMERA_STATE) {
 	case 0:
 		VS_applyCamera();
 		break;
@@ -347,8 +347,8 @@ void VS_selectRandomCamera(entity, mode, sub)
 			return;
 		}
 	}
-	MAIN_D_80135298 = (char **)entity;
-	MAIN_D_801B1B98.super = NULL;
+	VS_FOCUSED_ENTITY = (char **)entity;
+	STDVS_VIEW.super = NULL;
 	if (sub != 3) {
 		p = &VS_D_8007063C[mode];
 	} else {
@@ -356,7 +356,7 @@ void VS_selectRandomCamera(entity, mode, sub)
 	}
 	VS_setCameraParams(p->unk0, p->unk2, p->unk4, p->unk6, p->unk8, p->unkA);
 	if (mode < 5) {
-		MAIN_D_80135268 = 3;
+		VS_CAMERA_STATE = 3;
 		return;
 	}
 	VS_addResultModelScene((Entity *)entity == ENTITY_TABLE[2] ? ENTITY_TABLE[1] : ENTITY_TABLE[2]);
@@ -372,7 +372,7 @@ void VS_setRandomViewpoint(Entity *entity, int32_t idx)
 	if (randomLimit(3) != 0) {
 		return;
 	}
-	if (MAIN_D_80135268 == 7) {
+	if (VS_CAMERA_STATE == 7) {
 		return;
 	}
 
@@ -380,20 +380,20 @@ void VS_setRandomViewpoint(Entity *entity, int32_t idx)
 	GS_VIEWPOINT.super = NULL;
 
 	if (idx < 4) {
-		MAIN_D_80135298 = (char **)entity;
-		MAIN_D_80135268 = 4;
-		RotMatrix(&((Entity *)MAIN_D_80135298)->posData->rotation, &m);
+		VS_FOCUSED_ENTITY = (char **)entity;
+		VS_CAMERA_STATE = 4;
+		RotMatrix(&((Entity *)VS_FOCUSED_ENTITY)->posData->rotation, &m);
 		v.vx = VS_D_800706A8[idx][0];
 		v.vy = VS_D_800706A8[idx][1];
 		v.vz = VS_D_800706A8[idx][2];
 		ApplyMatrixLV(&m, &v, &out);
-		out.vx += ((Entity *)MAIN_D_80135298)->posData->location.vx;
-		out.vz += ((Entity *)MAIN_D_80135298)->posData->location.vz;
+		out.vx += ((Entity *)VS_FOCUSED_ENTITY)->posData->location.vx;
+		out.vz += ((Entity *)VS_FOCUSED_ENTITY)->posData->location.vz;
 		GS_VIEWPOINT.vpx = out.vx;
 		GS_VIEWPOINT.vpy = out.vy;
 		GS_VIEWPOINT.vpz = out.vz;
 	} else {
-		MAIN_D_80135268 = 6;
+		VS_CAMERA_STATE = 6;
 		GS_VIEWPOINT.vpx = VS_D_800706A8[idx][0];
 		GS_VIEWPOINT.vpy = VS_D_800706A8[idx][1];
 		GS_VIEWPOINT.vpz = VS_D_800706A8[idx][2];
@@ -437,19 +437,19 @@ void VS_setCameraToEntity(void)
 	VECTOR v;
 	VECTOR out;
 
-	rot = MAIN_D_801B1C0C[0];
-	rot.vy -= ((Entity *)MAIN_D_80135298)->posData->rotation.vy;
+	rot = STDVS_VIEW_ROTATION[0];
+	rot.vy -= ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
 	rot.vy &= 0xfff;
-	RotMatrix(&rot, &MAIN_D_801B1B98.view);
-	v = MAIN_D_801B1C14;
-	ApplyMatrixLV(&MAIN_D_801B1B98.view,
-	              &((Entity *)MAIN_D_80135298)->posData->location, &out);
+	RotMatrix(&rot, &STDVS_VIEW.view);
+	v = STDVS_VIEW_TRANSLATION;
+	ApplyMatrixLV(&STDVS_VIEW.view,
+	              &((Entity *)VS_FOCUSED_ENTITY)->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
-	TransMatrix(&MAIN_D_801B1B98.view, &v);
+	TransMatrix(&STDVS_VIEW.view, &v);
 	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&MAIN_D_801B1B98);
+	GsSetView2(&STDVS_VIEW);
 }
 
 int32_t VS_getFighterDistance(VECTOR *self, VECTOR *other, VECTOR *target)
@@ -470,10 +470,10 @@ void VS_updateCameraLerp(int32_t t, int8_t flip)
 	int32_t dist;
 	int32_t dbl;
 
-	off = MAIN_D_80134AA4;
-	rot = MAIN_D_80134AAC;
-	base = ((((DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].height +
-	           DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].radius) /
+	off = INTRO_CAMERA_STAGE2_POS;
+	rot = INTRO_CAMERA_STAGE2_ROT;
+	base = ((((DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height +
+	           DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].radius) /
 	          2) *
 	         0x62c) /
 	        450);
@@ -491,9 +491,9 @@ void VS_updateCameraLerp(int32_t t, int8_t flip)
 		rot.vy = -rot.vy;
 	}
 
-	rot.vy += ((Entity *)MAIN_D_80135298)->posData->rotation.vy;
-	off.vy = (-DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].height * 2) / 3;
-	VS_setViewpointFromBone((Entity *)MAIN_D_80135298, &off, &rot, dist);
+	rot.vy += ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
+	off.vy = (-DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height * 2) / 3;
+	VS_setViewpointFromBone((Entity *)VS_FOCUSED_ENTITY, &off, &rot, dist);
 }
 
 int32_t VS_isPositionNearEntity(Entity *entity, VECTOR *pos)
@@ -544,7 +544,7 @@ void VS_tickCameraChase(void)
 	int32_t dist;
 	int32_t i;
 
-	cc = &MAIN_D_801352A4;
+	cc = &INTRO_CAMERA_FRAME_COUNT;
 	if (cc->timer < 0x14) {
 		return;
 	}
@@ -552,26 +552,26 @@ void VS_tickCameraChase(void)
 		goto inc;
 	}
 	if (cc->timer == 0x14) {
-		startAnimation((Entity *)MAIN_D_80135298, 0x23);
+		startAnimation((Entity *)VS_FOCUSED_ENTITY, 0x23);
 	}
 	if (cc->phase == 0) {
-		dist = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &((Entity *)MAIN_D_80135298)->posData->location);
+		dist = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &((Entity *)VS_FOCUSED_ENTITY)->posData->location);
 		if (dist >= 0x23) {
-			VS_D_80071754 = ((Entity *)MAIN_D_80135298)->posData->location;
+			VS_D_80071754 = ((Entity *)VS_FOCUSED_ENTITY)->posData->location;
 			cc->phase = 1;
-			MAIN_D_80135268 = 8;
+			VS_CAMERA_STATE = 8;
 		} else {
-			off = MAIN_D_80134A64;
-			rot = MAIN_D_80134A6C;
+			off = INTRO_CAMERA_STAGE1_POS;
+			rot = INTRO_CAMERA_STAGE1_ROT;
 			if (cc->side == 0) {
 				rot.vy = lerp(-0x638, -0x293, 0, 0x23, dist);
 			} else {
 				rot.vy = lerp(0x638, 0x293, 0, 0x23, dist);
 			}
-			rot.vy += ((Entity *)MAIN_D_80135298)->posData->rotation.vy;
-			off.vy = (-DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].height * 7) / 10;
-			d2 = (((DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].height + DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].radius) / 2) * 0x5aa) / 450;
-			VS_setViewpointFromBone((Entity *)MAIN_D_80135298, &off, &rot, d2);
+			rot.vy += ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
+			off.vy = (-DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height * 7) / 10;
+			d2 = (((DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height + DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].radius) / 2) * 0x5aa) / 450;
+			VS_setViewpointFromBone((Entity *)VS_FOCUSED_ENTITY, &off, &rot, d2);
 			GS_VIEWPOINT.vpy = (off.vy * 7) / 10;
 			if (GS_VIEWPOINT.vpy > -0xb4) {
 				GS_VIEWPOINT.vpy = -0xb4;
@@ -579,16 +579,16 @@ void VS_tickCameraChase(void)
 			goto inc;
 		}
 	}
-	t = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &((Entity *)MAIN_D_80135298)->posData->location);
+	t = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &((Entity *)VS_FOCUSED_ENTITY)->posData->location);
 	VS_updateCameraLerp(t, cc->side);
-	if (VS_isPositionNearEntity((Entity *)MAIN_D_80135298, &VS_D_80071744) == 1) {
+	if (VS_isPositionNearEntity((Entity *)VS_FOCUSED_ENTITY, &VS_D_80071744) == 1) {
 		for (i = 0; i < 3; i++) {
-			if (((uint8_t *)MAIN_D_80135298 + i)[0x44] != 0xff) {
-				startAnimation((Entity *)MAIN_D_80135298, ((uint8_t *)MAIN_D_80135298 + i)[0x44]);
+			if (((uint8_t *)VS_FOCUSED_ENTITY + i)[0x44] != 0xff) {
+				startAnimation((Entity *)VS_FOCUSED_ENTITY, ((uint8_t *)VS_FOCUSED_ENTITY + i)[0x44]);
 				break;
 			}
 		}
-		((Entity *)MAIN_D_80135298)->anim.animFlag |= 2;
+		((Entity *)VS_FOCUSED_ENTITY)->anim.animFlag |= 2;
 		cc->timer = -1;
 		return;
 	}
@@ -607,28 +607,28 @@ void VS_startCameraChase(entity, dx, side)
 	SVECTOR rot;
 	int32_t dist;
 
-	MAIN_D_80135298 = (char **)entity;
-	copyVector(&VS_D_80071754, &((Entity *)MAIN_D_80135298)->posData->location);
+	VS_FOCUSED_ENTITY = (char **)entity;
+	copyVector(&VS_D_80071754, &((Entity *)VS_FOCUSED_ENTITY)->posData->location);
 	VS_D_80071744.vx = VS_D_80071754.vx - dx;
 	VS_D_80071744.vy = VS_D_80071754.vy;
 	VS_D_80071744.vz = VS_D_80071754.vz;
-	startAnimation((Entity *)MAIN_D_80135298, 0x21);
-	MAIN_D_80135268 = 9;
-	MAIN_D_801352A4.timer = 0;
-	MAIN_D_801352A4.phase = 0;
-	MAIN_D_801352A4.side = side;
+	startAnimation((Entity *)VS_FOCUSED_ENTITY, 0x21);
+	VS_CAMERA_STATE = 9;
+	INTRO_CAMERA_FRAME_COUNT.timer = 0;
+	INTRO_CAMERA_FRAME_COUNT.phase = 0;
+	INTRO_CAMERA_FRAME_COUNT.side = side;
 	addObject(0x1aa, 0, (TickFunction)VS_tickCameraChase, NULL);
 	off = MAIN_D_80134A74;
 	rot = MAIN_D_80134A7C;
-	if (MAIN_D_801352A4.side == 0) {
+	if (INTRO_CAMERA_FRAME_COUNT.side == 0) {
 		rot.vy = -0x638;
 	} else {
 		rot.vy = 0x638;
 	}
-	rot.vy += ((Entity *)MAIN_D_80135298)->posData->rotation.vy;
-	off.vy = (-DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].height * 2) / 3;
-	dist = (((DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].height + DIGIMON_DATA[((Entity *)MAIN_D_80135298)->type].radius) / 2) * 0x5aa) / 450;
-	VS_setViewpointFromBone((Entity *)MAIN_D_80135298, &off, &rot, dist);
+	rot.vy += ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
+	off.vy = (-DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height * 2) / 3;
+	dist = (((DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height + DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].radius) / 2) * 0x5aa) / 450;
+	VS_setViewpointFromBone((Entity *)VS_FOCUSED_ENTITY, &off, &rot, dist);
 	GS_VIEWPOINT.vpy = (off.vy * 3) / 10;
 	if (GS_VIEWPOINT.vpy > -0xb4) {
 		GS_VIEWPOINT.vpy = -0xb4;
@@ -671,14 +671,14 @@ void VS_startCameraIntro(Entity *target, Entity *entity)
 	VS_D_80071A0C[0] = 0;
 	VS_D_80071A18[1] = entity;
 	if (target == NULL) {
-		if ((Entity *)MAIN_D_80135298 == ENTITY_TABLE[1]) {
+		if ((Entity *)VS_FOCUSED_ENTITY == ENTITY_TABLE[1]) {
 			target = ENTITY_TABLE[2];
 		} else {
 			target = ENTITY_TABLE[1];
 		}
 	}
 	VS_D_80071A18[0] = target;
-	MAIN_D_80135268 = 8;
+	VS_CAMERA_STATE = 8;
 	addObject(0x1ad, 0, (TickFunction)VS_tickCameraIntro, NULL);
 
 	off = MAIN_D_80134A94;
@@ -738,9 +738,9 @@ void VS_applyEntityViewpoint(void)
 
 	VIEWPORT_DISTANCE = 0x15e;
 	GsSetProjection(VIEWPORT_DISTANCE);
-	p = MAIN_D_80135298[1] + 0x34;
+	p = VS_FOCUSED_ENTITY[1] + 0x34;
 	GS_VIEWPOINT.vrx = *(int32_t *)(p + 0x14);
-	GS_VIEWPOINT.vry = -DIGIMON_DATA[(int32_t)MAIN_D_80135298[0]].height * 2 / 3;
+	GS_VIEWPOINT.vry = -DIGIMON_DATA[(int32_t)VS_FOCUSED_ENTITY[0]].height * 2 / 3;
 	GS_VIEWPOINT.vrz = *(int32_t *)(p + 0x1c);
 	GsSetRefView2(&GS_VIEWPOINT);
 }
@@ -798,22 +798,22 @@ void VS_renderCounterDigits(x, y, digits, value, layer)
 
 void VS_addFighterCounter(int32_t arg)
 {
-	if ((MAIN_D_801352A8 == 0) && (arg != 0)) {
-		MAIN_D_80135288 = arg;
+	if ((VS_IS_TIMER_INITIALIZED == 0) && (arg != 0)) {
+		VS_TIMER = arg;
 		addObject(0x1ac, 0, (TickFunction)VS_tickFighterCounter, (RenderFunction)VS_renderFighterCounter);
-		MAIN_D_801352A8 = 1;
+		VS_IS_TIMER_INITIALIZED = 1;
 	}
 }
 
 void VS_tickFighterCounter(void)
 {
-	if (MAIN_D_8013528C == 1) {
-		MAIN_D_80134D66++;
+	if (VS_TIMER_ACTIVE == 1) {
+		BATTLE_FRAME_COUNT++;
 		if (ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[0]]->anim.animId != 0x2b) {
 			if (ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->anim.animId != 0x2b) {
-				if (MAIN_D_80134D66 % 0x14 == 0) {
-					if (MAIN_D_80135288 != 0) {
-						MAIN_D_80135288--;
+				if (BATTLE_FRAME_COUNT % 0x14 == 0) {
+					if (VS_TIMER != 0) {
+						VS_TIMER--;
 					}
 				}
 			}
@@ -824,16 +824,16 @@ void VS_tickFighterCounter(void)
 void VS_renderFighterCounter(void)
 {
 #if defined(VERSION_JP)
-	VS_renderCounterDigits(-0xd, -0x61, 2, MAIN_D_80135288, 0);
+	VS_renderCounterDigits(-0xd, -0x61, 2, VS_TIMER, 0);
 #else
-	VS_renderCounterDigits(-0xd, -0x61, 2, MAIN_D_80135288, 3);
+	VS_renderCounterDigits(-0xd, -0x61, 2, VS_TIMER, 3);
 #endif
 }
 
 void VS_removeFighterCounter(void)
 {
-	if (MAIN_D_801352A8 != 0) {
+	if (VS_IS_TIMER_INITIALIZED != 0) {
 		removeObject(0x1ac, 0);
-		MAIN_D_801352A8 = 0;
+		VS_IS_TIMER_INITIALIZED = 0;
 	}
 }

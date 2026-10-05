@@ -1299,7 +1299,7 @@ void EVL_applyEvolution(Entity *entity, Stats *stats, PartnerPara *para, int16_t
 	uint8_t special;
 	EvoStatsGains *gains;
 
-	gains = &EVO_GAINS_DATA[digimonId];
+	gains = &EVOLUTION_STATS_GAINS[digimonId];
 	newId = gains->targetDigimon;
 	oldLevel = DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].level;
 	level = DIGIMON_DATA[digimonId].level;

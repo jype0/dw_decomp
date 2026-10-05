@@ -143,23 +143,23 @@ extern int32_t IS_IN_MENU;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int8_t MENU_SUB_STATE;
 extern int32_t TRIANGLE_MENU_STATE;
-extern int32_t MAIN_D_80134D2C;
+extern int32_t HAS_FISHING_ROD;
 extern int8_t MENU_STATE;
-extern int8_t MAIN_D_80134D36;
-extern int8_t MAIN_D_80134D37;
-extern int16_t MAIN_D_80134D38;
-extern int16_t MAIN_D_80134D3A;
+extern int8_t DIGIMON_MENU_STATE;
+extern int8_t PLAYER_MENU_STATE;
+extern int16_t MOVE_SELECT_BOX_Y;
+extern int16_t MOVE_SELECT_BOX_X;
 extern int32_t CHANGED_INPUT;
 extern uint8_t INVENTORY_POINTER;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern int32_t MAIN_D_80134D28;
+extern int32_t MENU_OPTION_COUNT;
 extern int8_t SELECTED_MEDAL;
 extern int8_t MEDAL_SELECTOR_INDEX;
 extern int8_t SELECTED_CARD;
-extern int16_t MAIN_D_80134D40;
-extern int16_t MAIN_D_80134D42;
-extern int16_t MAIN_D_80134D44;
+extern int16_t CHART_SELECTED_DIGIMON;
+extern int16_t CHART_SELECTED_COLUMN;
+extern int16_t CHART_SELECTED_ROW;
 extern int8_t MAIN_D_80134D46;
 extern int16_t MAIN_D_80134D48;
 extern int32_t MONEY;
@@ -338,7 +338,7 @@ uint8_t EQUIPPED_MOVES[3] = {
 
 uint8_t MAIN_D_80134237 = 0xff;
 
-SVECTOR MAIN_D_80134238 = { 0x0000, 0x0000, 0x0000, 0x0000 };
+SVECTOR MEDAL_ROTATION = { 0x0000, 0x0000, 0x0000, 0x0000 };
 
 #if !defined(VERSION_JP)
 char MAIN_D_80134240[] = "Current";
@@ -348,23 +348,23 @@ char MAIN_D_80134248[] = "Ending";
 
 char STR_OVERWORLD_EMPTY[] = "";
 
-TriangleCursorUVData MAIN_D_80134250 = { { 0x00, 0x04, 0x00, 0x04, 0x04, 0x04, 0x08, 0x08 } };
+TriangleCursorUVData SELECTION_CURSOR_U_MIN = { { 0x00, 0x04, 0x00, 0x04, 0x04, 0x04, 0x08, 0x08 } };
 
-TriangleCursorUVData MAIN_D_80134258 = { { 0x04, 0x00, 0x04, 0x00, 0x08, 0x08, 0x0c, 0x0c } };
+TriangleCursorUVData SELECTION_CURSOR_U_MAX = { { 0x04, 0x00, 0x04, 0x00, 0x08, 0x08, 0x0c, 0x0c } };
 
-TriangleCursorUVData MAIN_D_80134260 = { { 0xfb, 0xfb, 0xff, 0xff, 0xfb, 0xfb, 0xfb, 0xfb } };
+TriangleCursorUVData SELECTION_CURSOR_V_MIN = { { 0xfb, 0xfb, 0xff, 0xff, 0xfb, 0xfb, 0xfb, 0xfb } };
 
-TriangleCursorUVData MAIN_D_80134268 = { { 0xff, 0xff, 0xfb, 0xfb, 0xff, 0xff, 0xff, 0xff } };
+TriangleCursorUVData SELECTION_CURSOR_V_MAX = { { 0xff, 0xff, 0xfb, 0xfb, 0xff, 0xff, 0xff, 0xff } };
 
-TriangleCursorOffsetData MAIN_D_80134270 = { { 0x00, 0x18, 0x00, 0x18, 0x04, 0x04, 0x00, 0x19 } };
+TriangleCursorOffsetData SELECTION_CURSOR_X = { { 0x00, 0x18, 0x00, 0x18, 0x04, 0x04, 0x00, 0x19 } };
 
-TriangleCursorOffsetData MAIN_D_80134278 = { { 0x00, 0x00, 0x16, 0x16, 0x00, 0x16, 0x00, 0x00 } };
+TriangleCursorOffsetData SELECTION_CURSOR_Y = { { 0x00, 0x00, 0x16, 0x16, 0x00, 0x16, 0x00, 0x00 } };
 
-TriangleCursorOffsetData MAIN_D_80134280 = { { 0x04, 0x04, 0x04, 0x04, 0x18, 0x18, 0x04, 0x04 } };
+TriangleCursorOffsetData SELECTION_CURSOR_WIDTH = { { 0x04, 0x04, 0x04, 0x04, 0x18, 0x18, 0x04, 0x04 } };
 
-TriangleCursorOffsetData MAIN_D_80134288 = { { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x16, 0x16 } };
+TriangleCursorOffsetData SELECTION_CURSOR_HEIGHT = { { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x16, 0x16 } };
 
-RECT MAIN_D_80134290 = { 0, 232, 24, 12 };
+RECT MENU_TEXT_AREA = { 0, 232, 24, 12 };
 
 #if defined(VERSION_JP)
 char STR_YEAR_DAY[] = "年日";
@@ -372,7 +372,7 @@ char STR_YEAR_DAY[] = "年日";
 char STR_YEAR_DAY[8] = "YearDay";
 #endif
 
-DigimonTabs MAIN_D_801342A0 = { { 0x01, 0x01 } };
+DigimonTabs DIGIMON_MENU_VIEWS = { { 0x01, 0x01 } };
 
 PlayerTabs MAIN_D_801342A4 = { { 0x01, 0x01, 0x01, 0x01 } };
 
@@ -404,7 +404,7 @@ char MAIN_D_801342D0[] = "Genius";
 char MAIN_D_801342D8[] = "Legend";
 #endif
 
-RECT MAIN_D_801342E0 = { 0, 24, 256, 200 };
+RECT DIGIMON_STATS_TEXT_AREA = { 0, 24, 256, 200 };
 
 RECT MOVES_VIEW_TEXT_AREA = { 0, 24, 256, 200 };
 
@@ -426,11 +426,11 @@ RECT MEDAL_DETAIL_AREA = { 0, 24, 252, 48 };
 
 RECT CARD_VIEW_TEXT_AREA = { 0, 12, 256, 200 };
 
-GsRVIEW2 MAIN_D_80123860 = {
+GsRVIEW2 DIGIVICE_ENTITY_VIEW = {
 	1300, 0, -3280, 0, 0, 0, 0, NULL,
 };
 
-GsRVIEW2 MAIN_D_80123880 = {
+GsRVIEW2 MEDAL_VIEW = {
 	-1050, 220, -10000, -1050, 220, 0, 0, NULL,
 };
 
@@ -717,7 +717,7 @@ char STR_MEDAL_DESCRIPTION_COLLECTED_999999_BITS[] = "Collected 999999 bits";
 char STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS[] = "Survived for 300 days!";
 #endif
 
-StatsIconClutTable MAIN_D_80123DB8 = { {
+StatsIconClutTable STATS_VIEW_ELEMENT_CLUT = { {
 	0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09, 0x09,
 	0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
 	0x0b, 0x04, 0x04, 0x04, 0x0a,
@@ -748,11 +748,11 @@ char MAIN_D_80123E04[] = "Advanced";
 char MAIN_D_80123E10[] = "Top rate";
 #endif
 
-EvoClutTable MAIN_D_80123E1C = { {
+EvoClutTable EVO_CHART_VIEW_COLORS = { {
 	0x7a07, 0x7a47, 0x7a87, 0x7ac7, 0x7b07,
 } };
 
-CardSprites MAIN_D_80123E28 = { {
+CardSprites CARD_SPRITE_CLUT = { {
 	0x00, 0x00, 0x04, 0x01, 0x00, 0x03, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,
 	0x00, 0x01, 0x01, 0x04, 0x04, 0x03, 0x03, 0x04,
@@ -764,13 +764,13 @@ CardSprites MAIN_D_80123E28 = { {
 	0x00, 0x00,
 } };
 
-EvoClutTable MAIN_D_80123E6C = { {
+EvoClutTable EVO_CHART_DETAIL_COLORS = { {
 	0x7a07, 0x7a47, 0x7a87, 0x7ac7, 0x7b07,
 } };
 
 char MAIN_D_80123E78[] = "\\CARD\\CARD.ALL";
 
-GameMenuSprite GAME_MENU_SPRITES[8] = {
+GameMenuSprite MENU_OPTIONS[8] = {
 	{ 0x10, 0x1c, 1, 1, 0xc, 0x18, 0x18, 0x0, 0x30 },
 	{ 0x14, 0x47, 1, 0, 0xc, 0x14, 0x14, 0x0, 0x0 },
 	{ 0x38, 0x47, 2, 0, 0xd, 0x14, 0x14, 0x28, 0x0 },
@@ -781,7 +781,7 @@ GameMenuSprite GAME_MENU_SPRITES[8] = {
 	{ 0x14, 0x1f, 7, 0, 0xd, 0x14, 0x13, 0x50, 0x0 },
 };
 
-uint8_t GAME_MENU_LABELS[64] = {
+uint8_t GAME_MENU_TEXT_SPRITES[64] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x13, 0x00, 0x60, 0x00, 0x18, 0x07, 0x50, 0x14,
 	0x35, 0x00, 0x60, 0x00, 0x1c, 0x07, 0x50, 0x1b,
@@ -797,26 +797,26 @@ int16_t GAME_MENU_LINES[15] = {
 	0xffc6, 0x0001, 0xffc2, 0xffc7, 0x003e, 0xffc7, 0x0000,
 };
 
-uint8_t MAIN_D_80123F48[12] = {
+uint8_t UI_LINES_BORDER_COLOR[12] = {
 	0x02, 0x02, 0x02, 0x90, 0xd9, 0xfa, 0x4a, 0x9f,
 	0xc5, 0xb4, 0x96, 0x69,
 };
 
-int16_t MAIN_D_80123F54[30] = {
+int16_t STATS_VIEW_LINES[30] = {
 	0xffe5, 0xfff1, 0xffe5, 0x0063, 0x0000, 0xffe6, 0xfff0, 0xffe6,
 	0x0064, 0x0001, 0xffe5, 0xfff1, 0xffe7, 0x0063, 0x0000, 0xff6e,
 	0xffee, 0x0092, 0xffee, 0x0000, 0xff6d, 0xffef, 0x0093, 0xffef,
 	0x0001, 0xff6e, 0xfff0, 0x0092, 0xfff0, 0x0000,
 };
 
-int16_t TECH_VIEW_LINES1[30] = {
+int16_t MOVES_TECHSET_LINES[30] = {
 	0xff6e, 0xffeb, 0x0092, 0xffeb, 0x0000, 0xff6d, 0xffec, 0x0093,
 	0xffec, 0x0001, 0xff6e, 0xffed, 0x0092, 0xffed, 0x0000, 0xff6e,
 	0x0010, 0x0092, 0x0010, 0x0000, 0xff6d, 0x0011, 0x0093, 0x0011,
 	0x0001, 0xff6e, 0x0012, 0x0093, 0x0012, 0x0000,
 };
 
-int16_t TECH_VIEW_LINES3[60] = {
+int16_t MOVES_VIEW_HELP_LINES[60] = {
 	0xff76, 0x001a, 0xffad, 0x001a, 0x0000, 0xff76, 0x001b, 0xffad,
 	0x001b, 0x0001, 0xff76, 0x001c, 0xffad, 0x001c, 0x0000, 0xff72,
 	0x001e, 0xff72, 0x0059, 0x0000, 0xff73, 0x001e, 0xff73, 0x0059,
@@ -827,14 +827,14 @@ int16_t TECH_VIEW_LINES3[60] = {
 	0x005d, 0xffad, 0x005d, 0x0000,
 };
 
-IconRect MAIN_D_80124044[4] = {
+IconRect MOVES_VIEW_HELP_CORNERS[4] = {
 	{ 0xff72, 0x001a, 0x04, 0x04, 0x78, 0x10 },
 	{ 0xffad, 0x001a, 0x04, 0x04, 0x7c, 0x10 },
 	{ 0xff72, 0x0059, 0x04, 0x04, 0x78, 0x14 },
 	{ 0xffad, 0x0059, 0x04, 0x04, 0x7c, 0x14 },
 };
 
-int16_t MAIN_D_80124064[90] = {
+int16_t DIGIMON_MOVE_INFO_LINES_LEFT[90] = {
 	0xff9a, 0x0001, 0xffef, 0x0001, 0x0000, 0xff9a, 0x0002, 0xffef,
 	0x0002, 0x0001, 0xff9a, 0x0003, 0xffef, 0x0003, 0x0000, 0xff6f,
 	0x0005, 0xff6f, 0x005c, 0x0000, 0xff70, 0x0005, 0xff70, 0x005c,
@@ -849,7 +849,7 @@ int16_t MAIN_D_80124064[90] = {
 	0x005f, 0x0000,
 };
 
-int16_t MAIN_D_80124118[90] = {
+int16_t DIGIMON_MOVE_INFO_LINES_RIGHT[90] = {
 	0x0037, 0x0001, 0x008d, 0x0001, 0x0000, 0x0037, 0x0002, 0x008d,
 	0x0002, 0x0001, 0x0037, 0x0003, 0x008d, 0x0003, 0x0000, 0x000c,
 	0x0005, 0x000c, 0x0015, 0x0000, 0x000d, 0x0005, 0x000d, 0x0015,
@@ -864,7 +864,7 @@ int16_t MAIN_D_80124118[90] = {
 	0x005f, 0x0000,
 };
 
-IconRect MAIN_D_801241CC[13] = {
+IconRect MOVES_VIEW_TECHSET_TEXT[13] = {
 	{ 0x0016, 0xffb4, 0x17, 0x07, 0x5c, 0x22 },
 	{ 0x0062, 0xffb4, 0x13, 0x07, 0x4c, 0x29 },
 	{ 0x007a, 0xffb4, 0x10, 0x07, 0x00, 0x30 },
@@ -881,7 +881,7 @@ IconRect MAIN_D_801241CC[13] = {
 };
 
 #if defined(VERSION_JP)
-StringRect MAIN_D_80124234[12] = {
+StringRect MOVES_VIEW_STRING_SPRITES[12] = {
 	{ 0xff8e, 0xffbf, 0x009c, 0x00, 0x18 },
 	{ 0x0042, 0xffbf, 0x0030, 0xa8, 0x18 },
 	{ 0xff8e, 0xffcd, 0x0048, 0x84, 0x30 },
@@ -896,7 +896,7 @@ StringRect MAIN_D_80124234[12] = {
 	{ 0xff9a, 0x0052, 0x00d8, 0x00, 0x6c },
 };
 
-IconRect MAIN_D_80124294[7] = {
+IconRect MOVES_VIEW_SPRITES[7] = {
 	{ 0x0030, 0xffbf, 0x0c, 0x0c, 0x24, 0x00 },
 	{ 0xffe8, 0xffde, 0x0c, 0x0c, 0x54, 0x00 },
 	{ 0xff94, 0xffec, 0x0c, 0x0c, 0x24, 0x00 },
@@ -906,7 +906,7 @@ IconRect MAIN_D_80124294[7] = {
 	{ 0xff88, 0x0052, 0x0c, 0x0c, 0xb4, 0x00 },
 };
 #else
-StringRect MAIN_D_80124234[12] = {
+StringRect MOVES_VIEW_STRING_SPRITES[12] = {
 	{ 0xff8e, 0xffbf, 0x0073, 0x00, 0x18 },
 	{ 0x000f, 0xffbf, 0x006e, 0x71, 0x18 },
 	{ 0xff8e, 0xffcd, 0x0000, 0xdf, 0x18 },
@@ -921,7 +921,7 @@ StringRect MAIN_D_80124234[12] = {
 	{ 0xff9a, 0x0052, 0x0064, 0x00, 0x6c },
 };
 
-IconRect MAIN_D_80124294[7] = {
+IconRect MOVES_VIEW_SPRITES[7] = {
 	{ 0x0005, 0xffbf, 0x0c, 0x0c, 0x24, 0x00 },
 	{ 0x0052, 0xffde, 0x0c, 0x0c, 0x54, 0x00 },
 	{ 0xffbe, 0xffec, 0x0c, 0x0c, 0x24, 0x00 },
@@ -932,7 +932,7 @@ IconRect MAIN_D_80124294[7] = {
 };
 #endif
 
-RECT MAIN_D_801242CC[13] = {
+RECT STATS_VIEW_INSETS[13] = {
 	{ 50, 52, 98, 14 },
 	{ 50, 68, 244, 14 },
 	{ 50, 84, 26, 14 },
@@ -949,7 +949,7 @@ RECT MAIN_D_801242CC[13] = {
 };
 
 #if defined(VERSION_JP)
-StringRect MAIN_D_80124334[9] = {
+StringRect STATS_VIEW_TEXT[9] = {
 	{ 0xff76, 0x0022, 0x0030, 0x48, 0x30 },
 	{ 0xff82, 0x0040, 0x0024, 0x18, 0x30 },
 	{ 0xff82, 0x004f, 0x0024, 0x78, 0x30 },
@@ -961,7 +961,7 @@ StringRect MAIN_D_80124334[9] = {
 	{ 0xfff6, 0xffdd, 0x000c, 0x0c, 0x30 },
 };
 #else
-StringRect MAIN_D_80124334[9] = {
+StringRect STATS_VIEW_TEXT[9] = {
 	{ 0xff76, 0x0022, 0x0030, 0x48, 0x30 },
 	{ 0xff82, 0x0040, 0x0024, 0x18, 0x30 },
 	{ 0xff82, 0x004f, 0x0024, 0x78, 0x30 },
@@ -974,7 +974,7 @@ StringRect MAIN_D_80124334[9] = {
 };
 #endif
 
-IconRect MAIN_D_8012437C[21] = {
+IconRect STATS_VIEW_ELEMENTS[21] = {
 	{ 0xff74, 0xffaf, 0x35, 0x0b, 0x00, 0x4b },
 	{ 0xff74, 0xfff4, 0x35, 0x0b, 0x00, 0x56 },
 	{ 0xffee, 0xfff4, 0x35, 0x0b, 0x00, 0x61 },
@@ -998,7 +998,7 @@ IconRect MAIN_D_8012437C[21] = {
 	{ 0xff76, 0x004f, 0x09, 0x0b, 0x2c, 0x74 },
 };
 
-int16_t MAIN_D_80124424[55] = {
+int16_t TAMER_VIEW_PLAYER_LINES[55] = {
 	0xff6e, 0xffbf, 0x0092, 0xffbf, 0x0000, 0xff6d, 0xffc0, 0x0093,
 	0xffc0, 0x0001, 0xff6e, 0xffc1, 0x0092, 0xffc1, 0x0000, 0xffd3,
 	0xffc1, 0x0092, 0xffc1, 0x0000, 0xffd1, 0xffc1, 0xffd1, 0x0062,
@@ -1008,7 +1008,7 @@ int16_t MAIN_D_80124424[55] = {
 	0x002e, 0x0000, 0xffd3, 0x002f, 0xffd3, 0x0064, 0x0000,
 };
 
-RECT MAIN_D_80124494[11] = {
+RECT TAMER_WINDOW_BOXES[11] = {
 	{ 74, 38, 75, 14 },
 	{ 211, 64, 27, 14 },
 	{ 211, 101, 27, 14 },
@@ -1023,7 +1023,7 @@ RECT MAIN_D_80124494[11] = {
 };
 
 #if defined(VERSION_JP)
-StringRect MAIN_D_801244EC[11] = {
+StringRect TAMER_WINDOW_NAME_STRING[11] = {
 	{ 0xff88, 0xffaf, 0x0018, 0x00, 0x0c },
 	{ 0xffdb, 0xffca, 0x0054, 0x24, 0x0c },
 	{ 0xffdb, 0xffef, 0x0054, 0x78, 0x0c },
@@ -1037,7 +1037,7 @@ StringRect MAIN_D_801244EC[11] = {
 	{ 0x0050, 0x004d, 0x000c, 0x9c, 0x24 },
 };
 #else
-StringRect MAIN_D_801244EC[11] = {
+StringRect TAMER_WINDOW_NAME_STRING[11] = {
 	{ 0xff84, 0xffaf, 0x0024, 0x00, 0x0c },
 	{ 0xffdb, 0xffca, 0x0054, 0x24, 0x0c },
 	{ 0xffdb, 0xffef, 0x0054, 0x78, 0x0c },
@@ -1052,7 +1052,7 @@ StringRect MAIN_D_801244EC[11] = {
 };
 #endif
 
-EvoChartEntry MAIN_D_80124544[61] = {
+EvoChartEntry EVO_CHART_BOXES[61] = {
 	{ 0x001e, 0x002b, 0x40, 0x90, 0x00, 0x00 },
 	{ 0x0043, 0x002b, 0x60, 0x90, 0x00, 0x00 },
 	{ 0x0068, 0x002b, 0x40, 0x80, 0x00, 0x00 },
@@ -1298,14 +1298,14 @@ char *TAMER_LEVEL_TITLES[11] = {
 	MAIN_D_801342D8,
 };
 
-Line4Points MAIN_D_80124944[4] = {
+Line4Points CHART_FROM_LINES_EVEN[4] = {
 	{ 0xffac, 0xffbc, 0xffdb, 0xfff6, 0xffd0, 0xffd0, 0xffef, 0xffef },
 	{ 0xff9a, 0xffb6, 0xffc0, 0xfff6, 0xffe8, 0xffe8, 0xfff2, 0xfff2 },
 	{ 0xff9a, 0xffb6, 0xffc0, 0xfff6, 0xffff, 0xffff, 0xfff5, 0xfff5 },
 	{ 0xffac, 0xffbc, 0xffdb, 0xfff6, 0x0017, 0x0017, 0xfff8, 0xfff8 },
 };
 
-Line4Points MAIN_D_80124984[5] = {
+Line4Points CHART_FROM_LINES_ODD[5] = {
 	{ 0xffbe, 0xffcc, 0xfff6, 0xfff6, 0xffc4, 0xffc4, 0xffee, 0xffee },
 	{ 0xffac, 0xffc6, 0xffdb, 0xfff6, 0xffdc, 0xffdc, 0xfff1, 0xfff1 },
 	{ 0xff9a, 0xfff6, 0xfff6, 0xfff6, 0xfff4, 0xfff4, 0xfff4, 0xfff4 },
@@ -1313,7 +1313,7 @@ Line4Points MAIN_D_80124984[5] = {
 	{ 0xffbe, 0xffcc, 0xfff6, 0xfff6, 0x0024, 0x0024, 0xfffa, 0xfffa },
 };
 
-Line4Points MAIN_D_801249D4[6] = {
+Line4Points CHART_TO_LINES_EVEN[6] = {
 	{ 0x0009, 0x003d, 0x0040, 0x0040, 0xffec, 0xffb8, 0xffb8, 0xffb8 },
 	{ 0x0009, 0x0024, 0x0043, 0x0052, 0xffef, 0xffef, 0xffd0, 0xffd0 },
 	{ 0x0009, 0x003f, 0x0049, 0x0064, 0xfff2, 0xfff2, 0xffe8, 0xffe8 },
@@ -1322,7 +1322,7 @@ Line4Points MAIN_D_801249D4[6] = {
 	{ 0x0009, 0x003d, 0x0040, 0x0040, 0xfffb, 0x002f, 0x002f, 0x002f },
 };
 
-Line4Points MAIN_D_80124A34[5] = {
+Line4Points CHART_TO_LINES_ODD[5] = {
 	{ 0x0009, 0x0033, 0x0040, 0x0040, 0xffee, 0xffc4, 0xffc4, 0xffc4 },
 	{ 0x0009, 0x0024, 0x0039, 0x0052, 0xfff1, 0xfff1, 0xffdc, 0xffdc },
 	{ 0x0009, 0x0064, 0x0064, 0x0064, 0xfff4, 0xfff4, 0xfff4, 0xfff4 },
@@ -1345,14 +1345,14 @@ RGB8 MAIN_D_80124A84[12] = {
 	{ 0x82, 0x1e, 0x1e },
 };
 
-ChartSprite MAIN_D_80124AA8[4] = {
+ChartSprite CHART_FROM_SPRITES_EVEN[4] = {
 	{ 0xff9a, 0xffc7, 0x0000, 0x0000 },
 	{ 0xff88, 0xffdf, 0x0000, 0x0000 },
 	{ 0xff88, 0xfff7, 0x0000, 0x0000 },
 	{ 0xff9a, 0x000f, 0x0000, 0x0000 },
 };
 
-ChartSprite MAIN_D_80124AC8[5] = {
+ChartSprite CHART_FROM_SPRITES_ODD[5] = {
 	{ 0xffac, 0xffbb, 0x0000, 0x0000 },
 	{ 0xff9a, 0xffd3, 0x0000, 0x0000 },
 	{ 0xff88, 0xffeb, 0x0000, 0x0000 },
@@ -1360,7 +1360,7 @@ ChartSprite MAIN_D_80124AC8[5] = {
 	{ 0xffac, 0x001b, 0x0000, 0x0000 },
 };
 
-ChartSprite MAIN_D_80124AF0[6] = {
+ChartSprite CHART_TO_SPRITES_EVEN[6] = {
 	{ 0x0042, 0xffaf, 0x0000, 0x0000 },
 	{ 0x0054, 0xffc7, 0x0000, 0x0000 },
 	{ 0x0066, 0xffdf, 0x0000, 0x0000 },
@@ -1369,7 +1369,7 @@ ChartSprite MAIN_D_80124AF0[6] = {
 	{ 0x0042, 0x0027, 0x0000, 0x0000 },
 };
 
-ChartSprite MAIN_D_80124B20[5] = {
+ChartSprite CHART_TO_SPRITES_ODD[5] = {
 	{ 0x0042, 0xffbb, 0x0000, 0x0000 },
 	{ 0x0054, 0xffd3, 0x0000, 0x0000 },
 	{ 0x0066, 0xffeb, 0x0000, 0x0000 },
@@ -1402,21 +1402,21 @@ GARBAGE(addGameMenu, 14);
 
 void addGameMenu(void)
 {
-	GAME_MENU_SPRITES[0].unknown = 1;
-	MAIN_D_80134D28 = 7;
-	GAME_MENU_SPRITES[7].disabled = 0;
-	MAIN_D_80134D2C = getFishingAvailability();
-	if (MAIN_D_80134D2C != 0) {
-		MAIN_D_80134D28++;
-		if (MAIN_D_80134D2C == 1) {
-			GAME_MENU_SPRITES[7].disabled = 1;
+	MENU_OPTIONS[0].unknown = 1;
+	MENU_OPTION_COUNT = 7;
+	MENU_OPTIONS[7].disabled = 0;
+	HAS_FISHING_ROD = getFishingAvailability();
+	if (HAS_FISHING_ROD != 0) {
+		MENU_OPTION_COUNT++;
+		if (HAS_FISHING_ROD == 1) {
+			MENU_OPTIONS[7].disabled = 1;
 		}
-		GAME_MENU_SPRITES[0].unknown = 7;
+		MENU_OPTIONS[0].unknown = 7;
 	}
 	if (PARTNER_PARA.condition & 1) {
-		GAME_MENU_SPRITES[6].disabled = 0;
+		MENU_OPTIONS[6].disabled = 0;
 	} else {
-		GAME_MENU_SPRITES[6].disabled = 1;
+		MENU_OPTIONS[6].disabled = 1;
 	}
 	TRIANGLE_MENU_STATE = 0;
 	addObject(0xfa4, 0, (void (*)(int32_t))tickTriangleMenu, NULL);
@@ -1426,10 +1426,10 @@ void tickTriangleMenu(void)
 {
 	RECT rect;
 
-	rect = MAIN_D_80134290;
+	rect = MENU_TEXT_AREA;
 	switch (TRIANGLE_MENU_STATE) {
 	case 0:
-		if (MAIN_D_80134D2C != 0) {
+		if (HAS_FISHING_ROD != 0) {
 			createMenuBox(0, -0x42, -0x50, 0x84, 0x95, 2,
 			              tickGameMenu, renderGameMenu);
 		} else {
@@ -1463,7 +1463,7 @@ void tickTriangleMenu(void)
 			MENU_STATE = 0;
 			MENU_SUB_STATE = 0;
 			TRIANGLE_MENU_STATE = -1;
-			MAIN_D_80134D36 = 0;
+			DIGIMON_MENU_STATE = 0;
 		}
 		break;
 	case 4:
@@ -1484,7 +1484,7 @@ void tickTriangleMenu(void)
 			MENU_STATE = 0;
 			MENU_SUB_STATE = 0;
 			TRIANGLE_MENU_STATE = -1;
-			MAIN_D_80134D37 = 0;
+			PLAYER_MENU_STATE = 0;
 		}
 		break;
 	case 6:
@@ -1531,18 +1531,18 @@ void renderGameMenu(void)
 	renderSeparatorLines(GAME_MENU_LINES, 2, 5);
 	renderDateDigits();
 	yOffset = 0;
-	if (MAIN_D_80134D28 == 7) {
+	if (MENU_OPTION_COUNT == 7) {
 		yOffset = -0x28;
 	}
-	sprite = &GAME_MENU_SPRITES[1];
-	renderTriangleCursor((int8_t)GAME_MENU_SPRITES[0].unknown, yOffset);
-	for (i = 1; i < MAIN_D_80134D28; sprite++, i++) {
+	sprite = &MENU_OPTIONS[1];
+	renderTriangleCursor((int8_t)MENU_OPTIONS[0].unknown, yOffset);
+	for (i = 1; i < MENU_OPTION_COUNT; sprite++, i++) {
 		disabled = 0;
 		if (sprite->disabled == 1) {
 			disabled = 1;
 		}
 		highlight = 0;
-		if ((i == GAME_MENU_SPRITES[0].unknown) &&
+		if ((i == MENU_OPTIONS[0].unknown) &&
 		    ((PLAYTIME_FRAMES % 10) < 5)) {
 			highlight = 0x14;
 		}
@@ -1553,12 +1553,12 @@ void renderGameMenu(void)
 		                  sprite->texY + 0xc0, 0x1e,
 		                  GetClut(0x100, sprite->clutY + 0x1f0), 6,
 		                  disabled);
-		renderRectPolyFT4(((GameMenuLabel *)GAME_MENU_LABELS)[i].x - 0x42,
-		                  yOffset + (((GameMenuLabel *)GAME_MENU_LABELS)[i].y - 0x50),
-		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].width,
-		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].height,
-		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].texX,
-		                  ((GameMenuLabel *)GAME_MENU_LABELS)[i].texY + 0xbf, 0x1e, 0x7f50, 6,
+		renderRectPolyFT4(((GameMenuLabel *)GAME_MENU_TEXT_SPRITES)[i].x - 0x42,
+		                  yOffset + (((GameMenuLabel *)GAME_MENU_TEXT_SPRITES)[i].y - 0x50),
+		                  ((GameMenuLabel *)GAME_MENU_TEXT_SPRITES)[i].width,
+		                  ((GameMenuLabel *)GAME_MENU_TEXT_SPRITES)[i].height,
+		                  ((GameMenuLabel *)GAME_MENU_TEXT_SPRITES)[i].texX,
+		                  ((GameMenuLabel *)GAME_MENU_TEXT_SPRITES)[i].texY + 0xbf, 0x1e, 0x7f50, 6,
 		                  disabled);
 	}
 #if defined(VERSION_JP)
@@ -1669,17 +1669,17 @@ void renderTriangleCursor(int8_t selection, int16_t yOffset)
 	int16_t baseY;
 	int32_t i;
 
-	u0 = MAIN_D_80134250;
-	u1 = MAIN_D_80134258;
-	v0 = MAIN_D_80134260;
-	v1 = MAIN_D_80134268;
-	xOffset = MAIN_D_80134270;
-	yOffsetData = MAIN_D_80134278;
-	width = MAIN_D_80134280;
-	height = MAIN_D_80134288;
-	baseX = GAME_MENU_SPRITES[selection].x -
+	u0 = SELECTION_CURSOR_U_MIN;
+	u1 = SELECTION_CURSOR_U_MAX;
+	v0 = SELECTION_CURSOR_V_MIN;
+	v1 = SELECTION_CURSOR_V_MAX;
+	xOffset = SELECTION_CURSOR_X;
+	yOffsetData = SELECTION_CURSOR_Y;
+	width = SELECTION_CURSOR_WIDTH;
+	height = SELECTION_CURSOR_HEIGHT;
+	baseX = MENU_OPTIONS[selection].x -
 	        0x46;
-	baseY = GAME_MENU_SPRITES[selection].y -
+	baseY = MENU_OPTIONS[selection].y -
 	        0x53;
 	tags = ACTIVE_ORDERING_TABLE->org;
 	for (i = 0; i < 8; i++) {
@@ -1703,44 +1703,44 @@ void tickGameMenu(void)
 	int32_t selection;
 
 	if (PARTNER_PARA.condition & 1) {
-		GAME_MENU_SPRITES[6].disabled = 0;
+		MENU_OPTIONS[6].disabled = 0;
 	}
-	selection = GAME_MENU_SPRITES[0].unknown;
+	selection = MENU_OPTIONS[0].unknown;
 	if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x1000) {
 		if ((selection -= 3) <= 0) {
-			selection += ((MAIN_D_80134D28 + 1) / 3) * 3;
+			selection += ((MENU_OPTION_COUNT + 1) / 3) * 3;
 		}
-		if (selection >= MAIN_D_80134D28) {
+		if (selection >= MENU_OPTION_COUNT) {
 			selection -= 3;
 		}
 	} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x4000) {
-		if ((selection += 3) >= MAIN_D_80134D28) {
-			selection -= ((MAIN_D_80134D28 + 1) / 3) * 3;
+		if ((selection += 3) >= MENU_OPTION_COUNT) {
+			selection -= ((MENU_OPTION_COUNT + 1) / 3) * 3;
 		}
 		if (selection <= 0) {
 			selection += 3;
 		}
 	} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x8000) {
 		if ((selection -= 1) <= 0) {
-			selection = MAIN_D_80134D28 - 1;
+			selection = MENU_OPTION_COUNT - 1;
 		}
 	} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x2000) {
-		if ((selection += 1) >= MAIN_D_80134D28) {
+		if ((selection += 1) >= MENU_OPTION_COUNT) {
 			selection = 1;
 		}
 	}
-	if (selection != GAME_MENU_SPRITES[0].unknown) {
-		GAME_MENU_SPRITES[0].unknown = selection;
+	if (selection != MENU_OPTIONS[0].unknown) {
+		MENU_OPTIONS[0].unknown = selection;
 		playSound(0, 2);
 	}
 	if (TRIANGLE_MENU_STATE == -1) {
 		if (isKeyDown(CONFIRM_BUTTON) != 0) {
-			if (GAME_MENU_SPRITES[GAME_MENU_SPRITES[0].unknown].disabled & 1) {
+			if (MENU_OPTIONS[MENU_OPTIONS[0].unknown].disabled & 1) {
 				playSound(0, 4);
 			} else {
 				playSound(0, 3);
 			}
-			handleGameMenuSelection(GAME_MENU_SPRITES[0].unknown);
+			handleGameMenuSelection(MENU_OPTIONS[0].unknown);
 		}
 		if ((isKeyDown(CANCEL_BUTTON) != 0) &&
 		    ((UI_BOX_DATA[0].state == 1) ||
@@ -1783,12 +1783,12 @@ void tickDigimonMenu(void)
 	int16_t previousY;
 	int32_t i;
 
-	if ((MAIN_D_80134D36 != 1) ||
-	    ((MAIN_D_80134D36 == 1) && (MENU_STATE == 1))) {
+	if ((DIGIMON_MENU_STATE != 1) ||
+	    ((DIGIMON_MENU_STATE == 1) && (MENU_STATE == 1))) {
 		if ((CHANGED_INPUT & 0x2000) && (MENU_STATE != 0)) {
-			MAIN_D_80134D36++;
-			if (MAIN_D_80134D36 >= 2) {
-				MAIN_D_80134D36 = 1;
+			DIGIMON_MENU_STATE++;
+			if (DIGIMON_MENU_STATE >= 2) {
+				DIGIMON_MENU_STATE = 1;
 			} else {
 				MENU_STATE = 0;
 				MENU_SUB_STATE = 0;
@@ -1796,9 +1796,9 @@ void tickDigimonMenu(void)
 			}
 		}
 		if ((CHANGED_INPUT & 0x8000) && (MENU_STATE != 0)) {
-			MAIN_D_80134D36--;
-			if (MAIN_D_80134D36 < 0) {
-				MAIN_D_80134D36 = 0;
+			DIGIMON_MENU_STATE--;
+			if (DIGIMON_MENU_STATE < 0) {
+				DIGIMON_MENU_STATE = 0;
 			} else {
 				MENU_STATE = 0;
 				MENU_SUB_STATE = 0;
@@ -1811,7 +1811,7 @@ void tickDigimonMenu(void)
 			}
 			playSound(0, 4);
 		}
-		if ((MAIN_D_80134D36 == 1) && (isKeyDown(CONFIRM_BUTTON) != 0)) {
+		if ((DIGIMON_MENU_STATE == 1) && (isKeyDown(CONFIRM_BUTTON) != 0)) {
 			if (MENU_STATE == 1) {
 				MENU_STATE = 2;
 			}
@@ -1854,34 +1854,34 @@ void tickDigimonMenu(void)
 				equipMove();
 			}
 		}
-		previousX = MAIN_D_80134D3A;
-		previousY = MAIN_D_80134D38;
+		previousX = MOVE_SELECT_BOX_X;
+		previousY = MOVE_SELECT_BOX_Y;
 		if (CHANGED_INPUT & 0x1000) {
-			MAIN_D_80134D38 -= 0xf;
+			MOVE_SELECT_BOX_Y -= 0xf;
 		}
 		if (CHANGED_INPUT & 0x4000) {
-			MAIN_D_80134D38 += 0xf;
+			MOVE_SELECT_BOX_Y += 0xf;
 		}
 		if (CHANGED_INPUT & 0x8000) {
-			MAIN_D_80134D3A -= 0x12;
+			MOVE_SELECT_BOX_X -= 0x12;
 		}
 		if (CHANGED_INPUT & 0x2000) {
-			MAIN_D_80134D3A += 0x12;
+			MOVE_SELECT_BOX_X += 0x12;
 		}
-		if (MAIN_D_80134D3A < 0x73) {
-			MAIN_D_80134D3A = 0x73;
+		if (MOVE_SELECT_BOX_X < 0x73) {
+			MOVE_SELECT_BOX_X = 0x73;
 		}
-		if (MAIN_D_80134D3A >= 0xf2) {
-			MAIN_D_80134D3A = 0xf1;
+		if (MOVE_SELECT_BOX_X >= 0xf2) {
+			MOVE_SELECT_BOX_X = 0xf1;
 		}
-		if (MAIN_D_80134D38 < 0x6f) {
-			MAIN_D_80134D38 = 0x6f;
+		if (MOVE_SELECT_BOX_Y < 0x6f) {
+			MOVE_SELECT_BOX_Y = 0x6f;
 		}
-		if (MAIN_D_80134D38 >= 0xca) {
-			MAIN_D_80134D38 = 0xc9;
+		if (MOVE_SELECT_BOX_Y >= 0xca) {
+			MOVE_SELECT_BOX_Y = 0xc9;
 		}
-		if ((previousX != MAIN_D_80134D3A) ||
-		    (previousY != MAIN_D_80134D38)) {
+		if ((previousX != MOVE_SELECT_BOX_X) ||
+		    (previousY != MOVE_SELECT_BOX_Y)) {
 			playSound(0, 2);
 		}
 	} else if ((MENU_STATE == 8) && (isKeyDown(CANCEL_BUTTON) != 0)) {
@@ -1897,8 +1897,8 @@ void renderDigimonMenu(void)
 {
 	DigimonTabs tabs;
 
-	tabs = MAIN_D_801342A0;
-	switch (MAIN_D_80134D36) {
+	tabs = DIGIMON_MENU_VIEWS;
+	switch (DIGIMON_MENU_STATE) {
 	case 0:
 		renderDigimonStatsView();
 		break;
@@ -1906,7 +1906,7 @@ void renderDigimonMenu(void)
 		renderDigimonMovesView();
 		break;
 	}
-	tabs.tab[MAIN_D_80134D36] = 0;
+	tabs.tab[DIGIMON_MENU_STATE] = 0;
 	renderString(tabs.tab[0], -0x8a, -0x65, 0x3c, 0xc, 0, 0, 5, 1);
 	renderString(tabs.tab[1], -0x3f, -0x65, 0x30, 0xc, 0x3c, 0, 5, 1);
 	renderMenuTab(-0x91, 0x4c, tabs.tab[0]);
@@ -1941,9 +1941,9 @@ void tickPlayerMenu(void)
 
 	if (MENU_STATE < 2) {
 		if (CHANGED_INPUT & 0x2000) {
-			MAIN_D_80134D37++;
-			if (MAIN_D_80134D37 >= 4) {
-				MAIN_D_80134D37 = 3;
+			PLAYER_MENU_STATE++;
+			if (PLAYER_MENU_STATE >= 4) {
+				PLAYER_MENU_STATE = 3;
 			} else {
 				MENU_STATE = 0;
 				MENU_SUB_STATE = 0;
@@ -1951,9 +1951,9 @@ void tickPlayerMenu(void)
 			}
 		}
 		if (CHANGED_INPUT & 0x8000) {
-			MAIN_D_80134D37--;
-			if (MAIN_D_80134D37 < 0) {
-				MAIN_D_80134D37 = 0;
+			PLAYER_MENU_STATE--;
+			if (PLAYER_MENU_STATE < 0) {
+				PLAYER_MENU_STATE = 0;
 			} else {
 				MENU_STATE = 0;
 				MENU_SUB_STATE = 0;
@@ -1965,7 +1965,7 @@ void tickPlayerMenu(void)
 			playSound(0, 4);
 		}
 		if ((isKeyDown(CONFIRM_BUTTON) != 0) && (MENU_STATE == 1) &&
-		    (MAIN_D_80134D37 != 0) && (MAIN_D_80134D37 != 4)) {
+		    (PLAYER_MENU_STATE != 0) && (PLAYER_MENU_STATE != 4)) {
 			MENU_STATE = 2;
 			playSound(0, 3);
 			MEDAL_SELECTOR_INDEX = SELECTED_MEDAL = 0;
@@ -1975,103 +1975,103 @@ void tickPlayerMenu(void)
 		if ((isKeyDown(CANCEL_BUTTON) != 0) && (MENU_STATE == 2)) {
 			playSound(0, 4);
 			MENU_STATE = 1;
-			MAIN_D_80134D40 = -1;
+			CHART_SELECTED_DIGIMON = -1;
 		}
 
-		if (MAIN_D_80134D37 == 1) {
+		if (PLAYER_MENU_STATE == 1) {
 			if (MENU_STATE == 2) {
-				previousRow = MAIN_D_80134D42;
-				previousColumn = MAIN_D_80134D44;
+				previousRow = CHART_SELECTED_COLUMN;
+				previousColumn = CHART_SELECTED_ROW;
 				if (CHANGED_INPUT & 0x8000) {
-					MAIN_D_80134D42--;
+					CHART_SELECTED_COLUMN--;
 				}
 				if (CHANGED_INPUT & 0x2000) {
-					MAIN_D_80134D42++;
+					CHART_SELECTED_COLUMN++;
 				}
-				if (MAIN_D_80134D42 < 0) {
-					MAIN_D_80134D42 = 0;
+				if (CHART_SELECTED_COLUMN < 0) {
+					CHART_SELECTED_COLUMN = 0;
 				}
-				if (MAIN_D_80134D42 >= 9) {
-					MAIN_D_80134D42 = 8;
+				if (CHART_SELECTED_COLUMN >= 9) {
+					CHART_SELECTED_COLUMN = 8;
 				}
-				if ((MAIN_D_80134D42 == 0) ||
-				    (MAIN_D_80134D42 == 1)) {
+				if ((CHART_SELECTED_COLUMN == 0) ||
+				    (CHART_SELECTED_COLUMN == 1)) {
 					if (CHANGED_INPUT & 0x1000) {
-						MAIN_D_80134D44 -= 2;
+						CHART_SELECTED_ROW -= 2;
 					}
 					if (CHANGED_INPUT & 0x4000) {
-						MAIN_D_80134D44 += 2;
+						CHART_SELECTED_ROW += 2;
 					}
-					if (MAIN_D_80134D42 < 2) {
-						MAIN_D_80134D44 =
-							(MAIN_D_80134D44 / 2) * 2;
+					if (CHART_SELECTED_COLUMN < 2) {
+						CHART_SELECTED_ROW =
+							(CHART_SELECTED_ROW / 2) * 2;
 					}
 					maxColumn = 6;
 				} else {
 					if (CHANGED_INPUT & 0x1000) {
-						MAIN_D_80134D44--;
+						CHART_SELECTED_ROW--;
 					}
 					if (CHANGED_INPUT & 0x4000) {
-						MAIN_D_80134D44++;
+						CHART_SELECTED_ROW++;
 					}
-					if (MAIN_D_80134D42 == 2) {
+					if (CHART_SELECTED_COLUMN == 2) {
 						maxColumn = 8;
-					} else if (((MAIN_D_80134D42 >= 4) &&
-					            (MAIN_D_80134D42 < 7)) ||
-					           (MAIN_D_80134D42 == 8)) {
+					} else if (((CHART_SELECTED_COLUMN >= 4) &&
+					            (CHART_SELECTED_COLUMN < 7)) ||
+					           (CHART_SELECTED_COLUMN == 8)) {
 						maxColumn = 6;
 					} else {
 						maxColumn = 7;
 					}
 				}
-				if (MAIN_D_80134D44 < 0) {
-					MAIN_D_80134D44 = 0;
+				if (CHART_SELECTED_ROW < 0) {
+					CHART_SELECTED_ROW = 0;
 				}
-				if (maxColumn < MAIN_D_80134D44) {
-					MAIN_D_80134D44 = maxColumn;
+				if (maxColumn < CHART_SELECTED_ROW) {
+					CHART_SELECTED_ROW = maxColumn;
 				}
-				if ((previousRow != MAIN_D_80134D42) ||
-				    (previousColumn != MAIN_D_80134D44)) {
+				if ((previousRow != CHART_SELECTED_COLUMN) ||
+				    (previousColumn != CHART_SELECTED_ROW)) {
 					playSound(0, 2);
 				}
 
-				if (MAIN_D_80134D42 < 3) {
-					selectorX = MAIN_D_80134D42 * 0x25 + 0x1c;
-				} else if (MAIN_D_80134D42 < 7) {
+				if (CHART_SELECTED_COLUMN < 3) {
+					selectorX = CHART_SELECTED_COLUMN * 0x25 + 0x1c;
+				} else if (CHART_SELECTED_COLUMN < 7) {
 					selectorX =
-						(MAIN_D_80134D42 - 3) * 0x18 + 0x8b;
+						(CHART_SELECTED_COLUMN - 3) * 0x18 + 0x8b;
 				} else {
 					selectorX =
-						(MAIN_D_80134D42 - 7) * 0x18 + 0xf8;
+						(CHART_SELECTED_COLUMN - 7) * 0x18 + 0xf8;
 				}
-				MAIN_D_80134D40 = -1;
+				CHART_SELECTED_DIGIMON = -1;
 				for (i = 0; i < 0x3e; i++) {
 					if (((selectorX + 2) ==
-					     MAIN_D_80124544[i].posX) &&
-					    ((MAIN_D_80134D44 * 0x13 + 0x2b) ==
-					     MAIN_D_80124544[i].posY)) {
+					     EVO_CHART_BOXES[i].posX) &&
+					    ((CHART_SELECTED_ROW * 0x13 + 0x2b) ==
+					     EVO_CHART_BOXES[i].posY)) {
 						break;
 					}
 				}
-				MAIN_D_80134D40 = i + 1;
+				CHART_SELECTED_DIGIMON = i + 1;
 				if (isKeyDown(CONFIRM_BUTTON) != 0) {
 					if (hasDigimonRaised(
-						    (uint16_t)MAIN_D_80134D40) != 0) {
-						if (MAIN_D_80134D42 < 3) {
+						    (uint16_t)CHART_SELECTED_DIGIMON) != 0) {
+						if (CHART_SELECTED_COLUMN < 3) {
 							selectorX =
-								MAIN_D_80134D42 * 0x25 + 0x1c;
-						} else if (MAIN_D_80134D42 < 7) {
+								CHART_SELECTED_COLUMN * 0x25 + 0x1c;
+						} else if (CHART_SELECTED_COLUMN < 7) {
 							selectorX =
-								(MAIN_D_80134D42 - 3) * 0x18 + 0x8b;
+								(CHART_SELECTED_COLUMN - 3) * 0x18 + 0x8b;
 						} else {
 							selectorX =
-								(MAIN_D_80134D42 - 7) * 0x18 + 0xf8;
+								(CHART_SELECTED_COLUMN - 7) * 0x18 + 0xf8;
 						}
 						if (isUIBoxAvailable(2) == 1) {
 							setRECT(&finalPos, -0x96, -0x59, 0x12c, 0xbe);
 							startPos.x = selectorX - 0x99;
 							startPos.y =
-								MAIN_D_80134D44 * 0x13 - 0x45;
+								CHART_SELECTED_ROW * 0x13 - 0x45;
 							setWH(&startPos, 10, 10);
 							MAIN_D_80134D46 = 0;
 							createAnimatedUIBox(
@@ -2088,16 +2088,16 @@ void tickPlayerMenu(void)
 			} else if ((MENU_STATE == 3) &&
 			           (isKeyDown(CANCEL_BUTTON) != 0)) {
 				if (MENU_STATE == 3) {
-					if (MAIN_D_80134D42 < 3) {
-						selectorX = MAIN_D_80134D42 * 0x25 + 0x1c;
-					} else if (MAIN_D_80134D42 < 7) {
+					if (CHART_SELECTED_COLUMN < 3) {
+						selectorX = CHART_SELECTED_COLUMN * 0x25 + 0x1c;
+					} else if (CHART_SELECTED_COLUMN < 7) {
 						selectorX =
-							(MAIN_D_80134D42 - 3) * 0x18 + 0x8b;
+							(CHART_SELECTED_COLUMN - 3) * 0x18 + 0x8b;
 					} else {
 						selectorX =
-							(MAIN_D_80134D42 - 7) * 0x18 + 0xf8;
+							(CHART_SELECTED_COLUMN - 7) * 0x18 + 0xf8;
 					}
-					setRECT(&finalPos, selectorX - 0x99, MAIN_D_80134D44 * 0x13 - 0x45, 10, 10);
+					setRECT(&finalPos, selectorX - 0x99, CHART_SELECTED_ROW * 0x13 - 0x45, 10, 10);
 					removeAnimatedUIBox(2, &finalPos);
 					playSound(0, 3);
 					MENU_STATE = 2;
@@ -2106,9 +2106,9 @@ void tickPlayerMenu(void)
 		}
 
 #if defined(VERSION_JP)
-		if (MAIN_D_80134D37 == 2 && MENU_STATE == 2) {
+		if (PLAYER_MENU_STATE == 2 && MENU_STATE == 2) {
 #else
-		if (MAIN_D_80134D37 == 2) {
+		if (PLAYER_MENU_STATE == 2) {
 #endif
 			if ((CHANGED_INPUT & 0x8000) &&
 			    ((MEDAL_SELECTOR_INDEX % 5) != 0)) {
@@ -2137,7 +2137,7 @@ void tickPlayerMenu(void)
 			SELECTED_MEDAL = MEDAL_SELECTOR_INDEX;
 		}
 
-		if (MAIN_D_80134D37 == 3) {
+		if (PLAYER_MENU_STATE == 3) {
 			previousCard = SELECTED_CARD;
 			if (MENU_STATE == 2) {
 				if ((isKeyDown(CONFIRM_BUTTON) != 0) &&
@@ -2202,7 +2202,7 @@ void renderPlayerMenu(void)
 	PlayerTabs tabs;
 
 	tabs = MAIN_D_801342A4;
-	switch (MAIN_D_80134D37) {
+	switch (PLAYER_MENU_STATE) {
 	case 0:
 		renderPlayerInfoView();
 		break;
@@ -2216,7 +2216,7 @@ void renderPlayerMenu(void)
 		renderCardsView();
 		break;
 	}
-	tabs.tab[MAIN_D_80134D37] = 0;
+	tabs.tab[PLAYER_MENU_STATE] = 0;
 	renderString(tabs.tab[0], -0x89, -0x65, 0x3c, 0xc, 0, 0, 5, 1);
 	renderString(tabs.tab[1], -0x3e, -0x65, 0x3c, 0xc, 0x3c, 0, 5, 1);
 	renderString(tabs.tab[2], 0xd, -0x65, 0x24, 0xc, 0x78, 0, 5, 1);
@@ -2231,14 +2231,14 @@ void handleGameMenuSelection(int32_t selection)
 {
 	switch (selection) {
 	case 1:
-		if (GAME_MENU_SPRITES[selection].disabled & 1) {
+		if (MENU_OPTIONS[selection].disabled & 1) {
 			return;
 		}
 		TRIANGLE_MENU_STATE = 2;
 		drawInventoryText();
 		break;
 	case 6:
-		if (GAME_MENU_SPRITES[selection].disabled & 1) {
+		if (MENU_OPTIONS[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -2247,7 +2247,7 @@ void handleGameMenuSelection(int32_t selection)
 		startGameTime();
 		break;
 	case 5:
-		if (GAME_MENU_SPRITES[selection].disabled & 1) {
+		if (MENU_OPTIONS[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -2262,7 +2262,7 @@ void handleGameMenuSelection(int32_t selection)
 		TRIANGLE_MENU_STATE = 5;
 		break;
 	case 4:
-		if (GAME_MENU_SPRITES[selection].disabled & 1) {
+		if (MENU_OPTIONS[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -2271,7 +2271,7 @@ void handleGameMenuSelection(int32_t selection)
 		startGameTime();
 		break;
 	case 7:
-		if (GAME_MENU_SPRITES[selection].disabled & 1) {
+		if (MENU_OPTIONS[selection].disabled & 1) {
 			return;
 		}
 		closeTriangleMenu();
@@ -2284,7 +2284,7 @@ void handleGameMenuSelection(int32_t selection)
 
 void setSleepDisabled(int16_t arg)
 {
-	GAME_MENU_SPRITES[6].disabled = arg;
+	MENU_OPTIONS[6].disabled = arg;
 }
 
 void startFeedingItem(uint8_t arg)
@@ -2326,8 +2326,8 @@ int8_t getEquippedSlot(void)
 	uint8_t row;
 	int32_t slot;
 
-	column = (MAIN_D_80134D3A - 0x73) / 18;
-	row = (MAIN_D_80134D38 - 0x6f) / 15;
+	column = (MOVE_SELECT_BOX_X - 0x73) / 18;
+	row = (MOVE_SELECT_BOX_Y - 0x6f) / 15;
 	if (row == 1) {
 		row = 5;
 	} else if (row == 2) {
@@ -2366,8 +2366,8 @@ void equipMove(void)
 	int32_t slot;
 	int32_t animation;
 
-	column = (MAIN_D_80134D3A - 0x73) / 18;
-	row = (MAIN_D_80134D38 - 0x6f) / 15;
+	column = (MOVE_SELECT_BOX_X - 0x73) / 18;
+	row = (MOVE_SELECT_BOX_Y - 0x6f) / 15;
 	if (row == 1) {
 		row = 5;
 	} else if (row == 2) {
@@ -2471,7 +2471,7 @@ void renderDigimonStatsView(void)
 	int16_t clut;
 	uint8_t frame;
 
-	cluts = MAIN_D_80123DB8;
+	cluts = STATS_VIEW_ELEMENT_CLUT;
 	switch (MENU_STATE) {
 	case 0:
 		if (drawDigimonStatsStrings() == 1) {
@@ -2479,13 +2479,13 @@ void renderDigimonStatsView(void)
 		}
 		break;
 	case 1:
-		renderSeparatorLines(MAIN_D_80123F54, 6, 5);
+		renderSeparatorLines(STATS_VIEW_LINES, 6, 5);
 		for (j = 0; j < 9; j++) {
-			sr = &MAIN_D_80124334[j];
+			sr = &STATS_VIEW_TEXT[j];
 			renderString(3, sr->posX, sr->posY + 1, sr->uvWidth, 0xc, sr->uvX, sr->uvY, 5, 1);
 		}
 		for (j = 0; j < 0x15; j++) {
-			icon = &MAIN_D_8012437C[j];
+			icon = &STATS_VIEW_ELEMENTS[j];
 			renderRectPolyFT4(icon->posX, icon->posY, icon->width, icon->height, icon->texX,
 			                  icon->texY + 0x80, 5, GetClut(0x60, cluts.v[j] + 0x1e8), 5, 0);
 		}
@@ -2588,7 +2588,7 @@ void renderDigimonStatsView(void)
 		}
 		renderBox(-0x54, 0x52, PARTNER_PARA.virusBar * 3, 6, 0xc8, 0xc8, 0x3c, 0, 5);
 		for (j = 0; j < 0xd; j++) {
-			r = &MAIN_D_801242CC[j];
+			r = &STATS_VIEW_INSETS[j];
 			renderInsetBox(r->x, r->y, r->w, r->h, 5);
 		}
 		renderDigiviceEntity(ENTITY_TABLE[1], 1);
@@ -2607,7 +2607,7 @@ void renderDigimonMovesView(void)
 	int32_t j;
 	if (MENU_STATE > 0 && MENU_STATE < 7) {
 		for (i = 0; i < 0xd; i++) {
-			icon = &MAIN_D_801241CC[i];
+			icon = &MOVES_VIEW_TECHSET_TEXT[i];
 			renderRectPolyFT4(icon->posX,
 			                  icon->posY,
 			                  icon->width,
@@ -2639,7 +2639,7 @@ void renderDigimonMovesView(void)
 			}
 			j++;
 		}
-		renderSeparatorLines(TECH_VIEW_LINES1, 3, 3);
+		renderSeparatorLines(MOVES_TECHSET_LINES, 3, 3);
 	}
 	switch (MENU_STATE) {
 	case 0:
@@ -2650,7 +2650,7 @@ void renderDigimonMovesView(void)
 	case 1:
 		renderString(3, -0x8e, -0xf, 0x24, 0xc, 0x3c, 0x48, 5, 1);
 		for (i = 0; i < 3; i++) {
-			icon = &MAIN_D_801241CC[i];
+			icon = &MOVES_VIEW_TECHSET_TEXT[i];
 			renderRectPolyFT4(icon->posX, -9,
 			                  icon->width,
 			                  icon->height,
@@ -2658,7 +2658,7 @@ void renderDigimonMovesView(void)
 			                  icon->texY + 0x80, 5, 0x7b06, 5, 0);
 		}
 		renderRectPolyFT4(0x75, 4, 4, 4, 0x78, 0x8c, 5, 0x7b06, 5, 0);
-		renderSeparatorLines(&TECH_VIEW_LINES1[15], 3, 5);
+		renderSeparatorLines(&MOVES_TECHSET_LINES[15], 3, 5);
 		if (MAIN_D_80134237 != 0xff) {
 			renderString(3, -0x8e, -0xf, 0x24, 0xc, 0x3c, 0x48, 5, 1);
 			renderString(0, -0x7c, 1, 0x84, 0xc, 0, 0x3c, 5, 1);
@@ -2700,9 +2700,9 @@ void renderDigimonMovesView(void)
 		break;
 	case 6:
 		renderString(3, -0x8e, -0xf, 0x3c, 0xc, 0x60, 0x48, 5, 1);
-		renderSeparatorLines(TECH_VIEW_LINES3, 0xc, 5);
+		renderSeparatorLines(MOVES_VIEW_HELP_LINES, 0xc, 5);
 		for (i = 0; i < 4; i++) {
-			icon = &MAIN_D_80124044[i];
+			icon = &MOVES_VIEW_HELP_CORNERS[i];
 			renderRectPolyFT4(icon->posX,
 			                  icon->posY,
 			                  icon->width,
@@ -2730,15 +2730,15 @@ void renderDigimonMovesView(void)
 			renderRectPolyFT4(j * 0x12 - 0x26, -0xf, 4, 5, j * 4 + 0x94, 0x8c, 5, 0x7b06, 5, 0);
 			j++;
 		}
-		renderRectPolyFT4(MAIN_D_80134D3A - 0xa0,
-		                  MAIN_D_80134D38 - 0x78, 0x12, 0x10, 0xc0, 0x8c, 5, 0x7b06, 5, 0);
+		renderRectPolyFT4(MOVE_SELECT_BOX_X - 0xa0,
+		                  MOVE_SELECT_BOX_Y - 0x78, 0x12, 0x10, 0xc0, 0x8c, 5, 0x7b06, 5, 0);
 		for (row = 0; row < 7; row++) {
 			for (j = 0; j < 8; j++) {
 				renderBox(j * 0x12 - 0x2a, row * 0xf - 7, 0xc, 0xc,
 				          0x4e, 0x60, 0x6e, 0x80, 5);
 			}
 		}
-		if (0xa8 < MAIN_D_80134D3A) {
+		if (0xa8 < MOVE_SELECT_BOX_X) {
 			renderDigimonMovesSelected(0);
 		} else {
 			renderDigimonMovesSelected(1);
@@ -2763,7 +2763,7 @@ void renderDigimonMovesView(void)
 		renderString(0xe, 6, -0x21, 0xc, 0xc, 0xcc, 0x30, 5, 1);
 		renderString(0xe, -0x2a, -0x13, 0xc, 0xc, 0xcc, 0x30, 5, 1);
 		for (i = 0; i < 0xc; i++) {
-			sr = &MAIN_D_80124234[i];
+			sr = &MOVES_VIEW_STRING_SPRITES[i];
 			renderString(0, sr->posX,
 			             sr->posY + 1,
 			             sr->uvWidth, 0xc,
@@ -2776,7 +2776,7 @@ void renderDigimonMovesView(void)
 		renderRectPolyFT4(-0x81, -0x22, 0xc, 0xc, 0xb4, 0x8c, 5, 0x7b06, 5, 0);
 		renderRectPolyFT4(-0x7b, 0x50, 0x12, 0x10, 0xc0, 0x8c, 5, 0x7b06, 5, 0);
 		for (i = 0; i < 7; i++) {
-			icon = &MAIN_D_80124294[i];
+			icon = &MOVES_VIEW_SPRITES[i];
 #if !defined(VERSION_JP)
 			if (i != 2) {
 #endif
@@ -2837,10 +2837,10 @@ void renderPlayerInfoView(void)
 		}
 		break;
 	case 1:
-		renderSeparatorLines(MAIN_D_80124424, 0xb, 5);
+		renderSeparatorLines(TAMER_VIEW_PLAYER_LINES, 0xb, 5);
 
 		for (i = 0; i < 0xb; i++) {
-			e = &MAIN_D_801244EC[i];
+			e = &TAMER_WINDOW_NAME_STRING[i];
 			renderString(3 - ((i / 7) * 3), e->posX, e->posY + 1, e->uvWidth, 0xc, e->uvX,
 			             e->uvY, 5, 1);
 		}
@@ -2888,7 +2888,7 @@ void renderPlayerInfoView(void)
 		renderDigiviceEntity(ENTITY_TABLE[0], 0);
 
 		for (k = 0; k < 0xb; k++) {
-			r = &MAIN_D_80124494[k];
+			r = &TAMER_WINDOW_BOXES[k];
 			renderInsetBox(r->x, r->y, r->w, r->h, 5);
 		}
 		break;
@@ -2908,9 +2908,9 @@ void renderDigimonMovesSelected(int16_t panel)
 	uint8_t moveId;
 
 	if (panel == 0) {
-		renderSeparatorLines(MAIN_D_80124064, 0x12, 4);
+		renderSeparatorLines(DIGIMON_MOVE_INFO_LINES_LEFT, 0x12, 4);
 	} else {
-		renderSeparatorLines(MAIN_D_80124118, 0x12, 4);
+		renderSeparatorLines(DIGIMON_MOVE_INFO_LINES_RIGHT, 0x12, 4);
 	}
 
 	renderRectPolyFT4((panel * 0x9d) - 0x91, 1, 4, 4, 0x78, 0x90, 5, 0x7b06, 4, 0);
@@ -2934,8 +2934,8 @@ void renderDigimonMovesSelected(int16_t panel)
 		renderRectPolyFT4((panel * 0xcb) - 0x71, i * 0x11 + 0x1b, 0xa, 0xa, 0x8a, 0x8c, 5, 0x7b06, 3, 0);
 	}
 
-	row = (MAIN_D_80134D3A - 0x73) / 18;
-	col = (MAIN_D_80134D38 - 0x6f) / 15;
+	row = (MOVE_SELECT_BOX_X - 0x73) / 18;
+	col = (MOVE_SELECT_BOX_Y - 0x6f) / 15;
 	if (col == 1) {
 		col = 5;
 	} else if (col == 2) {
@@ -3178,7 +3178,7 @@ void renderEvoChartView(void)
 	int8_t shift;
 	EvoClutTable cluts;
 
-	cluts = MAIN_D_80123E1C;
+	cluts = EVO_CHART_VIEW_COLORS;
 	switch (MENU_STATE) {
 	case 0:
 		if (drawEvoChartStrings(0) == 1) {
@@ -3188,38 +3188,38 @@ void renderEvoChartView(void)
 	case 2:
 	case 3:
 	case 4:
-		if (MAIN_D_80134D42 < 3) {
-			x = (int16_t)(MAIN_D_80134D42 * 0x25 + 0x1c);
-		} else if (MAIN_D_80134D42 < 7) {
-			x = (int16_t)((MAIN_D_80134D42 - 3) * 0x18 + 0x8b);
+		if (CHART_SELECTED_COLUMN < 3) {
+			x = (int16_t)(CHART_SELECTED_COLUMN * 0x25 + 0x1c);
+		} else if (CHART_SELECTED_COLUMN < 7) {
+			x = (int16_t)((CHART_SELECTED_COLUMN - 3) * 0x18 + 0x8b);
 		} else {
-			x = (int16_t)((MAIN_D_80134D42 - 7) * 0x18 + 0xf8);
+			x = (int16_t)((CHART_SELECTED_COLUMN - 7) * 0x18 + 0xf8);
 		}
 		renderRectPolyFT4((int16_t)(x - 0xa2),
-		                  (int16_t)(MAIN_D_80134D44 * 0x13 - 0x4e), 0x18, 0x14,
+		                  (int16_t)(CHART_SELECTED_ROW * 0x13 - 0x4e), 0x18, 0x14,
 		                  0, 0xe8, 0x18, 0x7dc7, 5, 0);
 		/* fall through */
 	case 1:
 		for (i = 0; i < 0x3e; i++) {
 			if (hasDigimonRaised((i + 1) & 0xffff)) {
 				shift = 0;
-				if ((i + 1 == MAIN_D_80134D40) && (1 < MENU_STATE) &&
+				if ((i + 1 == CHART_SELECTED_DIGIMON) && (1 < MENU_STATE) &&
 				    ((PLAYTIME_FRAMES % 10) < 5)) {
 					shift = 0x10;
 				}
 				renderRectPolyFT4(
-					(int16_t)(MAIN_D_80124544[i].posX - 0xa0),
-					(int16_t)(MAIN_D_80124544[i].posY - 0x78),
+					(int16_t)(EVO_CHART_BOXES[i].posX - 0xa0),
+					(int16_t)(EVO_CHART_BOXES[i].posY - 0x78),
 					0x10, 0x10,
-					(uint8_t)(shift + MAIN_D_80124544[i].u),
-					MAIN_D_80124544[i].v, 0x18,
-					cluts.m[MAIN_D_80124544[i].clut],
+					(uint8_t)(shift + EVO_CHART_BOXES[i].u),
+					EVO_CHART_BOXES[i].v, 0x18,
+					cluts.m[EVO_CHART_BOXES[i].clut],
 					5, 0);
 			}
 		}
 		for (i = 0; i < 0x3e; i++) {
-			renderBorderBox((MAIN_D_80124544[i].posX - 1),
-			                (MAIN_D_80124544[i].posY - 1), 0x12, 0x12,
+			renderBorderBox((EVO_CHART_BOXES[i].posX - 1),
+			                (EVO_CHART_BOXES[i].posY - 1), 0x12, 0x12,
 			                0xbebebe, 0x3c3c3c, 0x87, 0x87, 0x87, 5);
 		}
 		renderBorderBox(0x15, 0x27, 0x22, 0x9f, 0xaaa0c8, 0x5a3c8c,
@@ -3247,7 +3247,7 @@ void renderEvoChartView(void)
 	}
 }
 
-GARBAGE_ARRAY(renderEvoChartDetail, TECH_VIEW_LINES1, 30, 9);
+GARBAGE_ARRAY(renderEvoChartDetail, MOVES_TECHSET_LINES, 30, 9);
 
 void renderEvoChartDetail(void)
 {
@@ -3267,42 +3267,42 @@ void renderEvoChartDetail(void)
 	int8_t fromCount;
 	int8_t toCount;
 
-	clut = MAIN_D_80123E6C;
+	clut = EVO_CHART_DETAIL_COLORS;
 	MENU_SUB_STATE = 2;
-	drawEvoChartStrings((int8_t)MAIN_D_80134D40);
+	drawEvoChartStrings((int8_t)CHART_SELECTED_DIGIMON);
 	count1 = (count2 = 0);
 	for (i = 0; i < 5; i++) {
-		if (EVO_PATHS_DATA[MAIN_D_80134D40 - 1].from[i] != -1) {
+		if (EVOLUTION_PATHS[CHART_SELECTED_DIGIMON - 1].from[i] != -1) {
 			count1++;
 		}
 	}
 	for (i = 0; i < 6; i++) {
-		if (EVO_PATHS_DATA[MAIN_D_80134D40 - 1].to[i] != -1) {
+		if (EVOLUTION_PATHS[CHART_SELECTED_DIGIMON - 1].to[i] != -1) {
 			count2++;
 		}
 	}
 
 	if ((count1 % 2) == 0) {
-		fromLines = MAIN_D_80124944;
-		fromSprites = MAIN_D_80124AA8;
+		fromLines = CHART_FROM_LINES_EVEN;
+		fromSprites = CHART_FROM_SPRITES_EVEN;
 		fromCount = 4;
 	} else {
-		fromLines = MAIN_D_80124984;
-		fromSprites = MAIN_D_80124AC8;
+		fromLines = CHART_FROM_LINES_ODD;
+		fromSprites = CHART_FROM_SPRITES_ODD;
 		fromCount = 5;
 	}
 	if ((count2 % 2) == 0) {
-		toLines = MAIN_D_801249D4;
-		toSprites = MAIN_D_80124AF0;
+		toLines = CHART_TO_LINES_EVEN;
+		toSprites = CHART_TO_SPRITES_EVEN;
 		toCount = 6;
 	} else {
-		toLines = MAIN_D_80124A34;
-		toSprites = MAIN_D_80124B20;
+		toLines = CHART_TO_LINES_ODD;
+		toSprites = CHART_TO_SPRITES_ODD;
 		toCount = 5;
 	}
 
 	for (j = 0; j < fromCount; j++) {
-		if (EVO_PATHS_DATA[MAIN_D_80134D40 - 1].from[j] > 0) {
+		if (EVOLUTION_PATHS[CHART_SELECTED_DIGIMON - 1].from[j] > 0) {
 			drawLine3P(0x65db,
 			           fromLines->x1, fromLines->y1 - 1,
 			           fromLines->x2, fromLines->y2 - 1,
@@ -3335,7 +3335,7 @@ void renderEvoChartDetail(void)
 	}
 
 	for (j = 0; j < toCount; j++) {
-		if (EVO_PATHS_DATA[MAIN_D_80134D40 - 1].to[j] > 0) {
+		if (EVOLUTION_PATHS[CHART_SELECTED_DIGIMON - 1].to[j] > 0) {
 			color1 = (MAIN_D_80124A84[j * 2].r & 0xff) |
 			         ((MAIN_D_80124A84[j * 2].g & 0xff) << 8) |
 			         ((MAIN_D_80124A84[j * 2].b & 0xff) << 16);
@@ -3374,22 +3374,22 @@ void renderEvoChartDetail(void)
 	}
 
 	renderRectPolyFT4(-8, -0x14, 0x10, 0x10,
-	                  MAIN_D_80124544[MAIN_D_80134D40 - 1].u,
-	                  MAIN_D_80124544[MAIN_D_80134D40 - 1].v, 0x18,
-	                  clut.m[MAIN_D_80124544[MAIN_D_80134D40 - 1].clut],
+	                  EVO_CHART_BOXES[CHART_SELECTED_DIGIMON - 1].u,
+	                  EVO_CHART_BOXES[CHART_SELECTED_DIGIMON - 1].v, 0x18,
+	                  clut.m[EVO_CHART_BOXES[CHART_SELECTED_DIGIMON - 1].clut],
 	                  4, 0);
 	renderBorderBox(0x97, 99, 0x12, 0x12, 0xbebebe, 0x3c3c3c, 0x87, 0x87,
 	                0x87, 4);
 
 	for (j = 0; j < fromCount; j++) {
-		id = EVO_PATHS_DATA[MAIN_D_80134D40 - 1].from[j];
+		id = EVOLUTION_PATHS[CHART_SELECTED_DIGIMON - 1].from[j];
 		if (id > 0) {
 			if (hasDigimonRaised(id & 0xffff) == 1) {
 				renderRectPolyFT4(fromSprites->posX, fromSprites->posY,
 				                  0x10, 0x10,
-				                  MAIN_D_80124544[id - 1].u,
-				                  MAIN_D_80124544[id - 1].v, 0x18,
-				                  clut.m[MAIN_D_80124544[id - 1].clut],
+				                  EVO_CHART_BOXES[id - 1].u,
+				                  EVO_CHART_BOXES[id - 1].v, 0x18,
+				                  clut.m[EVO_CHART_BOXES[id - 1].clut],
 				                  4, 0);
 			}
 			renderBorderBox(fromSprites->posX + 0x9f,
@@ -3400,14 +3400,14 @@ void renderEvoChartDetail(void)
 	}
 
 	for (j = 0; j < toCount; j++) {
-		id = EVO_PATHS_DATA[MAIN_D_80134D40 - 1].to[j];
+		id = EVOLUTION_PATHS[CHART_SELECTED_DIGIMON - 1].to[j];
 		if (id > 0) {
 			if (hasDigimonRaised(id & 0xffff) == 1) {
 				renderRectPolyFT4(toSprites->posX, toSprites->posY,
 				                  0x10, 0x10,
-				                  MAIN_D_80124544[id - 1].u,
-				                  MAIN_D_80124544[id - 1].v, 0x18,
-				                  clut.m[MAIN_D_80124544[id - 1].clut],
+				                  EVO_CHART_BOXES[id - 1].u,
+				                  EVO_CHART_BOXES[id - 1].v, 0x18,
+				                  clut.m[EVO_CHART_BOXES[id - 1].clut],
 				                  4, 0);
 			}
 			renderBorderBox(toSprites->posX + 0x9f,
@@ -3420,11 +3420,11 @@ void renderEvoChartDetail(void)
 #if defined(VERSION_JP)
 	renderString(3, -0x19, -0x4f, 0x30, 0xc, 0, 0x18, 4);
 	renderString(0, -0x56, 0x3a, 0x24, 0xc,
-	             ((DIGIMON_DATA[MAIN_D_80134D40].level - 1) * 36) + 0x30, 0x18,
+	             ((DIGIMON_DATA[CHART_SELECTED_DIGIMON].level - 1) * 36) + 0x30, 0x18,
 	             4);
 #else
 	renderString(3, -0x14, -0x4f, 0x24, 0xc, 0, 0x18, 4);
-	switch (DIGIMON_DATA[MAIN_D_80134D40].level) {
+	switch (DIGIMON_DATA[CHART_SELECTED_DIGIMON].level) {
 	case 1:
 		renderString(0, -0x5b, 0x3a, 0x2e, 0xc, 0x24, 0x18, 4);
 		break;
@@ -3441,7 +3441,7 @@ void renderEvoChartDetail(void)
 		renderString(0, -0x64, 0x3a, 0x41, 0xc, 0, 0x3c, 4);
 	}
 #endif
-	len = strlen(DIGIMON_DATA[MAIN_D_80134D40].name) / 2;
+	len = strlen(DIGIMON_DATA[CHART_SELECTED_DIGIMON].name) / 2;
 	renderString(0, -0x5c - ((len - 4) * 6), 0x4d, 0x78, 0xc, 0, 0x30, 4);
 	for (i = 0; i < 6; i++) {
 		renderInsetBox(MAIN_D_80124B48[i].posX, MAIN_D_80124B48[i].posY,
@@ -3530,7 +3530,7 @@ void renderCardsView(void)
 	int8_t card;
 	int8_t amount;
 
-	sprites = MAIN_D_80123E28;
+	sprites = CARD_SPRITE_CLUT;
 
 	switch (MENU_STATE) {
 	case 0:
@@ -3628,7 +3628,7 @@ int32_t drawDigimonStatsStrings(void)
 {
 	RECT rect;
 
-	rect = MAIN_D_801342E0;
+	rect = DIGIMON_STATS_TEXT_AREA;
 
 	switch (MENU_SUB_STATE) {
 	case 0:
@@ -3735,7 +3735,7 @@ int8_t entityId;
 	FRAMEBUFFER_OT[1]->org = FRAMEBUFFER1_ORIGIN;
 
 	GsSetProjection(0x200);
-	GsSetRefView2(&MAIN_D_80123860);
+	GsSetRefView2(&DIGIVICE_ENTITY_VIEW);
 	GsClearOt(0, 5, FRAMEBUFFER_OT[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 3; i++) {
@@ -3796,11 +3796,11 @@ void renderDigiviceMedals(void)
 	FRAMEBUFFER_OT[1]->org = FRAMEBUFFER1_ORIGIN;
 
 	GsSetProjection(0x400);
-	GsSetRefView2(&MAIN_D_80123880);
+	GsSetRefView2(&MEDAL_VIEW);
 	GsClearOt(0, 1, FRAMEBUFFER_OT[ACTIVE_FRAMEBUFFER]);
 
-	MAIN_D_80134238.vy += 0x64;
-	RotMatrix(&MAIN_D_80134238, &MEDAL_COORDINATES.coord);
+	MEDAL_ROTATION.vy += 0x64;
+	RotMatrix(&MEDAL_ROTATION, &MEDAL_COORDINATES.coord);
 	MEDAL_COORDINATES.flg = 0;
 	drawObject(&MEDAL_OBJECT, FRAMEBUFFER_OT[ACTIVE_FRAMEBUFFER], 5);
 	GsSortOt(FRAMEBUFFER_OT[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -3876,8 +3876,8 @@ int32_t drawDigimonMovesText(void)
 	case 5:
 		drawString(STATUS_VIEW_LABELS[7], 0, 0x60);
 		drawString(TECH_VIEW_LABELS[0], 0, 0x78);
-		MAIN_D_80134D3A = 0x73;
-		MAIN_D_80134D38 = 0x6f;
+		MOVE_SELECT_BOX_X = 0x73;
+		MOVE_SELECT_BOX_Y = 0x6f;
 		return 1;
 	}
 	return 0;
@@ -3937,7 +3937,7 @@ int32_t drawEvoChartStrings(int8_t arg)
 		clearTextSubArea(&rect1);
 		drawString(MAIN_D_80124C54, 0, 0xf0);
 		drawString(CARD_CHART_LABELS[1], 0, 0xc);
-		MAIN_D_80134D42 = MAIN_D_80134D44 = 0;
+		CHART_SELECTED_COLUMN = CHART_SELECTED_ROW = 0;
 		MENU_SUB_STATE = 1;
 		/* fall through */
 	case 1:
@@ -4017,7 +4017,7 @@ void renderSeparatorLines(int16_t *lines, int8_t count, int32_t zIndex)
 	int32_t i;
 
 	for (i = 0; i < count; lines += 5ULL, i++) {
-		color = &MAIN_D_80123F48[((uint8_t *)lines)[8] * 3];
+		color = &UI_LINES_BORDER_COLOR[((uint8_t *)lines)[8] * 3];
 		drawLine2P((color[0] & 0xff) | ((color[1] & 0xff) << 8) |
 		                            ((color[2] & 0xff) << 16),
 		           lines[0], lines[1], lines[2], lines[3],

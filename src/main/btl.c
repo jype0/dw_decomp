@@ -38,7 +38,7 @@ extern int32_t VIEWPORT_DISTANCE;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
 extern PACKET GS_WORK_BASES[];
-extern char DRAW_OFFSETS[];
+extern char DR_OFFSETS[];
 extern uint8_t IS_PREDEFINED_BATTLE;
 extern int8_t LOAD_EFE_STATE;
 extern FleeBubbleState FLEE_BUBBLE_DATA[];
@@ -89,7 +89,7 @@ uint8_t FLEE_BUBBLE_SCALE[10] = {
 	0x6c, 0x68,
 };
 
-uint8_t BATTLE_MUSIC[48] = {
+uint8_t ENEMY_MUSIC_MAPPING[48] = {
 	0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x02, 0x02,
 	0x02, 0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
 	0x02, 0x02, 0x01, 0x02, 0x02, 0x01, 0x01, 0x01,
@@ -98,7 +98,7 @@ uint8_t BATTLE_MUSIC[48] = {
 	0x02, 0x01, 0x02, 0x02, 0x02, 0x00, 0x00, 0x00,
 };
 
-uint8_t FLEE_CHANCE_TABLE[12] = {
+uint8_t FLEE_CHANCES[12] = {
 	0x3c, 0x46, 0x64, 0x50, 0x3c, 0x64, 0x5a, 0x64,
 	0x1e, 0x00, 0x00, 0x00,
 };
@@ -133,7 +133,7 @@ void loadBattleDataTick(void)
 	tickObjects();
 	renderObjects();
 	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80,
-		&DRAW_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
+		&DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
 	DrawSync(0);
 	VSync(3);
 	POLLED_INPUT_PREVIOUS = POLLED_INPUT;
@@ -148,7 +148,7 @@ void handleBattleIdle(entity, stats, flags)
 	Stats *stats;
 	uint16_t flags;
 {
-	if ((MAIN_D_80134D74 == 0) || (&entity->entity != MAIN_D_80134D60)) {
+	if ((NO_AI_FLAG == 0) || (&entity->entity != FINISHING_ENTITY)) {
 		if ((entity->entity.anim.animId != 0x21) &&
 		    (entity->entity.anim.animId != 0x22)) {
 			startBattleIdleAnimation(entity, &entity->stats, flags);
@@ -213,7 +213,7 @@ int32_t handleBattleStart(id)
 	COMBAT_DATA_PTR->player.entityIds[0] = 1;
 	COMBAT_DATA_PTR->player.unk4 = 0;
 	count = 0;
-	MAIN_D_80134D7C[0] = isTriggerSet(1);
+	FLEE_DISABLED[0] = isTriggerSet(1);
 	IS_PREDEFINED_BATTLE = readPStat(0xfa);
 	if (IS_PREDEFINED_BATTLE == 1) {
 		for (i = 0; i < 3; i++) {
@@ -305,13 +305,13 @@ int32_t handleBattleStart(id)
 				chance += 0x14;
 			}
 		}
-		if (MAIN_D_80134D7C[0] != 0) {
+		if (FLEE_DISABLED[0] != 0) {
 			chance = 0;
 		}
 
 		flag = 1;
 		if (DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].type != 0xff) {
-			if (chance < (&FLEE_CHANCE_TABLE[(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].type - 1) * 3])
+			if (chance < (&FLEE_CHANCES[(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].type - 1) * 3])
 			                     [DIGIMON_DATA[NPC_ENTITIES[i - 2].digimonEntity.entity.type].type - 1]) {
 				COMBAT_DATA_PTR->player.entityIds[++count] = i;
 				flag = 0;
@@ -358,7 +358,7 @@ void loadBattleData(int32_t entityId, int32_t count)
 			type = ENTITY_TABLE[entityId]->type;
 			if ((type >= 0x43) && (type < 0x70)) {
 #endif
-				playMusic(0x21, BATTLE_MUSIC[ENTITY_TABLE[entityId]->type - 0x43]);
+				playMusic(0x21, ENEMY_MUSIC_MAPPING[ENTITY_TABLE[entityId]->type - 0x43]);
 			} else {
 				playMusic(0x21, 1);
 			}

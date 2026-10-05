@@ -72,16 +72,16 @@ extern int32_t IS_SCRIPT_PAUSED;
 extern uint16_t CURRENT_SCRIPT_ID;
 extern long LOADED_DIGIMON_MODELS[8];
 extern int8_t GAME_STATE;
-extern int8_t MAIN_D_80134D20[8];
+extern int8_t NPC_ACTIVE_ANIM[8];
 extern MapDigimonEntity MAP_DIGIMON_TABLE[];
 extern int16_t NPC_COLLISION_STATE[];
 extern int32_t NPC_IS_WALKING_TOWARDS[];
 extern int8_t TALKED_TO_ENTITY;
-extern int8_t NPC_ACTIVE_ANIM;
-extern int16_t MAIN_D_8013CA38[];
-extern int16_t MAIN_D_8013CA8C[];
-extern int8_t MAIN_D_8013CAE0[];
-extern int8_t MAIN_D_8013CB0C[];
+extern int8_t NINJAMON_FX_COUNTER;
+extern int16_t NINJAMON_EFFECT_X[];
+extern int16_t NINJAMON_EFFECT_Y[];
+extern int8_t NINJAMON_EFFECT_X_OFFSET[];
+extern int8_t NINJAMON_EFFECT_Y_OFFSET[];
 extern int16_t MAP_OBJECT_INSTANCE_COUNT;
 extern LocalMapObject LOCAL_MAP_OBJECTS[];
 extern int16_t CAMERA_X[];
@@ -89,8 +89,8 @@ extern int16_t CAMERA_Y[];
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern int32_t MAP_OBJECT_MOVE_TO_DATA[];
-extern int8_t MAIN_D_8013CB38[];
-extern int8_t MAIN_D_8013CB44[];
+extern int8_t MOVE_OBJECT_DELTA_X[];
+extern int8_t MOVE_OBJECT_DELTA_Y[];
 extern uint8_t MAP_LAYER_ENABLED;
 extern uint8_t CURRENT_SCREEN;
 extern GsOT *ACTIVE_ORDERING_TABLE;
@@ -745,11 +745,11 @@ void createNinjamonEffect(void)
 {
 	int32_t i;
 
-	NPC_ACTIVE_ANIM = 0;
-	storeMapObjectPosition(MAIN_D_8013CA38, MAIN_D_8013CA8C, 0, 0x29);
+	NINJAMON_FX_COUNTER = 0;
+	storeMapObjectPosition(NINJAMON_EFFECT_X, NINJAMON_EFFECT_Y, 0, 0x29);
 	for (i = 0; i < 0x29; i++) {
-		MAIN_D_8013CAE0[i] = randomLimit(10) + 12;
-		MAIN_D_8013CB0C[i] = randomLimit(10) + 3;
+		NINJAMON_EFFECT_X_OFFSET[i] = randomLimit(10) + 12;
+		NINJAMON_EFFECT_Y_OFFSET[i] = randomLimit(10) + 3;
 	}
 	addObject(0xfba, 0, NULL, renderNinjamonEffect);
 }
@@ -772,19 +772,19 @@ void renderNinjamonEffect(int32_t instanceId)
 
 	data = MAP_TILE_DATA.objects;
 	for (i = 0; i < 0x29; i++) {
-		data->x += MAIN_D_8013CAE0[i];
-		data->y += MAIN_D_8013CB0C[i];
+		data->x += NINJAMON_EFFECT_X_OFFSET[i];
+		data->y += NINJAMON_EFFECT_Y_OFFSET[i];
 		if (data->x > 0xa0) {
-			data->x = MAIN_D_8013CA38[i];
-			data->y = MAIN_D_8013CA8C[i];
-			MAIN_D_8013CAE0[i] = randomLimit(10) + 12;
-			MAIN_D_8013CB0C[i] = randomLimit(10) + 3;
+			data->x = NINJAMON_EFFECT_X[i];
+			data->y = NINJAMON_EFFECT_Y[i];
+			NINJAMON_EFFECT_X_OFFSET[i] = randomLimit(10) + 12;
+			NINJAMON_EFFECT_Y_OFFSET[i] = randomLimit(10) + 3;
 		}
 		data->orderValue = 10;
 		data++;
 	}
-	NPC_ACTIVE_ANIM++;
-	if (NPC_ACTIVE_ANIM >= 0x3c) {
+	NINJAMON_FX_COUNTER++;
+	if (NINJAMON_FX_COUNTER >= 0x3c) {
 		data = MAP_TILE_DATA.objects;
 		i = 0;
 		while (i < 0x29) {
@@ -842,21 +842,21 @@ int32_t tickMoveObjectTo(uint8_t objectIndex, uint8_t moveIndex,
                          int8_t steps, int16_t targetX, int16_t targetY)
 {
 	if (MAP_OBJECT_MOVE_TO_DATA[moveIndex] == 0) {
-		MAIN_D_8013CB38[moveIndex] =
+		MOVE_OBJECT_DELTA_X[moveIndex] =
 			(targetX - MAP_TILE_DATA.objects[objectIndex].x) / steps;
-		MAIN_D_8013CB44[moveIndex] =
+		MOVE_OBJECT_DELTA_Y[moveIndex] =
 			(targetY - MAP_TILE_DATA.objects[objectIndex].y) / steps;
 		MAP_OBJECT_MOVE_TO_DATA[moveIndex] = 1;
 	}
 
-	MAP_TILE_DATA.objects[objectIndex].x += MAIN_D_8013CB38[moveIndex];
-	MAP_TILE_DATA.objects[objectIndex].y += MAIN_D_8013CB44[moveIndex];
+	MAP_TILE_DATA.objects[objectIndex].x += MOVE_OBJECT_DELTA_X[moveIndex];
+	MAP_TILE_DATA.objects[objectIndex].y += MOVE_OBJECT_DELTA_Y[moveIndex];
 
-	if (MAIN_D_8013CB38[moveIndex] > 0) {
+	if (MOVE_OBJECT_DELTA_X[moveIndex] > 0) {
 		if (MAP_TILE_DATA.objects[objectIndex].x >= targetX) {
 			MAP_TILE_DATA.objects[objectIndex].x = targetX;
 		}
-	} else if (MAIN_D_8013CB38[moveIndex] < 0) {
+	} else if (MOVE_OBJECT_DELTA_X[moveIndex] < 0) {
 		if (MAP_TILE_DATA.objects[objectIndex].x <= targetX) {
 			MAP_TILE_DATA.objects[objectIndex].x = targetX;
 		}
@@ -864,11 +864,11 @@ int32_t tickMoveObjectTo(uint8_t objectIndex, uint8_t moveIndex,
 		MAP_TILE_DATA.objects[objectIndex].x = targetX;
 	}
 
-	if (MAIN_D_8013CB44[moveIndex] > 0) {
+	if (MOVE_OBJECT_DELTA_Y[moveIndex] > 0) {
 		if (MAP_TILE_DATA.objects[objectIndex].y >= targetY) {
 			MAP_TILE_DATA.objects[objectIndex].y = targetY;
 		}
-	} else if (MAIN_D_8013CB44[moveIndex] < 0) {
+	} else if (MOVE_OBJECT_DELTA_Y[moveIndex] < 0) {
 		if (MAP_TILE_DATA.objects[objectIndex].y <= targetY) {
 			MAP_TILE_DATA.objects[objectIndex].y = targetY;
 		}
@@ -1145,7 +1145,7 @@ void clearMapDigimon(void)
 			MAP_DIGIMON_TABLE[i].cwDiff = 0;
 		MAP_DIGIMON_TABLE[i].lookAtTamerState =
 			MAP_DIGIMON_TABLE[i].hasWaypointTarget = 0;
-		MAIN_D_80134D20[i] = 0;
+		NPC_ACTIVE_ANIM[i] = 0;
 	}
 }
 
@@ -1205,7 +1205,7 @@ void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 	}
 	entity = ENTITY_TABLE[instanceId];
 
-	if (MAIN_D_80134D20[instanceId - 2] == 0) {
+	if (NPC_ACTIVE_ANIM[instanceId - 2] == 0) {
 		if (mapDigimon->stopAnim == 0) {
 			if (mapDigimon->lookAtTamerState == 0) {
 #if defined(VERSION_JP)
@@ -1758,7 +1758,7 @@ void setActiveAnim(uint8_t scriptId, int8_t animId)
 			continue;
 		}
 		if (npc->scriptId == scriptId) {
-			MAIN_D_80134D20[i] = animId;
+			NPC_ACTIVE_ANIM[i] = animId;
 			return;
 		}
 		npc++;

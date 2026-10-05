@@ -56,7 +56,7 @@ extern int32_t FISH_D_8007A4E4[];
 extern int32_t FISH_D_8007A4F8[];
 extern int32_t FISH_D_8007A540[];
 extern int32_t FISH_D_8007A554[];
-extern int16_t MAIN_D_80154F80[];
+extern int16_t FISH_RECORD_SIZE[];
 extern char MAIN_D_80124C54[];
 extern VECTOR FISH_REEL_TARGET;
 extern char FISH_MSG_TOOK_BAIT[];
@@ -98,7 +98,7 @@ extern int8_t PARTNER_STATE;
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern int32_t VIEWPORT_DISTANCE;
 extern int8_t FISH_D_8007A4B4[];
-extern uint8_t MAIN_D_80127BDC[];
+extern uint8_t ITEM_CLUT_DATA[];
 extern int8_t FISH_BITE_CHANCE[];
 extern SVECTOR FISH_D_8007A5BC[];
 extern SVECTOR FISH_D_8007A594[];
@@ -353,7 +353,7 @@ SVECTOR MAIN_D_801349D0 = { 0 };
 #if !defined(VERSION_JP)
 char MAIN_D_801349D8[] = "Hooked!";
 #endif
-int32_t MAIN_D_801349E0 = 2;
+int32_t FISHING_MAP_COUNT = 2;
 
 int32_t MAIN_D_801351D8;
 int16_t MAIN_D_801351DC[3];
@@ -2337,7 +2337,7 @@ void FISH_drawBaitSprite(void)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	*(int32_t *)&prim->r0 = 0x808080;
 	prim->tpage = getTPage(0, 0, 320, 0);
-	setClut(prim, 224, MAIN_D_80127BDC[item->sprite] + 488);
+	setClut(prim, 224, ITEM_CLUT_DATA[item->sprite] + 488);
 	setUV0(prim, prim->u2 = (item->sprite % 16) * 16, prim->v1 = (item->sprite / 16) * 16);
 	prim->u1 = prim->u3 = prim->u0 + 0xf;
 	prim->v2 = prim->v3 = prim->v0 + 0xf;
@@ -4325,8 +4325,8 @@ stateD:
 		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_CM, centimetres);
 	}
 #endif
-	if (FISHING_DATA_PTR->hooked.fish.size > MAIN_D_80154F80[FISHING_DATA_PTR->hooked.fish.kind]) {
-		MAIN_D_80154F80[FISHING_DATA_PTR->hooked.fish.kind] = FISHING_DATA_PTR->hooked.fish.size;
+	if (FISHING_DATA_PTR->hooked.fish.size > FISH_RECORD_SIZE[FISHING_DATA_PTR->hooked.fish.kind]) {
+		FISH_RECORD_SIZE[FISHING_DATA_PTR->hooked.fish.kind] = FISHING_DATA_PTR->hooked.fish.size;
 		newRecord = 1;
 	}
 	PARTNER_PARA.fishCaught++;

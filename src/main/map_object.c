@@ -44,15 +44,15 @@ extern uint8_t MAP_LAYER_ENABLED;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[2];
 
-int32_t DOORS_DISABLED;
-int8_t DOOR_MODEL_IDS[4];
-int8_t DOOR_ROTATION_TIMER;
+int32_t IS_DOORS_DISABLED;
+int8_t LOADED_DOOR_MODELS[4];
+int8_t MAP_OBJ_ROTATE_TIMER;
 int8_t ACTIVE_DIRT_CART_MODEL;
 int16_t map_object_unused_e42;
 /* One object keeps the lid stores dependent for retail MWCC scheduling. */
-ToyTownBoxLidProgress TOY_TOWN_BOX_LID_PROGRESS;
+ToyTownBoxLidProgress BOX_LID_PROGRESS;
 int8_t TOY_TOWN_SELECTED_BOX;
-int16_t MAIN_D_80134E4A;
+int16_t UNUSED_GEARBOX_VALUE;
 int16_t ANGEMON_PEDESTAL_PROGRESS_X;
 int16_t ANGEMON_PEDESTAL_PROGRESS_Z;
 
@@ -64,7 +64,7 @@ SVECTOR DIRT_CART_ROTATION = { 0, 0, 0, 0 };
 #endif
 SVECTOR DIRT_PILE_SIZE_ROTATION = { 0, 0, 0, 0 };
 RECT MEDAL_RECT = { 582, 432, 6, 32 };
-int8_t BOX_CORNER_OFFSETS[4][2] = { { -1, 1 }, { 1, 1 }, { -1, -1 }, { 1, -1 } };
+int8_t DIRECTION_FACTORS[4][2] = { { -1, 1 }, { 1, 1 }, { -1, -1 }, { 1, -1 } };
 int8_t DIRT_PILE_SIZE_COUNTER = 15;
 
 char DOOR_PATH_PREFIX[] = "\\DOOR\\DOOR";
@@ -75,7 +75,7 @@ VECTOR DIRT_PILE_LOCATION = { 2037, 0, 849, 0 };
 char DIRT_PILE_TMD[] = "\\ETCNA\\T_YAMA.TMD";
 char CHEST_TMD[16] = "\\ETCNA\\TAKA.TMD";
 char WARP_CRYSTAL_TMD[16] = "\\ETCNA\\WARP.TMD";
-VECTOR BOULDER_SCALE = { 4096, 4096, 4096, 0 };
+VECTOR BOULDER_DEFAULT_SCALE = { 4096, 4096, 4096, 0 };
 char BOULDER_TMD[] = "\\ETCNA\\IWA.TMD";
 char BOULDER_TIM[16] = "\\ETCNA\\IWA1.TIM";
 char MEDAL_TMD[] = "\\ETCNA\\MEDAL.TMD";
@@ -85,9 +85,9 @@ char BIG_BOX_TMD[] = "\\ETCNA\\BIGBOX.TMD";
 char SMALL_BOX_TMD[] = "\\ETCNA\\SMABOX.TMD";
 VECTOR GEARBOX_LOCATION = { -100, 0, 1700, 0 };
 char GEARBOX_TMD[16] = "\\ETCNA\\GAND.TMD";
-VECTOR ANGEMON_PEDESTAL_LOCATION = { 0, 0, 1500, 0 };
+VECTOR ANGEMON_PEDESTAL_POS = { 0, 0, 1500, 0 };
 char ANGEMON_PEDESTAL_TMD[16] = "\\ETCNA\\ABOX.TMD";
-VECTOR TRAINING_POOP_LOCATION = { 1922, 0, 503, 0 };
+VECTOR TRAINING_POOP_TRANSLATION = { 1922, 0, 503, 0 };
 char TRAINING_POOP_TMD[] = "\\ETCNA\\TRY.TMD";
 VECTOR DOOR_SCALE = { 4096, 4096, 4096, 0 };
 VECTOR CHEST_SCALE = { 4096, 4096, 4096, 0 };
@@ -98,8 +98,8 @@ Chest CHEST_ARRAY[NUM_CHESTS];
 GsCOORDINATE2 DOOR_COORDS[4];
 char GENERAL_MESH_BUFFER[4][0x800];
 GsDOBJ2 DOOR_OBJECTS[4];
-Map3DObject MAP_3D_OBJECTS[NUM_MAP_3D_OBJECTS];
-GsDOBJ2 GENERAL_OBJECT[2];
+Map3DObject MAP_3D_OBJ[NUM_MAP_3D_OBJECTS];
+GsDOBJ2 GENERAL_OBJECTS[2];
 GsCOORDINATE2 GENERAL_COORDS[2];
 GsDOBJ2 GENERAL_OBJECT3;
 GsCOORDINATE2 GENERAL_COORDS3;
@@ -107,9 +107,9 @@ uint8_t CHEST_MESH_BUFFER[0x800];
 GsCOORDINATE2 CHEST_COORDS[2];
 GsDOBJ2 CHEST_OBJECTS[2];
 GsCOORDINATE2 WARP_CRYSTAL_COORDS[2];
-GsDOBJ2 WARP_CRYSTAL_OBJECT[2];
+GsDOBJ2 WARP_CRYSTAL_OBJECTS[2];
 WarpCrystalData WARP_CRYSTAL_DATA[5];
-char MEDAL_MESH_BUFFER[0x800];
+char MEDAL_MESH[0x800];
 GsDOBJ2 MEDAL_OBJECT;
 GsCOORDINATE2 MEDAL_COORDINATES;
 
@@ -185,22 +185,22 @@ static void *map_object_text_order[] = {
 static void *map_object_sbss_order[] = {
 	&ANGEMON_PEDESTAL_PROGRESS_Z,
 	&ANGEMON_PEDESTAL_PROGRESS_X,
-	&MAIN_D_80134E4A,
+	&UNUSED_GEARBOX_VALUE,
 	&TOY_TOWN_SELECTED_BOX,
-	&TOY_TOWN_BOX_LID_PROGRESS,
+	&BOX_LID_PROGRESS,
 	&map_object_unused_e42,
 	&ACTIVE_DIRT_CART_MODEL,
-	&DOOR_ROTATION_TIMER,
-	DOOR_MODEL_IDS,
-	&DOORS_DISABLED,
+	&MAP_OBJ_ROTATE_TIMER,
+	LOADED_DOOR_MODELS,
+	&IS_DOORS_DISABLED,
 };
 
 static void *map_object_bss_order[] = {
 	&MEDAL_COORDINATES,
 	&MEDAL_OBJECT,
-	MEDAL_MESH_BUFFER,
+	MEDAL_MESH,
 	WARP_CRYSTAL_DATA,
-	WARP_CRYSTAL_OBJECT,
+	WARP_CRYSTAL_OBJECTS,
 	&WARP_CRYSTAL_COORDS,
 	CHEST_OBJECTS,
 	CHEST_COORDS,
@@ -208,8 +208,8 @@ static void *map_object_bss_order[] = {
 	&GENERAL_COORDS3,
 	&GENERAL_OBJECT3,
 	GENERAL_COORDS,
-	GENERAL_OBJECT,
-	MAP_3D_OBJECTS,
+	GENERAL_OBJECTS,
+	MAP_3D_OBJ,
 #if defined(VERSION_JP)
 	DOOR_COORDS,
 	DOOR_OBJECTS,
@@ -258,20 +258,20 @@ void loadDoors(int16_t doorEntryId)
 	int32_t slot;
 	char *dst;
 
-	if (DOORS_DISABLED == 1) {
+	if (IS_DOORS_DISABLED == 1) {
 		return;
 	}
 
 	for (slot = 0; slot < 4; slot++) {
-		DOOR_MODEL_IDS[slot] = -1;
+		LOADED_DOOR_MODELS[slot] = -1;
 	}
 	for (i = 0; i < NUM_MAP_3D_OBJECTS; i++) {
 		for (slot = 0; slot < 4; slot++) {
-			if (DOOR_MODEL_IDS[slot] == -1) {
-				DOOR_MODEL_IDS[slot] = DOOR_MAPDATA[doorEntryId].modelId[i];
+			if (LOADED_DOOR_MODELS[slot] == -1) {
+				LOADED_DOOR_MODELS[slot] = DOOR_MAPDATA[doorEntryId].modelId[i];
 				break;
 			}
-			if (DOOR_MODEL_IDS[slot] == DOOR_MAPDATA[doorEntryId].modelId[i]) {
+			if (LOADED_DOOR_MODELS[slot] == DOOR_MAPDATA[doorEntryId].modelId[i]) {
 				break;
 			}
 		}
@@ -279,15 +279,15 @@ void loadDoors(int16_t doorEntryId)
 	pathPrefix = pathSrc;
 	extension = extensionSrc;
 	for (slot = 0; slot < 4; slot++) {
-		if (DOOR_MODEL_IDS[slot] != -1) {
+		if (LOADED_DOOR_MODELS[slot] != -1) {
 			pathSrc = pathPrefix;
 			extensionSrc = extension;
 			dst = path;
 			while (*pathSrc != '\0') {
 				*dst++ = *pathSrc++;
 			}
-			*dst++ = digits[DOOR_MODEL_IDS[slot] / 10];
-			*dst++ = digits[DOOR_MODEL_IDS[slot] % 10];
+			*dst++ = digits[LOADED_DOOR_MODELS[slot] / 10];
+			*dst++ = digits[LOADED_DOOR_MODELS[slot] % 10];
 			while (*extensionSrc != '\0') {
 				*dst++ = *extensionSrc++;
 			}
@@ -297,17 +297,17 @@ void loadDoors(int16_t doorEntryId)
 	}
 
 	for (slot = 0; slot < NUM_MAP_3D_OBJECTS; slot++) {
-		MAP_3D_OBJECTS[slot].modelId = DOOR_MAPDATA[doorEntryId].modelId[slot];
-		MAP_3D_OBJECTS[slot].translation.vx = DOOR_MAPDATA[doorEntryId].posX[slot];
-		MAP_3D_OBJECTS[slot].translation.vy = DOOR_MAPDATA[doorEntryId].posY[slot];
-		MAP_3D_OBJECTS[slot].translation.vz = DOOR_MAPDATA[doorEntryId].posZ[slot];
-		MAP_3D_OBJECTS[slot].rotation.vx = 0;
-		MAP_3D_OBJECTS[slot].rotation.vy = DOOR_MAPDATA[doorEntryId].rotation[slot];
-		MAP_3D_OBJECTS[slot].rotation.vz = 0;
-		MAP_3D_OBJECTS[slot].direction = DOOR_MAPDATA[doorEntryId].rotation[slot];
+		MAP_3D_OBJ[slot].modelId = DOOR_MAPDATA[doorEntryId].modelId[slot];
+		MAP_3D_OBJ[slot].translation.vx = DOOR_MAPDATA[doorEntryId].posX[slot];
+		MAP_3D_OBJ[slot].translation.vy = DOOR_MAPDATA[doorEntryId].posY[slot];
+		MAP_3D_OBJ[slot].translation.vz = DOOR_MAPDATA[doorEntryId].posZ[slot];
+		MAP_3D_OBJ[slot].rotation.vx = 0;
+		MAP_3D_OBJ[slot].rotation.vy = DOOR_MAPDATA[doorEntryId].rotation[slot];
+		MAP_3D_OBJ[slot].rotation.vz = 0;
+		MAP_3D_OBJ[slot].direction = DOOR_MAPDATA[doorEntryId].rotation[slot];
 	}
 
-	DOOR_ROTATION_TIMER = 0;
+	MAP_OBJ_ROTATE_TIMER = 0;
 	addObject(0xfa9, 0, NULL, renderDoors);
 }
 
@@ -325,29 +325,29 @@ void renderDoors(int32_t instanceId)
 	}
 
 	for (i = 0; i < NUM_MAP_3D_OBJECTS; i++) {
-		if (MAP_3D_OBJECTS[i].modelId == -1) {
+		if (MAP_3D_OBJ[i].modelId == -1) {
 			continue;
 		}
 
 		for (slot = 0; slot < 4; slot++) {
-			if (DOOR_MODEL_IDS[slot] == MAP_3D_OBJECTS[i].modelId) {
+			if (LOADED_DOOR_MODELS[slot] == MAP_3D_OBJ[i].modelId) {
 				break;
 			}
 		}
 
-		if (isBoxOffScreen(&MAP_3D_OBJECTS[i].translation,
+		if (isBoxOffScreen(&MAP_3D_OBJ[i].translation,
 				   700, 800) == 1) {
 			continue;
 		}
 
 		projectPosition(&DOOR_COORDS[slot],
-				&MAP_3D_OBJECTS[i].translation,
-				&MAP_3D_OBJECTS[i].rotation, &scale);
+				&MAP_3D_OBJ[i].translation,
+				&MAP_3D_OBJ[i].rotation, &scale);
 		drawObject(&DOOR_OBJECTS[slot],
 			   GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
 
-		if (MAP_3D_OBJECTS[i].modelId == 10) {
-			doorCopy = MAP_3D_OBJECTS[i];
+		if (MAP_3D_OBJ[i].modelId == 10) {
+			doorCopy = MAP_3D_OBJ[i];
 			doorCopy.translation.vz -=
 				((doorCopy.rotation.vy < 0) ? 1 : -1) * 680;
 			doorCopy.rotation.vy *= -1;
@@ -363,9 +363,9 @@ void renderDoors(int32_t instanceId)
 void loadDirtCartModel(void)
 {
 	loadStaticTMD(DIRT_CART_TMD, GENERAL_MESH_BUFFER[0],
-		      &GENERAL_OBJECT[0], &GENERAL_COORDS[0]);
+		      &GENERAL_OBJECTS[0], &GENERAL_COORDS[0]);
 	loadStaticTMD(DIRT_CART_BOX_TMD, GENERAL_MESH_BUFFER[1],
-		      &GENERAL_OBJECT[1], &GENERAL_COORDS[1]);
+		      &GENERAL_OBJECTS[1], &GENERAL_COORDS[1]);
 
 	ACTIVE_DIRT_CART_MODEL = 2;
 
@@ -454,9 +454,9 @@ void loadWarpCrystals(int32_t mapId)
 
 	for (i = 0; i < 2; i++) {
 		GsLinkObject4((unsigned long)&buf[12],
-			      &WARP_CRYSTAL_OBJECT[i], i);
-		WARP_CRYSTAL_OBJECT[i].attribute = 0;
-		WARP_CRYSTAL_OBJECT[i].coord2 = &WARP_CRYSTAL_COORDS[i];
+			      &WARP_CRYSTAL_OBJECTS[i], i);
+		WARP_CRYSTAL_OBJECTS[i].attribute = 0;
+		WARP_CRYSTAL_OBJECTS[i].coord2 = &WARP_CRYSTAL_COORDS[i];
 	}
 
 	addObject(0xfb7, 0, NULL, renderWarpCrystals);
@@ -516,7 +516,7 @@ void renderWarpCrystals(int32_t instanceId)
 					&(&WARP_CRYSTAL_DATA[crystalIdx].pos1)[i],
 					&(&WARP_CRYSTAL_DATA[crystalIdx].rotation1)[i],
 					&scale);
-			drawObject(&WARP_CRYSTAL_OBJECT[i],
+			drawObject(&WARP_CRYSTAL_OBJECTS[i],
 				   GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
 		}
 	}
@@ -557,21 +557,21 @@ void spawnBoulder(void)
 {
 	VECTOR scale;
 
-	scale = BOULDER_SCALE;
+	scale = BOULDER_DEFAULT_SCALE;
 
 	loadStaticTMD(BOULDER_TMD, GENERAL_MESH_BUFFER[0], &GENERAL_OBJECT3,
 		      &GENERAL_COORDS3);
 	loadTextureFile(BOULDER_TIM, NULL, NULL);
 
-	MAP_3D_OBJECTS[0].translation.vx = -300;
-	MAP_3D_OBJECTS[0].translation.vy = -500;
-	MAP_3D_OBJECTS[0].translation.vz = 2000;
-	MAP_3D_OBJECTS[0].rotation.vx = 0;
-	MAP_3D_OBJECTS[0].rotation.vy = 0;
-	MAP_3D_OBJECTS[0].rotation.vz = 0;
+	MAP_3D_OBJ[0].translation.vx = -300;
+	MAP_3D_OBJ[0].translation.vy = -500;
+	MAP_3D_OBJ[0].translation.vz = 2000;
+	MAP_3D_OBJ[0].rotation.vx = 0;
+	MAP_3D_OBJ[0].rotation.vy = 0;
+	MAP_3D_OBJ[0].rotation.vz = 0;
 
-	projectPosition(&GENERAL_COORDS3, &MAP_3D_OBJECTS[0].translation,
-			&MAP_3D_OBJECTS[0].rotation, &scale);
+	projectPosition(&GENERAL_COORDS3, &MAP_3D_OBJ[0].translation,
+			&MAP_3D_OBJ[0].rotation, &scale);
 
 	addObject(0xfb6, 0, NULL, renderBoulder);
 }
@@ -595,7 +595,7 @@ void renderBoulder(int32_t instanceId)
 
 void initializeMedalModel(void)
 {
-	loadStaticTMD(MEDAL_TMD, MEDAL_MESH_BUFFER, &MEDAL_OBJECT,
+	loadStaticTMD(MEDAL_TMD, MEDAL_MESH, &MEDAL_OBJECT,
 		      &MEDAL_COORDINATES);
 }
 
@@ -625,21 +625,21 @@ void spawnToyTownBoxes(void)
 	i = 0;
 	while (i < 2) {
 		GsLinkObject4((unsigned long)(bigMeshData + 3),
-			      &WARP_CRYSTAL_OBJECT[i], i);
-		WARP_CRYSTAL_OBJECT[i].attribute = 0;
-		WARP_CRYSTAL_OBJECT[i].coord2 = &WARP_CRYSTAL_COORDS[i];
+			      &WARP_CRYSTAL_OBJECTS[i], i);
+		WARP_CRYSTAL_OBJECTS[i].attribute = 0;
+		WARP_CRYSTAL_OBJECTS[i].coord2 = &WARP_CRYSTAL_COORDS[i];
 
 		GsLinkObject4((unsigned long)(smallMeshData + 3),
-			      &GENERAL_OBJECT[i], i);
-		GENERAL_OBJECT[i].attribute = 0;
-		GENERAL_OBJECT[i].coord2 = &GENERAL_COORDS[i];
+			      &GENERAL_OBJECTS[i], i);
+		GENERAL_OBJECTS[i].attribute = 0;
+		GENERAL_OBJECTS[i].coord2 = &GENERAL_COORDS[i];
 		i++;
 	}
 	TransMatrix(&WARP_CRYSTAL_COORDS[0].coord, &bigBoxLocation);
 	WARP_CRYSTAL_COORDS[0].flg = 0;
 	TransMatrix(&GENERAL_COORDS[0].coord, &smallBoxLocation);
 	GENERAL_COORDS[0].flg = 0;
-	TOY_TOWN_BOX_LID_PROGRESS.big = TOY_TOWN_BOX_LID_PROGRESS.small = 0;
+	BOX_LID_PROGRESS.big = BOX_LID_PROGRESS.small = 0;
 	TOY_TOWN_SELECTED_BOX = 0;
 
 	addObject(0xfbd, 0, NULL, renderToyTownBoxes);
@@ -652,12 +652,12 @@ void renderToyTownBoxes(int32_t instanceId)
 
 	if (MAP_LAYER_ENABLED) {
 		if (TOY_TOWN_SELECTED_BOX == 1) {
-			TOY_TOWN_BOX_LID_PROGRESS.big -= 100;
-			if (TOY_TOWN_BOX_LID_PROGRESS.big < -0x400) {
-				TOY_TOWN_BOX_LID_PROGRESS.big = -0x400;
+			BOX_LID_PROGRESS.big -= 100;
+			if (BOX_LID_PROGRESS.big < -0x400) {
+				BOX_LID_PROGRESS.big = -0x400;
 			}
 
-			rot.vx = TOY_TOWN_BOX_LID_PROGRESS.big;
+			rot.vx = BOX_LID_PROGRESS.big;
 			rot.vy = 0;
 			rot.vz = 0;
 			RotMatrix(&rot, &WARP_CRYSTAL_COORDS[1].coord);
@@ -665,12 +665,12 @@ void renderToyTownBoxes(int32_t instanceId)
 		}
 
 		if (TOY_TOWN_SELECTED_BOX == 2) {
-			TOY_TOWN_BOX_LID_PROGRESS.small -= 100;
-			if (TOY_TOWN_BOX_LID_PROGRESS.small < -0x400) {
-				TOY_TOWN_BOX_LID_PROGRESS.small = -0x400;
+			BOX_LID_PROGRESS.small -= 100;
+			if (BOX_LID_PROGRESS.small < -0x400) {
+				BOX_LID_PROGRESS.small = -0x400;
 			}
 
-			rot.vx = TOY_TOWN_BOX_LID_PROGRESS.small;
+			rot.vx = BOX_LID_PROGRESS.small;
 			rot.vy = 0;
 			rot.vz = 0;
 			RotMatrix(&rot, &GENERAL_COORDS[1].coord);
@@ -678,9 +678,9 @@ void renderToyTownBoxes(int32_t instanceId)
 		}
 
 		for (i = 0; i < 2; ++i) {
-			drawObject(&WARP_CRYSTAL_OBJECT[i],
+			drawObject(&WARP_CRYSTAL_OBJECTS[i],
 				   GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
-			drawObject(&GENERAL_OBJECT[i],
+			drawObject(&GENERAL_OBJECTS[i],
 				   GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
 		}
 	}
@@ -699,7 +699,7 @@ void spawnGearbox(void)
 	TransMatrix(&GENERAL_COORDS3.coord, &translation);
 	GENERAL_COORDS3.flg = 0;
 
-	MAIN_D_80134E4A = 0x294;
+	UNUSED_GEARBOX_VALUE = 0x294;
 
 	addObject(0xfbc, 0, NULL, renderGearbox);
 }
@@ -716,7 +716,7 @@ void spawnAngemonPedestal(void)
 {
 	VECTOR translation;
 
-	translation = ANGEMON_PEDESTAL_LOCATION;
+	translation = ANGEMON_PEDESTAL_POS;
 
 	loadStaticTMD(ANGEMON_PEDESTAL_TMD, GENERAL_MESH_BUFFER[0],
 		      &GENERAL_OBJECT3, &GENERAL_COORDS3);
@@ -752,7 +752,7 @@ void initializeTrainingPoop(void)
 	VECTOR scale;
 	SVECTOR rotation;
 
-	translation = TRAINING_POOP_LOCATION;
+	translation = TRAINING_POOP_TRANSLATION;
 	rotation = TRAINING_POOP_ROTATION;
 
 	loadStaticTMD(TRAINING_POOP_TMD, GENERAL_MESH_BUFFER[0],
@@ -871,15 +871,15 @@ void unloadMapParts(void)
 
 int32_t tickRotateDoor(int16_t instance, int8_t target)
 {
-	switch (MAP_3D_OBJECTS[instance].modelId) {
+	switch (MAP_3D_OBJ[instance].modelId) {
 	case 0:
-		++DOOR_ROTATION_TIMER;
-		if (DOOR_ROTATION_TIMER > 32) {
-			DOOR_ROTATION_TIMER = 0;
+		++MAP_OBJ_ROTATE_TIMER;
+		if (MAP_OBJ_ROTATE_TIMER > 32) {
+			MAP_OBJ_ROTATE_TIMER = 0;
 			return 1;
 		}
 
-		MAP_3D_OBJECTS[instance].rotation.vy -= target * 33;
+		MAP_3D_OBJ[instance].rotation.vy -= target * 33;
 
 		break;
 	case 9:
@@ -891,38 +891,38 @@ int32_t tickRotateDoor(int16_t instance, int8_t target)
 	case 0x11:
 	case 0x12:
 	case 0x13:
-		++DOOR_ROTATION_TIMER;
-		if (DOOR_ROTATION_TIMER > 32) {
-			DOOR_ROTATION_TIMER = 0;
-			MAP_3D_OBJECTS[instance].rotation.vy =
-				MAP_3D_OBJECTS[instance].direction;
+		++MAP_OBJ_ROTATE_TIMER;
+		if (MAP_OBJ_ROTATE_TIMER > 32) {
+			MAP_OBJ_ROTATE_TIMER = 0;
+			MAP_3D_OBJ[instance].rotation.vy =
+				MAP_3D_OBJ[instance].direction;
 			return 1;
 		}
 
-		MAP_3D_OBJECTS[instance].rotation.vy += target * 33;
+		MAP_3D_OBJ[instance].rotation.vy += target * 33;
 
 		break;
 	case 0xe:
 	case 0xf:
-		++DOOR_ROTATION_TIMER;
-		if (DOOR_ROTATION_TIMER > 32) {
-			DOOR_ROTATION_TIMER = 0;
+		++MAP_OBJ_ROTATE_TIMER;
+		if (MAP_OBJ_ROTATE_TIMER > 32) {
+			MAP_OBJ_ROTATE_TIMER = 0;
 			return 1;
 		}
 
-		MAP_3D_OBJECTS[instance].rotation.vy += target * 33;
+		MAP_3D_OBJ[instance].rotation.vy += target * 33;
 
 		break;
 	case 5:
 	case 0x1f:
 	case 0x20:
-		++DOOR_ROTATION_TIMER;
-		if (DOOR_ROTATION_TIMER > 9) {
-			DOOR_ROTATION_TIMER = 0;
+		++MAP_OBJ_ROTATE_TIMER;
+		if (MAP_OBJ_ROTATE_TIMER > 9) {
+			MAP_OBJ_ROTATE_TIMER = 0;
 			return 1;
 		}
 
-		MAP_3D_OBJECTS[instance].translation.vy -= target * 200;
+		MAP_3D_OBJ[instance].translation.vy -= target * 200;
 
 		break;
 	case 0x15:
@@ -930,16 +930,16 @@ int32_t tickRotateDoor(int16_t instance, int8_t target)
 	case 0x18:
 	case 0x1b:
 	case 0x1d:
-		++DOOR_ROTATION_TIMER;
-		if (DOOR_ROTATION_TIMER > 9) {
-			DOOR_ROTATION_TIMER = 0;
+		++MAP_OBJ_ROTATE_TIMER;
+		if (MAP_OBJ_ROTATE_TIMER > 9) {
+			MAP_OBJ_ROTATE_TIMER = 0;
 			return 1;
 		}
 
 		if (CURRENT_SCREEN == 0x81) {
-			MAP_3D_OBJECTS[instance].translation.vz += 30;
+			MAP_3D_OBJ[instance].translation.vz += 30;
 		} else {
-			MAP_3D_OBJECTS[instance].translation.vx += 30;
+			MAP_3D_OBJ[instance].translation.vx += 30;
 		}
 
 		break;
@@ -948,33 +948,33 @@ int32_t tickRotateDoor(int16_t instance, int8_t target)
 	case 0x19:
 	case 0x1c:
 	case 0x1e:
-		++DOOR_ROTATION_TIMER;
-		if (DOOR_ROTATION_TIMER > 9) {
-			DOOR_ROTATION_TIMER = 0;
+		++MAP_OBJ_ROTATE_TIMER;
+		if (MAP_OBJ_ROTATE_TIMER > 9) {
+			MAP_OBJ_ROTATE_TIMER = 0;
 			return 1;
 		}
 
 		if (CURRENT_SCREEN == 0x81) {
-			MAP_3D_OBJECTS[instance].translation.vz -= 0x1e;
+			MAP_3D_OBJ[instance].translation.vz -= 0x1e;
 		} else {
-			MAP_3D_OBJECTS[instance].translation.vx -= 0x1e;
+			MAP_3D_OBJ[instance].translation.vx -= 0x1e;
 		}
 
 		break;
 	case 0x1a:
-		++DOOR_ROTATION_TIMER;
+		++MAP_OBJ_ROTATE_TIMER;
 
-		MAP_3D_OBJECTS[instance].rotation.vx -= target * 110;
-		if (MAP_3D_OBJECTS[instance].rotation.vx < -0x400) {
-			MAP_3D_OBJECTS[instance].rotation.vx = -0x400;
+		MAP_3D_OBJ[instance].rotation.vx -= target * 110;
+		if (MAP_3D_OBJ[instance].rotation.vx < -0x400) {
+			MAP_3D_OBJ[instance].rotation.vx = -0x400;
 		}
 
-		if (MAP_3D_OBJECTS[instance].rotation.vx > 0) {
-			MAP_3D_OBJECTS[instance].rotation.vx = 0;
+		if (MAP_3D_OBJ[instance].rotation.vx > 0) {
+			MAP_3D_OBJ[instance].rotation.vx = 0;
 		}
 
-		if (DOOR_ROTATION_TIMER > 19) {
-			DOOR_ROTATION_TIMER = 0;
+		if (MAP_OBJ_ROTATE_TIMER > 19) {
+			MAP_OBJ_ROTATE_TIMER = 0;
 			return 1;
 		}
 	}
@@ -992,9 +992,9 @@ int32_t isBoxOffScreen(VECTOR *position, int16_t width, int16_t height)
 	GsSetLsMatrix(&GsWSMATRIX);
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 4; j++) {
-			corner.vx = position->vx + width * BOX_CORNER_OFFSETS[j][0];
+			corner.vx = position->vx + width * DIRECTION_FACTORS[j][0];
 			corner.vy = position->vy + i * -height;
-			corner.vz = position->vz + width * BOX_CORNER_OFFSETS[j][1];
+			corner.vz = position->vz + width * DIRECTION_FACTORS[j][1];
 			gte_ldv0(&corner);
 			gte_rtps();
 			gte_stsxy((long *)&screen);
@@ -1076,12 +1076,12 @@ void moveBoulder(diffX, diffZ)
 
 	scale = MOVE_BOULDER_SCALE;
 
-	MAP_3D_OBJECTS[0].translation.vy += diffX;
-	MAP_3D_OBJECTS[0].translation.vz += diffZ;
-	MAP_3D_OBJECTS[0].rotation.vx -= 10;
+	MAP_3D_OBJ[0].translation.vy += diffX;
+	MAP_3D_OBJ[0].translation.vz += diffZ;
+	MAP_3D_OBJ[0].rotation.vx -= 10;
 
-	projectPosition(&GENERAL_COORDS3, &MAP_3D_OBJECTS[0].translation,
-			&MAP_3D_OBJECTS[0].rotation, &scale);
+	projectPosition(&GENERAL_COORDS3, &MAP_3D_OBJ[0].translation,
+			&MAP_3D_OBJ[0].rotation, &scale);
 }
 
 // clang-format off
@@ -1206,6 +1206,6 @@ void renderDirtCartModel(int32_t instanceId)
 
 	GENERAL_COORDS[ACTIVE_DIRT_CART_MODEL].flg = 0;
 
-	drawObject(&GENERAL_OBJECT[ACTIVE_DIRT_CART_MODEL],
+	drawObject(&GENERAL_OBJECTS[ACTIVE_DIRT_CART_MODEL],
 		   GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER, 2);
 }

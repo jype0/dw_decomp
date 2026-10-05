@@ -36,8 +36,8 @@ static void *trn_slots_functions[] = {
 	TRN_tickSlotMachine,
 };
 
-RECT MAIN_D_80134BC8 = { -82, -87, 164, 90 };
-RECT MAIN_D_80134BD0 = { -8, -8, 16, 16 };
+RECT SLOTS_UI_START = { -82, -87, 164, 90 };
+RECT SLOTS_UI_END = { -8, -8, 16, 16 };
 RECT MAIN_D_80134BD8 = { -8, -8, 16, 16 };
 
 // clang-format off
@@ -392,7 +392,7 @@ void TRN_createSlotMachineBox(int32_t arg)
 
 	st = &TRN_SLOT_MACHINE;
 	id = 3;
-	startPos = MAIN_D_80134BD0;
+	startPos = SLOTS_UI_END;
 	st->result = -1;
 	st->payout = -1;
 	st->state = 0;
@@ -411,7 +411,7 @@ void TRN_createSlotMachineBox(int32_t arg)
 		startPos.y -= (int16_t)(0x7e - DRAWING_OFFSET_Y);
 	}
 
-	createAnimatedUIBox(id, 0, 2, &MAIN_D_80134BC8, &startPos, (TickFunction)TRN_tickSlotMachine, (RenderFunction)TRN_renderSlotMachine);
+	createAnimatedUIBox(id, 0, 2, &SLOTS_UI_START, &startPos, (TickFunction)TRN_tickSlotMachine, (RenderFunction)TRN_renderSlotMachine);
 }
 
 int32_t TRN_getSlotMachineResult(void)

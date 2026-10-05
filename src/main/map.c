@@ -203,7 +203,7 @@ extern int8_t CAMERA_MOVE_DELTA_X;
 extern int8_t CAMERA_MOVE_DELTA_Y;
 extern int16_t CAMERA_MOVE_DIFF_X;
 extern int16_t CAMERA_MOVE_DIFF_Y;
-extern int16_t CAMERA_MOVE_DRAW_OFFSET_X;
+extern int16_t CAMERA_DATA;
 extern int16_t CAMERA_MOVE_DRAW_OFFSET_Y;
 extern int16_t CAMERA_MOVE_FINAL_X;
 extern int16_t CAMERA_MOVE_FINAL_Y;
@@ -214,8 +214,8 @@ extern int16_t CAMERA_X[];
 extern int16_t CAMERA_X_PREVIOUS;
 extern int16_t CAMERA_Y[];
 extern int16_t CAMERA_Y_PREVIOUS;
-extern int32_t COMBAT_AREA_CENTER_X;
-extern int32_t COMBAT_AREA_CENTER_Y;
+extern int32_t COMBAT_AREA_X;
+extern int32_t COMBAT_AREA_Y;
 extern uint8_t CURRENT_EXIT;
 extern uint16_t CURRENT_FRAME;
 extern uint8_t CURRENT_SCREEN;
@@ -242,19 +242,19 @@ extern int16_t HOUR;
 extern int32_t IS_SCRIPT_PAUSED;
 extern GsF_LIGHT LIGHT_DATA[];
 extern int32_t LOADED_DIGIMON_MODELS[];
-extern int16_t MAIN_D_80134DFC;
+extern int16_t DOOA_STORED_DIGIMON_Y;
 extern u_long *MAP_CLUTS[];
 extern int8_t MAP_COLLISION_DATA[];
 extern int8_t MAP_HEIGHT[];
-extern GsF_LIGHT MAP_LIGHT[];
+extern GsF_LIGHT MAP_LIGHTS[];
 extern int8_t MAP_TILES[];
 extern MapTiles MAP_TILE_DATA;
 extern int8_t MAP_TILE_X;
 extern int8_t MAP_TILE_Y;
 extern int8_t MAP_WIDTH[];
-extern int32_t MERAMON_SHAKE_BACKUP_OFFSET_X;
+extern int32_t MERAMON_SHAKE_DATA;
 extern int32_t MERAMON_SHAKE_BACKUP_OFFSET_Y;
-extern uint8_t MERAMON_SHAKE_COLOR_R;
+extern uint8_t MERAMON_SHAKE_RED;
 extern uint8_t MERAMON_SHAKE_FRAME_COUNT;
 extern int16_t MERAMON_SHAKE_HEIGHT;
 extern int16_t MERAMON_SHAKE_POS_X;
@@ -394,7 +394,7 @@ static void *map_functions[] = {
 	isTileOffScreen,
 };
 // clang-format off
-int8_t COMBAT_AREA_CORNER_OFFSETS[8] = {
+int8_t QUADRANTS[8] = {
 	0xff, 0x01, 0x01, 0x01, 0xff, 0xff, 0x01, 0xff,
 };
 
@@ -691,17 +691,17 @@ int8_t MAP_FILE_EXT_TFS[] = ".TFS";
 
 char MAP_PATH_SEPARATOR[] = "\\";
 
-int16_t MAIN_D_801343B0 = 0xffff;
+int16_t DEATH_MAP = 0xffff;
 
-int16_t MAIN_D_801343B2 = 0xffff;
+int16_t DEATH_MAP_EXIT = 0xffff;
 
 int8_t MAIN_D_801343B4 = 0x01;
 
-uint8_t MERAMON_SHAKE_COLOR_G = 0xff;
+uint8_t MERAMON_SHAKE_GREEN = 0xff;
 
-uint8_t MERAMON_SHAKE_COLOR_B = 0xff;
+uint8_t MERAMON_SHAKE_BLUE = 0xff;
 
-int16_t MERAMON_SHAKE_STEP = 0x0020;
+int16_t MERAMON_SHAKE_OFFSET = 0x0020;
 
 char MAP_PATH_PREFIX[] = "\\MAP\\MAP";
 
@@ -3262,7 +3262,7 @@ SVECTOR CONDITION_FX_OFFSETS[177] = {
 	{ 0x0000, 0x0000, 0x0000, 0x0000 },
 };
 
-int16_t ORIGINAL_TYPE[180] = {
+int16_t ORIGINAL_DIGIMON_TYPES[180] = {
 	0x0000, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
 	0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
 	0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
@@ -3427,17 +3427,17 @@ int32_t entityCheckCombatArea(Entity *entity, VECTOR *target, int32_t w,
 
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 4; j++) {
-			corner.vx = loc->vx + radius * COMBAT_AREA_CORNER_OFFSETS[i * 2];
+			corner.vx = loc->vx + radius * QUADRANTS[i * 2];
 			corner.vy = loc->vy + (i * -200);
-			corner.vz = loc->vz + radius * (&COMBAT_AREA_CORNER_OFFSETS[1])[i * 2];
+			corner.vz = loc->vz + radius * (&QUADRANTS[1])[i * 2];
 
 			gte_ldv0(&corner);
 			gte_rtps();
 			gte_stsxy((long *)&screen1);
 
-			corner.vx = target->vx + radius * COMBAT_AREA_CORNER_OFFSETS[i * 2];
+			corner.vx = target->vx + radius * QUADRANTS[i * 2];
 			corner.vy = target->vy + (i * -200);
-			corner.vz = target->vz + radius * (&COMBAT_AREA_CORNER_OFFSETS[1])[i * 2];
+			corner.vz = target->vz + radius * (&QUADRANTS[1])[i * 2];
 
 			gte_ldv0(&corner);
 			gte_rtps();
@@ -3455,19 +3455,19 @@ int32_t entityCheckCombatArea(Entity *entity, VECTOR *target, int32_t w,
 int32_t hasMovedOutsideCombatArea(DVECTOR *previousv, DVECTOR *currentv,
 				  int16_t width, int16_t height)
 {
-	if (((currentv->vx - COMBAT_AREA_CENTER_X) < (-width / 2)) &&
+	if (((currentv->vx - COMBAT_AREA_X) < (-width / 2)) &&
 	    (currentv->vx < previousv->vx)) {
 		return 1;
 	}
-	if (((currentv->vx - COMBAT_AREA_CENTER_X) > (width / 2)) &&
+	if (((currentv->vx - COMBAT_AREA_X) > (width / 2)) &&
 	    (currentv->vx > previousv->vx)) {
 		return 1;
 	}
-	if (((currentv->vy - COMBAT_AREA_CENTER_Y) < (-height / 2)) &&
+	if (((currentv->vy - COMBAT_AREA_Y) < (-height / 2)) &&
 	    (currentv->vy < previousv->vy)) {
 		return 1;
 	}
-	if (((currentv->vy - COMBAT_AREA_CENTER_Y) > (height / 2)) &&
+	if (((currentv->vy - COMBAT_AREA_Y) > (height / 2)) &&
 	    (currentv->vy > previousv->vy)) {
 		return 1;
 	}
@@ -4253,9 +4253,9 @@ int32_t entityIsOffScreen(Entity *entity, int32_t width, int32_t height)
 
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 4; j++) {
-			corner.vx = loc->vx + radius * COMBAT_AREA_CORNER_OFFSETS[j * 2];
+			corner.vx = loc->vx + radius * QUADRANTS[j * 2];
 			corner.vy = loc->vy + i * -DIGIMON_DATA[entity->type].height;
-			corner.vz = loc->vz + radius * (&COMBAT_AREA_CORNER_OFFSETS[1])[j * 2];
+			corner.vz = loc->vz + radius * (&QUADRANTS[1])[j * 2];
 			gte_ldv0(&corner);
 			gte_rtps();
 			gte_stsxy((long *)&screen);
@@ -4563,7 +4563,7 @@ int32_t loadMapSetup(int32_t *data)
 		LIGHT_DATA[i].g = *data++;
 		LIGHT_DATA[i].b = *data++;
 		GsSetFlatLight(i, &LIGHT_DATA[i]);
-		MAP_LIGHT[i] = LIGHT_DATA[i];
+		MAP_LIGHTS[i] = LIGHT_DATA[i];
 	}
 
 	ambientR = *data++;
@@ -4726,9 +4726,9 @@ void updateTimeOfDay(void)
 		}
 
 		for (i = 0; i < 3; i++) {
-			LIGHT_DATA[i].r = (red * MAP_LIGHT[i].r) / 10;
-			LIGHT_DATA[i].g = (green * MAP_LIGHT[i].g) / 10;
-			LIGHT_DATA[i].b = (green * MAP_LIGHT[i].b) / 10;
+			LIGHT_DATA[i].r = (red * MAP_LIGHTS[i].r) / 10;
+			LIGHT_DATA[i].g = (green * MAP_LIGHTS[i].g) / 10;
+			LIGHT_DATA[i].b = (green * MAP_LIGHTS[i].b) / 10;
 			GsSetFlatLight(i, &LIGHT_DATA[i]);
 		}
 	}
@@ -4960,14 +4960,14 @@ void tickDaytimeTransition(transition)
 
 			for (i = 0; i < 3; i++) {
 				if (transition == 0) {
-					LIGHT_DATA[i].g = MAP_LIGHT[i].g * 7 / 10;
-					LIGHT_DATA[i].b = MAP_LIGHT[i].b * 7 / 10;
+					LIGHT_DATA[i].g = MAP_LIGHTS[i].g * 7 / 10;
+					LIGHT_DATA[i].b = MAP_LIGHTS[i].b * 7 / 10;
 				} else if (transition == 1) {
-					LIGHT_DATA[i].r = MAP_LIGHT[i].r / 2;
-					LIGHT_DATA[i].g = MAP_LIGHT[i].g / 2;
-					LIGHT_DATA[i].b = MAP_LIGHT[i].b / 2;
+					LIGHT_DATA[i].r = MAP_LIGHTS[i].r / 2;
+					LIGHT_DATA[i].g = MAP_LIGHTS[i].g / 2;
+					LIGHT_DATA[i].b = MAP_LIGHTS[i].b / 2;
 				} else {
-					LIGHT_DATA[i] = MAP_LIGHT[i];
+					LIGHT_DATA[i] = MAP_LIGHTS[i];
 				}
 
 				GsSetFlatLight(i, &LIGHT_DATA[i]);
@@ -5286,7 +5286,7 @@ void tickCameraMovement(instanceId)
 		gte_ldv0(&view);
 		gte_rtps();
 		gte_stsxy((long *)&screenView);
-		CAMERA_MOVE_DRAW_OFFSET_X = DRAWING_OFFSET_X;
+		CAMERA_DATA = DRAWING_OFFSET_X;
 		CAMERA_MOVE_DRAW_OFFSET_Y = DRAWING_OFFSET_Y;
 		CAMERA_MOVE_DIFF_X = (screenView.vx - screenTarget.vx) + 160;
 		CAMERA_MOVE_DIFF_Y = (screenView.vy - screenTarget.vy) + 120;
@@ -5309,9 +5309,9 @@ void tickCameraMovement(instanceId)
 			CAMERA_MOVE_DIFF_Y = DRAW_OFFSET_LIMIT_Y_MAX;
 		}
 
-		CAMERA_MOVE_FINAL_X = CAMERA_X[0] + (CAMERA_MOVE_DRAW_OFFSET_X - CAMERA_MOVE_DIFF_X);
+		CAMERA_MOVE_FINAL_X = CAMERA_X[0] + (CAMERA_DATA - CAMERA_MOVE_DIFF_X);
 		CAMERA_MOVE_FINAL_Y = CAMERA_Y[0] + (CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y);
-		CAMERA_MOVE_DELTA_X = (CAMERA_MOVE_DIFF_X - CAMERA_MOVE_DRAW_OFFSET_X) % instanceId;
+		CAMERA_MOVE_DELTA_X = (CAMERA_MOVE_DIFF_X - CAMERA_DATA) % instanceId;
 		CAMERA_MOVE_DELTA_Y = (CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) % instanceId;
 
 #if defined(VERSION_JP)
@@ -5338,9 +5338,9 @@ void tickCameraMovement(instanceId)
 		CAMERA_HAS_TARGET = 1;
 	}
 
-	qx = (CAMERA_MOVE_DRAW_OFFSET_X - CAMERA_MOVE_DIFF_X) / instanceId;
+	qx = (CAMERA_DATA - CAMERA_MOVE_DIFF_X) / instanceId;
 	qy = (CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y) / instanceId;
-	stepX = (CAMERA_MOVE_DIFF_X - CAMERA_MOVE_DRAW_OFFSET_X) / instanceId;
+	stepX = (CAMERA_MOVE_DIFF_X - CAMERA_DATA) / instanceId;
 	stepY = (CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) / instanceId;
 	oldCameraX = CAMERA_X[0];
 	oldCameraY = CAMERA_Y[0];
@@ -5350,13 +5350,13 @@ void tickCameraMovement(instanceId)
 	DRAWING_OFFSET_Y += stepY;
 
 	if (CAMERA_MOVE_DELTA_X >= 0) {
-		if ((CAMERA_MOVE_DRAW_OFFSET_X - CAMERA_MOVE_DIFF_X) > 0) {
+		if ((CAMERA_DATA - CAMERA_MOVE_DIFF_X) > 0) {
 			CAMERA_X[0]++;
 		} else {
 			CAMERA_X[0]--;
 		}
 
-		if ((CAMERA_MOVE_DIFF_X - CAMERA_MOVE_DRAW_OFFSET_X) > 0) {
+		if ((CAMERA_MOVE_DIFF_X - CAMERA_DATA) > 0) {
 			DRAWING_OFFSET_X++;
 		} else {
 			DRAWING_OFFSET_X--;
@@ -5384,7 +5384,7 @@ void tickCameraMovement(instanceId)
 	cameraIsAtEdge(&atEdgeX, &atEdgeY);
 
 	if (atEdgeX == 1) {
-		if ((CAMERA_MOVE_DIFF_X - CAMERA_MOVE_DRAW_OFFSET_X) < 0) {
+		if ((CAMERA_MOVE_DIFF_X - CAMERA_DATA) < 0) {
 			if (DRAWING_OFFSET_X < CAMERA_MOVE_DIFF_X) {
 				DRAWING_OFFSET_X = CAMERA_MOVE_DIFF_X;
 			}
@@ -5393,7 +5393,7 @@ void tickCameraMovement(instanceId)
 				DRAWING_OFFSET_X = CAMERA_MOVE_DIFF_X;
 			}
 
-			if (CAMERA_MOVE_DRAW_OFFSET_X == CAMERA_MOVE_DIFF_X) {
+			if (CAMERA_DATA == CAMERA_MOVE_DIFF_X) {
 				DRAWING_OFFSET_X = CAMERA_MOVE_DIFF_X;
 			}
 		}
@@ -5437,12 +5437,12 @@ void tickCameraMovement(instanceId)
 		flags |= 0x1000;
 	}
 
-	if ((((CAMERA_MOVE_DRAW_OFFSET_X - CAMERA_MOVE_DIFF_X) / instanceId) >= 0x50) ||
+	if ((((CAMERA_DATA - CAMERA_MOVE_DIFF_X) / instanceId) >= 0x50) ||
 	    (((CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y) / instanceId) >= 0x50)) {
 		handleTileUpdate(flags, 1);
 	}
 
-	if ((((CAMERA_MOVE_DRAW_OFFSET_X - CAMERA_MOVE_DIFF_X) / instanceId) < 0x50) ||
+	if ((((CAMERA_DATA - CAMERA_MOVE_DIFF_X) / instanceId) < 0x50) ||
 	    (((CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y) / instanceId) < 0x50)) {
 		handleTileUpdate(flags, 0);
 	}
@@ -5814,8 +5814,8 @@ void changeMap(int16_t mapId, int16_t exitId)
 
 void setDeathMap(int16_t a, int16_t b)
 {
-	MAIN_D_801343B0 = a;
-	MAIN_D_801343B2 = b;
+	DEATH_MAP = a;
+	DEATH_MAP_EXIT = b;
 	MAIN_D_801343B4 = 0;
 }
 
@@ -5834,7 +5834,7 @@ int32_t waitForDeathMapLoading(int32_t flag)
 
 void changeToDeathMap(void)
 {
-	changeMap(MAIN_D_801343B0, MAIN_D_801343B2);
+	changeMap(DEATH_MAP, DEATH_MAP_EXIT);
 }
 
 // clang-format off
@@ -5884,7 +5884,7 @@ void loadTrainingLibrary(int32_t mapId)
 void createMeramonShake(void)
 {
 	MERAMON_SHAKE_FRAME_COUNT = 0;
-	MERAMON_SHAKE_BACKUP_OFFSET_X = DRAWING_OFFSET_X;
+	MERAMON_SHAKE_DATA = DRAWING_OFFSET_X;
 	MERAMON_SHAKE_BACKUP_OFFSET_Y = DRAWING_OFFSET_Y;
 	MERAMON_SHAKE_POS_X = MERAMON_SHAKE_POS_Y = MERAMON_SHAKE_WIDTH =
 		MERAMON_SHAKE_HEIGHT = 0;
@@ -5911,8 +5911,8 @@ void tickMeramonShake(int32_t arg0)
 
 	if ((MERAMON_SHAKE_FRAME_COUNT % 2) == 0) {
 		offset = -offset;
-		MERAMON_SHAKE_POS_X -= MERAMON_SHAKE_STEP;
-		MERAMON_SHAKE_POS_Y -= MERAMON_SHAKE_STEP;
+		MERAMON_SHAKE_POS_X -= MERAMON_SHAKE_OFFSET;
+		MERAMON_SHAKE_POS_Y -= MERAMON_SHAKE_OFFSET;
 
 		if (MERAMON_SHAKE_POS_X < -200) {
 			MERAMON_SHAKE_POS_X = -200;
@@ -5937,7 +5937,7 @@ void tickMeramonShake(int32_t arg0)
 	setUVDataPolyFT4(prim, 64, 128, 63, 63);
 	setPosDataPolyFT4(prim, MERAMON_SHAKE_POS_X, MERAMON_SHAKE_POS_Y,
 			  MERAMON_SHAKE_WIDTH, MERAMON_SHAKE_HEIGHT);
-	setRGB0(prim, MERAMON_SHAKE_COLOR_R, MERAMON_SHAKE_COLOR_G, MERAMON_SHAKE_COLOR_B);
+	setRGB0(prim, MERAMON_SHAKE_RED, MERAMON_SHAKE_GREEN, MERAMON_SHAKE_BLUE);
 	org = ACTIVE_ORDERING_TABLE->org;
 	AddPrim(&org[9], prim);
 	prim++;
@@ -5947,7 +5947,7 @@ void tickMeramonShake(int32_t arg0)
 	MERAMON_SHAKE_FRAME_COUNT++;
 
 	if (MERAMON_SHAKE_FRAME_COUNT >= 0xd2) {
-		DRAWING_OFFSET_X = MERAMON_SHAKE_BACKUP_OFFSET_X;
+		DRAWING_OFFSET_X = MERAMON_SHAKE_DATA;
 		DRAWING_OFFSET_Y = MERAMON_SHAKE_BACKUP_OFFSET_Y;
 		removeObject(0xfb8, 0);
 	}
@@ -6100,7 +6100,7 @@ int32_t getOriginalType(int32_t type)
 		return -1;
 	}
 
-	originalType = ORIGINAL_TYPE[type];
+	originalType = ORIGINAL_DIGIMON_TYPES[type];
 	if (originalType < 0) {
 		return type;
 	}
@@ -6521,14 +6521,14 @@ int32_t doSomethingWithSomePoints(int16_t *rect, DVECTOR *line)
 
 int16_t DOOA_storeDigimonY(void)
 {
-	MAIN_D_80134DFC = ENTITY_TABLE[1]->posData->location.vy;
+	DOOA_STORED_DIGIMON_Y = ENTITY_TABLE[1]->posData->location.vy;
 
-	return MAIN_D_80134DFC;
+	return DOOA_STORED_DIGIMON_Y;
 }
 
 int16_t DOOA_getStoredDigimonY(void)
 {
-	return MAIN_D_80134DFC;
+	return DOOA_STORED_DIGIMON_Y;
 }
 
 void renderFXParticle(SVECTOR *pos, int32_t size, uint8_t *color)

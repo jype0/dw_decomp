@@ -97,12 +97,12 @@ typedef union {
 } BtlDeathCountdownRaw;
 
 extern int16_t ENEMY_COUNT;
-extern int16_t MAIN_D_80134D66;
-extern int16_t MAIN_D_80134D68;
-extern Entity *MAIN_D_80134D60;
-extern int32_t MAIN_D_80134D70;
-extern int32_t MAIN_D_80134D74;
-extern int32_t MAIN_D_80134D7C[2];
+extern int16_t BATTLE_FRAME_COUNT;
+extern int16_t FLEE_TIMER;
+extern Entity *FINISHING_ENTITY;
+extern int32_t HAS_TAKEN_DAMAGE;
+extern int32_t NO_AI_FLAG;
+extern int32_t FLEE_DISABLED[2];
 extern uint8_t MAIN_D_80135078;
 extern long MAIN_D_8013507C;
 extern int32_t MAIN_D_80135080;

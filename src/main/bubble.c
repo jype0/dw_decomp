@@ -407,7 +407,7 @@ ConditionIcon CONDITION_ICON_SLEEPY[7] = {
 	{ 1, -5, 0 },
 };
 
-ConditionIcon *CONDITION_TYPE_ICONS[8] = {
+ConditionIcon *CONDITION_BUBBLE_TYPES[8] = {
 	&CONDITION_ICON_HUNGRY,
 	&CONDITION_ICON_POOPY,
 	&CONDITION_ICON_SICK,
@@ -447,7 +447,7 @@ int32_t addConditionBubble(int32_t type, Entity *entity)
 	bubble->scale = 0;
 	bubble->scale2 = 0;
 	bubble->frameCount2 = 0;
-	bubble->iconPtr = CONDITION_TYPE_ICONS[type];
+	bubble->iconPtr = CONDITION_BUBBLE_TYPES[type];
 	addObject(0x802, i, tickConditionBubble, renderConditionBubble);
 
 	return i;

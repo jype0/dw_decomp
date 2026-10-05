@@ -16,8 +16,8 @@
 #define EFE_PUSH1(type, value) EFE_PUSH(EFE_DATA_STACK, type, value)
 #define EFE_DROP1() (--EFE_DATA_STACK)
 
-#define EFE_POP2(type) EFE_POP(MAIN_D_80134CFC, type)
-#define EFE_PUSH2(type, value) EFE_PUSH(MAIN_D_80134CFC, type, value)
+#define EFE_POP2(type) EFE_POP(EFE_CALL_STACK, type)
+#define EFE_PUSH2(type, value) EFE_PUSH(EFE_CALL_STACK, type, value)
 
 #define EFE_SCRATCH ((EfeScratch *)getScratchAddr(0))
 #define EFE_SPRITE_SCRATCH ((EfeSpriteScratch *)getScratchAddr(0))
@@ -27,7 +27,7 @@
 
 #define EFE_SORT_WORKSPACE getScratchAddr(44)
 
-/* One entry of the EFE slot table at MAIN_D_80134D10. */
+/* One entry of the EFE slot table at EFE_DATA_PTR. */
 typedef int32_t EfeSlot[10];
 
 typedef struct {
@@ -202,31 +202,31 @@ extern EfeFlashData *EFE_FLASH_DATA;
 extern int32_t *EFE_DATA_STACK;
 extern int32_t EFE_SCRIPT_MEM1_DATA[];
 extern int16_t EFE_LOADED_MOVE_DATA[];
-extern EfeInstance *EFE_INSTANCE;
-extern int32_t EFE_PARENT_INSTANCE;
+extern EfeInstance *EFE_CURRENT_DATA_SEGMENT;
+extern int32_t EFE_PREVIOUS_DATA_SEGMENT;
 
 extern EfeParticleEffect *MAIN_D_80134CCC;
 extern int32_t MAIN_D_80134CD0;
-extern long MAIN_D_80134CD4;
+extern long COMBAT_EFFECT_ITR;
 extern int32_t MAIN_D_80134CD8;
 extern long MAIN_D_80134CE0;
-extern int32_t MAIN_D_80134CE4;
-extern EfeSubEffect *MAIN_D_80134CE8;
-extern int32_t MAIN_D_80134CEC;
+extern int32_t EFE_ACTIVE_SECTION;
+extern EfeSubEffect *EFE_SCRIPT_CONTEXT;
+extern int32_t EFE_SCRIPT_REGISTER;
 extern int32_t MAIN_D_80134CF0;
-extern int32_t *MAIN_D_80134CFC;
-extern int16_t *MAIN_D_80134D00;
-extern int16_t MAIN_D_80134D04;
-extern int32_t MAIN_D_80134D08;
-extern int32_t *MAIN_D_80134D0C;
-extern char *MAIN_D_80134D10;
+extern int32_t *EFE_CALL_STACK;
+extern int16_t *EFE_SCRIPT_PTR;
+extern int16_t EFE_SCRIPT_CURRENT_VALUE;
+extern int32_t EFE_SCRIPT_HEAD;
+extern int32_t *EFE_DATA_ITERATOR;
+extern char *EFE_DATA_PTR;
 extern int32_t MAIN_D_80134D14;
 extern int32_t MAIN_D_80134D18;
-extern int16_t MAIN_D_80139AB0[];
+extern int16_t UNUSED_EFE_ARRAY[];
 extern int16_t MAIN_D_80139B20[];
 extern int32_t MAIN_D_80139B28[];
 extern int32_t MAIN_D_80139B2C[];
 extern GsRVIEW2 MAIN_D_80139B34;
-extern int32_t MAIN_D_80139B54[];
+extern int32_t EFE_SCRIPT_RETURN0[];
 
 #endif

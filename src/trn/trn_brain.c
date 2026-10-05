@@ -59,7 +59,7 @@ int16_t arg;
 
 	MAIN_D_80135370 = readPStat(0xf6);
 	TRN_saveTrainingStartTime();
-	MAIN_D_80135371 = 0;
+	TRAINING_STATE = 0;
 }
 
 void TRN_tickBrainsTraining(int32_t instanceId)
@@ -68,7 +68,7 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 	DVECTOR pos;
 	int32_t r;
 
-	switch (MAIN_D_80135371) {
+	switch (TRAINING_STATE) {
 	case 0:
 		tamerSetState(-1);
 		startAnimation(&TAMER_ENTITY.entity, 2);
@@ -77,7 +77,7 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 		playSound(8, 9);
 		createCameraMovement(&TRN_D_8008F358, 10);
 		MAIN_D_8013537A = 0;
-		MAIN_D_80135371 = 1;
+		TRAINING_STATE = 1;
 		TRN_startSlotSessionIfEnabled(5);
 		break;
 	case 1:
@@ -85,7 +85,7 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 			startAnimation(ENTITY_TABLE[0], 0);
 			entityLookAtLocation(&TAMER_ENTITY.entity, &PARTNER_ENTITY.digimonEntity.entity.posData->location);
 			startAnimation(ENTITY_TABLE[1], 2);
-			MAIN_D_80135371 = 2;
+			TRAINING_STATE = 2;
 		}
 		break;
 	case 2:
@@ -103,7 +103,7 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 				startAnimation(ENTITY_TABLE[1], 0x16);
 				startAnimation(ENTITY_TABLE[2], 0x1e);
 			}
-			MAIN_D_80135371 = 3;
+			TRAINING_STATE = 3;
 			if (MAIN_D_80135370 == 1) {
 				TRN_startSlotSpin();
 			}
@@ -138,14 +138,14 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x12);
 			createCameraMovement(&TAMER_ENTITY.entity.posData->location, 10);
 			startAnimation(&NPC_ENTITIES[0].digimonEntity.entity, 0);
-			MAIN_D_80135371 = 4;
+			TRAINING_STATE = 4;
 			playSound(8, 0xa);
 		}
 		break;
 	case 4:
 		if (TRN_statGainsAreZero() == 1) {
 			MAIN_D_8013537C = 0;
-			MAIN_D_80135371 = 5;
+			TRAINING_STATE = 5;
 		}
 		break;
 	case 5:
@@ -161,7 +161,7 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 			tamerSetState(0);
 			partnerSetState(1);
 			MAIN_D_8013537A = 0;
-			MAIN_D_80135371 = 0;
+			TRAINING_STATE = 0;
 			removeObject(0xfb0, instanceId, TRN_tickBrainsTraining, NULL);
 			TRAINING_COMPLETE = 1;
 		}

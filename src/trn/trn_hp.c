@@ -31,10 +31,10 @@ static void *trn_hp_functions[] = {
 int16_t MAIN_D_8013536C;
 int16_t MAIN_D_8013536E;
 int8_t MAIN_D_80135370;
-int8_t MAIN_D_80135371;
+int8_t TRAINING_STATE;
 
 static void *trn_hp_sbss_order[] = {
-	&MAIN_D_80135371,
+	&TRAINING_STATE,
 	&MAIN_D_80135370,
 	&MAIN_D_8013536E,
 	&MAIN_D_8013536C,
@@ -60,7 +60,7 @@ int16_t arg;
 	}
 
 	TRN_saveTrainingStartTime();
-	MAIN_D_80135371 = 0;
+	TRAINING_STATE = 0;
 }
 
 void TRN_tickHpTraining(instanceId)
@@ -69,7 +69,7 @@ int16_t instanceId;
 	int32_t r;
 	int32_t done;
 
-	switch (MAIN_D_80135371) {
+	switch (TRAINING_STATE) {
 	case 0:
 		storeMapObjectPosition(TRN_D_8008F368, TRN_D_8008F388, MAIN_D_8013536C, MAIN_D_8013536E);
 		tamerSetState(8);
@@ -78,7 +78,7 @@ int16_t instanceId;
 		createCameraMovement(&TRN_D_8008F320, 10);
 		playSound(8, 9);
 		MAIN_D_8013537A = 0;
-		MAIN_D_80135371 = 1;
+		TRAINING_STATE = 1;
 		TRN_startSlotSessionIfEnabled(0);
 		break;
 	case 1:
@@ -90,7 +90,7 @@ int16_t instanceId;
 				TRN_startSlotSpin();
 			}
 			playSound(8, 0);
-			MAIN_D_80135371 = 2;
+			TRAINING_STATE = 2;
 		}
 		break;
 	case 2:
@@ -118,7 +118,7 @@ int16_t instanceId;
 		if ((((MAIN_D_8013537A >= 0x4b0) || (POLLED_INPUT & CANCEL_BUTTON)) && (MAIN_D_80135370 == 0)) || ((MAIN_D_80135370 == 1) && (0 <= r))) {
 			MAIN_D_8013537A %= 0x4b0;
 			playSound(8, 0xa);
-			MAIN_D_80135371 = 3;
+			TRAINING_STATE = 3;
 			MAIN_D_8013537A /= 120;
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x12);
 			TRN_awardHpTrainingGains(PARTNER_ENTITY.digimonEntity.entity.type, 0, r);
@@ -127,7 +127,7 @@ int16_t instanceId;
 		break;
 	case 3:
 		if (TRN_statGainsAreZero() == 1) {
-			MAIN_D_80135371 = 4;
+			TRAINING_STATE = 4;
 			MAIN_D_8013537C = 0;
 		}
 		break;
@@ -135,7 +135,7 @@ int16_t instanceId;
 		MAIN_D_8013537C++;
 		if (MAIN_D_8013537C >= 0x14) {
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 4);
-			MAIN_D_80135371 = 5;
+			TRAINING_STATE = 5;
 		}
 		break;
 	case 5:
@@ -152,7 +152,7 @@ int16_t instanceId;
 			tamerSetState(0);
 			removeAllCloudFX();
 			MAIN_D_8013537A = 0;
-			MAIN_D_80135371 = 0;
+			TRAINING_STATE = 0;
 			removeObject(0xfab, instanceId, TRN_tickHpTraining, NULL);
 			TRAINING_COMPLETE = 1;
 		}

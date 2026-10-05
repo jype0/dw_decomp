@@ -26,27 +26,27 @@
 #include <dw/ui.h>
 #include <dw/utils.h>
 
-extern uint8_t MAIN_D_80134FE4;
+extern uint8_t SCRIPT_SECTION;
 extern uint8_t MAIN_D_80134FE9;
 extern int32_t MAIN_D_80134FF0;
-extern uint8_t *SCRIPT_HEADER_PTR;
-extern uint8_t *SCRIPT_DATA_PTR;
+extern uint8_t *SCRIPT_OFFSET_PTR;
+extern uint8_t *MAP_SCRIPT_PTR;
 extern int8_t MAIN_STATE;
 extern int16_t SCRIPT_MAP_CHANGE_STATE;
 extern uint8_t MAIN_D_801BE6B4[];
-extern uint8_t MAIN_D_80135007;
+extern uint8_t ACTIVE_BGM_TRACK;
 extern uint8_t PREVIOUS_SCREEN;
 extern uint8_t PREVIOUS_EXIT;
 extern uint8_t CURRENT_EXIT;
 extern uint8_t MAIN_D_801BE738[];
 extern int8_t TALKED_TO_ENTITY;
-extern uint8_t MAPHEAD_DATA[];
-extern uint8_t SCRIPT_HEADER[];
-extern uint8_t SCRIPT_DATA[];
+extern uint8_t MAPHEAD_SCRIPT_BUFFER[];
+extern uint8_t SCRIPT_OFFSET_TABLE[];
+extern uint8_t MAP_SCRIPT_BUFFER[];
 extern ScriptState SCRIPT_STATE;
-extern uint8_t TEXT_BUFFERS[];
-extern uint8_t *CURRENT_SCRIPT_PTR;
-extern int32_t MAIN_D_80134FA8;
+extern uint8_t TEXTBOX_LINES_BUFFER[];
+extern uint8_t *ACTIVE_SCRIPT;
+extern int32_t LOAD_FILE_SECTION_STARTPOS;
 
 void unsetCameraFollowPlayer(void);
 int32_t scriptTickChangeMap(int32_t param_1, int32_t param_2, int32_t param_3);
@@ -185,9 +185,9 @@ int32_t tickScript(void)
 #endif
 	tickScriptedMovements();
 	if (MAIN_D_80134FE9 == 0x4b) {
-		if (scriptTickChangeMap((int16_t)MAIN_D_80134FF8,
-		                       (int16_t)SELECTION_MENU_STATE,
-		                       MAIN_D_80134FA0)) {
+		if (scriptTickChangeMap((int16_t)SCRIPT_PARAM_1,
+		                       (int16_t)SCRIPT_STATE_2,
+		                       SCRIPT_MAP_CHANGE_SHOW_NAME)) {
 			MAIN_D_80134FF0 = 0;
 			scriptPauseGame(0xff);
 			MAIN_D_80134FE9 = 0;
@@ -196,12 +196,12 @@ int32_t tickScript(void)
 
 	switch (ACTIVE_INSTRUCTION) {
 	case SCRIPT_OP_DELAY:
-		if (MAIN_D_80134FFC == 0) {
+		if (DELAY_FRAMES == 0) {
 			ACTIVE_INSTRUCTION = 0;
 		}
 		break;
 	case SCRIPT_OP_CALL_ROUTINE:
-		switch (MAIN_D_80134FF8) {
+		switch (SCRIPT_PARAM_1) {
 		case 0:
 			openDiscardItem();
 			break;
@@ -342,15 +342,15 @@ int32_t tickScript(void)
 		}
 		break;
 	case SCRIPT_OP_WAIT_FOR_ENTITY:
-		if (MAIN_D_80134FA4 == 0x19) {
+		if (WAIT_FOR_ENTITY_ID == 0x19) {
 			if (getScriptSyncBit()) {
 				ACTIVE_INSTRUCTION = 0;
 			}
-		} else if (MAIN_D_80134FA4 == 0x1a) {
+		} else if (WAIT_FOR_ENTITY_ID == 0x1a) {
 			if (TRN_LOADING_COMPLETE == 0) {
 				ACTIVE_INSTRUCTION = 0;
 			}
-		} else if (MAIN_D_80134FA4 == 0xff) {
+		} else if (WAIT_FOR_ENTITY_ID == 0xff) {
 			if (getScriptSyncBit()) {
 				for (op = 0; op < 0x16; op++) {
 					if (MAIN_D_801BE6B4[op * 0xc] != 0xff) {
@@ -361,7 +361,7 @@ int32_t tickScript(void)
 found:;
 			}
 		} else {
-			if (MAIN_D_801BE6B4[MAIN_D_80134FA4 * 0xc] == 0xff) {
+			if (MAIN_D_801BE6B4[WAIT_FOR_ENTITY_ID * 0xc] == 0xff) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 		}
@@ -382,7 +382,7 @@ found:;
 setjmp_retry:
 	ret = setjmp(SCRIPT_JMP_BUF);
 	if (ret == 0) {
-		op = *MAIN_D_80134FDC++;
+		op = *SCRIPT_POINTER++;
 		if (op >= 0xfb && op <= 0xff) {
 			scriptInstructionFBtoFF(op);
 		} else if (op >= 0x10 && op < 0x28) {
@@ -433,20 +433,20 @@ uint8_t *getScript(uint16_t mapId)
 	uint32_t size;
 
 	if (mapId == 0) {
-		return MAPHEAD_DATA_PTR;
+		return MAPHEAD_SCRIPT_PTR;
 	}
 
 	if (ACTIVE_MAP_SCRIPT == mapId) {
-		return SCRIPT_DATA_PTR;
+		return MAP_SCRIPT_PTR;
 	}
 
 	ACTIVE_MAP_SCRIPT = mapId;
-	table = (uint32_t *)SCRIPT_HEADER_PTR;
+	table = (uint32_t *)SCRIPT_OFFSET_PTR;
 	offset = table[mapId];
 	size = table[mapId + 1] - table[mapId];
-	readFileSection(MAIN_D_80130388, SCRIPT_DATA_PTR, offset, size);
+	readFileSection(MAIN_D_80130388, MAP_SCRIPT_PTR, offset, size);
 
-	return SCRIPT_DATA_PTR;
+	return MAP_SCRIPT_PTR;
 }
 
 // clang-format off
@@ -494,39 +494,39 @@ void scriptInstruction10to27(op)
 		break;
 	case SCRIPT_OP_JUMP_AND_LINK:
 		skipOneReadOneUShort(&shortArg);
-		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptPtr = SCRIPT_POINTER;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
 		entry.smth[0] = 1;
 		pushScriptStack(&entry);
-		MAIN_D_80134FDC =
-			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		SCRIPT_POINTER =
+			(uint8_t *)((uint32_t)ACTIVE_SCRIPT + shortArg);
 		break;
 	case SCRIPT_OP_JUMP_TO_FILE_AND_LINK:
 		skipOneReadTwoShort(&shortArg, &offset);
-		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptPtr = SCRIPT_POINTER;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
 		entry.smth[0] = 1;
 		pushScriptStack(&entry);
-		CURRENT_SCRIPT_PTR = getScript(shortArg);
-		MAIN_D_80134FDC = getScriptSection(
-			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
+		ACTIVE_SCRIPT = getScript(shortArg);
+		SCRIPT_POINTER = getScriptSection(
+			(uint8_t *)(int32_t)ACTIVE_SCRIPT, offset);
 		break;
 	case SCRIPT_OP_JUMP_RETURN:
-		MAIN_D_80134FDC++;
+		SCRIPT_POINTER++;
 		popScriptStack(&entry);
-		CURRENT_SCRIPT_PTR = getScript(entry.scriptId);
-		MAIN_D_80134FDC = (uint8_t *)entry.scriptPtr;
+		ACTIVE_SCRIPT = getScript(entry.scriptId);
+		SCRIPT_POINTER = (uint8_t *)entry.scriptPtr;
 		break;
 	case SCRIPT_OP_JUMP_TO:
 		skipOneReadOneUShort(&shortArg);
-		MAIN_D_80134FDC =
-			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		SCRIPT_POINTER =
+			(uint8_t *)((uint32_t)ACTIVE_SCRIPT + shortArg);
 		break;
 	case SCRIPT_OP_JUMP_TO_FILE:
 		skipOneReadTwoShort(&shortArg, &offset);
-		CURRENT_SCRIPT_PTR = getScript(shortArg);
-		MAIN_D_80134FDC = getScriptSection(
-			(uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, offset);
+		ACTIVE_SCRIPT = getScript(shortArg);
+		SCRIPT_POINTER = getScriptSection(
+			(uint8_t *)(int32_t)ACTIVE_SCRIPT, offset);
 		break;
 	case SCRIPT_OP_SWITCH:
 		pollOneUByteOneUShort(&pstat, &shortArg);
@@ -534,27 +534,27 @@ void scriptInstruction10to27(op)
 		if (value >= shortArg) {
 			value = shortArg - 1;
 		}
-		shortArg = *(uint16_t *)(MAIN_D_80134FDC + (value << 1));
-		MAIN_D_80134FDC =
-			(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		shortArg = *(uint16_t *)(SCRIPT_POINTER + (value << 1));
+		SCRIPT_POINTER =
+			(uint8_t *)((uint32_t)ACTIVE_SCRIPT + shortArg);
 		break;
 	case SCRIPT_OP_IF:
-		MAIN_D_80134FDC++;
+		SCRIPT_POINTER++;
 		scriptIfInstruction();
 		break;
 	case SCRIPT_OP_SHOW_TEXTBOX:
-		MAIN_D_80134FDC++;
+		SCRIPT_POINTER++;
 		if (MAIN_D_80135000 == 2) {
 			showTextbox(0, 0xff);
 		} else {
-			showTextbox(0, MAIN_D_80134FE6);
+			showTextbox(0, CURRENT_DIALOGUE_OWNER);
 		}
 		longjmp(SCRIPT_JMP_BUF, 2);
 	case SCRIPT_OP_SET_DIALOG_OWNER:
 		pollNextScriptUByte(&pstat);
 		MAIN_D_80135000 = 0;
 		if (UI_BOX_DATA[0].state != 1) {
-			MAIN_D_80134FE6 = pstat - 1;
+			CURRENT_DIALOGUE_OWNER = pstat - 1;
 		}
 		setDialogueOwner(pstat);
 		break;
@@ -588,7 +588,7 @@ void scriptInstruction10to27(op)
 		break;
 	case SCRIPT_OP_STORE_MAP_ID:
 		pollNextScriptUByte(&pstat);
-		writePStat(pstat, CURRENT_MAP_ID);
+		writePStat(pstat, CURRENT_SCREEN_ID);
 		break;
 	case SCRIPT_OP_STORE_DIGIMON_TYPE:
 		pollNextScriptUByte(&pstat);
@@ -645,13 +645,13 @@ void consumeMapChangeShowName(void)
 
 	switch (state) {
 	case 0:
-		MAIN_D_80134FA0 = (MAIN_D_80134FE0 != 0) ^ 1;
+		SCRIPT_MAP_CHANGE_SHOW_NAME = (SCRIPT_SECTION_IS_EVENT != 0) ^ 1;
 		break;
 	case 1:
-		MAIN_D_80134FA0 = 1;
+		SCRIPT_MAP_CHANGE_SHOW_NAME = 1;
 		break;
 	case 2:
-		MAIN_D_80134FA0 = 0;
+		SCRIPT_MAP_CHANGE_SHOW_NAME = 0;
 		break;
 	}
 
@@ -698,7 +698,7 @@ void scriptIfInstruction(void)
 	result = 0;
 	for (;;) {
 		pollNextScriptUByte(&condOp);
-		MAIN_D_80134FDC++;
+		SCRIPT_POINTER++;
 		if (condOp == 0x19) {
 			longjmp(SCRIPT_JMP_BUF, 1);
 		}
@@ -724,8 +724,8 @@ void scriptIfInstruction(void)
 			if (result != 1) {
 				continue;
 			}
-			MAIN_D_80134FDC =
-				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
+			SCRIPT_POINTER =
+				(uint8_t *)((uint32_t)ACTIVE_SCRIPT +
 			                    shortArg);
 			longjmp(SCRIPT_JMP_BUF, 1);
 		case (3 << 3):
@@ -734,8 +734,8 @@ void scriptIfInstruction(void)
 				continue;
 			}
 
-			MAIN_D_80134FDC =
-				(uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR +
+			SCRIPT_POINTER =
+				(uint8_t *)((uint32_t)ACTIVE_SCRIPT +
 			                    shortArg);
 			longjmp(SCRIPT_JMP_BUF, 1);
 		case (4 << 3):
@@ -859,11 +859,11 @@ static void scriptInstruction28to3F__garbage__(int32_t op)
 		break;
 	case SCRIPT_OP_JUMP_AND_LINK:
 		skipOneReadOneUShort(&shortArg);
-		entry.scriptPtr = MAIN_D_80134FDC;
+		entry.scriptPtr = SCRIPT_POINTER;
 		entry.scriptId = ACTIVE_MAP_SCRIPT;
 		entry.smth[0] = 1;
 		pushScriptStack(&entry);
-		MAIN_D_80134FDC = (uint8_t *)((uint32_t)CURRENT_SCRIPT_PTR + shortArg);
+		SCRIPT_POINTER = (uint8_t *)((uint32_t)ACTIVE_SCRIPT + shortArg);
 		break;
 	}
 }
@@ -965,10 +965,10 @@ void scriptInstruction28to3F(op)
 		*statPtr = enforceStatsLimits(byteArg1, value);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
 		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
-			TAMER_ENTITY.tamerLevel = (uint8_t)MAIN_D_80135002;
+			TAMER_ENTITY.tamerLevel = (uint8_t)TMP_TAMER_LEVEL;
 		}
 		if (byteArg1 == SCRIPT_STAT_LIVES) {
-			PARTNER_ENTITY.lives = (uint8_t)MAIN_D_80135004;
+			PARTNER_ENTITY.lives = (uint8_t)TMP_LIVES;
 		}
 		break;
 	case SCRIPT_OP_ADD_STAT:
@@ -978,10 +978,10 @@ void scriptInstruction28to3F(op)
 		*statPtr = enforceStatsLimits(byteArg1, *statPtr);
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
 		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
-			TAMER_ENTITY.tamerLevel = (uint8_t)MAIN_D_80135002;
+			TAMER_ENTITY.tamerLevel = (uint8_t)TMP_TAMER_LEVEL;
 		}
 		if (byteArg1 == SCRIPT_STAT_LIVES) {
-			PARTNER_ENTITY.lives = (uint8_t)MAIN_D_80135004;
+			PARTNER_ENTITY.lives = (uint8_t)TMP_LIVES;
 		}
 		break;
 	case SCRIPT_OP_REDUCE_STAT:
@@ -1000,10 +1000,10 @@ void scriptInstruction28to3F(op)
 		*statPtr = intArg;
 		scriptUpdateEnergyBoundaries(byteArg1, *statPtr);
 		if (byteArg1 == SCRIPT_STAT_TAMER_LEVEL) {
-			TAMER_ENTITY.tamerLevel = (uint8_t)MAIN_D_80135002;
+			TAMER_ENTITY.tamerLevel = (uint8_t)TMP_TAMER_LEVEL;
 		}
 		if (byteArg1 == SCRIPT_STAT_LIVES) {
-			PARTNER_ENTITY.lives = (uint8_t)MAIN_D_80135004;
+			PARTNER_ENTITY.lives = (uint8_t)TMP_LIVES;
 		}
 		break;
 	case SCRIPT_OP_ADVANCE_TO_DATE_AT:
@@ -1179,14 +1179,14 @@ void scriptInstruction46to58(op)
 		}
 		byteArg1 = scriptIdToEntityId(byteArg1);
 wait_for_entity_end:
-		MAIN_D_80134FA4 = byteArg1;
+		WAIT_FOR_ENTITY_ID = byteArg1;
 		longjmp(SCRIPT_JMP_BUF, 2);
 	case SCRIPT_OP_WARP_TO:
 		scriptPauseGame(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_D_80134FF8 = byteArg1;
-		SELECTION_MENU_STATE = byteArg2;
+		SCRIPT_PARAM_1 = byteArg1;
+		SCRIPT_STATE_2 = byteArg2;
 		consumeMapChangeShowName();
 		entry.smth[0] = 4;
 		entry.smth[1] = byteArg3;
@@ -1301,9 +1301,9 @@ wait_for_entity_end:
 		resetEntityOrigin(byteArg1);
 		break;
 	case SCRIPT_OP_SET_TEXTBOX_ORIGIN:
-		MAIN_D_80134FDC++;
-		pollNextTwoScriptShorts(&MAIN_D_80134FD2, &MAIN_D_80134FD4);
-		pollNextScriptShort(&MAIN_D_80134FD6);
+		SCRIPT_POINTER++;
+		pollNextTwoScriptShorts(&TEXTBOX_ORIGIN_X, &TEXTBOX_ORIGIN_Y);
+		pollNextScriptShort(&TEXTBOX_ORIGIN_Z);
 		break;
 	case SCRIPT_OP_PLAY_ANIMATION:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
@@ -1316,8 +1316,8 @@ wait_for_entity_end:
 	case SCRIPT_OP_TELEPORT:
 		scriptPauseGame(0xff);
 		pollNextScriptUByte(&byteArg1);
-		MAIN_D_80134FF8 = readPStat(byteArg1 + 0);
-		SELECTION_MENU_STATE = readPStat(byteArg1 + 1);
+		SCRIPT_PARAM_1 = readPStat(byteArg1 + 0);
+		SCRIPT_STATE_2 = readPStat(byteArg1 + 1);
 		consumeMapChangeShowName();
 		entry.smth[0] = 4;
 		entry.smth[1] = 0xff;
@@ -1439,7 +1439,7 @@ void scriptInstruction64to7E(op)
 	switch (op) {
 	case SCRIPT_OP_CALL_ROUTINE:
 		pollNextScriptUByte(&byteArg1);
-		MAIN_D_80134FF8 = byteArg1;
+		SCRIPT_PARAM_1 = byteArg1;
 		switch (byteArg1) {
 		case 0x16:
 			if (checkTournamentMedalConditions() == -1) {
@@ -1458,56 +1458,56 @@ void scriptInstruction64to7E(op)
 		case 0x12:
 		case 0x2f:
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-			SELECTION_MENU_STATE = 0;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_STATE_2 = 0;
+			SCRIPT_TEXTBOX_MODE = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x07:
 			byteArg1 = readPStat(0xfe);
-			if ((CURRENT_MAP_ID == 0x6b) ||
-			    (CURRENT_MAP_ID == 0x6c) ||
-			    (CURRENT_MAP_ID == 0xa5) ||
-			    (CURRENT_MAP_ID == 0x63)) {
+			if ((CURRENT_SCREEN_ID == 0x6b) ||
+			    (CURRENT_SCREEN_ID == 0x6c) ||
+			    (CURRENT_SCREEN_ID == 0xa5) ||
+			    (CURRENT_SCREEN_ID == 0x63)) {
 				switch (byteArg1) {
 				case 0:
-					TRN2_setupHpTraining(CURRENT_MAP_ID);
+					TRN2_setupHpTraining(CURRENT_SCREEN_ID);
 					break;
 				case 1:
-					TRN2_setupOffenseTraining(CURRENT_MAP_ID);
+					TRN2_setupOffenseTraining(CURRENT_SCREEN_ID);
 					break;
 				case 2:
-					TRN2_setupSpeedTraining(CURRENT_MAP_ID);
+					TRN2_setupSpeedTraining(CURRENT_SCREEN_ID);
 					break;
 				case 3:
-					TRN2_setupDefenseTraining(CURRENT_MAP_ID);
+					TRN2_setupDefenseTraining(CURRENT_SCREEN_ID);
 					break;
 				case 4:
-					TRN2_setupMpTraining(CURRENT_MAP_ID);
+					TRN2_setupMpTraining(CURRENT_SCREEN_ID);
 					break;
 				}
 			} else {
 				switch (byteArg1) {
 				case 0:
-					TRN_setupHpTraining(CURRENT_MAP_ID);
+					TRN_setupHpTraining(CURRENT_SCREEN_ID);
 					break;
 				case 1:
-					TRN_setupOffenseTraining(CURRENT_MAP_ID);
+					TRN_setupOffenseTraining(CURRENT_SCREEN_ID);
 					break;
 				case 2:
-					TRN_setupSpeedTraining(CURRENT_MAP_ID);
+					TRN_setupSpeedTraining(CURRENT_SCREEN_ID);
 					break;
 				case 3:
-					TRN_setupDefenseTraining(CURRENT_MAP_ID);
+					TRN_setupDefenseTraining(CURRENT_SCREEN_ID);
 					break;
 				case 4:
-					TRN_setupMpTraining(CURRENT_MAP_ID);
+					TRN_setupMpTraining(CURRENT_SCREEN_ID);
 					break;
 				case 5:
-					TRN_setupBrainsTraining(CURRENT_MAP_ID);
+					TRN_setupBrainsTraining(CURRENT_SCREEN_ID);
 					break;
 				}
 			}
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_TEXTBOX_MODE = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x03:
 		case 0x04:
@@ -1551,7 +1551,7 @@ void scriptInstruction64to7E(op)
 		case 0x18:
 		case 0x32:
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_TEXTBOX_MODE = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x19:
 			MAIN_D_80134FE7 = readPStat(0xfe);
@@ -1566,15 +1566,15 @@ void scriptInstruction64to7E(op)
 			createMonochromonMoodBubble();
 			break;
 		case 0x1e:
-			MAIN_D_8013500C = 0;
+			SHOP_VARIABLE = 0;
 			break;
 		case 0x1f:
 			posX = readPStat(0xf4) + (readPStat(0xf3) << 8);
-			MAIN_D_8013500C += posX;
+			SHOP_VARIABLE += posX;
 			break;
 		case 0x38:
-			writePStat(0xf3, (MAIN_D_8013500C / 256) & 0xff);
-			writePStat(0xf4, MAIN_D_8013500C & 0xff);
+			writePStat(0xf3, (SHOP_VARIABLE / 256) & 0xff);
+			writePStat(0xf4, SHOP_VARIABLE & 0xff);
 			break;
 		case 0x20:
 			initializeNamingBuffer(readPStat(0xfe));
@@ -1600,22 +1600,22 @@ void scriptInstruction64to7E(op)
 			loadShopLibrary();
 			break;
 		case 0x24:
-			readMapTFS(CURRENT_MAP_ID);
+			readMapTFS(CURRENT_SCREEN_ID);
 			break;
 		case 0x27:
-			loadTrainingLibrary(CURRENT_MAP_ID);
+			loadTrainingLibrary(CURRENT_SCREEN_ID);
 			break;
 		case 0x30:
 			openSaveMachine();
 			/* fall through */
 		case 0x25:
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_TEXTBOX_MODE = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x36:
 			gameClearSave();
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_TEXTBOX_MODE = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 		case 0x26:
 			createNinjamonEffect();
@@ -1642,7 +1642,7 @@ void scriptInstruction64to7E(op)
 			tamerSetState(0x10);
 			SOME_SCRIPT_SYNC_BIT = 0;
 			ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
-			SCRIPT_STATE_3 = 0;
+			SCRIPT_TEXTBOX_MODE = 0;
 			longjmp(SCRIPT_JMP_BUF, 2);
 			break;
 		case 0x37:
@@ -1678,8 +1678,8 @@ void scriptInstruction64to7E(op)
 		break;
 	case SCRIPT_OP_START_BATTLE:
 		pollNextScriptUByte(&byteArg1);
-		if (MAIN_D_80134FC8 < 0x270f) {
-			MAIN_D_80134FC8++;
+		if (BATTLES_STARTED < 0x270f) {
+			BATTLES_STARTED++;
 		}
 		byteArg1 = readPStat(0xfa);
 		if (byteArg1 != 0) {
@@ -1704,18 +1704,18 @@ void scriptInstruction64to7E(op)
 				if (PARTNER_ENTITY.lives == 0) {
 					PARTNER_PARA.remainingLifetime = 0;
 				}
-				CURRENT_SCRIPT_PTR = getScript(0);
-				MAIN_D_80134FDC = getScriptSection((uint8_t *)(int32_t)CURRENT_SCRIPT_PTR, 0x4de);
+				ACTIVE_SCRIPT = getScript(0);
+				SCRIPT_POINTER = getScriptSection((uint8_t *)(int32_t)ACTIVE_SCRIPT, 0x4de);
 				break;
 			}
 			if (outcome == 0) {
-				if (MAIN_D_80134FCA < 0x270f) {
-					MAIN_D_80134FCA++;
+				if (BATTLES_FLED < 0x270f) {
+					BATTLES_FLED++;
 				}
-				MAIN_D_80134FF8 = PREVIOUS_SCREEN;
-				SELECTION_MENU_STATE = PREVIOUS_EXIT;
+				SCRIPT_PARAM_1 = PREVIOUS_SCREEN;
+				SCRIPT_STATE_2 = PREVIOUS_EXIT;
 				PREVIOUS_EXIT = CURRENT_EXIT;
-				MAIN_D_80134FA0 = 0;
+				SCRIPT_MAP_CHANGE_SHOW_NAME = 0;
 				entry.smth[0] = 4;
 				entry.smth[1] = 0xff;
 				pushScriptStack(&entry);
@@ -1734,20 +1734,20 @@ void scriptInstruction64to7E(op)
 		b[3] = 0xa;
 
 		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT_FOR_ENTITY;
-		MAIN_D_80134FA4 = 0xa;
+		WAIT_FOR_ENTITY_ID = 0xa;
 		initializeTextbox();
 		longjmp(SCRIPT_JMP_BUF, 2);
 	case SCRIPT_OP_DELAY:
-		skipOneReadOneUShort(&MAIN_D_80134FFC);
+		skipOneReadOneUShort(&DELAY_FRAMES);
 		ACTIVE_INSTRUCTION = SCRIPT_OP_DELAY;
 		longjmp(SCRIPT_JMP_BUF, 2);
 	case SCRIPT_OP_SET_TEXTBOX_MODE:
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
-		MAIN_D_80134FE5 = byteArg1;
+		TEXTBOX_CLOSE_MODE = byteArg1;
 		if (byteArg1 != 2) {
 			break;
 		}
-		MAIN_D_80135010 = byteArg2;
+		AUTOCLOSE_FRAMES = byteArg2;
 		break;
 	case SCRIPT_OP_DEAL_DAMAGE:
 		scriptPauseGame(0xff);
@@ -1964,35 +1964,35 @@ void setMapHeadActive(void)
 {
 	uint16_t off;
 
-	off = *(int16_t *)MAPHEAD_DATA_PTR;
-	CURRENT_SCRIPT_PTR = MAPHEAD_DATA_PTR;
-	MAIN_D_80134FDC = MAPHEAD_DATA_PTR + off - 2;
+	off = *(int16_t *)MAPHEAD_SCRIPT_PTR;
+	ACTIVE_SCRIPT = MAPHEAD_SCRIPT_PTR;
+	SCRIPT_POINTER = MAPHEAD_SCRIPT_PTR + off - 2;
 }
 
 void initializeScripts(void)
 {
-	MAPHEAD_DATA_PTR = MAPHEAD_DATA;
-	SCRIPT_HEADER_PTR = SCRIPT_HEADER;
-	SCRIPT_DATA_PTR = SCRIPT_DATA;
+	MAPHEAD_SCRIPT_PTR = MAPHEAD_SCRIPT_BUFFER;
+	SCRIPT_OFFSET_PTR = SCRIPT_OFFSET_TABLE;
+	MAP_SCRIPT_PTR = MAP_SCRIPT_BUFFER;
 	SCRIPT_STATE_PTR = &SCRIPT_STATE;
-	TEXT_BUFFERS_PTR = TEXT_BUFFERS;
+	TEXTBOX_LINES_PTR = TEXTBOX_LINES_BUFFER;
 
-	readFile(MAIN_D_80130374, MAPHEAD_DATA_PTR);
-	readFileSection(MAIN_D_80130388, SCRIPT_HEADER_PTR, 0, 0x2000);
+	readFile(MAIN_D_80130374, MAPHEAD_SCRIPT_PTR);
+	readFileSection(MAIN_D_80130388, SCRIPT_OFFSET_PTR, 0, 0x2000);
 	memset((void *)SCRIPT_STATE_PTR, 0, sizeof(*SCRIPT_STATE_PTR));
 
 	MERIT = 0;
-	MAIN_D_80134FC6 = 0;
-	MAIN_D_80134FC8 = 0;
-	MAIN_D_80134FCA = 0;
-	MAIN_D_80134FCC = 0;
+	SCRIPT_STACK_OFFSET = 0;
+	BATTLES_STARTED = 0;
+	BATTLES_FLED = 0;
+	TOURNAMENTS_WON = 0;
+	TOURNAMENT_WINS = 0;
 	TOURNAMENTS_LOST = 0;
-	MAIN_D_80134FD0 = 0;
 	CURRENT_SCRIPT_ID = 0xffff;
 	ACTIVE_MAP_SCRIPT = 0xffff;
-	MAIN_D_80134FD2 = -0x270f;
-	MAIN_D_80134FD4 = -0x270f;
-	MAIN_D_80134FD6 = -0x270f;
+	TEXTBOX_ORIGIN_X = -0x270f;
+	TEXTBOX_ORIGIN_Y = -0x270f;
+	TEXTBOX_ORIGIN_Z = -0x270f;
 
 	inputInit();
 	dailyPStatTrigger();
@@ -2026,14 +2026,14 @@ void callScriptSection(scriptId, section, param)
 {
 	int32_t i;
 
-	CURRENT_SCRIPT_PTR = getScript(scriptId);
-	MAIN_D_80134FDC =
-		getScriptSection((uint8_t *)(int32_t)CURRENT_SCRIPT_PTR,
+	ACTIVE_SCRIPT = getScript(scriptId);
+	SCRIPT_POINTER =
+		getScriptSection((uint8_t *)(int32_t)ACTIVE_SCRIPT,
 	                         section);
-	MAIN_D_80134FE0 = param;
-	MAIN_D_80134FE4 = section;
-	MAIN_D_80134FE5 = 0;
-	MAIN_D_80134FE6 = 0xfd;
+	SCRIPT_SECTION_IS_EVENT = param;
+	SCRIPT_SECTION = section;
+	TEXTBOX_CLOSE_MODE = 0;
+	CURRENT_DIALOGUE_OWNER = 0xfd;
 	MAIN_D_80134FE7 = readPStat(0);
 	ACTIVE_INSTRUCTION = 0;
 	MAIN_D_80134FE9 = 0;
@@ -2146,9 +2146,9 @@ void pushScriptStack(StackEntry *entry)
 {
 	StackEntry *stackTop;
 
-	stackTop = &SCRIPT_STATE_PTR->stack[MAIN_D_80134FC6];
+	stackTop = &SCRIPT_STATE_PTR->stack[SCRIPT_STACK_OFFSET];
 	*stackTop = *entry;
-	++MAIN_D_80134FC6;
+	++SCRIPT_STACK_OFFSET;
 }
 
 void resetBGM(void)
@@ -2162,9 +2162,9 @@ int32_t popScriptStack(StackEntry *out)
 	StackEntry *stackTop;
 	StackEntry entry;
 
-	if (MAIN_D_80134FC6 != 0) {
-		--MAIN_D_80134FC6;
-		stackTop = &SCRIPT_STATE_PTR->stack[MAIN_D_80134FC6];
+	if (SCRIPT_STACK_OFFSET != 0) {
+		--SCRIPT_STACK_OFFSET;
+		stackTop = &SCRIPT_STATE_PTR->stack[SCRIPT_STACK_OFFSET];
 		entry = *stackTop;
 	} else {
 		entry.smth[0] = 0;
@@ -2175,20 +2175,20 @@ int32_t popScriptStack(StackEntry *out)
 
 void skipOneReadOneUShort(uint16_t *out)
 {
-	MAIN_D_80134FDC++;
+	SCRIPT_POINTER++;
 	pollNextScriptUShort(out);
 }
 
 void pollNextScriptUByte(uint8_t *out)
 {
-	*out = *MAIN_D_80134FDC;
-	MAIN_D_80134FDC++;
+	*out = *SCRIPT_POINTER;
+	SCRIPT_POINTER++;
 }
 
 void pollNextScriptUShort(uint16_t *out)
 {
-	*out = *(uint16_t *)MAIN_D_80134FDC;
-	MAIN_D_80134FDC += 2;
+	*out = *(uint16_t *)SCRIPT_POINTER;
+	SCRIPT_POINTER += 2;
 }
 
 void pollOneUByteOneUShort(uint8_t *outByte, uint16_t *outShort)
@@ -2199,7 +2199,7 @@ void pollOneUByteOneUShort(uint8_t *outByte, uint16_t *outShort)
 
 void skipOneReadTwoShort(uint16_t *out1, uint16_t *out2)
 {
-	MAIN_D_80134FDC++;
+	SCRIPT_POINTER++;
 	pollNextScriptUShort(out1);
 	pollNextScriptUShort(out2);
 }
@@ -2228,7 +2228,7 @@ void unsetTrigger(uint16_t trigger)
 
 void skipOnePollTwoScriptBytes(uint8_t *out1, uint8_t *out2)
 {
-	MAIN_D_80134FDC++;
+	SCRIPT_POINTER++;
 	pollNextScriptUByte(out1);
 	pollNextScriptUByte(out2);
 }
@@ -2350,8 +2350,8 @@ void scriptLoadModel(int32_t modelId)
 
 void pollNextScriptShort(int16_t *out)
 {
-	*out = *(int16_t *)MAIN_D_80134FDC;
-	MAIN_D_80134FDC += 2;
+	*out = *(int16_t *)SCRIPT_POINTER;
+	SCRIPT_POINTER += 2;
 }
 
 void pollNextTwoScriptShorts(int16_t *out1, int16_t *out2)
@@ -2376,7 +2376,7 @@ void playBGM(bgmId)
 
 	handleMusicOverride(&font, &variant);
 	ACTIVE_BGM_FONT = font;
-	MAIN_D_80135007 = variant;
+	ACTIVE_BGM_TRACK = variant;
 	stopBGM();
 	playMusic(font, variant);
 }
@@ -2393,9 +2393,9 @@ void updateBGM(void)
 	}
 
 	handleMusicOverride(&font, &variant);
-	if (ACTIVE_BGM_FONT != font || MAIN_D_80135007 != variant) {
+	if (ACTIVE_BGM_FONT != font || ACTIVE_BGM_TRACK != variant) {
 		ACTIVE_BGM_FONT = font;
-		MAIN_D_80135007 = variant;
+		ACTIVE_BGM_TRACK = variant;
 		stopBGM();
 		playMusic(font, variant);
 	}
@@ -2414,7 +2414,7 @@ void forceUpdateBGM(void)
 
 	handleMusicOverride(&font, &variant);
 	ACTIVE_BGM_FONT = font;
-	MAIN_D_80135007 = variant;
+	ACTIVE_BGM_TRACK = variant;
 	stopBGM();
 	playMusic(font, variant);
 }
@@ -2472,20 +2472,20 @@ void returnFromScriptFile(void)
 			break;
 		}
 		if (type == 3) {
-			readMapTFS(CURRENT_MAP_ID);
-			setupMap(CURRENT_MAP_ID, 0);
+			readMapTFS(CURRENT_SCREEN_ID);
+			setupMap(CURRENT_SCREEN_ID, 0);
 			MAIN_D_80134FEC = 0;
 			script = getScript(CURRENT_SCRIPT_ID);
 			section = getScriptSection(script, 0xfe);
 			if (section != 0) {
-				CURRENT_SCRIPT_PTR = script;
-				MAIN_D_80134FDC = section;
+				ACTIVE_SCRIPT = script;
+				SCRIPT_POINTER = section;
 				longjmp(SCRIPT_JMP_BUF, 1);
 			}
 		} else if (type == 4) {
 			if (entry.smth[1] != 0xff) {
-				CURRENT_SCRIPT_PTR = getScript(CURRENT_SCRIPT_ID);
-				MAIN_D_80134FDC = getScriptSection(CURRENT_SCRIPT_PTR, entry.smth[1]);
+				ACTIVE_SCRIPT = getScript(CURRENT_SCRIPT_ID);
+				SCRIPT_POINTER = getScriptSection(ACTIVE_SCRIPT, entry.smth[1]);
 			} else {
 				setMapHeadActive();
 			}
@@ -2514,15 +2514,15 @@ void scriptPauseGame(int32_t owner)
 		clearTextArea();
 		stopGameTime();
 
-		if (MAIN_D_80134FE0 != 0 && isTriggerSet(TRIGGER_44) == 0) {
-			entityId = scriptIdToEntityId(MAIN_D_80134FE4) & 0xff;
+		if (SCRIPT_SECTION_IS_EVENT != 0 && isTriggerSet(TRIGGER_44) == 0) {
+			entityId = scriptIdToEntityId(SCRIPT_SECTION) & 0xff;
 			if (entityId != 0xff) {
 				MAIN_D_801BE6B4[entityId * 0xc] = 0;
-				(MAIN_D_801BE6B4 + 1)[entityId * 0xc] = MAIN_D_80134FE4;
+				(MAIN_D_801BE6B4 + 1)[entityId * 0xc] = SCRIPT_SECTION;
 				(MAIN_D_801BE6B4 + 2)[entityId * 0xc] = 0xfd;
 				MAIN_D_801BE6B4[0] = 0;
 				MAIN_D_801BE6B4[1] = 0xfd;
-				MAIN_D_801BE6B4[2] = MAIN_D_80134FE4;
+				MAIN_D_801BE6B4[2] = SCRIPT_SECTION;
 			}
 		}
 	}
@@ -2567,7 +2567,7 @@ void readFileSection(char *filename, void *dest, uint32_t offset,
 
 	mode = 0x80;
 
-	if (MAIN_D_80134FA8 == 0) {
+	if (LOAD_FILE_SECTION_STARTPOS == 0) {
 		path[0] = '\\';
 		strcpy(&path[1], filename);
 		strcat(path, MAIN_D_801345F0);
@@ -2578,13 +2578,13 @@ void readFileSection(char *filename, void *dest, uint32_t offset,
 		while (CdControl(0xe, &mode, 0) == 0)
 			;
 
-		MAIN_D_80134FA8 = CdPosToInt(&file.pos);
+		LOAD_FILE_SECTION_STARTPOS = CdPosToInt(&file.pos);
 	} else {
 		while (CdControl(0xe, &mode, 0) == 0)
 			;
 	}
 
-	sector = MAIN_D_80134FA8 + (offset >> 11);
+	sector = LOAD_FILE_SECTION_STARTPOS + (offset >> 11);
 	file.pos = *CdIntToPos(sector, &file.pos);
 
 	while (CdControl(2, (u_char *)&file.pos, 0) == 0)
@@ -2619,7 +2619,7 @@ void scriptInstructionFBtoFF(op)
 		returnFromScriptFile();
 		break;
 	case 0xfb:
-		skipOneReadTwoShort(&CURRENT_SCRIPT_ID, &CURRENT_MAP_ID);
+		skipOneReadTwoShort(&CURRENT_SCRIPT_ID, &CURRENT_SCREEN_ID);
 
 		entry.smth[0] = 3;
 		pushScriptStack(&entry);
@@ -2627,7 +2627,7 @@ void scriptInstructionFBtoFF(op)
 		MAIN_D_80134FEC = 1;
 
 		resetBGM();
-		loadMap(CURRENT_MAP_ID);
+		loadMap(CURRENT_SCREEN_ID);
 		longjmp(SCRIPT_JMP_BUF, 1);
 		break;
 	}

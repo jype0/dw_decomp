@@ -5,7 +5,7 @@
 
 #include "common.h"
 
-int16_t FADE_OUT_TARGET;
+int16_t FADE_DATA;
 int16_t FADE_IN_TARGET;
 int16_t FADE_OUT_CURRENT;
 int16_t FADE_IN_CURRENT;
@@ -24,7 +24,7 @@ extern GsOT *ACTIVE_ORDERING_TABLE;
 // correct codegen for renderFadeOut()
 static void __garbage__()
 {
-	FADE_OUT_TARGET /= 7;
+	FADE_DATA /= 7;
 	FADE_IN_TARGET /= 7;
 	FADE_OUT_CURRENT = 0;
 	FADE_IN_CURRENT = 0;
@@ -36,7 +36,7 @@ static void __garbage__()
 
 void initializeFadeData(void)
 {
-	FADE_OUT_TARGET = 0;
+	FADE_DATA = 0;
 	FADE_OUT_CURRENT = 0;
 	FADE_IN_TARGET = 0;
 	FADE_IN_CURRENT = 0;
@@ -51,7 +51,7 @@ void fadeToBlack(int16_t frames)
 		removeObject(4005, 0);
 	}
 
-	FADE_OUT_TARGET = frames + 1;
+	FADE_DATA = frames + 1;
 	FADE_OUT_CURRENT = 1;
 	FADE_MODE = 2;
 	addObject(4005, 0, 0, renderFadeOut);
@@ -105,7 +105,7 @@ void renderFadeOut(void)
 {
 	uint8_t next;
 
-	next = FADE_PROGRESS += 160 / FADE_OUT_TARGET;
+	next = FADE_PROGRESS += 160 / FADE_DATA;
 
 	if (160 < next) {
 		FADE_PROGRESS = next = 160;
@@ -150,7 +150,7 @@ void fadeToWhite(int16_t frames)
 	}
 #endif
 
-	FADE_OUT_TARGET = frames + 1;
+	FADE_DATA = frames + 1;
 	FADE_OUT_CURRENT = 1;
 	FADE_MODE = 1;
 

@@ -25,17 +25,17 @@ typedef struct {
 
 extern int8_t PARTNER_PREVIOUS_TILE_X;
 extern int8_t PARTNER_PREVIOUS_TILE_Y;
-extern uint8_t MAIN_D_80125F70[][7];
-extern int32_t COMBAT_AREA_CENTER_X;
-extern int32_t COMBAT_AREA_CENTER_Y;
+extern uint8_t TYPE_FACTORS[][7];
+extern int32_t COMBAT_AREA_X;
+extern int32_t COMBAT_AREA_Y;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
 extern PACKET GS_WORK_BASES[];
-extern char DRAW_OFFSETS[];
-extern DigimonEntity *MAIN_D_80134EF4;
-extern DigimonEntity *MAIN_D_80134EF8;
+extern char DR_OFFSETS[];
+extern DigimonEntity *BATTLE_TARGETED_DIGIMON;
+extern DigimonEntity *BATTLE_ATTACKING_DIGIMON;
 extern uint8_t CURRENT_SCREEN;
-extern uint8_t MAIN_D_80134D64;
+extern uint8_t BATTLE_TOGGLE_LIFEBAR;
 extern int8_t PARTNER_WAYPOINT_COUNT;
 extern int8_t PARTNER_WAYPOINT_CURRENT;
 extern int8_t PARTNER_WAYPOINT_X[];
@@ -296,7 +296,7 @@ static void *battle_main_functions[] = {
 	BTL_tickPartnerAI,
 };
 
-uint8_t MAIN_D_801346E8[4] = { 70, 40, 30, 0 };
+uint8_t TARGET_ATTACKER_CHANCE[4] = { 70, 40, 30, 0 };
 uint8_t MAIN_D_801346EC[4] = { 50, 20, 5, 0 };
 uint8_t MAIN_D_801346F0[4] = { 50, 20, 10, 0 };
 uint8_t MAIN_D_801346F4[4] = { 10, 5, 0, 0 };
@@ -325,10 +325,10 @@ void BTL_tickPartnerAI(void)
 		COMBAT_DATA_PTR->player.commandDelay[0]--;
 	}
 
-	if (MAIN_D_80134D74 == 0) {
+	if (NO_AI_FLAG == 0) {
 		if (stats->current.currentHP > fighter->hpDamageBuffer) {
 			if (stats->base.brain < 0x12d) {
-				if ((MAIN_D_80134D66 % (((stats->base.brain / 2) + 1) * 20)) == 0) {
+				if ((BATTLE_FRAME_COUNT % (((stats->base.brain / 2) + 1) * 20)) == 0) {
 					if ((0x46 - PARTNER_PARA.discipline) > randomLimit(100)) {
 						*flagsPtr |= 0x2000;
 						fighter->senileTimer = 100;
@@ -364,7 +364,7 @@ void BTL_tickPartnerAI(void)
 		return;
 	}
 
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		return;
 	}
 
@@ -435,7 +435,7 @@ void BTL_tickPartnerAI(void)
 		}
 	}
 
-	if ((*flagsPtr & 8) && ((MAIN_D_80134D66 % 100) == 0)) {
+	if ((*flagsPtr & 8) && ((BATTLE_FRAME_COUNT % 100) == 0)) {
 		fighter->targetId = enemies[randomLimit(count)];
 	}
 
@@ -527,7 +527,7 @@ void BTL_tickEnemyAI(void)
 
 	combat = COMBAT_DATA_PTR;
 	partner = ENTITY_TABLE[1];
-	if ((MAIN_D_80134D66 % 20) == 0) {
+	if ((BATTLE_FRAME_COUNT % 20) == 0) {
 		for (i = 0; i <= ENEMY_COUNT; i++) {
 			if (combat->fighter[i].buffPrioTimer != 0) {
 				combat->fighter[i].buffPrioTimer--;
@@ -540,10 +540,10 @@ void BTL_tickEnemyAI(void)
 		entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 		stats = &((DigimonEntity *)entity)->stats;
 		flagsPtr = &fighter->flags;
-		if (MAIN_D_80134D74 == 0) {
+		if (NO_AI_FLAG == 0) {
 			if (stats->current.currentHP > fighter->hpDamageBuffer) {
 				if (stats->base.brain < 0x12d) {
-					if ((MAIN_D_80134D66 % (((stats->base.brain / 2) + 1) * 20)) == 0) {
+					if ((BATTLE_FRAME_COUNT % (((stats->base.brain / 2) + 1) * 20)) == 0) {
 						if (((0x12c - stats->base.brain) / 4) > randomLimit(100)) {
 							*flagsPtr |= 0x2000;
 							fighter->senileTimer = 100;
@@ -581,7 +581,7 @@ void BTL_tickEnemyAI(void)
 			fighter->moveRange = -1;
 			continue;
 		}
-		if (MAIN_D_80134D74 != 0) {
+		if (NO_AI_FLAG != 0) {
 			return;
 		}
 		if (*flagsPtr & 0x40) {
@@ -654,8 +654,8 @@ void BTL_tickFighterStates(void)
 	uint16_t *flags;
 	int32_t i;
 
-	if (MAIN_D_80134D7C[1] > 0) {
-		MAIN_D_80134D7C[1]--;
+	if (FLEE_DISABLED[1] > 0) {
+		FLEE_DISABLED[1]--;
 	}
 
 	combat = COMBAT_DATA_PTR;
@@ -799,7 +799,7 @@ void BTL_deinitializeCombat(void)
 	}
 
 	BTL_removePartnerStatusBars();
-	if (MAIN_D_80134D7C[0] != 0) {
+	if (FLEE_DISABLED[0] != 0) {
 		for (i = 2; i < 10; i++) {
 			if (ENTITY_TABLE[i] != NULL) {
 				found = 0;
@@ -941,7 +941,7 @@ void BTL_handleVictorySequence(void)
 		startAnimation(entity, 0x2c);
 	}
 
-	if (MAIN_D_80134D7C[0] != 0) {
+	if (FLEE_DISABLED[0] != 0) {
 		for (;;) {
 			for (i = 1; ENEMY_COUNT >= i; i++) {
 				if (!(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]]->anim.animFlag & 1)) {
@@ -1021,7 +1021,7 @@ void BTL_tickHitState(Entity *entity, FighterData *fighter, int32_t arg2)
 
 void BTL_tickFlatState(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int32_t arg3)
 {
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -1045,7 +1045,7 @@ void BTL_tickStunState(Entity *entity)
 
 void BTL_tickConfusedState(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int32_t arg3)
 {
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -1112,7 +1112,7 @@ void BTL_tickChargeState(DigimonEntity *digimon, DigimonEntity *target, FighterD
 	int32_t r;
 	int16_t tech;
 
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -1174,7 +1174,7 @@ void BTL_tickChargeState(DigimonEntity *digimon, DigimonEntity *target, FighterD
 
 void BTL_tickCooldownState(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter)
 {
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -1198,7 +1198,7 @@ void BTL_tickCooldownState(DigimonEntity *digimon, DigimonEntity *target, Fighte
 
 void BTL_tickQueuedMove(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int32_t arg3)
 {
-	if ((MAIN_D_80134D74 != 0) && (MAIN_D_80134D60 != &digimon->entity)) {
+	if ((NO_AI_FLAG != 0) && (FINISHING_ENTITY != &digimon->entity)) {
 		handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 		return;
 	}
@@ -1226,7 +1226,7 @@ int32_t BTL_handlePartnerMoveCommand(DigimonEntity *digimon, DigimonEntity *targ
 {
 	uint32_t reach;
 
-	if (MAIN_D_80134D74 != 0) {
+	if (NO_AI_FLAG != 0) {
 		return 0;
 	}
 
@@ -1285,8 +1285,8 @@ int32_t BTL_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, Fight
 		radius = radius * radius;
 		if (dist <= radius) {
 			handleBattleIdle(digimon, &digimon->stats, fighter->flags);
-			if (MAIN_D_80134D74 != 0) {
-				if (MAIN_D_80134D60 != &digimon->entity) {
+			if (NO_AI_FLAG != 0) {
+				if (FINISHING_ENTITY != &digimon->entity) {
 					return 0;
 				}
 				if (MAIN_D_80135080 > 0) {
@@ -1297,10 +1297,10 @@ int32_t BTL_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, Fight
 			} else {
 				tech = entityGetTechFromAnim(&digimon->entity, fighter->queuedAnim);
 				if ((tech >= 0x3a) && (tech < 0x71)) {
-					MAIN_D_80134D74 = 1;
+					NO_AI_FLAG = 1;
 				}
-				if (MAIN_D_80134D74 != 0) {
-					MAIN_D_80134D60 = &digimon->entity;
+				if (NO_AI_FLAG != 0) {
+					FINISHING_ENTITY = &digimon->entity;
 					if (digimon == (DigimonEntity *)ENTITY_TABLE[1]) {
 						BTL_initializeFinisherChargeup(tech);
 					}
@@ -1319,12 +1319,12 @@ int32_t BTL_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, Fight
 			BTL_setupMoveExecution(digimon, target, fighter);
 			return 0;
 		}
-		if (MAIN_D_80134D74 == 0) {
+		if (NO_AI_FLAG == 0) {
 			BTL_setWalking(&digimon->entity, &digimon->stats, fighter->flags);
 			entityLookAtLocation(&digimon->entity, &target->entity.posData->location);
 			goto check;
 		}
-		if (MAIN_D_80134D60 != &digimon->entity) {
+		if (FINISHING_ENTITY != &digimon->entity) {
 			return 0;
 		}
 		if (MAIN_D_80135080 > 0) {
@@ -1359,7 +1359,7 @@ void BTL_tickRangedAttack(DigimonEntity *digimon, DigimonEntity *target, Fighter
 		return;
 	}
 
-	if ((MAIN_D_80134D74 != 0) && (&digimon->entity == MAIN_D_80134D60)) {
+	if ((NO_AI_FLAG != 0) && (&digimon->entity == FINISHING_ENTITY)) {
 		BTL_startQueuedMove(digimon, target, fighter);
 		return;
 	}
@@ -1384,7 +1384,7 @@ void BTL_tickRangedAttack(DigimonEntity *digimon, DigimonEntity *target, Fighter
 	fighter->unk15 = 0;
 	handleBattleIdle(digimon, &digimon->stats, fighter->flags);
 	if (fighter->flags & 8) {
-		if ((MAIN_D_80134D66 % 40) == 0) {
+		if ((BATTLE_FRAME_COUNT % 40) == 0) {
 			BTL_startQueuedMove(digimon, target, fighter);
 		} else {
 			entityLookAtLocation(&digimon->entity, &target->entity.posData->location);
@@ -1538,7 +1538,7 @@ void BTL_tickFighterAction(int32_t index)
 		digimon->entity.anim.animFlag &= 5;
 	}
 
-	if ((MAIN_D_80134D74 != 0) && (MAIN_D_80134D60 == &digimon->entity) && (MAIN_D_80135080 > 0)) {
+	if ((NO_AI_FLAG != 0) && (FINISHING_ENTITY == &digimon->entity) && (MAIN_D_80135080 > 0)) {
 		return;
 	}
 
@@ -1561,9 +1561,9 @@ void BTL_tickFighterAction(int32_t index)
 		return;
 	}
 
-	if (MAIN_D_80134D60 == &digimon->entity) {
-		MAIN_D_80134D74 = 0;
-		MAIN_D_80134D60 = NULL;
+	if (FINISHING_ENTITY == &digimon->entity) {
+		NO_AI_FLAG = 0;
+		FINISHING_ENTITY = NULL;
 	}
 
 	fighter->unk16 = 0;
@@ -1658,7 +1658,7 @@ int32_t BTL_getContactRangeSquared(int32_t *a, int32_t *b)
 void BTL_increaseSpeedBuffer(FighterData *fighter, Stats *stats)
 {
 	if (fighter->speedBuffer < 0x64) {
-		if ((MAIN_D_80134D66 % 2) == 0) {
+		if ((BATTLE_FRAME_COUNT % 2) == 0) {
 			fighter->speedBuffer += (stats->base.speed / 100) + 1;
 		}
 		if (fighter->speedBuffer >= 0x65) {
@@ -1850,8 +1850,8 @@ grace:
 
 int32_t BTL_battleMain(void)
 {
-	COMBAT_AREA_CENTER_X = 0xa0 - DRAWING_OFFSET_X;
-	COMBAT_AREA_CENTER_Y = 0x78 - DRAWING_OFFSET_Y;
+	COMBAT_AREA_X = 0xa0 - DRAWING_OFFSET_X;
+	COMBAT_AREA_Y = 0x78 - DRAWING_OFFSET_Y;
 	BTL_initializeCombat();
 	BTL_handleBattleIntro();
 	for (;;) {
@@ -1864,7 +1864,7 @@ int32_t BTL_battleMain(void)
 		BTL_tickPartnerWaypointTrail();
 		BTL_battleTickFrame();
 		handlePause();
-		MAIN_D_80134D66++;
+		BATTLE_FRAME_COUNT++;
 	}
 
 	removePauseBox();
@@ -1995,7 +1995,7 @@ int16_t BTL_calculateHitChance(DigimonEntity *attacker, DigimonEntity *defender,
 void BTL_retargetAfterHit(DigimonEntity *digimon, FighterData *fighter, AttackObject attack)
 {
 	if (digimon == (DigimonEntity *)ENTITY_TABLE[1]) {
-		if (((MAIN_D_801346E8[digimon->stats.current.chargeMode] - PARTNER_PARA.discipline) <= randomLimit(100)) && (BTL_isFighterDefeated(fighter->targetId) == 0)) {
+		if (((TARGET_ATTACKER_CHANCE[digimon->stats.current.chargeMode] - PARTNER_PARA.discipline) <= randomLimit(100)) && (BTL_isFighterDefeated(fighter->targetId) == 0)) {
 			return;
 		}
 		BTL_selectFighterTarget(digimon, fighter, BTL_getFighterSlot(attack.casterId), 1);
@@ -2015,7 +2015,7 @@ int32_t BTL_calculateDamage(DigimonEntity *attacker, DigimonEntity *defender, in
 
 	for (i = 0; i < 3; i++) {
 		if (DIGIMON_DATA[defender->entity.type].special[i] != 0xff) {
-			mult[i] = MAIN_D_80125F70[MOVE_DATA[move].special][DIGIMON_DATA[defender->entity.type].special[i]];
+			mult[i] = TYPE_FACTORS[MOVE_DATA[move].special][DIGIMON_DATA[defender->entity.type].special[i]];
 		} else {
 			mult[i] = 10;
 		}
@@ -2127,7 +2127,7 @@ void BTL_tickAttackHits(void)
 		if (popAttackObject(COMBAT_DATA_PTR->player.entityIds[i], &attack) == 0) {
 			continue;
 		}
-		if (MAIN_D_80134D68 >= 0x13) {
+		if (FLEE_TIMER >= 0x13) {
 			continue;
 		}
 		entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
@@ -2146,20 +2146,20 @@ void BTL_tickAttackHits(void)
 		fighter->flags &= 0xff8f;
 		attacker = ENTITY_TABLE[attack.casterId];
 		hit = BTL_calculateHitChance((DigimonEntity *)attacker, (DigimonEntity *)entity, fighter, tech);
-		if (entity == MAIN_D_80134D60) {
+		if (entity == FINISHING_ENTITY) {
 			if (i == 0) {
 				BTL_removeFinisherChargeup();
 			}
 			if (MAIN_D_8013507C != -1) {
 				BTL_removeFinisherAura(MAIN_D_8013507C);
 			}
-			MAIN_D_80134D74 = 0;
-			MAIN_D_80134D60 = NULL;
+			NO_AI_FLAG = 0;
+			FINISHING_ENTITY = NULL;
 		}
 		if (randomLimit(100) < hit) {
 			BTL_retargetAfterHit((DigimonEntity *)entity, fighter, attack);
 			dmg = BTL_calculateDamage((DigimonEntity *)attacker, (DigimonEntity *)entity, tech);
-			MAIN_D_80134D70 = 1;
+			HAS_TAKEN_DAMAGE = 1;
 			if (i == 0) {
 				if ((dmg * 100 / PARTNER_ENTITY.digimonEntity.stats.base.hp) >= 0x14) {
 					COMBAT_DATA_PTR->player.unk2++;
@@ -2280,7 +2280,7 @@ void BTL_renderEnemyHPBars(void)
 		fighter = &combat->fighter[i];
 		entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 		spr = &COMBAT_DATA_PTR->player.unk1[i];
-		if (MAIN_D_80134D64 == 0) {
+		if (BATTLE_TOGGLE_LIFEBAR == 0) {
 			if (spr->unk25 >= 0x15) {
 				continue;
 			}
@@ -2441,8 +2441,8 @@ void BTL_startQueuedMove(DigimonEntity *digimon, DigimonEntity *target, FighterD
 {
 	int16_t tech;
 
-	if (MAIN_D_80134D74 != 0) {
-		if (MAIN_D_80134D60 != &digimon->entity) {
+	if (NO_AI_FLAG != 0) {
+		if (FINISHING_ENTITY != &digimon->entity) {
 			return;
 		}
 		if (MAIN_D_80135080 > 0) {
@@ -2453,10 +2453,10 @@ void BTL_startQueuedMove(DigimonEntity *digimon, DigimonEntity *target, FighterD
 	} else {
 		tech = entityGetTechFromAnim(&digimon->entity, fighter->queuedAnim);
 		if ((tech >= 0x3a) && (tech < 0x71)) {
-			MAIN_D_80134D74 = 1;
+			NO_AI_FLAG = 1;
 		}
-		if (MAIN_D_80134D74 != 0) {
-			MAIN_D_80134D60 = &digimon->entity;
+		if (NO_AI_FLAG != 0) {
+			FINISHING_ENTITY = &digimon->entity;
 			if (digimon == (DigimonEntity *)ENTITY_TABLE[1]) {
 				BTL_initializeFinisherChargeup(tech);
 			}
@@ -2486,7 +2486,7 @@ void BTL_startQueuedMove(DigimonEntity *digimon, DigimonEntity *target, FighterD
 	}
 
 	if (MOVE_DATA[tech].unk3 & 2) {
-		MAIN_D_80134D7C[1] = 0x6e;
+		FLEE_DISABLED[1] = 0x6e;
 	}
 
 	startAnimation(&digimon->entity, fighter->queuedAnim);
@@ -2503,7 +2503,7 @@ int32_t BTL_isMoveOnCooldown(Entity *entity, FighterData *fighter)
 	int16_t tech;
 
 	tech = entityGetTechFromAnim(entity, fighter->queuedAnim);
-	if ((MOVE_DATA[tech].unk3 & 2) && (MAIN_D_80134D7C[1] > 0)) {
+	if ((MOVE_DATA[tech].unk3 & 2) && (FLEE_DISABLED[1] > 0)) {
 		return 1;
 	}
 
@@ -2517,27 +2517,27 @@ void BTL_setupMoveExecution(DigimonEntity *digimon, DigimonEntity *target, Fight
 	int16_t brain;
 	int32_t i;
 
-	MAIN_D_80134EF8 = digimon;
+	BATTLE_ATTACKING_DIGIMON = digimon;
 	tech = entityGetTechFromAnim(&digimon->entity, fighter->queuedAnim);
 	if (fighter->moveRange != 4) {
-		MAIN_D_80134EF4 = target;
+		BATTLE_TARGETED_DIGIMON = target;
 		if (target == NULL) {
 			if (MOVE_DATA[tech].unk3 & 1) {
 				if (digimon != (DigimonEntity *)ENTITY_TABLE[1]) {
-					MAIN_D_80134EF4 = (DigimonEntity *)ENTITY_TABLE[1];
+					BATTLE_TARGETED_DIGIMON = (DigimonEntity *)ENTITY_TABLE[1];
 					fighter->targetId = 0;
 				} else {
 					for (i = 1; ENEMY_COUNT >= i; i++) {
 						if (BTL_isFighterDefeated(i) != 1) {
 							fighter->targetId = i;
-							MAIN_D_80134EF4 = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+							BATTLE_TARGETED_DIGIMON = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 						}
 					}
 				}
 			}
 		}
 	} else {
-		MAIN_D_80134EF4 = digimon;
+		BATTLE_TARGETED_DIGIMON = digimon;
 	}
 
 	BTL_removeMoveEffect(digimon, fighter);
@@ -2563,7 +2563,7 @@ void BTL_setupMoveExecution(DigimonEntity *digimon, DigimonEntity *target, Fight
 		}
 	} else {
 		if (!((tech >= 0x3a) && (tech < 0x71))) {
-			if (MAIN_D_80134D7C[0] == 0) {
+			if (FLEE_DISABLED[0] == 0) {
 				digimon->stats.current.currentMP -= MOVE_DATA[tech].mpCost * 3;
 			}
 		}
@@ -2620,7 +2620,7 @@ void BTL_battleTickFrame(void)
 	GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 	tickObjects();
 	renderObjects();
-	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80, &DRAW_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
+	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80, &DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
 	DrawSync(0);
 	VSync(3);
 	POLLED_INPUT_PREVIOUS = POLLED_INPUT;
@@ -2809,7 +2809,7 @@ void BTL_tickStatusEffects(void)
 		entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
 		stats = &((DigimonEntity *)entity)->stats;
 		if (fighter->flags & 1) {
-			if (MAIN_D_80134D74 == 0) {
+			if (NO_AI_FLAG == 0) {
 				fighter->poisonTimer--;
 			}
 			if (fighter->poisonTimer == 0) {
@@ -2826,7 +2826,7 @@ void BTL_tickStatusEffects(void)
 			}
 		}
 		if (fighter->flags & 2) {
-			if ((MAIN_D_80134D74 == 0) && (fighter->confusionTimer != 0)) {
+			if ((NO_AI_FLAG == 0) && (fighter->confusionTimer != 0)) {
 				fighter->confusionTimer--;
 			}
 			if ((fighter->confusionTimer == 0) && !(combat->fighter[0].flags & 0x20)) {
@@ -2834,7 +2834,7 @@ void BTL_tickStatusEffects(void)
 			}
 		}
 		if (fighter->flags & 4) {
-			if (MAIN_D_80134D74 == 0) {
+			if (NO_AI_FLAG == 0) {
 				fighter->stunTimer--;
 			}
 			if (fighter->stunTimer == 0) {
@@ -2844,7 +2844,7 @@ void BTL_tickStatusEffects(void)
 		if (fighter->flatTimer <= 0) {
 			continue;
 		}
-		if ((MAIN_D_80134D74 == 0) || (fighter->flatTimer < 0x42)) {
+		if ((NO_AI_FLAG == 0) || (fighter->flatTimer < 0x42)) {
 			fighter->flatTimer--;
 		}
 		BTL_applyFlattenScale(&entity->posData->scale, fighter->flatTimer);
@@ -3098,7 +3098,7 @@ int16_t BTL_getMostEffectiveMove(index, flags)
 	for (i = 0; i < 3; i++) {
 		if (flags[i] == 1) {
 			tech = entityGetTechFromAnim(&digimon->entity, moves[i]);
-			score[i] = MAIN_D_80125F70[MOVE_DATA[tech].special][DIGIMON_DATA[target->type].special[0]];
+			score[i] = TYPE_FACTORS[MOVE_DATA[tech].special][DIGIMON_DATA[target->type].special[0]];
 		} else {
 			score[i] = -1;
 		}
@@ -3364,7 +3364,7 @@ int16_t BTL_calculateTargetScore(DigimonEntity *self, DigimonEntity *other)
 	int16_t mult;
 
 	st = &self->stats;
-	mult = MAIN_D_80125F70[DIGIMON_DATA[self->entity.type].special[0]]
+	mult = TYPE_FACTORS[DIGIMON_DATA[self->entity.type].special[0]]
 			      [DIGIMON_DATA[other->entity.type].special[0]];
 	switch (mult) {
 	case 20:
@@ -3588,7 +3588,7 @@ void BTL_selectPartnerMove(DigimonEntity *digimon, FighterData *fighter, int16_t
 
 int16_t BTL_calculateElementBonus(int16_t arg0, int16_t arg1)
 {
-	switch (MAIN_D_80125F70[arg0][arg1]) {
+	switch (TYPE_FACTORS[arg0][arg1]) {
 	case 20:
 		return 10;
 	case 15:
