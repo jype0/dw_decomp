@@ -13,20 +13,8 @@
 #include <dw/tamer.h>
 #include <dw/ui.h>
 
-typedef struct {
-	uint32_t usedRows;
-	TextBoxData box[6];
-} TextBoxTable;
-
-extern TextBoxTable TEXTBOX_LINES_USED;
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern int32_t MAIN_D_80134F94;
-extern uint16_t SELECTION_CURRENT[];
-extern uint16_t MAIN_D_801BE954[];
-extern uint16_t MAIN_D_801BE956[];
-extern uint16_t SELECTION_COUNT[];
-extern int32_t SELECTION_POINTER[];
-extern int32_t SELECTION_END_POINTER[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
 extern int8_t DRAW_STRING2_IS_FIXED_WIDTH;
@@ -104,8 +92,8 @@ void renderScriptDialogueBox(void)
 	int16_t y;
 	int16_t ySave;
 
-	rowPx = TEXTBOX_DATA[0].vramRow * 12;
-	rowPx += (TEXTBOX_DATA[0].backPage * 48);
+	rowPx = TEXTBOX_DATA.box[0].vramRow * 12;
+	rowPx += (TEXTBOX_DATA.box[0].backPage * 48);
 	x = UI_BOX_DATA[0].finalPos.x + 5;
 	y = UI_BOX_DATA[0].finalPos.y + 4;
 	ySave = y;
@@ -149,7 +137,7 @@ int32_t drawTextboxStrings(boxId, flag)
 	int16_t row;
 	uint8_t *buf;
 
-	box = &TEXTBOX_LINES_USED.box[boxId];
+	box = &TEXTBOX_DATA.box[boxId];
 	if (box->writeCount == box->renderCount) {
 		return 0;
 	}
@@ -198,16 +186,16 @@ void clearTextboxLineCount(boxId)
 	TextBoxData *entry;
 	int32_t rows;
 
-	entry = &TEXTBOX_LINES_USED.box[boxId];
+	entry = &TEXTBOX_DATA.box[boxId];
 
-	rows = ((int32_t *)entry)[9];
+	rows = entry->vramRows;
 	if (entry->doubleBuffered == 1) {
 		rows <<= 1;
 	}
 
-	((int32_t *)entry)[9] = 0;
+	entry->vramRows = 0;
 	entry->registered = 1;
-	TEXTBOX_LINES_USED.usedRows -= rows;
+	TEXTBOX_DATA.usedRows -= rows;
 }
 
 int32_t tickSelectionDialogue(void)
@@ -224,40 +212,39 @@ int32_t tickSelectionDialogue(void)
 		advanceTextbox(0);
 		playSound(0, 3);
 
-		return SELECTION_CURRENT[0];
+		return DIALOGUE_SELECTION.current;
 	}
 
 	if (isKeyDown(CANCEL_BUTTON)) {
 		if (isTriggerSet(0x31) == 0) {
 			if (ACTIVE_INSTRUCTION != SCRIPT_OP_CALL_ROUTINE) {
 				advanceTextbox(0);
-				SCRIPT_POINTER =
-					(uint8_t *)SELECTION_END_POINTER[0];
+				SCRIPT_POINTER = DIALOGUE_SELECTION.endPointer;
 				playSound(0, 4);
 
 				return 0xffff;
 			}
 
 			advanceTextbox(0);
-			SELECTION_CURRENT[0] = SELECTION_COUNT[0] - 1;
+			DIALOGUE_SELECTION.current = DIALOGUE_SELECTION.count - 1;
 			playSound(0, 4);
 
-			return SELECTION_CURRENT[0];
+			return DIALOGUE_SELECTION.current;
 		}
 
 		playSound(0, 0xb);
 	} else if (isKeyDown(0x1000)) {
-		if (SELECTION_CURRENT[0] == 0) {
-			SELECTION_CURRENT[0] = SELECTION_COUNT[0] - 1;
+		if (DIALOGUE_SELECTION.current == 0) {
+			DIALOGUE_SELECTION.current = DIALOGUE_SELECTION.count - 1;
 		} else {
-			SELECTION_CURRENT[0] -= 1;
+			DIALOGUE_SELECTION.current -= 1;
 		}
 
 		playSound(0, 2);
 	} else if (isKeyDown(0x4000)) {
-		SELECTION_CURRENT[0] += 1;
-		if (SELECTION_CURRENT[0] == SELECTION_COUNT[0]) {
-			SELECTION_CURRENT[0] = 0;
+		DIALOGUE_SELECTION.current += 1;
+		if (DIALOGUE_SELECTION.current == DIALOGUE_SELECTION.count) {
+			DIALOGUE_SELECTION.current = 0;
 		}
 
 		playSound(0, 2);
@@ -289,7 +276,7 @@ int32_t tickConfirmDialogue(void)
 			goto ret0;
 		}
 
-		if (TEXTBOX_DATA[0].doubleBuffered == 1) {
+		if (TEXTBOX_DATA.box[0].doubleBuffered == 1) {
 			advanceTextbox(0);
 			playSound(0, 3);
 			return 1;
@@ -304,7 +291,7 @@ int32_t tickConfirmDialogue(void)
 		}
 		/* fall through */
 	case 1:
-		if (TEXTBOX_DATA[0].doubleBuffered == 1) {
+		if (TEXTBOX_DATA.box[0].doubleBuffered == 1) {
 			advanceTextbox(0);
 			return 1;
 		} else {
@@ -322,17 +309,17 @@ void renderDialogueSelectionCursor(x, y)
 	int16_t y;
 // clang-format on
 {
-	if (TEXTBOX_DATA[0].idle == 1) {
+	if (TEXTBOX_DATA.box[0].idle == 1) {
 		return;
 	}
 
 #if defined(VERSION_JP)
-	renderSelectionCursor(x - 1, (long)y + MAIN_D_801BE954[0] + SELECTION_CURRENT[0] * 13,
-	                      MAIN_D_801BE956[0], 0xd, 6);
+	renderSelectionCursor(x - 1, (long)y + DIALOGUE_SELECTION.cursorOffsetY + DIALOGUE_SELECTION.current * 13,
+	                      DIALOGUE_SELECTION.cursorWidth, 0xd, 6);
 #else
 	renderSelectionCursor(x - 1,
-	                      y + MAIN_D_801BE954[0] + SELECTION_CURRENT[0] * 13 - 2,
-	                      MAIN_D_801BE956[0], 0xd, 6);
+	                      y + DIALOGUE_SELECTION.cursorOffsetY + DIALOGUE_SELECTION.current * 13 - 2,
+	                      DIALOGUE_SELECTION.cursorWidth, 0xd, 6);
 #endif
 }
 
@@ -365,12 +352,12 @@ void tickCustomSizedTextbox(void)
 	}
 
 	if (UI_BOX_DATA[0].state == 1) {
-		while (TEXTBOX_DATA[0].pageReady == 0) {
+		while (TEXTBOX_DATA.box[0].pageReady == 0) {
 			showTextbox(0, 0xff);
 		}
 
 		ACTIVE_INSTRUCTION = 0;
-		TEXTBOX_DATA[0].idle = 1;
+		TEXTBOX_DATA.box[0].idle = 1;
 		triggerBoxCloseFlag(0);
 		playSound(0, 4);
 	}
@@ -385,7 +372,7 @@ void renderCustomSizedTextbox(void)
 	int16_t y;
 	int32_t i;
 
-	box = TEXTBOX_LINES_USED.box;
+	box = TEXTBOX_DATA.box;
 	pagePx = box->vramRows * 12;
 	rowPx = box->vramRow * 12;
 	rowPx += (int16_t)(box->backPage * pagePx);
@@ -402,13 +389,13 @@ void initializeTextbox(void)
 	TextBoxData *box;
 	int32_t i;
 
-	for (i = 0, box = TEXTBOX_DATA; i < 6; i++, box++) {
+	for (i = 0, box = TEXTBOX_DATA.box; i < 6; i++, box++) {
 		box->flags = 0;
 		box->vramRows = 0;
 		box->registered = 1;
 	}
 
-	TEXTBOX_LINES_USED.usedRows = 0;
+	TEXTBOX_DATA.usedRows = 0;
 	DELAY_FRAMES = 0;
 	AUTOCLOSE_FRAMES = 0;
 	TEXTBOX_OPEN_TIMER = 0;
@@ -432,7 +419,7 @@ void tickTextboxHandling(int32_t flag)
 
 	drew = 0;
 	if (ACTIVE_INSTRUCTION != 0xff) {
-		for (i = 0, box = TEXTBOX_DATA; i < 6; i++, box++) {
+		for (i = 0, box = TEXTBOX_DATA.box; i < 6; i++, box++) {
 			if (box->vramRows != 0) {
 				if (box->registered == 1 && box->writeCount != box->renderCount) {
 					if (box->doubleBuffered == 1) {
@@ -518,7 +505,7 @@ void closeTextbox(boxId, target)
 // clang-format on
 {
 	if (UI_BOX_DATA[boxId].state != 0 && UI_BOX_DATA[boxId].state != 3) {
-		if ((TEXTBOX_LINES_USED.box[boxId].flags & 0x40) == 0) {
+		if ((TEXTBOX_DATA.box[boxId].flags & 0x40) == 0) {
 			removeStaticUIBox(boxId);
 		} else {
 			removeAnimatedUIBox(boxId, target);
@@ -534,7 +521,7 @@ void closeAllTextboxes(void)
 	uint8_t flags;
 
 	for (i = 0; i < 6; i++) {
-		flags = TEXTBOX_LINES_USED.box[i].flags;
+		flags = TEXTBOX_DATA.box[i].flags;
 		if ((flags & 0xf) != 0) {
 			if (flags & 0x40) {
 				ACTIVE_INSTRUCTION = 0xff;
@@ -558,7 +545,7 @@ void createTextbox(boxId, flags, rect, origin, tick, render)
 {
 	TextBoxData *entry;
 
-	entry = &TEXTBOX_LINES_USED.box[boxId];
+	entry = &TEXTBOX_DATA.box[boxId];
 
 	if ((entry->flags & 0xf) == 1) {
 		closeTextbox(boxId, 0);
@@ -578,7 +565,7 @@ void triggerBoxCloseFlag(boxId)
 	uint8_t boxId;
 // clang-format on
 {
-	TextBoxData *e = &TEXTBOX_LINES_USED.box[boxId];
+	TextBoxData *e = &TEXTBOX_DATA.box[boxId];
 	uint8_t val = e->flags;
 
 	if ((val & 0xf) != 0) {
@@ -602,7 +589,7 @@ void registerTextbox(boxId, row, rows, doubleBuffer, mode)
 	int32_t vramX;
 	int32_t vramW;
 
-	entry = &TEXTBOX_LINES_USED.box[boxId];
+	entry = &TEXTBOX_DATA.box[boxId];
 	entry->vramRow = row;
 	entry->vramRows = rows;
 	entry->writeRow = 0;
@@ -621,7 +608,7 @@ void registerTextbox(boxId, row, rows, doubleBuffer, mode)
 		usedRows = usedRows << 1;
 	}
 
-	TEXTBOX_LINES_USED.usedRows += usedRows;
+	TEXTBOX_DATA.usedRows += usedRows;
 	setTextColor(1);
 	getVRAMModeCoords(entry->vramMode, &vramX, &vramW);
 	setRECT(&rect, vramX, entry->vramRow * 12, vramW, usedRows * 12);
@@ -781,7 +768,7 @@ int32_t flipIdleTextboxPage(boxId)
 {
 	TextBoxData *entry;
 
-	entry = &TEXTBOX_LINES_USED.box[boxId];
+	entry = &TEXTBOX_DATA.box[boxId];
 
 	if (entry->doubleBuffered == 0) {
 		return 0;
@@ -826,7 +813,7 @@ int32_t tickBackgroundDialogue(void)
 {
 	TextBoxData *entry;
 
-	entry = TEXTBOX_DATA;
+	entry = TEXTBOX_DATA.box;
 
 	if (flipIdleTextboxPage(0) != 0) {
 		return 0;
@@ -848,7 +835,7 @@ int32_t advanceTextbox(boxId)
 {
 	TextBoxData *entry;
 
-	entry = &TEXTBOX_LINES_USED.box[boxId];
+	entry = &TEXTBOX_DATA.box[boxId];
 	if (entry->registered == 0) {
 		return 0;
 	}
@@ -922,9 +909,7 @@ void tickScriptDialogueBox(void)
 {
 	if (ACTIVE_INSTRUCTION == SCRIPT_OP_SET_SELECTION) {
 		if (tickSelectionDialogue() != 0xffff) {
-			SCRIPT_POINTER =
-				(uint8_t *)((uint32_t)SELECTION_POINTER[0] +
-			                    SELECTION_CURRENT[0] * 2);
+			SCRIPT_POINTER = DIALOGUE_SELECTION.pointer + DIALOGUE_SELECTION.current * 2;
 			SCRIPT_POINTER =
 				(uint8_t *)((uint32_t)ACTIVE_SCRIPT +
 			                    *(uint16_t *)SCRIPT_POINTER);
@@ -944,7 +929,7 @@ void tickScriptDialogueBox(void)
 			break;
 		case 2:
 			if (tickSelectionDialogue() != 0xffff) {
-				SCRIPT_STATE_2 = (long)SCRIPT_NEXT_STATE_2 + SELECTION_CURRENT[0];
+				SCRIPT_STATE_2 = (long)SCRIPT_NEXT_STATE_2 + DIALOGUE_SELECTION.current;
 				ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
 				SCRIPT_TEXTBOX_MODE = 0;
 			}
@@ -989,27 +974,27 @@ void scriptShowSelection(void)
 
 	pollNextScriptUByte(&optionCount);
 
-	SELECTION_COUNT[0] = optionCount;
-	SELECTION_CURRENT[0] = 0;
-	SELECTION_POINTER[0] = (int32_t)SCRIPT_POINTER;
+	DIALOGUE_SELECTION.count = optionCount;
+	DIALOGUE_SELECTION.current = 0;
+	DIALOGUE_SELECTION.pointer = SCRIPT_POINTER;
 	SCRIPT_POINTER = SCRIPT_POINTER + (optionCount + 1) * 2;
-	MAIN_D_801BE956[0] = showTextbox(0, CURRENT_DIALOGUE_OWNER);
-	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
+	DIALOGUE_SELECTION.cursorWidth = showTextbox(0, CURRENT_DIALOGUE_OWNER);
+	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * 12 + 2;
 #if !defined(VERSION_JP)
-	height = MAIN_D_801BE956[0];
+	height = DIALOGUE_SELECTION.cursorWidth;
 
 	if (height > 0xf0) {
-		MAIN_D_801BE956[0] = 0xf0;
+		DIALOGUE_SELECTION.cursorWidth = 0xf0;
 	}
 #endif
 
 	SCRIPT_POINTER += 2;
-	SELECTION_END_POINTER[0] = (int32_t)SCRIPT_POINTER;
+	DIALOGUE_SELECTION.endPointer = SCRIPT_POINTER;
 
 	if (CURRENT_DIALOGUE_OWNER != 0xff) {
-		MAIN_D_801BE954[0] = 0xd;
+		DIALOGUE_SELECTION.cursorOffsetY = 0xd;
 	} else {
-		MAIN_D_801BE954[0] = 0;
+		DIALOGUE_SELECTION.cursorOffsetY = 0;
 	}
 
 	ACTIVE_INSTRUCTION = SCRIPT_OP_SET_SELECTION;
@@ -1028,7 +1013,7 @@ uint16_t showTextbox(uint8_t boxId, uint8_t speakerId)
 	int32_t lines;
 	uint8_t ctrl;
 
-	entry = &TEXTBOX_LINES_USED.box[boxId];
+	entry = &TEXTBOX_DATA.box[boxId];
 	base = TEXTBOX_LINES_PTR + (entry->vramRow << 6);
 	if (entry->vramMode == 2) {
 		base += 0x20;
@@ -1244,7 +1229,7 @@ void scriptSetTextboxSize(void)
 
 uint16_t showTextboxReady(uint8_t boxId, uint8_t speakerId)
 {
-	TEXTBOX_LINES_USED.box[boxId].pageReady = 1;
+	TEXTBOX_DATA.box[boxId].pageReady = 1;
 
 	return showTextbox(boxId, speakerId);
 }

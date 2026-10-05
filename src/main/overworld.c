@@ -10,12 +10,16 @@
 #include <dw/ui.h>
 
 typedef struct {
-	int16_t typeId;
-	int16_t padding0;
 	VECTOR waypoints[8];
 	int16_t aiSections[8];
 	int16_t activeSection;
-	int16_t padding2;
+	int16_t padding;
+} MapDigimonPath;
+
+typedef struct {
+	int16_t typeId;
+	int16_t padding0;
+	MapDigimonPath path;
 	VECTOR targetLocation;
 	int16_t posX;
 	int16_t posY;
@@ -35,25 +39,6 @@ typedef struct {
 	int8_t stopAnim;
 	uint8_t pad[2];
 } MapDigimonEntity;
-
-typedef struct {
-	int16_t orderValue;
-	int16_t x;
-	int16_t y;
-	int16_t animSprites[8];
-	uint8_t animTimes[8];
-	uint8_t timer;
-	uint8_t pad;
-	int8_t currentFrame;
-	int8_t flag;
-} LocalMapObjectInstance;
-
-typedef struct {
-	uint8_t tiles[0x2bc];
-	LocalMapObjectInstance objects[188];
-} MapTiles;
-
-extern MapTiles MAP_TILE_DATA;
 
 typedef struct {
 	int16_t texX;
@@ -84,8 +69,6 @@ extern int8_t NINJAMON_EFFECT_X_OFFSET[];
 extern int8_t NINJAMON_EFFECT_Y_OFFSET[];
 extern int16_t MAP_OBJECT_INSTANCE_COUNT;
 extern LocalMapObject LOCAL_MAP_OBJECTS[];
-extern int16_t CAMERA_X[];
-extern int16_t CAMERA_Y[];
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern int32_t MAP_OBJECT_MOVE_TO_DATA[];
@@ -115,8 +98,6 @@ void scriptNPCStartAnimation(uint8_t scriptId, int8_t animId);
 
 void renderPlayerMenu(void);
 void renderMist(void);
-void renderMapOverlays(LocalMapObjectInstance *instances, int16_t screenX,
-                       int16_t screenY);
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY,
                        int32_t width, int32_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uPos, int32_t vPos,
@@ -144,7 +125,6 @@ void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
 int32_t NPCEntityIsInTrackingRect(MapDigimonEntity *mapDigimon, VECTOR *location);
 void NPCEntityTickLookingAtTamer(MapDigimonEntity *mapDigimon, Entity *entity,
                                  TamerEntity *tamer);
-void clearMapObjects(LocalMapObjectInstance *instances);
 void loadMapObjects(LocalMapObjectInstance *mapObjects, int16_t *data,
                     int16_t mapId);
 void getRotationDifference(PositionData *posData, VECTOR *targetLoc,
@@ -187,7 +167,6 @@ void renderNinjamonEffect(int32_t instanceId);
 int32_t randomLimit(int32_t max);
 int32_t _atan(int32_t dy, int32_t dx);
 void createNinjamonEffect(void);
-void calcMapObjectOrder(LocalMapObjectInstance *instances);
 void getDrawPosition(SVECTOR *worldPos, int16_t *outX, int16_t *outY);
 void storeMapObjectPosition(int16_t *outX, int16_t *outY, uint8_t a,
                             int16_t count);
@@ -263,16 +242,15 @@ static void *overworld_functions[] = {
 };
 
 // clang-format off
-int16_t MIST_X_OFFSETS[1] = {
-	0xff60,
+int16_t MIST_X_OFFSETS[2] = {
+	0xff60, 0x00a0,
 };
-int16_t MAIN_D_80134226 = 0x00a0;
-int16_t MAIN_D_80134228 = 0x00a0;
-int16_t MAIN_D_8013422A = 0xff60;
-int16_t MIST_Y_OFFSETS[1] = {
-	0xff88,
+int16_t MAIN_D_80134228[2] = {
+	0x00a0, 0xff60,
 };
-int16_t MAIN_D_8013422E = 0x0078;
+int16_t MIST_Y_OFFSETS[2] = {
+	0xff88, 0x0078,
+};
 int16_t MIST_CLUT_Y[2] = {
 	0x0050, 0x0010,
 };
@@ -528,8 +506,8 @@ void renderMist(void)
 			MIST_CLUT_Y[1] = 0x80;
 		}
 
-		cameraDeltaX = CAMERA_X_PREVIOUS - (int16_t)CAMERA_X[0];
-		cameraDeltaY = CAMERA_Y_PREVIOUS - (int16_t)CAMERA_Y[0];
+		cameraDeltaX = CAMERA_X_PREVIOUS - (int16_t)MAP_TILE_DATA.cameraX;
+		cameraDeltaY = CAMERA_Y_PREVIOUS - (int16_t)MAP_TILE_DATA.cameraY;
 		MIST_X_OFFSETS[0] += cameraDeltaX;
 		if (PLAYTIME_FRAMES % 2 == 0) {
 			MIST_X_OFFSETS[0]--;
@@ -541,37 +519,37 @@ void renderMist(void)
 			MIST_X_OFFSETS[0] += 0x280;
 		}
 
-		MAIN_D_80134226 = MIST_X_OFFSETS[0] + 0x140;
-		if (MAIN_D_80134226 >= 0xa0) {
-			MAIN_D_80134226 -= 0x280;
+		MIST_X_OFFSETS[1] = MIST_X_OFFSETS[0] + 0x140;
+		if (MIST_X_OFFSETS[1] >= 0xa0) {
+			MIST_X_OFFSETS[1] -= 0x280;
 		}
-		if (MAIN_D_80134226 < -0x1df) {
-			MAIN_D_80134226 += 0x280;
+		if (MIST_X_OFFSETS[1] < -0x1df) {
+			MIST_X_OFFSETS[1] += 0x280;
 		}
 
-		MAIN_D_80134228 += (int16_t)(cameraDeltaX * 12 / 10);
+		MAIN_D_80134228[0] += (int16_t)(cameraDeltaX * 12 / 10);
 		if (PLAYTIME_FRAMES % 2 == 0) {
-			MAIN_D_80134228++;
+			MAIN_D_80134228[0]++;
 		}
-		if (MAIN_D_80134228 >= 0x1e0) {
-			MAIN_D_80134228 -= 0x280;
+		if (MAIN_D_80134228[0] >= 0x1e0) {
+			MAIN_D_80134228[0] -= 0x280;
 		}
-		if (MAIN_D_80134228 < -0x9f) {
-			MAIN_D_80134228 += 0x280;
+		if (MAIN_D_80134228[0] < -0x9f) {
+			MAIN_D_80134228[0] += 0x280;
 		}
 
-		MAIN_D_8013422A = MAIN_D_80134228 + 0x140;
-		if (MAIN_D_8013422A >= 0x1e0) {
-			MAIN_D_8013422A -= 0x280;
+		MAIN_D_80134228[1] = MAIN_D_80134228[0] + 0x140;
+		if (MAIN_D_80134228[1] >= 0x1e0) {
+			MAIN_D_80134228[1] -= 0x280;
 		}
-		if (MAIN_D_8013422A < -0x9f) {
-			MAIN_D_8013422A += 0x280;
+		if (MAIN_D_80134228[1] < -0x9f) {
+			MAIN_D_80134228[1] += 0x280;
 		}
-		if (MAIN_D_8013422A >= 0x1e0) {
-			MAIN_D_8013422A -= 0x280;
+		if (MAIN_D_80134228[1] >= 0x1e0) {
+			MAIN_D_80134228[1] -= 0x280;
 		}
-		if (MAIN_D_8013422A < -0x9f) {
-			MAIN_D_8013422A += 0x280;
+		if (MAIN_D_80134228[1] < -0x9f) {
+			MAIN_D_80134228[1] += 0x280;
 		}
 
 		MIST_Y_OFFSETS[0] += cameraDeltaY;
@@ -581,12 +559,12 @@ void renderMist(void)
 		if (MIST_Y_OFFSETS[0] < -0x167) {
 			MIST_Y_OFFSETS[0] += 0x1e0;
 		}
-		MAIN_D_8013422E = MIST_Y_OFFSETS[0] + 0xf0;
-		if (MAIN_D_8013422E >= 0x78) {
-			MAIN_D_8013422E -= 0x1e0;
+		MIST_Y_OFFSETS[1] = MIST_Y_OFFSETS[0] + 0xf0;
+		if (MIST_Y_OFFSETS[1] >= 0x78) {
+			MIST_Y_OFFSETS[1] -= 0x1e0;
 		}
-		if (MAIN_D_8013422E < -0x167) {
-			MAIN_D_8013422E += 0x1e0;
+		if (MIST_Y_OFFSETS[1] < -0x167) {
+			MIST_Y_OFFSETS[1] += 0x1e0;
 		}
 
 		for (i = 0; i < 8; i++) {
@@ -611,10 +589,10 @@ void renderMist(void)
 					prim->clut = GetClut(MIST_CLUT_Y[1],
 					                     0x1e6);
 				}
-				prim->x0 = (&MAIN_D_80134228)[i % 2];
-				prim->x1 = (&MAIN_D_80134228)[i % 2] - 0x140;
-				prim->x2 = (&MAIN_D_80134228)[i % 2];
-				prim->x3 = (&MAIN_D_80134228)[i % 2] - 0x140;
+				prim->x0 = MAIN_D_80134228[i % 2];
+				prim->x1 = MAIN_D_80134228[i % 2] - 0x140;
+				prim->x2 = MAIN_D_80134228[i % 2];
+				prim->x3 = MAIN_D_80134228[i % 2] - 0x140;
 				prim->y0 = MIST_Y_OFFSETS[(i - 4) / 2];
 				prim->y1 = MIST_Y_OFFSETS[(i - 4) / 2];
 				prim->y2 = MIST_Y_OFFSETS[(i - 4) / 2] + 0xf0;
@@ -905,15 +883,15 @@ void setMapObjectsFlag(int16_t start, int16_t count, int8_t flag)
 
 void getDrawPosition(SVECTOR *worldPos, int16_t *outX, int16_t *outY)
 {
-	int16_t screen[4];
+	SVECTOR screen;
 
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
 	gte_ldv0(worldPos);
 	gte_rtps();
-	gte_stsxy(screen);
-	*outX = DRAWING_OFFSET_X + (screen[0] + (int16_t)CAMERA_X[0]);
-	*outY = DRAWING_OFFSET_Y + (screen[1] + CAMERA_Y[0]);
+	gte_stsxy(&screen);
+	*outX = DRAWING_OFFSET_X + (screen.vx + (int16_t)MAP_TILE_DATA.cameraX);
+	*outY = DRAWING_OFFSET_Y + (screen.vy + MAP_TILE_DATA.cameraY);
 }
 
 void spawnSpriteAtLocation(int16_t x, int16_t y, int16_t z, int16_t sprite,
@@ -995,7 +973,7 @@ void loadMapDigimon(int16_t *data, int16_t mapId)
 	Stats *stats;
 	int16_t digimonCount;
 	int16_t count;
-	VECTOR *waypoints;
+	MapDigimonPath *path;
 	int32_t i;
 	int32_t j;
 
@@ -1037,21 +1015,17 @@ void loadMapDigimon(int16_t *data, int16_t mapId)
 			NPC_ENTITIES[i].flee.vy = *data++;
 			NPC_ENTITIES[i].flee.vz = *data++;
 			MAP_DIGIMON_TABLE[i].animation = 0;
-			waypoints = MAP_DIGIMON_TABLE[i].waypoints;
+			path = &MAP_DIGIMON_TABLE[i].path;
 			count = *data++;
 			for (j = 0; j < 8; j++) {
-#if defined(VERSION_JP)
-				*(int16_t *)((uint8_t *)waypoints + j * 2 + 0x80) = *data++;
-#else
-				*(int16_t *)((uint8_t *)(j * 2) + (uint32_t)waypoints + 0x80) = *data++;
-#endif
+				path->aiSections[j] = *data++;
 			}
 			for (j = 0; j < count; j++) {
-				waypoints[j].vx = *data++;
-				waypoints[j].vy = *data++;
-				waypoints[j].vz = *data++;
+				path->waypoints[j].vx = *data++;
+				path->waypoints[j].vy = *data++;
+				path->waypoints[j].vz = *data++;
 			}
-			*(int16_t *)((uint8_t *)waypoints + 0x90) = 0;
+			path->activeSection = 0;
 		}
 	}
 }
@@ -1131,12 +1105,12 @@ void clearMapDigimon(void)
 
 	for (i = 0; i < 8; i++) {
 		for (j = 0; j < 8; j++) {
-			MAP_DIGIMON_TABLE[i].aiSections[j] = -1;
-			MAP_DIGIMON_TABLE[i].waypoints[j].vx = 0;
-			MAP_DIGIMON_TABLE[i].waypoints[j].vy = 0;
-			MAP_DIGIMON_TABLE[i].waypoints[j].vz = 0;
+			MAP_DIGIMON_TABLE[i].path.aiSections[j] = -1;
+			MAP_DIGIMON_TABLE[i].path.waypoints[j].vx = 0;
+			MAP_DIGIMON_TABLE[i].path.waypoints[j].vy = 0;
+			MAP_DIGIMON_TABLE[i].path.waypoints[j].vz = 0;
 		}
-		MAP_DIGIMON_TABLE[i].activeSection = 0;
+		MAP_DIGIMON_TABLE[i].path.activeSection = 0;
 		ENTITY_TABLE[i + 2] = NULL;
 		ENTITY_TABLE[i + 2]->isOnMap = 0;
 		MAP_DIGIMON_TABLE[i].typeId = -1;
@@ -1182,12 +1156,12 @@ void clearMapAITable(int32_t index)
 	if (index != -1) {
 		MAP_DIGIMON_TABLE[index].lookAtTamerState =
 			MAP_DIGIMON_TABLE[index].hasWaypointTarget = 0;
-		MAP_DIGIMON_TABLE[index].activeSection = 0;
+		MAP_DIGIMON_TABLE[index].path.activeSection = 0;
 	} else {
 		for (i = 0; i < 8; i++) {
 			MAP_DIGIMON_TABLE[i].lookAtTamerState =
 				MAP_DIGIMON_TABLE[i].hasWaypointTarget = 0;
-			MAP_DIGIMON_TABLE[i].activeSection = 0;
+			MAP_DIGIMON_TABLE[i].path.activeSection = 0;
 		}
 	}
 }
@@ -1331,7 +1305,7 @@ void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
                              int32_t instanceId)
 #endif
 {
-	switch (mapDigimon->aiSections[mapDigimon->activeSection]) {
+	switch (mapDigimon->path.aiSections[mapDigimon->path.activeSection]) {
 	case 0:
 		tickWaypointWait(mapDigimon, entity);
 		break;
@@ -1351,9 +1325,9 @@ void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
 		break;
 	}
 
-	if (mapDigimon->activeSection >= 8 ||
-	    mapDigimon->aiSections[mapDigimon->activeSection] == -1) {
-		mapDigimon->activeSection = 0;
+	if (mapDigimon->path.activeSection >= 8 ||
+	    mapDigimon->path.aiSections[mapDigimon->path.activeSection] == -1) {
+		mapDigimon->path.activeSection = 0;
 	}
 }
 
@@ -1677,10 +1651,10 @@ void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity)
 	case 1:
 		mapDigimon->waypointWaitTimer++;
 		if (mapDigimon->waypointWaitTimer >=
-		    mapDigimon->waypoints[mapDigimon->activeSection].vx) {
+		    mapDigimon->path.waypoints[mapDigimon->path.activeSection].vx) {
 			mapDigimon->hasWaypointTarget = 0;
 			mapDigimon->waypointWaitTimer = 0;
-			mapDigimon->activeSection++;
+			mapDigimon->path.activeSection++;
 		}
 		break;
 	}
@@ -1702,11 +1676,11 @@ void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
 	switch (mapDigimon->hasWaypointTarget) {
 	case 0:
 		mapDigimon->targetLocation.vx =
-			mapDigimon->waypoints[mapDigimon->activeSection].vx;
+			mapDigimon->path.waypoints[mapDigimon->path.activeSection].vx;
 		mapDigimon->targetLocation.vy =
-			mapDigimon->waypoints[mapDigimon->activeSection].vy;
+			mapDigimon->path.waypoints[mapDigimon->path.activeSection].vy;
 		mapDigimon->targetLocation.vz =
-			mapDigimon->waypoints[mapDigimon->activeSection].vz;
+			mapDigimon->path.waypoints[mapDigimon->path.activeSection].vz;
 		if (mapDigimon->animation != animation) {
 			mapDigimon->animation = animation;
 			startAnimation(entity, mapDigimon->animation);
@@ -1740,7 +1714,7 @@ void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
 		if ((currentTileX == targetTileX) &&
 		    (currentTileY == targetTileY)) {
 			mapDigimon->hasWaypointTarget = 0;
-			mapDigimon->activeSection++;
+			mapDigimon->path.activeSection++;
 		}
 		break;
 	}
@@ -1795,7 +1769,7 @@ void setLoopCountToOne(uint32_t scriptId)
 void resetEntityOrigin(uint8_t scriptId)
 {
 	NPCEntity *npc;
-	VECTOR *waypoints;
+	MapDigimonPath *path;
 	int16_t deltaX;
 	int16_t deltaZ;
 	int32_t i;
@@ -1820,23 +1794,14 @@ void resetEntityOrigin(uint8_t scriptId)
 		npc->digimonEntity.entity.posData->location.vx;
 	MAP_DIGIMON_TABLE[i].posZ =
 		npc->digimonEntity.entity.posData->location.vz;
-	waypoints = MAP_DIGIMON_TABLE[i].waypoints;
-	if (0) {
-		waypoints = waypoints;
-	}
+	path = &MAP_DIGIMON_TABLE[i].path;
 	for (j = 0; j < 8; j++) {
-#if defined(VERSION_JP)
-		if (*(int16_t *)((uint8_t *)waypoints + j * 2 + 0x80) != 0) {
-			if (*(int16_t *)((uint8_t *)waypoints + j * 2 + 0x80) == -1) {
-#else
-		if (*(int16_t *)((uint8_t *)(j * 2) + (uint32_t)waypoints + 0x80) != 0) {
-			if (*(int16_t *)((uint8_t *)(j * 2) + (uint32_t)waypoints + 0x80) ==
-			    -1) {
-#endif
+		if (path->aiSections[j] != 0) {
+			if (path->aiSections[j] == -1) {
 				break;
 			}
-			waypoints[j].vx += deltaX;
-			waypoints[j].vz += deltaZ;
+			path->waypoints[j].vx += deltaX;
+			path->waypoints[j].vz += deltaZ;
 		}
 	}
 }

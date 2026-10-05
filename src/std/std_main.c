@@ -63,8 +63,8 @@ extern uint32_t POLLED_INPUT_PREVIOUS;
 extern uint8_t TYPE_FACTORS[][7];
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
-extern PACKET GS_WORK_BASES[];
-extern char DR_OFFSETS[];
+extern PACKET GS_WORK_BASES[2][0x14000];
+extern DR_OFFSET DR_OFFSETS[2];
 extern int32_t MAIN_D_801350EC;
 extern SVECTOR STDVS_VIEW_ROTATION[];
 extern VECTOR STDVS_VIEW_TRANSLATION;
@@ -576,10 +576,8 @@ char MAIN_D_801348A8[] = "Change";
 uint8_t MAIN_D_801348B0[5] = { 0, 11, 25, 39, 50 };
 uint8_t MAIN_D_801348B8[5] = { 11, 14, 14, 11, 11 };
 
-int16_t MAIN_D_801350FC;
-int16_t MAIN_D_801350FE;
-int16_t MAIN_D_80135100;
-int16_t MAIN_D_80135102;
+int16_t MAIN_D_801350FC[2];
+int16_t MAIN_D_80135100[2];
 int32_t MAIN_D_80135104;
 int32_t MAIN_D_80135108;
 int32_t MAIN_D_8013510C;
@@ -589,9 +587,9 @@ int32_t MAIN_D_80135118;
 int16_t MAIN_D_8013511C;
 int32_t MAIN_D_80135120;
 int32_t MAIN_D_80135124;
-char **MAIN_D_80135128;
+Entity *MAIN_D_80135128;
 uint8_t MAIN_D_8013512C;
-void *MAIN_D_80135130;
+TMDModel *MAIN_D_80135130;
 int32_t MAIN_D_80135134;
 int16_t MAIN_D_80135138;
 int16_t MAIN_D_8013513A;
@@ -605,8 +603,7 @@ uint8_t MAIN_D_8013514C;
 uint8_t MAIN_D_8013514D;
 uint8_t PARTICIPANT_TYPES[8];
 uint8_t MAIN_D_80135158[4];
-uint8_t MAIN_D_8013515C;
-uint8_t MAIN_D_8013515D;
+uint8_t MAIN_D_8013515C[2];
 int32_t MAIN_D_80135160;
 uint8_t MAIN_D_80135164;
 uint8_t MAIN_D_80135165;
@@ -643,8 +640,7 @@ static void *std_main_sbss_order[] = {
 	&MAIN_D_80135165,
 	&MAIN_D_80135164,
 	&MAIN_D_80135160,
-	&MAIN_D_8013515D,
-	&MAIN_D_8013515C,
+	MAIN_D_8013515C,
 	&MAIN_D_80135158,
 	&PARTICIPANT_TYPES,
 	&MAIN_D_8013514D,
@@ -670,10 +666,8 @@ static void *std_main_sbss_order[] = {
 	&MAIN_D_8013510C,
 	&MAIN_D_80135108,
 	&MAIN_D_80135104,
-	&MAIN_D_80135102,
-	&MAIN_D_80135100,
-	&MAIN_D_801350FE,
-	&MAIN_D_801350FC,
+	MAIN_D_80135100,
+	MAIN_D_801350FC,
 };
 
 // clang-format off
@@ -1333,14 +1327,26 @@ uint8_t STD_D_8007A6A8[8][10] = {
 	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff },
 };
 
-uint8_t STD_D_8007A6F8[16] = {
-	0x00, 0xc0, 0x20, 0xc0, 0x40, 0xc0, 0x60, 0xc0,
-	0x80, 0xc0, 0xa0, 0xc0, 0xc0, 0xc0, 0x00, 0x00,
+uint8_t STD_D_8007A6F8[8][2] = {
+	{ 0x00, 0xc0 },
+	{ 0x20, 0xc0 },
+	{ 0x40, 0xc0 },
+	{ 0x60, 0xc0 },
+	{ 0x80, 0xc0 },
+	{ 0xa0, 0xc0 },
+	{ 0xc0, 0xc0 },
+	{ 0x00, 0x00 },
 };
 
-uint8_t STD_D_8007A708[16] = {
-	0x00, 0xd0, 0x20, 0xd0, 0x40, 0xd0, 0x60, 0xd0,
-	0x80, 0xd0, 0xa0, 0xd0, 0xc0, 0xd0, 0x00, 0x00,
+uint8_t STD_D_8007A708[8][2] = {
+	{ 0x00, 0xd0 },
+	{ 0x20, 0xd0 },
+	{ 0x40, 0xd0 },
+	{ 0x60, 0xd0 },
+	{ 0x80, 0xd0 },
+	{ 0xa0, 0xd0 },
+	{ 0xc0, 0xd0 },
+	{ 0x00, 0x00 },
 };
 // clang-format on
 
@@ -2047,11 +2053,11 @@ void STD_setCameraToEntity(void)
 	VECTOR out;
 
 	rot = STDVS_VIEW_ROTATION[0];
-	rot.vy -= ((Entity *)MAIN_D_80135128)->posData->rotation.vy;
+	rot.vy -= MAIN_D_80135128->posData->rotation.vy;
 	rot.vy &= 0xfff;
 	RotMatrix(&rot, &STDVS_VIEW.view);
 	v = STDVS_VIEW_TRANSLATION;
-	ApplyMatrixLV(&STDVS_VIEW.view, &((Entity *)MAIN_D_80135128)->posData->location, &out);
+	ApplyMatrixLV(&STDVS_VIEW.view, &MAIN_D_80135128->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
@@ -2105,7 +2111,7 @@ void STD_setViewpointRotationFromEntity(void)
 {
 	MATRIX *m;
 
-	m = (MATRIX *)(MAIN_D_80135128[1] + 0xbc);
+	m = &MAIN_D_80135128->posData[1].posMatrix.workm;
 	GS_VIEWPOINT.vrx = m->t[0];
 	GS_VIEWPOINT.vry = m->t[1];
 	GS_VIEWPOINT.vrz = m->t[2];
@@ -2121,8 +2127,8 @@ void STD_func_8005A054(void)
 	VECTOR *otherPos;
 	Entity *other;
 
-	selfPos = &((Entity *)MAIN_D_80135128)->posData->location;
-	if ((Entity *)MAIN_D_80135128 == ENTITY_TABLE[1]) {
+	selfPos = &MAIN_D_80135128->posData->location;
+	if (MAIN_D_80135128 == ENTITY_TABLE[1]) {
 		other = MAIN_D_801350E8;
 	} else {
 		other = ENTITY_TABLE[1];
@@ -2134,7 +2140,7 @@ void STD_func_8005A054(void)
 	STDVS_VIEW_ROTATION[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
 	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
 	v = STDVS_VIEW_TRANSLATION;
-	ApplyMatrixLV(&STDVS_VIEW.view, &((Entity *)MAIN_D_80135128)->posData->location, &out);
+	ApplyMatrixLV(&STDVS_VIEW.view, &MAIN_D_80135128->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
@@ -2220,7 +2226,7 @@ void STD_func_8005A55C(DigimonEntity *entity, int32_t mode, uint8_t sub)
 			return;
 		}
 	}
-	MAIN_D_80135128 = (char **)entity;
+	MAIN_D_80135128 = &entity->entity;
 	STDVS_VIEW.super = NULL;
 	if (sub != 3) {
 		p = &STD_D_8007A390[mode];
@@ -2237,7 +2243,7 @@ void STD_func_8005A55C(DigimonEntity *entity, int32_t mode, uint8_t sub)
 	} else {
 		STD_func_8006C6DC();
 	}
-	MAIN_D_80135128 = (char **)ENTITY_TABLE[1];
+	MAIN_D_80135128 = ENTITY_TABLE[1];
 	STD_func_8005B688(ENTITY_TABLE[1], MAIN_D_801350E8);
 }
 
@@ -2258,15 +2264,15 @@ void STD_setRandomViewpoint(Entity *entity, int32_t idx)
 	GS_VIEWPOINT.super = NULL;
 
 	if (idx < 4) {
-		MAIN_D_80135128 = (char **)entity;
+		MAIN_D_80135128 = entity;
 		MAIN_D_801350EC = 4;
-		RotMatrix(&((Entity *)MAIN_D_80135128)->posData->rotation, &m);
+		RotMatrix(&MAIN_D_80135128->posData->rotation, &m);
 		v.vx = STD_D_8007A3FC[idx][0];
 		v.vy = STD_D_8007A3FC[idx][1];
 		v.vz = STD_D_8007A3FC[idx][2];
 		ApplyMatrixLV(&m, &v, &out);
-		out.vx += ((Entity *)MAIN_D_80135128)->posData->location.vx;
-		out.vz += ((Entity *)MAIN_D_80135128)->posData->location.vz;
+		out.vx += MAIN_D_80135128->posData->location.vx;
+		out.vz += MAIN_D_80135128->posData->location.vz;
 		GS_VIEWPOINT.vpx = out.vx;
 		GS_VIEWPOINT.vpy = out.vy;
 		GS_VIEWPOINT.vpz = out.vz;
@@ -2344,8 +2350,8 @@ void STD_updateCameraLerp(int32_t t, int8_t flip)
 
 	off = MAIN_D_80134858;
 	rot = MAIN_D_80134860;
-	base = ((((DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].height +
-	           DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].radius) /
+	base = ((((DIGIMON_DATA[MAIN_D_80135128->type].height +
+	           DIGIMON_DATA[MAIN_D_80135128->type].radius) /
 	          2) *
 	         0x62c) /
 	        450);
@@ -2363,9 +2369,9 @@ void STD_updateCameraLerp(int32_t t, int8_t flip)
 		rot.vy = -rot.vy;
 	}
 
-	rot.vy += ((Entity *)MAIN_D_80135128)->posData->rotation.vy;
-	off.vy = (-DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].height * 2) / 3;
-	STD_setViewpointFromBone((Entity *)MAIN_D_80135128, &off, &rot, dist);
+	rot.vy += MAIN_D_80135128->posData->rotation.vy;
+	off.vy = (-DIGIMON_DATA[MAIN_D_80135128->type].height * 2) / 3;
+	STD_setViewpointFromBone(MAIN_D_80135128, &off, &rot, dist);
 }
 
 int32_t STD_isPositionNearEntity(Entity *entity, VECTOR *pos)
@@ -2424,12 +2430,12 @@ void STD_tickCameraChase(void)
 		goto inc;
 	}
 	if (cc->timer == 0x14) {
-		startAnimation((Entity *)MAIN_D_80135128, 0x23);
+		startAnimation(MAIN_D_80135128, 0x23);
 	}
 	if (cc->phase == 0) {
-		dist = STD_getFighterDistance(&STD_D_8007B704, &STD_D_8007B6F4, &((Entity *)MAIN_D_80135128)->posData->location);
+		dist = STD_getFighterDistance(&STD_D_8007B704, &STD_D_8007B6F4, &MAIN_D_80135128->posData->location);
 		if (dist >= 0x23) {
-			STD_D_8007B704 = ((Entity *)MAIN_D_80135128)->posData->location;
+			STD_D_8007B704 = MAIN_D_80135128->posData->location;
 			cc->phase = 1;
 			MAIN_D_801350EC = 8;
 		} else {
@@ -2440,10 +2446,10 @@ void STD_tickCameraChase(void)
 			} else {
 				rot.vy = lerp(0x638, 0x293, 0, 0x23, dist);
 			}
-			rot.vy += ((Entity *)MAIN_D_80135128)->posData->rotation.vy;
-			off.vy = (-DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].height * 7) / 10;
-			d2 = (((DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].height + DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].radius) / 2) * 0x5aa) / 450;
-			STD_setViewpointFromBone((Entity *)MAIN_D_80135128, &off, &rot, d2);
+			rot.vy += MAIN_D_80135128->posData->rotation.vy;
+			off.vy = (-DIGIMON_DATA[MAIN_D_80135128->type].height * 7) / 10;
+			d2 = (((DIGIMON_DATA[MAIN_D_80135128->type].height + DIGIMON_DATA[MAIN_D_80135128->type].radius) / 2) * 0x5aa) / 450;
+			STD_setViewpointFromBone(MAIN_D_80135128, &off, &rot, d2);
 			GS_VIEWPOINT.vpy = (off.vy * 7) / 10;
 			if (GS_VIEWPOINT.vpy > -0xb4) {
 				GS_VIEWPOINT.vpy = -0xb4;
@@ -2451,16 +2457,16 @@ void STD_tickCameraChase(void)
 			goto inc;
 		}
 	}
-	t = STD_getFighterDistance(&STD_D_8007B704, &STD_D_8007B6F4, &((Entity *)MAIN_D_80135128)->posData->location);
+	t = STD_getFighterDistance(&STD_D_8007B704, &STD_D_8007B6F4, &MAIN_D_80135128->posData->location);
 	STD_updateCameraLerp(t, cc->side);
-	if (STD_isPositionNearEntity((Entity *)MAIN_D_80135128, &STD_D_8007B6F4) == 1) {
+	if (STD_isPositionNearEntity(MAIN_D_80135128, &STD_D_8007B6F4) == 1) {
 		for (i = 0; i < 3; i++) {
-			if (((uint8_t *)MAIN_D_80135128 + i)[0x44] != 0xff) {
-				startAnimation((Entity *)MAIN_D_80135128, ((uint8_t *)MAIN_D_80135128 + i)[0x44]);
+			if (((DigimonEntity *)MAIN_D_80135128)->stats.base.moves[i] != 0xff) {
+				startAnimation(MAIN_D_80135128, ((DigimonEntity *)MAIN_D_80135128)->stats.base.moves[i]);
 				break;
 			}
 		}
-		((Entity *)MAIN_D_80135128)->anim.animFlag |= 2;
+		MAIN_D_80135128->anim.animFlag |= 2;
 		cc->timer = -1;
 		return;
 	}
@@ -2479,12 +2485,12 @@ void STD_startCameraChase(entity, dx, side)
 	SVECTOR rot;
 	int32_t dist;
 
-	MAIN_D_80135128 = (char **)entity;
-	copyVector(&STD_D_8007B704, &((Entity *)MAIN_D_80135128)->posData->location);
+	MAIN_D_80135128 = entity;
+	copyVector(&STD_D_8007B704, &MAIN_D_80135128->posData->location);
 	STD_D_8007B6F4.vx = STD_D_8007B704.vx - dx;
 	STD_D_8007B6F4.vy = STD_D_8007B704.vy;
 	STD_D_8007B6F4.vz = STD_D_8007B704.vz;
-	startAnimation((Entity *)MAIN_D_80135128, 0x21);
+	startAnimation(MAIN_D_80135128, 0x21);
 	MAIN_D_801350EC = 9;
 	MAIN_D_80135144.timer = 0;
 	MAIN_D_80135144.phase = 0;
@@ -2497,10 +2503,10 @@ void STD_startCameraChase(entity, dx, side)
 	} else {
 		rot.vy = 0x638;
 	}
-	rot.vy += ((Entity *)MAIN_D_80135128)->posData->rotation.vy;
-	off.vy = (-DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].height * 2) / 3;
-	dist = (((DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].height + DIGIMON_DATA[((Entity *)MAIN_D_80135128)->type].radius) / 2) * 0x5aa) / 450;
-	STD_setViewpointFromBone((Entity *)MAIN_D_80135128, &off, &rot, dist);
+	rot.vy += MAIN_D_80135128->posData->rotation.vy;
+	off.vy = (-DIGIMON_DATA[MAIN_D_80135128->type].height * 2) / 3;
+	dist = (((DIGIMON_DATA[MAIN_D_80135128->type].height + DIGIMON_DATA[MAIN_D_80135128->type].radius) / 2) * 0x5aa) / 450;
+	STD_setViewpointFromBone(MAIN_D_80135128, &off, &rot, dist);
 	GS_VIEWPOINT.vpy = (off.vy * 3) / 10;
 	if (GS_VIEWPOINT.vpy > -0xb4) {
 		GS_VIEWPOINT.vpy = -0xb4;
@@ -2547,7 +2553,7 @@ void STD_func_8005B688(Entity *target, Entity *entity)
 	STD_D_8007B9BC[6] = 0;
 	STD_D_8007B9D0.entity = entity;
 	if (target == NULL) {
-		if ((Entity *)MAIN_D_80135128 == ENTITY_TABLE[1]) {
+		if (MAIN_D_80135128 == ENTITY_TABLE[1]) {
 			target = MAIN_D_801350E8;
 		} else {
 			target = ENTITY_TABLE[1];
@@ -2610,14 +2616,14 @@ void STD_removeCameraIntro(void)
 
 void STD_applyEntityViewpoint(void)
 {
-	char *p;
+	MATRIX *m;
 
 	VIEWPORT_DISTANCE = 0x15e;
 	GsSetProjection(VIEWPORT_DISTANCE);
-	p = MAIN_D_80135128[1] + 0x34;
-	GS_VIEWPOINT.vrx = *(int32_t *)(p + 0x14);
-	GS_VIEWPOINT.vry = -DIGIMON_DATA[(int32_t)MAIN_D_80135128[0]].height * 2 / 3;
-	GS_VIEWPOINT.vrz = *(int32_t *)(p + 0x1c);
+	m = &MAIN_D_80135128->posData->posMatrix.workm;
+	GS_VIEWPOINT.vrx = m->t[0];
+	GS_VIEWPOINT.vry = -DIGIMON_DATA[MAIN_D_80135128->type].height * 2 / 3;
+	GS_VIEWPOINT.vrz = m->t[2];
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
@@ -2719,8 +2725,8 @@ void STD_func_8005C1E4(void)
 		ab[0] = MAIN_D_80135158[(MAIN_D_8013514C - 5) * 2];
 		ab[1] = MAIN_D_80135158[(MAIN_D_8013514C - 5) * 2 + 1];
 	} else {
-		ab[0] = MAIN_D_8013515C;
-		ab[1] = MAIN_D_8013515D;
+		ab[0] = MAIN_D_8013515C[0];
+		ab[1] = MAIN_D_8013515C[1];
 	}
 	if (ab[0] == MAIN_D_8013514D || ab[1] == MAIN_D_8013514D) {
 		match = 1;
@@ -2783,7 +2789,7 @@ void STD_func_8005C1E4(void)
 						}
 					}
 					if (MAIN_D_8013514C >= 5 && MAIN_D_8013514C < 7) {
-						if (i == (&MAIN_D_8013515C)[MAIN_D_8013514C - 5]) {
+						if (i == MAIN_D_8013515C[MAIN_D_8013514C - 5]) {
 							flag = 1;
 						}
 					}
@@ -2884,7 +2890,7 @@ void STD_func_8005C1E4(void)
 							MAIN_D_80135158[MAIN_D_8013514D / 2] = MAIN_D_8013514D;
 						}
 						if (MAIN_D_8013514C < 7) {
-							(&MAIN_D_8013515C)[MAIN_D_8013514D / 4] = MAIN_D_8013514D;
+							MAIN_D_8013515C[MAIN_D_8013514D / 4] = MAIN_D_8013514D;
 						}
 						MAIN_D_8013514C++;
 					} else {
@@ -3217,25 +3223,25 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 
 	if (MAIN_D_8013514D < 4) {
 		if (MAIN_D_8013514D < 2) {
-			MAIN_D_8013515C = MAIN_D_80135158[1];
+			MAIN_D_8013515C[0] = MAIN_D_80135158[1];
 		} else {
-			MAIN_D_8013515C = MAIN_D_80135158[0];
+			MAIN_D_8013515C[0] = MAIN_D_80135158[0];
 		}
 		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[2]]].level - 3][DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[3]]].level - 3]) {
-			MAIN_D_8013515D = MAIN_D_80135158[2];
+			MAIN_D_8013515C[1] = MAIN_D_80135158[2];
 		} else {
-			MAIN_D_8013515D = MAIN_D_80135158[3];
+			MAIN_D_8013515C[1] = MAIN_D_80135158[3];
 		}
 	} else {
 		if (randomLimit(100) < STD_D_8007A58C[DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[0]]].level - 3][DIGIMON_DATA[PARTICIPANT_TYPES[MAIN_D_80135158[1]]].level - 3]) {
-			MAIN_D_8013515C = MAIN_D_80135158[0];
+			MAIN_D_8013515C[0] = MAIN_D_80135158[0];
 		} else {
-			MAIN_D_8013515C = MAIN_D_80135158[1];
+			MAIN_D_8013515C[0] = MAIN_D_80135158[1];
 		}
 		if (MAIN_D_8013514D < 6) {
-			MAIN_D_8013515D = MAIN_D_80135158[3];
+			MAIN_D_8013515C[1] = MAIN_D_80135158[3];
 		} else {
-			MAIN_D_8013515D = MAIN_D_80135158[2];
+			MAIN_D_8013515C[1] = MAIN_D_80135158[2];
 		}
 	}
 
@@ -3248,19 +3254,19 @@ void STD_func_8005D9F4(uint8_t *out, uint8_t *list)
 	switch (MAIN_D_8013514D / 2) {
 	case 0:
 		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[1]];
-		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515D];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C[1]];
 		break;
 	case 1:
 		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[0]];
-		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515D];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C[1]];
 		break;
 	case 2:
 		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[3]];
-		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C[0]];
 		break;
 	case 3:
 		out[1] = PARTICIPANT_TYPES[MAIN_D_80135158[2]];
-		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C];
+		out[2] = PARTICIPANT_TYPES[MAIN_D_8013515C[0]];
 		break;
 	}
 }
@@ -3821,22 +3827,22 @@ int16_t STD_func_8005F354(void)
 			return 0;
 		}
 
-		MAIN_D_80135100 = MAIN_D_801350FC - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[0]])->stats.current.currentHP;
-		MAIN_D_80135102 = MAIN_D_801350FE - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats.current.currentHP;
+		MAIN_D_80135100[0] = MAIN_D_801350FC[0] - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[0]])->stats.current.currentHP;
+		MAIN_D_80135100[1] = MAIN_D_801350FC[1] - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats.current.currentHP;
 		COMBAT_DATA_PTR->fighter[0].hpDamageBuffer = 0;
 		COMBAT_DATA_PTR->fighter[1].hpDamageBuffer = 0;
 
-		if (MAIN_D_80135100 > MAIN_D_80135102) {
+		if (MAIN_D_80135100[0] > MAIN_D_80135100[1]) {
 			STD_func_80060C14(1, 0);
 			return -1;
 		}
 
-		if (MAIN_D_80135100 < MAIN_D_80135102) {
+		if (MAIN_D_80135100[0] < MAIN_D_80135100[1]) {
 			STD_func_80060C14(0, 1);
 			return 1;
 		}
 
-		if (MAIN_D_80135100 == MAIN_D_80135102) {
+		if (MAIN_D_80135100[0] == MAIN_D_80135100[1]) {
 			STD_func_80060C14(1, 1);
 			return 2;
 		}
@@ -3855,8 +3861,8 @@ void STD_func_8005E8A4(Entity *entity, Entity *other)
 	DigimonEntity *digimon;
 	int16_t brains;
 
-	((int16_t *)&MAIN_D_80135100)[0] = 0;
-	((int16_t *)&MAIN_D_80135100)[1] = 0;
+	MAIN_D_80135100[0] = 0;
+	MAIN_D_80135100[1] = 0;
 	MAIN_D_8013516C = 0;
 	STD_addFighterCounter(0x63);
 	MAIN_D_80135170 = 0;
@@ -3999,7 +4005,7 @@ void STD_func_8005E8A4(Entity *entity, Entity *other)
 
 	for (i = 0; i <= ENEMY_COUNT; i++) {
 		stats = &((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]])->stats;
-		(&MAIN_D_801350FC)[i] = stats->current.currentHP;
+		MAIN_D_801350FC[i] = stats->current.currentHP;
 		dst = (int16_t *)&INITIAL_COMBAT_STATS[i];
 		*dst++ = stats->base.hp;
 		*dst++ = stats->base.mp;
@@ -5365,12 +5371,12 @@ void STD_func_80063300(int32_t id)
 	renderString(0, x + 138, y + 6, 120, 12, 0, 36, 6 - id, 1);
 	renderString(0, x + 108, y + 24, 48, 24, 0, 0, 6 - id, 1);
 
-	digits = STD_func_80061124(MAIN_D_80135102);
+	digits = STD_func_80061124(MAIN_D_80135100[1]);
 	STD_func_800593D0(x + 42 + (48 - digits * 12) / 2, y + 30, digits,
-	                  MAIN_D_80135102, 6 - id);
-	digits = STD_func_80061124(MAIN_D_80135100);
+	                  MAIN_D_80135100[1], 6 - id);
+	digits = STD_func_80061124(MAIN_D_80135100[0]);
 	STD_func_800593D0(x + 174 + (48 - digits * 12) / 2, y + 30, digits,
-	                  MAIN_D_80135100, 6 - id);
+	                  MAIN_D_80135100[0], 6 - id);
 }
 
 void STD_startWalkingAnimation2(Entity *entity, Stats *stats, uint16_t flags)
@@ -5403,7 +5409,7 @@ void STD_func_80063508(int16_t id)
 	Entity *entity;
 	uint32_t otz;
 	int32_t offset;
-	int16_t sxy[2];
+	DVECTOR sxy;
 
 	entity = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[id]];
 	GsSetLsMatrix(&GsWSMATRIX);
@@ -5413,12 +5419,12 @@ void STD_func_80063508(int16_t id)
 	pos.vz = m->t[2];
 	gte_ldv0(&pos);
 	gte_rtps();
-	gte_stsxy(sxy);
+	gte_stsxy(&sxy);
 	gte_stszotz(&otz);
-	sxy[0] -= (int16_t)(160 - DRAWING_OFFSET_X);
-	sxy[1] -= (int16_t)(120 - DRAWING_OFFSET_Y);
+	sxy.vx -= (int16_t)(160 - DRAWING_OFFSET_X);
+	sxy.vy -= (int16_t)(120 - DRAWING_OFFSET_Y);
 	offset = VIEWPORT_DISTANCE * (DIGIMON_DATA[entity->type].radius / 2) / (otz * 4);
-	sxy[0] += (int16_t)offset;
+	sxy.vx += (int16_t)offset;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	SetPolyFT4(prim);
@@ -5426,7 +5432,7 @@ void STD_func_80063508(int16_t id)
 	prim->clut = GetClut(0, 0x1e1);
 	setRGB0(prim, 0x80, 0x80, 0x80);
 	setUVWH(prim, id * 48 + 0xa0, 0xe0, (id == 0 ? 0x30 : 0x2f), 31);
-	setXYWH(prim, sxy[0], sxy[1] - 0x20, (id == 0 ? 0x30 : 0x2f), 31);
+	setXYWH(prim, sxy.vx, sxy.vy - 0x20, (id == 0 ? 0x30 : 0x2f), 31);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + otz, prim++);
 
 	GsSetWorkBase((PACKET *)prim);
@@ -5487,7 +5493,7 @@ void STD_func_800647F8(void)
 		}
 		if (randomLimit(100) < chance) {
 			if (MAIN_D_801350EC == 6 && MOVE_DATA[tech].range == 1 && MAIN_D_801350EC == 3) {
-				if (MOVE_DATA[entityGetTechFromAnim((Entity *)MAIN_D_80135128, ((Entity *)MAIN_D_80135128)->anim.animId)].range == 3) {
+				if (MOVE_DATA[entityGetTechFromAnim(MAIN_D_80135128, MAIN_D_80135128->anim.animId)].range == 3) {
 					goto skipViewpoint;
 				}
 			}
@@ -5920,11 +5926,11 @@ void STD_battleTickFrame(void)
 	POLLED_INPUT = PadRead(1);
 	ACTIVE_FRAMEBUFFER = GsGetActiveBuff();
 	ACTIVE_ORDERING_TABLE = &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER];
-	GsSetWorkBase(&GS_WORK_BASES[ACTIVE_FRAMEBUFFER * 0x14000]);
+	GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 	tickObjects();
 	renderObjects();
-	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80, &DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x20, &DR_OFFSETS[ACTIVE_FRAMEBUFFER]);
 	DrawSync(0);
 	VSync(3);
 	POLLED_INPUT_PREVIOUS = POLLED_INPUT;
@@ -6508,7 +6514,7 @@ void STD_func_800658B4(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 	}
 
 	if (MAIN_D_801350EC == 3) {
-		if (MOVE_DATA[entityGetTechFromAnim((Entity *)MAIN_D_80135128, ((Entity *)MAIN_D_80135128)->anim.animId)].range == 3) {
+		if (MOVE_DATA[entityGetTechFromAnim(MAIN_D_80135128, MAIN_D_80135128->anim.animId)].range == 3) {
 			return;
 		}
 	}
@@ -7225,9 +7231,9 @@ void STD_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, uint8_t index)
 
 	if ((index >= 8U) && (index < 0xcU)) {
 		eff = MOVE_DATA[entityGetTechFromAnim(&digimon->entity, digimon->stats.base.moves[index - 8])].special;
-		setUVWH(prim, STD_D_8007A708[eff * 2], (&STD_D_8007A708[1])[eff * 2], 0x10, 0xf);
+		setUVWH(prim, STD_D_8007A708[eff][0], STD_D_8007A708[eff][1], 0x10, 0xf);
 	} else {
-		setUVWH(prim, STD_D_8007A6F8[(index - 1) * 2], (&STD_D_8007A6F8[1])[(index - 1) * 2], 0x10, 0xf);
+		setUVWH(prim, STD_D_8007A6F8[index - 1][0], STD_D_8007A6F8[index - 1][1], 0x10, 0xf);
 	}
 }
 

@@ -1,6 +1,7 @@
 #include <libgs.h>
 
 #include <dw/anim.h>
+#include <dw/combat.h>
 #include <dw/entity.h>
 #include <dw/font.h>
 #include <dw/garbage.h>
@@ -15,7 +16,6 @@
 extern int32_t POLLED_INPUT;
 extern int32_t POLLED_INPUT_PREVIOUS;
 extern int8_t GAME_STATE;
-extern char *COMBAT_DATA_PTR;
 extern TamerEntity TAMER_ENTITY;
 extern char *ITEM_DESC_PTR[];
 
@@ -297,7 +297,7 @@ void tickInventoryUI(int32_t instanceId)
 #endif
 	TamerEntity *tam;
 
-	if (*(uint8_t *)(COMBAT_DATA_PTR + 0x64e) != 1) {
+	if (COMBAT_DATA_PTR->player.currentCommand[0] != 1) {
 		tam = &TAMER_ENTITY;
 		if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & CONFIRM_BUTTON) {
 			if (UI_BOX_DATA[3].state == 1) {

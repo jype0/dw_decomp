@@ -2977,8 +2977,8 @@ int16_t z;
 void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 {
 	LINE_F4 *lf3;
-	u_char *quad;
-	u_char *tri;
+	TMD_P_TG4 *quad;
+	TMD_P_TG3 *tri;
 	struct TMD_STRUCT *tmd;
 	int32_t i;
 	u_char *prim;
@@ -2992,9 +2992,9 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 	long otz;
 	MATRIX m;
 	GsCOORDINATE2 *coord;
-	uint32_t gt3;
-	uint32_t gt4;
-	uint32_t lf2;
+	POLY_GT3 *gt3;
+	POLY_GT4 *gt4;
+	LINE_F2 *lf2;
 	int8_t color;
 
 	color = WIREFRAME_COLOR_MIN + rand() % (WIREFRAME_COLOR_MAX - WIREFRAME_COLOR_MIN);
@@ -3016,28 +3016,28 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 	setRotTransMatrix(&m);
 	for (i = 0; i < primn; i++) {
 		if ((prim[3] & 0xFC) == 0x34) {
-			tri = prim;
+			tri = (TMD_P_TG3 *)prim;
 			if (WIREFRAME_RNG_TABLE[i & 0xF] < wireFrameShare) {
-				gt3 = (uint32_t)pk;
-				if (0 < RotNclip3(&vert[*(u_short *)(tri + 0x12)], &vert[*(u_short *)(tri + 0x16)],
-				                  &vert[*(u_short *)(tri + 0x1A)], (long *)&((POLY_GT3 *)gt3)->x0, (long *)&((POLY_GT3 *)gt3)->x1,
-				                  (long *)&((POLY_GT3 *)gt3)->x2, &p, &otz, &flag)) {
-					NormalColorCol3(&normal[*(u_short *)(tri + 0x10)],
-					                &normal[*(u_short *)(tri + 0x14)],
-					                &normal[*(u_short *)(tri + 0x18)], &col, (CVECTOR *)&((POLY_GT3 *)gt3)->r0,
-					                (CVECTOR *)&((POLY_GT3 *)gt3)->r1, (CVECTOR *)&((POLY_GT3 *)gt3)->r2);
-					setUV3((POLY_GT3 *)gt3, tri[4], tri[5], tri[8], tri[9], tri[0xC], tri[0xD]);
-					((POLY_GT3 *)gt3)->clut = *(u_short *)(tri + 6);
-					((POLY_GT3 *)gt3)->tpage = *(u_short *)(tri + 0xA);
-					setPolyGT3((POLY_GT3 *)gt3);
+				gt3 = (POLY_GT3 *)pk;
+				if (0 < RotNclip3(&vert[tri->v0], &vert[tri->v1],
+				                  &vert[tri->v2], (long *)&gt3->x0, (long *)&gt3->x1,
+				                  (long *)&gt3->x2, &p, &otz, &flag)) {
+					NormalColorCol3(&normal[tri->n0],
+					                &normal[tri->n1],
+					                &normal[tri->n2], &col, (CVECTOR *)&gt3->r0,
+					                (CVECTOR *)&gt3->r1, (CVECTOR *)&gt3->r2);
+					setUV3(gt3, tri->tu0, tri->tv0, tri->tu1, tri->tv1, tri->tu2, tri->tv2);
+					gt3->clut = tri->clut;
+					gt3->tpage = tri->tpage;
+					setPolyGT3(gt3);
 					otz = otz >> 2;
-					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, (POLY_GT3 *)gt3);
-					pk = (u_char *)(gt3 += sizeof(POLY_GT3));
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, gt3);
+					pk = (u_char *)++gt3;
 				}
 			} else {
 				lf3 = (LINE_F4 *)pk;
-				if (0 < RotNclip3(&vert[*(u_short *)(tri + 0x12)], &vert[*(u_short *)(tri + 0x16)],
-				                  &vert[*(u_short *)(tri + 0x1A)], (long *)&lf3->x0, (long *)&lf3->x1,
+				if (0 < RotNclip3(&vert[tri->v0], &vert[tri->v1],
+				                  &vert[tri->v2], (long *)&lf3->x0, (long *)&lf3->x1,
 				                  (long *)&lf3->x2, &p, &otz, &flag)) {
 					lf3->x3 = lf3->x0;
 					lf3->y3 = lf3->y0;
@@ -3050,32 +3050,32 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 					pk = (u_char *)(lf3 + 1);
 				}
 			}
-			prim = tri + 0x1C;
+			prim = (u_char *)(tri + 1);
 		} else if ((prim[3] & 0xFC) == 0x3C) {
-			quad = prim;
+			quad = (TMD_P_TG4 *)prim;
 			if (WIREFRAME_RNG_TABLE[i & 0xF] < wireFrameShare) {
-				gt4 = (uint32_t)pk;
-				if (0 < RotNclip4(&vert[*(u_short *)(quad + 0x16)], &vert[*(u_short *)(quad + 0x1A)],
-				                  &vert[*(u_short *)(quad + 0x1E)], &vert[*(u_short *)(quad + 0x22)],
-				                  (long *)&((POLY_GT4 *)gt4)->x0, (long *)&((POLY_GT4 *)gt4)->x1, (long *)&((POLY_GT4 *)gt4)->x2, (long *)&((POLY_GT4 *)gt4)->x3, &p,
+				gt4 = (POLY_GT4 *)pk;
+				if (0 < RotNclip4(&vert[quad->v0], &vert[quad->v1],
+				                  &vert[quad->v2], &vert[quad->v3],
+				                  (long *)&gt4->x0, (long *)&gt4->x1, (long *)&gt4->x2, (long *)&gt4->x3, &p,
 				                  &otz, &flag)) {
-					NormalColorCol3(&normal[*(u_short *)(quad + 0x14)],
-					                &normal[*(u_short *)(quad + 0x18)],
-					                &normal[*(u_short *)(quad + 0x1C)], &col, (CVECTOR *)&((POLY_GT4 *)gt4)->r0,
-					                (CVECTOR *)&((POLY_GT4 *)gt4)->r1, (CVECTOR *)&((POLY_GT4 *)gt4)->r2);
-					NormalColorCol(&normal[*(u_short *)(quad + 0x20)], &col, (CVECTOR *)&((POLY_GT4 *)gt4)->r3);
-					setUV4((POLY_GT4 *)gt4, quad[4], quad[5], quad[8], quad[9], quad[0xC], quad[0xD], quad[0x10], quad[0x11]);
-					((POLY_GT4 *)gt4)->clut = *(u_short *)(quad + 6);
-					((POLY_GT4 *)gt4)->tpage = *(u_short *)(quad + 0xA);
-					setPolyGT4((POLY_GT4 *)gt4);
+					NormalColorCol3(&normal[quad->n0],
+					                &normal[quad->n1],
+					                &normal[quad->n2], &col, (CVECTOR *)&gt4->r0,
+					                (CVECTOR *)&gt4->r1, (CVECTOR *)&gt4->r2);
+					NormalColorCol(&normal[quad->n3], &col, (CVECTOR *)&gt4->r3);
+					setUV4(gt4, quad->tu0, quad->tv0, quad->tu1, quad->tv1, quad->tu2, quad->tv2, quad->tu3, quad->tv3);
+					gt4->clut = quad->clut;
+					gt4->tpage = quad->tpage;
+					setPolyGT4(gt4);
 					otz = otz >> 2;
-					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, (POLY_GT4 *)gt4);
-					pk = (u_char *)(gt4 += sizeof(POLY_GT4));
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, gt4);
+					pk = (u_char *)++gt4;
 				}
 			} else {
 				lf3 = (LINE_F4 *)pk;
-				if (0 < RotNclip4(&vert[*(u_short *)(quad + 0x16)], &vert[*(u_short *)(quad + 0x1A)],
-				                  &vert[*(u_short *)(quad + 0x1E)], &vert[*(u_short *)(quad + 0x22)],
+				if (0 < RotNclip4(&vert[quad->v0], &vert[quad->v1],
+				                  &vert[quad->v2], &vert[quad->v3],
 				                  (long *)&lf3->x0, (long *)&lf3->x1, (long *)&lf3->x3, (long *)&lf3->x2, &p,
 				                  &otz, &flag)) {
 					setlen(lf3, 6);
@@ -3084,12 +3084,12 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 					lf3->r0 = lf3->g0 = lf3->b0 = color;
 					otz = otz >> 2;
 					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, lf3);
-					lf2 = (uint32_t)(lf3 + 1);
-					setLineF2((LINE_F2 *)lf2);
-					((LINE_F2 *)lf2)->r0 = ((LINE_F2 *)lf2)->g0 = ((LINE_F2 *)lf2)->b0 = color;
-					setXY2((LINE_F2 *)lf2, lf3->x3, lf3->y3, lf3->x0, lf3->y0);
-					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, (LINE_F2 *)lf2);
-					pk = (u_char *)(lf2 += sizeof(LINE_F2));
+					lf2 = (LINE_F2 *)(lf3 + 1);
+					setLineF2(lf2);
+					lf2->r0 = lf2->g0 = lf2->b0 = color;
+					setXY2(lf2, lf3->x3, lf3->y3, lf3->x0, lf3->y0);
+					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, lf2);
+					pk = (u_char *)++lf2;
 				}
 			}
 			prim = prim + 0x24;
@@ -3112,6 +3112,8 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 	SVECTOR *vert;
 	SVECTOR *normal;
 	u_char *prim;
+	TMD_P_TG3 *tri;
+	TMD_P_TG4 *quad;
 	GsCOORDINATE2 *coord;
 	u_char *pk;
 	int32_t start;
@@ -3144,20 +3146,21 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 	setRotTransMatrix(&m);
 	for (i = 0; i < primn; i++) {
 		if ((prim[3] & 0xFC) == 0x34) {
+			tri = (TMD_P_TG3 *)prim;
 			cur = (uint32_t)prim;
 			if (WIREFRAME_RNG_TABLE[i & 0xF] < wireFrameShare) {
 				gt3 = (POLY_GT3 *)pk;
 				start = (int32_t)pk;
-				if (0 < RotNclip3(&vert[*(u_short *)(prim + 0x12)], &vert[*(u_short *)(prim + 0x16)],
-				                  &vert[*(u_short *)(prim + 0x1A)], (long *)&gt3->x0, (long *)&gt3->x1,
+				if (0 < RotNclip3(&vert[tri->v0], &vert[tri->v1],
+				                  &vert[tri->v2], (long *)&gt3->x0, (long *)&gt3->x1,
 				                  (long *)&gt3->x2, &p, &otz, &flag)) {
-					NormalColorCol3(&normal[*(u_short *)(prim + 0x10)],
-					                &normal[*(u_short *)(prim + 0x14)],
-					                &normal[*(u_short *)(prim + 0x18)], &col, (CVECTOR *)&gt3->r0,
+					NormalColorCol3(&normal[tri->n0],
+					                &normal[tri->n1],
+					                &normal[tri->n2], &col, (CVECTOR *)&gt3->r0,
 					                (CVECTOR *)&gt3->r1, (CVECTOR *)&gt3->r2);
-					setUV3(gt3, prim[4], prim[5], prim[8], prim[9], prim[0xC], prim[0xD]);
-					gt3->clut = *(u_short *)(prim + 6);
-					gt3->tpage = *(u_short *)(prim + 0xA);
+					setUV3(gt3, tri->tu0, tri->tv0, tri->tu1, tri->tv1, tri->tu2, tri->tv2);
+					gt3->clut = tri->clut;
+					gt3->tpage = tri->tpage;
 					setPolyGT3(gt3);
 					otz = otz >> 2;
 					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, gt3);
@@ -3166,8 +3169,8 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 			} else {
 				lf3 = (LINE_F4 *)pk;
 				start = (int32_t)pk;
-				if (0 < RotNclip3(&vert[*(u_short *)(prim + 0x12)], &vert[*(u_short *)(prim + 0x16)],
-				                  &vert[*(u_short *)(prim + 0x1A)], (long *)&lf3->x0, (long *)&lf3->x1,
+				if (0 < RotNclip3(&vert[tri->v0], &vert[tri->v1],
+				                  &vert[tri->v2], (long *)&lf3->x0, (long *)&lf3->x1,
 				                  (long *)&lf3->x2, &p, &otz, &flag)) {
 					lf3->x3 = lf3->x0;
 					lf3->y3 = lf3->y0;
@@ -3184,21 +3187,22 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 			}
 			prim = (u_char *)(cur + 0x1C);
 		} else if ((prim[3] & 0xFC) == 0x3C) {
+			quad = (TMD_P_TG4 *)prim;
 			if (WIREFRAME_RNG_TABLE[i & 0xF] < wireFrameShare) {
 				gt4 = (POLY_GT4 *)pk;
 				start = (int32_t)pk;
-				if (0 < RotNclip4(&vert[*(u_short *)(prim + 0x16)], &vert[*(u_short *)(prim + 0x1A)],
-				                  &vert[*(u_short *)(prim + 0x1E)], &vert[*(u_short *)(prim + 0x22)],
+				if (0 < RotNclip4(&vert[quad->v0], &vert[quad->v1],
+				                  &vert[quad->v2], &vert[quad->v3],
 				                  (long *)&gt4->x0, (long *)&gt4->x1, (long *)&gt4->x2, (long *)&gt4->x3, &p,
 				                  &otz, &flag)) {
-					NormalColorCol3(&normal[*(u_short *)(prim + 0x14)],
-					                &normal[*(u_short *)(prim + 0x18)],
-					                &normal[*(u_short *)(prim + 0x1C)], &col, (CVECTOR *)&gt4->r0,
+					NormalColorCol3(&normal[quad->n0],
+					                &normal[quad->n1],
+					                &normal[quad->n2], &col, (CVECTOR *)&gt4->r0,
 					                (CVECTOR *)&gt4->r1, (CVECTOR *)&gt4->r2);
-					NormalColorCol(&normal[*(u_short *)(prim + 0x20)], &col, (CVECTOR *)&gt4->r3);
-					setUV4(gt4, prim[4], prim[5], prim[8], prim[9], prim[0xC], prim[0xD], prim[0x10], prim[0x11]);
-					gt4->clut = *(u_short *)(prim + 6);
-					gt4->tpage = *(u_short *)(prim + 0xA);
+					NormalColorCol(&normal[quad->n3], &col, (CVECTOR *)&gt4->r3);
+					setUV4(gt4, quad->tu0, quad->tv0, quad->tu1, quad->tv1, quad->tu2, quad->tv2, quad->tu3, quad->tv3);
+					gt4->clut = quad->clut;
+					gt4->tpage = quad->tpage;
 					setPolyGT4(gt4);
 					otz = otz >> 2;
 					AddPrim(ACTIVE_ORDERING_TABLE->org + otz, gt4);
@@ -3206,8 +3210,8 @@ void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 				}
 			} else {
 				lf3 = (LINE_F4 *)pk;
-				if (0 < RotNclip4(&vert[*(u_short *)(prim + 0x16)], &vert[*(u_short *)(prim + 0x1A)],
-				                  &vert[*(u_short *)(prim + 0x1E)], &vert[*(u_short *)(prim + 0x22)],
+				if (0 < RotNclip4(&vert[quad->v0], &vert[quad->v1],
+				                  &vert[quad->v2], &vert[quad->v3],
 				                  (long *)&lf3->x0, (long *)&lf3->x1, (long *)&lf3->x3, (long *)&lf3->x2, &p,
 				                  &otz, &flag)) {
 					setlen(lf3, 6);
@@ -3416,7 +3420,7 @@ ModelComponent *loadMMD(int32_t digiType, int32_t modelType)
 	readFile(path, m->mmdPtr);
 	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[0]);
 	m->animTablePtr = (long *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[1]);
-	GsMapModelingData((u_long *)m->modelPtr + 1);
+	GsMapModelingData((u_long *)&m->modelPtr->flags);
 	updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 	                     m->clutPage - 0x7A00);
 	return m;
@@ -3652,7 +3656,7 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 		path[9] = digimonType / 30 + '0';
 		m->modelPtr = malloc3(((int32_t)lookupFileSize(path) + 0x7FF) & ~0x7FF);
 		readFile(path, m->modelPtr);
-		GsMapModelingData((u_long *)m->modelPtr + 1);
+		GsMapModelingData((u_long *)&m->modelPtr->flags);
 		updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 		                     m->clutPage - 0x7A00);
 		concatStrings(path, MAIN_D_8011D478, name);
@@ -3694,7 +3698,7 @@ ModelComponent *applyMMD(int32_t digimonType, int32_t entityType,
 	memcpy(m->mmdPtr, modelData->modelPtr, modelData->modelSize);
 	m->modelPtr = (TMDModel *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[0]);
 	m->animTablePtr = (long *)((char *)m->mmdPtr + ((long *)m->mmdPtr)[1]);
-	GsMapModelingData((u_long *)m->modelPtr + 1);
+	GsMapModelingData((u_long *)&m->modelPtr->flags);
 	updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 	                     m->clutPage - 0x7A00);
 	return m;

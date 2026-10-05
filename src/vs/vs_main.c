@@ -31,14 +31,13 @@ extern uint32_t POLLED_INPUT_PREVIOUS;
 extern int32_t DRAWING_OFFSET_Y;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
-extern PACKET GS_WORK_BASES[];
-extern char DR_OFFSETS[];
+extern PACKET GS_WORK_BASES[2][0x14000];
+extern DR_OFFSET DR_OFFSETS[2];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t DRAWING_OFFSET_X;
 extern int16_t MAIN_D_801352AC[2];
 extern char *MOVE_NAMES[];
 extern int32_t VS_CAMERA_STATE;
-extern char **VS_FOCUSED_ENTITY;
 extern DigimonEntity *BATTLE_TARGETED_DIGIMON;
 extern DigimonEntity *BATTLE_ATTACKING_DIGIMON;
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
@@ -201,14 +200,26 @@ uint8_t VS_D_80070764[8][10] = {
 	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff },
 };
 
-uint8_t VS_D_800707B4[16] = {
-	0x00, 0xc0, 0x20, 0xc0, 0x40, 0xc0, 0x60, 0xc0,
-	0x80, 0xc0, 0xa0, 0xc0, 0xc0, 0xc0, 0x00, 0x00,
+uint8_t VS_D_800707B4[8][2] = {
+	{ 0x00, 0xc0 },
+	{ 0x20, 0xc0 },
+	{ 0x40, 0xc0 },
+	{ 0x60, 0xc0 },
+	{ 0x80, 0xc0 },
+	{ 0xa0, 0xc0 },
+	{ 0xc0, 0xc0 },
+	{ 0x00, 0x00 },
 };
 
-uint8_t VS_D_800707C4[16] = {
-	0x00, 0xd0, 0x20, 0xd0, 0x40, 0xd0, 0x60, 0xd0,
-	0x80, 0xd0, 0xa0, 0xd0, 0xc0, 0xd0, 0x00, 0x00,
+uint8_t VS_D_800707C4[8][2] = {
+	{ 0x00, 0xd0 },
+	{ 0x20, 0xd0 },
+	{ 0x40, 0xd0 },
+	{ 0x60, 0xd0 },
+	{ 0x80, 0xd0 },
+	{ 0xa0, 0xd0 },
+	{ 0xc0, 0xd0 },
+	{ 0x00, 0x00 },
 };
 // clang-format on
 
@@ -820,7 +831,7 @@ void VS_startFighterMove(DigimonEntity *digimon, DigimonEntity *target, FighterD
 			entityLookAtLocation(&digimon->entity, &target->entity.posData->location);
 			startAnimation(&digimon->entity, fighter->queuedAnim);
 			digimon->entity.anim.animFlag &= 0xfe;
-			VS_ACTIVE_FINISHER_AURA_ID = VS_addFinisherAura((int32_t)&digimon->entity, 0x50);
+			VS_ACTIVE_FINISHER_AURA_ID = VS_addFinisherAura(&digimon->entity, 0x50);
 			VS_FINISHER_TIMER = 0x50;
 			return;
 		}
@@ -968,7 +979,7 @@ void VS_playMoveEffect(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 	}
 
 	if (VS_CAMERA_STATE == 3) {
-		if (MOVE_DATA[entityGetTechFromAnim((Entity *)VS_FOCUSED_ENTITY, ((Entity *)VS_FOCUSED_ENTITY)->anim.animId)].range == 3) {
+		if (MOVE_DATA[entityGetTechFromAnim(VS_FOCUSED_ENTITY, VS_FOCUSED_ENTITY->anim.animId)].range == 3) {
 			return;
 		}
 	}
@@ -1001,11 +1012,11 @@ void VS_tickFrame(void)
 	POLLED_INPUT = PadRead(1);
 	ACTIVE_FRAMEBUFFER = GsGetActiveBuff();
 	ACTIVE_ORDERING_TABLE = &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER];
-	GsSetWorkBase(&GS_WORK_BASES[ACTIVE_FRAMEBUFFER * 0x14000]);
+	GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 	tickObjects();
 	renderObjects();
-	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80, &DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x20, &DR_OFFSETS[ACTIVE_FRAMEBUFFER]);
 	DrawSync(0);
 	VSync(3);
 	GsSetOrign(DRAWING_OFFSET_X, DRAWING_OFFSET_Y);
@@ -1843,8 +1854,8 @@ void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, int32_t index)
 
 	if ((index >= 8U) && (index < 0xcU)) {
 		eff = MOVE_DATA[entityGetTechFromAnim(&digimon->entity, digimon->stats.base.moves[index - 8])].special;
-		setUVWH(prim, VS_D_800707C4[eff * 2], (&VS_D_800707C4[1])[eff * 2], 0x10, 0xf);
+		setUVWH(prim, VS_D_800707C4[eff][0], VS_D_800707C4[eff][1], 0x10, 0xf);
 	} else {
-		setUVWH(prim, VS_D_800707B4[(index - 1) * 2], (&VS_D_800707B4[1])[(index - 1) * 2], 0x10, 0xf);
+		setUVWH(prim, VS_D_800707B4[index - 1][0], VS_D_800707B4[index - 1][1], 0x10, 0xf);
 	}
 }

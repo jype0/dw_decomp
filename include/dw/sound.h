@@ -6,6 +6,11 @@
 #define NUM_SOUND_BUFFERS	10
 
 typedef struct {
+	uint32_t vhOffset;
+	uint32_t vbOffset;
+} VhbFileHeader;
+
+typedef struct {
 	uint16_t sectorId;
 	uint16_t sectorCount;
 } MapSoundPara;

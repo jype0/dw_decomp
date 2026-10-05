@@ -24,17 +24,6 @@
 #include <dw/vecmath.h>
 
 typedef struct {
-	uint8_t *imagePtr;
-	int16_t tileId;
-	int16_t posX;
-	int16_t posY;
-	int16_t texU;
-	int16_t texV;
-	int16_t tpage;
-	int16_t clut;
-} MapTileData;
-
-typedef struct {
 	int16_t cameraX;
 	int16_t cameraY;
 	int8_t width;
@@ -42,27 +31,9 @@ typedef struct {
 	int8_t pad[26];
 } MapState;
 
-typedef struct {
-	int16_t orderValue;
-	int16_t x;
-	int16_t y;
-	int16_t animSprites[8];
-	uint8_t animTimes[8];
-	uint8_t timer;
-	uint8_t pad;
-	int8_t currentFrame;
-	int8_t flag;
-} LocalMapObjectInstance;
-
-typedef struct {
-	MapTileData tiles[35];
-	LocalMapObjectInstance objects[188];
-} MapTiles;
-
 long RotTransPers3(SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, long *sxy0, long *sxy1, long *sxy2, long *p, long *flag);
 int abs(int x);
 int32_t addObject(int32_t objectId, int16_t instanceId, void (*tick)(int32_t), void (*render)(int32_t));
-void calcMapObjectOrder(LocalMapObjectInstance *instances);
 void checkArenaMap(uint8_t mapId);
 void checkCurlingMap(int32_t mapId);
 void checkFishingMap(int32_t mapId, int32_t arg1);
@@ -70,7 +41,6 @@ int32_t checkMapCollisionX(Entity *entity, int32_t direction);
 int32_t checkMapCollisionZ(Entity *entity, int32_t direction);
 void checkShopMap(uint8_t mapId);
 void clearMapDigimon(void);
-void clearMapObjects(LocalMapObjectInstance *instances);
 void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY);
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
 void handleBattleIdle(DigimonEntity *entity, Stats *stats, int32_t flags);
@@ -87,7 +57,6 @@ void loadWarpCrystals(int32_t mapId);
 int32_t readFile(char *path, void *dest);
 void removeMapEntities(void);
 int32_t removeObject(int32_t objectId, int16_t instanceId);
-void renderMapOverlays(LocalMapObjectInstance *instances, int16_t screenX, int16_t screenY);
 void renderPoop(int32_t instanceId);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 void runMapHeadScript(int32_t section);
@@ -105,7 +74,6 @@ void initializeTamerWaypoints(void);
 void clearTamerWaypoints(void);
 void initializeMap(void);
 void setupMap(void);
-void initializeDrawingOffsets(MapTileData *tiles);
 void updateDrawingOffsets(DVECTOR *current, DVECTOR *previous);
 void moveCameraByOffset(int32_t diffX, int32_t diffY);
 int32_t scriptTickChangeMap(int16_t mapId, int16_t exitId, int32_t showName);
@@ -210,9 +178,7 @@ extern int16_t CAMERA_MOVE_FINAL_Y;
 extern int8_t CAMERA_REACHED_TARGET;
 extern VECTOR CAMERA_TARGET;
 extern int32_t CAMERA_UPDATE_TILES;
-extern int16_t CAMERA_X[];
 extern int16_t CAMERA_X_PREVIOUS;
-extern int16_t CAMERA_Y[];
 extern int16_t CAMERA_Y_PREVIOUS;
 extern int32_t COMBAT_AREA_X;
 extern int32_t COMBAT_AREA_Y;
@@ -245,13 +211,8 @@ extern int32_t LOADED_DIGIMON_MODELS[];
 extern int16_t DOOA_STORED_DIGIMON_Y;
 extern u_long *MAP_CLUTS[];
 extern int8_t MAP_COLLISION_DATA[];
-extern int8_t MAP_HEIGHT[];
 extern GsF_LIGHT MAP_LIGHTS[];
 extern int8_t MAP_TILES[];
-extern MapTiles MAP_TILE_DATA;
-extern int8_t MAP_TILE_X;
-extern int8_t MAP_TILE_Y;
-extern int8_t MAP_WIDTH[];
 extern int32_t MERAMON_SHAKE_DATA;
 extern int32_t MERAMON_SHAKE_BACKUP_OFFSET_Y;
 extern uint8_t MERAMON_SHAKE_RED;
@@ -260,7 +221,6 @@ extern int16_t MERAMON_SHAKE_HEIGHT;
 extern int16_t MERAMON_SHAKE_POS_X;
 extern int16_t MERAMON_SHAKE_POS_Y;
 extern int16_t MERAMON_SHAKE_WIDTH;
-extern int8_t PARTNER_AREA_RESPONSE[];
 extern int8_t PARTNER_STATE;
 extern int8_t PARTNER_TAMER_PREVIOUS_TILE_X;
 extern int8_t PARTNER_TAMER_PREVIOUS_TILE_Y;
@@ -394,8 +354,11 @@ static void *map_functions[] = {
 	isTileOffScreen,
 };
 // clang-format off
-int8_t QUADRANTS[8] = {
-	0xff, 0x01, 0x01, 0x01, 0xff, 0xff, 0x01, 0xff,
+int8_t QUADRANTS[4][2] = {
+	{ 0xff, 0x01 },
+	{ 0x01, 0x01 },
+	{ 0xff, 0xff },
+	{ 0x01, 0xff },
 };
 
 int16_t COLLISION_GRACE_ROTATION[8][4] = {
@@ -3427,17 +3390,17 @@ int32_t entityCheckCombatArea(Entity *entity, VECTOR *target, int32_t w,
 
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 4; j++) {
-			corner.vx = loc->vx + radius * QUADRANTS[i * 2];
+			corner.vx = loc->vx + (radius * QUADRANTS[i][0]);
 			corner.vy = loc->vy + (i * -200);
-			corner.vz = loc->vz + radius * (&QUADRANTS[1])[i * 2];
+			corner.vz = loc->vz + (radius * QUADRANTS[i][1]);
 
 			gte_ldv0(&corner);
 			gte_rtps();
 			gte_stsxy((long *)&screen1);
 
-			corner.vx = target->vx + radius * QUADRANTS[i * 2];
+			corner.vx = target->vx + (radius * QUADRANTS[i][0]);
 			corner.vy = target->vy + (i * -200);
-			corner.vz = target->vz + radius * (&QUADRANTS[1])[i * 2];
+			corner.vz = target->vz + (radius * QUADRANTS[i][1]);
 
 			gte_ldv0(&corner);
 			gte_rtps();
@@ -4253,9 +4216,9 @@ int32_t entityIsOffScreen(Entity *entity, int32_t width, int32_t height)
 
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 4; j++) {
-			corner.vx = loc->vx + radius * QUADRANTS[j * 2];
+			corner.vx = loc->vx + (radius * QUADRANTS[j][0]);
 			corner.vy = loc->vy + i * -DIGIMON_DATA[entity->type].height;
-			corner.vz = loc->vz + radius * (&QUADRANTS[1])[j * 2];
+			corner.vz = loc->vz + (radius * QUADRANTS[j][1]);
 			gte_ldv0(&corner);
 			gte_rtps();
 			gte_stsxy((long *)&screen);
@@ -4325,8 +4288,8 @@ void renderMap(int32_t arg0)
 
 	tickCameraFollowPlayer();
 
-	startTile = MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]);
-	columns = stride = MAP_WIDTH[0];
+	startTile = MAP_TILE_X + ((long)MAP_TILE_Y * MAP_TILE_DATA.width);
+	columns = stride = MAP_TILE_DATA.width;
 	if (stride > 3) {
 		columns = 4;
 	}
@@ -4368,7 +4331,7 @@ void renderMap(int32_t arg0)
 			prim->tpage = MAP_TILE_DATA.tiles[col + (startTile + stride * row)].tpage;
 			prim->clut = MAP_TILE_DATA.tiles[col + (startTile + stride * row)].clut;
 			setPosDataMapTile(&MAP_TILE_DATA.tiles[col + (startTile + stride * row)],
-					  CAMERA_X[0], CAMERA_Y[0], prim);
+					  MAP_TILE_DATA.cameraX, MAP_TILE_DATA.cameraY, prim);
 			AddPrim(&ot[0xfff], prim);
 			++prim;
 
@@ -4377,10 +4340,10 @@ void renderMap(int32_t arg0)
 	}
 
 	renderMapOverlays(MAP_TILE_DATA.objects,
-			  CAMERA_X[0], CAMERA_Y[0]);
+			  MAP_TILE_DATA.cameraX, MAP_TILE_DATA.cameraY);
 
-	CAMERA_X_PREVIOUS = CAMERA_X[0];
-	CAMERA_Y_PREVIOUS = CAMERA_Y[0];
+	CAMERA_X_PREVIOUS = MAP_TILE_DATA.cameraX;
+	CAMERA_Y_PREVIOUS = MAP_TILE_DATA.cameraY;
 }
 
 void loadMap(int32_t mapId)
@@ -4580,25 +4543,25 @@ int32_t loadMapSetup(int32_t *data)
 		regionB[j] = *data++;
 	}
 
-	PARTNER_AREA_RESPONSE[0] = 0;
+	MAP_TILE_DATA.partnerAreaResponse = 0;
 	favoredRegion = RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].favoredRegion;
 
 	for (j = 0; j < 4; j++) {
 		if (regionA[j] == favoredRegion) {
-			PARTNER_AREA_RESPONSE[0] = 1;
+			MAP_TILE_DATA.partnerAreaResponse = 1;
 			break;
 		}
 
 		if (regionB[j] == favoredRegion) {
-			PARTNER_AREA_RESPONSE[0] = 2;
+			MAP_TILE_DATA.partnerAreaResponse = 2;
 			break;
 		}
 	}
 
-	MAP_WIDTH[0] = *data++;
-	MAP_HEIGHT[0] = *data++;
+	MAP_TILE_DATA.width = *data++;
+	MAP_TILE_DATA.height = *data++;
 
-	for (i = 0; i < MAP_WIDTH[0] * MAP_HEIGHT[0]; i++) {
+	for (i = 0; i < MAP_TILE_DATA.width * MAP_TILE_DATA.height; i++) {
 		MAP_TILES[i] = *data++;
 	}
 
@@ -4643,9 +4606,9 @@ void setupMap(void)
 	updateTimeOfDay();
 
 	tile = MAP_TILE_DATA.tiles;
-	for (y = 0; y < MAP_HEIGHT[0]; y++) {
-		for (x = 0; x < MAP_WIDTH[0]; x++) {
-			tile->tileId = MAP_TILES[x + (y * MAP_WIDTH[0])];
+	for (y = 0; y < MAP_TILE_DATA.height; y++) {
+		for (x = 0; x < MAP_TILE_DATA.width; x++) {
+			tile->tileId = MAP_TILES[x + (y * MAP_TILE_DATA.width)];
 			if (tile->tileId == -1) {
 				fillTileData(tile, (uint8_t *)NULL,
 					     x % 4 * 64 + 768, y % 3 * 128,
@@ -4661,37 +4624,37 @@ void setupMap(void)
 		}
 	}
 
-	CAMERA_X[0] = ((MAP_WIDTH[0] * 128) / 2) - 160;
-	CAMERA_Y[0] = ((*(int8_t *)MAP_HEIGHT * 128) / 2) - 120;
-	DRAW_OFFSET_LIMIT_X_MAX = CAMERA_X[0] + 160;
-	DRAW_OFFSET_LIMIT_X_MIN = -(*(int8_t *)MAP_WIDTH * 128 - 320 - DRAW_OFFSET_LIMIT_X_MAX);
-	DRAW_OFFSET_LIMIT_Y_MAX = CAMERA_Y[0] + 120;
-	DRAW_OFFSET_LIMIT_Y_MIN = -(*(int8_t *)&MAP_HEIGHT[0] * 128 - 240 - DRAW_OFFSET_LIMIT_Y_MAX);
+	MAP_TILE_DATA.cameraX = ((MAP_TILE_DATA.width * 128) / 2) - 160;
+	MAP_TILE_DATA.cameraY = ((MAP_TILE_DATA.height * 128) / 2) - 120;
+	DRAW_OFFSET_LIMIT_X_MAX = MAP_TILE_DATA.cameraX + 160;
+	DRAW_OFFSET_LIMIT_X_MIN = -(MAP_TILE_DATA.width * 128 - 320 - DRAW_OFFSET_LIMIT_X_MAX);
+	DRAW_OFFSET_LIMIT_Y_MAX = MAP_TILE_DATA.cameraY + 120;
+	DRAW_OFFSET_LIMIT_Y_MIN = -(MAP_TILE_DATA.height * 128 - 240 - DRAW_OFFSET_LIMIT_Y_MAX);
 	PLAYER_OFFSET_X = DRAWING_OFFSET_X = 160;
 	PLAYER_OFFSET_Y = DRAWING_OFFSET_Y = 120;
 
 	initializeDrawingOffsets(MAP_TILE_DATA.tiles);
 
-	MAP_TILE_X = CAMERA_X[0] / 128;
-	if (MAP_WIDTH[0] < 5) {
+	MAP_TILE_X = MAP_TILE_DATA.cameraX / 128;
+	if (MAP_TILE_DATA.width < 5) {
 		MAP_TILE_X = 0;
-	} else if ((MAP_TILE_X + 4) > MAP_WIDTH[0]) {
-		MAP_TILE_X -= (MAP_TILE_X + 4) - MAP_WIDTH[0];
+	} else if ((MAP_TILE_X + 4) > MAP_TILE_DATA.width) {
+		MAP_TILE_X -= (MAP_TILE_X + 4) - MAP_TILE_DATA.width;
 	}
 
 	PREV_TILE_X = MAP_TILE_X;
 
-	MAP_TILE_Y = CAMERA_Y[0] / 128;
-	if (MAP_HEIGHT[0] < 4) {
+	MAP_TILE_Y = MAP_TILE_DATA.cameraY / 128;
+	if (MAP_TILE_DATA.height < 4) {
 		MAP_TILE_Y = 0;
-	} else if ((MAP_TILE_Y + 3) > MAP_HEIGHT[0]) {
-		MAP_TILE_Y -= (MAP_TILE_Y + 3) - MAP_HEIGHT[0];
+	} else if ((MAP_TILE_Y + 3) > MAP_TILE_DATA.height) {
+		MAP_TILE_Y -= (MAP_TILE_Y + 3) - MAP_TILE_DATA.height;
 	}
 
 	PREV_TILE_Y = MAP_TILE_Y;
 
 	uploadMapTileImages(MAP_TILE_DATA.tiles,
-			    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]));
+			    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_TILE_DATA.width));
 	calcMapObjectOrder(MAP_TILE_DATA.objects);
 
 	CAMERA_FOLLOW_PLAYER = 1;
@@ -4770,26 +4733,26 @@ void initializeDrawingOffsets(MapTileData *tiles)
 	gte_ldv0(&tamerPos);
 	gte_rtps();
 	gte_stsxy(&tamerScreen);
-	CAMERA_X[0] += tamerScreen.vx - viewScreen.vx;
-	CAMERA_Y[0] += tamerScreen.vy - viewScreen.vy;
+	MAP_TILE_DATA.cameraX += tamerScreen.vx - viewScreen.vx;
+	MAP_TILE_DATA.cameraY += tamerScreen.vy - viewScreen.vy;
 	DRAWING_OFFSET_X += viewScreen.vx - tamerScreen.vx;
 	DRAWING_OFFSET_Y += viewScreen.vy - tamerScreen.vy;
 	PLAYER_OFFSET_X += viewScreen.vx - tamerScreen.vx;
 	PLAYER_OFFSET_Y += viewScreen.vy - tamerScreen.vy;
 
-	if (CAMERA_X[0] < 0) {
-		CAMERA_X[0] = 0;
+	if (MAP_TILE_DATA.cameraX < 0) {
+		MAP_TILE_DATA.cameraX = 0;
 		DRAWING_OFFSET_X = DRAW_OFFSET_LIMIT_X_MAX;
-	} else if (CAMERA_X[0] > ((MAP_WIDTH[0] * 128) - 320)) {
-		CAMERA_X[0] = (MAP_WIDTH[0] * 128) - 320;
+	} else if (MAP_TILE_DATA.cameraX > ((MAP_TILE_DATA.width * 128) - 320)) {
+		MAP_TILE_DATA.cameraX = (MAP_TILE_DATA.width * 128) - 320;
 		DRAWING_OFFSET_X = DRAW_OFFSET_LIMIT_X_MIN;
 	}
 
-	if (CAMERA_Y[0] < 0) {
-		CAMERA_Y[0] = 0;
+	if (MAP_TILE_DATA.cameraY < 0) {
+		MAP_TILE_DATA.cameraY = 0;
 		DRAWING_OFFSET_Y = DRAW_OFFSET_LIMIT_Y_MAX;
-	} else if (CAMERA_Y[0] > ((MAP_HEIGHT[0] * 128) - 240)) {
-		CAMERA_Y[0] = (MAP_HEIGHT[0] * 128) - 240;
+	} else if (MAP_TILE_DATA.cameraY > ((MAP_TILE_DATA.height * 128) - 240)) {
+		MAP_TILE_DATA.cameraY = (MAP_TILE_DATA.height * 128) - 240;
 		DRAWING_OFFSET_Y = DRAW_OFFSET_LIMIT_Y_MIN;
 	}
 }
@@ -4827,7 +4790,7 @@ void uploadMapTileImages(MapTileData *tiles, int16_t index)
 
 		DrawSync(0);
 
-		if (MAP_HEIGHT[0] > 2) {
+		if (MAP_TILE_DATA.height > 2) {
 			setRECT(&rect, tiles[index + (stride * 2) + i].texU, tiles[index + (stride * 2) + i].texV, 64, 128);
 
 			if (tiles[index + (stride * 2) + i].tileId == -1) {
@@ -4852,8 +4815,8 @@ void unloadMap(void)
 		MAP_TILE_DATA.tiles[i].texU = MAP_TILE_DATA.tiles[i].texV = 0;
 	}
 
-	MAP_WIDTH[0] = MAP_HEIGHT[0] = 0;
-	CAMERA_X[0] = CAMERA_Y[0] = 0;
+	MAP_TILE_DATA.width = MAP_TILE_DATA.height = 0;
+	MAP_TILE_DATA.cameraX = MAP_TILE_DATA.cameraY = 0;
 	DRAWING_OFFSET_X = 160;
 	DRAWING_OFFSET_Y = 120;
 
@@ -4885,10 +4848,10 @@ void tickCameraFollowPlayer(void)
 		gte_ldv0(&worldPos);
 		gte_rtps();
 		gte_stsxy(&screenEnd);
-		oldCameraX = CAMERA_X[0];
-		oldCameraY = CAMERA_Y[0];
-		CAMERA_X[0] += screenEnd.vx - screenStart.vx;
-		CAMERA_Y[0] += screenEnd.vy - screenStart.vy;
+		oldCameraX = MAP_TILE_DATA.cameraX;
+		oldCameraY = MAP_TILE_DATA.cameraY;
+		MAP_TILE_DATA.cameraX += screenEnd.vx - screenStart.vx;
+		MAP_TILE_DATA.cameraY += screenEnd.vy - screenStart.vy;
 		updateDrawingOffsets((DVECTOR *)&screenStart,
 				   (DVECTOR *)&screenEnd);
 		handleTileUpdate(POLLED_INPUT, 0);
@@ -5028,12 +4991,12 @@ void updateDrawingOffsets(DVECTOR *current, DVECTOR *previous)
 		if ((POLLED_INPUT & 0x8000) != 0) {
 			if (PLAYER_OFFSET_X < DRAWING_OFFSET_X) {
 				DRAWING_OFFSET_X -= current->vx - previous->vx;
-				CAMERA_X[0] -= (int16_t)(previous->vx - current->vx);
+				MAP_TILE_DATA.cameraX -= (int16_t)(previous->vx - current->vx);
 			}
 		} else if ((POLLED_INPUT & 0x2000) != 0) {
 			if (PLAYER_OFFSET_X > DRAWING_OFFSET_X) {
 				DRAWING_OFFSET_X -= current->vx - previous->vx;
-				CAMERA_X[0] -= (int16_t)(previous->vx - current->vx);
+				MAP_TILE_DATA.cameraX -= (int16_t)(previous->vx - current->vx);
 			}
 		}
 	}
@@ -5044,12 +5007,12 @@ void updateDrawingOffsets(DVECTOR *current, DVECTOR *previous)
 		if ((POLLED_INPUT & 0x1000) != 0) {
 			if (PLAYER_OFFSET_Y < DRAWING_OFFSET_Y) {
 				DRAWING_OFFSET_Y -= current->vy - previous->vy;
-				CAMERA_Y[0] -= (int16_t)(previous->vy - current->vy);
+				MAP_TILE_DATA.cameraY -= (int16_t)(previous->vy - current->vy);
 			}
 		} else if ((POLLED_INPUT & 0x4000) != 0) {
 			if (PLAYER_OFFSET_Y > DRAWING_OFFSET_Y) {
 				DRAWING_OFFSET_Y -= current->vy - previous->vy;
-				CAMERA_Y[0] -= (int16_t)(previous->vy - current->vy);
+				MAP_TILE_DATA.cameraY -= (int16_t)(previous->vy - current->vy);
 			}
 		}
 	}
@@ -5060,26 +5023,26 @@ void handleTileUpdate(int32_t input, int32_t force)
 	if ((((input & 0x1000) != 0) ||
 	     ((input & 0x8000) != 0) ||
 	     ((input & 0x2000) != 0)) &&
-	    (CAMERA_Y[0] <= CAMERA_Y_PREVIOUS)) {
-		if ((MAP_HEIGHT[0] >= 8) &&
-		    (CAMERA_Y[0] >= 0x201) &&
-		    (CAMERA_Y[0] < 0x281)) {
+	    (MAP_TILE_DATA.cameraY <= CAMERA_Y_PREVIOUS)) {
+		if ((MAP_TILE_DATA.height >= 8) &&
+		    (MAP_TILE_DATA.cameraY >= 0x201) &&
+		    (MAP_TILE_DATA.cameraY < 0x281)) {
 			MAP_TILE_Y = 4;
-		} else if ((MAP_HEIGHT[0] >= 7) &&
-			   (CAMERA_Y[0] >= 0x181) &&
-			   (CAMERA_Y[0] < 0x201)) {
+		} else if ((MAP_TILE_DATA.height >= 7) &&
+			   (MAP_TILE_DATA.cameraY >= 0x181) &&
+			   (MAP_TILE_DATA.cameraY < 0x201)) {
 			MAP_TILE_Y = 3;
-		} else if ((MAP_HEIGHT[0] >= 6) &&
-			   (CAMERA_Y[0] >= 0x101) &&
-			   (CAMERA_Y[0] < 0x181)) {
+		} else if ((MAP_TILE_DATA.height >= 6) &&
+			   (MAP_TILE_DATA.cameraY >= 0x101) &&
+			   (MAP_TILE_DATA.cameraY < 0x181)) {
 			MAP_TILE_Y = 2;
-		} else if ((MAP_HEIGHT[0] >= 5) &&
-			   (CAMERA_Y[0] >= 0x81) &&
-			   (CAMERA_Y[0] < 0x101)) {
+		} else if ((MAP_TILE_DATA.height >= 5) &&
+			   (MAP_TILE_DATA.cameraY >= 0x81) &&
+			   (MAP_TILE_DATA.cameraY < 0x101)) {
 			MAP_TILE_Y = 1;
-		} else if ((MAP_HEIGHT[0] >= 4) &&
-			   (CAMERA_Y[0] >= 0) &&
-			   (CAMERA_Y[0] < 0x81)) {
+		} else if ((MAP_TILE_DATA.height >= 4) &&
+			   (MAP_TILE_DATA.cameraY >= 0) &&
+			   (MAP_TILE_DATA.cameraY < 0x81)) {
 			MAP_TILE_Y = 0;
 		}
 
@@ -5089,31 +5052,31 @@ void handleTileUpdate(int32_t input, int32_t force)
 	} else if (((input & 0x4000) != 0) ||
 		   ((input & 0x8000) != 0) ||
 		   ((input & 0x2000) != 0)) {
-		if (CAMERA_Y[0] >= CAMERA_Y_PREVIOUS) {
-			if ((MAP_HEIGHT[0] >= 8) &&
-			    (CAMERA_Y[0] >= 0x280) &&
-			    (CAMERA_Y[0] < 0x301)) {
+		if (MAP_TILE_DATA.cameraY >= CAMERA_Y_PREVIOUS) {
+			if ((MAP_TILE_DATA.height >= 8) &&
+			    (MAP_TILE_DATA.cameraY >= 0x280) &&
+			    (MAP_TILE_DATA.cameraY < 0x301)) {
 				MAP_TILE_Y = 5;
-			} else if ((MAP_HEIGHT[0] >= 7) &&
-				   (CAMERA_Y[0] >= 0x200) &&
-				   (CAMERA_Y[0] < 0x280)) {
+			} else if ((MAP_TILE_DATA.height >= 7) &&
+				   (MAP_TILE_DATA.cameraY >= 0x200) &&
+				   (MAP_TILE_DATA.cameraY < 0x280)) {
 				MAP_TILE_Y = 4;
-			} else if ((MAP_HEIGHT[0] >= 6) &&
-				   (CAMERA_Y[0] >= 0x180) &&
-				   (CAMERA_Y[0] < 0x200)) {
+			} else if ((MAP_TILE_DATA.height >= 6) &&
+				   (MAP_TILE_DATA.cameraY >= 0x180) &&
+				   (MAP_TILE_DATA.cameraY < 0x200)) {
 				MAP_TILE_Y = 3;
-			} else if ((MAP_HEIGHT[0] >= 5) &&
-				   (CAMERA_Y[0] >= 0x100) &&
-				   (CAMERA_Y[0] < 0x180)) {
+			} else if ((MAP_TILE_DATA.height >= 5) &&
+				   (MAP_TILE_DATA.cameraY >= 0x100) &&
+				   (MAP_TILE_DATA.cameraY < 0x180)) {
 				MAP_TILE_Y = 2;
-			} else if ((MAP_HEIGHT[0] >= 4) &&
-				   (CAMERA_Y[0] >= 0x80)
-				   && (CAMERA_Y[0] < 0x100)) {
+			} else if ((MAP_TILE_DATA.height >= 4) &&
+				   (MAP_TILE_DATA.cameraY >= 0x80)
+				   && (MAP_TILE_DATA.cameraY < 0x100)) {
 				MAP_TILE_Y = 1;
 			}
 
-			if (CAMERA_Y[0] >= ((MAP_HEIGHT[0] * 128) - 240)) {
-				MAP_TILE_Y = MAP_HEIGHT[0] - 3;
+			if (MAP_TILE_DATA.cameraY >= ((MAP_TILE_DATA.height * 128) - 240)) {
+				MAP_TILE_Y = MAP_TILE_DATA.height - 3;
 				if (MAP_TILE_Y < 0) {
 					MAP_TILE_Y = 0;
 				}
@@ -5128,34 +5091,34 @@ void handleTileUpdate(int32_t input, int32_t force)
 	if ((((input & 0x8000) != 0) ||
 	     ((input & 0x1000) != 0) ||
 	     ((input & 0x4000) != 0)) &&
-	    (CAMERA_X[0] <= CAMERA_X_PREVIOUS)) {
-		if ((MAP_WIDTH[0] >= 0xb) &&
-		    (CAMERA_X[0] >= 0x30a) &&
-		    (CAMERA_X[0] < 0x381)) {
+	    (MAP_TILE_DATA.cameraX <= CAMERA_X_PREVIOUS)) {
+		if ((MAP_TILE_DATA.width >= 0xb) &&
+		    (MAP_TILE_DATA.cameraX >= 0x30a) &&
+		    (MAP_TILE_DATA.cameraX < 0x381)) {
 			MAP_TILE_X = 6;
-		} else if ((MAP_WIDTH[0] >= 0xa) &&
-			   (CAMERA_X[0] >= 0x28a) &&
-			   (CAMERA_X[0] < 0x301)) {
+		} else if ((MAP_TILE_DATA.width >= 0xa) &&
+			   (MAP_TILE_DATA.cameraX >= 0x28a) &&
+			   (MAP_TILE_DATA.cameraX < 0x301)) {
 			MAP_TILE_X = 5;
-		} else if ((MAP_WIDTH[0] >= 9) &&
-			   (CAMERA_X[0] >= 0x20a) &&
-			   (CAMERA_X[0] < 0x281)) {
+		} else if ((MAP_TILE_DATA.width >= 9) &&
+			   (MAP_TILE_DATA.cameraX >= 0x20a) &&
+			   (MAP_TILE_DATA.cameraX < 0x281)) {
 			MAP_TILE_X = 4;
-		} else if ((MAP_WIDTH[0] >= 8) &&
-			   (CAMERA_X[0] >= 0x18a) &&
-			   (CAMERA_X[0] < 0x201)) {
+		} else if ((MAP_TILE_DATA.width >= 8) &&
+			   (MAP_TILE_DATA.cameraX >= 0x18a) &&
+			   (MAP_TILE_DATA.cameraX < 0x201)) {
 			MAP_TILE_X = 3;
-		} else if ((MAP_WIDTH[0] >= 7) &&
-			   (CAMERA_X[0] >= 0x10a) &&
-			   (CAMERA_X[0] < 0x181)) {
+		} else if ((MAP_TILE_DATA.width >= 7) &&
+			   (MAP_TILE_DATA.cameraX >= 0x10a) &&
+			   (MAP_TILE_DATA.cameraX < 0x181)) {
 			MAP_TILE_X = 2;
-		} else if ((MAP_WIDTH[0] >= 6) &&
-			   (CAMERA_X[0] >= 0x8a) &&
-			   (CAMERA_X[0] < 0x101)) {
+		} else if ((MAP_TILE_DATA.width >= 6) &&
+			   (MAP_TILE_DATA.cameraX >= 0x8a) &&
+			   (MAP_TILE_DATA.cameraX < 0x101)) {
 			MAP_TILE_X = 1;
-		} else if ((MAP_WIDTH[0] >= 5) &&
-			   (CAMERA_X[0] >= 0xa) &&
-			   (CAMERA_X[0] < 0x81)) {
+		} else if ((MAP_TILE_DATA.width >= 5) &&
+			   (MAP_TILE_DATA.cameraX >= 0xa) &&
+			   (MAP_TILE_DATA.cameraX < 0x81)) {
 			MAP_TILE_X = 0;
 		}
 
@@ -5165,39 +5128,39 @@ void handleTileUpdate(int32_t input, int32_t force)
 	} else if (((input & 0x2000) != 0) ||
 		   ((input & 0x1000) != 0) ||
 		   ((input & 0x4000) != 0)) {
-		if (CAMERA_X[0] >= CAMERA_X_PREVIOUS) {
-			if ((MAP_WIDTH[0] >= 0xb) &&
-			    (CAMERA_X[0] >= 0x38a) &&
-			    (CAMERA_X[0] < 0x3f7)) {
+		if (MAP_TILE_DATA.cameraX >= CAMERA_X_PREVIOUS) {
+			if ((MAP_TILE_DATA.width >= 0xb) &&
+			    (MAP_TILE_DATA.cameraX >= 0x38a) &&
+			    (MAP_TILE_DATA.cameraX < 0x3f7)) {
 				MAP_TILE_X = 7;
-			} else if ((MAP_WIDTH[0] >= 0xa) &&
-				   (CAMERA_X[0] >= 0x30a) &&
-				   (CAMERA_X[0] < 0x377)) {
+			} else if ((MAP_TILE_DATA.width >= 0xa) &&
+				   (MAP_TILE_DATA.cameraX >= 0x30a) &&
+				   (MAP_TILE_DATA.cameraX < 0x377)) {
 				MAP_TILE_X = 6;
-			} else if ((MAP_WIDTH[0] >= 9) &&
-				   (CAMERA_X[0] >= 0x28a) &&
-				   (CAMERA_X[0] < 0x2f7)) {
+			} else if ((MAP_TILE_DATA.width >= 9) &&
+				   (MAP_TILE_DATA.cameraX >= 0x28a) &&
+				   (MAP_TILE_DATA.cameraX < 0x2f7)) {
 				MAP_TILE_X = 5;
-			} else if ((MAP_WIDTH[0] >= 8) &&
-				   (CAMERA_X[0] >= 0x20a) &&
-				   (CAMERA_X[0] < 0x277)) {
+			} else if ((MAP_TILE_DATA.width >= 8) &&
+				   (MAP_TILE_DATA.cameraX >= 0x20a) &&
+				   (MAP_TILE_DATA.cameraX < 0x277)) {
 				MAP_TILE_X = 4;
-			} else if ((MAP_WIDTH[0] >= 7) &&
-				   (CAMERA_X[0] >= 0x18a) &&
-				   (CAMERA_X[0] < 0x1f7)) {
+			} else if ((MAP_TILE_DATA.width >= 7) &&
+				   (MAP_TILE_DATA.cameraX >= 0x18a) &&
+				   (MAP_TILE_DATA.cameraX < 0x1f7)) {
 				MAP_TILE_X = 3;
-			} else if ((MAP_WIDTH[0] >= 6) &&
-				   (CAMERA_X[0] >= 0x10a) &&
-				   (CAMERA_X[0] < 0x177)) {
+			} else if ((MAP_TILE_DATA.width >= 6) &&
+				   (MAP_TILE_DATA.cameraX >= 0x10a) &&
+				   (MAP_TILE_DATA.cameraX < 0x177)) {
 				MAP_TILE_X = 2;
-			} else if ((MAP_WIDTH[0] >= 5) &&
-				   (CAMERA_X[0] >= 0x8a) &&
-				   (CAMERA_X[0] < 0xf6)) {
+			} else if ((MAP_TILE_DATA.width >= 5) &&
+				   (MAP_TILE_DATA.cameraX >= 0x8a) &&
+				   (MAP_TILE_DATA.cameraX < 0xf6)) {
 				MAP_TILE_X = 1;
 			}
 
-			if (CAMERA_X[0] >= ((MAP_WIDTH[0] * 128) - 320)) {
-				MAP_TILE_X = MAP_WIDTH[0] - 4;
+			if (MAP_TILE_DATA.cameraX >= ((MAP_TILE_DATA.width * 128) - 320)) {
+				MAP_TILE_X = MAP_TILE_DATA.width - 4;
 				if (MAP_TILE_X < 0) {
 					MAP_TILE_X = 0;
 				}
@@ -5210,7 +5173,7 @@ void handleTileUpdate(int32_t input, int32_t force)
 	}
 	if (force == 1) {
 		uploadMapTileImages(MAP_TILE_DATA.tiles,
-				    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]));
+				    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_TILE_DATA.width));
 	}
 }
 
@@ -5218,22 +5181,22 @@ void cameraIsAtEdge(int32_t *outX, int32_t *outY)
 {
 	*outX = *outY = 1;
 
-	if (CAMERA_X[0] < 0) {
-		CAMERA_X[0] = 0;
+	if (MAP_TILE_DATA.cameraX < 0) {
+		MAP_TILE_DATA.cameraX = 0;
 		DRAWING_OFFSET_X = DRAW_OFFSET_LIMIT_X_MAX;
 		*outX = 0;
-	} else if (CAMERA_X[0] > (MAP_WIDTH[0] * 128 - 320)) {
-		CAMERA_X[0] = MAP_WIDTH[0] * 128 - 320;
+	} else if (MAP_TILE_DATA.cameraX > (MAP_TILE_DATA.width * 128 - 320)) {
+		MAP_TILE_DATA.cameraX = MAP_TILE_DATA.width * 128 - 320;
 		DRAWING_OFFSET_X = DRAW_OFFSET_LIMIT_X_MIN;
 		*outX = 0;
 	}
 
-	if (CAMERA_Y[0] < 0) {
-		CAMERA_Y[0] = 0;
+	if (MAP_TILE_DATA.cameraY < 0) {
+		MAP_TILE_DATA.cameraY = 0;
 		DRAWING_OFFSET_Y = DRAW_OFFSET_LIMIT_Y_MAX;
 		*outY = 0;
-	} else if (CAMERA_Y[0] > (MAP_HEIGHT[0] * 128 - 240)) {
-		CAMERA_Y[0] = MAP_HEIGHT[0] * 128 - 240;
+	} else if (MAP_TILE_DATA.cameraY > (MAP_TILE_DATA.height * 128 - 240)) {
+		MAP_TILE_DATA.cameraY = MAP_TILE_DATA.height * 128 - 240;
 		DRAWING_OFFSET_Y = DRAW_OFFSET_LIMIT_Y_MIN;
 		*outY = 0;
 	}
@@ -5309,8 +5272,8 @@ void tickCameraMovement(instanceId)
 			CAMERA_MOVE_DIFF_Y = DRAW_OFFSET_LIMIT_Y_MAX;
 		}
 
-		CAMERA_MOVE_FINAL_X = CAMERA_X[0] + (CAMERA_DATA - CAMERA_MOVE_DIFF_X);
-		CAMERA_MOVE_FINAL_Y = CAMERA_Y[0] + (CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y);
+		CAMERA_MOVE_FINAL_X = MAP_TILE_DATA.cameraX + (CAMERA_DATA - CAMERA_MOVE_DIFF_X);
+		CAMERA_MOVE_FINAL_Y = MAP_TILE_DATA.cameraY + (CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y);
 		CAMERA_MOVE_DELTA_X = (CAMERA_MOVE_DIFF_X - CAMERA_DATA) % instanceId;
 		CAMERA_MOVE_DELTA_Y = (CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) % instanceId;
 
@@ -5342,18 +5305,18 @@ void tickCameraMovement(instanceId)
 	qy = (CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y) / instanceId;
 	stepX = (CAMERA_MOVE_DIFF_X - CAMERA_DATA) / instanceId;
 	stepY = (CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) / instanceId;
-	oldCameraX = CAMERA_X[0];
-	oldCameraY = CAMERA_Y[0];
-	CAMERA_X[0] += qx;
-	CAMERA_Y[0] += qy;
+	oldCameraX = MAP_TILE_DATA.cameraX;
+	oldCameraY = MAP_TILE_DATA.cameraY;
+	MAP_TILE_DATA.cameraX += qx;
+	MAP_TILE_DATA.cameraY += qy;
 	DRAWING_OFFSET_X += stepX;
 	DRAWING_OFFSET_Y += stepY;
 
 	if (CAMERA_MOVE_DELTA_X >= 0) {
 		if ((CAMERA_DATA - CAMERA_MOVE_DIFF_X) > 0) {
-			CAMERA_X[0]++;
+			MAP_TILE_DATA.cameraX++;
 		} else {
-			CAMERA_X[0]--;
+			MAP_TILE_DATA.cameraX--;
 		}
 
 		if ((CAMERA_MOVE_DIFF_X - CAMERA_DATA) > 0) {
@@ -5367,9 +5330,9 @@ void tickCameraMovement(instanceId)
 
 	if (CAMERA_MOVE_DELTA_Y >= 0) {
 		if ((CAMERA_MOVE_DRAW_OFFSET_Y - CAMERA_MOVE_DIFF_Y) > 0) {
-			CAMERA_Y[0]++;
+			MAP_TILE_DATA.cameraY++;
 		} else {
-			CAMERA_Y[0]--;
+			MAP_TILE_DATA.cameraY--;
 		}
 
 		if ((CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) > 0) {
@@ -5399,7 +5362,7 @@ void tickCameraMovement(instanceId)
 		}
 
 		if (DRAWING_OFFSET_X == CAMERA_MOVE_DIFF_X) {
-			CAMERA_X[0] = CAMERA_MOVE_FINAL_X;
+			MAP_TILE_DATA.cameraX = CAMERA_MOVE_FINAL_X;
 			atEdgeX = 0;
 		}
 	}
@@ -5420,7 +5383,7 @@ void tickCameraMovement(instanceId)
 		}
 
 		if (DRAWING_OFFSET_Y == CAMERA_MOVE_DIFF_Y) {
-			CAMERA_Y[0] = CAMERA_MOVE_FINAL_Y;
+			MAP_TILE_DATA.cameraY = CAMERA_MOVE_FINAL_Y;
 			atEdgeY = 0;
 		}
 	}
@@ -5459,7 +5422,7 @@ void tickCameraMovement(instanceId)
 
 		if (CAMERA_UPDATE_TILES == 1) {
 			uploadMapTileImages(MAP_TILE_DATA.tiles,
-					    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]));
+					    MAP_TILE_X + ((long)MAP_TILE_Y * MAP_TILE_DATA.width));
 			CAMERA_UPDATE_TILES = 0;
 		}
 	}
@@ -5557,10 +5520,10 @@ void moveCameraByDiff(VECTOR *from, VECTOR *to)
 	gte_ldv0(&toPos);
 	gte_rtps();
 	gte_stsxy(&toScreen);
-	oldCameraX = CAMERA_X[0];
-	oldCameraY = CAMERA_Y[0];
-	CAMERA_X[0] += toScreen.vx - fromScreen.vx;
-	CAMERA_Y[0] += toScreen.vy - fromScreen.vy;
+	oldCameraX = MAP_TILE_DATA.cameraX;
+	oldCameraY = MAP_TILE_DATA.cameraY;
+	MAP_TILE_DATA.cameraX += toScreen.vx - fromScreen.vx;
+	MAP_TILE_DATA.cameraY += toScreen.vy - fromScreen.vy;
 
 	flags = 0;
 	if (from->vx < to->vx) {
@@ -5588,8 +5551,8 @@ void moveCameraByOffset(diffX, diffY)
 	int32_t atEdgeX;
 	int32_t atEdgeY;
 
-	CAMERA_X[0] += diffX;
-	CAMERA_Y[0] += diffY;
+	MAP_TILE_DATA.cameraX += diffX;
+	MAP_TILE_DATA.cameraY += diffY;
 	DRAWING_OFFSET_X -= diffX;
 	DRAWING_OFFSET_Y -= diffY;
 	cameraIsAtEdge(&atEdgeX, &atEdgeY);
@@ -5618,18 +5581,18 @@ void updateTileRow(bottom)
 	int32_t i;
 
 	if (MAP_TILE_Y != PREV_TILE_Y) {
-		base = MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]);
+		base = MAP_TILE_X + ((long)MAP_TILE_Y * MAP_TILE_DATA.width);
 
-		if (MAP_WIDTH[0] >= 4) {
+		if (MAP_TILE_DATA.width >= 4) {
 			count = 4;
 		} else {
-			count = MAP_WIDTH[0];
+			count = MAP_TILE_DATA.width;
 		}
 
 		if (bottom == 0) {
 			start = 0;
 		} else {
-			start = (int16_t)(MAP_WIDTH[0] * 2);
+			start = (int16_t)(MAP_TILE_DATA.width * 2);
 		}
 
 		for (i = 0; i < count; i++) {
@@ -5660,8 +5623,8 @@ void updateTileColumn(right)
 	int32_t i;
 
 	if (MAP_TILE_X != PREV_TILE_X) {
-		base = MAP_TILE_X + ((long)MAP_TILE_Y * MAP_WIDTH[0]);
-		stride = MAP_WIDTH[0];
+		base = MAP_TILE_X + ((long)MAP_TILE_Y * MAP_TILE_DATA.width);
+		stride = MAP_TILE_DATA.width;
 
 		if (right == 0) {
 			start = 0;
@@ -5670,7 +5633,7 @@ void updateTileColumn(right)
 		}
 
 		for (i = 0; i < 3; i++) {
-			if ((MAP_HEIGHT[0] < 3) && (i == 2)) {
+			if ((MAP_TILE_DATA.height < 3) && (i == 2)) {
 				break;
 			}
 

@@ -22,21 +22,6 @@
 #define VS_BUFF_MODEL		((TMDModel *)0x80055328)
 
 typedef struct {
-	int16_t hp;
-	int16_t mp;
-	int16_t off;
-	int16_t def;
-	int16_t speed;
-	int16_t brain;
-	int16_t weight;
-	int16_t unk0E;
-	uint8_t unk10[0xc];
-	uint8_t type;
-	uint8_t moves[3];
-	uint8_t unk20[0x20];
-} VsFighterCard;
-
-typedef struct {
 	int16_t w;
 	int16_t h;
 	int16_t dx;
@@ -171,8 +156,8 @@ uint8_t MAIN_D_80135261;
 uint8_t MAIN_D_80135262;
 int16_t VS_CURRENT_BATTLE;
 int32_t VS_CAMERA_STATE;
-char *VS_DIGIMON_P1_PTR;
-char *VS_DIGIMON_P2_PTR;
+RegisteredDigimon *VS_DIGIMON_P1_PTR;
+RegisteredDigimon *VS_DIGIMON_P2_PTR;
 uint8_t VS_MUSIC;
 int16_t VS_DISCIPLINE[2];
 int16_t VS_STARTING_HP[2];
@@ -182,9 +167,9 @@ uint8_t VS_TIMER;
 int32_t VS_TIMER_ACTIVE;
 int32_t VS_DISABLE_HITTING;
 int16_t VS_DEFAULT_CAM_MIN_DISTANCE;
-char **VS_FOCUSED_ENTITY;
+Entity *VS_FOCUSED_ENTITY;
 int8_t VS_CAMERA_TIMER;
-void *VS_STAGE_MODEL_PTR;
+TMDModel *VS_STAGE_MODEL_PTR;
 
 static void *vs_scene_sbss_order[] = {
 	&VS_STAGE_MODEL_PTR,
@@ -1052,12 +1037,12 @@ void VS_initializeVS(void)
 	int16_t result;
 
 	VS_resetMatchState();
-	VS_loadVSAssets(VS_D_800716A8[10]);
+	VS_loadVSAssets(VS_D_800716A8.stage);
 	VS_addInputObjects();
 	VS_CURRENT_BATTLE = -1;
 	VS_playVersusIntroSequence();
 	VS_CURRENT_BATTLE = 0;
-	while (VS_CURRENT_BATTLE < VS_D_800716A8[11]) {
+	while (VS_CURRENT_BATTLE < VS_D_800716A8.battleCount) {
 #if !defined(VERSION_JP)
 		PLAYTIME_FRAMES = 0;
 #endif
@@ -1073,7 +1058,7 @@ void VS_initializeVS(void)
 		loadDigimonSounds(5, ENTITY_TABLE[2]->type);
 		VS_setVSPhase(0xa);
 		VS_addArenaRenderers();
-		VS__runIntro(VS_D_800716A8[10]);
+		VS__runIntro(VS_D_800716A8.stage);
 		VS_CAMERA_STATE = 1;
 		result = VS__combatMain();
 		VS_removeCameraIntro();
@@ -1174,17 +1159,17 @@ void VS_addInputObjects(void)
 
 void VS_loadFighterEntities(uint8_t slot)
 {
-	VsFighterCard *card1;
-	VsFighterCard *card2;
+	RegisteredDigimon *fighter1;
+	RegisteredDigimon *fighter2;
 	Stats *stats;
 	int32_t type1;
 	int32_t type2;
 	int32_t prev;
 
-	card1 = (VsFighterCard *)(VS_DIGIMON_P1_PTR + VS_D_800716A8[slot] * 64);
-	card2 = (VsFighterCard *)(VS_DIGIMON_P2_PTR + (&VS_D_800716A8[5])[slot] * 64);
+	fighter1 = &VS_DIGIMON_P1_PTR[VS_D_800716A8.fighters[0][slot]];
+	fighter2 = &VS_DIGIMON_P2_PTR[VS_D_800716A8.fighters[1][slot]];
 
-	type1 = card1->type;
+	type1 = fighter1->digimonId;
 	if (ENTITY_TABLE[1] == NULL || ENTITY_TABLE[1]->type != type1) {
 		if (ENTITY_TABLE[1] != NULL) {
 			prev = ENTITY_TABLE[1]->type;
@@ -1196,7 +1181,7 @@ void VS_loadFighterEntities(uint8_t slot)
 		initializeDigimonObject(type1, 1, VS__tickDigimonP1);
 	}
 
-	type2 = card2->type;
+	type2 = fighter2->digimonId;
 	if (ENTITY_TABLE[2] == NULL || ENTITY_TABLE[2]->type != type2) {
 		if (ENTITY_TABLE[2] != NULL) {
 			prev = ENTITY_TABLE[2]->type;
@@ -1210,35 +1195,35 @@ void VS_loadFighterEntities(uint8_t slot)
 
 	stats = &PARTNER_ENTITY.digimonEntity.stats;
 	stats->current.chargeMode = 0;
-	stats->base.off = card1->off;
-	stats->base.def = card1->def;
-	stats->base.speed = card1->speed;
-	stats->base.brain = card1->brain;
-	stats->base.hp = card1->hp;
-	stats->base.mp = card1->mp;
-	stats->current.currentHP = card1->hp;
-	stats->current.currentMP = card1->mp;
-	VS_DISCIPLINE[0] = card1->weight;
-	stats->base.moves[0] = card1->moves[0];
-	stats->base.moves[1] = card1->moves[1];
-	stats->base.moves[2] = card1->moves[2];
-	stats->base.moves[3] = VS_getFirstSpecialMove(card1->type);
+	stats->base.off = fighter1->offense;
+	stats->base.def = fighter1->defense;
+	stats->base.speed = fighter1->speed;
+	stats->base.brain = fighter1->brains;
+	stats->base.hp = fighter1->hp;
+	stats->base.mp = fighter1->mp;
+	stats->current.currentHP = fighter1->hp;
+	stats->current.currentMP = fighter1->mp;
+	VS_DISCIPLINE[0] = fighter1->discipline;
+	stats->base.moves[0] = fighter1->moves[0];
+	stats->base.moves[1] = fighter1->moves[1];
+	stats->base.moves[2] = fighter1->moves[2];
+	stats->base.moves[3] = VS_getFirstSpecialMove(fighter1->digimonId);
 
 	stats = &NPC_ENTITIES[0].digimonEntity.stats;
 	stats->current.chargeMode = 0;
-	stats->base.off = card2->off;
-	stats->base.def = card2->def;
-	stats->base.speed = card2->speed;
-	stats->base.brain = card2->brain;
-	stats->base.hp = card2->hp;
-	stats->base.mp = card2->mp;
-	stats->current.currentHP = card2->hp;
-	stats->current.currentMP = card2->mp;
-	VS_DISCIPLINE[1] = card2->weight;
-	stats->base.moves[0] = card2->moves[0];
-	stats->base.moves[1] = card2->moves[1];
-	stats->base.moves[2] = card2->moves[2];
-	stats->base.moves[3] = VS_getFirstSpecialMove(card2->type);
+	stats->base.off = fighter2->offense;
+	stats->base.def = fighter2->defense;
+	stats->base.speed = fighter2->speed;
+	stats->base.brain = fighter2->brains;
+	stats->base.hp = fighter2->hp;
+	stats->base.mp = fighter2->mp;
+	stats->current.currentHP = fighter2->hp;
+	stats->current.currentMP = fighter2->mp;
+	VS_DISCIPLINE[1] = fighter2->discipline;
+	stats->base.moves[0] = fighter2->moves[0];
+	stats->base.moves[1] = fighter2->moves[1];
+	stats->base.moves[2] = fighter2->moves[2];
+	stats->base.moves[3] = VS_getFirstSpecialMove(fighter2->digimonId);
 
 	ENTITY_TABLE[1]->isOnMap = 1;
 	ENTITY_TABLE[1]->isOnScreen = 1;
@@ -1291,8 +1276,8 @@ void VS_renderFighterNamePlate(int16_t side)
 	POLY_FT4 *prim;
 	int32_t i;
 	int16_t offset;
-	char *card1;
-	char *card2;
+	RegisteredDigimon *fighter1;
+	RegisteredDigimon *fighter2;
 	int32_t n;
 	int32_t m;
 	int32_t length;
@@ -1311,13 +1296,13 @@ void VS_renderFighterNamePlate(int16_t side)
 		offset = -MAIN_D_8013525E;
 	}
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0; i < VS_D_800716A8[11]; i++) {
+	for (i = 0; i < VS_D_800716A8.battleCount; i++) {
 		if (side == 0) {
-			card1 = VS_DIGIMON_P1_PTR + VS_D_800716A8[i] * 64;
-			type = ((VsFighterCard *)card1)->type;
+			fighter1 = &VS_DIGIMON_P1_PTR[VS_D_800716A8.fighters[0][i]];
+			type = fighter1->digimonId;
 		} else {
-			card2 = VS_DIGIMON_P2_PTR + (&VS_D_800716A8[5])[i] * 64;
-			type = ((VsFighterCard *)card2)->type;
+			fighter2 = &VS_DIGIMON_P2_PTR[VS_D_800716A8.fighters[1][i]];
+			type = fighter2->digimonId;
 		}
 		SetPolyFT4(prim);
 		setRGB0(prim, 0x80, 0x80, 0x80);
@@ -1341,9 +1326,9 @@ void VS_renderFighterNamePlate(int16_t side)
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 
 		if (side == 0) {
-			name = (uint16_t *)(card1 + 0xe);
+			name = (uint16_t *)fighter1->name;
 		} else {
-			name = (uint16_t *)(card2 + 0xe);
+			name = (uint16_t *)fighter2->name;
 		}
 		length = strlen((char *)name) / 2;
 		for (n = 0; n < length; n++) {
@@ -1386,7 +1371,7 @@ void VS_renderRoundPips(slot)
 	x = -0x98;
 	y = -0x56;
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0; i < VS_D_800716A8[11]; i++) {
+	for (i = 0; i < VS_D_800716A8.battleCount; i++) {
 		if (i < MAIN_D_80135261) {
 			SetPolyFT4(prim);
 			prim->tpage = getTPage(0, 0, 320, 0);
@@ -1431,7 +1416,7 @@ void VS_renderVersusBanner(slot)
 		offset = -MAIN_D_8013525E;
 	}
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0; i < VS_D_800716A8[11]; i++) {
+	for (i = 0; i < VS_D_800716A8.battleCount; i++) {
 		SetPolyFT4(prim);
 		prim->tpage = getTPage(0, 0, 384, 0);
 		setRGB0(prim, 0x80, 0x80, 0x80);
@@ -1541,7 +1526,7 @@ void VS_playVersusIntroSequence(void)
 	drawString(MAIN_D_80124C54, 0, 0xf0);
 	fadeFromBlack(3);
 	i = 3;
-	if (VS_CURRENT_BATTLE == VS_D_800716A8[11] - 1) {
+	if (VS_CURRENT_BATTLE == VS_D_800716A8.battleCount - 1) {
 		if (VS_STATE_WINS[0] > VS_STATE_WINS[1]) {
 			VS_addResultModelScene(ENTITY_TABLE[1]);
 			VS_setVersusModelSceneTimer(0x3c);
@@ -1568,7 +1553,7 @@ void VS_playVersusIntroSequence(void)
 	}
 	MAIN_D_80135262 = 0;
 	removeObject(0x19d, 0);
-	if (VS_CURRENT_BATTLE == VS_D_800716A8[11] - 1) {
+	if (VS_CURRENT_BATTLE == VS_D_800716A8.battleCount - 1) {
 		if (VS_STATE_WINS[0] != VS_STATE_WINS[1]) {
 			VS_removeResultModelScene();
 		}
@@ -1576,7 +1561,7 @@ void VS_playVersusIntroSequence(void)
 			VS_removeVersusModelScene();
 		}
 	}
-	if (VS_CURRENT_BATTLE != VS_D_800716A8[11] - 1) {
+	if (VS_CURRENT_BATTLE != VS_D_800716A8.battleCount - 1) {
 		fadeToBlack(3);
 		for (i = 0; i < 4; i++) {
 			VS_tickFrame();
@@ -1622,7 +1607,7 @@ void VS_tickVersusIntro(void)
 		break;
 	case 4:
 		MAIN_D_80135261++;
-		if (MAIN_D_80135261 == VS_D_800716A8[11]) {
+		if (MAIN_D_80135261 == VS_D_800716A8.battleCount) {
 			VS_STATE_STATE++;
 		} else {
 			VS_STATE_STATE = 0;
@@ -1658,17 +1643,17 @@ void VS_loadArenaAssets(void)
 {
 	int32_t i;
 
-	VS_loadArenaTIMToVRAM(VS_D_800705FC[VS_D_800716A8[10]], MAIN_D_80134A60[VS_D_800716A8[10]]);
-	VS_STAGE_MODEL_PTR = TAMER_MODEL_BUFFER;
-	readFile(VS_D_800705B4[VS_D_800716A8[10]], VS_STAGE_MODEL_PTR);
-	GsMapModelingData((u_long *)VS_STAGE_MODEL_PTR + 1);
-	for (i = 0; i < MAIN_D_80134A5C[VS_D_800716A8[10]]; i++) {
-		GsLinkObject4((u_long)((char *)VS_STAGE_MODEL_PTR + 0xc), &VS_D_800719CC[i], i);
+	VS_loadArenaTIMToVRAM(VS_D_800705FC[VS_D_800716A8.stage], MAIN_D_80134A60[VS_D_800716A8.stage]);
+	VS_STAGE_MODEL_PTR = (TMDModel *)TAMER_MODEL_BUFFER;
+	readFile(VS_D_800705B4[VS_D_800716A8.stage], VS_STAGE_MODEL_PTR);
+	GsMapModelingData((u_long *)&VS_STAGE_MODEL_PTR->flags);
+	for (i = 0; i < MAIN_D_80134A5C[VS_D_800716A8.stage]; i++) {
+		GsLinkObject4((u_long)VS_STAGE_MODEL_PTR->obj, &VS_D_800719CC[i], i);
 		GsInitCoordinate2(NULL, &VS_D_8007188C[i].coord);
 		VS_D_800719CC[i].attribute = 0;
 		VS_D_800719CC[i].coord2 = &VS_D_8007188C[i].coord;
 	}
-	readFile(VS_D_80070630[VS_D_800716A8[10]], MAP_COLLISION_DATA);
+	readFile(VS_D_80070630[VS_D_800716A8.stage], MAP_COLLISION_DATA);
 }
 
 void VS_unloadArenaAssets(void)
@@ -1677,7 +1662,7 @@ void VS_unloadArenaAssets(void)
 
 void VS_addArenaRenderers(void)
 {
-	switch (VS_D_800716A8[10]) {
+	switch (VS_D_800716A8.stage) {
 	case 0:
 		addObject(0x1a7, 0, NULL, (RenderFunction)VS_renderArenaViewLeft);
 		break;

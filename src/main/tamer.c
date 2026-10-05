@@ -112,7 +112,7 @@ extern uint16_t CURRENT_SCRIPT_ID;
 extern uint8_t CURRENT_SCREEN;
 extern uint8_t ACTIVE_BGM_FONT;
 extern int32_t ACTIVE_FRAMEBUFFER;
-extern void *ACTIVE_ORDERING_TABLE;
+extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint8_t SKIP_DAYTIME_TRANSITION;
 extern int8_t HAS_ROTATION_DATA[8];
 extern uint8_t UNKNOWN_TAMER_DATA[10];
@@ -209,7 +209,7 @@ void setupPartnerOnWarp(int32_t x, int32_t y, int32_t z, int32_t rotationY);
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern GsOT GS_ORDERING_TABLE[2];
-extern uint8_t GS_WORK_BASES[2][81920];
+extern PACKET GS_WORK_BASES[2][0x14000];
 extern MATRIX GsWSMATRIX;
 extern int32_t FADE_PROTECTION;
 
@@ -827,7 +827,7 @@ int8_t startBattle(int16_t instanceId)
 	tickConditionBoundaries();
 
 	ACTIVE_FRAMEBUFFER = GsGetActiveBuff();
-	GsSetWorkBase((PACKET *)GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
+	GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0, GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER);
 	ACTIVE_ORDERING_TABLE = GS_ORDERING_TABLE + ACTIVE_FRAMEBUFFER;
 

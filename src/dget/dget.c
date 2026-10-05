@@ -248,7 +248,7 @@ void buildScheduleEntries(void)
 		textPtr = textStart + 0x40;
 	}
 
-	textBox = &TEXTBOX_DATA[2];
+	textBox = &TEXTBOX_DATA.box[2];
 	textBox->pageReady = 1;
 	++textBox->writeCount;
 }
@@ -426,7 +426,7 @@ void renderTournamentTextbox(void)
 	int16_t posX;
 	int16_t posY;
 
-	uvY = TEXTBOX_DATA[1].vramRow * 12;
+	uvY = TEXTBOX_DATA.box[1].vramRow * 12;
 	posX = UI_BOX_DATA[1].finalPos.x + 6;
 	posY = UI_BOX_DATA[1].finalPos.y + 3;
 
@@ -608,7 +608,7 @@ void renderTournamentInfo(void)
 	int16_t posX;
 	int16_t posY;
 
-	uvY = TEXTBOX_DATA[3].vramRow * 12;
+	uvY = TEXTBOX_DATA.box[3].vramRow * 12;
 	posX = UI_BOX_DATA[3].finalPos.x + 6;
 	posY = UI_BOX_DATA[3].finalPos.y + 3;
 

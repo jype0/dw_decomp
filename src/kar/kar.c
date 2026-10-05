@@ -14,6 +14,7 @@
 #include <dw/garbage.h>
 #include <dw/input.h>
 #include <dw/kar.h>
+#include <dw/map.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/types.h>
@@ -39,7 +40,7 @@ typedef struct {
 	int8_t ring[4];
 } KarRingFlags;
 
-extern int8_t MAIN_D_80134A48[4];
+extern KarRingFlags MAIN_D_80134A48;
 void setMapObjectsFlag(int32_t start, int32_t count, int32_t flag);
 
 extern int32_t ACTIVE_FRAMEBUFFER;
@@ -47,11 +48,6 @@ extern int32_t VIEWPORT_DISTANCE;
 extern GsOT GS_ORDERING_TABLE[];
 extern GsRVIEW2 GS_VIEWPOINT;
 
-extern int8_t MAP_TILE_X;
-extern int8_t MAP_TILE_Y;
-extern int8_t MAP_WIDTH[];
-extern int16_t CAMERA_Y[];
-extern uint8_t MAP_TILE_DATA[];
 extern char MAIN_D_80134A38[];
 extern char MAIN_D_80134A3C[];
 
@@ -724,7 +720,7 @@ KarOffTbl KAR_D_8005B40C = {
 };
 
 KarTallyValues MAIN_D_80134A44 = { { 2, 1, -2, 2 } };
-int8_t MAIN_D_80134A48[4] = { 0 };
+KarRingFlags MAIN_D_80134A48 = { { 0 } };
 KarPeggedModelIds MAIN_D_80134A4C = { { 11, 10, 9 } };
 int8_t MAIN_D_80134A4F = -1;
 
@@ -1026,9 +1022,9 @@ void KAR_setupMatch(int32_t mode)
 				stone->pos.vy = i * 0xaa - 0x50;
 				stone->pos.vx = (p != 0) ? 0x2bc : -0x2bc;
 				stone->pos.vz = 0;
-				stone->unk94 = 0x96;
-				stone->selectPhase = 0;
-				stone->unk98 = 0;
+				stone->rotation.vx = 0x96;
+				stone->rotation.vy = 0;
+				stone->rotation.vz = 0;
 				stone->state = -1;
 			} else if (i < obstacles) {
 #if defined(VERSION_JP)
@@ -1040,18 +1036,18 @@ void KAR_setupMatch(int32_t mode)
 				stone->pos.vx = spawnX.x[i] - rand() % 0x13f;
 #endif
 				stone->pos.vz = -(rand() % 0x3e8 + 0x3e8);
-				stone->unk94 = 0;
-				stone->selectPhase = 0;
-				stone->unk98 = 0;
+				stone->rotation.vx = 0;
+				stone->rotation.vy = 0;
+				stone->rotation.vz = 0;
 				stone->state = 1;
 				stone->speed = 0;
 			} else {
 				stone->pos.vy = 0;
 				stone->pos.vx = 0;
 				stone->pos.vz = 0;
-				stone->unk94 = 0;
-				stone->selectPhase = 0;
-				stone->unk98 = 0;
+				stone->rotation.vx = 0;
+				stone->rotation.vy = 0;
+				stone->rotation.vz = 0;
 				stone->state = -0x65;
 				stone->speed = 0;
 			}
@@ -1097,9 +1093,9 @@ void KAR_tickStones(int32_t instanceId)
 			}
 			if (MAIN_D_80135244 == 5) {
 				if (i == MAIN_D_8013523A && p == MAIN_D_8013523C) {
-					stone->selectPhase += 0x14;
+					stone->rotation.vy += 0x14;
 				} else {
-					stone->selectPhase = 0;
+					stone->rotation.vy = 0;
 				}
 			}
 			if (stone->state > 0 && stone->speed >= 0) {
@@ -1179,16 +1175,16 @@ void KAR_renderScene(int32_t instanceId)
 					stone->pos.vx = ENTITY_TABLE[idx]->posData[9].posMatrix.workm.t[0];
 					stone->pos.vy = ENTITY_TABLE[idx]->posData[9].posMatrix.workm.t[1] + 0x78;
 					stone->pos.vz = ENTITY_TABLE[idx]->posData[9].posMatrix.workm.t[2];
-					stone->unk94 = stone->selectPhase = stone->unk98 = 0;
+					stone->rotation.vx = stone->rotation.vy = stone->rotation.vz = 0;
 				} else {
 					stone->pos.vx = ENTITY_TABLE[idx]->posData[4].posMatrix.workm.t[0];
 					stone->pos.vy = ENTITY_TABLE[idx]->posData[4].posMatrix.workm.t[1] + 0x78;
 					stone->pos.vz = ENTITY_TABLE[idx]->posData[4].posMatrix.workm.t[2];
-					stone->unk94 = stone->selectPhase = stone->unk98 = 0;
+					stone->rotation.vx = stone->rotation.vy = stone->rotation.vz = 0;
 				}
 			}
 
-			RotMatrix((SVECTOR *)&stone->unk94, &stone->coord.coord);
+			RotMatrix(&stone->rotation, &stone->coord.coord);
 			TransMatrix(&stone->coord.coord, &stone->pos);
 			stone->coord.flg = 0;
 
@@ -1546,7 +1542,7 @@ void KAR_updateRingMarkers(void)
 	KarStone *stone;
 
 	objects = KAR_D_8005B450;
-	flags = *(KarRingFlags *)MAIN_D_80134A48;
+	flags = MAIN_D_80134A48;
 	zones = KAR_D_8005B460;
 	if (MAIN_D_80135244 == 0xB) {
 		MAIN_D_80135257 = 0;
@@ -2529,8 +2525,8 @@ int8_t KAR_tickScoreTally(void)
 		if (KAR_D_800639C0[MAIN_D_80135256]->ring != KAR_D_800639C0[MAIN_D_80135256]->prevRing) {
 			done = tickCameraMoveTo(KAR_D_800639C0[MAIN_D_80135256]->pos.vx,
 			                        KAR_D_800639C0[MAIN_D_80135256]->pos.vz, 5);
-			if ((CAMERA_Y[0] % 0x80) == 0 || (CAMERA_Y[0] % 0x80) >= 0x6a) {
-				uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + MAP_TILE_Y * (int16_t)MAP_WIDTH[0]);
+			if ((MAP_TILE_DATA.cameraY % 0x80) == 0 || (MAP_TILE_DATA.cameraY % 0x80) >= 0x6a) {
+				uploadMapTileImages(MAP_TILE_DATA.tiles, MAP_TILE_X + (MAP_TILE_Y * (int16_t)MAP_TILE_DATA.width));
 			}
 			if (done == 1) {
 				MAIN_D_8013522E = 1;
@@ -3235,8 +3231,8 @@ void KAR_tickMatchState(void)
 		MAIN_D_80135224 = tickCameraMoveTo(
 			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos.vx,
 			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].pos.vz, 0x14);
-		if (((CAMERA_Y[0] % 0x80) == 0) || ((CAMERA_Y[0] % 0x80) >= 0x6A)) {
-			uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + MAP_TILE_Y * (int16_t)MAP_WIDTH[0]);
+		if (((MAP_TILE_DATA.cameraY % 0x80) == 0) || ((MAP_TILE_DATA.cameraY % 0x80) >= 0x6A)) {
+			uploadMapTileImages(MAP_TILE_DATA.tiles, MAP_TILE_X + (MAP_TILE_Y * (int16_t)MAP_TILE_DATA.width));
 		}
 		if (MAIN_D_80135224 == 1) {
 			MAIN_D_80135244 = 8;
@@ -3263,7 +3259,7 @@ void KAR_tickMatchState(void)
 				}
 			} else if (KAR_D_8005B5A0[1].row.unk2 <= MAIN_D_8013523E) {
 				MAIN_D_80135244 = 9;
-				KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].selectPhase =
+				KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].rotation.vy =
 					ENTITY_TABLE[MAIN_D_80135248]->posData->rotation.vy;
 				if (MAIN_D_80135250 != 0) {
 					MAIN_D_80135250 = 1;
@@ -3273,7 +3269,7 @@ void KAR_tickMatchState(void)
 			MAIN_D_80135244 = 9;
 			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].angle =
 				MAIN_D_8013524C;
-			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].selectPhase =
+			KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].rotation.vy =
 				TAMER_ENTITY.entity.posData->rotation.vy;
 		}
 		break;
@@ -3339,8 +3335,8 @@ void KAR_tickMatchState(void)
 		break;
 	case 0xE:
 		MAIN_D_80135224 = tickCameraMoveTo(0, -0x6A4, 0xA);
-		if (((CAMERA_Y[0] % 0x80) == 0) || ((CAMERA_Y[0] % 0x80) >= 0x6A)) {
-			uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + MAP_TILE_Y * (int16_t)MAP_WIDTH[0]);
+		if (((MAP_TILE_DATA.cameraY % 0x80) == 0) || ((MAP_TILE_DATA.cameraY % 0x80) >= 0x6A)) {
+			uploadMapTileImages(MAP_TILE_DATA.tiles, MAP_TILE_X + (MAP_TILE_Y * (int16_t)MAP_TILE_DATA.width));
 		}
 		if (MAIN_D_80135224 == 1) {
 			MAIN_D_80135244 = 0xF;
@@ -3361,8 +3357,8 @@ void KAR_tickMatchState(void)
 			if (MAIN_D_80135250 != 0) {
 				MAIN_D_80135224 = tickCameraMoveTo(ENTITY_TABLE[player]->posData->location.vx,
 				                                   ENTITY_TABLE[player]->posData->location.vz, 0x14);
-				if (((CAMERA_Y[0] % 0x80) == 0) || ((CAMERA_Y[0] % 0x80) >= 0x6A)) {
-					uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + MAP_TILE_Y * (int16_t)MAP_WIDTH[0]);
+				if (((MAP_TILE_DATA.cameraY % 0x80) == 0) || ((MAP_TILE_DATA.cameraY % 0x80) >= 0x6A)) {
+					uploadMapTileImages(MAP_TILE_DATA.tiles, MAP_TILE_X + (MAP_TILE_Y * (int16_t)MAP_TILE_DATA.width));
 				}
 				if (MAIN_D_80135224 == 1) {
 					ENTITY_TABLE[player]->posData->rotation.vy = 0;
@@ -3400,8 +3396,8 @@ void KAR_tickMatchState(void)
 	case 0x10:
 		MAIN_D_80135224 = tickCameraMoveTo(ENTITY_TABLE[player]->posData->location.vx,
 		                                   ENTITY_TABLE[player]->posData->location.vz, 0x14);
-		if (((CAMERA_Y[0] % 0x80) == 0) || ((CAMERA_Y[0] % 0x80) >= 0x6A)) {
-			uploadMapTileImages(MAP_TILE_DATA, MAP_TILE_X + MAP_TILE_Y * (int16_t)MAP_WIDTH[0]);
+		if (((MAP_TILE_DATA.cameraY % 0x80) == 0) || ((MAP_TILE_DATA.cameraY % 0x80) >= 0x6A)) {
+			uploadMapTileImages(MAP_TILE_DATA.tiles, MAP_TILE_X + (MAP_TILE_Y * (int16_t)MAP_TILE_DATA.width));
 		}
 		if (MAIN_D_80135224 == 1) {
 			if ((KAR_D_8005B5A0[0].row.thrown >= 5) && (KAR_D_8005B5A0[1].row.thrown >= 5)) {

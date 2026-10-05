@@ -5,6 +5,7 @@
 #include <libgte.h>
 
 #include <dw/battle.h>
+#include <dw/efe.h>
 #include <dw/entity.h>
 #include <dw/graphics.h>
 #include <dw/types.h>
@@ -147,12 +148,12 @@ extern BtlDeathCountdownRaw BTL_D_80073E78;
 extern char BTL_END_BOX_TEXTBUFFER[1024];
 extern uint8_t BTL_D_800742A0[155][20];
 extern void (*BTL_D_80074EBC[97])(void);
-extern int16_t BTL_D_80075040[12][6];
-extern int16_t BTL_D_800750D0[4][4];
-extern int16_t BTL_D_800750F0[4][8];
-extern int16_t BTL_D_80075130[5][6];
-extern int16_t BTL_D_8007516C[25][4];
-extern int16_t BTL_D_80075234[2][4];
+extern EfePoisonBubble BTL_D_80075040[12];
+extern EfePoison BTL_D_800750D0[4];
+extern EfeConfusion BTL_D_800750F0[4];
+extern EfeStun BTL_D_80075130[5];
+extern EfeStunSpark BTL_D_8007516C[25];
+extern EfeFinisherAura BTL_D_80075234[2];
 extern SVECTOR BTL_D_80075244[20];
 extern BtlParticleVelocity BTL_D_800752E4[20];
 extern BtlParticleDrag BTL_D_8007535C[20];

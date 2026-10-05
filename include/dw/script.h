@@ -172,6 +172,17 @@ typedef struct {
 extern BattleEntry BIRDRA_TRANSPORT_TARGETS[];
 
 typedef struct {
+	uint8_t *pointer;
+	uint8_t *endPointer;
+	uint16_t count;
+	uint16_t current;
+	uint16_t cursorOffsetY;
+	uint16_t cursorWidth;
+} DialogueSelection;
+
+extern DialogueSelection DIALOGUE_SELECTION;
+
+typedef struct {
 	uint8_t digimonId;
 	uint8_t spriteId;
 	int16_t meritValue;
@@ -251,14 +262,13 @@ extern uint8_t SCRIPT_TEXTBOX_MODE;
 extern int32_t SCRIPT_MAP_CHANGE_SHOW_NAME;
 extern int32_t SCRIPT_SECTION_IS_EVENT;
 extern int32_t MONEY;
-extern char MAIN_D_801B1D1C[];
+extern char NAMING_BUFFER[20];
 extern int32_t UPDATE_SHOP_BIT_BOX;
 extern uint8_t ACTIVE_INSTRUCTION;
 extern uint8_t ITEM_MENU_TYPE;
 extern uint8_t MAIN_D_80135000;
 extern uint8_t WAIT_FOR_ENTITY_ID;
 extern uint16_t SCRIPT_PARAM_1;
-extern ScriptCameraMovement MAIN_D_801BE72C;
 extern uint8_t NAMING_BOX_FLAG;
 extern int8_t DRAW_STRING2_IS_FIXED_WIDTH;
 uint8_t scriptIdToEntityId(int32_t scriptId);

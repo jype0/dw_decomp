@@ -5,6 +5,7 @@
 #include <libgs.h>
 #include <libgte.h>
 
+#include <dw/model.h>
 #include <dw/types.h>
 
 typedef struct {
@@ -76,7 +77,7 @@ typedef struct {
 	int32_t objCount;
 	GsDOBJ2 *objects;
 	GsDOBJ2 *objectsEnd;
-	uint8_t *targetBuffer;
+	TMDModel *targetBuffer;
 } TMDFileLoadingData;
 
 typedef struct {

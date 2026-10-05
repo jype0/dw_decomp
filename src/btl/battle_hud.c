@@ -59,7 +59,7 @@ void setPosDataPolyFT4(POLY_FT4 *prim, int32_t x, int32_t y, int32_t w, int32_t 
 void BTL_drawBattleEndText(int32_t a);
 void BTL_renderBattleStartTextBurst(void);
 void BTL_scrollBattleEndText(void);
-void BTL_appendItemDroppedText(int32_t *p);
+void BTL_appendItemDroppedText(Entity *e);
 void BTL_appendInjuredText(char *name);
 void BTL_appendCommandLearnedText(void);
 void BTL_appendMPBonusText(void);
@@ -148,10 +148,7 @@ uint8_t MAIN_D_80134774[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
 int16_t MAIN_D_80135090[2];
 int8_t MAIN_D_80135094;
 int32_t BATTLE_END_TYPING;
-int16_t BATTLE_END_POS_X;
-int16_t BATTLE_END_POS_Z;
-int16_t BATTLE_END_WIDTH;
-int16_t BATTLE_END_HEIGHT;
+RECT BATTLE_END_BOX;
 uint8_t *BATTLE_END_CURSOR;
 uint16_t BATTLE_END_PEN_X;
 uint16_t BATTLE_END_PEN_Y;
@@ -207,10 +204,7 @@ static void *battle_hud_sbss_order[] = {
 	&BATTLE_END_PEN_X,
 	&BATTLE_END_CURSOR,
 #endif
-	&BATTLE_END_HEIGHT,
-	&BATTLE_END_WIDTH,
-	&BATTLE_END_POS_Z,
-	&BATTLE_END_POS_X,
+	&BATTLE_END_BOX,
 	&BATTLE_END_TYPING,
 	&MAIN_D_80135094,
 	&MAIN_D_80135090,
@@ -606,7 +600,7 @@ void BTL_removeDeathCountdown(void)
 void BTL_initializeBattleEndText(uint16_t arg0, int16_t arg1, RECT *arg2)
 {
 	BATTLE_END_TYPING = 0;
-	*(RECT *)&BATTLE_END_POS_X = *arg2;
+	BATTLE_END_BOX = *arg2;
 	BATTLE_END_PEN_X = 0;
 	BATTLE_END_V = BATTLE_END_PEN_Y = arg0;
 	BATTLE_END_CURSOR = (uint8_t *)BTL_END_BOX_TEXTBUFFER;
@@ -619,13 +613,13 @@ void BTL_initializeBattleEndText(uint16_t arg0, int16_t arg1, RECT *arg2)
 	BATTLE_END_WAIT_TIMER = BATTLE_END_WAIT_FRAMES;
 }
 
-void BTL_appendItemDroppedText(int32_t *p)
+void BTL_appendItemDroppedText(Entity *e)
 {
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_YELLOW);
-	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_DATA[p[0]].name);
+	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_DATA[e->type].name);
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_DROPPED);
 	strcat(BTL_END_BOX_TEXTBUFFER,
-	       ITEM_PARA[DIGIMON_DATA[p[0]].dropItem].name);
+	       ITEM_PARA[DIGIMON_DATA[e->type].dropItem].name);
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_WHITE_WAIT);
 	BATTLE_END_BOX_LINE_COUNT += 2;
 }
@@ -856,7 +850,7 @@ void BTL_renderBattleEndText(n)
 	int16_t n;
 // clang-format on
 {
-	renderString(0, BATTLE_END_POS_X, BATTLE_END_POS_Z, BATTLE_END_WIDTH, BATTLE_END_HEIGHT, 0, BATTLE_END_V, 6 - n, 0);
+	renderString(0, BATTLE_END_BOX.x, BATTLE_END_BOX.y, BATTLE_END_BOX.w, BATTLE_END_BOX.h, 0, BATTLE_END_V, 6 - n, 0);
 }
 
 int32_t BTL_isEndBoxTextFinished(void)
@@ -1281,7 +1275,7 @@ void BTL_renderFinisherReadyIcon(void)
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 482);
-	if ((MAIN_D_801350C9 != 1) || (((uint8_t *)COMBAT_DATA_PTR)[0x64e] == 0xb)) {
+	if ((MAIN_D_801350C9 != 1) || (COMBAT_DATA_PTR->player.currentCommand[0] == 0xb)) {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	} else {
 		setRGB0(prim, MAIN_D_801350C7, MAIN_D_801350C7, MAIN_D_801350C7);
@@ -1293,7 +1287,7 @@ void BTL_renderFinisherReadyIcon(void)
 	GsSetWorkBase((PACKET *)prim);
 
 	box.attribute = 0x40000000;
-	if ((MAIN_D_801350C9 != 1) || (((uint8_t *)COMBAT_DATA_PTR)[0x64e] == 0xb)) {
+	if ((MAIN_D_801350C9 != 1) || (COMBAT_DATA_PTR->player.currentCommand[0] == 0xb)) {
 		box.r = box.g = box.b = 0x80;
 	} else {
 		box.r = box.g = box.b = MAIN_D_801350C7;
@@ -1313,7 +1307,7 @@ void BTL_renderFinisherGaugeSegment(int16_t i, int16_t idx)
 	hp = COMBAT_DATA_PTR->fighter[idx].finisherProgress * 6 / COMBAT_DATA_PTR->fighter[idx].finisherGoal;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 492);
-	if ((((hp - 1) == i) || (MAIN_D_801350C9 == 1)) && (((uint8_t *)COMBAT_DATA_PTR)[0x64e] != 0xb)) {
+	if ((((hp - 1) == i) || (MAIN_D_801350C9 == 1)) && (COMBAT_DATA_PTR->player.currentCommand[0] != 0xb)) {
 		setRGB0(prim, MAIN_D_801350C7, MAIN_D_801350C7, MAIN_D_801350C7);
 	} else {
 		setRGB0(prim, 0x80, 0x80, 0x80);

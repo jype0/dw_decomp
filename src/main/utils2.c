@@ -8,6 +8,7 @@
 #include <dw/font.h>
 #include <dw/line.h>
 #include <dw/main.h>
+#include <dw/map.h>
 #include <dw/math.h>
 #include <dw/mov.h>
 #include <dw/params.h>
@@ -19,14 +20,6 @@
 #include <dw/utils.h>
 
 #define shop_START		((char *)0x80080800)
-
-typedef struct {
-	uint8_t mapId;
-	uint8_t mode;
-	int16_t startId;
-	int16_t count;
-	uint16_t trigger;
-} MapLightUpdateData;
 
 void reinitializeAfterTournament(void);
 void thunkReinitializeAfterTournament(void);
@@ -71,7 +64,6 @@ void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width,
 void drawEntityTextIcon(int16_t x, int16_t y, uint8_t u, int32_t otOffset);
 int32_t STD_func_800579D8(uint8_t *arg);
 
-extern MapLightUpdateData MAP_LIGHT_UPDATE_DATA[];
 extern uint8_t ITEM_CLUT_DATA[];
 extern uint8_t MAP_LAYER_ENABLED;
 extern RGB8 TEXT_COLORS[];

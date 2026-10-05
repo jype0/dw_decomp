@@ -33,12 +33,11 @@ extern uint8_t *SCRIPT_OFFSET_PTR;
 extern uint8_t *MAP_SCRIPT_PTR;
 extern int8_t MAIN_STATE;
 extern int16_t SCRIPT_MAP_CHANGE_STATE;
-extern uint8_t MAIN_D_801BE6B4[];
+extern ScriptCameraMovement SCRIPT_MOVEMENT[22];
 extern uint8_t ACTIVE_BGM_TRACK;
 extern uint8_t PREVIOUS_SCREEN;
 extern uint8_t PREVIOUS_EXIT;
 extern uint8_t CURRENT_EXIT;
-extern uint8_t MAIN_D_801BE738[];
 extern int8_t TALKED_TO_ENTITY;
 extern uint8_t MAPHEAD_SCRIPT_BUFFER[];
 extern uint8_t SCRIPT_OFFSET_TABLE[];
@@ -353,7 +352,7 @@ int32_t tickScript(void)
 		} else if (WAIT_FOR_ENTITY_ID == 0xff) {
 			if (getScriptSyncBit()) {
 				for (op = 0; op < 0x16; op++) {
-					if (MAIN_D_801BE6B4[op * 0xc] != 0xff) {
+					if (SCRIPT_MOVEMENT[op].type != 0xff) {
 						goto found;
 					}
 				}
@@ -361,7 +360,7 @@ int32_t tickScript(void)
 found:;
 			}
 		} else {
-			if (MAIN_D_801BE6B4[WAIT_FOR_ENTITY_ID * 0xc] == 0xff) {
+			if (SCRIPT_MOVEMENT[WAIT_FOR_ENTITY_ID].type == 0xff) {
 				ACTIVE_INSTRUCTION = 0;
 			}
 		}
@@ -1087,7 +1086,7 @@ void scriptInstruction46to58(op)
 	uint8_t byteArg2;
 	uint8_t byteArg3;
 	uint8_t entityId;
-	uint8_t *b;
+	ScriptCameraMovement *b;
 
 	switch (op) {
 	case SCRIPT_OP_LOAD_DIGIMON:
@@ -1199,10 +1198,10 @@ wait_for_entity_end:
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
-		b[0] = 0;
-		b[1] = byteArg1;
-		b[2] = byteArg2;
+		b = &SCRIPT_MOVEMENT[entityId];
+		b->type = 0;
+		b->entityId = byteArg1;
+		b->target = byteArg2;
 		break;
 	case SCRIPT_OP_ENTITY_SET_ROTATION:
 		scriptPauseGame(0xff);
@@ -1212,10 +1211,10 @@ wait_for_entity_end:
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
-		b[0] = 1;
-		b[1] = byteArg1;
-		*(int16_t *)(b + 4) = posX;
+		b = &SCRIPT_MOVEMENT[entityId];
+		b->type = 1;
+		b->entityId = byteArg1;
+		b->posX = posX;
 		break;
 	case SCRIPT_OP_ENTITY_WALK_TO:
 		scriptPauseGame(0xff);
@@ -1227,29 +1226,29 @@ wait_for_entity_end:
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
-		b[0] = 2;
-		b[1] = byteArg1;
-		*(int16_t *)(b + 4) = posX;
-		*(int16_t *)(b + 6) = posY;
+		b = &SCRIPT_MOVEMENT[entityId];
+		b->type = 2;
+		b->entityId = byteArg1;
+		b->posX = posX;
+		b->posY = posY;
 		break;
 	case SCRIPT_OP_MOVE_CAMERA_TO:
 		scriptPauseGame(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptShorts(&posX, &posY);
-		b = (uint8_t *)&MAIN_D_801BE72C;
-		b[0] = 6;
-		*(int16_t *)(b + 4) = posX;
-		*(int16_t *)(b + 6) = posY;
-		b[3] = (int32_t)byteArg1;
+		b = &SCRIPT_MOVEMENT[10];
+		b->type = 6;
+		b->posX = posX;
+		b->posY = posY;
+		b->speed = (int32_t)byteArg1;
 		break;
 	case SCRIPT_OP_MOVE_CAMERA_TO_ENTITY:
 		scriptPauseGame(0xff);
 		skipOnePollTwoScriptBytes(&byteArg1, &byteArg2);
-		b = (uint8_t *)&MAIN_D_801BE72C;
-		b[0] = 7;
-		b[1] = byteArg1;
-		b[3] = (int32_t)byteArg2;
+		b = &SCRIPT_MOVEMENT[10];
+		b->type = 7;
+		b->entityId = byteArg1;
+		b->speed = (int32_t)byteArg2;
 		break;
 	case SCRIPT_OP_ENTITY_WALK_TO_ENTITY:
 		scriptPauseGame(0xff);
@@ -1260,10 +1259,10 @@ wait_for_entity_end:
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
-		b[0] = 3;
-		b[1] = byteArg1;
-		b[2] = byteArg3;
+		b = &SCRIPT_MOVEMENT[entityId];
+		b->type = 3;
+		b->entityId = byteArg1;
+		b->target = byteArg3;
 		break;
 	case SCRIPT_OP_ENTITY_WALK_TO_WITH_CAMERA:
 		scriptPauseGame(0xff);
@@ -1275,11 +1274,11 @@ wait_for_entity_end:
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
-		b[0] = 4;
-		b[1] = byteArg1;
-		*(int16_t *)(b + 4) = posX;
-		*(int16_t *)(b + 6) = posY;
+		b = &SCRIPT_MOVEMENT[entityId];
+		b->type = 4;
+		b->entityId = byteArg1;
+		b->posX = posX;
+		b->posY = posY;
 		break;
 	case SCRIPT_OP_ENTITY_WALK_TO_ENTITY_WITH_CAMERA:
 		scriptPauseGame(0xff);
@@ -1290,10 +1289,10 @@ wait_for_entity_end:
 		if (entityId == 0xff) {
 			break;
 		}
-		b = MAIN_D_801BE6B4 + entityId * 0xc;
-		b[0] = 5;
-		b[1] = byteArg1;
-		b[2] = byteArg3;
+		b = &SCRIPT_MOVEMENT[entityId];
+		b->type = 5;
+		b->entityId = byteArg1;
+		b->target = byteArg3;
 		break;
 	case SCRIPT_OP_RESET_ENTITY_ORIGIN:
 		scriptPauseGame(0xff);
@@ -1434,7 +1433,7 @@ void scriptInstruction64to7E(op)
 	uint8_t byteArg3;
 	uint8_t entityId;
 	uint8_t padByte;
-	uint8_t *b;
+	ScriptCameraMovement *b;
 
 	switch (op) {
 	case SCRIPT_OP_CALL_ROUTINE:
@@ -1728,10 +1727,10 @@ void scriptInstruction64to7E(op)
 			break;
 		}
 
-		b = (uint8_t *)&MAIN_D_801BE72C;
-		b[0] = 7;
-		b[1] = 0xfd;
-		b[3] = 0xa;
+		b = &SCRIPT_MOVEMENT[10];
+		b->type = 7;
+		b->entityId = 0xfd;
+		b->speed = 0xa;
 
 		ACTIVE_INSTRUCTION = SCRIPT_OP_WAIT_FOR_ENTITY;
 		WAIT_FOR_ENTITY_ID = 0xa;
@@ -1789,12 +1788,12 @@ void scriptInstruction64to7E(op)
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
-			b[0] = 8;
-			b[1] = byteArg1;
-			b[3] = byteArg2;
-			*(int16_t *)(b + 4) = posX;
-			*(int16_t *)(b + 6) = posY;
+			b = &SCRIPT_MOVEMENT[entityId];
+			b->type = 8;
+			b->entityId = byteArg1;
+			b->speed = byteArg2;
+			b->posX = posX;
+			b->posY = posY;
 		}
 		break;
 	case SCRIPT_OP_ENTITY_MOVE_TO_ENTITY:
@@ -1804,11 +1803,11 @@ void scriptInstruction64to7E(op)
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
-			b[0] = 9;
-			b[1] = byteArg1;
-			b[2] = byteArg2;
-			b[3] = byteArg3;
+			b = &SCRIPT_MOVEMENT[entityId];
+			b->type = 9;
+			b->entityId = byteArg1;
+			b->target = byteArg2;
+			b->speed = byteArg3;
 		}
 		break;
 	case SCRIPT_OP_ENTITY_MOVE_TO_WITH_CAMERA:
@@ -1819,12 +1818,12 @@ void scriptInstruction64to7E(op)
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
-			b[0] = 0xb;
-			b[1] = byteArg1;
-			b[3] = byteArg2;
-			*(int16_t *)(b + 4) = posX;
-			*(int16_t *)(b + 6) = posY;
+			b = &SCRIPT_MOVEMENT[entityId];
+			b->type = 0xb;
+			b->entityId = byteArg1;
+			b->speed = byteArg2;
+			b->posX = posX;
+			b->posY = posY;
 		}
 		break;
 	case SCRIPT_OP_ENTITY_MOVE_TO_ENTITY_WITH_CAMERA:
@@ -1834,20 +1833,20 @@ void scriptInstruction64to7E(op)
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
-			b[0] = 0xb;
-			b[1] = byteArg1;
-			b[2] = byteArg2;
-			b[3] = byteArg3;
+			b = &SCRIPT_MOVEMENT[entityId];
+			b->type = 0xb;
+			b->entityId = byteArg1;
+			b->target = byteArg2;
+			b->speed = byteArg3;
 		}
 		break;
 	case SCRIPT_OP_ROTATE_3D_OBJECT:
 		scriptPauseGame(0xff);
 		pollNextScriptUByte(&byteArg1);
 		pollNextTwoScriptBytes(&byteArg2, &byteArg3);
-		MAIN_D_801BE738[0] = 0xc;
-		MAIN_D_801BE738[1] = byteArg1;
-		MAIN_D_801BE738[2] = byteArg3;
+		SCRIPT_MOVEMENT[11].type = 0xc;
+		SCRIPT_MOVEMENT[11].entityId = byteArg1;
+		SCRIPT_MOVEMENT[11].target = byteArg3;
 		break;
 	case SCRIPT_OP_MOVE_OBJECT_TO:
 		scriptPauseGame(0xff);
@@ -1856,13 +1855,13 @@ void scriptInstruction64to7E(op)
 		pollNextTwoScriptBytes(&entityId, &padByte);
 		pollNextTwoScriptShorts(&posX, &posY);
 		byteArg1 += 0xc;
-		b = MAIN_D_801BE6B4 + byteArg1 * 0xc;
-		b[0] = 0xd;
-		b[1] = byteArg2;
-		b[3] = byteArg3;
-		b[2] = entityId;
-		*(int16_t *)(b + 8) = posX;
-		*(int16_t *)(b + 0xa) = posY;
+		b = &SCRIPT_MOVEMENT[byteArg1];
+		b->type = 0xd;
+		b->entityId = byteArg2;
+		b->speed = byteArg3;
+		b->target = entityId;
+		b->targetX = posX;
+		b->targetY = posY;
 		break;
 	case SCRIPT_OP_ENTITY_MOVE_TO_AXIS:
 		scriptPauseGame(0xff);
@@ -1872,12 +1871,12 @@ void scriptInstruction64to7E(op)
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
-			b[0] = 0xe;
-			b[1] = byteArg1;
-			b[2] = byteArg2;
-			*(int16_t *)(b + 4) = posX;
-			b[3] = byteArg3;
+			b = &SCRIPT_MOVEMENT[entityId];
+			b->type = 0xe;
+			b->entityId = byteArg1;
+			b->target = byteArg2;
+			b->posX = posX;
+			b->speed = byteArg3;
 		}
 		break;
 	case SCRIPT_OP_ENTITY_MOVE_TO_AXIS_WITH_CAMERA:
@@ -1888,12 +1887,12 @@ void scriptInstruction64to7E(op)
 		entityId = scriptIdToEntityId(byteArg1);
 		&entityId;
 		if (entityId != 0xff) {
-			b = MAIN_D_801BE6B4 + entityId * 0xc;
-			b[0] = 0xf;
-			b[1] = byteArg1;
-			b[2] = byteArg2;
-			*(int16_t *)(b + 4) = posX;
-			b[3] = byteArg3;
+			b = &SCRIPT_MOVEMENT[entityId];
+			b->type = 0xf;
+			b->entityId = byteArg1;
+			b->target = byteArg2;
+			b->posX = posX;
+			b->speed = byteArg3;
 		}
 		break;
 	case SCRIPT_OP_SPAWN_ITEM:
@@ -2043,7 +2042,7 @@ void callScriptSection(scriptId, section, param)
 	SOME_SCRIPT_SYNC_BIT = 1;
 	MAIN_D_80134F9C = TALKED_TO_ENTITY;
 	for (i = 0; i < 0x16; i++) {
-		((ScriptCameraMovement *)MAIN_D_801BE6B4)[i].type = 0xff;
+		SCRIPT_MOVEMENT[i].type = 0xff;
 	}
 
 	initializeTextbox();
@@ -2051,7 +2050,7 @@ void callScriptSection(scriptId, section, param)
 
 void tickScriptedMovement(int32_t slot)
 {
-	ScriptCameraMovement *movement = &((ScriptCameraMovement *)MAIN_D_801BE6B4)[slot];
+	ScriptCameraMovement *movement = &SCRIPT_MOVEMENT[slot];
 	int32_t done;
 
 	switch (movement->type) {
@@ -2517,12 +2516,12 @@ void scriptPauseGame(int32_t owner)
 		if (SCRIPT_SECTION_IS_EVENT != 0 && isTriggerSet(TRIGGER_44) == 0) {
 			entityId = scriptIdToEntityId(SCRIPT_SECTION) & 0xff;
 			if (entityId != 0xff) {
-				MAIN_D_801BE6B4[entityId * 0xc] = 0;
-				(MAIN_D_801BE6B4 + 1)[entityId * 0xc] = SCRIPT_SECTION;
-				(MAIN_D_801BE6B4 + 2)[entityId * 0xc] = 0xfd;
-				MAIN_D_801BE6B4[0] = 0;
-				MAIN_D_801BE6B4[1] = 0xfd;
-				MAIN_D_801BE6B4[2] = SCRIPT_SECTION;
+				SCRIPT_MOVEMENT[entityId].type = 0;
+				SCRIPT_MOVEMENT[entityId].entityId = SCRIPT_SECTION;
+				SCRIPT_MOVEMENT[entityId].target = 0xfd;
+				SCRIPT_MOVEMENT[0].type = 0;
+				SCRIPT_MOVEMENT[0].entityId = 0xfd;
+				SCRIPT_MOVEMENT[0].target = SCRIPT_SECTION;
 			}
 		}
 	}
@@ -2600,7 +2599,7 @@ void tickScriptedMovements(void)
 	int32_t i;
 
 	for (i = 0; i < 0x16; i++) {
-		if (MAIN_D_801BE6B4[i * 0xc] != 0xff) {
+		if (SCRIPT_MOVEMENT[i].type != 0xff) {
 			tickScriptedMovement(i);
 		}
 	}

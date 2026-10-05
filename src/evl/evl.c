@@ -803,15 +803,15 @@ void EVL_calculateCameraVectors(VECTOR *viewRef, VECTOR *viewPos, Entity *entity
 void EVL_releaseAllParticles(void)
 {
 	int32_t i;
-	int32_t *p;
+	EvlParticle *p;
 
-	p = &EVL_D_80068944[0].timer;
+	p = EVL_D_80068944;
 	for (i = 0; i < 100; i++) {
-		if (*p >= 0) {
+		if (p->timer >= 0) {
 			removeObject(0x607, i);
-			*p = -1;
+			p->timer = -1;
 		}
-		p = (int32_t *)((uint32_t)p + 0x10);
+		p++;
 	}
 }
 

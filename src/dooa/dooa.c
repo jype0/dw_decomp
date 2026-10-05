@@ -1027,7 +1027,7 @@ void DOOA_tickRebirth(int32_t instanceId)
 		seq->phase = 0xce;
 		DOOA_removeShardEffect();
 		loadVLALL(REINCARNATE_BABY_TYPE[seq->eggSlot], GENERAL_BUFFER_PTR);
-		loadMMDAsync(REINCARNATE_BABY_TYPE[seq->eggSlot], 3, DOOA_MMD_BUFFER, (EvoModelData *)seq->modelData,
+		loadMMDAsync(REINCARNATE_BABY_TYPE[seq->eggSlot], 3, DOOA_MMD_BUFFER, &seq->modelData,
 		             (uint8_t *)&seq->isModelLoading);
 		DOO2_resetShardSets(DOOA_SHARD_BUFFER);
 		playSound(8, 6);
@@ -1540,7 +1540,7 @@ void DOOA_spawnBoneShards(DooaShardEffect *effect, int32_t boneIndex, long wireI
 	model = getEntityModelComponent(entity->type, 3);
 	tmd = model->modelPtr;
 	header = tmd;
-	objects = (struct TMD_STRUCT *)((uint32_t)header + 12);
+	objects = header->obj;
 	objIndex = DIGIMON_SKELETONS[entity->type][boneIndex].objIndex;
 	if (objIndex == -1) {
 		return;

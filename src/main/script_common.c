@@ -23,19 +23,31 @@ typedef struct {
 } BabyTypeTable;
 
 typedef struct {
-	int16_t v[15];
-} MenuTextLayout;
+	int16_t x;
+	int16_t y;
+	int16_t chars;
+} MenuTextField;
+
+typedef struct {
+	MenuTextField v[5];
+} AmountBoxLayout;
+
+typedef struct {
+	int16_t srcX;
+	int16_t srcY;
+	int16_t x;
+	int16_t y;
+	int16_t width;
+} MenuTextSprite;
+
+typedef struct {
+	MenuTextSprite v[3];
+} ConfirmBoxLayout;
 
 typedef struct {
 	int16_t v[28];
 } BoxUVTable;
 
-typedef struct {
-	uint32_t usedRows;
-	TextBoxData box[6];
-} TextBoxTable;
-
-extern TextBoxTable TEXTBOX_LINES_USED;
 extern uint32_t INPUT_REPEAT_MASK;
 extern int32_t MAIN_D_80135028;
 extern uint32_t ARRAY_SECTION_OFFSET;
@@ -45,12 +57,8 @@ extern uint32_t INPUT_FRESH_MASK;
 extern uint16_t INPUT_REPEAT_COUNTER;
 extern int32_t ITEM_MENU_SUB_TEXTBOX_LINE;
 extern uint32_t POLLED_INPUT;
-extern uint16_t SELECTION_CURRENT[];
-extern uint16_t MAIN_D_801BE954[];
-extern uint16_t MAIN_D_801BE956[];
 extern int32_t BIT_BOX_SHOW_BITS;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern uint16_t SELECTION_COUNT[];
 extern uint8_t SHOP_AMOUNT;
 extern uint8_t NAMING_CURRENT_LETTER;
 extern uint8_t MAX_SHOP_AMOUNT;
@@ -676,8 +684,8 @@ int16_t MAIN_D_801345C0[1] = {
 
 uint16_t MAIN_D_801345C2 = 0x1700;
 
-int32_t MAP_LIGHT_UPDATE_DATA[2] = {
-	0x003101b7, 0xffff0002,
+MapLightUpdateData MAP_LIGHT_UPDATE_DATA[1] = {
+	{ 0xb7, 0x01, 0x0031, 0x0002, 0xffff },
 };
 
 GsSPRITE MONOCHROMON_BUBBLE_SPRITE = {
@@ -701,34 +709,34 @@ GsSPRITE MONOCHROMON_BUBBLE_SPRITE = {
 	0,				/* rotate */
 };
 
-MenuTextLayout AMOUNT_BOX_LAYOUT = {
+AmountBoxLayout AMOUNT_BOX_LAYOUT = {
 	{
 #if defined(VERSION_JP)
-		0x001a, 0x0007, 0x0008, 0x0032,
-		0x001b, 0x0005, 0x0056, 0x002b,
-		0x0002, 0x0026, 0x0041, 0x0006,
-		0x0016, 0x002b, 0x0001,
+		{ 0x001a, 0x0007, 0x0008 },
+		{ 0x0032, 0x001b, 0x0005 },
+		{ 0x0056, 0x002b, 0x0002 },
+		{ 0x0026, 0x0041, 0x0006 },
+		{ 0x0016, 0x002b, 0x0001 },
 #else
-		0x001a, 0x0007, 0x0008, 0x004a,
-		0x001b, 0x0005, 0x0059, 0x002b,
-		0x0002, 0x0040, 0x0041, 0x0006,
-		0x0016, 0x002b, 0x0001,
+		{ 0x001a, 0x0007, 0x0008 },
+		{ 0x004a, 0x001b, 0x0005 },
+		{ 0x0059, 0x002b, 0x0002 },
+		{ 0x0040, 0x0041, 0x0006 },
+		{ 0x0016, 0x002b, 0x0001 },
 #endif
 	},
 };
 
-MenuTextLayout CONFIRM_BOX_LAYOUT = {
+ConfirmBoxLayout CONFIRM_BOX_LAYOUT = {
 	{
 #if defined(VERSION_JP)
-		0x0000, 0x0000, 0x0004, 0x0002,
-		0x0060, 0x0000, 0x000c, 0x0010,
-		0x0012, 0x0018, 0x0018, 0x000c,
-		0x003a, 0x0012, 0x0024,
+		{ 0x0000, 0x0000, 0x0004, 0x0002, 0x0060 },
+		{ 0x0000, 0x000c, 0x0010, 0x0012, 0x0018 },
+		{ 0x0018, 0x000c, 0x003a, 0x0012, 0x0024 },
 #else
-		0x0000, 0x0000, 0x0004, 0x0002,
-		0x0060, 0x0000, 0x000c, 0x000e,
-		0x0012, 0x0024, 0x0024, 0x000c,
-		0x0044, 0x0012, 0x0024,
+		{ 0x0000, 0x0000, 0x0004, 0x0002, 0x0060 },
+		{ 0x0000, 0x000c, 0x000e, 0x0012, 0x0024 },
+		{ 0x0024, 0x000c, 0x0044, 0x0012, 0x0024 },
 #endif
 	},
 };
@@ -1276,7 +1284,7 @@ void renderItemMenuDescriptionBox(void)
 	int16_t x;
 	int16_t y;
 
-	rowPx = TEXTBOX_DATA[3].vramRow * 12;
+	rowPx = TEXTBOX_DATA.box[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x + 6;
 	y = UI_BOX_DATA[3].finalPos.y + 5;
 	renderString(0, x, y, 0xfc, 0xc, 0, rowPx, 3, 1);
@@ -1284,8 +1292,8 @@ void renderItemMenuDescriptionBox(void)
 
 void renderItemMenuAmountBox(void)
 {
-	MenuTextLayout layout;
-	int16_t *entry;
+	AmountBoxLayout layout;
+	MenuTextField *entry;
 	int32_t i;
 	int16_t x;
 	int16_t y;
@@ -1295,7 +1303,7 @@ void renderItemMenuAmountBox(void)
 	int16_t srcCol;
 
 	layout = AMOUNT_BOX_LAYOUT;
-	rowPx = TEXTBOX_DATA[3].vramRow * 12;
+	rowPx = TEXTBOX_DATA.box[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x;
 	y = UI_BOX_DATA[3].finalPos.y;
 	renderHorizontalLine(3, 4, 0x17, 0x7a);
@@ -1314,13 +1322,13 @@ void renderItemMenuAmountBox(void)
 	i = 0;
 	srcCol = 0;
 	while (i < 4) {
-		renderString(0, entry[0] + x, entry[1] + y, entry[2] * 12, 0xc, srcCol * 12, rowPx, 3, 1);
-		srcCol += entry[2];
+		renderString(0, entry->x + x, entry->y + y, entry->chars * 12, 0xc, srcCol * 12, rowPx, 3, 1);
+		srcCol += entry->chars;
 		i++;
-		entry += 3;
+		entry += 1;
 	}
 #if defined(VERSION_JP)
-	renderString(0, entry[0] + x, entry[1] + y, entry[2] * 12, 0xc, 0x90, 0x60, 3, 1);
+	renderString(0, entry->x + x, entry->y + y, entry->chars * 12, 0xc, 0x90, 0x60, 3, 1);
 #endif
 }
 
@@ -1406,8 +1414,8 @@ void updateItemMenuAmountBoxString(void)
 	out = intToStringSJIS(out, total, 6, 0);
 	*out++ = 0;
 	*out = 0;
-	TEXTBOX_DATA[3].pageReady = 1;
-	TEXTBOX_DATA[3].writeCount++;
+	TEXTBOX_DATA.box[3].pageReady = 1;
+	TEXTBOX_DATA.box[3].writeCount++;
 }
 
 void tickSingleCardShop(void)
@@ -1469,8 +1477,8 @@ void tickSingleCardShop(void)
 
 void renderSingleCardShop(void)
 {
-	MenuTextLayout layout;
-	int16_t *entry;
+	ConfirmBoxLayout layout;
+	MenuTextSprite *entry;
 	int32_t i;
 	int32_t unused;
 	int16_t rowPx;
@@ -1478,17 +1486,17 @@ void renderSingleCardShop(void)
 	int16_t y;
 
 	layout = CONFIRM_BOX_LAYOUT;
-	rowPx = TEXTBOX_DATA[3].vramRow * 12;
+	rowPx = TEXTBOX_DATA.box[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x + 4;
 	y = UI_BOX_DATA[3].finalPos.y + 3;
 	entry = layout.v;
 	i = 0;
 	unused = 0;
 	while (i < 3) {
-		renderString(0, x + entry[2], y + entry[3], entry[4], 0xc,
-		             entry[0], rowPx + entry[1], 3, 1);
+		renderString(0, x + entry->x, y + entry->y, entry->width, 0xc,
+		             entry->srcX, rowPx + entry->srcY, 3, 1);
 		i++;
-		entry += 5;
+		entry += 1;
 	}
 	renderSelectionCursor(x + 8 + SHOP_AMOUNT * 47, y + 0x12, 0x28,
 	                      0xe, 3);
@@ -2239,7 +2247,7 @@ void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style)
 	uint8_t *p;
 	int32_t rows;
 
-	entry = &TEXTBOX_LINES_USED.box[box->boxId];
+	entry = &TEXTBOX_DATA.box[box->boxId];
 	rows = box->itemCount - box->topRow;
 	if (rows > box->visibleRows) {
 		rows = box->visibleRows;
@@ -2529,8 +2537,8 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiB
 	out += len;
 	*out++ = 0;
 	*out = 0;
-	TEXTBOX_DATA[3].pageReady = 1;
-	TEXTBOX_DATA[3].writeCount++;
+	TEXTBOX_DATA.box[3].pageReady = 1;
+	TEXTBOX_DATA.box[3].writeCount++;
 
 	return 1;
 }
@@ -2632,7 +2640,7 @@ void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2
 	uint8_t item;
 
 	boxId = box->boxId;
-	tbox = &TEXTBOX_LINES_USED.box[boxId];
+	tbox = &TEXTBOX_DATA.box[boxId];
 	if (mode != 2) {
 		if (isItemMenuBoxBusy(box) != 0) {
 			top = box->prevTopRow;
@@ -2679,10 +2687,10 @@ void renderItemMenuItemList(ItemMenuBox *box, int16_t x1, int16_t y1, int16_t x2
 
 void updateItemMenuSubTextboxLine(void)
 {
-	uint8_t *box = (uint8_t *)TEXTBOX_DATA;
+	TextBoxData *box = (TextBoxData *)TEXTBOX_DATA.box;
 
-	ITEM_MENU_SUB_TEXTBOX_LINE = *(int32_t *)(box + 0x20);
-	ITEM_MENU_SUB_TEXTBOX_LINE = (*(int32_t *)(box + 0x18) ^ 1) * *(int32_t *)(box + 0x24);
+	ITEM_MENU_SUB_TEXTBOX_LINE = box->vramRow;
+	ITEM_MENU_SUB_TEXTBOX_LINE = (box->backPage ^ 1) * box->vramRows;
 }
 
 void playShopSoundOnlyInSavannah(void)
@@ -2854,7 +2862,7 @@ int32_t flipTextboxPage(uint8_t a)
 {
 	TextBoxData *entry;
 
-	entry = &TEXTBOX_LINES_USED.box[a];
+	entry = &TEXTBOX_DATA.box[a];
 
 	if (entry->doubleBuffered == 0) {
 		return 0;
@@ -3099,7 +3107,7 @@ void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 	int32_t outClut;
 	uint8_t *p;
 
-	entry = &TEXTBOX_LINES_USED.box[box->boxId];
+	entry = &TEXTBOX_DATA.box[box->boxId];
 	entry->backPage ^= 1;
 
 	row = box->cursor;
@@ -3183,7 +3191,7 @@ uint8_t *getTextboxLine(ItemMenuBox *box, uint8_t index)
 	TextBoxData *entry;
 	uint8_t *row;
 
-	entry = &TEXTBOX_LINES_USED.box[box->boxId];
+	entry = &TEXTBOX_DATA.box[box->boxId];
 	row = TEXTBOX_LINES_PTR + box->itemRow[index] * 0x40;
 
 	if (entry->vramMode == 2) {
@@ -3272,20 +3280,20 @@ void showMapheadSelection(int32_t idx, uint8_t owner, uint16_t x, int32_t *outSe
 		SCRIPT_POINTER = resolveMapHeadEntry(section, idx);
 	}
 
-	SELECTION_COUNT[0] = x;
+	DIALOGUE_SELECTION.count = x;
 
 	if (*outSel == 0) {
 		*outSel = 1;
-		SELECTION_CURRENT[0] = 0;
+		DIALOGUE_SELECTION.current = 0;
 	}
 
-	MAIN_D_801BE956[0] = showTextboxReady(0, CURRENT_DIALOGUE_OWNER);
-	MAIN_D_801BE956[0] = MAIN_D_801BE956[0] * 12 + 2;
+	DIALOGUE_SELECTION.cursorWidth = showTextboxReady(0, CURRENT_DIALOGUE_OWNER);
+	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * 12 + 2;
 
 	if (owner != 0xff) {
-		MAIN_D_801BE954[0] = 0xd;
+		DIALOGUE_SELECTION.cursorOffsetY = 0xd;
 	} else {
-		MAIN_D_801BE954[0] = 0;
+		DIALOGUE_SELECTION.cursorOffsetY = 0;
 	}
 
 	ACTIVE_INSTRUCTION = SCRIPT_OP_CALL_ROUTINE;
@@ -3410,7 +3418,7 @@ void renderShopBitsBox(void)
 	int16_t x;
 	int16_t y;
 
-	rowPx = TEXTBOX_DATA[2].vramRow * 12;
+	rowPx = TEXTBOX_DATA.box[2].vramRow * 12;
 	x = UI_BOX_DATA[2].finalPos.x + 6;
 	y = UI_BOX_DATA[2].finalPos.y + 4;
 

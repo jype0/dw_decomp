@@ -27,14 +27,17 @@
 
 #define EFE_SORT_WORKSPACE getScratchAddr(44)
 
-/* One entry of the EFE slot table at EFE_DATA_PTR. */
-typedef int32_t EfeSlot[10];
-
 typedef struct {
 	int32_t vx;
 	int32_t vy;
 	int32_t vz;
 } EfeVector;
+
+typedef struct {
+	int32_t red;
+	int32_t green;
+	int32_t blue;
+} EfeColor;
 
 typedef struct {
 	EfeVector position;
@@ -52,6 +55,47 @@ typedef struct {
 	int16_t positionY;
 	int16_t positionZ;
 } EfeBoneOffset;
+
+typedef struct {
+	int16_t type;
+	EfeBoneOffset offset;
+} EfeTechBoneOffset;
+
+typedef struct {
+	int16_t frame;
+	int16_t angle;
+	int16_t spin;
+	int16_t offsets[3];
+	Entity *entity;
+} EfeConfusion;
+
+typedef struct {
+	int16_t frame;
+	int16_t duration;
+	int16_t state;
+	int16_t pad;
+	Entity *entity;
+} EfeStun;
+
+typedef struct {
+	int16_t frame;
+	int16_t pad;
+	Entity *entity;
+} EfeStunSpark;
+
+typedef struct {
+	int16_t frame;
+	int16_t pad;
+	Entity *entity;
+} EfePoison;
+
+typedef struct {
+	int16_t frame;
+	int16_t pad;
+	int16_t offsetX;
+	int16_t offsetZ;
+	Entity *entity;
+} EfePoisonBubble;
 
 typedef struct {
 	int16_t distance;
@@ -86,6 +130,65 @@ typedef struct {
 	Entity *targetEntity;
 	EfeBoneOffset *boneOffset;
 } EfeSubEffect;
+
+typedef struct {
+	int16_t frames;
+	int8_t deltaU;
+	int8_t deltaV;
+} EfeUvKeyframe;
+
+typedef struct {
+	int16_t unk0;
+	int16_t unk2;
+	int16_t unk4;
+	int16_t unk6;
+	int16_t unk8;
+	int16_t unkA;
+	int16_t numKeyframes;
+	int16_t keyframe;
+	int16_t uvFrame;
+	int16_t frame;
+	int16_t numFrames;
+	int16_t pad;
+	EfeUvKeyframe *uvData;
+	EfeUvKeyframe *uv;
+} EfeUvAnim;
+
+typedef struct {
+	int32_t startScript;
+	int32_t initScript;
+	uint32_t uvAnims;
+	int32_t uvAnimsEnd;
+	uint32_t subEffects;
+	int32_t tmdStart;
+	int32_t tmdEnd;
+	int32_t timStart;
+	int32_t timEnd;
+	int32_t dataEnd;
+	int32_t unk28;
+	int32_t numSubEffects;
+	int32_t effectId;
+} EfeFileHeader;
+
+/* One entry of the EFE slot table at EFE_DATA_PTR. */
+typedef struct {
+	int32_t effectId;
+	int16_t *initScript;
+	int32_t data;
+	int16_t *startScript;
+	EfeSubEffect *subEffects;
+	int16_t numSubEffects;
+	int16_t pad;
+	ModelComponent *model;
+	int32_t numObjects;
+	EfeUvAnim *uvAnims;
+	EfeUvAnim *uvAnimsEnd;
+} EfeSlot;
+
+typedef struct {
+	int32_t mask;
+	EfeSubEffect *context;
+} EfeSound;
 
 typedef struct {
 	GsDOBJ2 obj;
@@ -143,13 +246,36 @@ typedef struct {
 } EfeRibbonScratch;
 
 typedef struct {
+	int16_t type;
+	int16_t unk2;
+	int16_t unk4;
+	int16_t unk6;
+	int16_t unk8;
+	int16_t u;
+} EfeAuraType;
+
+typedef struct {
 	int32_t frame;
 	SVECTOR position;
 	SVECTOR rotation;
 	SVECTOR velocity;
-	char *typeData;
+	EfeAuraType *type;
 	Entity *owner;
 } EfeAura;
+
+typedef struct {
+	int16_t size;
+	int16_t x;
+	int16_t y;
+	int16_t depth;
+	int16_t u;
+} EfeParallaxSprite;
+
+typedef struct {
+	int16_t frame;
+	int16_t duration;
+	Entity *entity;
+} EfeFinisherAura;
 
 typedef struct {
 	int16_t state;
@@ -213,19 +339,18 @@ extern long MAIN_D_80134CE0;
 extern int32_t EFE_ACTIVE_SECTION;
 extern EfeSubEffect *EFE_SCRIPT_CONTEXT;
 extern int32_t EFE_SCRIPT_REGISTER;
-extern int32_t MAIN_D_80134CF0;
+extern EfeBoneOffset *MAIN_D_80134CF0;
 extern int32_t *EFE_CALL_STACK;
 extern int16_t *EFE_SCRIPT_PTR;
 extern int16_t EFE_SCRIPT_CURRENT_VALUE;
 extern int32_t EFE_SCRIPT_HEAD;
-extern int32_t *EFE_DATA_ITERATOR;
-extern char *EFE_DATA_PTR;
+extern EfeSlot *EFE_DATA_ITERATOR;
+extern EfeSlot *EFE_DATA_PTR;
 extern int32_t MAIN_D_80134D14;
 extern int32_t MAIN_D_80134D18;
 extern int16_t UNUSED_EFE_ARRAY[];
-extern int16_t MAIN_D_80139B20[];
-extern int32_t MAIN_D_80139B28[];
-extern int32_t MAIN_D_80139B2C[];
+extern EfeLoad MAIN_D_80139B20;
+extern EfeSound EFE_SOUND_DATA[10];
 extern GsRVIEW2 MAIN_D_80139B34;
 extern int32_t EFE_CALL_STACK_BUFFER[16];
 

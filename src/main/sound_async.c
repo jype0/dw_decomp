@@ -132,8 +132,8 @@ int32_t loadSoundCompleteCallback(void *param)
 	case 0:
 		sb->vabId = 0;
 		memcpy(VHB_HEADER_ADDR[(int32_t)param],
-		       &buffer[(((uint32_t *)buffer)[0] >> 2) << 2],
-		       ((uint32_t *)buffer)[1] - ((uint32_t *)buffer)[0]);
+		       &buffer[(((VhbFileHeader *)buffer)->vhOffset >> 2) << 2],
+		       ((VhbFileHeader *)buffer)->vbOffset - ((VhbFileHeader *)buffer)->vhOffset);
 
 		SsVabClose((int32_t)param);
 		if ((sb->vabId = SsVabOpenHeadSticky(VHB_HEADER_ADDR[(int32_t)param],
@@ -143,7 +143,7 @@ int32_t loadSoundCompleteCallback(void *param)
 			return 0;
 		}
 
-		if (sb->vabId != SsVabTransBody(&buffer[((uint32_t *)buffer)[1]], sb->vabId)) {
+		if (sb->vabId != SsVabTransBody(&buffer[((VhbFileHeader *)buffer)->vbOffset], sb->vabId)) {
 			sb->vabId = -1;
 			return 0;
 		}
@@ -171,8 +171,8 @@ void uploadSoundBuffer(int32_t vabId)
 	buffer = sb->buffer;
 	sb->vabId = 0;
 	memcpy(VHB_HEADER_ADDR[vabId],
-	       &buffer[(((uint32_t *)buffer)[0] >> 2) << 2],
-	       ((uint32_t *)buffer)[1] - ((uint32_t *)buffer)[0]);
+	       &buffer[(((VhbFileHeader *)buffer)->vhOffset >> 2) << 2],
+	       ((VhbFileHeader *)buffer)->vbOffset - ((VhbFileHeader *)buffer)->vhOffset);
 
 	SsVabClose(vabId);
 	if ((sb->vabId = SsVabOpenHeadSticky(VHB_HEADER_ADDR[vabId], vabId,
@@ -181,7 +181,7 @@ void uploadSoundBuffer(int32_t vabId)
 		return;
 	}
 
-	if (sb->vabId != SsVabTransBody(&buffer[((uint32_t *)buffer)[1]], sb->vabId)) {
+	if (sb->vabId != SsVabTransBody(&buffer[((VhbFileHeader *)buffer)->vbOffset], sb->vabId)) {
 		sb->vabId = -1;
 		return;
 	}

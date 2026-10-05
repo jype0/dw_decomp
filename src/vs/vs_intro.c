@@ -28,12 +28,7 @@ extern int16_t VS__INTRO_DATA_POS_X;
 extern int16_t VS__INTRO_DATA_POS_Y;
 extern CameraChase INTRO_CAMERA_CHASE;
 extern int32_t VS__INTRO_STATS_ACTIVE;
-extern int16_t MAIN_D_801B1C70[];
-extern int16_t MAIN_D_801B1C72[];
-extern int16_t MAIN_D_801B1C74[];
-extern int16_t MAIN_D_801B1C76[];
-extern int16_t MAIN_D_801B1C78[];
-extern int16_t MAIN_D_801B1C7A[];
+extern int16_t VS__INTRO_STATS_DATA[6];
 extern uint8_t VS_MUSIC;
 extern uint8_t VS__INTRO_DATA_ANIM_FRAME;
 
@@ -256,12 +251,12 @@ void VS__addIntroStats(entity, id)
 {
 	if (VS__INTRO_STATS_ACTIVE != 1) {
 		VS__INTRO_STATS_ACTIVE = 1;
-		MAIN_D_801B1C70[0] = -100;
-		MAIN_D_801B1C72[0] = -100;
-		MAIN_D_801B1C74[0] = -10;
-		MAIN_D_801B1C76[0] = -10;
-		MAIN_D_801B1C78[0] = -10;
-		MAIN_D_801B1C7A[0] = -10;
+		VS__INTRO_STATS_DATA[0] = -100;
+		VS__INTRO_STATS_DATA[1] = -100;
+		VS__INTRO_STATS_DATA[2] = -10;
+		VS__INTRO_STATS_DATA[3] = -10;
+		VS__INTRO_STATS_DATA[4] = -10;
+		VS__INTRO_STATS_DATA[5] = -10;
 		addObject(0x1a9, id, VS__tickIntroStats, VS__renderIntroStats);
 	}
 }
@@ -408,36 +403,36 @@ void VS__tickIntroStats(id)
 {
 	Stats *stats;
 
-	MAIN_D_801B1C70[0] += 200;
-	MAIN_D_801B1C72[0] += 200;
-	MAIN_D_801B1C74[0] += 20;
-	MAIN_D_801B1C76[0] += 20;
-	MAIN_D_801B1C78[0] += 20;
-	MAIN_D_801B1C7A[0] += 20;
+	VS__INTRO_STATS_DATA[0] += 200;
+	VS__INTRO_STATS_DATA[1] += 200;
+	VS__INTRO_STATS_DATA[2] += 20;
+	VS__INTRO_STATS_DATA[3] += 20;
+	VS__INTRO_STATS_DATA[4] += 20;
+	VS__INTRO_STATS_DATA[5] += 20;
 
 	stats = &((DigimonEntity *)ENTITY_TABLE[id])->stats;
-	if (stats->current.currentHP < MAIN_D_801B1C70[0]) {
-		MAIN_D_801B1C70[0] = stats->current.currentHP;
+	if (stats->current.currentHP < VS__INTRO_STATS_DATA[0]) {
+		VS__INTRO_STATS_DATA[0] = stats->current.currentHP;
 	}
 
-	if (stats->current.currentMP < MAIN_D_801B1C72[0]) {
-		MAIN_D_801B1C72[0] = stats->current.currentMP;
+	if (stats->current.currentMP < VS__INTRO_STATS_DATA[1]) {
+		VS__INTRO_STATS_DATA[1] = stats->current.currentMP;
 	}
 
-	if (stats->base.off < MAIN_D_801B1C74[0]) {
-		MAIN_D_801B1C74[0] = stats->base.off;
+	if (stats->base.off < VS__INTRO_STATS_DATA[2]) {
+		VS__INTRO_STATS_DATA[2] = stats->base.off;
 	}
 
-	if (stats->base.def < MAIN_D_801B1C76[0]) {
-		MAIN_D_801B1C76[0] = stats->base.def;
+	if (stats->base.def < VS__INTRO_STATS_DATA[3]) {
+		VS__INTRO_STATS_DATA[3] = stats->base.def;
 	}
 
-	if (stats->base.speed < MAIN_D_801B1C78[0]) {
-		MAIN_D_801B1C78[0] = stats->base.speed;
+	if (stats->base.speed < VS__INTRO_STATS_DATA[4]) {
+		VS__INTRO_STATS_DATA[4] = stats->base.speed;
 	}
 
-	if (stats->base.brain < MAIN_D_801B1C7A[0]) {
-		MAIN_D_801B1C7A[0] = stats->base.brain;
+	if (stats->base.brain < VS__INTRO_STATS_DATA[5]) {
+		VS__INTRO_STATS_DATA[5] = stats->base.brain;
 	}
 }
 
@@ -451,21 +446,21 @@ void VS__renderIntroStats(id)
 
 	for (i = 0; i < 6; ++i) {
 		renderString(0, -100, i * 16 - 28, 48, 12, 0, i * 12, 0, 1);
-		VS__renderIntroStatBar((int16_t)i, MAIN_D_801B1C70[i]);
+		VS__renderIntroStatBar((int16_t)i, VS__INTRO_STATS_DATA[i]);
 	}
 
 	stats = &((DigimonEntity *)ENTITY_TABLE[id])->stats;
-	if (MAIN_D_801B1C70[0] != stats->current.currentHP ||
-	    MAIN_D_801B1C72[0] != stats->current.currentMP ||
-	    MAIN_D_801B1C74[0] != stats->base.off ||
-	    MAIN_D_801B1C76[0] != stats->base.def ||
-	    MAIN_D_801B1C78[0] != stats->base.speed ||
-	    MAIN_D_801B1C7A[0] != stats->base.brain) {
+	if (VS__INTRO_STATS_DATA[0] != stats->current.currentHP ||
+	    VS__INTRO_STATS_DATA[1] != stats->current.currentMP ||
+	    VS__INTRO_STATS_DATA[2] != stats->base.off ||
+	    VS__INTRO_STATS_DATA[3] != stats->base.def ||
+	    VS__INTRO_STATS_DATA[4] != stats->base.speed ||
+	    VS__INTRO_STATS_DATA[5] != stats->base.brain) {
 		playSound(0, 0x16);
 	} else {
 		for (i = 0; i < 6; ++i) {
 			VS__renderIntroStatNumber(52, (int16_t)(i * 16 - 28), 4,
-			                          MAIN_D_801B1C70[i], 3);
+			                          VS__INTRO_STATS_DATA[i], 3);
 		}
 	}
 }

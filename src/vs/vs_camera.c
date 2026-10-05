@@ -23,7 +23,6 @@ extern int32_t MAIN_D_80135284;
 extern uint8_t VS_TIMER;
 extern int32_t VS_TIMER_ACTIVE;
 extern int16_t VS_DEFAULT_CAM_MIN_DISTANCE;
-extern char **VS_FOCUSED_ENTITY;
 extern int8_t VS_CAMERA_TIMER;
 
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
@@ -222,7 +221,7 @@ void VS_setViewpointRotationFromEntity(void)
 {
 	MATRIX *m;
 
-	m = (MATRIX *)(VS_FOCUSED_ENTITY[1] + 0xbc);
+	m = &VS_FOCUSED_ENTITY->posData[1].posMatrix.workm;
 	GS_VIEWPOINT.vrx = m->t[0];
 	GS_VIEWPOINT.vry = m->t[1];
 	GS_VIEWPOINT.vrz = m->t[2];
@@ -238,8 +237,8 @@ void VS_setCameraLookAtEntity(void)
 	VECTOR *otherPos;
 	Entity *other;
 
-	selfPos = &((Entity *)VS_FOCUSED_ENTITY)->posData->location;
-	if ((Entity *)VS_FOCUSED_ENTITY == ENTITY_TABLE[1]) {
+	selfPos = &VS_FOCUSED_ENTITY->posData->location;
+	if (VS_FOCUSED_ENTITY == ENTITY_TABLE[1]) {
 		other = ENTITY_TABLE[2];
 	} else {
 		other = ENTITY_TABLE[1];
@@ -251,7 +250,7 @@ void VS_setCameraLookAtEntity(void)
 	STDVS_VIEW_ROTATION[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
 	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
 	v = STDVS_VIEW_TRANSLATION;
-	ApplyMatrixLV(&STDVS_VIEW.view, &((Entity *)VS_FOCUSED_ENTITY)->posData->location, &out);
+	ApplyMatrixLV(&STDVS_VIEW.view, &VS_FOCUSED_ENTITY->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
@@ -347,7 +346,7 @@ void VS_selectRandomCamera(entity, mode, sub)
 			return;
 		}
 	}
-	VS_FOCUSED_ENTITY = (char **)entity;
+	VS_FOCUSED_ENTITY = &entity->entity;
 	STDVS_VIEW.super = NULL;
 	if (sub != 3) {
 		p = &VS_D_8007063C[mode];
@@ -380,15 +379,15 @@ void VS_setRandomViewpoint(Entity *entity, int32_t idx)
 	GS_VIEWPOINT.super = NULL;
 
 	if (idx < 4) {
-		VS_FOCUSED_ENTITY = (char **)entity;
+		VS_FOCUSED_ENTITY = entity;
 		VS_CAMERA_STATE = 4;
-		RotMatrix(&((Entity *)VS_FOCUSED_ENTITY)->posData->rotation, &m);
+		RotMatrix(&VS_FOCUSED_ENTITY->posData->rotation, &m);
 		v.vx = VS_D_800706A8[idx][0];
 		v.vy = VS_D_800706A8[idx][1];
 		v.vz = VS_D_800706A8[idx][2];
 		ApplyMatrixLV(&m, &v, &out);
-		out.vx += ((Entity *)VS_FOCUSED_ENTITY)->posData->location.vx;
-		out.vz += ((Entity *)VS_FOCUSED_ENTITY)->posData->location.vz;
+		out.vx += VS_FOCUSED_ENTITY->posData->location.vx;
+		out.vz += VS_FOCUSED_ENTITY->posData->location.vz;
 		GS_VIEWPOINT.vpx = out.vx;
 		GS_VIEWPOINT.vpy = out.vy;
 		GS_VIEWPOINT.vpz = out.vz;
@@ -438,12 +437,12 @@ void VS_setCameraToEntity(void)
 	VECTOR out;
 
 	rot = STDVS_VIEW_ROTATION[0];
-	rot.vy -= ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
+	rot.vy -= VS_FOCUSED_ENTITY->posData->rotation.vy;
 	rot.vy &= 0xfff;
 	RotMatrix(&rot, &STDVS_VIEW.view);
 	v = STDVS_VIEW_TRANSLATION;
 	ApplyMatrixLV(&STDVS_VIEW.view,
-	              &((Entity *)VS_FOCUSED_ENTITY)->posData->location, &out);
+	              &VS_FOCUSED_ENTITY->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
@@ -472,8 +471,8 @@ void VS_updateCameraLerp(int32_t t, int8_t flip)
 
 	off = INTRO_CAMERA_STAGE2_POS;
 	rot = INTRO_CAMERA_STAGE2_ROT;
-	base = ((((DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height +
-	           DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].radius) /
+	base = ((((DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height +
+	           DIGIMON_DATA[VS_FOCUSED_ENTITY->type].radius) /
 	          2) *
 	         0x62c) /
 	        450);
@@ -491,9 +490,9 @@ void VS_updateCameraLerp(int32_t t, int8_t flip)
 		rot.vy = -rot.vy;
 	}
 
-	rot.vy += ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
-	off.vy = (-DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height * 2) / 3;
-	VS_setViewpointFromBone((Entity *)VS_FOCUSED_ENTITY, &off, &rot, dist);
+	rot.vy += VS_FOCUSED_ENTITY->posData->rotation.vy;
+	off.vy = (-DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height * 2) / 3;
+	VS_setViewpointFromBone(VS_FOCUSED_ENTITY, &off, &rot, dist);
 }
 
 int32_t VS_isPositionNearEntity(Entity *entity, VECTOR *pos)
@@ -552,12 +551,12 @@ void VS_tickCameraChase(void)
 		goto inc;
 	}
 	if (cc->timer == 0x14) {
-		startAnimation((Entity *)VS_FOCUSED_ENTITY, 0x23);
+		startAnimation(VS_FOCUSED_ENTITY, 0x23);
 	}
 	if (cc->phase == 0) {
-		dist = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &((Entity *)VS_FOCUSED_ENTITY)->posData->location);
+		dist = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &VS_FOCUSED_ENTITY->posData->location);
 		if (dist >= 0x23) {
-			VS_D_80071754 = ((Entity *)VS_FOCUSED_ENTITY)->posData->location;
+			VS_D_80071754 = VS_FOCUSED_ENTITY->posData->location;
 			cc->phase = 1;
 			VS_CAMERA_STATE = 8;
 		} else {
@@ -568,10 +567,10 @@ void VS_tickCameraChase(void)
 			} else {
 				rot.vy = lerp(0x638, 0x293, 0, 0x23, dist);
 			}
-			rot.vy += ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
-			off.vy = (-DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height * 7) / 10;
-			d2 = (((DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height + DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].radius) / 2) * 0x5aa) / 450;
-			VS_setViewpointFromBone((Entity *)VS_FOCUSED_ENTITY, &off, &rot, d2);
+			rot.vy += VS_FOCUSED_ENTITY->posData->rotation.vy;
+			off.vy = (-DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height * 7) / 10;
+			d2 = (((DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height + DIGIMON_DATA[VS_FOCUSED_ENTITY->type].radius) / 2) * 0x5aa) / 450;
+			VS_setViewpointFromBone(VS_FOCUSED_ENTITY, &off, &rot, d2);
 			GS_VIEWPOINT.vpy = (off.vy * 7) / 10;
 			if (GS_VIEWPOINT.vpy > -0xb4) {
 				GS_VIEWPOINT.vpy = -0xb4;
@@ -579,16 +578,16 @@ void VS_tickCameraChase(void)
 			goto inc;
 		}
 	}
-	t = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &((Entity *)VS_FOCUSED_ENTITY)->posData->location);
+	t = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &VS_FOCUSED_ENTITY->posData->location);
 	VS_updateCameraLerp(t, cc->side);
-	if (VS_isPositionNearEntity((Entity *)VS_FOCUSED_ENTITY, &VS_D_80071744) == 1) {
+	if (VS_isPositionNearEntity(VS_FOCUSED_ENTITY, &VS_D_80071744) == 1) {
 		for (i = 0; i < 3; i++) {
-			if (((uint8_t *)VS_FOCUSED_ENTITY + i)[0x44] != 0xff) {
-				startAnimation((Entity *)VS_FOCUSED_ENTITY, ((uint8_t *)VS_FOCUSED_ENTITY + i)[0x44]);
+			if (((DigimonEntity *)VS_FOCUSED_ENTITY)->stats.base.moves[i] != 0xff) {
+				startAnimation(VS_FOCUSED_ENTITY, ((DigimonEntity *)VS_FOCUSED_ENTITY)->stats.base.moves[i]);
 				break;
 			}
 		}
-		((Entity *)VS_FOCUSED_ENTITY)->anim.animFlag |= 2;
+		VS_FOCUSED_ENTITY->anim.animFlag |= 2;
 		cc->timer = -1;
 		return;
 	}
@@ -607,12 +606,12 @@ void VS_startCameraChase(entity, dx, side)
 	SVECTOR rot;
 	int32_t dist;
 
-	VS_FOCUSED_ENTITY = (char **)entity;
-	copyVector(&VS_D_80071754, &((Entity *)VS_FOCUSED_ENTITY)->posData->location);
+	VS_FOCUSED_ENTITY = entity;
+	copyVector(&VS_D_80071754, &VS_FOCUSED_ENTITY->posData->location);
 	VS_D_80071744.vx = VS_D_80071754.vx - dx;
 	VS_D_80071744.vy = VS_D_80071754.vy;
 	VS_D_80071744.vz = VS_D_80071754.vz;
-	startAnimation((Entity *)VS_FOCUSED_ENTITY, 0x21);
+	startAnimation(VS_FOCUSED_ENTITY, 0x21);
 	VS_CAMERA_STATE = 9;
 	INTRO_CAMERA_CHASE.timer = 0;
 	INTRO_CAMERA_CHASE.phase = 0;
@@ -625,10 +624,10 @@ void VS_startCameraChase(entity, dx, side)
 	} else {
 		rot.vy = 0x638;
 	}
-	rot.vy += ((Entity *)VS_FOCUSED_ENTITY)->posData->rotation.vy;
-	off.vy = (-DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height * 2) / 3;
-	dist = (((DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].height + DIGIMON_DATA[((Entity *)VS_FOCUSED_ENTITY)->type].radius) / 2) * 0x5aa) / 450;
-	VS_setViewpointFromBone((Entity *)VS_FOCUSED_ENTITY, &off, &rot, dist);
+	rot.vy += VS_FOCUSED_ENTITY->posData->rotation.vy;
+	off.vy = (-DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height * 2) / 3;
+	dist = (((DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height + DIGIMON_DATA[VS_FOCUSED_ENTITY->type].radius) / 2) * 0x5aa) / 450;
+	VS_setViewpointFromBone(VS_FOCUSED_ENTITY, &off, &rot, dist);
 	GS_VIEWPOINT.vpy = (off.vy * 3) / 10;
 	if (GS_VIEWPOINT.vpy > -0xb4) {
 		GS_VIEWPOINT.vpy = -0xb4;
@@ -671,7 +670,7 @@ void VS_startCameraIntro(Entity *target, Entity *entity)
 	VS_D_80071A0C[0] = 0;
 	VS_D_80071A18[1] = entity;
 	if (target == NULL) {
-		if ((Entity *)VS_FOCUSED_ENTITY == ENTITY_TABLE[1]) {
+		if (VS_FOCUSED_ENTITY == ENTITY_TABLE[1]) {
 			target = ENTITY_TABLE[2];
 		} else {
 			target = ENTITY_TABLE[1];
@@ -734,14 +733,14 @@ void VS_removeCameraIntro(void)
 
 void VS_applyEntityViewpoint(void)
 {
-	char *p;
+	MATRIX *m;
 
 	VIEWPORT_DISTANCE = 0x15e;
 	GsSetProjection(VIEWPORT_DISTANCE);
-	p = VS_FOCUSED_ENTITY[1] + 0x34;
-	GS_VIEWPOINT.vrx = *(int32_t *)(p + 0x14);
-	GS_VIEWPOINT.vry = -DIGIMON_DATA[(int32_t)VS_FOCUSED_ENTITY[0]].height * 2 / 3;
-	GS_VIEWPOINT.vrz = *(int32_t *)(p + 0x1c);
+	m = &VS_FOCUSED_ENTITY->posData->posMatrix.workm;
+	GS_VIEWPOINT.vrx = m->t[0];
+	GS_VIEWPOINT.vry = -DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height * 2 / 3;
+	GS_VIEWPOINT.vrz = m->t[2];
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 

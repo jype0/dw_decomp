@@ -36,8 +36,8 @@ void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width,
 
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
-extern PACKET GS_WORK_BASES[];
-extern char DR_OFFSETS[];
+extern PACKET GS_WORK_BASES[2][0x14000];
+extern DR_OFFSET DR_OFFSETS[2];
 
 // clang-format off
 RGB8 TEXT_COLORS[17] = {
@@ -68,12 +68,12 @@ void pauseFrame(void)
 {
 	ACTIVE_FRAMEBUFFER = GsGetActiveBuff();
 	ACTIVE_ORDERING_TABLE = &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER];
-	GsSetWorkBase(&GS_WORK_BASES[ACTIVE_FRAMEBUFFER * 0x14000]);
+	GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 	tickObjects();
 	renderObjects();
-	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80,
-		&DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xC]);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x20,
+		&DR_OFFSETS[ACTIVE_FRAMEBUFFER]);
 	DrawSync(0);
 	VSync(3);
 	GsSetOrign(DRAWING_OFFSET_X, DRAWING_OFFSET_Y);

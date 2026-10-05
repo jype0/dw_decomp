@@ -33,7 +33,7 @@ extern int32_t VS__IS_DRAW;
 extern int32_t VS_ACTIVE_FINISHER_AURA_ID;
 extern int32_t VS_TIMER_ACTIVE;
 extern int32_t VS_DISABLE_HITTING;
-extern uint8_t MAIN_D_80134F3C;
+extern uint8_t VS__CHARGE_MODES[4];
 extern int16_t VS_DEFAULT_CAM_MIN_DISTANCE;
 extern int32_t VS_CAMERA_STATE;
 extern uint8_t VS_CAMERA_TIMER;
@@ -42,13 +42,10 @@ extern int16_t VS_DISCIPLINE[2];
 extern uint8_t PAUSE_BOX_VISIBLE;
 extern uint8_t PAUSE_STATE;
 extern uint8_t VS__PAUSING_PLAYER;
-extern uint8_t MAIN_D_80134F3D;
 extern uint32_t VS__CURRENT_INPUT;
 extern uint32_t VS__PREVIOUS_INPUT;
 extern uint8_t VS__BATTLE_RESULT_TIMER;
 extern int16_t VS_CURRENT_BATTLE;
-extern char *VS_DIGIMON_P1_PTR;
-extern char *VS_DIGIMON_P2_PTR;
 extern int32_t VS_FINISHER_TIMER;
 extern int32_t COMBAT_AREA_Y;
 extern int32_t COMBAT_AREA_X;
@@ -238,7 +235,7 @@ void VS__combatInit(void)
 	VS_ACTIVE_FINISHER_AURA_ID = -1;
 
 	for (i = 0; i < 2; ++i) {
-		(&MAIN_D_80134F3C)[i] = ((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.current.chargeMode;
+		VS__CHARGE_MODES[i] = ((DigimonEntity *)ENTITY_TABLE[i + 1])->stats.current.chargeMode;
 		COMBAT_DATA_PTR->player.remainingChargeupTime[i] = -1;
 	}
 
@@ -675,7 +672,7 @@ void VS__tickDigimonAi(fighterId)
 
 		if (COMBAT_DATA_PTR->player.currentCommand[fighterId] != 2 &&
 		    COMBAT_DATA_PTR->player.currentCommand[fighterId] != 4) {
-			entity->stats.current.chargeMode = (&MAIN_D_80134F3C)[fighterId];
+			entity->stats.current.chargeMode = VS__CHARGE_MODES[fighterId];
 		}
 	}
 
@@ -866,8 +863,8 @@ int16_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2)
 	int16_t frames;
 	Stats *stats;
 
-	((DigimonEntity *)ENTITY_TABLE[1])->stats.current.chargeMode = MAIN_D_80134F3C;
-	((DigimonEntity *)ENTITY_TABLE[2])->stats.current.chargeMode = MAIN_D_80134F3D;
+	((DigimonEntity *)ENTITY_TABLE[1])->stats.current.chargeMode = VS__CHARGE_MODES[0];
+	((DigimonEntity *)ENTITY_TABLE[2])->stats.current.chargeMode = VS__CHARGE_MODES[1];
 	GAME_STATE = 5;
 	VS__deinitializeStatusEffects();
 
@@ -1111,17 +1108,17 @@ void VS__addTimeoutWindow(void)
 	RECT finalPos;
 	RECT startPos;
 	Stats *stats;
-	char *name1;
-	char *name2;
+	RegisteredDigimon *fighter1;
+	RegisteredDigimon *fighter2;
 
-	name1 = VS_DIGIMON_P1_PTR + VS_D_800716A8[VS_CURRENT_BATTLE] * 64;
-	name2 = VS_DIGIMON_P2_PTR + (&VS_D_800716A8[5])[VS_CURRENT_BATTLE] * 64;
+	fighter1 = &VS_DIGIMON_P1_PTR[VS_D_800716A8.fighters[0][VS_CURRENT_BATTLE]];
+	fighter2 = &VS_DIGIMON_P2_PTR[VS_D_800716A8.fighters[1][VS_CURRENT_BATTLE]];
 
 	clearTextArea();
 	drawString(MAIN_D_80134518, 6, 0);
 	drawString(STR_DAMEEJI, 0, 12);
-	drawString(name1 + 14, (120 - strlen(name1 + 14) * 6) / 2, 24);
-	drawString(name2 + 14, (120 - strlen(name2 + 14) * 6) / 2, 36);
+	drawString(fighter1->name, (120 - (strlen(fighter1->name) * 6)) / 2, 24);
+	drawString(fighter2->name, (120 - (strlen(fighter2->name) * 6)) / 2, 36);
 	DrawSync(0);
 	removeObject(0x1a2, 0);
 
@@ -1505,7 +1502,7 @@ int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
 					VS_addTargetCursor(fighterId, tech);
 					startAnimation(&entity->entity, data->queuedAnim);
 					entity->entity.anim.animFlag &= 0xfe;
-					VS_ACTIVE_FINISHER_AURA_ID = VS_addFinisherAura((int32_t)&entity->entity, 80);
+					VS_ACTIVE_FINISHER_AURA_ID = VS_addFinisherAura(&entity->entity, 80);
 					VS_FINISHER_TIMER = 80;
 					return 0;
 				}

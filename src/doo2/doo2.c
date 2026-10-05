@@ -26,17 +26,6 @@ typedef struct {
 } Doo2Shard;
 
 typedef struct {
-	int32_t unk_00;
-	int32_t modelData;
-	int32_t unk_08;
-	int32_t unk_0C;
-	uint16_t tpage;
-	uint16_t unk_12;
-	int32_t unk_14;
-	int32_t unk_18;
-} Doo2ShardParams;
-
-typedef struct {
 	SVECTOR *sourceVertices;
 	uint32_t vertexCount;
 	SVECTOR *worldVertices;
@@ -51,9 +40,9 @@ int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, 
 void DOO2_setScratchTop(int32_t size);
 void DOO2_tickShardSet(int32_t slot);
 void DOO2_releaseShardSet(int32_t slot);
-void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16_t unused3, Doo2ShardParams *model);
+void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16_t unused3, ModelComponent *model);
 void DOO2_renderQuadShard(Doo2Shard *fragment, int32_t arg1, int16_t duration,
-                          int16_t arg3, Doo2ShardParams *sheet);
+                          int16_t arg3, ModelComponent *sheet);
 void DOO2_tickEggBox(void);
 void DOO2_renderEggIcons(void);
 void DOO2_renderShardSet(int32_t index);
@@ -104,12 +93,15 @@ static void *doo2_sbss_order[] = {
 	&MAIN_D_80135310,
 };
 
-Doo2ShardParams DOO2_SHARD_PARAMS = {
+ModelComponent DOO2_SHARD_PARAMS = {
 	0,
-	0,
-	0,
-	0,
+	NULL,
+	NULL,
+	NULL,
 	0x39,
+	0,
+	0,
+	0,
 	0,
 	0,
 	0,
@@ -178,8 +170,8 @@ void DOO2_setScratchTop(int32_t size)
 
 void DOO2_renderShardSet(int32_t index)
 {
-	Doo2ShardParams params;
-	Doo2ShardParams *paramsPtr;
+	ModelComponent params;
+	ModelComponent *paramsPtr;
 	Doo2ShardSet *entry;
 	int32_t shards;
 	int32_t count;
@@ -191,7 +183,7 @@ void DOO2_renderShardSet(int32_t index)
 	count = entry->centerCount;
 	MAIN_D_80135314 = (uint8_t *)entry->primitives;
 	MAIN_D_80135318 = (Doo2ModelVertex *)entry->vertices;
-	paramsPtr->modelData = DOOA_REINCARNATION_SEQ.modelData[0];
+	paramsPtr->modelPtr = (TMDModel *)DOOA_REINCARNATION_SEQ.modelData.modelPtr;
 	MAIN_D_8013531C[0] = ((((41 - entry->timer) * 74) / 40) + 54);
 	MAIN_D_8013531C[1] = MAIN_D_8013531C[0];
 	MAIN_D_8013531C[2] = MAIN_D_8013531C[0];
@@ -231,7 +223,7 @@ void DOO2_releaseShardSet(int32_t slot)
 	removeObject(0x609, slot);
 }
 
-void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16_t unused3, Doo2ShardParams *model)
+void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16_t unused3, ModelComponent *model)
 {
 	SVECTOR a;
 	SVECTOR b;
@@ -247,7 +239,7 @@ void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16
 	SetPolyFT3(prim);
 	SetSemiTrans(prim, 1);
 	setRGB0(prim, MAIN_D_8013531C[0], MAIN_D_8013531C[1], MAIN_D_8013531C[2]);
-	prim->tpage = model->tpage;
+	prim->tpage = model->pixelPage;
 	prim->clut = tri->clut;
 	setUV3(prim, tri->tu0, tri->tv0, tri->tu1, tri->tv1, tri->tu2, tri->tv2);
 	va = &MAIN_D_80135318[tri->v0];
@@ -278,7 +270,7 @@ void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16
 }
 
 void DOO2_renderQuadShard(Doo2Shard *fragment, int32_t arg1, int16_t duration,
-                          int16_t arg3, Doo2ShardParams *sheet)
+                          int16_t arg3, ModelComponent *sheet)
 {
 	SVECTOR a;
 	SVECTOR b;
@@ -296,7 +288,7 @@ void DOO2_renderQuadShard(Doo2Shard *fragment, int32_t arg1, int16_t duration,
 	SetPolyFT4(prim);
 	SetSemiTrans(prim, 1);
 	setRGB0(prim, MAIN_D_8013531C[0], MAIN_D_8013531C[1], MAIN_D_8013531C[2]);
-	prim->tpage = sheet->tpage;
+	prim->tpage = sheet->pixelPage;
 	prim->clut = quad->clut;
 	setUV4(prim, quad->tu0, quad->tv0, quad->tu1, quad->tv1, quad->tu2, quad->tv2, quad->tu3, quad->tv3);
 	pa = MAIN_D_80135318 + quad->v0;
@@ -415,7 +407,7 @@ void DOO2_fadeClut(int16_t *srcClut, void *entity, int16_t *dstClut, int32_t sta
 
 void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 {
-	u_long *tmd;
+	struct TMD_STRUCT *tmd;
 	int32_t i;
 	uint8_t *tmdPrim;
 	int32_t primCount;
@@ -438,11 +430,11 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 
 	color = WIREFRAME_COLOR_MIN + (rand() % (WIREFRAME_COLOR_MAX - WIREFRAME_COLOR_MIN));
 
-	tmd = obj->tmd;
-	verts = (SVECTOR *)tmd[0];
-	normals = (SVECTOR *)tmd[2];
-	tmdPrim = (uint8_t *)tmd[4];
-	primCount = tmd[5];
+	tmd = (struct TMD_STRUCT *)obj->tmd;
+	verts = (SVECTOR *)tmd->vertop;
+	normals = (SVECTOR *)tmd->nortop;
+	tmdPrim = (uint8_t *)tmd->primtop;
+	primCount = tmd->primn;
 
 	packet = GsGetWorkBase();
 

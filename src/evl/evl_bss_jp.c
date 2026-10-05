@@ -1847,9 +1847,7 @@ GsRVIEW2 EVL_D_800688E8 = {
 	(GsCOORDINATE2 *)0x602c1dfa,
 };
 
-int32_t EVL_D_80068908[4] = {
-	0xdadabecb, 0x04b12cf0, 0x2f32303d, 0x06b7a64a,
-};
+VECTOR EVL_D_80068908 = { 0xdadabecb, 0x04b12cf0, 0x2f32303d, 0x06b7a64a };
 
 GsRVIEW2 EVL_D_80068918 = {
 	0x4c4c85a5,

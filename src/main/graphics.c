@@ -6,9 +6,7 @@
 #include <dw/types.h>
 
 extern _GsFCALL GsFCALL4;
-extern int32_t MAIN_D_80137BE8[];
-extern int32_t MAIN_D_80137BE4[];
-extern AttackObject ATTACK_OBJECTS[];
+extern AttackObject ATTACK_OBJECTS[17];
 
 PACKET *GsTMDfastF3L();
 PACKET *GsTMDfastG3L();
@@ -102,7 +100,7 @@ int32_t addAttackObject(int32_t victimId, int32_t active, SVECTOR *pos, int32_t 
 {
 	int32_t i;
 
-	MAIN_D_80137BE8[0] = -1;
+	ATTACK_OBJECTS[16].active = -1;
 	for (i = 0;; i++) {
 		if (ATTACK_OBJECTS[i].active == -1) {
 			break;
@@ -126,7 +124,7 @@ int32_t popAttackObject(int32_t entityId, AttackObject *out)
 	int32_t k;
 	int32_t m;
 
-	MAIN_D_80137BE4[0] = entityId;
+	ATTACK_OBJECTS[16].victimId = entityId;
 	for (i = 0;; i++) {
 		if (ATTACK_OBJECTS[i].victimId == entityId) {
 			break;

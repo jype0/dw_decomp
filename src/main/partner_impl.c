@@ -14,6 +14,7 @@
 #include <dw/font.h>
 #include <dw/garbage.h>
 #include <dw/item.h>
+#include <dw/map.h>
 #include <dw/map_object.h>
 #include <dw/math.h>
 #include <dw/model.h>
@@ -226,7 +227,6 @@ extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[2];
 SVECTOR POOP_ROTATION = { 0, 0, 0, 0 };
 
-extern int8_t PARTNER_AREA_RESPONSE[];
 extern uint16_t CURRENT_FRAME;
 extern uint16_t LAST_HANDLED_FRAME;
 extern int32_t CONDITION_BUBBLE_TYPE;
@@ -1286,9 +1286,9 @@ void sleepRegen(void)
 	if (getItemCount(0x22) != 0)
 		sleepFactor = (int16_t)(sleepFactor * 12 / 10);
 
-	if (PARTNER_AREA_RESPONSE[0] == 1)
+	if (MAP_TILE_DATA.partnerAreaResponse == 1)
 		sleepFactor = (int16_t)(sleepFactor * 12 / 10);
-	else if (PARTNER_AREA_RESPONSE[0] == 2)
+	else if (MAP_TILE_DATA.partnerAreaResponse == 2)
 		sleepFactor = (int16_t)(sleepFactor * 8 / 10);
 
 	maxHP = PARTNER_ENTITY.digimonEntity.stats.base.hp;
@@ -1326,11 +1326,11 @@ void tickTirednessMechanics(void)
 
 	animId = PARTNER_ENTITY.digimonEntity.entity.anim.animId;
 	if (((PARTNER_PARA.areaEffectTimer % 1200) == 0) && (PARTNER_PARA.areaEffectTimer > 0)) {
-		if (PARTNER_AREA_RESPONSE[0] == 1) {
+		if (MAP_TILE_DATA.partnerAreaResponse == 1) {
 			PARTNER_PARA.happiness += 1;
 			PARTNER_PARA.tiredness -= 2;
 		}
-		if (PARTNER_AREA_RESPONSE[0] == 2) {
+		if (MAP_TILE_DATA.partnerAreaResponse == 2) {
 			PARTNER_PARA.happiness -= 1;
 			PARTNER_PARA.tiredness += 1;
 		}
@@ -1793,7 +1793,7 @@ void tickSicknessMechanics(void)
 	if (!wasSick && (PARTNER_PARA.areaEffectTimer > 12000) &&
 	    ((CURRENT_FRAME % 1200) == 0) &&
 	    (CURRENT_FRAME != LAST_HANDLED_FRAME) &&
-	    (PARTNER_AREA_RESPONSE[0] == 2)) {
+	    (MAP_TILE_DATA.partnerAreaResponse == 2)) {
 		PARTNER_PARA.condition |= 0x40;
 		PARTNER_PARA.timesBeingSick++;
 		PARTNER_PARA.sicknessTimer = 1;
@@ -2112,9 +2112,9 @@ void renderStatusBars(state)
 	else
 		happinessTexX = 97;
 	if (PLAYTIME_FRAMES % 10 < 5) {
-		if (PARTNER_AREA_RESPONSE[0] == 2)
+		if (MAP_TILE_DATA.partnerAreaResponse == 2)
 			happinessTexX += 11;
-		else if (PARTNER_AREA_RESPONSE[0] == 1)
+		else if (MAP_TILE_DATA.partnerAreaResponse == 1)
 			happinessTexX -= 11;
 	}
 	renderRectPolyFT4(STATUS_UI_OFFSET_X + 3, 83, 11, 11, happinessTexX, 244, 5, GetClut(96, 503), 14, 0);

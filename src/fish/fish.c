@@ -17,6 +17,7 @@
 #include <dw/input.h>
 #include <dw/item.h>
 #include <dw/line.h>
+#include <dw/map.h>
 #include <dw/params.h>
 #include <dw/rng.h>
 #include <dw/script.h>
@@ -105,8 +106,6 @@ extern SVECTOR FISH_D_8007A594[];
 extern VECTOR FISH_ROD_SEGMENT_POS[];
 extern DVECTOR FISH_D_8007A9B0[];
 extern char FISH_PATH_ROD_MODEL[];
-extern int16_t CAMERA_X[];
-extern int16_t CAMERA_Y[];
 
 int32_t getDistance(long x, long y, long z);
 void renderSelectionCursor(int32_t a0, int32_t a1, int32_t a2, int32_t a3, int32_t a4);
@@ -4718,8 +4717,8 @@ void FISH_scrollCameraTo(int32_t x, int32_t y)
 	y -= FISH_viewY(0x78);
 	DRAWING_OFFSET_X -= x;
 	DRAWING_OFFSET_Y -= y;
-	CAMERA_X[0] += (int16_t)x;
-	CAMERA_Y[0] += (int16_t)y;
+	MAP_TILE_DATA.cameraX += (int16_t)x;
+	MAP_TILE_DATA.cameraY += (int16_t)y;
 
 	handleTileUpdate(((x < 0) ? 0x8000 : 0) |
 	                         ((x > 0) ? 0x2000 : 0) |

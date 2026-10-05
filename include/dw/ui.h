@@ -40,9 +40,14 @@ typedef struct {
 	RenderFunction render;
 } TextBoxData;
 
+typedef struct {
+	uint32_t usedRows;
+	TextBoxData box[6];
+} TextBoxTable;
+
 extern RGB8 UI_BOX_COLORS[];
 extern UIBoxData UI_BOX_DATA[6];
-extern TextBoxData TEXTBOX_DATA[6];
+extern TextBoxTable TEXTBOX_DATA;
 
 void initializeUIBoxData(void);
 void createStaticUIBox(int32_t id, uint8_t color, uint8_t features, RECT *pos,

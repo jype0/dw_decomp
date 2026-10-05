@@ -552,15 +552,15 @@ void EAB_calculateCameraOrbit(VECTOR *viewRef, VECTOR *viewPos, Entity *entity,
 void EAB_removeParticles(void)
 {
 	int32_t i;
-	int32_t *p;
+	EabParticle *p;
 
-	p = &EAB_D_80061A10[0].timer;
+	p = EAB_D_80061A10;
 	for (i = 0; i < 100; i++) {
-		if (*p >= 0) {
+		if (p->timer >= 0) {
 			removeObject(0x607, i);
-			*p = -1;
+			p->timer = -1;
 		}
-		p = (int32_t *)((uint32_t)p + 0x10);
+		p++;
 	}
 }
 

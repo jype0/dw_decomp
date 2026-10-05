@@ -392,8 +392,8 @@ int32_t readVHBFile(int32_t vabId, char *filename, uint8_t *buffer)
 	concatStrings3(pathBuf, str, VHB_EXT);
 	readFile(pathBuf, buffer);
 	memcpy(VHB_HEADER_ADDR[vabId],
-	       &buffer[(((uint32_t *)buffer)[0] >> 2) << 2],
-	       ((uint32_t *)buffer)[1] - ((uint32_t *)buffer)[0]);
+	       &buffer[(((VhbFileHeader *)buffer)->vhOffset >> 2) << 2],
+	       ((VhbFileHeader *)buffer)->vbOffset - ((VhbFileHeader *)buffer)->vhOffset);
 
 	SsVabClose(vabId);
 	if ((vabid = SsVabOpenHeadSticky(VHB_HEADER_ADDR[vabId], vabId,
@@ -401,7 +401,7 @@ int32_t readVHBFile(int32_t vabId, char *filename, uint8_t *buffer)
 		return -1;
 	}
 
-	if (SsVabTransBody(&buffer[((uint32_t *)buffer)[1]], vabid) != vabid) {
+	if (SsVabTransBody(&buffer[((VhbFileHeader *)buffer)->vbOffset], vabid) != vabid) {
 		return -1;
 	}
 
@@ -447,8 +447,8 @@ int32_t readVHBFileSectors(int32_t vabId, char *filename, uint8_t *buffer,
 	concatStrings3(pathBuf, str, VHB_EXT);
 	readFileSectors(pathBuf, buffer, offset, sectors);
 	memcpy(VHB_HEADER_ADDR[vabId],
-	       &buffer[(((uint32_t *)buffer)[0] >> 2) << 2],
-	       ((uint32_t *)buffer)[1] - ((uint32_t *)buffer)[0]);
+	       &buffer[(((VhbFileHeader *)buffer)->vhOffset >> 2) << 2],
+	       ((VhbFileHeader *)buffer)->vbOffset - ((VhbFileHeader *)buffer)->vhOffset);
 
 	SsVabClose(vabId);
 	if ((vabid = SsVabOpenHeadSticky(VHB_HEADER_ADDR[vabId], vabId,
@@ -456,7 +456,7 @@ int32_t readVHBFileSectors(int32_t vabId, char *filename, uint8_t *buffer,
 		return -1;
 	}
 
-	if (SsVabTransBody(&buffer[((uint32_t *)buffer)[1]], vabid) != vabid) {
+	if (SsVabTransBody(&buffer[((VhbFileHeader *)buffer)->vbOffset], vabid) != vabid) {
 		return -1;
 	}
 

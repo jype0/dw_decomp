@@ -6,6 +6,7 @@
 
 #include <dw/efe.h>
 #include <dw/entity.h>
+#include <dw/evl.h>
 #include <dw/types.h>
 
 typedef struct {
@@ -22,7 +23,7 @@ typedef struct {
 	int16_t fadeLevel;
 	int16_t eggSlot;
 	DooaFlash flash;
-	int32_t modelData[6];
+	EvoModelData modelData;
 	int16_t sparkleIndex;
 	int8_t isModelLoading;
 	int8_t unk_3F;

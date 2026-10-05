@@ -22,12 +22,6 @@ typedef struct {
 } CloudFXEntry;
 
 typedef struct {
-	int32_t red;
-	int32_t green;
-	int32_t blue;
-} EfeColor;
-
-typedef struct {
 	int16_t state;
 	int16_t timer;
 	int16_t type;
@@ -81,14 +75,16 @@ typedef struct {
 	int8_t a;
 } FlashParams;
 
-uint8_t ENTITY_PARTICLE_FX_MODES[54] = {
-	0x78, 0x50, 0x80, 0x80, 0x0f, 0x0f, 0x78, 0x50,
-	0xc0, 0x80, 0x0f, 0x0f, 0xc8, 0x50, 0x80, 0x90,
-	0x1f, 0x07, 0xc8, 0x96, 0x80, 0x80, 0x0f, 0x0f,
-	0xc8, 0x96, 0xc0, 0x80, 0x0f, 0x0f, 0xfa, 0x64,
-	0x80, 0x90, 0x1f, 0x07, 0x64, 0x64, 0x80, 0x80,
-	0x0f, 0x0f, 0x64, 0x64, 0xc0, 0x80, 0x0f, 0x0f,
-	0xc8, 0x64, 0x80, 0x90, 0x1f, 0x07,
+EntityParticleSprite ENTITY_PARTICLE_FX_MODES[9] = {
+	{ 0x78, 0x50, 0x80, 0x80, 0x0f, 0x0f },
+	{ 0x78, 0x50, 0xc0, 0x80, 0x0f, 0x0f },
+	{ 0xc8, 0x50, 0x80, 0x90, 0x1f, 0x07 },
+	{ 0xc8, 0x96, 0x80, 0x80, 0x0f, 0x0f },
+	{ 0xc8, 0x96, 0xc0, 0x80, 0x0f, 0x0f },
+	{ 0xfa, 0x64, 0x80, 0x90, 0x1f, 0x07 },
+	{ 0x64, 0x64, 0x80, 0x80, 0x0f, 0x0f },
+	{ 0x64, 0x64, 0xc0, 0x80, 0x0f, 0x0f },
+	{ 0xc8, 0x64, 0x80, 0x90, 0x1f, 0x07 },
 };
 
 GsSPRITE CLOUD_FX_SPRITE = {
@@ -174,12 +170,12 @@ void initializeEFE();
 void getEFEDATEntry();
 void renderParticleFlash();
 
-extern int16_t CLOUD_FX_DATA[];
-extern int16_t ENTITY_PARTICLE_FX_DATA[];
+extern CloudFXEntry CLOUD_FX_DATA[60];
+extern EntityParticleFX ENTITY_PARTICLE_FX_DATA[20];
 #if !defined(VERSION_JP)
 extern u_long SOME_IMAGE_DATA[];
 #endif
-extern uint8_t PARTICLE_FX_DATA[];
+extern ParticleFX PARTICLE_FX_DATA[4];
 extern EfeParticleField FX_PARTICLE_DATA[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t FLASH_INSTANCE;
@@ -243,7 +239,7 @@ void initializeParticleFX(void)
 	SVECTOR vec;
 	MATRIX m;
 
-	setInt16WithStride(PARTICLE_FX_DATA, -1, 4, 0x34);
+	setInt16WithStride(&PARTICLE_FX_DATA[0].state, -1, 4, 0x34);
 	for (i = 0; i < 0x32; i++) {
 		ang.vx = (((rand() & 0x7F) - 0x40) << 12) / 64;
 		ang.vy = (((rand() & 0x7F) - 0x40) << 12) / 64;
@@ -252,9 +248,7 @@ void initializeParticleFX(void)
 		vec.vz = ((rand() % 150) + 0xFA) * 0x10;
 		RotMatrixZYX(&ang, &m);
 		ApplyMatrixSV(&m, &vec, &vec);
-		FX_PARTICLE_DATA[i].vx = vec.vx;
-		FX_PARTICLE_DATA[i].vy = vec.vy;
-		FX_PARTICLE_DATA[i].vz = vec.vz;
+		copyVector(&FX_PARTICLE_DATA[i], &vec);
 	}
 }
 
@@ -268,14 +262,14 @@ void createParticleFX(int32_t kind, int32_t count, SVECTOR *pos, Entity *entity,
 	int16_t p3;
 
 	for (i = 0; i < 4; i++) {
-		if (((ParticleFX *)PARTICLE_FX_DATA)[i].state == -1) {
+		if (PARTICLE_FX_DATA[i].state == -1) {
 			break;
 		}
 	}
 	if (i == 4) {
 		return;
 	}
-	fx = &((ParticleFX *)PARTICLE_FX_DATA)[i];
+	fx = &PARTICLE_FX_DATA[i];
 	fx->spread[0][0] = (rand() % 200) - 100;
 	fx->spread[1][0] = (rand() % 200) - 100;
 	fx->spread[2][0] = (rand() % 200) - 100;
@@ -364,7 +358,7 @@ void tickParticleFX(int32_t id)
 	int16_t baseX;
 	int16_t baseZ;
 
-	fx = &((ParticleFX *)PARTICLE_FX_DATA)[id];
+	fx = &PARTICLE_FX_DATA[id];
 	entity = fx->entity;
 	fx->state++;
 	fx->endFrame--;
@@ -439,7 +433,7 @@ void renderParticleFX(int32_t id)
 	int32_t i;
 	int32_t state;
 
-	fx = &((ParticleFX *)PARTICLE_FX_DATA)[id];
+	fx = &PARTICLE_FX_DATA[id];
 	flashCount = PARTICLE_FX_FLASH_COUNT[fx->mode];
 	particleCount = PARTICLE_FX_PARTICLE_COUNT[fx->mode];
 	entity = fx->entity;
@@ -491,14 +485,14 @@ int32_t addEntityParticleFX(Entity *owner, int32_t timer)
 	EntityParticleFX *fx;
 
 	for (i = 0; i < 20; i++) {
-		if (((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[i].timer < 0) {
+		if (ENTITY_PARTICLE_FX_DATA[i].timer < 0) {
 			break;
 		}
 	}
 	if (i == 20) {
 		return -1;
 	}
-	fx = &((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[i];
+	fx = &ENTITY_PARTICLE_FX_DATA[i];
 	fx->timer = timer;
 	fx->boneId = ((int32_t)rand() % (DIGIMON_DATA[owner->type].boneCount - 1)) + 1;
 	fx->unk8 = 0;
@@ -509,14 +503,14 @@ int32_t addEntityParticleFX(Entity *owner, int32_t timer)
 
 void initializeEntityParticleFX(void)
 {
-	setInt16WithStride(ENTITY_PARTICLE_FX_DATA, -1, 0x14, 0xC);
+	setInt16WithStride(&ENTITY_PARTICLE_FX_DATA[0].timer, -1, 0x14, 0xC);
 }
 
 void tickEntityParticleFX(int32_t id)
 {
 	EntityParticleFX *fx;
 
-	fx = &((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[id];
+	fx = &ENTITY_PARTICLE_FX_DATA[id];
 	if (fx->timer <= 0) {
 		removeEntityParticleFX(id);
 		return;
@@ -540,12 +534,12 @@ void renderEntityParticleFX(int32_t id)
 	POLY_FT4 *prim;
 	EntityParticleSprite *sprite;
 
-	fx = &((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[id];
+	fx = &ENTITY_PARTICLE_FX_DATA[id];
 	owner = fx->owner;
 	owner = fx->owner;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	boneId = fx->boneId;
-	sprite = &((EntityParticleSprite *)ENTITY_PARTICLE_FX_MODES)[fx->unk8];
+	sprite = &ENTITY_PARTICLE_FX_MODES[fx->unk8];
 	bone = &owner->posData[boneId];
 	worldPos.vx = bone->posMatrix.workm.t[0];
 	worldPos.vy = bone->posMatrix.workm.t[1];
@@ -563,13 +557,13 @@ void renderEntityParticleFX(int32_t id)
 
 void removeEntityParticleFX(int32_t id)
 {
-	((EntityParticleFX *)ENTITY_PARTICLE_FX_DATA)[id].timer = -1;
+	ENTITY_PARTICLE_FX_DATA[id].timer = -1;
 	removeObject(0x502, id);
 }
 
 void initializeCloudFXData(void)
 {
-	setInt16WithStride(CLOUD_FX_DATA, -1, 0x3C, 6);
+	setInt16WithStride(&CLOUD_FX_DATA[0].state, -1, 0x3C, 6);
 }
 
 void removeAllCloudFX(void)
@@ -577,8 +571,8 @@ void removeAllCloudFX(void)
 	int32_t i;
 
 	for (i = 0; i < 0x3C; i++) {
-		if (((CloudFXEntry *)CLOUD_FX_DATA)[i].state != -1) {
-			((CloudFXEntry *)CLOUD_FX_DATA)[i].state = -1;
+		if (CLOUD_FX_DATA[i].state != -1) {
+			CLOUD_FX_DATA[i].state = -1;
 			removeObject(0x601, i);
 		}
 	}
@@ -590,12 +584,12 @@ void createCloudFX(int16_t *pos)
 	int32_t i;
 
 	for (i = 0; i < 0x3C; i++) {
-		if (((CloudFXEntry *)CLOUD_FX_DATA)[i].state < 0) {
+		if (CLOUD_FX_DATA[i].state < 0) {
 			break;
 		}
 	}
 	if (i != 0x3C) {
-		e = &((CloudFXEntry *)CLOUD_FX_DATA)[i];
+		e = &CLOUD_FX_DATA[i];
 		e->state = 0;
 		e->unk2 = pos[0];
 		e->unk4 = pos[2];
@@ -607,7 +601,7 @@ void tickCloudFX(int32_t id)
 {
 	int16_t *p;
 
-	p = &CLOUD_FX_DATA[id * 3];
+	p = &CLOUD_FX_DATA[id].state;
 	*p += 1;
 	if (*p >= 0xE) {
 		*p = -1;
@@ -622,7 +616,7 @@ void renderCloudFX(int32_t id)
 	DVECTOR screenPos;
 	int32_t depth;
 
-	cloud = &((CloudFXEntry *)CLOUD_FX_DATA)[id];
+	cloud = &CLOUD_FX_DATA[id];
 	worldPos.vx = cloud->unk2;
 	worldPos.vy = CLOUD_FX_Y[cloud->state];
 	worldPos.vz = cloud->unk4;

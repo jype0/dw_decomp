@@ -241,7 +241,7 @@ void tamerTickBattle(instanceId)
 	tamer = ENTITY_TABLE[instanceId];
 
 	if (GAME_STATE == 1) {
-		if (((uint8_t *)COMBAT_DATA_PTR)[0x64e] != 1) {
+		if (COMBAT_DATA_PTR->player.currentCommand[0] != 1) {
 			partner = ENTITY_TABLE[1];
 
 			if (IS_TAMERLESS_BATTLE == 0) {

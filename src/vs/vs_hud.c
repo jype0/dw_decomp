@@ -349,9 +349,13 @@ BarSprite VS_D_80070A90[6] = {
 	{ 0x01eb, 0x84, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
 };
 
-int32_t VS_D_80070ACC[8] = {
-	0x00001004, 0x00000000, 0x00001000, 0x00000000,
-	0x00001004, 0x00000000, 0x00000000, 0x000003e8,
+MATRIX VS_D_80070ACC = {
+	{
+		{ 0x1004, 0x0000, 0x0000 },
+		{ 0x0000, 0x1000, 0x0000 },
+		{ 0x0000, 0x0000, 0x1004 },
+	},
+	{ 0x00000000, 0x00000000, 0x000003e8 },
 };
 
 int16_t VS_D_80070AEC[18] = {
@@ -1117,7 +1121,7 @@ void VS_renderHPBarFill(int16_t id)
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 0x1e2);
-	if ((MAIN_D_801352D6[id] != 1) || (((uint8_t *)COMBAT_DATA_PTR + id)[0x64e] == 0xb)) {
+	if ((MAIN_D_801352D6[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	} else {
 		setRGB0(prim, MAIN_D_801352D2[id], MAIN_D_801352D2[id], MAIN_D_801352D2[id]);
@@ -1129,7 +1133,7 @@ void VS_renderHPBarFill(int16_t id)
 	GsSetWorkBase((PACKET *)prim);
 
 	box.attribute = 0x40000000;
-	if ((MAIN_D_801352D6[id] != 1) || (((uint8_t *)COMBAT_DATA_PTR + id)[0x64e] == 0xb)) {
+	if ((MAIN_D_801352D6[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
 		box.r = box.g = box.b = 0x80;
 	} else {
 		box.r = box.g = box.b = MAIN_D_801352D2[id];
@@ -1150,7 +1154,7 @@ void VS_renderHPBarDigits(int16_t i, int16_t id)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 0x100, 0x1ec);
 
-	if ((((n - 1) == i) || (MAIN_D_801352D6[id] == 1)) && (((uint8_t *)COMBAT_DATA_PTR + id)[0x64e] != 0xb)) {
+	if ((((n - 1) == i) || (MAIN_D_801352D6[id] == 1)) && (COMBAT_DATA_PTR->player.currentCommand[id] != 0xb)) {
 		setRGB0(prim, MAIN_D_801352D2[id], MAIN_D_801352D2[id], MAIN_D_801352D2[id]);
 	} else {
 		setRGB0(prim, 0x80, 0x80, 0x80);
@@ -1329,7 +1333,7 @@ void VS_renderVersusModelScene(void)
 	int32_t i;
 
 	GsSetProjection(0x200);
-	GsWSMATRIX = *(MATRIX *)VS_D_80070ACC;
+	GsWSMATRIX = VS_D_80070ACC;
 	GsClearOt(0, 4, &VS_D_80071764[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 4; i++) {
@@ -1480,7 +1484,7 @@ void VS_renderResultModelScene(void)
 	int32_t i;
 
 	GsSetProjection(0x15e);
-	GsWSMATRIX = *(MATRIX *)VS_D_80070ACC;
+	GsWSMATRIX = VS_D_80070ACC;
 	GsClearOt(0, 4, &VS_D_80071764[ACTIVE_FRAMEBUFFER]);
 	for (i = 4; i >= 0; i--) {
 		GsGetLws(VS_D_80072A50[VS_D_80070B10[VS_WINNER_ID][i]].data.obj.coord2, &lw, &ls);

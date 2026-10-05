@@ -4,8 +4,8 @@
 #include <libgs.h>
 #include <libgte.h>
 
+#include <dw/efe.h>
 #include <dw/entity.h>
-#include <dw/graphics.h>
 #include <dw/graphics.h>
 #include <dw/types.h>
 
@@ -55,7 +55,7 @@ typedef struct {
 
 extern int16_t STD_D_8007AA40[];
 extern char STD_D_8007AAB0[];
-extern int32_t STD_D_8007AA10[];
+extern MATRIX STD_D_8007AA10;
 
 extern GsOT_TAG STD_D_8007B664[];
 extern GsOT_TAG STD_D_8007B674[];
@@ -80,11 +80,7 @@ extern int32_t STD_D_8007BAAC[];
 extern StdUnkBAF4 STD_D_8007BAF4[8];
 extern StdUnkBB64 STD_D_8007BB64[8];
 extern uint8_t STD_D_8007BB94[155][20];
-extern PositionDataRaw STD_D_8007C7B0[4];
-extern int32_t STD_D_8007CAD0[];
-extern int32_t STD_D_8007CB58[];
-extern int32_t STD_D_8007CBE0[];
-extern int32_t STD_D_8007CC68[];
+extern PositionDataRaw STD_D_8007C7B0[9];
 extern int16_t STD_D_8007CC78[];
 extern int16_t STD_D_8007CCA4[];
 extern int16_t STD_D_8007CCD0[];
@@ -97,12 +93,12 @@ extern int16_t STD_D_8007FA1C[];
 extern uint8_t STD_D_8007FA5C[];
 extern void (*STD_jtbl_8007FA7C[])(void);
 extern MATRIXRaw STD_D_8007FC00;
-extern int16_t STD_D_8007FC20[12][6];
-extern int16_t STD_D_8007FCB0[][4];
-extern int16_t STD_D_8007FCD0[][8];
-extern int16_t STD_D_8007FD10[][6];
-extern int16_t STD_D_8007FD4C[][4];
-extern int16_t STD_D_8007FE14[2][4];
+extern EfePoisonBubble STD_D_8007FC20[12];
+extern EfePoison STD_D_8007FCB0[4];
+extern EfeConfusion STD_D_8007FCD0[4];
+extern EfeStun STD_D_8007FD10[5];
+extern EfeStunSpark STD_D_8007FD4C[25];
+extern EfeFinisherAura STD_D_8007FE14[2];
 extern SVECTOR STD_D_8007FE24[];
 
 extern StdArenaCfg MAIN_D_801347FC;

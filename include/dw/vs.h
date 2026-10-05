@@ -5,10 +5,30 @@
 #include <libgte.h>
 
 #include <dw/combat.h>
+#include <dw/efe.h>
 #include <dw/entity.h>
 #include <dw/graphics.h>
-#include <dw/graphics.h>
 #include <dw/types.h>
+
+typedef struct {
+	int16_t hp;
+	int16_t mp;
+	int16_t offense;
+	int16_t defense;
+	int16_t speed;
+	int16_t brains;
+	int16_t discipline;
+	char name[14];
+	uint8_t digimonId;
+	uint8_t moves[3];
+	uint8_t unk20[32];
+} RegisteredDigimon;
+
+typedef struct {
+	uint8_t fighters[2][5];
+	uint8_t stage;
+	uint8_t battleCount;
+} VsBattleSetup;
 
 typedef struct {
 	int32_t opcode;
@@ -21,6 +41,9 @@ typedef struct {
 	int8_t side;
 } CameraChase;
 
+extern RegisteredDigimon *VS_DIGIMON_P1_PTR;
+extern RegisteredDigimon *VS_DIGIMON_P2_PTR;
+extern Entity *VS_FOCUSED_ENTITY;
 extern char MAIN_D_80134A50[];
 extern char MAIN_D_80134A54[];
 extern uint8_t MAIN_D_80134A5C[4];
@@ -70,7 +93,7 @@ extern uint8_t VS_D_8006FF20[][14];
 
 extern int8_t VS_D_80071690[2][5];
 extern uint8_t VS_D_8007169C[2][5];
-extern uint8_t VS_D_800716A8[];
+extern VsBattleSetup VS_D_800716A8;
 extern GsOT_TAG VS_D_800716B4[];
 extern GsOT_TAG VS_D_800716C4[];
 extern GsOT VS_D_800716D4[];
@@ -102,19 +125,20 @@ extern PositionDataRaw VS_D_80072A50[7];
 extern int16_t VS_D_80072E08[10];
 extern void (*VS_jtbl_80072E1C[])(void);
 extern MATRIXRaw VS_D_80072FA0;
-extern int16_t VS_D_80072FC0[12][6];
-extern int16_t VS_D_80073050[][4];
-extern int16_t VS_D_80073070[][8];
-extern int16_t VS_D_800730B0[][6];
-extern int16_t VS_D_800730EC[][4];
-extern int16_t VS_D_800731B4[2][4];
+extern EfePoisonBubble VS_D_80072FC0[12];
+extern EfePoison VS_D_80073050[4];
+extern EfeConfusion VS_D_80073070[4];
+extern EfeStun VS_D_800730B0[5];
+extern EfeStunSpark VS_D_800730EC[25];
+extern EfeFinisherAura VS_D_800731B4[2];
 extern SVECTOR VS_D_800731C4[];
 
+void VS__initialize(RegisteredDigimon *fightersP1, RegisteredDigimon *fightersP2);
 int32_t VS_addAuraProjectile(Entity *e);
 void VS_addCommandMenu(uint8_t index);
 void VS_addFighterCounter(int32_t arg);
 void VS_addFighterStatusBars(int32_t id);
-int32_t VS_addFinisherAura(int32_t arg, int32_t val);
+int32_t VS_addFinisherAura(Entity *entity, int32_t duration);
 void VS_addFinisherProgress(FighterData *fighter, int16_t amount);
 void VS_addTargetCursor(/* int16_t id, int32_t tech */);
 void VS_addVersusModelScene(void);

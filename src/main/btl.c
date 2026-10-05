@@ -23,7 +23,7 @@
 #define BTL_FINISHER_MODEL	((char *)0x80053800)
 #define BTL_CONFUSION_MODEL	((char *)0x80054838)
 #define BTL_STUN_MODEL		((char *)0x80054d00)
-#define BTL_BUFF_MODEL		((char *)0x80055328)
+#define BTL_BUFF_MODEL		((TMDModel *)0x80055328)
 
 #define NUM_CONCAVE_SCREENS	18
 
@@ -37,8 +37,8 @@ extern uint8_t CURRENT_SCREEN;
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
-extern PACKET GS_WORK_BASES[];
-extern char DR_OFFSETS[];
+extern PACKET GS_WORK_BASES[2][0x14000];
+extern DR_OFFSET DR_OFFSETS[2];
 extern uint8_t IS_PREDEFINED_BATTLE;
 extern int8_t LOAD_EFE_STATE;
 extern FleeBubbleState FLEE_BUBBLE_DATA[];
@@ -50,7 +50,7 @@ int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void tickPartnerWaypoints(void);
 void partnerTickCollision(void);
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
-void initializeBuffModel(void *model);
+void initializeBuffModel(TMDModel *model);
 void initializeBuffModelObject(void);
 void BTL_initializeBattleItemParticles(void);
 void BTL_initializeUnk2(void);
@@ -128,12 +128,12 @@ void loadBattleDataTick(void)
 	POLLED_INPUT = PadRead(1);
 	ACTIVE_FRAMEBUFFER = GsGetActiveBuff();
 	ACTIVE_ORDERING_TABLE = &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER];
-	GsSetWorkBase(&GS_WORK_BASES[ACTIVE_FRAMEBUFFER * 0x14000]);
+	GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 	tickObjects();
 	renderObjects();
-	AddPrim((char *)ACTIVE_ORDERING_TABLE->org + 0x80,
-		&DR_OFFSETS[ACTIVE_FRAMEBUFFER * 0xc]);
+	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x20,
+		&DR_OFFSETS[ACTIVE_FRAMEBUFFER]);
 	DrawSync(0);
 	VSync(3);
 	POLLED_INPUT_PREVIOUS = POLLED_INPUT;

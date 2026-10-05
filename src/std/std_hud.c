@@ -340,9 +340,13 @@ BarSprite STD_D_8007A9D4[6] = {
 	{ 0x01eb, 0x84, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
 };
 
-int32_t STD_D_8007AA10[8] = {
-	0x00001004, 0x00000000, 0x00001000, 0x00000000,
-	0x00001004, 0x00000000, 0x00000000, 0x000003e8,
+MATRIX STD_D_8007AA10 = {
+	{
+		{ 0x1004, 0x0000, 0x0000 },
+		{ 0x0000, 0x1000, 0x0000 },
+		{ 0x0000, 0x0000, 0x1004 },
+	},
+	{ 0x00000000, 0x00000000, 0x000003e8 },
 };
 
 int16_t STD_D_8007AA30[8] = {
@@ -922,7 +926,7 @@ void STD_func_8006A824(int16_t id)
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 0x1e2);
-	if ((MAIN_D_801351A2[id] != 1) || (((uint8_t *)COMBAT_DATA_PTR + id)[0x64e] == 0xb)) {
+	if ((MAIN_D_801351A2[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	} else {
 		setRGB0(prim, MAIN_D_8013519E[id], MAIN_D_8013519E[id], MAIN_D_8013519E[id]);
@@ -934,7 +938,7 @@ void STD_func_8006A824(int16_t id)
 	GsSetWorkBase((PACKET *)prim);
 
 	box.attribute = 0x40000000;
-	if ((MAIN_D_801351A2[id] != 1) || (((uint8_t *)COMBAT_DATA_PTR + id)[0x64e] == 0xb)) {
+	if ((MAIN_D_801351A2[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
 		box.r = box.g = box.b = 0x80;
 	} else {
 		box.r = box.g = box.b = MAIN_D_8013519E[id];
@@ -955,7 +959,7 @@ void STD_renderHPBarDigits(int16_t i, int16_t id)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 0x100, 0x1ec);
 
-	if ((((n - 1) == i) || (MAIN_D_801351A2[id] == 1)) && (((uint8_t *)COMBAT_DATA_PTR + id)[0x64e] != 0xb)) {
+	if ((((n - 1) == i) || (MAIN_D_801351A2[id] == 1)) && (COMBAT_DATA_PTR->player.currentCommand[id] != 0xb)) {
 		setRGB0(prim, MAIN_D_8013519E[id], MAIN_D_8013519E[id], MAIN_D_8013519E[id]);
 	} else {
 		setRGB0(prim, 0x80, 0x80, 0x80);
@@ -1164,7 +1168,7 @@ void STD_renderVersusModelScene(void)
 	int32_t i;
 
 	GsSetProjection(0x200);
-	GsWSMATRIX = *(MATRIX *)STD_D_8007AA10;
+	GsWSMATRIX = STD_D_8007AA10;
 	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 4; i++) {
@@ -1286,24 +1290,24 @@ void STD_func_8006BA18(void)
 		STD_D_8007C7B0[i].data.rotation.vz = 0;
 		switch (i) {
 		case 5:
-			STD_D_8007CAD0[0] = 0xbe;
-			STD_D_8007CAD0[1] = 0xc8;
-			STD_D_8007CAD0[2] = 0x7bc;
+			STD_D_8007C7B0[5].data.location.vx = 0xbe;
+			STD_D_8007C7B0[5].data.location.vy = 0xc8;
+			STD_D_8007C7B0[5].data.location.vz = 0x7bc;
 			break;
 		case 6:
-			STD_D_8007CB58[0] = 0x168;
-			STD_D_8007CB58[1] = 0xc8;
-			STD_D_8007CB58[2] = 0x7bc;
+			STD_D_8007C7B0[6].data.location.vx = 0x168;
+			STD_D_8007C7B0[6].data.location.vy = 0xc8;
+			STD_D_8007C7B0[6].data.location.vz = 0x7bc;
 			break;
 		case 7:
-			STD_D_8007CBE0[0] = 0x230;
-			STD_D_8007CBE0[1] = 0xc8;
-			STD_D_8007CBE0[2] = 0x7bc;
+			STD_D_8007C7B0[7].data.location.vx = 0x230;
+			STD_D_8007C7B0[7].data.location.vy = 0xc8;
+			STD_D_8007C7B0[7].data.location.vz = 0x7bc;
 			break;
 		case 8:
-			STD_D_8007CC68[0] = 0x2e4;
-			STD_D_8007CC68[1] = 0xc8;
-			STD_D_8007CC68[2] = 0x7bc;
+			STD_D_8007C7B0[8].data.location.vx = 0x2e4;
+			STD_D_8007C7B0[8].data.location.vy = 0xc8;
+			STD_D_8007C7B0[8].data.location.vz = 0x7bc;
 			break;
 		default:
 			STD_D_8007C7B0[i].data.location.vx = i * 0xc8 - 0x2f8;

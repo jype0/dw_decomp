@@ -14,7 +14,7 @@ static void *fish_model_functions[] = {
 
 void FISH_loadTMDModel(TMDFileLoadingData *model, char *path, uint8_t *buf, uint32_t bufSize)
 {
-	uint8_t *end;
+	struct TMD_STRUCT *tmdObjects;
 	GsDOBJ2 *obj;
 	int32_t size;
 	int32_t i;
@@ -24,10 +24,10 @@ void FISH_loadTMDModel(TMDFileLoadingData *model, char *path, uint8_t *buf, uint
 		exit(1);
 	}
 
-	model->targetBuffer = buf;
+	model->targetBuffer = (TMDModel *)buf;
 	readFile(path, model->targetBuffer);
 
-	model->objCount = ((uint32_t *)model->targetBuffer)[2];
+	model->objCount = model->targetBuffer->nobj;
 	model->objects = (GsDOBJ2 *)(buf + size);
 
 	if (bufSize < (size + (model->objCount * sizeof(GsDOBJ2)))) {
@@ -40,11 +40,11 @@ void FISH_loadTMDModel(TMDFileLoadingData *model, char *path, uint8_t *buf, uint
 		exit(1);
 	}
 
-	GsMapModelingData((u_long *)(model->targetBuffer + 4));
+	GsMapModelingData((u_long *)&model->targetBuffer->flags);
 
-	end = model->targetBuffer + 0xc;
+	tmdObjects = model->targetBuffer->obj;
 	for (i = 0; i < model->objCount; i++) {
-		GsLinkObject4((u_long)end, obj = &model->objects[i], i);
+		GsLinkObject4((u_long)tmdObjects, obj = &model->objects[i], i);
 		obj->attribute = 0;
 	}
 }

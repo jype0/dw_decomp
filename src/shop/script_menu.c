@@ -24,11 +24,6 @@ typedef struct {
 	char s[12];
 } BoxLabel;
 
-typedef struct {
-	uint32_t usedRows;
-	TextBoxData box[6];
-} TextBoxTable;
-
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint8_t ACTIVE_BGM_TRACK;
 extern uint8_t NAMING_CURRENT_LETTER;
@@ -38,8 +33,6 @@ extern int32_t CARD_PRICES[];
 extern uint8_t SHOP_AMOUNT;
 extern uint32_t POLLED_INPUT;
 extern int16_t ITEM_MENU_DESCRIPTION_RECTS[];
-extern TextBoxTable TEXTBOX_LINES_USED;
-extern char MAIN_D_801B1D26[];
 extern int16_t SELECTION_CURSOR_WIDTHS[];
 extern uint8_t *ACTIVE_SCRIPT;
 
@@ -1087,16 +1080,16 @@ void initializeNamingBuffer(uint8_t flags)
 	if ((flags & 2) == 0) {
 		NAMING_BOX_FLAG = 0;
 		SCRIPT_STATE_2 = 0;
-		MAIN_D_801B1D1C[0] = 0;
+		NAMING_BUFFER[0] = 0;
 	} else {
 		closeBox(0);
 		NAMING_BOX_FLAG = flags;
 		SCRIPT_STATE_2 = 0x14;
 
 		if ((NAMING_BOX_FLAG & 1) == 0) {
-			strcpy(MAIN_D_801B1D1C, DIGIMON_DATA[0].name);
+			strcpy(NAMING_BUFFER, DIGIMON_DATA[0].name);
 		} else {
-			strcpy(MAIN_D_801B1D1C, PARTNER_ENTITY.name);
+			strcpy(NAMING_BUFFER, PARTNER_ENTITY.name);
 		}
 	}
 
@@ -1181,9 +1174,9 @@ int32_t newGameStateMachine(void)
 		setInputRepeatMask(0);
 
 		if ((NAMING_BOX_FLAG & 1) == 0) {
-			strcpy(DIGIMON_DATA[0].name, MAIN_D_801B1D1C);
+			strcpy(DIGIMON_DATA[0].name, NAMING_BUFFER);
 		} else {
-			strcpy(PARTNER_ENTITY.name, MAIN_D_801B1D1C);
+			strcpy(PARTNER_ENTITY.name, NAMING_BUFFER);
 		}
 
 		if ((NAMING_BOX_FLAG & 2) != 0) {
@@ -1232,7 +1225,7 @@ int32_t newGameStateMachine(void)
 		break;
 	case 0x1a:
 		NAMING_BOX_FLAG |= 1;
-		MAIN_D_801B1D1C[0] = 0;
+		NAMING_BUFFER[0] = 0;
 		SCRIPT_STATE_2 = 0x13;
 		break;
 	case 0x1b:
@@ -1999,13 +1992,13 @@ void updateKeeperTextbox(int32_t boxIndex)
 {
 	if (boxIndex == 0) {
 		showMapHeadTextbox(4, 0xff, 1, 0x4d5);
-		TEXTBOX_DATA[1].writeCount--;
+		TEXTBOX_DATA.box[1].writeCount--;
 		TEXTBOX_LINES_PTR[0x246] = 0xd;
 		TEXTBOX_LINES_PTR[0x3c6] = 0xd;
 		updateItemMenuStrings(ITEM_MENU_LEFT, 0xa, 0);
 	} else {
 		showMapHeadTextbox(5, 0xff, 2, 0x4d5);
-		TEXTBOX_DATA[2].writeCount--;
+		TEXTBOX_DATA.box[2].writeCount--;
 		TEXTBOX_LINES_PTR[0x266] = 0xd;
 		TEXTBOX_LINES_PTR[0x3e6] = 0xd;
 		updateItemMenuStrings(ITEM_MENU_RIGHT, 0xa, 0);
@@ -2323,7 +2316,7 @@ void renderKeeperBox(ItemMenuBox *box, int8_t flag)
 	y = by + box->cursor * 0x12 + 0x21;
 draw:
 	renderSelectionCursor(bx + 5, y, 0x80, 0x12, 6 - boxId);
-	tbox = &TEXTBOX_LINES_USED.box[boxId];
+	tbox = &TEXTBOX_DATA.box[boxId];
 	getVRAMModeCoords(tbox->vramMode, &x, &clut);
 	y = 0x6c;
 	y += tbox->backPage * tbox->vramRows * 12;
@@ -2578,7 +2571,7 @@ void renderMojyaTradeMenu(void)
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
 	renderHorizontalLine(1, 4, 0x15, 0xd7);
-	box = &TEXTBOX_LINES_USED.box[id];
+	box = &TEXTBOX_DATA.box[id];
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	y = 0x6c;
 	y += box->backPage * box->vramRows * 12;
@@ -2602,7 +2595,7 @@ void updateMojyaTradeStrings(void)
 {
 	showMapHeadTextbox(0xf, 0xff, 1, 0x4d6);
 
-	--TEXTBOX_DATA[1].writeCount;
+	--TEXTBOX_DATA.box[1].writeCount;
 	TEXTBOX_LINES_PTR[0x254] = 0xd;
 	TEXTBOX_LINES_PTR[0x354] = 0xd;
 
@@ -2711,7 +2704,7 @@ void setupNameDisplayBox(void)
 	createTextbox(2, flags, &rect2, &rect1, 0, renderNameDisplayBox);
 	registerTextbox(2, 0, 1, 0, 0);
 
-	NAMING_CURRENT_LETTER = strlen(MAIN_D_801B1D1C) >> 1;
+	NAMING_CURRENT_LETTER = strlen(NAMING_BUFFER) >> 1;
 	if (NAMING_CURRENT_LETTER == 6) {
 		--NAMING_CURRENT_LETTER;
 	}
@@ -2746,7 +2739,7 @@ void tickNamingBox(void)
 	col = NAMING_SELECTOR % 5;
 	special = NAMING_SELECTOR & 0x7fff;
 	if (isKeyDown(0x80)) {
-		MAIN_D_801B1D1C[0] = 0;
+		NAMING_BUFFER[0] = 0;
 		NAMING_CURRENT_LETTER = 0;
 		updateNamingPreview();
 		playSound(0, 3);
@@ -2769,14 +2762,14 @@ void tickNamingBox(void)
 				return;
 			}
 			idx = NAMING_CURRENT_LETTER * 2;
-			MAIN_D_801B1D1C[idx + 0] = hi;
-			MAIN_D_801B1D1C[idx + 1] = lo;
-			MAIN_D_801B1D1C[idx + 2] = 0;
+			NAMING_BUFFER[idx + 0] = hi;
+			NAMING_BUFFER[idx + 1] = lo;
+			NAMING_BUFFER[idx + 2] = 0;
 			if (NAMING_CURRENT_LETTER != 5) {
 				NAMING_CURRENT_LETTER++;
 			}
 			updateNamingPreview();
-			if (MAIN_D_801B1D26[0] != 0 && NAMING_CURRENT_LETTER == 5) {
+			if (NAMING_BUFFER[10] != 0 && NAMING_CURRENT_LETTER == 5) {
 				NAMING_SELECTOR = 0x8000 | NAMING_OK;
 			}
 			playSound(0, 3);
@@ -2796,7 +2789,7 @@ void tickNamingBox(void)
 			namingDeleteLast();
 			break;
 		case NAMING_OK:
-			if (MAIN_D_801B1D1C[0] == 0) {
+			if (NAMING_BUFFER[0] == 0) {
 				playSound(0, 0xb);
 				return;
 			}
@@ -2844,7 +2837,7 @@ void renderNamingBox(void)
 	renderSelectionBox();
 	bx = UI_BOX_DATA[1].finalPos.x;
 	by = UI_BOX_DATA[1].finalPos.y;
-	box = &TEXTBOX_DATA[1];
+	box = &TEXTBOX_DATA.box[1];
 	texY = box->backPage * box->vramRows * 12;
 	texY += box->vramRow * 12;
 	texX = 0;
@@ -2853,7 +2846,7 @@ void renderNamingBox(void)
 		renderString(0, bx + lbl[0], by + lbl[1], lbl[2], 12, texX, texY, 5, 1);
 		texX += lbl[2];
 	}
-	if (MAIN_D_801B1D1C[0] == 0) {
+	if (NAMING_BUFFER[0] == 0) {
 		ty = 0xd;
 	} else {
 		ty = 0;
@@ -2893,7 +2886,7 @@ void fillNamingMenuStrings(void)
 	TextBoxData *box;
 	uint8_t *line;
 
-	box = &TEXTBOX_DATA[1];
+	box = &TEXTBOX_DATA.box[1];
 	buf = TEXTBOX_LINES_PTR + box->vramRow * 64;
 	buf = (uint8_t *)((uint32_t)buf + (box->backPage ^ 1) * box->vramRows * 64);
 	line = buf;
@@ -2956,8 +2949,8 @@ void updateNamingPreview(void)
 	}
 
 	out += len;
-	strcpy(out, MAIN_D_801B1D1C);
-	len = strlen(MAIN_D_801B1D1C);
+	strcpy(out, NAMING_BUFFER);
+	len = strlen(NAMING_BUFFER);
 	out += len;
 	out = padWithSpaces(out, 6, len);
 	terminateString(out, 1);
@@ -2971,16 +2964,16 @@ void updateNamingPreview(void)
 
 void namingDeleteLast(void)
 {
-	if (MAIN_D_801B1D1C[0] != 0) {
+	if (NAMING_BUFFER[0] != 0) {
 		if (NAMING_CURRENT_LETTER == 0) {
-			MAIN_D_801B1D1C[0] = 0;
+			NAMING_BUFFER[0] = 0;
 		} else {
 #if defined(VERSION_JP)
-			MAIN_D_801B1D1C[NAMING_CURRENT_LETTER * 2] = 0;
+			NAMING_BUFFER[NAMING_CURRENT_LETTER * 2] = 0;
 			NAMING_CURRENT_LETTER--;
 #else
 			NAMING_CURRENT_LETTER--;
-			MAIN_D_801B1D1C[NAMING_CURRENT_LETTER * 2] = 0;
+			NAMING_BUFFER[NAMING_CURRENT_LETTER * 2] = 0;
 #endif
 		}
 
@@ -2994,24 +2987,24 @@ void terminateNamingBuffer(void)
 	int32_t pos;
 
 	for (pos = 0; pos < 0xc; pos += 2) {
-		if (MAIN_D_801B1D1C[pos + 2] == 0) {
+		if (NAMING_BUFFER[pos + 2] == 0) {
 			break;
 		}
 	}
 
 	while (pos != 0) {
-		if ((uint8_t)MAIN_D_801B1D1C[pos] != 0x81) {
+		if ((uint8_t)NAMING_BUFFER[pos] != 0x81) {
 			break;
 		}
 
-		if ((uint8_t)MAIN_D_801B1D1C[pos + 1] != 0x40) {
+		if ((uint8_t)NAMING_BUFFER[pos + 1] != 0x40) {
 			break;
 		}
 
 		pos -= 2;
 	}
 
-	MAIN_D_801B1D1C[pos + 2] = 0;
+	NAMING_BUFFER[pos + 2] = 0;
 }
 
 void namingSelectionLeft(int16_t col, int16_t row, int16_t specialIdx)

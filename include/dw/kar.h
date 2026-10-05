@@ -38,10 +38,7 @@ typedef struct {
 	GsDOBJ2 obj;
 	GsCOORDINATE2 coord;
 	int8_t pad84[16];
-	int16_t unk94;
-	int16_t selectPhase;
-	int16_t unk98;
-	int16_t pad9A;
+	SVECTOR rotation;
 	VECTOR pos;
 } KarStone;
 

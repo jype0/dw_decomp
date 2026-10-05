@@ -28,7 +28,7 @@
 #define STD_STUN_MODEL		((char *)0x80054d00)
 #define STD_BUFF_MODEL		((TMDModel *)0x80055328)
 
-extern void *MAIN_D_80135130;
+extern TMDModel *MAIN_D_80135130;
 extern int8_t GAME_STATE;
 extern int32_t VIEWPORT_DISTANCE;
 extern SVECTOR STDVS_VIEW_ROTATION[];
@@ -631,9 +631,9 @@ void STD_func_80057E5C(id)
 	STD_loadArenaTIMToVRAM(STD_D_8007A338[id], ((uint8_t *)MAIN_D_801347FC.timCount)[id]);
 	MAIN_D_80135130 = malloc3(((int32_t)lookupFileSize(STD_D_8007A304[id]) + 0x7ff) & ~0x7ff);
 	readFile(STD_D_8007A304[id], MAIN_D_80135130);
-	GsMapModelingData((u_long *)MAIN_D_80135130 + 1);
+	GsMapModelingData((u_long *)&MAIN_D_80135130->flags);
 	for (i = 0; i < MAIN_D_801347FC.modelCount[id]; i++) {
-		GsLinkObject4((u_long)((char *)MAIN_D_80135130 + 0xc), &STD_D_8007B97C[i], i);
+		GsLinkObject4((u_long)MAIN_D_80135130->obj, &STD_D_8007B97C[i], i);
 		GsInitCoordinate2(NULL, &STD_D_8007B83C[i].coord);
 		STD_D_8007B97C[i].attribute = 0;
 		STD_D_8007B97C[i].coord2 = &STD_D_8007B83C[i].coord;
