@@ -18,7 +18,12 @@ SECTIONS
     .main : AT(main_ROM_START)
     {
         main_TEXT_START = .;
-        BUILD_DIR/asm/main/800.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libapi.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libc.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libetc.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libgpu.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libgs.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libgte.s.o(.text .text.*);
         BUILD_DIR/src/main/model.c.o(.text .text.*);
         BUILD_DIR/src/main/world_object.c.o(.text .text.*);
         BUILD_DIR/src/main/file.c.o(.text .text.*);
@@ -32,7 +37,7 @@ SECTIONS
         BUILD_DIR/src/main/fade.c.o(.text .text.*);
         BUILD_DIR/src/main/aabb.c.o(.text .text.*);
         BUILD_DIR/src/main/efe.c.o(.text .text.*);
-        BUILD_DIR/asm/main/242CC.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libcd.s.o(.text .text.*);
         BUILD_DIR/src/main/overworld.c.o(.text .text.*);
         BUILD_DIR/src/main/game_menu.c.o(.text .text.*);
         BUILD_DIR/src/main/map_collision.c.o(.text .text.*);
@@ -41,7 +46,8 @@ SECTIONS
         BUILD_DIR/src/main/ui.c.o(.text .text.*);
         BUILD_DIR/src/main/item.c.o(.text .text.*);
         BUILD_DIR/src/main/sound.c.o(.text .text.*);
-        BUILD_DIR/asm/main/3FEF4.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libspu.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libsnd.s.o(.text .text.*);
         BUILD_DIR/src/main/map.c.o(.text .text.*);
         BUILD_DIR/src/main/inventory.c.o(.text .text.*);
         BUILD_DIR/src/main/clock.c.o(.text .text.*);
@@ -67,10 +73,11 @@ SECTIONS
         BUILD_DIR/src/main/kar.c.o(.text .text.*);
         BUILD_DIR/src/main/efe_table.c.o(.text .text.*);
         BUILD_DIR/src/main/sound_async.c.o(.text .text.*);
-        BUILD_DIR/asm/main/79008.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libpress.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libds.s.o(.text .text.*);
         BUILD_DIR/src/main/butterfly.c.o(.text .text.*);
         BUILD_DIR/src/main/main_menu.c.o(.text .text.*);
-        BUILD_DIR/asm/main/81E7C.s.o(.text .text.*);
+        BUILD_DIR/asm/main/psyq/libmcrd.s.o(.text .text.*);
         BUILD_DIR/src/main/bubble.c.o(.text .text.*);
         BUILD_DIR/src/main/battle_ui.c.o(.text .text.*);
         BUILD_DIR/src/main/main.c.o(.text .text.*);
@@ -80,14 +87,19 @@ SECTIONS
         main_TEXT_SIZE = ABSOLUTE(main_TEXT_END - main_TEXT_START);
 
         main_RODATA_START = .;
-        BUILD_DIR/asm/main/data/89E64.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/rts_info.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libc.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libetc.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libgpu.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libgs.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/src/main/tamer.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/efe.c.o(.rodata .rodata.*);
-        BUILD_DIR/asm/main/data/8A71C.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libcd.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/src/main/overworld.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/game_menu.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/item.c.o(.rodata .rodata.*);
-        BUILD_DIR/asm/main/data/8AD98.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libspu.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libsnd.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/src/main/map.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/inventory.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/partner.c.o(.rodata .rodata.*);
@@ -99,9 +111,9 @@ SECTIONS
         BUILD_DIR/src/main/line.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/vecmath.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/rng.c.o(.rodata .rodata.*);
-        BUILD_DIR/asm/main/data/8B6E0.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libpress.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/src/main/main_menu.c.o(.rodata .rodata.*);
-        BUILD_DIR/asm/main/data/8B7F8.rodata.s.o(.rodata .rodata.*);
+        BUILD_DIR/asm/main/data/psyq/libmcrd.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/src/main/battle_ui.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/main.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/bubble.c.o(.rodata .rodata.*);
@@ -140,7 +152,11 @@ SECTIONS
         main_RODATA_SIZE = ABSOLUTE(main_RODATA_END - main_RODATA_START);
 
         main_DATA_START = .;
-        BUILD_DIR/asm/main/data/8B9CC.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libapi.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libc.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libetc.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libgpu.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libgte.data.s.o(.data .data.*);
         BUILD_DIR/src/main/model.c.o(.data .data.*);
         BUILD_DIR/src/main/file_table.c.o(.data .data.*);
         BUILD_DIR/src/main/graphics.c.o(.data .data.*);
@@ -150,13 +166,14 @@ SECTIONS
         BUILD_DIR/src/main/toilet_data.c.o(.data .data.*);
         BUILD_DIR/src/main/door_mapdata.c.o(.data .data.*);
         BUILD_DIR/src/main/efe.c.o(.data .data.*);
-        BUILD_DIR/asm/main/data/9F198.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libcd.data.s.o(.data .data.*);
         BUILD_DIR/src/main/game_menu.c.o(.data .data.*);
         BUILD_DIR/src/main/particle.c.o(.data .data.*);
         BUILD_DIR/src/main/ui.c.o(.data .data.*);
         BUILD_DIR/src/main/item.c.o(.data .data.*);
         BUILD_DIR/src/main/sound.c.o(.data .data.*);
-        BUILD_DIR/asm/main/data/A43D0.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libspu.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libsnd.data.s.o(.data .data.*);
         BUILD_DIR/src/main/map.c.o(.data .data.*);
         BUILD_DIR/src/main/inventory.c.o(.data .data.*);
         BUILD_DIR/src/main/clock.c.o(.data .data.*);
@@ -172,10 +189,10 @@ SECTIONS
         BUILD_DIR/src/main/btl.c.o(.data .data.*);
         BUILD_DIR/src/main/efe_table.c.o(.data .data.*);
         BUILD_DIR/src/main/sound_async.c.o(.data .data.*);
-        BUILD_DIR/asm/main/data/A8AD4.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libpress.data.s.o(.data .data.*);
         BUILD_DIR/src/main/butterfly.c.o(.data .data.*);
         BUILD_DIR/src/main/main_menu.c.o(.data .data.*);
-        BUILD_DIR/asm/main/data/AA5D4.data.s.o(.data .data.*);
+        BUILD_DIR/asm/main/data/psyq/libmcrd.data.s.o(.data .data.*);
         BUILD_DIR/src/main/bubble.c.o(.data .data.*);
         BUILD_DIR/src/main/main.c.o(.data .data.*);
         main_DATA_END = .;

@@ -88,26 +88,10 @@ MAIN_C_SRC := \
 	src/main/vecmath.c \
 	src/main/world_object.c
 
-PSYQ_OBJ := \
-	$(BUILD_DIR)/asm/main/800.s.o \
-	$(BUILD_DIR)/asm/main/242CC.s.o \
-	$(BUILD_DIR)/asm/main/3FEF4.s.o \
-	$(BUILD_DIR)/asm/main/79008.s.o \
-	$(BUILD_DIR)/asm/main/81E7C.s.o \
-	$(BUILD_DIR)/asm/main/data/89E64.rodata.s.o \
-	$(BUILD_DIR)/asm/main/data/8A71C.rodata.s.o \
-	$(BUILD_DIR)/asm/main/data/8AD98.rodata.s.o \
-	$(BUILD_DIR)/asm/main/data/8B6E0.rodata.s.o \
-	$(BUILD_DIR)/asm/main/data/8B7F8.rodata.s.o \
-	$(BUILD_DIR)/asm/main/data/8B9CC.data.s.o \
-	$(BUILD_DIR)/asm/main/data/9F198.data.s.o \
-	$(BUILD_DIR)/asm/main/data/A43D0.data.s.o \
-	$(BUILD_DIR)/asm/main/data/A8AD4.data.s.o \
-	$(BUILD_DIR)/asm/main/data/AA5D4.data.s.o
-
 # PsyQ library code and data is one section per file, so a library file is
 # kept whenever anything in it is referenced
-$(PSYQ_OBJ): ASFLAGS += -Wa,--defsym,PLAIN_SECTIONS=1
+$(BUILD_DIR)/asm/main/psyq/%.s.o $(BUILD_DIR)/asm/main/data/psyq/%.s.o: \
+	ASFLAGS += -Wa,--defsym,PLAIN_SECTIONS=1
 
 $(eval $(call unit,MAIN,main))
 
