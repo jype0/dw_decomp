@@ -1,5 +1,17 @@
-rom:0x0000AA18 reloc:MIPS_HI16 symbol:D_8011C4E4 addend:-0x1000
-rom:0x0000AA20 reloc:MIPS_LO16 symbol:D_8011C4E4 addend:-0x1000
+rom:0x0000A990 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1000
+rom:0x0000A998 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1000
+rom:0x0000A9F4 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x800
+rom:0x0000A9FC reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x800
+rom:0x0000AA18 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1800
+rom:0x0000AA20 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1800
+rom:0x0004105C reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x00041060 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
+rom:0x000410E4 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x000410E8 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
+rom:0x000411A0 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x000411A4 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
+rom:0x00041274 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x00041278 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
 rom:0x000A8870 reloc:MIPS_32 symbol:btl_START
 rom:0x000A8874 reloc:MIPS_32 symbol:std_START
 rom:0x000A8878 reloc:MIPS_32 symbol:fish_START

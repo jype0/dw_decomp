@@ -15,7 +15,7 @@ subsegments:
   - [0x8013D474, item]
   - [0x8013D590, unk_0x8013D590]
   - [0x8013DCC4, sound]
-  - [0x8014DBEC, libspu]
+  - [0x8014DD74, libspu]
   - [0x8014DD88, libsnd]
   - [0x8014F060, unk_0x8014F060]
   - [0x80150F00, map_object]

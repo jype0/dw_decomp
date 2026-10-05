@@ -37,6 +37,14 @@ rom:0x000348D0 reloc:MIPS_26 symbol:BTL_healStatusEffect
 rom:0x00035F2C reloc:MIPS_NONE symbol:NONE
 rom:0x00035F30 reloc:MIPS_NONE symbol:NONE
 rom:0x00035F34 reloc:MIPS_NONE symbol:NONE
+rom:0x00037BEC reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x00037BF0 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
+rom:0x00037C74 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x00037C78 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
+rom:0x00037D30 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x00037D34 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
+rom:0x00037E04 reloc:MIPS_HI16 symbol:_spu_RQ addend:-0x188
+rom:0x00037E08 reloc:MIPS_LO16 symbol:_spu_RQ addend:-0x188
 rom:0x0004D850 reloc:MIPS_26 symbol:STD_tickPartnerTournament
 rom:0x0004E7BC reloc:MIPS_26 symbol:DOOA_tick
 rom:0x0004E800 reloc:MIPS_26 symbol:DOOA_tick

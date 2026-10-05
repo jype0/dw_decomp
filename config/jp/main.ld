@@ -428,7 +428,11 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/sound.c.o(.bss.*);
         . = ALIGN(., 4);
-        BUILD_DIR/generated/unk_0x801566A4.bss.s.o(.bss.*);
+        BUILD_DIR/generated/libspu.bss.s.o(.bss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/generated/libsnd.bss.s.o(.bss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/generated/unk_0x80157B14.bss.s.o(.bss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/map_object.c.o(.bss.*);
         . = ALIGN(., 4);

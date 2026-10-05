@@ -23,7 +23,9 @@ MAIN_BSS := \
 	$(GEN_DIR)/unk_0x80140CF4.bss.s \
 	$(GEN_DIR)/unk_0x801414B8.bss.s \
 	$(GEN_DIR)/unk_0x80146048.bss.s \
-	$(GEN_DIR)/unk_0x801566A4.bss.s \
+	$(GEN_DIR)/libspu.bss.s \
+	$(GEN_DIR)/libsnd.bss.s \
+	$(GEN_DIR)/unk_0x80157B14.bss.s \
 	$(GEN_DIR)/unk_0x80167BCC.bss.s \
 	$(GEN_DIR)/unk_0x80168460.bss.s \
 	$(GEN_DIR)/unk_0x80168920.bss.s
