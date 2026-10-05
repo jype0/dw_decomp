@@ -26,7 +26,7 @@ MAIN_BSS := \
 	$(GEN_DIR)/unk_0x80154F80.bss.s \
 	$(GEN_DIR)/libds.bss.s \
 	$(GEN_DIR)/butterfly.bss.s \
-	$(GEN_DIR)/libmrcd.bss.s \
+	$(GEN_DIR)/libmcrd.bss.s \
 	$(GEN_DIR)/bubble.bss.s \
 	$(GEN_DIR)/battle_ui.bss.s \
 	$(GEN_DIR)/unk_0x801555D0.bss.s \

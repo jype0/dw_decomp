@@ -833,7 +833,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/butterfly.c.o(.bss.*);
         . = ALIGN(., 4);
-        BUILD_DIR/generated/libmrcd.bss.s.o(.bss.*);
+        BUILD_DIR/generated/libmcrd.bss.s.o(.bss.*);
         . = ALIGN(., 4);
         BUILD_DIR/generated/bubble.bss.s.o(.bss.*);
         . = ALIGN(., 4);

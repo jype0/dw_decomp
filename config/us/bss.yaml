@@ -23,7 +23,7 @@ subsegments:
   - [0x80154F80, unk_0x80154F80]
   - [0x80155424, libds]
   - [0x80155430, butterfly]
-  - [0x80155440, libmrcd]
+  - [0x80155440, libmcrd]
   - [0x80155560, bubble]
   - [0x801555A8, battle_ui]
   - [0x801555D0, unk_0x801555D0]
