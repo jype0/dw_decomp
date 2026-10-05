@@ -125,7 +125,7 @@ segments:
       - [0x86F48, c, main]
       - [0x89908, c, new_game]
       - [0x89C2C, c, buff_model]
-      - [0x89E64, rodata, rts_info]
+      - [0x89E64, bin, rts_info, discard:True]
       - [0x89F14, rodata, psyq/libc]
       - [0x89FF4, rodata, psyq/libetc]
       - [0x8A0A4, rodata, psyq/libgpu]

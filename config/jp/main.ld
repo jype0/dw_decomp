@@ -87,7 +87,80 @@ SECTIONS
         main_TEXT_SIZE = ABSOLUTE(main_TEXT_END - main_TEXT_START);
 
         main_RODATA_START = .;
-        BUILD_DIR/asm/main/data/rts_info.rodata.s.o(.rodata .rodata.*);
+        __static_init = .;
+        LONG(0x0)
+        _gp_addr = .;
+        LONG(_gp)
+        _sbss_size = .;
+        LONG(main_SBSS_SIZE)
+        _bss_size = .;
+        LONG(main_BSS_SIZE)
+        _sdata_size = .;
+        LONG(main_SDATA_SIZE)
+        _data_size = .;
+        LONG(main_DATA_SIZE)
+        _rdata_size = .;
+        LONG(main_RODATA_SIZE)
+        _fsbss = .;
+        LONG(main_SBSS_START)
+        _fbss = .;
+        LONG(main_BSS_START)
+        _fsdata = .;
+        LONG(main_SDATA_START)
+        _fdata = .;
+        LONG(main_DATA_START)
+        _frdata = .;
+        LONG(main_RODATA_START)
+        _start_etbl = .;
+        LONG(main_TEXT_START)
+        _nbfunctions = .;
+        LONG(main_TEXT_START)
+        _ftext = .;
+        LONG(main_TEXT_START)
+        _stack_addr = .;
+        LONG(0x801FFF00)
+        _nbtvectors = .;
+        LONG(0x0)
+        _stack_size = .;
+        LONG(0x40)
+        _heap_size = .;
+        LONG(0x400)
+        _etext = .;
+        LONG(main_TEXT_END)
+        _edata = .;
+        LONG(main_SDATA_END)
+        _end = .;
+        LONG(main_BSS_END)
+        _fsdata_ROM = .;
+        LONG(main_SDATA_START)
+        _fdata_ROM = .;
+        LONG(main_DATA_START)
+        _sdata_ROM_size = .;
+        LONG(main_SDATA_SIZE)
+        _data_ROM_size = .;
+        LONG(main_DATA_SIZE)
+        _scratchpad_size = .;
+        LONG(0x0)
+
+        _overlay_section_addresses = .;
+        LONG(main_TEXT_START)
+        LONG(btl_HEADER)
+        LONG(std_HEADER)
+        LONG(fish_HEADER)
+        LONG(evl_HEADER)
+        LONG(kar_HEADER)
+        LONG(vs_HEADER)
+        LONG(mov_HEADER)
+        LONG(doo2_HEADER)
+        LONG(dooa_HEADER)
+        LONG(trn_HEADER)
+        LONG(shop_HEADER)
+        LONG(dget_HEADER)
+        LONG(trn2_HEADER)
+        LONG(murd_HEADER)
+        LONG(endi_HEADER)
+        LONG(eab_HEADER)
+
         BUILD_DIR/asm/main/data/psyq/libc.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/asm/main/data/psyq/libetc.rodata.s.o(.rodata .rodata.*);
         BUILD_DIR/asm/main/data/psyq/libgpu.rodata.s.o(.rodata .rodata.*);

@@ -10,6 +10,7 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/btl/data/model_1.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/btl/data/model_2.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/btl/data/model_3.rodata.s.o(.rodata .rodata.*));
+			btl_HEADER = .;
 			KEEP(BUILD_DIR/asm/btl/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/btl/battle_setup.c.o(.text .text.*);
 			BUILD_DIR/src/btl/battle_main.c.o(.text .text.*);
@@ -37,6 +38,7 @@ SECTIONS
 		.DGET {
 			dget_START = .;
 
+			dget_HEADER = .;
 			KEEP(BUILD_DIR/asm/dget/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/dget/dget.c.o(.text .text.*);
 			BUILD_DIR/src/dget/dget.c.o(.rodata .rodata.*);
@@ -50,6 +52,7 @@ SECTIONS
 		.DOO2 {
 			doo2_START = .;
 
+			doo2_HEADER = .;
 			KEEP(BUILD_DIR/asm/doo2/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/doo2/doo2.c.o(.text .text.*);
 			BUILD_DIR/src/doo2/doo2.c.o(.rodata .rodata.*);
@@ -63,6 +66,7 @@ SECTIONS
 		.DOOA {
 			dooa_START = .;
 
+			dooa_HEADER = .;
 			KEEP(BUILD_DIR/asm/dooa/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/dooa/dooa.c.o(.text .text.*);
 			BUILD_DIR/src/dooa/dooa.c.o(.rodata .rodata.*);
@@ -77,6 +81,7 @@ SECTIONS
 		.EAB {
 			eab_START = .;
 
+			eab_HEADER = .;
 			KEEP(BUILD_DIR/asm/eab/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/eab/eab.c.o(.text .text.*);
 			BUILD_DIR/src/eab/eab.c.o(.rodata .rodata.*);
@@ -91,6 +96,7 @@ SECTIONS
 		.ENDI {
 			endi_START = .;
 
+			endi_HEADER = .;
 			KEEP(BUILD_DIR/asm/endi/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/endi/endi.c.o(.text .text.*);
 			BUILD_DIR/src/endi/endi.c.o(.rodata .rodata.*);
@@ -104,6 +110,7 @@ SECTIONS
 		.EVL {
 			evl_START = .;
 
+			evl_HEADER = .;
 			KEEP(BUILD_DIR/asm/evl/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/evl/evl.c.o(.text .text.*);
 			BUILD_DIR/src/evl/evl.c.o(.rodata .rodata.*);
@@ -118,6 +125,7 @@ SECTIONS
 		.FISH {
 			fish_START = .;
 
+			fish_HEADER = .;
 			KEEP(BUILD_DIR/asm/fish/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/fish/fish.c.o(.text .text.*);
 			BUILD_DIR/src/fish/fish_model.c.o(.text .text.*);
@@ -134,6 +142,7 @@ SECTIONS
 		.KAR {
 			kar_START = .;
 
+			kar_HEADER = .;
 			KEEP(BUILD_DIR/asm/kar/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/kar/kar.c.o(.text .text.*);
 			BUILD_DIR/src/kar/kar.c.o(.rodata .rodata.*);
@@ -148,6 +157,7 @@ SECTIONS
 		.MOV {
 			mov_START = .;
 
+			mov_HEADER = .;
 			KEEP(BUILD_DIR/asm/mov/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/mov/mov.c.o(.text .text.*);
 			BUILD_DIR/src/mov/mov.c.o(.rodata .rodata.*);
@@ -161,6 +171,7 @@ SECTIONS
 		.MURD {
 			murd_START = .;
 
+			murd_HEADER = .;
 			KEEP(BUILD_DIR/asm/murd/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/murd/murd.c.o(.text .text.*);
 			BUILD_DIR/src/murd/murd.c.o(.rodata .rodata.*);
@@ -172,6 +183,7 @@ SECTIONS
 	OVERLAY 0x80080800 : NOCROSSREFS
 	{
 		.SHOP {
+			shop_HEADER = .;
 			KEEP(BUILD_DIR/asm/shop/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/shop/script_menu.c.o(.text .text.*);
 			BUILD_DIR/src/shop/script_menu.c.o(.rodata .rodata.*);
@@ -190,6 +202,7 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/std/data/model_1.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/std/data/model_2.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/std/data/model_3.rodata.s.o(.rodata .rodata.*));
+			std_HEADER = .;
 			KEEP(BUILD_DIR/asm/std/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/std/std_setup.c.o(.text .text.*);
 			BUILD_DIR/src/std/std_main.c.o(.text .text.*);
@@ -213,6 +226,7 @@ SECTIONS
 		.TRN2 {
 			trn2_START = .;
 
+			trn2_HEADER = .;
 			KEEP(BUILD_DIR/asm/trn2/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/trn2/trn2_hp_map99.c.o(.text .text.*);
 			BUILD_DIR/src/trn2/trn2_def_map99.c.o(.text .text.*);
@@ -244,6 +258,7 @@ SECTIONS
 		.TRN {
 			trn_START = .;
 
+			trn_HEADER = .;
 			KEEP(BUILD_DIR/asm/trn/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/trn/trn_reward.c.o(.text .text.*);
 			BUILD_DIR/src/trn/trn_hp.c.o(.text .text.*);
@@ -280,6 +295,7 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/vs/data/model_1.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/vs/data/model_2.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/vs/data/model_3.rodata.s.o(.rodata .rodata.*));
+			vs_HEADER = .;
 			KEEP(BUILD_DIR/asm/vs/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/vs/vs_select.c.o(.text .text.*);
 			BUILD_DIR/src/vs/vs_scene.c.o(.text .text.*);
