@@ -74,7 +74,7 @@ extern char MAIN_D_80124C54[];
 extern uint8_t GAME_STATE;
 extern uint8_t CURRENT_SCREEN;
 
-int8_t STAT_GAIN_FACTORS[4] = { 10, 12, 16, 0 };
+int8_t STAT_GAIN_ENEMY_FACTORS[4] = { 10, 12, 16, 0 };
 #if defined(VERSION_JP)
 /* Money obtained */
 char BITS_LABEL[] = "取得金";
@@ -135,9 +135,9 @@ void battleStatsGainsAndDrops(uint8_t *droppedItems)
 		}
 
 		if (enemyStat >= partnerStat) {
-			STATS_GAINS[stat] = ((den + (enemyStat * STAT_GAIN_FACTORS[ENEMY_COUNT - 1])) - 1) / den;
+			STATS_GAINS[stat] = ((den + (enemyStat * STAT_GAIN_ENEMY_FACTORS[ENEMY_COUNT - 1])) - 1) / den;
 		} else {
-			chance = ((enemyStat * STAT_GAIN_FACTORS[ENEMY_COUNT - 1]) * 100) / den;
+			chance = ((enemyStat * STAT_GAIN_ENEMY_FACTORS[ENEMY_COUNT - 1]) * 100) / den;
 			if (randomLimit(100) < chance) {
 				STATS_GAINS[stat] = 1;
 			}

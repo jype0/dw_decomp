@@ -22,7 +22,7 @@ extern int16_t ENEMY_COUNT;
 extern int32_t NO_AI_FLAG;
 extern int32_t VS_DISABLE_HITTING;
 extern int32_t FLEE_DISABLED[2];
-extern int32_t VS_P2_AOE_TIMER;
+extern int32_t P2_AOE_TIMER;
 extern Entity *FINISHING_ENTITY;
 extern int32_t VS_FINISHER_TIMER;
 extern int32_t VS_ACTIVE_FINISHER_AURA_ID;
@@ -843,7 +843,7 @@ void VS_startFighterMove(DigimonEntity *digimon, DigimonEntity *target, FighterD
 		if (&digimon->entity == ENTITY_TABLE[1]) {
 			FLEE_DISABLED[1] = 0x6e;
 		} else {
-			VS_P2_AOE_TIMER = 0x6e;
+			P2_AOE_TIMER = 0x6e;
 		}
 	}
 	startAnimation(&digimon->entity, fighter->queuedAnim);
@@ -870,7 +870,7 @@ int32_t VS_selectMoveTarget(Entity *entity, FighterData *fighter)
 				return 1;
 			}
 		} else {
-			if (VS_P2_AOE_TIMER > 0) {
+			if (P2_AOE_TIMER > 0) {
 				return 1;
 			}
 		}

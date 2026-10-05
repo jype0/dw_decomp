@@ -94,12 +94,12 @@ static void *vs_camera_functions[] = {
 	VS_applyCamera,
 };
 
-CameraChase INTRO_CAMERA_FRAME_COUNT;
+CameraChase INTRO_CAMERA_CHASE;
 int32_t VS_IS_TIMER_INITIALIZED;
 
 static void *vs_camera_sbss_order[] = {
 	&VS_IS_TIMER_INITIALIZED,
-	&INTRO_CAMERA_FRAME_COUNT,
+	&INTRO_CAMERA_CHASE,
 };
 
 SVECTOR INTRO_CAMERA_STAGE1_POS = { 0 };
@@ -544,7 +544,7 @@ void VS_tickCameraChase(void)
 	int32_t dist;
 	int32_t i;
 
-	cc = &INTRO_CAMERA_FRAME_COUNT;
+	cc = &INTRO_CAMERA_CHASE;
 	if (cc->timer < 0x14) {
 		return;
 	}
@@ -614,13 +614,13 @@ void VS_startCameraChase(entity, dx, side)
 	VS_D_80071744.vz = VS_D_80071754.vz;
 	startAnimation((Entity *)VS_FOCUSED_ENTITY, 0x21);
 	VS_CAMERA_STATE = 9;
-	INTRO_CAMERA_FRAME_COUNT.timer = 0;
-	INTRO_CAMERA_FRAME_COUNT.phase = 0;
-	INTRO_CAMERA_FRAME_COUNT.side = side;
+	INTRO_CAMERA_CHASE.timer = 0;
+	INTRO_CAMERA_CHASE.phase = 0;
+	INTRO_CAMERA_CHASE.side = side;
 	addObject(0x1aa, 0, (TickFunction)VS_tickCameraChase, NULL);
 	off = MAIN_D_80134A74;
 	rot = MAIN_D_80134A7C;
-	if (INTRO_CAMERA_FRAME_COUNT.side == 0) {
+	if (INTRO_CAMERA_CHASE.side == 0) {
 		rot.vy = -0x638;
 	} else {
 		rot.vy = 0x638;

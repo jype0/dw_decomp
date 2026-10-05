@@ -162,11 +162,11 @@ char MAIN_D_80134A54[] = "Lose";
 uint8_t MAIN_D_80134A5C[4] = { 3, 4, 2, 0 };
 uint8_t MAIN_D_80134A60[4] = { 4, 1, 1, 0 };
 
-uint8_t MAIN_D_80135258[2];
-uint8_t MAIN_D_8013525A[2];
+uint8_t VS_STATE_WINS[2];
+uint8_t VS_STATE_LOSSES[2];
 int16_t MAIN_D_8013525C;
 int16_t MAIN_D_8013525E;
-uint8_t MAIN_D_80135260;
+uint8_t VS_STATE_STATE;
 uint8_t MAIN_D_80135261;
 uint8_t MAIN_D_80135262;
 int16_t VS_CURRENT_BATTLE;
@@ -205,11 +205,11 @@ static void *vs_scene_sbss_order[] = {
 	&VS_CURRENT_BATTLE,
 	&MAIN_D_80135262,
 	&MAIN_D_80135261,
-	&MAIN_D_80135260,
+	&VS_STATE_STATE,
 	&MAIN_D_8013525E,
 	&MAIN_D_8013525C,
-	&MAIN_D_8013525A,
-	&MAIN_D_80135258,
+	&VS_STATE_LOSSES,
+	&VS_STATE_WINS,
 };
 
 // clang-format off
@@ -1082,20 +1082,20 @@ void VS_initializeVS(void)
 		if (result == 1) {
 			VS_D_80071690[0][VS_CURRENT_BATTLE] = 1;
 			VS_D_8007169C[1][VS_CURRENT_BATTLE] = 1;
-			MAIN_D_80135258[0]++;
-			MAIN_D_8013525A[1]++;
+			VS_STATE_WINS[0]++;
+			VS_STATE_LOSSES[1]++;
 		}
 		if (result == -1) {
 			VS_D_80071690[1][VS_CURRENT_BATTLE] = 1;
 			VS_D_8007169C[0][VS_CURRENT_BATTLE] = 1;
-			MAIN_D_80135258[1]++;
-			MAIN_D_8013525A[0]++;
+			VS_STATE_WINS[1]++;
+			VS_STATE_LOSSES[0]++;
 		}
 		if (result == 2) {
 			VS_D_8007169C[0][VS_CURRENT_BATTLE] = 1;
 			VS_D_8007169C[1][VS_CURRENT_BATTLE] = 1;
-			MAIN_D_8013525A[0]++;
-			MAIN_D_8013525A[1]++;
+			VS_STATE_LOSSES[0]++;
+			VS_STATE_LOSSES[1]++;
 		}
 		ENTITY_TABLE[1]->isOnScreen = 0;
 		ENTITY_TABLE[2]->isOnScreen = 0;
@@ -1113,10 +1113,10 @@ void VS_resetMatchState(void)
 
 	MAIN_D_8013525C = 0;
 	MAIN_D_8013525E = 0;
-	MAIN_D_80135260 = 0;
+	VS_STATE_STATE = 0;
 	MAIN_D_80135261 = 0;
-	MAIN_D_80135258[0] = MAIN_D_80135258[1] = 0;
-	MAIN_D_8013525A[0] = MAIN_D_8013525A[1] = 0;
+	VS_STATE_WINS[0] = VS_STATE_WINS[1] = 0;
+	VS_STATE_LOSSES[0] = VS_STATE_LOSSES[1] = 0;
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 5; j++) {
 			VS_D_80071690[i][j] = 0;
@@ -1408,8 +1408,8 @@ void VS_renderRoundPips(slot)
 
 void VS_renderRoundScores(int16_t slot)
 {
-	renderNumber(0, slot * 0x9a - 100, 0x30, 1, MAIN_D_80135258[slot], 0x1e);
-	renderNumber(0, slot * 0x9a - 0x1c, 0x30, 1, MAIN_D_8013525A[slot], 0x1e);
+	renderNumber(0, slot * 0x9a - 100, 0x30, 1, VS_STATE_WINS[slot], 0x1e);
+	renderNumber(0, slot * 0x9a - 0x1c, 0x30, 1, VS_STATE_LOSSES[slot], 0x1e);
 }
 
 // clang-format off
@@ -1542,15 +1542,15 @@ void VS_playVersusIntroSequence(void)
 	fadeFromBlack(3);
 	i = 3;
 	if (VS_CURRENT_BATTLE == VS_D_800716A8[11] - 1) {
-		if (MAIN_D_80135258[0] > MAIN_D_80135258[1]) {
+		if (VS_STATE_WINS[0] > VS_STATE_WINS[1]) {
 			VS_addResultModelScene(ENTITY_TABLE[1]);
 			VS_setVersusModelSceneTimer(0x3c);
 		}
-		if (MAIN_D_80135258[1] > MAIN_D_80135258[0]) {
+		if (VS_STATE_WINS[1] > VS_STATE_WINS[0]) {
 			VS_addResultModelScene(ENTITY_TABLE[2]);
 			VS_setVersusModelSceneTimer(0x3c);
 		}
-		if (MAIN_D_80135258[0] == MAIN_D_80135258[1]) {
+		if (VS_STATE_WINS[0] == VS_STATE_WINS[1]) {
 			VS_loadVersusSceneModel();
 			VS_addVersusModelScene();
 			VS_setVersusModelSceneTimer(-10);
@@ -1569,10 +1569,10 @@ void VS_playVersusIntroSequence(void)
 	MAIN_D_80135262 = 0;
 	removeObject(0x19d, 0);
 	if (VS_CURRENT_BATTLE == VS_D_800716A8[11] - 1) {
-		if (MAIN_D_80135258[0] != MAIN_D_80135258[1]) {
+		if (VS_STATE_WINS[0] != VS_STATE_WINS[1]) {
 			VS_removeResultModelScene();
 		}
-		if (MAIN_D_80135258[0] == MAIN_D_80135258[1]) {
+		if (VS_STATE_WINS[0] == VS_STATE_WINS[1]) {
 			VS_removeVersusModelScene();
 		}
 	}
@@ -1593,39 +1593,39 @@ void VS_tickPlaytime(void)
 
 void VS_tickVersusIntro(void)
 {
-	switch (MAIN_D_80135260) {
+	switch (VS_STATE_STATE) {
 	case 0:
 		MAIN_D_8013525E++;
 		if (MAIN_D_8013525E == 10) {
-			MAIN_D_80135260++;
+			VS_STATE_STATE++;
 		}
 		break;
 	case 1:
 		MAIN_D_8013525C++;
 		if (MAIN_D_8013525C == 20) {
-			MAIN_D_80135260++;
+			VS_STATE_STATE++;
 			MAIN_D_80135262 = 1;
 		}
 		break;
 	case 2:
 		MAIN_D_8013525E--;
 		if (MAIN_D_8013525E == 0) {
-			MAIN_D_80135260++;
+			VS_STATE_STATE++;
 			MAIN_D_8013525C = 0;
 		}
 		break;
 	case 3:
 		MAIN_D_8013525C++;
 		if (MAIN_D_8013525C == 10) {
-			MAIN_D_80135260++;
+			VS_STATE_STATE++;
 		}
 		break;
 	case 4:
 		MAIN_D_80135261++;
 		if (MAIN_D_80135261 == VS_D_800716A8[11]) {
-			MAIN_D_80135260++;
+			VS_STATE_STATE++;
 		} else {
-			MAIN_D_80135260 = 0;
+			VS_STATE_STATE = 0;
 			MAIN_D_8013525C = 0;
 		}
 		break;
@@ -1640,7 +1640,7 @@ void VS_tickVersusIntro(void)
 
 void VS_renderVersusIntro(void)
 {
-	if (MAIN_D_80135260 == 1) {
+	if (VS_STATE_STATE == 1) {
 		VS_renderVersusFlash();
 	}
 	VS_renderFighterNamePlate(0);

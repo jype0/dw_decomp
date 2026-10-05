@@ -21,12 +21,12 @@
 
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
-extern int16_t MAIN_D_80134F24;
-extern int16_t MAIN_D_80134F26;
-extern uint8_t MAIN_D_80134F28;
-extern int16_t MAIN_D_80134F2A;
-extern int16_t MAIN_D_80134F2C;
-extern CameraChase INTRO_CAMERA_FRAME_COUNT;
+extern int16_t VS__INTRO_DATA_FRAME_COUNT;
+extern int16_t VS__INTRO_DATA_RENDERED_CHARACTERS;
+extern uint8_t VS__INTRO_DATA_COLOR;
+extern int16_t VS__INTRO_DATA_POS_X;
+extern int16_t VS__INTRO_DATA_POS_Y;
+extern CameraChase INTRO_CAMERA_CHASE;
 extern int32_t VS__INTRO_STATS_ACTIVE;
 extern int16_t MAIN_D_801B1C70[];
 extern int16_t MAIN_D_801B1C72[];
@@ -35,7 +35,7 @@ extern int16_t MAIN_D_801B1C76[];
 extern int16_t MAIN_D_801B1C78[];
 extern int16_t MAIN_D_801B1C7A[];
 extern uint8_t VS_MUSIC;
-extern uint8_t MAIN_D_80134F2E;
+extern uint8_t VS__INTRO_DATA_ANIM_FRAME;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
                   int32_t f, int32_t g, int32_t h, int32_t i);
@@ -177,33 +177,33 @@ void VS__addIntroText(entity, id)
 {
 	int32_t len;
 
-	MAIN_D_80134F24 = 4;
-	MAIN_D_80134F26 = 0;
+	VS__INTRO_DATA_FRAME_COUNT = 4;
+	VS__INTRO_DATA_RENDERED_CHARACTERS = 0;
 
 	switch (DIGIMON_DATA[entity->type].special[0]) {
 	case 0:
-		MAIN_D_80134F28 = 3;
+		VS__INTRO_DATA_COLOR = 3;
 		break;
 	case 1:
-		MAIN_D_80134F28 = 1;
+		VS__INTRO_DATA_COLOR = 1;
 		break;
 	case 2:
-		MAIN_D_80134F28 = 6;
+		VS__INTRO_DATA_COLOR = 6;
 		break;
 	case 3:
-		MAIN_D_80134F28 = 2;
+		VS__INTRO_DATA_COLOR = 2;
 		break;
 	case 4:
-		MAIN_D_80134F28 = 4;
+		VS__INTRO_DATA_COLOR = 4;
 		break;
 	case 5:
-		MAIN_D_80134F28 = 0;
+		VS__INTRO_DATA_COLOR = 0;
 		break;
 	case 6:
-		MAIN_D_80134F28 = 5;
+		VS__INTRO_DATA_COLOR = 5;
 		break;
 	default:
-		MAIN_D_80134F28 = 0;
+		VS__INTRO_DATA_COLOR = 0;
 		break;
 	}
 
@@ -212,20 +212,20 @@ void VS__addIntroText(entity, id)
 		len = 10;
 	}
 
-	MAIN_D_80134F2A = -(len * 16);
-	MAIN_D_80134F2C = 68;
+	VS__INTRO_DATA_POS_X = -(len * 16);
+	VS__INTRO_DATA_POS_Y = 68;
 	addObject(0x1ab, id, VS__tickIntroName, VS__renderIntroName);
 }
 
 void VS__setPostIntroPosition(Entity *entity)
 {
-	if (INTRO_CAMERA_FRAME_COUNT.timer != -1) {
+	if (INTRO_CAMERA_CHASE.timer != -1) {
 		entity->posData->location = VS_D_80071744;
 		entity->anim.locX = VS_D_80071744.vx << 15;
 		entity->anim.locY = VS_D_80071744.vy << 15;
 		entity->anim.locZ = VS_D_80071744.vz << 15;
 		startAnimation(entity, 0x21);
-		INTRO_CAMERA_FRAME_COUNT.timer = -1;
+		INTRO_CAMERA_CHASE.timer = -1;
 	}
 }
 
@@ -298,10 +298,10 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 	SetPolyGT4(prim);
 	prim->tpage = getTPage(0, 0, 768, 0);
 	setClut(prim, 0, 480);
-	setRGB0(prim, MAIN_D_8012F438[MAIN_D_80134F28].r, MAIN_D_8012F438[MAIN_D_80134F28].g, MAIN_D_8012F438[MAIN_D_80134F28].b);
-	setRGB1(prim, MAIN_D_8012F438[MAIN_D_80134F28].r, MAIN_D_8012F438[MAIN_D_80134F28].g, MAIN_D_8012F438[MAIN_D_80134F28].b);
-	setRGB2(prim, MAIN_D_8012F438[MAIN_D_80134F28].r / 10, MAIN_D_8012F438[MAIN_D_80134F28].g / 10, MAIN_D_8012F438[MAIN_D_80134F28].b / 10);
-	setRGB3(prim, MAIN_D_8012F438[MAIN_D_80134F28].r / 10, MAIN_D_8012F438[MAIN_D_80134F28].g / 10, MAIN_D_8012F438[MAIN_D_80134F28].b / 10);
+	setRGB0(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b);
+	setRGB1(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b);
+	setRGB2(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b / 10);
+	setRGB3(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b / 10);
 
 	u = (character % 32) * 32;
 	v = (character / 8) * 32;
@@ -505,21 +505,21 @@ void VS__tickIntroName(int32_t id)
 {
 	int32_t len;
 
-	++MAIN_D_80134F24;
+	++VS__INTRO_DATA_FRAME_COUNT;
 
 	len = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
 		len = 10;
 	}
 
-	if (len == MAIN_D_80134F26 && MAIN_D_80134F2E == 3) {
-		if (INTRO_CAMERA_FRAME_COUNT.timer == 0) {
+	if (len == VS__INTRO_DATA_RENDERED_CHARACTERS && VS__INTRO_DATA_ANIM_FRAME == 3) {
+		if (INTRO_CAMERA_CHASE.timer == 0) {
 			startAnimation(ENTITY_TABLE[id], 0x23);
-			INTRO_CAMERA_FRAME_COUNT.timer = 20;
+			INTRO_CAMERA_CHASE.timer = 20;
 		}
 
-		if (MAIN_D_80134F2C >= -71) {
-			MAIN_D_80134F2C -= 28;
+		if (VS__INTRO_DATA_POS_Y >= -71) {
+			VS__INTRO_DATA_POS_Y -= 28;
 		} else {
 			VS__addIntroStats(ENTITY_TABLE[id], id);
 		}
@@ -543,35 +543,35 @@ void VS__renderIntroName(id)
 		charCount = 10;
 	}
 
-	if (MAIN_D_80134F24 % 4 == 0) {
-		if (MAIN_D_80134F26 < charCount) {
-			++MAIN_D_80134F26;
-			MAIN_D_80134F2E = 0;
+	if (VS__INTRO_DATA_FRAME_COUNT % 4 == 0) {
+		if (VS__INTRO_DATA_RENDERED_CHARACTERS < charCount) {
+			++VS__INTRO_DATA_RENDERED_CHARACTERS;
+			VS__INTRO_DATA_ANIM_FRAME = 0;
 		}
-	} else if (MAIN_D_80134F2E != 3) {
-		++MAIN_D_80134F2E;
+	} else if (VS__INTRO_DATA_ANIM_FRAME != 3) {
+		++VS__INTRO_DATA_ANIM_FRAME;
 	}
 
 	charIndex = 0;
-	for (i = 0; i < MAIN_D_80134F26; ++i) {
+	for (i = 0; i < VS__INTRO_DATA_RENDERED_CHARACTERS; ++i) {
 		character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
 		if (character == 0x3d) {
 			character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
 		}
 
-		if (i == MAIN_D_80134F26 - 1) {
-			y = MAIN_D_80134F2C - MAIN_D_801344FC[MAIN_D_80134F2E];
-			size = MAIN_D_801344F8[MAIN_D_80134F2E];
+		if (i == VS__INTRO_DATA_RENDERED_CHARACTERS - 1) {
+			y = VS__INTRO_DATA_POS_Y - MAIN_D_801344FC[VS__INTRO_DATA_ANIM_FRAME];
+			size = MAIN_D_801344F8[VS__INTRO_DATA_ANIM_FRAME];
 		} else {
-			y = MAIN_D_80134F2C;
+			y = VS__INTRO_DATA_POS_Y;
 			size = 32;
 		}
 
-		VS__renderIntroNameChar((int16_t)MAIN_D_80134F2A + i * 32, y, size, character);
+		VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
 
 		if (character == 0x1f || character == 0x25) {
 			character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
-			VS__renderIntroNameChar((int16_t)MAIN_D_80134F2A + i * 32, y, size, character);
+			VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
 		}
 	}
 }

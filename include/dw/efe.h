@@ -227,6 +227,6 @@ extern int16_t MAIN_D_80139B20[];
 extern int32_t MAIN_D_80139B28[];
 extern int32_t MAIN_D_80139B2C[];
 extern GsRVIEW2 MAIN_D_80139B34;
-extern int32_t EFE_SCRIPT_RETURN0[];
+extern int32_t EFE_CALL_STACK_BUFFER[16];
 
 #endif

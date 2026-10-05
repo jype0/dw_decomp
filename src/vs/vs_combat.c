@@ -28,7 +28,7 @@ extern int16_t VS_STARTING_HP[2];
 extern uint8_t VS_MUSIC;
 extern int32_t VIEWPORT_DISTANCE;
 extern int16_t VS_DAMAGE[2];
-extern int32_t VS_P2_AOE_TIMER;
+extern int32_t P2_AOE_TIMER;
 extern int32_t VS__IS_DRAW;
 extern int32_t VS_ACTIVE_FINISHER_AURA_ID;
 extern int32_t VS_TIMER_ACTIVE;
@@ -39,7 +39,8 @@ extern int32_t VS_CAMERA_STATE;
 extern uint8_t VS_CAMERA_TIMER;
 extern uint8_t VS_TIMER;
 extern int16_t VS_DISCIPLINE[2];
-extern uint8_t PAUSE_BOX_VISIBLE[2];
+extern uint8_t PAUSE_BOX_VISIBLE;
+extern uint8_t PAUSE_STATE;
 extern uint8_t VS__PAUSING_PLAYER;
 extern uint8_t MAIN_D_80134F3D;
 extern uint32_t VS__CURRENT_INPUT;
@@ -252,7 +253,7 @@ void VS__combatInit(void)
 #if defined(VERSION_JP)
 	FLEE_DISABLED[1] = 0;
 #endif
-	VS_P2_AOE_TIMER = 0;
+	P2_AOE_TIMER = 0;
 	ENEMY_COUNT = 1;
 
 	COMBAT_DATA_PTR->player.entityIds[0] = 1;
@@ -757,8 +758,8 @@ void VS__tickBattle(void)
 		FLEE_DISABLED[1]--;
 	}
 
-	if (VS_P2_AOE_TIMER > 0) {
-		VS_P2_AOE_TIMER--;
+	if (P2_AOE_TIMER > 0) {
+		P2_AOE_TIMER--;
 	}
 
 	combat = COMBAT_DATA_PTR;
@@ -835,9 +836,9 @@ void VS__tickBattle(void)
 
 void VS__handlePause(void)
 {
-	while (PAUSE_BOX_VISIBLE[1] != 0 && PAUSE_BOX_VISIBLE[0] >= 2) {
+	while (PAUSE_STATE != 0 && PAUSE_BOX_VISIBLE >= 2) {
 		if (VS__PAUSING_PLAYER == VS__isButtonsPressed(0x800)) {
-			PAUSE_BOX_VISIBLE[1] = (PAUSE_BOX_VISIBLE[1] + 1) & 1;
+			PAUSE_STATE = (PAUSE_STATE + 1) & 1;
 			VS__PAUSING_PLAYER = 0;
 		}
 	}
@@ -845,16 +846,16 @@ void VS__handlePause(void)
 	if (VS__PAUSING_PLAYER == 0) {
 		VS__PAUSING_PLAYER = VS__isButtonsPressed(0x800);
 		if (VS__PAUSING_PLAYER != 0) {
-			PAUSE_BOX_VISIBLE[1] = (PAUSE_BOX_VISIBLE[1] + 1) & 1;
+			PAUSE_STATE = (PAUSE_STATE + 1) & 1;
 		}
 	}
 
-	if (PAUSE_BOX_VISIBLE[1] != 0) {
+	if (PAUSE_STATE != 0) {
 		createPauseBox();
-		++PAUSE_BOX_VISIBLE[0];
+		++PAUSE_BOX_VISIBLE;
 	} else {
 		removePauseBox();
-		PAUSE_BOX_VISIBLE[0] = 0;
+		PAUSE_BOX_VISIBLE = 0;
 	}
 }
 

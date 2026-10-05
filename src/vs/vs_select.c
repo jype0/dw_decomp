@@ -49,11 +49,11 @@ extern int32_t VS__BOTH_SELECTED;
 extern int16_t VS__MODE_STATE;
 extern uint8_t MAIN_D_801B1CB2[];
 extern uint8_t MAIN_D_801B1D02[];
-extern uint8_t MAIN_D_80134F58;
-extern uint8_t MAIN_D_80134F59;
-extern uint8_t MAIN_D_80134F5A;
-extern uint8_t MAIN_D_80134F5B;
-extern uint8_t MAIN_D_80134F5C;
+extern uint8_t VS__SELECT_BOX_DATA_SELECTION_COUNT;
+extern uint8_t VS__SELECT_BOX_DATA_SELECTION;
+extern uint8_t VS__SELECT_BOX_DATA_ANIM_FRAME;
+extern uint8_t VS__SELECT_BOX_DATA_HAS_SELECTED;
+extern uint8_t VS__SELECT_BOX_DATA_TIMER;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
                   int32_t f, int32_t g, int32_t h, int32_t i);
@@ -941,18 +941,18 @@ int32_t VS__tickSelectMode(void)
 
 	if (count1 >= 3 && count2 >= 3) {
 		if (count1 >= 5 && count2 >= 5) {
-			MAIN_D_80134F58 = 2;
+			VS__SELECT_BOX_DATA_SELECTION_COUNT = 2;
 		} else {
-			MAIN_D_80134F58 = 1;
+			VS__SELECT_BOX_DATA_SELECTION_COUNT = 1;
 		}
 	} else {
-		MAIN_D_80134F58 = 0;
+		VS__SELECT_BOX_DATA_SELECTION_COUNT = 0;
 	}
 
-	MAIN_D_80134F59 = 0;
-	MAIN_D_80134F5A = 0;
-	MAIN_D_80134F5B = 0;
-	MAIN_D_80134F5C = 0;
+	VS__SELECT_BOX_DATA_SELECTION = 0;
+	VS__SELECT_BOX_DATA_ANIM_FRAME = 0;
+	VS__SELECT_BOX_DATA_HAS_SELECTED = 0;
+	VS__SELECT_BOX_DATA_TIMER = 0;
 	setRECT(&rect, -90, -70, 180, 128);
 	createStaticUIBox(0, 1, 0, &rect, VS__tickSelectBox,
 	                  VS__renderSelectModeBox);
@@ -963,7 +963,7 @@ int32_t VS__tickSelectMode(void)
 		VS_tickFrame();
 	}
 
-	while (MAIN_D_80134F5B == 0) {
+	while (VS__SELECT_BOX_DATA_HAS_SELECTED == 0) {
 		VS_tickFrame();
 	}
 
@@ -973,10 +973,10 @@ int32_t VS__tickSelectMode(void)
 		VS_tickFrame();
 	}
 
-	VS_D_800716A8[11] = MAIN_D_80134550[MAIN_D_80134F59];
+	VS_D_800716A8[11] = MAIN_D_80134550[VS__SELECT_BOX_DATA_SELECTION];
 	removeStaticUIBox(0);
 
-	if (MAIN_D_80134F5B == 1) {
+	if (VS__SELECT_BOX_DATA_HAS_SELECTED == 1) {
 		return 1;
 	}
 
@@ -987,53 +987,53 @@ void VS__tickSelectBox(int32_t id)
 {
 	uint8_t previous;
 
-	if (MAIN_D_80134F5B != 0) {
+	if (VS__SELECT_BOX_DATA_HAS_SELECTED != 0) {
 		return;
 	}
 
 	if (VS__isKeyPressedByAnyPlayer(CONFIRM_BUTTON) != 0) {
 		playSound(0, 3);
-		MAIN_D_80134F5B = 1;
+		VS__SELECT_BOX_DATA_HAS_SELECTED = 1;
 		return;
 	}
 
-	++MAIN_D_80134F5C;
-	if (MAIN_D_80134F5C % 8 == 0) {
-		MAIN_D_80134F5A = (MAIN_D_80134F5A + 1) & 1;
+	++VS__SELECT_BOX_DATA_TIMER;
+	if (VS__SELECT_BOX_DATA_TIMER % 8 == 0) {
+		VS__SELECT_BOX_DATA_ANIM_FRAME = (VS__SELECT_BOX_DATA_ANIM_FRAME + 1) & 1;
 	}
 
 	if (VS__isKeyPressedByAnyPlayer(0x8000) != 0) {
-		previous = MAIN_D_80134F59--;
+		previous = VS__SELECT_BOX_DATA_SELECTION--;
 		if (id == 1) {
-			if (MAIN_D_80134F59 == 0xff) {
-				MAIN_D_80134F59 = 2;
+			if (VS__SELECT_BOX_DATA_SELECTION == 0xff) {
+				VS__SELECT_BOX_DATA_SELECTION = 2;
 			}
 
 			playSound(0, 2);
-			MAIN_D_80134F5A = 0;
+			VS__SELECT_BOX_DATA_ANIM_FRAME = 0;
 		} else {
-			if (MAIN_D_80134F59 == 0xff) {
-				MAIN_D_80134F59 = MAIN_D_80134F58;
+			if (VS__SELECT_BOX_DATA_SELECTION == 0xff) {
+				VS__SELECT_BOX_DATA_SELECTION = VS__SELECT_BOX_DATA_SELECTION_COUNT;
 			}
 
-			if (previous != MAIN_D_80134F59) {
+			if (previous != VS__SELECT_BOX_DATA_SELECTION) {
 				playSound(0, 2);
-				MAIN_D_80134F5A = 0;
+				VS__SELECT_BOX_DATA_ANIM_FRAME = 0;
 			}
 		}
 	}
 
 	if (VS__isKeyPressedByAnyPlayer(0x2000) != 0) {
-		previous = MAIN_D_80134F59++;
+		previous = VS__SELECT_BOX_DATA_SELECTION++;
 		if (id == 1) {
-			MAIN_D_80134F59 %= 3;
+			VS__SELECT_BOX_DATA_SELECTION %= 3;
 			playSound(0, 2);
-			MAIN_D_80134F5A = 0;
+			VS__SELECT_BOX_DATA_ANIM_FRAME = 0;
 		} else {
-			MAIN_D_80134F59 %= MAIN_D_80134F58 + 1;
-			if (previous != MAIN_D_80134F59) {
+			VS__SELECT_BOX_DATA_SELECTION %= VS__SELECT_BOX_DATA_SELECTION_COUNT + 1;
+			if (previous != VS__SELECT_BOX_DATA_SELECTION) {
 				playSound(0, 2);
-				MAIN_D_80134F5A = 0;
+				VS__SELECT_BOX_DATA_ANIM_FRAME = 0;
 			}
 		}
 	}
@@ -1056,30 +1056,30 @@ void VS__renderSelectModeBox(depth)
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->clut = GetClut(48, sprite->clut);
 
-		if (i > 0 && i < 4 && MAIN_D_80134F59 != i - 1) {
+		if (i > 0 && i < 4 && VS__SELECT_BOX_DATA_SELECTION != i - 1) {
 			setRGB0(prim, 0x40, 0x40, 0x40);
 		}
 
-		if (i == 4 && MAIN_D_80134F59 != 0) {
+		if (i == 4 && VS__SELECT_BOX_DATA_SELECTION != 0) {
 			setClut(prim, 48, 501);
 		}
 
-		if (i == 5 && MAIN_D_80134F59 != 1) {
+		if (i == 5 && VS__SELECT_BOX_DATA_SELECTION != 1) {
 			setClut(prim, 48, 501);
 		}
 
-		if (i == 6 && MAIN_D_80134F59 != 2) {
+		if (i == 6 && VS__SELECT_BOX_DATA_SELECTION != 2) {
 			setClut(prim, 48, 501);
 		}
 
 		prim->tpage = getTPage(0, 0, 448, 0);
 
-		if (i == MAIN_D_80134F59 + 1 && i > 0 && i < 4) {
+		if (i == VS__SELECT_BOX_DATA_SELECTION + 1 && i > 0 && i < 4) {
 			setUVDataPolyFT4(prim,
-			                 sprite->u + MAIN_D_80134F5A * 40,
+			                 sprite->u + VS__SELECT_BOX_DATA_ANIM_FRAME * 40,
 			                 sprite->v, sprite->w, sprite->h);
 
-			if (i == 3 && MAIN_D_80134F5A == 1) {
+			if (i == 3 && VS__SELECT_BOX_DATA_ANIM_FRAME == 1) {
 				setClut(prim, 48, 495);
 			}
 		} else {
@@ -1087,7 +1087,7 @@ void VS__renderSelectModeBox(depth)
 			                 sprite->h);
 		}
 
-		setPosDataPolyFT4(prim, (i != 7) ? sprite->x - 90 : (sprite->x - 90) + MAIN_D_80134F59 * 56, sprite->y - 70,
+		setPosDataPolyFT4(prim, (i != 7) ? sprite->x - 90 : (sprite->x - 90) + VS__SELECT_BOX_DATA_SELECTION * 56, sprite->y - 70,
 		                  sprite->w, sprite->h);
 
 		AddPrim((ACTIVE_ORDERING_TABLE->org + 6) - depth, prim++);
@@ -1101,10 +1101,10 @@ int32_t VS__tickSelectMap(void)
 	RECT rect;
 	int32_t i;
 
-	MAIN_D_80134F59 = 0;
-	MAIN_D_80134F5A = 0;
-	MAIN_D_80134F5B = 0;
-	MAIN_D_80134F5C = 0;
+	VS__SELECT_BOX_DATA_SELECTION = 0;
+	VS__SELECT_BOX_DATA_ANIM_FRAME = 0;
+	VS__SELECT_BOX_DATA_HAS_SELECTED = 0;
+	VS__SELECT_BOX_DATA_TIMER = 0;
 	setRECT(&rect, -90, -70, 180, 128);
 	createStaticUIBox(1, 1, 0, &rect, VS__tickSelectBox,
 	                  VS__renderSelectMapBox);
@@ -1115,7 +1115,7 @@ int32_t VS__tickSelectMap(void)
 		VS_tickFrame();
 	}
 
-	while (MAIN_D_80134F5B == 0) {
+	while (VS__SELECT_BOX_DATA_HAS_SELECTED == 0) {
 		VS_tickFrame();
 	}
 
@@ -1125,10 +1125,10 @@ int32_t VS__tickSelectMap(void)
 		VS_tickFrame();
 	}
 
-	VS_D_800716A8[10] = MAIN_D_80134F59;
+	VS_D_800716A8[10] = VS__SELECT_BOX_DATA_SELECTION;
 	removeStaticUIBox(1);
 
-	if (MAIN_D_80134F5B == 1) {
+	if (VS__SELECT_BOX_DATA_HAS_SELECTED == 1) {
 		return 1;
 	}
 
@@ -1160,25 +1160,25 @@ void VS__renderSelectMapBox(id)
 		setUVDataPolyFT4(prim, sprite->u, sprite->v, sprite->w,
 		                 sprite->h);
 
-		if (i == 1 && MAIN_D_80134F59 != 0) {
+		if (i == 1 && VS__SELECT_BOX_DATA_SELECTION != 0) {
 			setUVDataPolyFT4(prim, sprite->u + 40, sprite->v,
 			                 sprite->w, sprite->h);
 			setClut(prim, 48, 499);
 		}
 
-		if (i == 2 && MAIN_D_80134F59 != 1) {
+		if (i == 2 && VS__SELECT_BOX_DATA_SELECTION != 1) {
 			setUVDataPolyFT4(prim, sprite->u + 40, sprite->v,
 			                 sprite->w, sprite->h);
 			setClut(prim, 48, 499);
 		}
 
-		if (i == 3 && MAIN_D_80134F59 != 2) {
+		if (i == 3 && VS__SELECT_BOX_DATA_SELECTION != 2) {
 			setUVDataPolyFT4(prim, sprite->u + 40, sprite->v,
 			                 sprite->w, sprite->h);
 			setClut(prim, 48, 499);
 		}
 
-		if (i >= 4 && i < 7 && MAIN_D_80134F59 != i - 4) {
+		if (i >= 4 && i < 7 && VS__SELECT_BOX_DATA_SELECTION != i - 4) {
 			setClut(prim, 48, 492);
 		}
 
@@ -1186,7 +1186,7 @@ void VS__renderSelectMapBox(id)
 		if (i != 7) {
 			posX = sprite->x - 90;
 		} else {
-			posX = sprite->x - 90 + MAIN_D_80134F59 * 56;
+			posX = sprite->x - 90 + VS__SELECT_BOX_DATA_SELECTION * 56;
 		}
 
 		setPosDataPolyFT4(prim, posX, sprite->y - 70, sprite->w,

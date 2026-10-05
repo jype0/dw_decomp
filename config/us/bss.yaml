@@ -1,6 +1,6 @@
 name: bss
 start: 0x801353F8
-end: 0x801FFF00
+end: 0x801BFB64
 subsegments:
   - [0x801353F8, libapi]
   - [0x80135450, libetc]

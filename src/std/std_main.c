@@ -80,7 +80,7 @@ extern uint8_t MAIN_D_801350F8;
 extern GsVIEW2 STDVS_VIEW;
 extern GsCOORDINATE2 MAIN_D_801B1BBC;
 extern int32_t FLEE_DISABLED[2];
-extern int32_t VS_P2_AOE_TIMER;
+extern int32_t P2_AOE_TIMER;
 extern char *MOVE_NAMES[];
 extern int16_t MAIN_D_801350E4;
 extern int8_t BATTLE_TOGGLE_LIFEBAR;
@@ -3877,7 +3877,7 @@ void STD_func_8005E8A4(Entity *entity, Entity *other)
 	FINISHING_ENTITY = NULL;
 	MAIN_D_80135174 = 0;
 #endif
-	VS_P2_AOE_TIMER = 0;
+	P2_AOE_TIMER = 0;
 	COMBAT_DATA_PTR->player.unk7 = 0;
 	COMBAT_DATA_PTR->player.changeTarget = 0;
 	NO_AI_FLAG = 0;
@@ -4166,8 +4166,8 @@ void STD_func_800602A8(void)
 		FLEE_DISABLED[1]--;
 	}
 
-	if (VS_P2_AOE_TIMER > 0) {
-		VS_P2_AOE_TIMER--;
+	if (P2_AOE_TIMER > 0) {
+		P2_AOE_TIMER--;
 	}
 
 	combat = COMBAT_DATA_PTR;
@@ -6369,7 +6369,7 @@ void STD_func_80065540(DigimonEntity *digimon, DigimonEntity *target, FighterDat
 		if (&digimon->entity == ENTITY_TABLE[1]) {
 			FLEE_DISABLED[1] = 0x6e;
 		} else {
-			VS_P2_AOE_TIMER = 0x6e;
+			P2_AOE_TIMER = 0x6e;
 		}
 	}
 	startAnimation(&digimon->entity, fighter->queuedAnim);
@@ -6396,7 +6396,7 @@ int32_t STD_selectMoveTarget(Entity *entity, FighterData *fighter)
 				return 1;
 			}
 		} else {
-			if (VS_P2_AOE_TIMER > 0) {
+			if (P2_AOE_TIMER > 0) {
 				return 1;
 			}
 		}

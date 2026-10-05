@@ -77,7 +77,8 @@ extern uint8_t MAP_LAYER_ENABLED;
 extern RGB8 TEXT_COLORS[];
 extern uint32_t PAUSE_INPUT;
 extern uint32_t PAUSE_INPUT_PREVIOUS;
-extern uint8_t PAUSE_BOX_VISIBLE[2];
+extern uint8_t PAUSE_BOX_VISIBLE;
+extern uint8_t PAUSE_STATE;
 extern int32_t MAIN_D_80134E7C;
 extern char btl_START[];
 extern char dget_START[];
@@ -401,9 +402,9 @@ void startMovie(int32_t movieId)
 
 void handlePause(void)
 {
-	if (PAUSE_BOX_VISIBLE[0] != 0) {
+	if (PAUSE_BOX_VISIBLE != 0) {
 		removePauseBox();
-		PAUSE_BOX_VISIBLE[0] = 0;
+		PAUSE_BOX_VISIBLE = 0;
 	}
 	if ((readPStat(0) == 3 || IS_GAMETIME_RUNNING == 0) && GAME_STATE == 0) {
 		return;
@@ -413,19 +414,19 @@ void handlePause(void)
 	}
 	PAUSE_INPUT = PadRead(1);
 	if ((PAUSE_INPUT & 0x800) && !(PAUSE_INPUT_PREVIOUS & 0x800)) {
-		PAUSE_BOX_VISIBLE[1] = (PAUSE_BOX_VISIBLE[1] + 1) & 1;
+		PAUSE_STATE = (PAUSE_STATE + 1) & 1;
 	}
 	PAUSE_INPUT_PREVIOUS = PAUSE_INPUT;
-	if (PAUSE_BOX_VISIBLE[1] != 0) {
+	if (PAUSE_STATE != 0) {
 		createPauseBox();
 		pauseFrame();
 		pauseFrame();
-		PAUSE_BOX_VISIBLE[0]++;
+		PAUSE_BOX_VISIBLE++;
 	}
-	while (PAUSE_BOX_VISIBLE[1] != 0) {
+	while (PAUSE_STATE != 0) {
 		PAUSE_INPUT = PadRead(1);
 		if ((PAUSE_INPUT & 0x800) && !(PAUSE_INPUT_PREVIOUS & 0x800)) {
-			PAUSE_BOX_VISIBLE[1] = (PAUSE_BOX_VISIBLE[1] + 1) & 1;
+			PAUSE_STATE = (PAUSE_STATE + 1) & 1;
 		}
 		PAUSE_INPUT_PREVIOUS = PAUSE_INPUT;
 	}
