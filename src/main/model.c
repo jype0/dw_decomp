@@ -692,7 +692,7 @@ SkeletonBone SKELETON_MONZAEMON[14] = {
 	{ 0x05, 0x0c },
 };
 
-SkeletonBone MAIN_D_8011C318[23] = {
+SkeletonBone SKELETON_GOBURIMON[23] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -718,7 +718,7 @@ SkeletonBone MAIN_D_8011C318[23] = {
 	{ 0x10, 0x15 },
 };
 
-SkeletonBone MAIN_D_8011C348[21] = {
+SkeletonBone SKELETON_SUKAMON[21] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -742,7 +742,7 @@ SkeletonBone MAIN_D_8011C348[21] = {
 	{ 0x0b, 0x13 },
 };
 
-SkeletonBone MAIN_D_8011C374[27] = {
+SkeletonBone SKELETON_ETEMON[27] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -794,7 +794,7 @@ SkeletonBone SKELETON_FRIGIMON[19] = {
 	{ 0x0b, 0x11 },
 };
 
-SkeletonBone MAIN_D_8011C3D4[21] = {
+SkeletonBone SKELETON_ANDROMON[21] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -818,7 +818,7 @@ SkeletonBone MAIN_D_8011C3D4[21] = {
 	{ 0x0e, 0x13 },
 };
 
-SkeletonBone MAIN_D_8011C400[11] = {
+SkeletonBone SKELETON_GIROMON[11] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -861,7 +861,7 @@ SkeletonBone SKELETON_ANGEMON[26] = {
 	{ 0x11, 0x12 },
 };
 
-SkeletonBone MAIN_D_8011C44C[31] = {
+SkeletonBone SKELETON_PALMON[31] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -895,7 +895,7 @@ SkeletonBone MAIN_D_8011C44C[31] = {
 	{ 0x12, 0x1d },
 };
 
-SkeletonBone MAIN_D_8011C48C[27] = {
+SkeletonBone SKELETON_UNIMON[27] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -948,7 +948,7 @@ SkeletonBone SKELETON_VEGIEMON[20] = {
 	{ 0x00, 0x01 },
 };
 
-SkeletonBone MAIN_D_8011C4EC[22] = {
+SkeletonBone SKELETON_BIYOMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -973,7 +973,7 @@ SkeletonBone MAIN_D_8011C4EC[22] = {
 	{ 0x0d, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011C518[28] = {
+SkeletonBone SKELETON_KUNEMON[28] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x0b, 0x01 },
@@ -1004,7 +1004,7 @@ SkeletonBone MAIN_D_8011C518[28] = {
 	{ 0x11, 0x1a },
 };
 
-SkeletonBone MAIN_D_8011C550[11] = {
+SkeletonBone SKELETON_TOKOMON[11] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1018,7 +1018,7 @@ SkeletonBone MAIN_D_8011C550[11] = {
 	{ 0x08, 0x02 },
 };
 
-SkeletonBone MAIN_D_8011C568[27] = {
+SkeletonBone SKELETON_CENTARUMON[27] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x07, 0x01 },
@@ -1058,7 +1058,7 @@ SkeletonBone SKELETON_KOROMON[7] = {
 	{ 0x04, 0x05 },
 };
 
-SkeletonBone MAIN_D_8011C5B0[20] = {
+SkeletonBone SKELETON_NANIMON[20] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1135,7 +1135,7 @@ SkeletonBone SKELETON_NUMEMON[22] = {
 	{ 0x13, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011C638[10] = {
+SkeletonBone SKELETON_BAKEMON[10] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1175,7 +1175,7 @@ SkeletonBone SKELETON_BIRDRAMON[24] = {
 	{ 0x15, 0x16 },
 };
 
-SkeletonBone MAIN_D_8011C67C[9] = {
+SkeletonBone SKELETON_YURAMON[9] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1187,7 +1187,7 @@ SkeletonBone MAIN_D_8011C67C[9] = {
 	{ 0x06, 0x07 },
 };
 
-SkeletonBone MAIN_D_8011C690[26] = {
+SkeletonBone SKELETON_PIXIMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1216,7 +1216,7 @@ SkeletonBone MAIN_D_8011C690[26] = {
 	{ 0x0f, 0x18 },
 };
 
-SkeletonBone MAIN_D_8011C6C4[28] = {
+SkeletonBone SKELETON_DRIMOGEMON[28] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1262,7 +1262,7 @@ SkeletonBone SKELETON_WHAMON[12] = {
 	{ 0x04, 0x0a },
 };
 
-SkeletonBone MAIN_D_8011C714[30] = {
+SkeletonBone SKELETON_YANMAMON[30] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1295,7 +1295,7 @@ SkeletonBone MAIN_D_8011C714[30] = {
 	{ 0x1b, 0x1c },
 };
 
-SkeletonBone MAIN_D_8011C750[22] = {
+SkeletonBone SKELETON_GOTSUMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1320,7 +1320,7 @@ SkeletonBone MAIN_D_8011C750[22] = {
 	{ 0x0f, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011C77C[17] = {
+SkeletonBone SKELETON_JIJIMON[17] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1340,7 +1340,7 @@ SkeletonBone MAIN_D_8011C77C[17] = {
 	{ 0x0e, 0x0f },
 };
 
-SkeletonBone MAIN_D_8011C7A0[25] = {
+SkeletonBone SKELETON_PENGUINMON[25] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1368,7 +1368,7 @@ SkeletonBone MAIN_D_8011C7A0[25] = {
 	{ 0x11, 0x17 },
 };
 
-SkeletonBone MAIN_D_8011C7D4[18] = {
+SkeletonBone SKELETON_MOJYAMON[18] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1389,7 +1389,7 @@ SkeletonBone MAIN_D_8011C7D4[18] = {
 	{ 0x0e, 0x10 },
 };
 
-SkeletonBone MAIN_D_8011C7F8[10] = {
+SkeletonBone SKELETON_TANEMON[10] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1402,7 +1402,7 @@ SkeletonBone MAIN_D_8011C7F8[10] = {
 	{ 0x07, 0x02 },
 };
 
-SkeletonBone MAIN_D_8011C80C[20] = {
+SkeletonBone SKELETON_COELAMON[20] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1464,7 +1464,7 @@ SkeletonBone SKELETON_SEADRAMON[17] = {
 	{ 0x0d, 0x07 },
 };
 
-SkeletonBone MAIN_D_8011C878[15] = {
+SkeletonBone SKELETON_MEGASEADRAMON[15] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x02, 0x01 },
@@ -1482,7 +1482,7 @@ SkeletonBone MAIN_D_8011C878[15] = {
 	{ 0x0c, 0x05 },
 };
 
-SkeletonBone MAIN_D_8011C898[18] = {
+SkeletonBone SKELETON_OGREMON[18] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1562,7 +1562,7 @@ SkeletonBone SKELETON_KABUTERIMON[28] = {
 	{ 0x19, 0x1a },
 };
 
-SkeletonBone MAIN_D_8011C928[21] = {
+SkeletonBone SKELETON_BRACHIOMON[21] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1586,7 +1586,7 @@ SkeletonBone MAIN_D_8011C928[21] = {
 	{ 0x12, 0x13 },
 };
 
-SkeletonBone MAIN_D_8011C954[23] = {
+SkeletonBone SKELETON_LEOMON[23] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1612,7 +1612,7 @@ SkeletonBone MAIN_D_8011C954[23] = {
 	{ 0x14, 0x15 },
 };
 
-SkeletonBone MAIN_D_8011C984[24] = {
+SkeletonBone SKELETON_MONOCHROMON[24] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1639,7 +1639,7 @@ SkeletonBone MAIN_D_8011C984[24] = {
 	{ 0x13, 0x16 },
 };
 
-SkeletonBone MAIN_D_8011C9B4[30] = {
+SkeletonBone SKELETON_KUWAGAMON[30] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1672,7 +1672,7 @@ SkeletonBone MAIN_D_8011C9B4[30] = {
 	{ 0x1b, 0x1c },
 };
 
-SkeletonBone MAIN_D_8011C9F0[26] = {
+SkeletonBone SKELETON_HERCULESKABUTERIMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1701,7 +1701,7 @@ SkeletonBone MAIN_D_8011C9F0[26] = {
 	{ 0x17, 0x18 },
 };
 
-SkeletonBone MAIN_D_8011CA24[12] = {
+SkeletonBone SKELETON_WARUMONZAEMON[12] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1716,7 +1716,7 @@ SkeletonBone MAIN_D_8011CA24[12] = {
 	{ 0x09, 0x02 },
 };
 
-SkeletonBone MAIN_D_8011CA3C[31] = {
+SkeletonBone SKELETON_PHOENIXMON[31] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1750,7 +1750,7 @@ SkeletonBone MAIN_D_8011CA3C[31] = {
 	{ 0x1c, 0x1d },
 };
 
-SkeletonBone MAIN_D_8011CA7C[12] = {
+SkeletonBone SKELETON_DIGITAMAMON[12] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1765,7 +1765,7 @@ SkeletonBone MAIN_D_8011CA7C[12] = {
 	{ 0x09, 0x0a },
 };
 
-SkeletonBone MAIN_D_8011CA94[21] = {
+SkeletonBone SKELETON_KOKATORIMON[21] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1789,7 +1789,7 @@ SkeletonBone MAIN_D_8011CA94[21] = {
 	{ 0x11, 0x13 },
 };
 
-SkeletonBone MAIN_D_8011CAC0[15] = {
+SkeletonBone SKELETON_SHELLMON[15] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x01, 0x01 },
@@ -1807,7 +1807,7 @@ SkeletonBone MAIN_D_8011CAC0[15] = {
 	{ 0x00, 0x01 },
 };
 
-SkeletonBone MAIN_D_8011CAE0[23] = {
+SkeletonBone SKELETON_PATAMON[23] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1833,7 +1833,7 @@ SkeletonBone MAIN_D_8011CAE0[23] = {
 	{ 0x14, 0x15 },
 };
 
-SkeletonBone MAIN_D_8011CB10[22] = {
+SkeletonBone SKELETON_FLAREIZAMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1858,7 +1858,7 @@ SkeletonBone MAIN_D_8011CB10[22] = {
 	{ 0x13, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011CB3C[5] = {
+SkeletonBone SKELETON_HAGURUMON[5] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1910,7 +1910,7 @@ SkeletonBone SKELETON_METALMAMEMON[19] = {
 	{ 0x0b, 0x11 },
 };
 
-SkeletonBone MAIN_D_8011CB98[19] = {
+SkeletonBone SKELETON_GUARDROMON[19] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1932,7 +1932,7 @@ SkeletonBone MAIN_D_8011CB98[19] = {
 	{ 0x0f, 0x11 },
 };
 
-SkeletonBone MAIN_D_8011CBC0[32] = {
+SkeletonBone SKELETON_MACHINEDRAMON[32] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1967,7 +1967,7 @@ SkeletonBone MAIN_D_8011CBC0[32] = {
 	{ 0x1d, 0x1e },
 };
 
-SkeletonBone MAIN_D_8011CC00[16] = {
+SkeletonBone SKELETON_MARKET_MANAGER[16] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -1986,7 +1986,7 @@ SkeletonBone MAIN_D_8011CC00[16] = {
 	{ 0x0d, 0x0e },
 };
 
-SkeletonBone MAIN_D_8011CC20[21] = {
+SkeletonBone SKELETON_KING_SUKAMON[21] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2010,7 +2010,7 @@ SkeletonBone MAIN_D_8011CC20[21] = {
 	{ 0x0b, 0x13 },
 };
 
-SkeletonBone MAIN_D_8011CC4C[29] = {
+SkeletonBone SKELETON_MEGADRAMON[29] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2042,7 +2042,7 @@ SkeletonBone MAIN_D_8011CC4C[29] = {
 	{ 0x16, 0x1b },
 };
 
-SkeletonBone MAIN_D_8011CC88[25] = {
+SkeletonBone SKELETON_MYOTISMON[25] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2099,7 +2099,7 @@ SkeletonBone SKELETON_GARURUMON[26] = {
 	{ 0x10, 0x18 },
 };
 
-SkeletonBone MAIN_D_8011CCF0[17] = {
+SkeletonBone SKELETON_TANKMON[17] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2119,7 +2119,7 @@ SkeletonBone MAIN_D_8011CCF0[17] = {
 	{ 0x0c, 0x0e },
 };
 
-SkeletonBone MAIN_D_8011CD14[28] = {
+SkeletonBone SKELETON_SHOGUNGEKOMON[28] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2150,7 +2150,7 @@ SkeletonBone MAIN_D_8011CD14[28] = {
 	{ 0x16, 0x1a },
 };
 
-SkeletonBone MAIN_D_8011CD4C[26] = {
+SkeletonBone SKELETON_CHERRYMON[26] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2179,7 +2179,7 @@ SkeletonBone MAIN_D_8011CD4C[26] = {
 	{ 0x17, 0x18 },
 };
 
-SkeletonBone MAIN_D_8011CD80[7] = {
+SkeletonBone SKELETON_TINMON[7] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2212,7 +2212,7 @@ SkeletonBone SKELETON_AIRDRAMON[20] = {
 	{ 0x0f, 0x12 },
 };
 
-SkeletonBone MAIN_D_8011CDB8[27] = {
+SkeletonBone SKELETON_TENTOMON[27] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2242,7 +2242,7 @@ SkeletonBone MAIN_D_8011CDB8[27] = {
 	{ 0x18, 0x19 },
 };
 
-SkeletonBone MAIN_D_8011CDF0[22] = {
+SkeletonBone SKELETON_GEKOMON[22] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2267,7 +2267,7 @@ SkeletonBone MAIN_D_8011CDF0[22] = {
 	{ 0x12, 0x14 },
 };
 
-SkeletonBone MAIN_D_8011CE1C[15] = {
+SkeletonBone SKELETON_OTAMAMON[15] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2285,7 +2285,7 @@ SkeletonBone MAIN_D_8011CE1C[15] = {
 	{ 0x0c, 0x0d },
 };
 
-SkeletonBone MAIN_D_8011CE3C[18] = {
+SkeletonBone SKELETON_ANALOGMAN[18] = {
 	{ 0xff, 0xff },
 	{ 0xff, 0x00 },
 	{ 0x00, 0x01 },
@@ -2337,103 +2337,103 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	SKELETON_METALMAMEMON,
 	SKELETON_VADEMON,
 	SKELETON_BOTAMON,
-	MAIN_D_8011C550,
-	MAIN_D_8011CAE0,
-	MAIN_D_8011C518,
-	MAIN_D_8011C48C,
-	MAIN_D_8011C898,
-	MAIN_D_8011CAC0,
-	MAIN_D_8011C568,
-	MAIN_D_8011C638,
-	MAIN_D_8011C6C4,
-	MAIN_D_8011C348,
-	MAIN_D_8011C3D4,
-	MAIN_D_8011C400,
-	MAIN_D_8011C374,
-	MAIN_D_8011C67C,
-	MAIN_D_8011C7F8,
-	MAIN_D_8011C4EC,
-	MAIN_D_8011C44C,
-	MAIN_D_8011C984,
-	MAIN_D_8011C954,
-	MAIN_D_8011C80C,
-	MAIN_D_8011CA94,
-	MAIN_D_8011C9B4,
-	MAIN_D_8011C7D4,
-	MAIN_D_8011C5B0,
-	MAIN_D_8011CC4C,
-	MAIN_D_8011C690,
-	MAIN_D_8011CA7C,
-	MAIN_D_8011C7A0,
+	SKELETON_TOKOMON,
+	SKELETON_PATAMON,
+	SKELETON_KUNEMON,
+	SKELETON_UNIMON,
+	SKELETON_OGREMON,
+	SKELETON_SHELLMON,
+	SKELETON_CENTARUMON,
+	SKELETON_BAKEMON,
+	SKELETON_DRIMOGEMON,
+	SKELETON_SUKAMON,
+	SKELETON_ANDROMON,
+	SKELETON_GIROMON,
+	SKELETON_ETEMON,
+	SKELETON_YURAMON,
+	SKELETON_TANEMON,
+	SKELETON_BIYOMON,
+	SKELETON_PALMON,
+	SKELETON_MONOCHROMON,
+	SKELETON_LEOMON,
+	SKELETON_COELAMON,
+	SKELETON_KOKATORIMON,
+	SKELETON_KUWAGAMON,
+	SKELETON_MOJYAMON,
+	SKELETON_NANIMON,
+	SKELETON_MEGADRAMON,
+	SKELETON_PIXIMON,
+	SKELETON_DIGITAMAMON,
+	SKELETON_PENGUINMON,
 	SKELETON_MAMEMON,
-	MAIN_D_8011CA3C,
-	MAIN_D_8011C9F0,
-	MAIN_D_8011C878,
+	SKELETON_PHOENIXMON,
+	SKELETON_HERCULESKABUTERIMON,
+	SKELETON_MEGASEADRAMON,
 	NULL,
-	MAIN_D_8011C954,
-	MAIN_D_8011CC4C,
-	MAIN_D_8011C374,
-	MAIN_D_8011CC88,
-	MAIN_D_8011C714,
-	MAIN_D_8011C750,
-	MAIN_D_8011CB10,
-	MAIN_D_8011CA24,
+	SKELETON_LEOMON,
+	SKELETON_MEGADRAMON,
+	SKELETON_ETEMON,
+	SKELETON_MYOTISMON,
+	SKELETON_YANMAMON,
+	SKELETON_GOTSUMON,
+	SKELETON_FLAREIZAMON,
+	SKELETON_WARUMONZAEMON,
 	SKELETON_GABUMON,
-	MAIN_D_8011C898,
-	MAIN_D_8011C348,
-	MAIN_D_8011C518,
-	MAIN_D_8011C48C,
-	MAIN_D_8011CCF0,
+	SKELETON_OGREMON,
+	SKELETON_SUKAMON,
+	SKELETON_KUNEMON,
+	SKELETON_UNIMON,
+	SKELETON_TANKMON,
 	SKELETON_VEGIEMON,
-	MAIN_D_8011C7D4,
-	MAIN_D_8011C6C4,
-	MAIN_D_8011C318,
+	SKELETON_MOJYAMON,
+	SKELETON_DRIMOGEMON,
+	SKELETON_GOBURIMON,
 	SKELETON_FRIGIMON,
 	SKELETON_GABUMON,
 	SKELETON_BETAMON,
 	SKELETON_GABUMON,
 	SKELETON_ANGEMON,
-	MAIN_D_8011C44C,
+	SKELETON_PALMON,
 	SKELETON_NUMEMON,
-	MAIN_D_8011C984,
-	MAIN_D_8011C898,
-	MAIN_D_8011C400,
-	MAIN_D_8011CAC0,
-	MAIN_D_8011CB98,
-	MAIN_D_8011C7A0,
-	MAIN_D_8011C750,
-	MAIN_D_8011CA94,
-	MAIN_D_8011CAE0,
-	MAIN_D_8011C318,
+	SKELETON_MONOCHROMON,
+	SKELETON_OGREMON,
+	SKELETON_GIROMON,
+	SKELETON_SHELLMON,
+	SKELETON_GUARDROMON,
+	SKELETON_PENGUINMON,
+	SKELETON_GOTSUMON,
+	SKELETON_KOKATORIMON,
+	SKELETON_PATAMON,
+	SKELETON_GOBURIMON,
 	SKELETON_GABUMON,
 	SKELETON_VEGIEMON,
 	SKELETON_DEVIMON,
-	MAIN_D_8011CB10,
-	MAIN_D_8011C714,
-	MAIN_D_8011C318,
+	SKELETON_FLAREIZAMON,
+	SKELETON_YANMAMON,
+	SKELETON_GOBURIMON,
 	SKELETON_MERAMON,
 	SKELETON_GARURUMON,
 	SKELETON_BIRDRAMON,
-	MAIN_D_8011C638,
+	SKELETON_BAKEMON,
 	SKELETON_FRIGIMON,
-	MAIN_D_8011CE1C,
-	MAIN_D_8011CDF0,
-	MAIN_D_8011CDB8,
-	MAIN_D_8011C878,
-	MAIN_D_8011C750,
+	SKELETON_OTAMAMON,
+	SKELETON_GEKOMON,
+	SKELETON_TENTOMON,
+	SKELETON_MEGASEADRAMON,
+	SKELETON_GOTSUMON,
 	NULL,
-	MAIN_D_8011CBC0,
-	MAIN_D_8011CE3C,
-	MAIN_D_8011C77C,
-	MAIN_D_8011CC00,
-	MAIN_D_8011CD14,
-	MAIN_D_8011CC20,
-	MAIN_D_8011CD4C,
-	MAIN_D_8011CB3C,
-	MAIN_D_8011CD80,
+	SKELETON_MACHINEDRAMON,
+	SKELETON_ANALOGMAN,
+	SKELETON_JIJIMON,
+	SKELETON_MARKET_MANAGER,
+	SKELETON_SHOGUNGEKOMON,
+	SKELETON_KING_SUKAMON,
+	SKELETON_CHERRYMON,
+	SKELETON_HAGURUMON,
+	SKELETON_TINMON,
 	SKELETON_TYRANNOMON,
-	MAIN_D_8011C318,
-	MAIN_D_8011C928,
+	SKELETON_GOBURIMON,
+	SKELETON_BRACHIOMON,
 	SKELETON_BOTAMON,
 	SKELETON_BETAMON,
 	SKELETON_GREYMON,
@@ -2458,33 +2458,33 @@ SkeletonBone *DIGIMON_SKELETONS[180] = {
 	SKELETON_SKULLGREYMON,
 	SKELETON_METALMAMEMON,
 	SKELETON_VADEMON,
-	MAIN_D_8011CAE0,
-	MAIN_D_8011C518,
-	MAIN_D_8011C48C,
-	MAIN_D_8011C898,
-	MAIN_D_8011CAC0,
-	MAIN_D_8011C568,
-	MAIN_D_8011C638,
-	MAIN_D_8011C6C4,
-	MAIN_D_8011C348,
-	MAIN_D_8011C3D4,
-	MAIN_D_8011C400,
-	MAIN_D_8011C374,
-	MAIN_D_8011C4EC,
-	MAIN_D_8011C44C,
-	MAIN_D_8011C984,
-	MAIN_D_8011C954,
-	MAIN_D_8011C80C,
-	MAIN_D_8011CA94,
-	MAIN_D_8011C9B4,
-	MAIN_D_8011C7D4,
-	MAIN_D_8011C5B0,
-	MAIN_D_8011CC4C,
-	MAIN_D_8011C690,
-	MAIN_D_8011CA7C,
+	SKELETON_PATAMON,
+	SKELETON_KUNEMON,
+	SKELETON_UNIMON,
+	SKELETON_OGREMON,
+	SKELETON_SHELLMON,
+	SKELETON_CENTARUMON,
+	SKELETON_BAKEMON,
+	SKELETON_DRIMOGEMON,
+	SKELETON_SUKAMON,
+	SKELETON_ANDROMON,
+	SKELETON_GIROMON,
+	SKELETON_ETEMON,
+	SKELETON_BIYOMON,
+	SKELETON_PALMON,
+	SKELETON_MONOCHROMON,
+	SKELETON_LEOMON,
+	SKELETON_COELAMON,
+	SKELETON_KOKATORIMON,
+	SKELETON_KUWAGAMON,
+	SKELETON_MOJYAMON,
+	SKELETON_NANIMON,
+	SKELETON_MEGADRAMON,
+	SKELETON_PIXIMON,
+	SKELETON_DIGITAMAMON,
 	SKELETON_MAMEMON,
-	MAIN_D_8011C7A0,
-	MAIN_D_8011CC88,
+	SKELETON_PENGUINMON,
+	SKELETON_MYOTISMON,
 	SKELETON_GREYMON,
 	SKELETON_METALGREYMON,
 };
