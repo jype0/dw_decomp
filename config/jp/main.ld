@@ -87,6 +87,7 @@ SECTIONS
         main_TEXT_SIZE = ABSOLUTE(main_TEXT_END - main_TEXT_START);
 
         main_RODATA_START = .;
+
         __static_init = .;
         LONG(0x0)
         _gp_addr = .;
@@ -521,6 +522,8 @@ SECTIONS
         . = ALIGN(., 4);
         main_BSS_END = .;
         main_BSS_SIZE = ABSOLUTE(main_BSS_END - main_BSS_START);
+        main_MEMFILL_SIZE = ABSOLUTE(main_BSS_END - main_SBSS_START);
+        main_MEMFILL_ALIGNED_SIZE = ABSOLUTE(((main_MEMFILL_SIZE + 0X7FF) / 0x800) * 0x800);
     }
     __romPos += SIZEOF(.bss);
     __romPos = ALIGN(__romPos, 4);
