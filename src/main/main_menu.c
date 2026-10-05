@@ -32,6 +32,13 @@
 #define NO_TEXT_W 0x1c
 #endif
 
+/* MemCardSync command and result type */
+#if defined(VERSION_JP)
+typedef long MemCardSyncWord;
+#else
+typedef unsigned long MemCardSyncWord;
+#endif
+
 typedef struct {
 	int8_t pos;
 	int8_t count;
@@ -238,7 +245,7 @@ void tickMainMenu(void);
 int32_t tickMenuInput(MenuCursor *cursor, int32_t which);
 int32_t getMenuOnCardChange(int32_t menu);
 void setMemoryCardReadError(int32_t id, int32_t returnMenu);
-int32_t isMemcardUnformatted(int32_t chan, int32_t mode);
+int32_t isMemcardUnformatted(int32_t chan, MemCardSyncWord mode);
 int32_t getCardUsedBlockCount(int32_t channel, int32_t returnMenu);
 int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots, int32_t unused);
 int32_t tickSelectSlotInput(MenuCursor *cursor, int32_t which);
@@ -3532,8 +3539,8 @@ void drawRegisteredDigimonSlots(int32_t slot)
 
 void updateMemoryCardState(void)
 {
-	unsigned long result;
-	unsigned long cmd;
+	MemCardSyncWord result;
+	MemCardSyncWord cmd;
 
 	switch (MemCardSync(1, &cmd, &result)) {
 	case -1:
@@ -3565,9 +3572,9 @@ void updateMemoryCardState(void)
 void tickMainMenu(void)
 {
 	int32_t view;
-	uint32_t command;
-	int32_t result;
-	int32_t count;
+	MemCardSyncWord command;
+	MemCardSyncWord result;
+	long count;
 	int32_t slot;
 	uint32_t combinedInput;
 	int32_t lo;
@@ -3644,7 +3651,7 @@ void tickMainMenu(void)
 
 	case 2:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			status = MemCardFormat(MEMORY_CARD_ID);
 			switch (status) {
 			case 0:
@@ -3721,12 +3728,12 @@ void tickMainMenu(void)
 
 	case 0xC:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, 0);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
@@ -3793,7 +3800,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x10:
-		if ((MAIN_MENU_TICKS >= 3) && MemCardSync(1, (unsigned long *)&command, (unsigned long *)&result)) {
+		if ((MAIN_MENU_TICKS >= 3) && MemCardSync(1, &command, &result)) {
 			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
 			status = MemCardCreateFile(MEMORY_CARD_ID, MAIN_D_8013190C, 1);
 			switch (status) {
@@ -3815,7 +3822,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x11:
-		MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+		MemCardSync(0, &command, &result);
 		MAIN_D_8013192C[0] = 0x53;
 		MAIN_D_8013192C[1] = 0x43;
 		MAIN_D_8013192C[2] = 0x13;
@@ -3848,11 +3855,11 @@ void tickMainMenu(void)
 		*(SavegamePayload *)MAIN_D_80132A2C =
 			*(SavegamePayload *)MAIN_D_80131B2C;
 		status = MemCardWriteFile(MEMORY_CARD_ID, MAIN_D_8013190C,
-					 (long *)MAIN_D_8013192C, 0, 0x2000);
+					 (void *)MAIN_D_8013192C, 0, 0x2000);
 		if (status != 1) {
 			setMemoryCardReadError(0, 0);
 		}
-		MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+		MemCardSync(0, &command, &result);
 		if (result == 0) {
 			TARGET_MENU = 9;
 			loadSavegame((SavegamePayload *)MAIN_D_80131B2C);
@@ -3913,12 +3920,12 @@ void tickMainMenu(void)
 
 	case 0x15:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, 0);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x16;
@@ -3973,14 +3980,14 @@ void tickMainMenu(void)
 
 	case 0x19:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
 			status = MemCardReadFile(MEMORY_CARD_ID, MAIN_D_8013190C,
-					    (long *)MAIN_D_8013192C, 0, 0x2000);
+					    (void *)MAIN_D_8013192C, 0, 0x2000);
 			if (status != 1) {
 				setMemoryCardReadError(0, 0);
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (result == 0) {
 				if (((SavegamePayload *)MAIN_D_80131B2C)->checksum ==
 				    createSavegameChecksum(0)) {
@@ -4034,12 +4041,12 @@ void tickMainMenu(void)
 
 	case 0x1F:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, 0);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x20;
@@ -4093,7 +4100,7 @@ void tickMainMenu(void)
 		break;
 
 	case 0x23:
-		if ((MAIN_MENU_TICKS >= 3) && MemCardSync(1, (unsigned long *)&command, (unsigned long *)&result)) {
+		if ((MAIN_MENU_TICKS >= 3) && MemCardSync(1, &command, &result)) {
 			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
 			status = MemCardDeleteFile(MEMORY_CARD_ID, MAIN_D_8013190C);
 			if (status == 0) {
@@ -4126,12 +4133,12 @@ void tickMainMenu(void)
 
 	case 0x29:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardExist(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, 0x28);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			switch (result) {
 			case 0:
 				TARGET_MENU = 0x2A;
@@ -4154,10 +4161,10 @@ void tickMainMenu(void)
 		break;
 
 	case 0x2A:
-		MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+		MemCardSync(0, &command, &result);
 		MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
 		status = MemCardGetDirentry(MEMORY_CARD_ID, MAIN_D_8013190C,
-					MEMCARD_DIRENTRIES, (long *)&count, 0, 1);
+					MEMCARD_DIRENTRIES, &count, 0, 1);
 		MEMORY_CARD_ERROR = -1;
 		switch (status) {
 		case -1:
@@ -4181,7 +4188,7 @@ void tickMainMenu(void)
 
 	case 0x2B:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			MAIN_D_8013192C[0] = 0x53;
 			MAIN_D_8013192C[1] = 0x43;
 			MAIN_D_8013192C[2] = 0x13;
@@ -4214,11 +4221,11 @@ void tickMainMenu(void)
 			*(SavegamePayload *)MAIN_D_80132A2C =
 				*(SavegamePayload *)MAIN_D_80131B2C;
 			status = MemCardWriteFile(MEMORY_CARD_ID, MAIN_D_8013190C,
-						 (long *)MAIN_D_8013192C, 0, 0x2000);
+						 (void *)MAIN_D_8013192C, 0, 0x2000);
 			if (status != 1) {
 				setMemoryCardReadError(0, 0x28);
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (result == 0) {
 				TARGET_MENU = 9;
 			} else {
@@ -4248,12 +4255,12 @@ void tickMainMenu(void)
 
 	case 0x31:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, 0x28);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
@@ -4301,12 +4308,12 @@ void tickMainMenu(void)
 
 	case 0x33:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, 0x32);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			if (result == 0) {
 				TARGET_MENU = 0x34;
@@ -4363,14 +4370,14 @@ void tickMainMenu(void)
 
 	case 0x36:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
 			status = MemCardReadFile(MEMORY_CARD_ID, MAIN_D_8013190C,
-					    (long *)MAIN_D_8013192C, 0, 0x2000);
+					    (void *)MAIN_D_8013192C, 0, 0x2000);
 			if (status != 1) {
 				setMemoryCardReadError(0, 0x32);
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (result == 0) {
 				if (((SavegamePayload *)MAIN_D_80131B2C)->checksum ==
 				    createSavegameChecksum(0)) {
@@ -4476,12 +4483,12 @@ void tickMainMenu(void)
 
 	case 0x3F:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardExist(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, SAVE_RETRY_RETURN_MENU);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			switch (result) {
 			case 0:
 				TARGET_MENU = 0x40;
@@ -4504,10 +4511,10 @@ void tickMainMenu(void)
 		break;
 
 	case 0x40:
-		MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+		MemCardSync(0, &command, &result);
 		MAIN_D_8013190C[0xF] = MAIN_D_80131648[MEMORY_CARD_SLOT];
 		status = MemCardGetDirentry(MEMORY_CARD_ID, MAIN_D_8013190C,
-					MEMCARD_DIRENTRIES, (long *)&count, 0, 1);
+					MEMCARD_DIRENTRIES, &count, 0, 1);
 		MEMORY_CARD_ERROR = -1;
 		switch (status) {
 		case -1:
@@ -4531,7 +4538,7 @@ void tickMainMenu(void)
 
 	case 0x41:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			MAIN_D_8013192C[0] = 0x53;
 			MAIN_D_8013192C[1] = 0x43;
 			MAIN_D_8013192C[2] = 0x13;
@@ -4564,11 +4571,11 @@ void tickMainMenu(void)
 			*(SavegamePayload *)MAIN_D_80132A2C =
 				*(SavegamePayload *)MAIN_D_80131B2C;
 			status = MemCardWriteFile(MEMORY_CARD_ID, MAIN_D_8013190C,
-						 (long *)MAIN_D_8013192C, 0, 0x2000);
+						 (void *)MAIN_D_8013192C, 0, 0x2000);
 			if (status != 1) {
 				setMemoryCardReadError(0, SAVE_RETRY_RETURN_MENU);
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (result == 0) {
 				TARGET_MENU = 9;
 			} else {
@@ -4598,12 +4605,12 @@ void tickMainMenu(void)
 
 	case 0x43:
 		if (MAIN_MENU_TICKS >= 3) {
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
 				setMemoryCardReadError(0, SAVE_RETRY_RETURN_MENU);
 				break;
 			}
-			MemCardSync(0, (unsigned long *)&command, (unsigned long *)&result);
+			MemCardSync(0, &command, &result);
 			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
 			switch (result) {
 			case 0:
@@ -4735,10 +4742,10 @@ void setMemoryCardReadError(int32_t id, int32_t returnMenu)
 	MEMORY_CARD_RETURN_MENU = returnMenu;
 }
 
-int32_t isMemcardUnformatted(int32_t chan, int32_t mode)
+int32_t isMemcardUnformatted(int32_t chan, MemCardSyncWord mode)
 {
-	unsigned long cmd;
-	unsigned long result;
+	MemCardSyncWord cmd;
+	MemCardSyncWord result;
 
 	if ((mode == 0) || (mode == 3)) {
 		return 0;
@@ -4755,8 +4762,8 @@ int32_t isMemcardUnformatted(int32_t chan, int32_t mode)
 
 int32_t getCardUsedBlockCount(int32_t channel, int32_t returnMenu)
 {
-	unsigned long cmd;
-	unsigned long result;
+	MemCardSyncWord cmd;
+	MemCardSyncWord result;
 	long fileCount;
 	int32_t i;
 	int32_t blocks;
@@ -4786,8 +4793,8 @@ int32_t getCardUsedBlockCount(int32_t channel, int32_t returnMenu)
 
 int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots, int32_t unused)
 {
-	unsigned long cmd;
-	unsigned long result;
+	MemCardSyncWord cmd;
+	MemCardSyncWord result;
 	long fileCount;
 	int32_t status;
 	/* Retail reserves 0x200 bytes even though each header read requests 0x80. */
@@ -4820,7 +4827,7 @@ int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots
 		} else {
 			slot = MEMCARD_DIRENTRIES[i].name[15] - '7';
 		}
-		status = MemCardReadFile(channel, MEMCARD_DIRENTRIES[i].name, (long *)data, 0, 0x80);
+		status = MemCardReadFile(channel, MEMCARD_DIRENTRIES[i].name, (void *)data, 0, 0x80);
 		if (status != 1) {
 			setMemoryCardReadError(0, 0);
 			return 0;

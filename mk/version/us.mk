@@ -1,5 +1,7 @@
 EXE_NAME := SLUS_010.32
 
+PSYQ_INCLUDE := external/psyq_headers/mw_lib41/include
+
 MAIN_SBSS := \
 	$(GEN_DIR)/unk_0x80134C4C.sbss.s \
 	$(GEN_DIR)/unk_0x80134CC0.sbss.s \
