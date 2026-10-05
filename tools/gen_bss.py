@@ -92,6 +92,10 @@ def __main():
                                 outfile)
 
                 prev_sym, prev_addr = cur_sym, cur_addr
+            else:
+                if prev_sym is not None:
+                    __print_sym(section_name, prev_sym, subsegment_end,
+                                prev_addr, outfile)
 
 
 if __name__ == '__main__':
