@@ -201,7 +201,7 @@ int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
                       int16_t height, int8_t features, void (*tick)(void),
                       void (*render)(void));
 void closeUIBoxIfOpen(int32_t arg);
-void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
+void getEntityScreenPos(Entity *entity, int32_t flag, DVECTOR *outPos);
 void addInventoryUI(void);
 void tickGameMenu(void);
 void renderGameMenu(void);
@@ -1548,11 +1548,11 @@ void closeUIBoxIfOpen(id)
 	int16_t id;
 {
 	RECT rect;
-	int16_t pos[2];
+	DVECTOR pos;
 
 	if (UI_BOX_DATA[id].frame >= 5 && UI_BOX_DATA[id].state == 1) {
-		getEntityScreenPos(ENTITY_TABLE[0], 0, pos);
-		setRECT(&rect, pos[0] - 5, pos[1] - 5, 10, 10);
+		getEntityScreenPos(ENTITY_TABLE[0], 0, &pos);
+		setRECT(&rect, pos.vx - 5, pos.vy - 5, 10, 10);
 		removeAnimatedUIBox(id, 0);
 	}
 }
@@ -1800,15 +1800,15 @@ int32_t createMenuBox(int16_t id, int16_t x, int16_t y, int16_t width,
 {
 	RECT finalPos;
 	RECT startPos;
-	int16_t entityPos[2];
+	DVECTOR entityPos;
 
 	if (UI_BOX_DATA[id].state == 1) {
 		return 1;
 	}
 	if (UI_BOX_DATA[id].frame == 0) {
 		setRECT(&finalPos, x, y, width, height);
-		getEntityScreenPos(ENTITY_TABLE[0], 1, entityPos);
-		setRECT(&startPos, entityPos[0] - 5, entityPos[1] - 5, 10, 10);
+		getEntityScreenPos(ENTITY_TABLE[0], 1, &entityPos);
+		setRECT(&startPos, entityPos.vx - 5, entityPos.vy - 5, 10, 10);
 		createAnimatedUIBox(id, 1, features, &finalPos, &startPos,
 		                    (TickFunction)tick, (RenderFunction)render);
 	}

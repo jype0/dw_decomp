@@ -154,7 +154,7 @@ void TRN_tickBrainsTraining(int32_t instanceId)
 			TRN_applyBaseStats();
 			TRN_closeUIBox(1);
 			if (UI_BOX_DATA[2].state == 1) {
-				getEntityScreenPos(ENTITY_TABLE[0], 0, (int16_t *)&pos);
+				getEntityScreenPos(ENTITY_TABLE[0], 0, &pos);
 				setRECT(&rect, pos.vx - 5, pos.vy - 5, 10, 10);
 				removeAnimatedUIBox(2, &rect);
 			}

@@ -33,7 +33,7 @@ void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDIN
 char *initializeFlashData(char *base);
 void EFECreateFlash(void);
 
-void EAB_setModelColor(int32_t *color);
+void EAB_setModelColor(VECTOR *color);
 void EAB_tickBuildup(void);
 void EAB_renderBuildup(void);
 void EAB_initializeRings(void);
@@ -128,28 +128,28 @@ VECTOR EAB_D_800617B0 = { 0x000000ff, 0x000000ff, 0x000000ff, 0x00000000 };
 VECTOR EAB_D_800617C0 = { 0x000000ff, 0x000000ff, 0x000000ff, 0x00000000 };
 // clang-format on
 
-void EAB_setModelColor(int32_t *color)
+void EAB_setModelColor(VECTOR *color)
 {
 	int32_t *rec;
-	int32_t *hdr;
+	struct TMD_STRUCT *obj;
 	int32_t idx;
 	int32_t i;
 	int32_t count;
 	uint8_t t;
 
 	idx = 0;
-	hdr = (int32_t *)(BOSS_EFE_TMD + 0xc);
-	hdr += idx * 7;
-	count = hdr[5];
-	rec = (int32_t *)hdr[4];
+	obj = (struct TMD_STRUCT *)(BOSS_EFE_TMD + 0xc);
+	obj += idx;
+	count = obj->primn;
+	rec = (int32_t *)obj->primtop;
 	for (i = 0; i < count; i++) {
 		t = *rec >> 24;
 		switch (t) {
 		case 0x2d:
 		case 0x2f:
-			((char (*)[0x20])((char *)rec + 0x14))[0][0] = (int16_t)color[0];
-			((char (*)[0x20])((char *)rec + 0x15))[0][0] = (int16_t)color[1];
-			((char (*)[0x20])((char *)rec + 0x16))[0][0] = (int16_t)color[2];
+			((char (*)[0x20])((char *)rec + 0x14))[0][0] = (int16_t)color->vx;
+			((char (*)[0x20])((char *)rec + 0x15))[0][0] = (int16_t)color->vy;
+			((char (*)[0x20])((char *)rec + 0x16))[0][0] = (int16_t)color->vz;
 			rec += 8;
 			break;
 		}
@@ -628,7 +628,7 @@ void EAB_startBuildup(Entity *entity)
 	id = 0;
 	GsMapModelingData((unsigned long *)(BOSS_EFE_TMD + 4));
 	color = EAB_D_800616DC;
-	EAB_setModelColor((int32_t *)&color);
+	EAB_setModelColor(&color);
 	hud->frame = 0;
 	hud->phase = 0;
 	hud->entity = entity;

@@ -35,7 +35,7 @@ int8_t ENTITY_TEXT_Y_OFFSETS[24] = {
 };
 /* The u of each icon in its texture page. */
 uint8_t ENTITY_TEXT_ICON_U[8] = { 0xB0, 0xC8, 0xB8, 0xC0, 0xD0, 0, 0, 0 };
-void getEntityScreenPos(Entity *entity, int32_t mode, int16_t *out);
+void getEntityScreenPos(Entity *entity, int32_t mode, DVECTOR *out);
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
 			  int32_t *digits);
 extern int8_t GAME_STATE;
@@ -137,18 +137,18 @@ void addEntityText(Entity *entity, int16_t slotId, int16_t color, int32_t value,
 
 void setCombatTextPosition(Entity *entity, EntityTextDataEntry *entry)
 {
-	int16_t xy[2];
+	DVECTOR xy;
 
-	getEntityScreenPos(entity, 0, xy);
-	entry->x = xy[0];
-	entry->y = xy[1] - 8;
+	getEntityScreenPos(entity, 0, &xy);
+	entry->x = xy.vx;
+	entry->y = xy.vy - 8;
 }
 
 void renderEntityText(instanceId)
 	int16_t instanceId;
 {
 	GsOT_TAG *ot;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 	uint8_t *frame;
 	EntityTextData *slot;
 	EntityTextDataEntry *entry;
@@ -177,10 +177,10 @@ void renderEntityText(instanceId)
 		/* In battle, the number follows its fighter. */
 		if (GAME_STATE == 4) {
 			getEntityScreenPos(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[instanceId]],
-					   0, screenPos);
+					   0, &screenPos);
 			drawEntityText(entry->color, entry->numDigits,
-				       screenPos[0] + entry->x,
-				       screenPos[1] - 8 + entry->y,
+				       screenPos.vx + entry->x,
+				       screenPos.vy - 8 + entry->y,
 				       entry->value, 14 - i);
 		} else {
 			drawEntityText(entry->color, entry->numDigits,
@@ -194,8 +194,8 @@ void renderEntityText(instanceId)
 						   ENTITY_TEXT_ICON_U[entry->icon - 1],
 						   14 - i);
 			} else {
-				drawEntityTextIcon(screenPos[0] + entry->x - 8,
-						   screenPos[1] - 8 + entry->y,
+				drawEntityTextIcon(screenPos.vx + entry->x - 8,
+						   screenPos.vy - 8 + entry->y,
 						   ENTITY_TEXT_ICON_U[entry->icon - 1],
 						   14 - i);
 			}

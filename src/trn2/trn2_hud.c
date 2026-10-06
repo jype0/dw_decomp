@@ -339,7 +339,7 @@ void TRN2_applyBaseStats(void)
 void TRN2_createPostTrainingStatsBox(void)
 {
 	int32_t i;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 	RECT finalPos;
 	RECT startPos;
 
@@ -370,9 +370,9 @@ void TRN2_createPostTrainingStatsBox(void)
 
 	setRECT(&finalPos, -94, -78, 188, 96);
 
-	getEntityScreenPos(ENTITY_TABLE[1], 1, screenPos);
+	getEntityScreenPos(ENTITY_TABLE[1], 1, &screenPos);
 
-	setRECT(&startPos, screenPos[0] - 5, screenPos[1] - 5, 10, 10);
+	setRECT(&startPos, screenPos.vx - 5, screenPos.vy - 5, 10, 10);
 	createAnimatedUIBox(1, 0, 2, &finalPos, &startPos, TRN2_tickPostTrainingStatsBox, (RenderFunction)TRN2_renderPostTrainingStatsBox);
 }
 

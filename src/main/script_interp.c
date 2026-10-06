@@ -78,7 +78,7 @@ void gameClearSave(void);
 void spawnSpriteAtLocation(int16_t x, int16_t y, int16_t z, int16_t w, int32_t type);
 void spawnSpriteAtEntity(int32_t entId, int32_t sprite, int32_t param);
 void setImpassableRect(int16_t x, int16_t y, int8_t w, int8_t h);
-void addEntityText(int32_t a0, int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+void addEntityText(Entity *entity, int32_t slot, int32_t color, int32_t value, int32_t icon);
 void setLoopCountToOne(int32_t a0);
 void loadTrainingLibrary(int32_t a0);
 int32_t loadTextureFile(char *path, uint32_t *outTPage, uint32_t *outClut);
@@ -1766,7 +1766,7 @@ void scriptInstruction64to7E(op)
 			}
 			PARTNER_ENTITY.digimonEntity.stats.current
 				.currentHP -= damage;
-			addEntityText((int32_t)ENTITY_TABLE[1], 0, 0, damage,
+			addEntityText(ENTITY_TABLE[1], 0, 0, damage,
 			              0);
 		}
 		break;

@@ -64,9 +64,9 @@ void STD_func_80057FD0(int32_t which);
 void STD_func_80057FD0(int16_t which);
 #endif
 int16_t STD_func_800579D8(uint8_t *arg);
-int16_t STD_func_80057510(int32_t a, int16_t b);
+int16_t STD_func_80057510(Entity *opponent, int16_t b);
 void STD_func_80058E28(int32_t arg);
-int32_t STD_func_8006314C(Entity *entity, int32_t arg);
+int32_t STD_func_8006314C(Entity *entity, Entity *other);
 void STD_removeCameraIntro(void);
 void GsGetTimInfo(unsigned long *tim, GsIMAGE *img);
 void readFile(char *path, void *dest);
@@ -384,7 +384,7 @@ void STD_func_80056E2C(int16_t type, int16_t slot, uint8_t tier)
 	}
 }
 
-int16_t STD_func_80057510(int32_t a, int16_t b)
+int16_t STD_func_80057510(Entity *opponent, int16_t b)
 {
 	int16_t result;
 
@@ -392,7 +392,7 @@ int16_t STD_func_80057510(int32_t a, int16_t b)
 	GAME_STATE = 5;
 	STD_func_80058E28(b);
 	MAIN_D_801350EC = 1;
-	result = STD_func_8006314C(ENTITY_TABLE[0], a);
+	result = STD_func_8006314C(ENTITY_TABLE[0], opponent);
 	STD_removeCameraIntro();
 	MAIN_D_801350EC = 10;
 	return result;
@@ -553,7 +553,7 @@ int16_t STD_func_800579D8(uint8_t *arg)
 		STD_func_8005DF94(1);
 		STD_func_80056E2C(local[i], i, arg[0]);
 		MAIN_D_801350E8 = ENTITY_TABLE[i + 2];
-		MAIN_D_801350E4 = STD_func_80057510((int32_t)ENTITY_TABLE[i + 2], arena);
+		MAIN_D_801350E4 = STD_func_80057510(ENTITY_TABLE[i + 2], arena);
 		j++;
 		if (MAIN_D_801350E4 == 1) {
 			loadMapSounds(0x10);

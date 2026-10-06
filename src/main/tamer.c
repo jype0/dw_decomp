@@ -164,7 +164,7 @@ void playSound(int32_t vabId, uint32_t note);
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
 int32_t entityCheckCollision(Entity *a, Entity *b, int32_t c, int32_t d);
-void collisionGrace(int32_t a, Entity *b, int32_t c, int32_t d);
+void collisionGrace(Entity *a, Entity *b, int32_t c, int32_t d);
 int32_t tickEntityWalkTo(/* uint8_t scriptId, uint8_t targetId, int16_t x, int16_t z, int8_t useCamera */);
 void setTrigger(uint16_t trigger);
 int32_t tickOpenChestTray(int32_t chestId);
@@ -194,7 +194,7 @@ void loadMapDigimon(uint8_t *data, int16_t a);
 void tamerTickBattle(int32_t instanceId);
 void tickConditionBoundaries(void);
 void handlePostBattleTiredness(void);
-int32_t getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
+int32_t getEntityScreenPos(Entity *entity, int32_t flag, DVECTOR *outPos);
 int32_t isUIBoxAvailable(int32_t id);
 void playBGM(int16_t bgmId);
 void readMapTFS(int32_t mapId);
@@ -637,7 +637,7 @@ void checkMapInteraction(void)
 			                  NPC_ENTITIES[TALKED_TO_ENTITY - 2].scriptId, 1);
 		}
 	} else if (collision == 10) {
-		collisionGrace(0, ENTITY_TABLE[0], 0, 0);
+		collisionGrace(NULL, ENTITY_TABLE[0], 0, 0);
 	}
 
 	if (TAMER_STATE != 0) {
@@ -1357,7 +1357,7 @@ void tamerTickPickupItem(void)
 	RECT textRect;
 	RECT targetRect;
 	RECT sourceRect;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 
 	textRect = ITEM_PICKUP_TEXT_AREA;
 
@@ -1377,10 +1377,10 @@ void tamerTickPickupItem(void)
 	case 1:
 		if (isUIBoxAvailable(1) == 1) {
 			setRECT(&targetRect, -130, 42, 262, 59);
-			getEntityScreenPos(ENTITY_TABLE[0], 1, screenPos);
+			getEntityScreenPos(ENTITY_TABLE[0], 1, &screenPos);
 			setRECT(&sourceRect,
-				screenPos[0] - 5,
-				screenPos[1] - 5,
+				screenPos.vx - 5,
+				screenPos.vy - 5,
 				10, 10);
 			TAKE_CHEST_ITEM =
 				DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type;
@@ -1416,10 +1416,10 @@ void tamerTickPickupItem(void)
 		}
 		break;
 	case 4:
-		getEntityScreenPos(ENTITY_TABLE[0], 1, screenPos);
+		getEntityScreenPos(ENTITY_TABLE[0], 1, &screenPos);
 		setRECT(&textRect,
-			screenPos[0] - 5,
-			screenPos[1] - 5,
+			screenPos.vx - 5,
+			screenPos.vy - 5,
 			10, 10);
 		removeAnimatedUIBox(1, &textRect);
 		if (TAKE_CHEST_STATE == 0) {
@@ -1441,7 +1441,7 @@ void tamerTickTakeChest(void)
 	RECT textRect;
 	RECT targetRect;
 	RECT sourceRect;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 
 	textRect = TAKE_CHEST_TEXT_AREA;
 
@@ -1470,10 +1470,10 @@ void tamerTickTakeChest(void)
 			if (tickOpenChestTray(INTERACTED_CHEST) == 1) {
 				setRECT(&targetRect, -130, 42, 262, 59);
 				getEntityScreenPos(ENTITY_TABLE[0], 1,
-						   screenPos);
+						   &screenPos);
 				setRECT(&sourceRect,
-					screenPos[0] - 5,
-					screenPos[1] - 5,
+					screenPos.vx - 5,
+					screenPos.vy - 5,
 					10, 10);
 				TAKE_CHEST_ITEM =
 					CHEST_ARRAY[INTERACTED_CHEST].item;
@@ -1514,10 +1514,10 @@ void tamerTickTakeChest(void)
 		if (((POLLED_INPUT & CONFIRM_BUTTON) != 0) &&
 		    (5 < TAKE_ITEM_FRAME_COUNTER)) {
 			getEntityScreenPos(&TAMER_ENTITY.entity, 1,
-					   screenPos);
+					   &screenPos);
 			setRECT(&textRect,
-				screenPos[0] - 5,
-				screenPos[1] - 5,
+				screenPos.vx - 5,
+				screenPos.vy - 5,
 				10, 10);
 			removeAnimatedUIBox(1, &textRect);
 			if (TAKE_CHEST_STATE == 0) {
@@ -1690,7 +1690,7 @@ void tamerTickAwardSomething(void)
 	RECT textRect;
 	RECT targetRect;
 	RECT sourceRect;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 
 	textRect = AWARD_SOMETHING_TEXT_AREA;
 
@@ -1735,10 +1735,10 @@ void tamerTickAwardSomething(void)
 	case 4:
 		if (isUIBoxAvailable(1) == 1) {
 			setRECT(&targetRect, -130, 42, 262, 59);
-			getEntityScreenPos(ENTITY_TABLE[0], 1, screenPos);
+			getEntityScreenPos(ENTITY_TABLE[0], 1, &screenPos);
 			setRECT(&sourceRect,
-				screenPos[0] - 5,
-				screenPos[1] - 5,
+				screenPos.vx - 5,
+				screenPos.vy - 5,
 				10, 10);
 			TAKE_CHEST_ITEM =
 				CHEST_ARRAY[INTERACTED_CHEST].item;
@@ -1752,10 +1752,10 @@ void tamerTickAwardSomething(void)
 		if ((POLLED_INPUT & CONFIRM_BUTTON) != 0) {
 			TAKE_ITEM_FRAME_COUNTER = 0;
 			getEntityScreenPos(&TAMER_ENTITY.entity, 1,
-					   screenPos);
+					   &screenPos);
 			setRECT(&textRect,
-				screenPos[0] - 5,
-				screenPos[1] - 5,
+				screenPos.vx - 5,
+				screenPos.vy - 5,
 				10, 10);
 			removeAnimatedUIBox(1, &textRect);
 			tamerSetState(0);

@@ -476,7 +476,7 @@ void BTL_initializeDeathCountdown(void)
 
 void BTL_addDeathCountdown(Entity *entity)
 {
-	int16_t pos[2];
+	DVECTOR pos;
 	GsSPRITE *sprite;
 	GsSPRITE *shadow;
 #if !defined(VERSION_JP)
@@ -488,26 +488,26 @@ void BTL_addDeathCountdown(Entity *entity)
 #endif
 	BTL_D_80073E78.data.timer = 0;
 	BTL_D_80073E78.data.step = 0;
-	getEntityScreenPos(entity, 1, pos);
-	if (pos[0] >= 0x8d) {
-		pos[0] = 0x8c;
+	getEntityScreenPos(entity, 1, &pos);
+	if (pos.vx >= 0x8d) {
+		pos.vx = 0x8c;
 	}
-	if (pos[0] < -0x8c) {
-		pos[0] = -0x8c;
+	if (pos.vx < -0x8c) {
+		pos.vx = -0x8c;
 	}
-	if (pos[1] >= 0x65) {
-		pos[1] = 0x64;
+	if (pos.vy >= 0x65) {
+		pos.vy = 0x64;
 	}
-	if (pos[1] < -0x64) {
-		pos[1] = -0x64;
+	if (pos.vy < -0x64) {
+		pos.vy = -0x64;
 	}
 #if defined(VERSION_JP)
 	sprite = &BTL_D_80073E54;
 	shadow = &BTL_D_80073E78.data.sprite;
 	shadow->cy = sprite->cy = 0x1ed;
 	shadow->rotate = sprite->rotate = 0;
-	shadow->x = sprite->x = pos[0];
-	shadow->y = sprite->y = pos[1];
+	shadow->x = sprite->x = pos.vx;
+	shadow->y = sprite->y = pos.vy;
 #else
 	shadow = &BTL_D_80073E78.data.sprite;
 	do {
@@ -515,9 +515,9 @@ void BTL_addDeathCountdown(Entity *entity)
 		shadow->cy = 0x1ed;
 		BTL_D_80073E54.rotate = 0;
 		shadow->rotate = 0;
-		BTL_D_80073E54.x = pos[0];
-		shadow->x = pos[0];
-		py = pos[1];
+		BTL_D_80073E54.x = pos.vx;
+		shadow->x = pos.vx;
+		py = pos.vy;
 		BTL_D_80073E54.y = py;
 		shadow->y = py;
 	} while (0);

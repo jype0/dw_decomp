@@ -52,7 +52,7 @@ void VS_unloadEFESlot(int32_t idx);
 void VS_runEFESlotScript(int32_t idx);
 int32_t VS_setupLoadedEFEFile(EfeLoad *load);
 void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage);
-void VS_handleEFEFileLoaded(int32_t arg);
+void VS_handleEFEFileLoaded(EfeLoad *load);
 void VS_tickEFEUVAnimation(int32_t idx);
 void VS_tickParticleEmitters(void);
 void VS_renderParticleEmitters(void);
@@ -62,7 +62,7 @@ int32_t VS_startEFE(int32_t i);
 char *VS_getEFEHeapPointer(void);
 char *VS_getEFETextureSection(char *p);
 char *VS_getEFEModelSection(char *p);
-int32_t VS_getEFEFileId(int32_t p);
+int32_t VS_getEFEFileId(char *data);
 void VS_isTargetUnhit(void);
 void VS_markEFEFinished(void);
 void VS_getViewportDistance2(void);
@@ -238,8 +238,8 @@ void VS_tickAuraProjectile(int32_t id);
 void VS_renderAuraProjectile(int32_t i);
 char *VS_initializeAuraProjectiles(char *base);
 void setInt16WithStride(int16_t *ptr, int16_t value, int32_t count, int32_t stride);
-void createCloudFX(int16_t *pos);
-int32_t addEntityParticleFX(int32_t *typePtr, int32_t timer);
+void createCloudFX(SVECTOR *pos);
+int32_t addEntityParticleFX(Entity *owner, int32_t timer);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
 int32_t getOriginalType(int32_t type);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
@@ -252,7 +252,7 @@ void getDrawingOffsetCopy(int32_t *x, int32_t *y);
 void getRViewCopy(GsRVIEW2 *view);
 void getViewportDistanceCopy(int32_t *out);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
-void setFileReadCallback2(void *callback, int32_t arg);
+void setFileReadCallback2(void *callback, void *param);
 void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDINATE2 *super, VECTOR *trans, SVECTOR *rot, VECTOR *scale);
 void translateConditionFXToEntity(Entity *entity, SVECTOR *out);
 void renderSprite(GsSPRITE *sprite, int32_t x, int32_t y, int32_t distance, int32_t width, int32_t height);
@@ -1198,12 +1198,12 @@ char *VS_getEFEModelSection(char *p)
 	return section;
 }
 
-int32_t VS_getEFEFileId(int32_t p)
+int32_t VS_getEFEFileId(char *data)
 {
-	int32_t *header;
+	EfeFileHeader *header;
 
-	header = (int32_t *)p;
-	return header[12];
+	header = (EfeFileHeader *)data;
+	return header->effectId;
 }
 
 int32_t VS_setupLoadedEFEFile(EfeLoad *load)
@@ -1239,7 +1239,7 @@ int32_t VS_setupLoadedEFEFile(EfeLoad *load)
 	data = (char *)m->mmdPtr;
 	tim = VS_getEFETextureSection(data);
 	m->modelPtr = (TMDModel *)(tmd = VS_getEFEModelSection(data));
-	fileId = VS_getEFEFileId((int32_t)data);
+	fileId = VS_getEFEFileId(data);
 
 	switch (VS_EFE_LOAD_STATE) {
 	case 0:
@@ -1377,17 +1377,17 @@ int32_t VS_setupLoadedEFEFile(EfeLoad *load)
 end:;
 }
 
-void VS_handleEFEFileLoaded(int32_t arg)
+void VS_handleEFEFileLoaded(EfeLoad *load)
 {
-	int32_t *header;
-	int32_t textureSize;
-	int32_t modelSize;
+	EfeLoad *ld;
+	int16_t *moves;
+	ModelComponent *model;
 
-	header = (int32_t *)arg;
-	textureSize = header[2];
-	modelSize = header[4];
+	ld = load;
+	moves = ld->moves;
+	model = ld->model;
 	VS_EFE_LOAD_STATE = 0;
-	setFileReadCallback2(VS_setupLoadedEFEFile, arg);
+	setFileReadCallback2(VS_setupLoadedEFEFile, load);
 }
 
 void VS_tickEFEUVAnimation(int32_t idx)
@@ -3583,7 +3583,7 @@ void VS_addSourceEntityParticleFX(void)
 	int32_t timer;
 
 	timer = EFE_POP1(int32_t);
-	addEntityParticleFX((int32_t *)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity, timer);
+	addEntityParticleFX(EFE_SCRIPT_CONTEXT->sourceEntity, timer);
 }
 
 void VS_copyFromParentTransform(void)
@@ -3792,14 +3792,14 @@ void VS_renderScreenSprite(void)
 
 void VS_addCloudEffect(void)
 {
-	int16_t pos[3];
+	SVECTOR pos;
 	EfeVector *v;
 
 	v = EFE_POP1(EfeVector *);
-	pos[0] = v->vx;
-	pos[1] = v->vy;
-	pos[2] = v->vz;
-	createCloudFX(pos);
+	pos.vx = v->vx;
+	pos.vy = v->vy;
+	pos.vz = v->vz;
+	createCloudFX(&pos);
 }
 
 void VS_selectNextTargetEntity(void)

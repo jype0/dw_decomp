@@ -19,7 +19,7 @@ void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t
 void createCameraMovement(VECTOR *pos, int32_t speed);
 void initializeDaytimeTransition(int32_t phase);
 void tickConditionBoundaries(void);
-void createCloudFX(int16_t *pos);
+void createCloudFX(SVECTOR *pos);
 int32_t hasMove(int32_t moveId);
 void learnMove(int32_t moveId);
 void createMenuBox(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, void (*tick)(void), void (*render)(void));
@@ -156,7 +156,7 @@ void TRN_func_800888A0(int8_t arg)
 
 void TRN_createCloudFXLine(int16_t a, int16_t b, int16_t x, int16_t z, int16_t dx, int16_t dz, int8_t n)
 {
-	int16_t pos[3];
+	SVECTOR pos;
 	int16_t d;
 	int32_t i;
 	int32_t r;
@@ -168,10 +168,10 @@ void TRN_createCloudFXLine(int16_t a, int16_t b, int16_t x, int16_t z, int16_t d
 		d = (a / 120) * b;
 		for (i = 0; i < n; i++) {
 			r = randomLimit(100);
-			pos[0] = (x + d) - r;
-			pos[1] = 0;
-			pos[2] = (z + d) - r;
-			createCloudFX(pos);
+			pos.vx = (x + d) - r;
+			pos.vy = 0;
+			pos.vz = (z + d) - r;
+			createCloudFX(&pos);
 			x += dx;
 			z += dz;
 		}

@@ -168,7 +168,7 @@ void swapInt(int32_t *a, int32_t *b)
 void getEntityScreenPos(e, boneId, out)
 Entity *e;
 int16_t boneId;
-int16_t *out;
+DVECTOR *out;
 {
 	MATRIX *w;
 	SVECTOR v;
@@ -181,8 +181,8 @@ int16_t *out;
 	gte_ldv0(&v);
 	gte_rtps();
 	gte_stsxy((long *)out);
-	out[0] -= 0xA0 - DRAWING_OFFSET_X;
-	out[1] -= 0x78 - DRAWING_OFFSET_Y;
+	out->vx -= 0xA0 - DRAWING_OFFSET_X;
+	out->vy -= 0x78 - DRAWING_OFFSET_Y;
 }
 
 void setEntityTextDigit(poly, x, y)

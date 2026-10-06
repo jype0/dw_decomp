@@ -85,15 +85,15 @@ void VS_calculateScoreRanks(int32_t *values, int32_t *groups, int32_t count);
 uint8_t VS_isFighterDefeated(uint8_t index);
 void VS_renderMoveName(int32_t i);
 void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, int32_t index);
-void addEntityText(DigimonEntity *digimon, long slot, int32_t color, int32_t value, uint8_t flag);
+void addEntityText(Entity *entity, long slot, int32_t color, int32_t value, uint8_t flag);
 void addWithLimit(/* int16_t *value, int16_t amount, int16_t limit */);
 void VS_stopEFESubEffect(int32_t a, int32_t b);
-int32_t VS_addPoisonEffect(DigimonEntity *digimon);
-void VS_removePoisonEffect(int32_t i, DigimonEntity *digimon);
-int32_t VS_addConfusionEffect(DigimonEntity *digimon);
-void VS_removeConfusionEffect(int32_t i, DigimonEntity *digimon);
-int32_t VS_addStunEffect(DigimonEntity *digimon, int32_t val);
-void VS_removeStunEffect(int32_t i, DigimonEntity *digimon);
+int32_t VS_addPoisonEffect(Entity *entity);
+void VS_removePoisonEffect(int32_t i, Entity *entity);
+int32_t VS_addConfusionEffect(Entity *entity);
+void VS_removeConfusionEffect(int32_t i, Entity *entity);
+int32_t VS_addStunEffect(Entity *entity, int32_t val);
+void VS_removeStunEffect(int32_t i, Entity *entity);
 void VS_removeTargetCursor(int16_t index);
 void VS_removeFinisherAura(int32_t i);
 int32_t VS_startEFE(int32_t script);
@@ -560,7 +560,7 @@ void VS_buffStats(digimon, slot, value, stat, color, flag)
 // clang-format on
 {
 	addWithLimit(stat, value, 0x3e7);
-	addEntityText(digimon, slot, color, value, flag);
+	addEntityText(&digimon->entity, slot, color, value, flag);
 }
 
 void VS_startAttackAnimation(Entity *entity, AttackObject *attack, uint8_t anim)
@@ -637,7 +637,7 @@ skipViewpoint:
 			fighter->flags |= 0x10;
 			VS_handleHitReaction(entity, fighter, &attack, i);
 			sub->unk25 = 0;
-			addEntityText((DigimonEntity *)entity, i, 0, dmg, 0);
+			addEntityText(entity, i, 0, dmg, 0);
 			fighter->invulnerableTimer = MOVE_DATA[tech].iframes;
 			entity->anim.animFlag &= 0xfe;
 			VS_applyMoveStatus((DigimonEntity *)entity, fighter, tech);
@@ -684,7 +684,7 @@ skipViewpoint:
 				fighter->hpDamageBuffer = 0x270f;
 			}
 			sub->unk25 = 0;
-			addEntityText((DigimonEntity *)entity, i, 0, dmg, 0);
+			addEntityText(entity, i, 0, dmg, 0);
 		}
 		VS_addFinisherProgress(fighter, fighter->finisherGoal * 3 / 50);
 		for (j = 0; ENEMY_COUNT >= j; j++) {
@@ -1119,13 +1119,13 @@ void VS_addStatusEffectVisual(DigimonEntity *digimon, FighterData *fighter, uint
 	if (fighter->statusFxId == -1) {
 		switch (kind) {
 		case 1:
-			fighter->statusFxId = VS_addPoisonEffect(digimon);
+			fighter->statusFxId = VS_addPoisonEffect(&digimon->entity);
 			break;
 		case 2:
-			fighter->statusFxId = VS_addConfusionEffect(digimon);
+			fighter->statusFxId = VS_addConfusionEffect(&digimon->entity);
 			break;
 		case 3:
-			fighter->statusFxId = VS_addStunEffect(digimon, fighter->stunTimer);
+			fighter->statusFxId = VS_addStunEffect(&digimon->entity, fighter->stunTimer);
 			break;
 		}
 	}
@@ -1148,13 +1148,13 @@ void VS_removeStatusEffectVisual(DigimonEntity *digimon, FighterData *fighter, u
 	if (fighter->statusFxId != -1L) {
 		switch (kind) {
 		case 1:
-			VS_removePoisonEffect(fighter->statusFxId, digimon);
+			VS_removePoisonEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		case 2:
-			VS_removeConfusionEffect(fighter->statusFxId, digimon);
+			VS_removeConfusionEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		case 3:
-			VS_removeStunEffect(fighter->statusFxId, digimon);
+			VS_removeStunEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		}
 		fighter->statusFxId = -1;
@@ -1196,7 +1196,7 @@ void VS_applyMoveResult(void)
 				if (i != 0) {
 					COMBAT_DATA_PTR->player.unk1[i].unk25 = 0;
 				}
-				addEntityText((DigimonEntity *)entity, i, 0xc, dmg, 0);
+				addEntityText(entity, i, 0xc, dmg, 0);
 			}
 		}
 		if (fighter->flags & 2) {

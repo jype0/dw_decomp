@@ -177,9 +177,9 @@ void FISH_showBaitSprite(VECTOR *pos, int32_t sprite);
 int32_t FISH_moveBaitToRodTip(int32_t maxStep);
 void FISH_tickBaitSprite(void);
 void FISH_drawBaitSprite(void);
-void FISH_resetBobberAnim(FishRipple *s);
-void FISH_initBobberAnim(FishRipple *s);
-void FISH_clearBobberAnim(FishRipple *s);
+void FISH_resetBobberAnim(FishingSwimmer *s);
+void FISH_initBobberAnim(FishingSwimmer *s);
+void FISH_clearBobberAnim(FishingSwimmer *s);
 void FISH_getRodTipPos(VECTOR *out);
 void FISH_bobberCommand(FishingSwimmer *s, int32_t command);
 void FISH_tickBobberPhysics(void);
@@ -1421,7 +1421,7 @@ int32_t FISH_openBaitMenu(void)
 		FISH_drawBaitMenuRow(k);
 	}
 
-	getEntityScreenPos(ENTITY_TABLE[0], 1, (int16_t *)&pos);
+	getEntityScreenPos(ENTITY_TABLE[0], 1, &pos);
 	setRECT(&menu->startPos, pos.vx - 5, pos.vy - 5, 10, 10);
 	setRECT(&menu->finalPos, -0x98, -0x68, 0x132, 0xb6);
 	menu->boxId = 3;
@@ -1563,7 +1563,7 @@ void FISH_renderTextBox(int32_t boxId)
 int32_t FISH_showTextBox(char *line0, char *line1, char *line2, char *line3, VECTOR *target)
 {
 	FishingView *view = &FISHING_DATA_PTR->view;
-	int16_t pos[2];
+	DVECTOR pos;
 	int32_t i;
 
 	FISH_closeTextBox();
@@ -1587,7 +1587,7 @@ int32_t FISH_showTextBox(char *line0, char *line1, char *line2, char *line3, VEC
 		}
 	}
 
-	getEntityScreenPos(ENTITY_TABLE[0], 1, pos);
+	getEntityScreenPos(ENTITY_TABLE[0], 1, &pos);
 
 	setRECT(&view->box.startPos, -DRAWING_OFFSET_X + 0xa0, -DRAWING_OFFSET_Y + 0x78, 1, 1);
 	setRECT(&view->box.finalPos, -0x82, 0x2a, 0x106, 0x3b);
@@ -2346,20 +2346,20 @@ void FISH_drawBaitSprite(void)
 	GsSetWorkBase((PACKET *)(prim + 1));
 }
 
-void FISH_resetBobberAnim(FishRipple *s)
+void FISH_resetBobberAnim(FishingSwimmer *s)
 {
-	s->kind = 3;
+	s->state = 3;
 	s->sprite = 0;
-	s->frame = 0;
-	s->active = 0;
+	s->timer = 0;
+	s->mode = 0;
 }
 
-void FISH_initBobberAnim(FishRipple *s)
+void FISH_initBobberAnim(FishingSwimmer *s)
 {
 	FISH_resetBobberAnim(s);
 }
 
-void FISH_clearBobberAnim(FishRipple *s)
+void FISH_clearBobberAnim(FishingSwimmer *s)
 {
 	FISH_resetBobberAnim(s);
 }
@@ -2569,7 +2569,7 @@ void FISH_tickBobberPhysics(void)
 				FISH_SCRATCH->v0.vx = 0;
 				FISH_SCRATCH->v0.vy = 0;
 				FISH_SCRATCH->v0.vz = s->dist;
-				rotateVector(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, (VECTOR *)s);
+				rotateVector(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, &s->pos);
 				addVector(&s->pos, &FISHING_DATA_PTR->rod.lineStart);
 				FISH_SCRATCH->v0.vx = s->pos.vx - old.vx;
 				FISH_SCRATCH->v0.vy = s->pos.vy - old.vy;
@@ -2594,7 +2594,7 @@ void FISH_tickBobberPhysics(void)
 				FISH_SCRATCH->v0.vx = 0;
 				FISH_SCRATCH->v0.vy = 0;
 				FISH_SCRATCH->v0.vz = s->dist;
-				rotateVector(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, (VECTOR *)s);
+				rotateVector(&FISH_SCRATCH->rot, &FISH_SCRATCH->v0, &s->pos);
 				addVector(&s->pos, &FISHING_DATA_PTR->rod.lineStart);
 			}
 		}
@@ -3822,7 +3822,7 @@ giveUp:
 	startAnimation(&TAMER_ENTITY.entity, 0);
 	rod->displaySwimmer = 0;
 	FISH_clearBaitSprite();
-	FISH_initBobberAnim((FishRipple *)&FISHING_DATA_PTR->swimmer.pos);
+	FISH_initBobberAnim(&FISHING_DATA_PTR->swimmer);
 	rod->displayLine = 0;
 	FISHING_DATA_PTR->swimmer.mode = 0;
 	rod->fishingState = 2;
@@ -4616,7 +4616,7 @@ void FISH_endFishing(FishingRod *rod)
 	FISH_shutdownTextBox();
 	FISH_resetTension();
 	FISH_initBaitSprite();
-	FISH_initBobberAnim((FishRipple *)&FISHING_DATA_PTR->swimmer.pos);
+	FISH_initBobberAnim(&FISHING_DATA_PTR->swimmer);
 }
 
 void FISH_loadFishing(FishingRod *rod)
@@ -4633,7 +4633,7 @@ void FISH_loadFishing(FishingRod *rod)
 	rod->displayRod = 1;
 	rod->displaySwimmer = 0;
 	rod->displayLine = 0;
-	FISH_clearBobberAnim((FishRipple *)&FISHING_DATA_PTR->swimmer.pos);
+	FISH_clearBobberAnim(&FISHING_DATA_PTR->swimmer);
 	FISH_tickHookedFish(0xf);
 	FISH_loadTMDModel(&FISHING_DATA_PTR->rodModel, FISH_PATH_ROD_MODEL,
 	                  FISHING_DATA_PTR->rodModelBuffer, 0x1000);
@@ -4660,7 +4660,7 @@ void FISH_init(void)
 	FISH_initTextBox();
 	FISH_resetTension();
 	FISH_hideBaitSprite();
-	FISH_resetBobberAnim((FishRipple *)&FISHING_DATA_PTR->swimmer.pos);
+	FISH_resetBobberAnim(&FISHING_DATA_PTR->swimmer);
 	FISH_initFishPool();
 	FISH_resetRodState(&FISHING_DATA_PTR->rod);
 	FISH_clearHookedFish();

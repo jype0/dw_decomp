@@ -89,15 +89,15 @@ void BTL_healStatusEffect(int32_t arg0);
 int16_t BTL_getNearestEnemy(Entity *self, int16_t *flags);
 void BTL_tickAttackState(Entity *entity, DigimonEntity *target, int32_t id);
 void handleBattleIdle(DigimonEntity *digimon, Stats *stats, int32_t flags);
-void createParticleFX(uint8_t kind, int32_t count, void *arg2, Entity *entity, int32_t arg4);
+void createParticleFX(uint8_t kind, int32_t count, SVECTOR *pos, Entity *entity, int32_t lifetime);
 void BTL_resetFlatten(int16_t index);
 void BTL_handleVictorySequence(void);
-int32_t BTL_addPoisonEffect(DigimonEntity *digimon);
-int32_t BTL_addConfusionEffect(DigimonEntity *digimon);
-int32_t BTL_addStunEffect(DigimonEntity *digimon, int32_t val);
-void BTL_removePoisonEffect(int32_t id, DigimonEntity *digimon);
-void BTL_removeConfusionEffect(int32_t id, DigimonEntity *digimon);
-void BTL_removeStunEffect(int32_t id, DigimonEntity *digimon);
+int32_t BTL_addPoisonEffect(Entity *entity);
+int32_t BTL_addConfusionEffect(Entity *entity);
+int32_t BTL_addStunEffect(Entity *entity, int32_t val);
+void BTL_removePoisonEffect(int32_t id, Entity *entity);
+void BTL_removeConfusionEffect(int32_t id, Entity *entity);
+void BTL_removeStunEffect(int32_t id, Entity *entity);
 uint32_t BTL_getMoveWithHighestDistance(DigimonEntity *digimon);
 void BTL_getRemainingEnemies(Entity *self, int16_t *out, int16_t *count);
 void BTL_findUnblockedRotation(Entity *entity, int16_t *rot, int16_t hit, int16_t orig);
@@ -134,7 +134,7 @@ int16_t BTL_getCheapestMove(int32_t arg0, int16_t *flags);
 void BTL_tickHitState(Entity *entity, FighterData *fighter, int32_t arg2);
 int32_t BTL_selectMoveByPower(int32_t arg0, int16_t *flags);
 int32_t BTL_selectMoveByMpCost(int32_t arg0, int16_t *flags);
-void addEntityText(DigimonEntity *digimon, long slot, int32_t color, int32_t value, uint8_t flag);
+void addEntityText(Entity *entity, long slot, int32_t color, int32_t value, uint8_t flag);
 void addWithLimit(/* int16_t *value, int16_t amount, int16_t limit */);
 void BTL_buffStats(DigimonEntity *digimon, int32_t slot, int32_t value, int16_t *stat, int32_t color, int32_t flag);
 int16_t BTL_getRandomUsableMove(int16_t *flags);
@@ -2172,7 +2172,7 @@ void BTL_tickAttackHits(void)
 			fighter->flags |= 0x10;
 			BTL_handleHitReaction(entity, fighter, &attack, i);
 			sub->unk25 = 0;
-			addEntityText((DigimonEntity *)entity, i, 0, dmg, 0);
+			addEntityText(entity, i, 0, dmg, 0);
 			fighter->invulnerableTimer = MOVE_DATA[tech].iframes;
 			entity->anim.animFlag &= 0xfe;
 			BTL_applyMoveStatus((DigimonEntity *)entity, fighter, tech);
@@ -2219,7 +2219,7 @@ void BTL_tickAttackHits(void)
 				fighter->hpDamageBuffer = 0x270f;
 			}
 			sub->unk25 = 0;
-			addEntityText((DigimonEntity *)entity, i, 0, dmg, 0);
+			addEntityText(entity, i, 0, dmg, 0);
 		}
 		BTL_addFinisherProgress(fighter, fighter->finisherGoal * 3 / 50);
 		for (j = 0; ENEMY_COUNT >= j; j++) {
@@ -2255,14 +2255,14 @@ void BTL_buffStats(digimon, slot, value, stat, color, flag)
 // clang-format on
 {
 	addWithLimit(stat, value, 0x3e7);
-	addEntityText(digimon, slot, color, value, flag);
+	addEntityText(&digimon->entity, slot, color, value, flag);
 }
 
 void BTL_renderEnemyHPBars(void)
 {
 	long i;
 	int32_t w;
-	int16_t pos[2];
+	DVECTOR pos;
 	PlayerDataSub *spr;
 	CombatData *combat;
 	FighterData *fighter;
@@ -2296,20 +2296,20 @@ void BTL_renderEnemyHPBars(void)
 		if (!(fighter->flags & 0x10) && (fighter->hpDamageBuffer == 0)) {
 			spr->unk25++;
 		}
-		getEntityScreenPos(entity, 1, pos);
-		if (pos[1] < -0x4a) {
+		getEntityScreenPos(entity, 1, &pos);
+		if (pos.vy < -0x4a) {
 			y = -0x64;
 		} else {
-			y = pos[1] - 0x1a;
+			y = pos.vy - 0x1a;
 		}
-		if (pos[0] >= 0x42) {
+		if (pos.vx >= 0x42) {
 			x = 0x55;
 		} else {
-			x = pos[0] + 0x14;
+			x = pos.vx + 0x14;
 		}
 		drawLine3P(color, x, y, x + 0x36, y, x + 0x36, y + 6, 7, 0);
 		drawLine3P(color, x, y + 1, x, y + 6, x + 0x35, y + 6, 7, 0);
-		drawLine2P(color, x, y + 6, pos[0], pos[1], 7, 0);
+		drawLine2P(color, x, y + 6, pos.vx, pos.vy, 7, 0);
 		sprite = (GsSPRITE *)spr;
 		sprite->x = x + 2;
 		sprite->y = y + 2;
@@ -2719,13 +2719,13 @@ void BTL_addStatusEffectVisual(DigimonEntity *digimon, FighterData *fighter, uin
 	if (fighter->statusFxId == -1) {
 		switch (kind) {
 		case 1:
-			fighter->statusFxId = BTL_addPoisonEffect(digimon);
+			fighter->statusFxId = BTL_addPoisonEffect(&digimon->entity);
 			break;
 		case 2:
-			fighter->statusFxId = BTL_addConfusionEffect(digimon);
+			fighter->statusFxId = BTL_addConfusionEffect(&digimon->entity);
 			break;
 		case 3:
-			fighter->statusFxId = BTL_addStunEffect(digimon, fighter->stunTimer);
+			fighter->statusFxId = BTL_addStunEffect(&digimon->entity, fighter->stunTimer);
 			break;
 		}
 	}
@@ -2748,13 +2748,13 @@ void BTL_removeStatusEffectVisual(DigimonEntity *digimon, FighterData *fighter, 
 	if (fighter->statusFxId != -1L) {
 		switch (kind) {
 		case 1:
-			BTL_removePoisonEffect(fighter->statusFxId, digimon);
+			BTL_removePoisonEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		case 2:
-			BTL_removeConfusionEffect(fighter->statusFxId, digimon);
+			BTL_removeConfusionEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		case 3:
-			BTL_removeStunEffect(fighter->statusFxId, digimon);
+			BTL_removeStunEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		}
 		fighter->statusFxId = -1;
@@ -2822,7 +2822,7 @@ void BTL_tickStatusEffects(void)
 				if (i != 0) {
 					COMBAT_DATA_PTR->player.unk1[i].unk25 = 0;
 				}
-				addEntityText((DigimonEntity *)entity, i, 0xc, dmg, 0);
+				addEntityText(entity, i, 0xc, dmg, 0);
 			}
 		}
 		if (fighter->flags & 2) {

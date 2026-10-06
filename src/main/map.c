@@ -10,6 +10,7 @@
 #include <dw/fade.h>
 #include <dw/file.h>
 #include <dw/font.h>
+#include <dw/graphics.h>
 #include <dw/input.h>
 #include <dw/item.h>
 #include <dw/map.h>
@@ -138,7 +139,7 @@ void loadMap(int32_t mapId);
 int32_t loadMapSetup(int32_t *data);
 void moveCameraByDiff(VECTOR *from, VECTOR *to);
 void readMapTFS(int32_t mapId);
-void renderFXParticle(SVECTOR *pos, int32_t size, uint8_t *color);
+void renderFXParticle(SVECTOR *pos, int32_t size, RGB8 *color);
 void renderMap(int32_t arg0);
 void renderMapName(int32_t instanceId);
 void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance, int32_t width, int32_t height);
@@ -6494,7 +6495,7 @@ int16_t DOOA_getStoredDigimonY(void)
 	return DOOA_STORED_DIGIMON_Y;
 }
 
-void renderFXParticle(SVECTOR *pos, int32_t size, uint8_t *color)
+void renderFXParticle(SVECTOR *pos, int32_t size, RGB8 *color)
 {
 	POLY_FT4 *prim;
 	int32_t depth;
@@ -6505,7 +6506,7 @@ void renderFXParticle(SVECTOR *pos, int32_t size, uint8_t *color)
 	SetPolyFT4(prim);
 	SetSemiTrans(prim, 1);
 	prim->code |= 2;
-	setRGB0(prim, color[0], color[1], color[2]);
+	setRGB0(prim, color->r, color->g, color->b);
 	prim->tpage = getTPage(0, 1, 768, 256);
 	prim->clut = getClut(192, 489);
 	setUVWH(prim, 0, 160, 15, 15);

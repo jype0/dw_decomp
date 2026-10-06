@@ -66,10 +66,10 @@ void renderTMDModel(uint8_t *buffer, int32_t id, GsCOORDINATE2 *coord, GsCOORDIN
 void calculateBoneMatrix(Entity *entity, int32_t boneId, MATRIX *out);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 int32_t getOriginalType(int32_t type);
-void createCloudFX(int16_t *pos);
-int32_t addEntityParticleFX(int32_t *typePtr, int32_t timer);
+void createCloudFX(SVECTOR *pos);
+int32_t addEntityParticleFX(Entity *owner, int32_t timer);
 void setInt16WithStride(int16_t *ptr, int16_t value, int32_t count, int32_t stride);
-void setFileReadCallback2(void *callback, int32_t arg);
+void setFileReadCallback2(void *callback, void *param);
 int32_t STD_setupLoadedEFEFile(EfeLoad *load);
 void updateTMDTextureData(char *tmd, int32_t clutX, int32_t x, int32_t y, int32_t tpage);
 void STD_renderParticleEmitters(void);
@@ -90,7 +90,7 @@ void STD_clearEFESoundChannels(void);
 void STD_stopEFESounds(void);
 void STD_unloadEFESlot(int32_t idx);
 void STD_runEFESlotScript(int32_t idx);
-void STD_handleEFEFileLoaded(int32_t arg);
+void STD_handleEFEFileLoaded(EfeLoad *load);
 void STD_tickParticleEmitters(void);
 int16_t STD_offsetEFEPrimitiveUVs(char *base, int32_t idx, int8_t du, int8_t dv);
 char *STD_initializeEFEEngine(char *base);
@@ -102,7 +102,7 @@ void STD_stopEFESubEffect(int32_t a, int32_t b);
 int32_t STD_func_8006EA6C(void);
 char *STD_func_8006EA78(char *p);
 char *STD_func_8006EAAC(char *p);
-int32_t STD_getEFEFileId(int32_t p);
+int32_t STD_getEFEFileId(char *data);
 void STD_isTargetUnhit(void);
 void STD_markEFEFinished(void);
 void STD_func_8006EB58(void);
@@ -1552,12 +1552,12 @@ char *STD_func_8006EAAC(char *p)
 	return section;
 }
 
-int32_t STD_getEFEFileId(int32_t p)
+int32_t STD_getEFEFileId(char *data)
 {
-	int32_t *header;
+	EfeFileHeader *header;
 
-	header = (int32_t *)p;
-	return header[12];
+	header = (EfeFileHeader *)data;
+	return header->effectId;
 }
 
 int32_t STD_setupLoadedEFEFile(EfeLoad *load)
@@ -1593,7 +1593,7 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 	data = (char *)m->mmdPtr;
 	tim = STD_func_8006EA78(data);
 	m->modelPtr = (TMDModel *)(tmd = STD_func_8006EAAC(data));
-	fileId = STD_getEFEFileId((int32_t)data);
+	fileId = STD_getEFEFileId(data);
 
 	switch (MAIN_D_801351B8) {
 	case 0:
@@ -1731,17 +1731,17 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 end:;
 }
 
-void STD_handleEFEFileLoaded(int32_t arg)
+void STD_handleEFEFileLoaded(EfeLoad *load)
 {
-	int32_t *header;
-	int32_t textureSize;
-	int32_t modelSize;
+	EfeLoad *ld;
+	int16_t *moves;
+	ModelComponent *model;
 
-	header = (int32_t *)arg;
-	textureSize = header[2];
-	modelSize = header[4];
+	ld = load;
+	moves = ld->moves;
+	model = ld->model;
 	MAIN_D_801351B8 = 0;
-	setFileReadCallback2(STD_setupLoadedEFEFile, arg);
+	setFileReadCallback2(STD_setupLoadedEFEFile, load);
 }
 
 void STD_tickEFEUVAnimation(int32_t idx)
@@ -3985,7 +3985,7 @@ void STD_addSourceEntityParticleFX(void)
 	int32_t timer;
 
 	timer = EFE_POP1(int32_t);
-	addEntityParticleFX((int32_t *)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity, timer);
+	addEntityParticleFX(EFE_SCRIPT_CONTEXT->sourceEntity, timer);
 }
 
 void STD_copyFromParentTransform(void)
@@ -4194,14 +4194,14 @@ void STD_renderScreenSprite(void)
 
 void STD_addCloudEffect(void)
 {
-	int16_t pos[3];
+	SVECTOR pos;
 	EfeVector *v;
 
 	v = EFE_POP1(EfeVector *);
-	pos[0] = v->vx;
-	pos[1] = v->vy;
-	pos[2] = v->vz;
-	createCloudFX(pos);
+	pos.vx = v->vx;
+	pos.vy = v->vy;
+	pos.vz = v->vz;
+	createCloudFX(&pos);
 }
 
 void STD_selectNextTargetEntity(void)

@@ -105,7 +105,7 @@ int32_t STD_func_80061AA8(DigimonEntity *digimon, DigimonEntity *target, Fighter
 int32_t STD_tickMeleeAttack(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter, int16_t arg3);
 void STD_func_80065540(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter);
 int16_t STD_getMostEffectiveMove(int32_t arg0, int16_t *flags);
-void addEntityText(DigimonEntity *digimon, long slot, int32_t color, int32_t value, uint8_t flag);
+void addEntityText(Entity *entity, long slot, int32_t color, int32_t value, uint8_t flag);
 void setupModelMatrix(PositionData *posData);
 void startAnimation(Entity *entity, uint8_t animId);
 void tickAnimation(Entity *entity);
@@ -236,12 +236,12 @@ void STD_func_80067744(DigimonEntity *digimon, FighterData *fighter, int16_t ind
 void STD_func_80067A30(DigimonEntity *digimon, FighterData *fighter, int16_t index);
 void STD_renderCommandMenu(uint8_t id);
 void STD_addCommandMenu(uint8_t index);
-int32_t STD_addStunEffect(DigimonEntity *digimon, int32_t val);
-int32_t STD_addConfusionEffect(DigimonEntity *digimon);
-int32_t STD_func_80077664(DigimonEntity *digimon);
-void STD_removeStunEffect(int32_t id, DigimonEntity *digimon);
-void STD_removeConfusionEffect(int32_t id, DigimonEntity *digimon);
-void STD_removePoisonEffect(int32_t id, DigimonEntity *digimon);
+int32_t STD_addStunEffect(Entity *entity, int32_t val);
+int32_t STD_addConfusionEffect(Entity *entity);
+int32_t STD_func_80077664(Entity *entity);
+void STD_removeStunEffect(int32_t id, Entity *entity);
+void STD_removeConfusionEffect(int32_t id, Entity *entity);
+void STD_removePoisonEffect(int32_t id, Entity *entity);
 int32_t STD_addFinisherAura(Entity *entity, int32_t arg1);
 void STD_func_80069134(int16_t tech);
 void STD_func_800658B4(DigimonEntity *digimon, DigimonEntity *target, FighterData *fighter);
@@ -5512,7 +5512,7 @@ skipViewpoint:
 			fighter->flags |= 0x10;
 			STD_handleHitReaction(entity, fighter, &attack, i);
 			sub->unk25 = 0;
-			addEntityText((DigimonEntity *)entity, i, 0, dmg, 0);
+			addEntityText(entity, i, 0, dmg, 0);
 			fighter->invulnerableTimer = MOVE_DATA[tech].iframes;
 			entity->anim.animFlag &= 0xfe;
 			STD_applyMoveStatus((DigimonEntity *)entity, fighter, tech);
@@ -5559,7 +5559,7 @@ skipViewpoint:
 				fighter->hpDamageBuffer = 0x270f;
 			}
 			sub->unk25 = 0;
-			addEntityText((DigimonEntity *)entity, i, 0, dmg, 0);
+			addEntityText(entity, i, 0, dmg, 0);
 		}
 		STD_addFinisherProgress(fighter, fighter->finisherGoal * 3 / 50);
 		for (j = 0; ENEMY_COUNT >= j; j++) {
@@ -5900,7 +5900,7 @@ void STD_buffStats(digimon, slot, value, stat, color, flag)
 // clang-format on
 {
 	addWithLimit(stat, value, 0x3e7);
-	addEntityText(digimon, slot, color, value, flag);
+	addEntityText(&digimon->entity, slot, color, value, flag);
 }
 
 void STD_startHitAnimation(Entity *entity, AttackObject *attack, uint8_t animId)
@@ -6601,7 +6601,7 @@ void STD_applyMoveResult(void)
 				if (i != 0) {
 					COMBAT_DATA_PTR->player.unk1[i].unk25 = 0;
 				}
-				addEntityText((DigimonEntity *)entity, i, 0xc, dmg, 0);
+				addEntityText(entity, i, 0xc, dmg, 0);
 			}
 		}
 		if (fighter->flags & 2) {
@@ -6755,13 +6755,13 @@ void STD_addStatusEffectVisual(DigimonEntity *digimon, FighterData *fighter, uin
 	if (fighter->statusFxId == -1) {
 		switch (kind) {
 		case 1:
-			fighter->statusFxId = STD_func_80077664(digimon);
+			fighter->statusFxId = STD_func_80077664(&digimon->entity);
 			break;
 		case 2:
-			fighter->statusFxId = STD_addConfusionEffect(digimon);
+			fighter->statusFxId = STD_addConfusionEffect(&digimon->entity);
 			break;
 		case 3:
-			fighter->statusFxId = STD_addStunEffect(digimon, fighter->stunTimer);
+			fighter->statusFxId = STD_addStunEffect(&digimon->entity, fighter->stunTimer);
 			break;
 		}
 	}
@@ -6784,13 +6784,13 @@ void STD_removeStatusEffectVisual(DigimonEntity *digimon, FighterData *fighter, 
 	if (fighter->statusFxId != -1L) {
 		switch (kind) {
 		case 1:
-			STD_removePoisonEffect(fighter->statusFxId, digimon);
+			STD_removePoisonEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		case 2:
-			STD_removeConfusionEffect(fighter->statusFxId, digimon);
+			STD_removeConfusionEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		case 3:
-			STD_removeStunEffect(fighter->statusFxId, digimon);
+			STD_removeStunEffect(fighter->statusFxId, &digimon->entity);
 			break;
 		}
 		fighter->statusFxId = -1;

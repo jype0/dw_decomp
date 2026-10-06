@@ -23,7 +23,7 @@ void addGameMenu(void);
 void closeTriangleMenu(void);
 void startFeedingItem(uint8_t type);
 void startThrowingItem(void);
-void getEntityScreenPos(Entity *e, int32_t mode, int16_t *out);
+void getEntityScreenPos(Entity *e, int32_t mode, DVECTOR *out);
 void renderString(int32_t color, int32_t x, int32_t y, int32_t w, int32_t h,
                   int32_t u, int32_t v, int32_t layer, int32_t shadow);
 void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h, int32_t layer);
@@ -435,7 +435,7 @@ void closeInventoryBoxes(void)
 
 int32_t createInventoryView(void)
 {
-	int16_t xy[2];
+	DVECTOR xy;
 	RECT finalPos;
 	RECT startPos;
 	uint8_t features;
@@ -465,8 +465,8 @@ int32_t createInventoryView(void)
 			box->totalRows = INVENTORY.size == 20 ? 10 : 15;
 		}
 		setRECT(&finalPos, -0x98, -0x68, 0x130, INVENTORY.size == 10 ? 0x6e : 0xb6);
-		getEntityScreenPos(ENTITY_TABLE[0], 1, xy);
-		setRECT(&startPos, xy[0] - 5, xy[1] - 5, 10, 10);
+		getEntityScreenPos(ENTITY_TABLE[0], 1, &xy);
+		setRECT(&startPos, xy.vx - 5, xy.vy - 5, 10, 10);
 		createAnimatedUIBox(0, 0, features, &finalPos, &startPos,
 		                    (TickFunction)tickInventoryTop, (RenderFunction)renderInventoryTop);
 	}
@@ -599,7 +599,7 @@ void renderInventoryBottom(int16_t boxId)
 
 void closeInventoryBoxes2(void)
 {
-	int16_t xy[2];
+	DVECTOR xy;
 	RECT rect;
 	int16_t x;
 	int16_t y;
@@ -621,8 +621,8 @@ void closeInventoryBoxes2(void)
 		removeAnimatedUIBox(1, &rect);
 	}
 	if ((UI_BOX_DATA[1].frame <= 0) && (UI_BOX_DATA[0].state == 1)) {
-		getEntityScreenPos(ENTITY_TABLE[0], 1, xy);
-		setRECT(&rect, xy[0] - 5, xy[1] - 5, 0xa, 0xa);
+		getEntityScreenPos(ENTITY_TABLE[0], 1, &xy);
+		setRECT(&rect, xy.vx - 5, xy.vy - 5, 0xa, 0xa);
 		removeAnimatedUIBox(0, &rect);
 	}
 }

@@ -285,7 +285,7 @@ void startAnimationTamer(int32_t animId);
 void tickScriptDialogueBox(void);
 void renderScriptDialogueBox(void);
 void returnFromScriptFile(void);
-void getEntityScreenPos(Entity *entity, int32_t flag, int16_t *outPos);
+void getEntityScreenPos(Entity *entity, int32_t flag, DVECTOR *outPos);
 void readFileSection(char *filename, void *dest, uint32_t offset,
 		     uint32_t size);
 void dailyPStatTrigger(void);

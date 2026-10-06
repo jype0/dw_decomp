@@ -20,7 +20,7 @@ int32_t moveMapObjectsWithLimit(int16_t startIndex, int16_t count, int16_t dx, i
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
 void setMapObjectsFlag(int16_t start, int16_t count, int32_t flag);
-void createParticleFX(uint8_t kind, int32_t count, void *arg2, Entity *entity, int32_t arg4);
+void createParticleFX(uint8_t kind, int32_t count, SVECTOR *pos, Entity *entity, int32_t lifetime);
 void resetMapObjectAnimation(int16_t startIndex, int16_t count);
 void TRN_func_800888A0(int8_t arg);
 void tamerSetState(int8_t state);

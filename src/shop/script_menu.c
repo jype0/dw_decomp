@@ -2607,7 +2607,7 @@ void setupNewGameDialogueBox(void)
 	int32_t i;
 	RECT rect2;
 	RECT rect1;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 	uint8_t flags;
 
 	flags = 0x81;
@@ -2616,11 +2616,11 @@ void setupNewGameDialogueBox(void)
 #endif
 	for (i = 2; i < 10; i++) {
 		if (ENTITY_TABLE[i]->type == 0x75) {
-			getEntityScreenPos(ENTITY_TABLE[i], 1, screenPos);
+			getEntityScreenPos(ENTITY_TABLE[i], 1, &screenPos);
 		}
 	}
 
-	setRECT(&rect1, screenPos[0], screenPos[1], 10, 10);
+	setRECT(&rect1, screenPos.vx, screenPos.vy, 10, 10);
 	setRECT(&rect2, -130, -78, 262, 59);
 	createTextbox(0, flags, &rect2, &rect1, tickScriptDialogueBox, renderScriptDialogueBox);
 	registerTextbox(0, 0, 4, 1, 0);
@@ -2652,7 +2652,7 @@ void setupNameSelectorBox(void)
 	uint8_t flags;
 	RECT rect2;
 	RECT rect1;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 
 #if !defined(VERSION_JP)
 	DRAW_STRING2_IS_FIXED_WIDTH = 1;
@@ -2665,11 +2665,11 @@ void setupNameSelectorBox(void)
 
 	for (i = 2; i < 10; i++) {
 		if (ENTITY_TABLE[i]->type == 0x75) {
-			getEntityScreenPos(ENTITY_TABLE[i], 1, screenPos);
+			getEntityScreenPos(ENTITY_TABLE[i], 1, &screenPos);
 		}
 	}
 
-	setRECT(&rect1, screenPos[0], screenPos[1], 10, 10);
+	setRECT(&rect1, screenPos.vx, screenPos.vy, 10, 10);
 	setRECT(&rect2, -145, -91, 290, 138);
 	createTextbox(1, flags, &rect2, &rect1, tickNamingBox, renderNamingBox);
 	registerTextbox(1, 1, 7, 1, 0);
@@ -2685,7 +2685,7 @@ void setupNameDisplayBox(void)
 	uint8_t flags;
 	RECT rect2;
 	RECT rect1;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 
 	if ((NAMING_BOX_FLAG & 2) == 0) {
 		flags = 0xc1;
@@ -2695,11 +2695,11 @@ void setupNameDisplayBox(void)
 
 	for (i = 2; i < 10; i++) {
 		if (ENTITY_TABLE[i]->type == 0x75) {
-			getEntityScreenPos(ENTITY_TABLE[i], 1, screenPos);
+			getEntityScreenPos(ENTITY_TABLE[i], 1, &screenPos);
 		}
 	}
 
-	setRECT(&rect1, screenPos[0], screenPos[1], 10, 10);
+	setRECT(&rect1, screenPos.vx, screenPos.vy, 10, 10);
 	setRECT(&rect2, -145, 60, 149, 42);
 	createTextbox(2, flags, &rect2, &rect1, 0, renderNameDisplayBox);
 	registerTextbox(2, 0, 1, 0, 0);

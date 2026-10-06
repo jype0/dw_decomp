@@ -147,7 +147,7 @@ int32_t entityCheckCollision(Entity *a, Entity *entity, int32_t c, int32_t d);
 void removeTriangleMenu(void);
 void closeInventoryBoxes(void);
 void removeUIBox1(void);
-void collisionGrace(int32_t a, Entity *entity, int32_t c, int32_t d);
+void collisionGrace(Entity *a, Entity *entity, int32_t c, int32_t d);
 uint8_t entityIsOffScreen(Entity *entity, int32_t w, int32_t h);
 void NPCEntityTick(int32_t instanceId);
 void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon);
@@ -1284,7 +1284,7 @@ void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 			if (NPC_COLLISION_STATE[instanceId - 2] != -1 &&
 			    NPC_IS_WALKING_TOWARDS[instanceId - 2] == 0 &&
 			    entity->anim.animId > 1 && entity->anim.animId < 5) {
-				collisionGrace(0, entity, 0, 0);
+				collisionGrace(NULL, entity, 0, 0);
 			}
 		} else {
 			if (mapDigimon->animation != 0) {

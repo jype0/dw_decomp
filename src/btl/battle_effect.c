@@ -79,15 +79,15 @@ void BTL_runEFESlotScript(int32_t i);
 void getRViewCopy(GsRVIEW2 *view);
 void getViewportDistanceCopy(int32_t *out);
 int32_t BTL_addPoisonBubble(Entity *entity);
-void createCloudFX(int16_t *pos);
+void createCloudFX(SVECTOR *pos);
 void BTL_removeFinisherAura(int32_t index);
-int32_t addEntityParticleFX(int32_t *typePtr, int32_t timer);
+int32_t addEntityParticleFX(Entity *owner, int32_t timer);
 void setInt16WithStride(int16_t *ptr, int16_t value, int32_t count, int32_t stride);
-void setFileReadCallback2(void *callback, int32_t arg);
+void setFileReadCallback2(void *callback, void *param);
 int32_t BTL_setupLoadedEFEFile(EfeLoad *load);
 void BTL_stopEFESounds(void);
 void BTL_renderPoisonEffect(void);
-void BTL_handleEFEFileLoaded(int32_t arg);
+void BTL_handleEFEFileLoaded(EfeLoad *load);
 int32_t BTL_getEFEHeapPointer(void);
 void BTL_markEFEFinished(void);
 void BTL_getViewportDistance2(void);
@@ -148,7 +148,7 @@ int32_t BTL_startEFE(int32_t i);
 void BTL_stopEFESubEffect(int32_t a, int32_t b);
 char *BTL_getEFETextureSection(char *p);
 char *BTL_getEFEModelSection(char *p);
-int32_t BTL_getEFEFileId(int32_t p);
+int32_t BTL_getEFEFileId(char *data);
 void BTL_isTargetUnhit(void);
 void BTL_renderScreenFade(void);
 void BTL_applyBoxAttackHit(void);
@@ -1473,12 +1473,12 @@ char *BTL_getEFEModelSection(char *p)
 	return section;
 }
 
-int32_t BTL_getEFEFileId(int32_t p)
+int32_t BTL_getEFEFileId(char *data)
 {
-	int32_t *header;
+	EfeFileHeader *header;
 
-	header = (int32_t *)p;
-	return header[12];
+	header = (EfeFileHeader *)data;
+	return header->effectId;
 }
 
 int32_t BTL_setupLoadedEFEFile(EfeLoad *load)
@@ -1514,7 +1514,7 @@ int32_t BTL_setupLoadedEFEFile(EfeLoad *load)
 	data = (char *)m->mmdPtr;
 	tim = BTL_getEFETextureSection(data);
 	m->modelPtr = (TMDModel *)(tmd = BTL_getEFEModelSection(data));
-	fileId = BTL_getEFEFileId((int32_t)data);
+	fileId = BTL_getEFEFileId(data);
 
 	switch (MAIN_D_801350CC) {
 	case 0:
@@ -1652,17 +1652,17 @@ int32_t BTL_setupLoadedEFEFile(EfeLoad *load)
 end:;
 }
 
-void BTL_handleEFEFileLoaded(int32_t arg)
+void BTL_handleEFEFileLoaded(EfeLoad *load)
 {
-	int32_t *header;
-	int32_t textureSize;
-	int32_t modelSize;
+	EfeLoad *ld;
+	int16_t *moves;
+	ModelComponent *model;
 
-	header = (int32_t *)arg;
-	textureSize = header[2];
-	modelSize = header[4];
+	ld = load;
+	moves = ld->moves;
+	model = ld->model;
 	MAIN_D_801350CC = 0;
-	setFileReadCallback2(BTL_setupLoadedEFEFile, arg);
+	setFileReadCallback2(BTL_setupLoadedEFEFile, load);
 }
 
 void BTL_tickEFEUVAnimation(int32_t idx)
@@ -3836,7 +3836,7 @@ void BTL_addSourceEntityParticleFX(void)
 	int32_t timer;
 
 	timer = EFE_POP1(int32_t);
-	addEntityParticleFX((int32_t *)(int32_t)EFE_SCRIPT_CONTEXT->sourceEntity, timer);
+	addEntityParticleFX(EFE_SCRIPT_CONTEXT->sourceEntity, timer);
 }
 
 void BTL_copyFromParentTransform(void)
@@ -4038,14 +4038,14 @@ void BTL_renderScreenSprite(void)
 
 void BTL_addCloudEffect(void)
 {
-	int16_t pos[3];
+	SVECTOR pos;
 	EfeVector *v;
 
 	v = EFE_POP1(EfeVector *);
-	pos[0] = v->vx;
-	pos[1] = v->vy;
-	pos[2] = v->vz;
-	createCloudFX(pos);
+	pos.vx = v->vx;
+	pos.vy = v->vy;
+	pos.vz = v->vz;
+	createCloudFX(&pos);
 }
 
 void BTL_selectNextTargetEntity(void)

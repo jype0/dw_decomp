@@ -14,13 +14,13 @@ extern uint32_t POLLED_INPUT;
 extern int32_t TRAINING_COMPLETE;
 
 void createCameraMovement(VECTOR *pos, int32_t speed);
-void createCloudFX(int16_t *pos);
+void createCloudFX(SVECTOR *pos);
 void storeMapObjectPosition();
 void loadMapObjectPosition();
 int32_t moveMapObjectsWithLimit(int16_t startIndex, int16_t count, int16_t dx, int16_t dy, int16_t limitX, int16_t limitY);
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
-void createParticleFX(uint8_t kind, int32_t count, void *arg2, Entity *entity, int32_t arg4);
+void createParticleFX(uint8_t kind, int32_t count, SVECTOR *pos, Entity *entity, int32_t lifetime);
 void TRN_tickDefenseTraining(int32_t instanceId);
 void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
@@ -86,7 +86,7 @@ int16_t arg;
 void TRN_tickDefenseTraining(instanceId)
 int16_t instanceId;
 {
-	int16_t pos[3];
+	SVECTOR pos;
 	VECTOR *loc;
 	int32_t r;
 	int32_t done;
@@ -138,10 +138,10 @@ int16_t instanceId;
 		loc->vx += 0x64;
 		PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0x400;
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x25);
-		pos[0] = loc->vx;
-		pos[1] = 0;
-		pos[2] = loc->vz - 0x64;
-		createCloudFX(pos);
+		pos.vx = loc->vx;
+		pos.vy = 0;
+		pos.vz = loc->vz - 0x64;
+		createCloudFX(&pos);
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, -0x32, 0, TRN_D_8008F368[0] + 0x32, 0);
 		if (done == 1) {
 			TRAINING_STATE = 4;
@@ -155,10 +155,10 @@ int16_t instanceId;
 		loc->vx += 0x64;
 		PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0x400;
 		startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0x25);
-		pos[0] = loc->vx;
-		pos[1] = 0;
-		pos[2] = loc->vz - 0x64;
-		createCloudFX(pos);
+		pos.vx = loc->vx;
+		pos.vy = 0;
+		pos.vz = loc->vz - 0x64;
+		createCloudFX(&pos);
 		done = moveMapObjectsWithLimit(MAIN_D_8013536C, MAIN_D_8013536E, 0x32, 0, TRN_D_8008F368[0] + 0x5a, 0);
 		if (done == 1) {
 			TRAINING_STATE = 5;

@@ -18,7 +18,7 @@ void storeMapObjectPosition();
 void setMapObjectsFlag(int16_t start, int16_t count, int32_t flag);
 void setCameraFollowPlayer(void);
 void unsetCameraFollowPlayer(void);
-void createParticleFX(uint8_t kind, int32_t count, void *arg2, Entity *entity, int32_t arg4);
+void createParticleFX(uint8_t kind, int32_t count, SVECTOR *pos, Entity *entity, int32_t lifetime);
 void resetMapObjectAnimation(int16_t startIndex, int16_t count);
 void TRN2_tickOffenseTraining(int32_t instanceId);
 void TRN2_func_8008AA84(int8_t arg);

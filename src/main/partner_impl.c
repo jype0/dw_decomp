@@ -244,7 +244,7 @@ void addTamerLevel(int32_t chance, int32_t amount);
 void setSleepDisabled(int32_t disabled);
 void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY);
 void setTrigger(uint16_t flag);
-void createCloudFX(int16_t *pos);
+void createCloudFX(SVECTOR *pos);
 void updateTimeOfDay(void);
 int32_t isInDaytimeTransition(void);
 void renderRectPolyFT4(int32_t posX, int32_t posY, int32_t width,
@@ -1179,7 +1179,7 @@ int32_t createPoopPile(int16_t tileX, int16_t tileY)
 	int16_t rotation;
 	int16_t i;
 	int16_t count;
-	int16_t pos[3];
+	SVECTOR pos;
 	int32_t direction;
 
 	rotation = PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy;
@@ -1256,10 +1256,10 @@ int32_t createPoopPile(int16_t tileX, int16_t tileY)
 	if (CURRENT_POOP_ID >= 100)
 		CURRENT_POOP_ID = 0;
 
-	pos[0] = (tileX - 50) * 100 + 50;
-	pos[1] = PARTNER_ENTITY.digimonEntity.entity.posData->location.vy;
-	pos[2] = (50 - tileY) * 100 - 50;
-	createCloudFX(pos);
+	pos.vx = (tileX - 50) * 100 + 50;
+	pos.vy = PARTNER_ENTITY.digimonEntity.entity.posData->location.vy;
+	pos.vz = (50 - tileY) * 100 - 50;
+	createCloudFX(&pos);
 	return i;
 }
 

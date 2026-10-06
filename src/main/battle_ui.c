@@ -269,15 +269,15 @@ void battleMoveLearning(void)
 
 void createBitsBox(void)
 {
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 	RECT finalPos;
 	RECT startPos;
 
 	setRECT(&finalPos, -88, 18, 176, BTL_END_BOX_TEXTBUFFER[0] ? 66 : 31);
 
-	getEntityScreenPos(ENTITY_TABLE[0], 1, screenPos);
+	getEntityScreenPos(ENTITY_TABLE[0], 1, &screenPos);
 
-	setRECT(&startPos, screenPos[0] - 5, screenPos[1] - 5, 10, 10);
+	setRECT(&startPos, screenPos.vx - 5, screenPos.vy - 5, 10, 10);
 	createAnimatedUIBox(1, 0, 2, &finalPos, &startPos, tickBitBox, (RenderFunction)renderBitBox);
 
 	drawString(BITS_LABEL, 0, 72);
@@ -517,7 +517,7 @@ void resetStatsAfterCombat(void)
 
 void createPostBattleStatsBox(void)
 {
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 	RECT finalPos;
 	RECT startPos;
 	int32_t i;
@@ -552,9 +552,9 @@ void createPostBattleStatsBox(void)
 
 	setRECT(&finalPos, -88, -78, 176, 96);
 
-	getEntityScreenPos(ENTITY_TABLE[1], 1, screenPos);
+	getEntityScreenPos(ENTITY_TABLE[1], 1, &screenPos);
 
-	setRECT(&startPos, screenPos[0] - 5, screenPos[1] - 5, 10, 10);
+	setRECT(&startPos, screenPos.vx - 5, screenPos.vy - 5, 10, 10);
 	createAnimatedUIBox(0, 0, 2, &finalPos, &startPos, tickPostBattleStatsBox,
 			    (RenderFunction)renderPostBattleStatsBox);
 }

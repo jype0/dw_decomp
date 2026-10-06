@@ -73,7 +73,7 @@ const char *BTL_SHOUTS[7] = {
 void BTL_drawCommandShout(uint32_t command)
 {
 	RECT rect;
-	int16_t screenPos[2];
+	DVECTOR screenPos;
 	int16_t tech;
 	int32_t length;
 
@@ -82,7 +82,7 @@ void BTL_drawCommandShout(uint32_t command)
 	}
 
 	BTL_COMMAND_SHOUT.frame = 0;
-	getEntityScreenPos(ENTITY_TABLE[0], 4, screenPos);
+	getEntityScreenPos(ENTITY_TABLE[0], 4, &screenPos);
 	setRECT(&rect, 0, 204, 168, 12);
 	clearTextSubArea(&rect);
 
@@ -102,24 +102,24 @@ void BTL_drawCommandShout(uint32_t command)
 #else
 	BTL_COMMAND_SHOUT.width = length * 12;
 #endif
-	if ((screenPos[0] - (BTL_COMMAND_SHOUT.width / 2)) < -140) {
-		screenPos[0] = (BTL_COMMAND_SHOUT.width / 2) - 140;
+	if ((screenPos.vx - (BTL_COMMAND_SHOUT.width / 2)) < -140) {
+		screenPos.vx = (BTL_COMMAND_SHOUT.width / 2) - 140;
 	}
 
-	if ((screenPos[0] + (BTL_COMMAND_SHOUT.width / 2)) >= 141) {
-		screenPos[0] = 140 - (BTL_COMMAND_SHOUT.width / 2);
+	if ((screenPos.vx + (BTL_COMMAND_SHOUT.width / 2)) >= 141) {
+		screenPos.vx = 140 - (BTL_COMMAND_SHOUT.width / 2);
 	}
 
-	if (screenPos[1] < -100) {
-		screenPos[1] = -100;
+	if (screenPos.vy < -100) {
+		screenPos.vy = -100;
 	}
 
-	if (screenPos[1] >= 101) {
-		screenPos[1] = 100;
+	if (screenPos.vy >= 101) {
+		screenPos.vy = 100;
 	}
 
-	BTL_COMMAND_SHOUT.x = screenPos[0];
-	BTL_COMMAND_SHOUT.y = screenPos[1];
+	BTL_COMMAND_SHOUT.x = screenPos.vx;
+	BTL_COMMAND_SHOUT.y = screenPos.vy;
 	addObject(0x199, 0, NULL, (RenderFunction)BTL_renderCommandShout);
 }
 

@@ -14,9 +14,9 @@ void playSound(int32_t soundId, uint32_t flag);
 void drawLine3P(int32_t color, int32_t x0, int32_t y0,
 		int32_t x1, int32_t y1, int32_t x2, int32_t y2,
 		int32_t layer, int32_t blend);
-void setUVDataPolyFT4(PACKET *prim, int32_t uvX, int32_t uvY,
+void setUVDataPolyFT4(POLY_FT4 *prim, int32_t uvX, int32_t uvY,
 		      int32_t uvWidth, int32_t uvHeight);
-void setPosDataPolyFT4(PACKET *prim, int32_t posX, int32_t posY,
+void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY,
 		       int32_t width, int32_t height);
 void drawLine2P(int32_t color, int32_t x0, int32_t y0,
 		int32_t x1, int32_t y1,
@@ -205,8 +205,8 @@ void createAnimatedUIBox(int16_t instanceId, uint8_t color, uint8_t features,
 	data->state = 2;
 	data->color = color;
 	data->features = features;
-	data->startPos = *(RECT *)startPos;
-	data->finalPos = *(RECT *)finalPos;
+	data->startPos = *startPos;
+	data->finalPos = *finalPos;
 	data->render = renderFunc;
 	data->tick = tickFunc;
 	addObject(0x1a4, instanceId, tickUIBox, renderUIBoxAnimated);
@@ -263,8 +263,8 @@ void renderUIBoxBorder(RECT *rect, int32_t layer)
 		p->tpage = getTPage(0, 0, 320, 0);
 		setClut(p, 0x60, 0x1EC);
 		setRGB0(p, 0x80, 0x80, 0x80);
-		setUVDataPolyFT4((PACKET *)p, BOX_BORDER_CORNERS_U[i], BOX_BORDER_CORNERS_V[i] + 0x80, 4, 4);
-		setPosDataPolyFT4((PACKET *)p, (i % 2 == 0) ? rect->x : rect->x + rect->w - 4,
+		setUVDataPolyFT4(p, BOX_BORDER_CORNERS_U[i], BOX_BORDER_CORNERS_V[i] + 0x80, 4, 4);
+		setPosDataPolyFT4(p, (i % 2 == 0) ? rect->x : rect->x + rect->w - 4,
 				  (i < 2) ? rect->y : rect->y + rect->h - 4, 4, 4);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, p++);
 	}

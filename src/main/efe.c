@@ -17,8 +17,8 @@
 
 typedef struct {
 	int16_t state;
-	int16_t unk2;
-	int16_t unk4;
+	int16_t x;
+	int16_t z;
 } CloudFXEntry;
 
 typedef struct {
@@ -136,7 +136,7 @@ int32_t isTamerOnScreen(void);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
 void renderParticleFlash(ParticleFlashData *params);
 void renderFXParticle(SVECTOR *pos, int32_t size, uint8_t *color);
-int32_t worldPosToScreenPos(int16_t *world, int16_t *screen);
+int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 void addFXPrim(POLY_FT4 *prim, int32_t x, int32_t y, int16_t width, int16_t height, int32_t depth);
 void renderSprite(GsSPRITE *spr, int32_t x, int32_t y, int32_t depth,
                   int32_t sx, int32_t sy);
@@ -152,7 +152,7 @@ void renderEntityParticleFX(int32_t id);
 void removeEntityParticleFX();
 void initializeCloudFXData();
 void removeAllCloudFX();
-void createCloudFX(int16_t *pos);
+void createCloudFX(SVECTOR *pos);
 void tickCloudFX();
 void renderCloudFX(int32_t id);
 void EFERotateVector(void);
@@ -408,7 +408,7 @@ void tickParticleFX(int32_t id)
 			dist = radius + (rand() % spread);
 			pos.vx = baseX + ((dist * _sin(angle)) >> 12);
 			pos.vz = baseZ - ((dist * _cos(angle)) >> 12);
-			createCloudFX((int16_t *)&pos);
+			createCloudFX(&pos);
 		}
 		return;
 	}
@@ -442,7 +442,7 @@ void renderParticleFX(int32_t id)
 			world.vx = fx->position.vx + fx->spread[0][i];
 			world.vy = fx->position.vy + fx->spread[1][i];
 			world.vz = fx->position.vz + fx->spread[2][i];
-			depth = worldPosToScreenPos((int16_t *)&world, (int16_t *)&screen);
+			depth = worldPosToScreenPos(&world, &screen);
 			flash.screenPos.vx = screen.vx;
 			flash.screenPos.vy = screen.vy;
 			flash.sizeX = flash.sizeY = 0x40;
@@ -544,7 +544,7 @@ void renderEntityParticleFX(int32_t id)
 	worldPos.vx = bone->posMatrix.workm.t[0];
 	worldPos.vy = bone->posMatrix.workm.t[1];
 	worldPos.vz = bone->posMatrix.workm.t[2];
-	depth = worldPosToScreenPos((int16_t *)&worldPos, (int16_t *)&screenPos);
+	depth = worldPosToScreenPos(&worldPos, &screenPos);
 	SetPolyFT4(prim);
 	SetSemiTrans(prim, 1);
 	prim->code |= 2;
@@ -578,7 +578,7 @@ void removeAllCloudFX(void)
 	}
 }
 
-void createCloudFX(int16_t *pos)
+void createCloudFX(SVECTOR *pos)
 {
 	CloudFXEntry *e;
 	int32_t i;
@@ -591,8 +591,8 @@ void createCloudFX(int16_t *pos)
 	if (i != 0x3C) {
 		e = &CLOUD_FX_DATA[i];
 		e->state = 0;
-		e->unk2 = pos[0];
-		e->unk4 = pos[2];
+		e->x = pos->vx;
+		e->z = pos->vz;
 		addObject(0x601, i, tickCloudFX, renderCloudFX);
 	}
 }
@@ -617,10 +617,10 @@ void renderCloudFX(int32_t id)
 	int32_t depth;
 
 	cloud = &CLOUD_FX_DATA[id];
-	worldPos.vx = cloud->unk2;
+	worldPos.vx = cloud->x;
 	worldPos.vy = CLOUD_FX_Y[cloud->state];
-	worldPos.vz = cloud->unk4;
-	depth = worldPosToScreenPos((int16_t *)&worldPos, (int16_t *)&screenPos);
+	worldPos.vz = cloud->z;
+	depth = worldPosToScreenPos(&worldPos, &screenPos);
 	CLOUD_FX_SPRITE.u = CLOUD_FX_U[cloud->state];
 	CLOUD_FX_SPRITE.r = CLOUD_FX_SPRITE.g = CLOUD_FX_SPRITE.b = CLOUD_FX_COLOR[cloud->state];
 	renderSprite(&CLOUD_FX_SPRITE, screenPos.vx, screenPos.vy, depth,
@@ -770,7 +770,7 @@ void renderEFEFlash(int32_t id)
 	if (data->progress < 0) {
 		return;
 	}
-	depth = worldPosToScreenPos((int16_t *)&data->worldPos, (int16_t *)&flash.screenPos);
+	depth = worldPosToScreenPos(&data->worldPos, &flash.screenPos);
 	if (data->mode >= 0) {
 		flash.screenPos.vx += data->offsetX * VIEWPORT_DISTANCE / depth;
 		flash.screenPos.vy += data->offsetY * VIEWPORT_DISTANCE / depth;

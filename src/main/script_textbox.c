@@ -879,7 +879,7 @@ void setupDialogueBox(uint8_t owner)
 
 int32_t setupBoxOrigin(int32_t ownerId, RECT *origin)
 {
-	int16_t pos[2];
+	DVECTOR pos;
 
 	if (ownerId == 0xff) {
 		return 0;
@@ -888,8 +888,8 @@ int32_t setupBoxOrigin(int32_t ownerId, RECT *origin)
 	if (TEXTBOX_ORIGIN_X != -0x270f) {
 		worldPosToScreenPos2(&TEXTBOX_ORIGIN_X, &TEXTBOX_ORIGIN_Y,
 		                     &TEXTBOX_ORIGIN_Z);
-		pos[0] = TEXTBOX_ORIGIN_X - 5;
-		pos[1] = TEXTBOX_ORIGIN_Y - 5;
+		pos.vx = TEXTBOX_ORIGIN_X - 5;
+		pos.vy = TEXTBOX_ORIGIN_Y - 5;
 		TEXTBOX_ORIGIN_X = -0x270f;
 	} else {
 		int32_t entityId = scriptIdToEntityId(ownerId) & 0xff;
@@ -897,10 +897,10 @@ int32_t setupBoxOrigin(int32_t ownerId, RECT *origin)
 			return 0;
 		}
 
-		getEntityScreenPos(ENTITY_TABLE[entityId], 1, pos);
+		getEntityScreenPos(ENTITY_TABLE[entityId], 1, &pos);
 	}
 
-	setRECT(origin, pos[0], pos[1], 0xa, 0xa);
+	setRECT(origin, pos.vx, pos.vy, 0xa, 0xa);
 
 	return 1;
 }
