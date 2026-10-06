@@ -34,7 +34,7 @@ static void *trn2_off_functions[] = {
 int16_t MAIN_D_801353C6;
 
 // clang-format off
-int8_t TRN2_D_8008DA20[67][2] = {
+int8_t TRN2_TRAINING_ANIM_IDS[67][2] = {
 	{ 0x0, 0x0 }, { 0x2e, 0xa }, { 0x2e, 0xa }, { 0x33, 0xc },
 	{ 0x2e, 0x14 }, { 0x35, 0x14 }, { 0x2e, 0xa }, { 0x2e, 0xa },
 	{ 0x2e, 0xa }, { 0x35, 0xd }, { 0x2e, 0xa }, { 0x2e, 0x14 },
@@ -109,7 +109,7 @@ int16_t instanceId;
 	case 1:
 		TRN2_func_8008AA84(4);
 		if (tickEntityWalkTo(0xfc, 0xff, TRN2_D_8008DC1C.vx, TRN2_D_8008DC1C.vz, 0) == 1) {
-			startAnimation(ENTITY_TABLE[1], TRN2_D_8008DA20[PARTNER_ENTITY.digimonEntity.entity.type][0]);
+			startAnimation(ENTITY_TABLE[1], TRN2_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
 			PARTNER_ENTITY.digimonEntity.entity.anim.animFlag |= 2;
 			MAIN_D_801353C6 = 0;
 			PARTNER_ENTITY.digimonEntity.entity.posData->rotation.vy = 0x400;
@@ -123,7 +123,7 @@ int16_t instanceId;
 		MAIN_D_801353C6++;
 		MAIN_D_801353C2++;
 		PARTNER_ENTITY.digimonEntity.entity.anim.animFlag |= 2;
-		if (MAIN_D_801353C6 == TRN2_D_8008DA20[PARTNER_ENTITY.digimonEntity.entity.type][1]) {
+		if (MAIN_D_801353C6 == TRN2_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][1]) {
 			createParticleFX(0, 0, &TRN2_D_8008DC3C[0], NULL, 0);
 			createParticleFX(0, 0, &TRN2_D_8008DC3C[1], NULL, 0);
 			createParticleFX(0, 0, &TRN2_D_8008DC3C[2], NULL, 0);
@@ -141,7 +141,7 @@ int16_t instanceId;
 		if (MAIN_D_801353C6 == 0x2e) {
 			setMapObjectsFlag(0x27, 4, 0);
 			setMapObjectsFlag(MAIN_D_801353B4, MAIN_D_801353B6, 1);
-			startAnimation(ENTITY_TABLE[1], TRN2_D_8008DA20[PARTNER_ENTITY.digimonEntity.entity.type][0]);
+			startAnimation(ENTITY_TABLE[1], TRN2_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
 			MAIN_D_801353C6 = 0;
 			MAIN_D_801353BD = 2;
 		}

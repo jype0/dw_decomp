@@ -28,7 +28,7 @@
 #define STD_STUN_MODEL		((char *)0x80054d00)
 #define STD_BUFF_MODEL		((TMDModel *)0x80055328)
 
-extern TMDModel *MAIN_D_80135130;
+extern TMDModel *STD_ARENA_MODEL;
 extern int8_t GAME_STATE;
 extern int32_t VIEWPORT_DISTANCE;
 extern SVECTOR STDVS_VIEW_ROTATION[];
@@ -41,40 +41,40 @@ extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern uint8_t CURRENT_SCREEN;
-extern char *STD_D_8007A338[];
-extern char *STD_D_8007A304[];
-extern char *STD_D_8007A358[];
+extern char *STD_ARENA_TIMS[];
+extern char *STD_ARENA_MODELS[];
+extern char *STD_ARENA_COLLISIONS[];
 extern int8_t MAP_COLLISION_DATA[];
 
-void STD_func_80058488(void);
-void STD_func_80056E2C(int16_t type, int16_t slot, uint8_t tier);
+void STD_removeArenaRenderer(void);
+void STD_initializeOpponent(int16_t type, int16_t slot, uint8_t tier);
 void initializeDigimonObject(int32_t type, int32_t instanceId, void (*tick)(int32_t));
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 void scriptLoadModel(int32_t modelId);
 void swapByte(uint8_t *a, uint8_t *b);
 void STD_loadTIMToVRAM(char *path);
-void STD_func_8005D9F4(uint8_t *out, uint8_t *arg);
+void STD_setupParticipants(uint8_t *out, uint8_t *arg);
 void STD_initializeCamera(void);
-void STD_func_80058254(void);
-void STD_func_80057FC4(void);
-void STD_func_80057778(void);
+void STD_renderArena1(void);
+void STD_freeArenaModel(void);
+void STD_removeOverworldObjects(void);
 #if defined(VERSION_JP)
-void STD_func_80057FD0(int32_t which);
+void STD_addArenaRenderer(int32_t which);
 #else
-void STD_func_80057FD0(int16_t which);
+void STD_addArenaRenderer(int16_t which);
 #endif
-int16_t STD_func_800579D8(uint8_t *arg);
-int16_t STD_func_80057510(Entity *opponent, int16_t b);
-void STD_func_80058E28(int32_t arg);
-int32_t STD_func_8006314C(Entity *entity, Entity *other);
+int16_t STD_tournamentMain(uint8_t *arg);
+int16_t STD_runMatch(Entity *opponent, int16_t b);
+void STD_runIntro(int32_t arg);
+int32_t STD_combatMain(Entity *entity, Entity *other);
 void STD_removeCameraIntro(void);
 void GsGetTimInfo(unsigned long *tim, GsIMAGE *img);
 void readFile(char *path, void *dest);
 void STD_loadArenaTIMToVRAM(char *path, int32_t count);
-void STD_func_800577B4();
-int32_t STD_func_8005DFF8(void);
-void STD_func_80058030(void);
-void STD_func_80057E5C(int32_t id);
+void STD_initializeLighting();
+int32_t STD_isBracketFinished(void);
+void STD_renderArena0(void);
+void STD_loadArenaAssets(int32_t id);
 void STD_initializeFinisherAuraModel(char *tim, char *base);
 void STD_initializePoisonBubble(void);
 void STD_initializeConfusionEffect(char *base);
@@ -83,159 +83,159 @@ void initializeBuffModel(TMDModel *model);
 void STD_battleTickFrame(void);
 int32_t loadTIMFile(char *path, void *buffer);
 void removeMapEntities(void);
-void STD_func_8006B6F4(void);
-void STD_func_80056CA8(int32_t arena, uint8_t *arg);
-void STD_func_8005A550(void);
+void STD_loadWinLoseModel(void);
+void STD_initializeTournament(int32_t arena, uint8_t *arg);
+void STD_removeVSPhase(void);
 void fadeToBlack(int16_t mode);
-void STD_func_80057628(void);
-void STD_addEnemyHPBars(void);
-void STD_func_8005D964(void);
-void STD_func_8005DEEC(int32_t track);
-void STD_func_8005DF94(int32_t mode);
-void STD_func_8005E5E0(void);
-void STD_func_8005E898(void);
-void STD_func_80064FCC(unsigned short count);
-void STD_func_8006BA18(void);
-void STD_func_8006BE64(void);
-void STD_func_8006BFB4(void);
-void STD_func_8006C630(void);
-void STD_func_8006C6D0(void);
-void STD_func_8006CCD4(void);
-void STD_func_8006D15C(void);
+void STD_deinitializeTournament(void);
+void STD_addPodiumRenderer(void);
+void STD_initializeBracket(void);
+void STD_addBracket(int32_t track);
+void STD_removeBracket(int32_t mode);
+void STD_addBracketIntro(void);
+void STD_removeBracketIntro(void);
+void STD_tickFrames(unsigned short count);
+void STD_loadChampionModels(void);
+void STD_initializeChampionScene(void);
+void STD_addChampionScene(void);
+void STD_removeChampionScene(void);
+void STD_removePodiumRenderer(void);
+void STD_removeLoseScene(void);
+void STD_removeWinScene(void);
 void STD_setVSPhase(int32_t arg);
 void fadeFromBlack(int16_t frames);
 int32_t loadMapSounds(int32_t mapSoundId);
 uint32_t lookupFileSize(char *path);
 
 static void *std_setup_functions[] = {
-	STD_func_80058488,
-	STD_func_80058254,
-	STD_func_80058030,
-	STD_func_80057FD0,
-	STD_func_80057FC4,
-	STD_func_80057E5C,
+	STD_removeArenaRenderer,
+	STD_renderArena1,
+	STD_renderArena0,
+	STD_addArenaRenderer,
+	STD_freeArenaModel,
+	STD_loadArenaAssets,
 	STD_loadArenaTIMToVRAM,
-	STD_func_800579D8,
+	STD_tournamentMain,
 	STD_loadTIMToVRAM,
-	STD_func_800577B4,
-	STD_func_80057778,
-	STD_func_80057628,
+	STD_initializeLighting,
+	STD_removeOverworldObjects,
+	STD_deinitializeTournament,
 	STD_initializeCamera,
-	STD_func_80057510,
-	STD_func_80056E2C,
-	STD_func_80056CA8,
+	STD_runMatch,
+	STD_initializeOpponent,
+	STD_initializeTournament,
 };
 
-StdArenaCfg MAIN_D_801347FC = { { 3, 4 }, { 4, 1 } };
+StdArenaCfg STD_ARENA_COUNTS = { { 3, 4 }, { 4, 1 } };
 
-int16_t MAIN_D_801350E4;
-Entity *MAIN_D_801350E8;
-int32_t MAIN_D_801350EC;
+int16_t STD_MATCH_RESULT;
+Entity *STD_OPPONENT_ENTITY;
+int32_t STD_CAMERA_STATE;
 int32_t MAIN_D_801350F0;
-int32_t MAIN_D_801350F4;
-uint8_t MAIN_D_801350F8;
+int32_t STD_CHAMPION_SCENE_DONE;
+uint8_t STD_MUSIC;
 
 static void *std_setup_sbss_order[] = {
-	&MAIN_D_801350F8,
-	&MAIN_D_801350F4,
+	&STD_MUSIC,
+	&STD_CHAMPION_SCENE_DONE,
 	&MAIN_D_801350F0,
-	&MAIN_D_801350EC,
-	&MAIN_D_801350E8,
-	&MAIN_D_801350E4,
+	&STD_CAMERA_STATE,
+	&STD_OPPONENT_ENTITY,
+	&STD_MATCH_RESULT,
 };
 
 // clang-format off
-int16_t STD_D_800799B4[24] = {
+int16_t STD_OPPONENT_BASE_STATS[24] = {
 	0x0064, 0x0096, 0x00c8, 0x00fa, 0x012c, 0x0000, 0x00c8, 0x00c8,
 	0x00c8, 0x00c8, 0x00c8, 0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x00fa,
 	0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x00fa, 0x015e, 0x0000,
 };
 
-char STD_D_800799E4[] = "\\STDDAT\\GRADE\\GRADED.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GRADED_TIM[] = "\\STDDAT\\GRADE\\GRADED.TIM";
 
-char STD_D_80079A00[] = "\\STDDAT\\GRADE\\GRADEC.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GRADEC_TIM[] = "\\STDDAT\\GRADE\\GRADEC.TIM";
 
-char STD_D_80079A1C[] = "\\STDDAT\\GRADE\\GRADEB.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GRADEB_TIM[] = "\\STDDAT\\GRADE\\GRADEB.TIM";
 
-char STD_D_80079A38[] = "\\STDDAT\\GRADE\\GRADEA.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GRADEA_TIM[] = "\\STDDAT\\GRADE\\GRADEA.TIM";
 
-char STD_D_80079A54[] = "\\STDDAT\\GRADE\\GRADES.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GRADES_TIM[] = "\\STDDAT\\GRADE\\GRADES.TIM";
 
-char STD_D_80079A70[] = "\\STDDAT\\GRADE\\GRADER.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GRADER_TIM[] = "\\STDDAT\\GRADE\\GRADER.TIM";
 
-char STD_D_80079A8C[24] = "\\STDDAT\\GRADE\\CAPV1.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_CAPV1_TIM[24] = "\\STDDAT\\GRADE\\CAPV1.TIM";
 
-char STD_D_80079AA4[24] = "\\STDDAT\\GRADE\\CAPV2.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_CAPV2_TIM[24] = "\\STDDAT\\GRADE\\CAPV2.TIM";
 
-char STD_D_80079ABC[24] = "\\STDDAT\\GRADE\\CAPV3.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_CAPV3_TIM[24] = "\\STDDAT\\GRADE\\CAPV3.TIM";
 
-char STD_D_80079AD4[24] = "\\STDDAT\\GRADE\\CAPV4.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_CAPV4_TIM[24] = "\\STDDAT\\GRADE\\CAPV4.TIM";
 
-char STD_D_80079AEC[24] = "\\STDDAT\\GRADE\\CAPVO.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_CAPVO_TIM[24] = "\\STDDAT\\GRADE\\CAPVO.TIM";
 
-char STD_D_80079B04[] = "\\STDDAT\\GRADE\\FR.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_FR_TIM[] = "\\STDDAT\\GRADE\\FR.TIM";
 
-char STD_D_80079B1C[] = "\\STDDAT\\GRADE\\GP.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_GP_TIM[] = "\\STDDAT\\GRADE\\GP.TIM";
 
-char STD_D_80079B34[] = "\\STDDAT\\GRADE\\TW.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_TW_TIM[] = "\\STDDAT\\GRADE\\TW.TIM";
 
-char STD_D_80079B4C[] = "\\STDDAT\\GRADE\\CO.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_CO_TIM[] = "\\STDDAT\\GRADE\\CO.TIM";
 
-char STD_D_80079B64[] = "\\STDDAT\\GRADE\\NT.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_NT_TIM[] = "\\STDDAT\\GRADE\\NT.TIM";
 
-char STD_D_80079B7C[] = "\\STDDAT\\GRADE\\MT.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_MT_TIM[] = "\\STDDAT\\GRADE\\MT.TIM";
 
-char STD_D_80079B94[] = "\\STDDAT\\GRADE\\DT.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_DT_TIM[] = "\\STDDAT\\GRADE\\DT.TIM";
 
-char STD_D_80079BAC[] = "\\STDDAT\\GRADE\\DY.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_DY_TIM[] = "\\STDDAT\\GRADE\\DY.TIM";
 
-char STD_D_80079BC4[] = "\\STDDAT\\GRADE\\WI.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_WI_TIM[] = "\\STDDAT\\GRADE\\WI.TIM";
 
-char STD_D_80079BDC[] = "\\STDDAT\\GRADE\\AN.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_AN_TIM[] = "\\STDDAT\\GRADE\\AN.TIM";
 
-char STD_D_80079BF4[] = "\\STDDAT\\GRADE\\HU.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_HU_TIM[] = "\\STDDAT\\GRADE\\HU.TIM";
 
-char STD_D_80079C0C[] = "\\STDDAT\\GRADE\\BT.TIM";
+char STD_PATH_GRADE_STDDAT_GRADE_BT_TIM[] = "\\STDDAT\\GRADE\\BT.TIM";
 
-char *STD_D_80079C24[23] = {
-	STD_D_800799E4,
-	STD_D_80079A00,
-	STD_D_80079A1C,
-	STD_D_80079A38,
-	STD_D_80079A54,
-	STD_D_80079A70,
-	STD_D_80079A8C,
-	STD_D_80079AA4,
-	STD_D_80079ABC,
-	STD_D_80079AD4,
-	STD_D_80079AEC,
-	STD_D_80079B04,
-	STD_D_80079B1C,
-	STD_D_80079B34,
-	STD_D_80079B4C,
-	STD_D_80079B64,
-	STD_D_80079B7C,
-	STD_D_80079B94,
-	STD_D_80079BAC,
-	STD_D_80079BC4,
-	STD_D_80079BDC,
-	STD_D_80079BF4,
-	STD_D_80079C0C,
+char *STD_GRADES[23] = {
+	STD_PATH_GRADE_STDDAT_GRADE_GRADED_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_GRADEC_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_GRADEB_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_GRADEA_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_GRADES_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_GRADER_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_CAPV1_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_CAPV2_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_CAPV3_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_CAPV4_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_CAPVO_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_FR_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_GP_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_TW_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_CO_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_NT_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_MT_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_DT_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_DY_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_WI_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_AN_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_HU_TIM,
+	STD_PATH_GRADE_STDDAT_GRADE_BT_TIM,
 };
 
-char STD_D_80079C80[] = "\\STDDAT\\STDTIM.BIN";
+char STD_PATH_STDDAT_STDTIM_BIN[] = "\\STDDAT\\STDTIM.BIN";
 
-char STD_D_80079C94[] = "\\STDDAT\\TIME.TIM";
+char STD_PATH_STDDAT_TIME_TIM[] = "\\STDDAT\\TIME.TIM";
 
-char STD_D_80079CA8[] = "\\ETCDAT\\SBOY.TIM";
+char STD_PATH_ETCDAT_SBOY_TIM[] = "\\ETCDAT\\SBOY.TIM";
 // clang-format on
 
-void STD_func_80056CA8(int32_t arena, uint8_t *arg)
+void STD_initializeTournament(int32_t arena, uint8_t *arg)
 {
 	if (arena == 0) {
-		MAIN_D_801350F8 = 0x1e;
+		STD_MUSIC = 0x1e;
 	} else {
-		MAIN_D_801350F8 = 0x20;
+		STD_MUSIC = 0x20;
 	}
 
 	GAME_STATE = 5;
@@ -251,14 +251,14 @@ void STD_func_80056CA8(int32_t arena, uint8_t *arg)
 	STD_D_8007B6AC[1].org = STD_D_8007B6E4;
 	removeMapEntities();
 	ENTITY_TABLE[0]->isOnScreen = 0;
-	STD_func_80057778();
+	STD_removeOverworldObjects();
 	STD_initializeCamera();
-	STD_func_800577B4(arena);
-	STD_func_80057E5C(arena);
-	STD_func_8006B6F4();
-	loadTIMFile(STD_D_80079C24[arg[0]], GENERAL_BUFFER_PTR);
-	STD_loadTIMToVRAM(STD_D_80079C80);
-	loadTIMFile(STD_D_80079C94, GENERAL_BUFFER);
+	STD_initializeLighting(arena);
+	STD_loadArenaAssets(arena);
+	STD_loadWinLoseModel();
+	loadTIMFile(STD_GRADES[arg[0]], GENERAL_BUFFER_PTR);
+	STD_loadTIMToVRAM(STD_PATH_STDDAT_STDTIM_BIN);
+	loadTIMFile(STD_PATH_STDDAT_TIME_TIM, GENERAL_BUFFER);
 	STD_initializeFinisherAuraModel(STD_FINISHER_TIM, STD_FINISHER_MODEL);
 	STD_initializePoisonBubble();
 	STD_initializeConfusionEffect(STD_CONFUSION_MODEL);
@@ -266,7 +266,7 @@ void STD_func_80056CA8(int32_t arena, uint8_t *arg)
 	initializeBuffModel(STD_BUFF_MODEL);
 }
 
-void STD_func_80056E2C(int16_t type, int16_t slot, uint8_t tier)
+void STD_initializeOpponent(int16_t type, int16_t slot, uint8_t tier)
 {
 	int32_t nb;
 	int32_t na;
@@ -279,7 +279,7 @@ void STD_func_80056E2C(int16_t type, int16_t slot, uint8_t tier)
 	int32_t i;
 	int16_t base;
 
-	base = STD_D_800799B4[tier];
+	base = STD_OPPONENT_BASE_STATS[tier];
 	scriptLoadModel(type);
 	ENTITY_TABLE[slot + 2] = (Entity *)&NPC_ENTITIES[slot];
 	initializeDigimonObject(type, slot + 2, STD_tickNPCTournament);
@@ -384,17 +384,17 @@ void STD_func_80056E2C(int16_t type, int16_t slot, uint8_t tier)
 	}
 }
 
-int16_t STD_func_80057510(Entity *opponent, int16_t b)
+int16_t STD_runMatch(Entity *opponent, int16_t b)
 {
 	int16_t result;
 
 	ENTITY_TABLE[1]->isOnScreen = 1;
 	GAME_STATE = 5;
-	STD_func_80058E28(b);
-	MAIN_D_801350EC = 1;
-	result = STD_func_8006314C(ENTITY_TABLE[0], opponent);
+	STD_runIntro(b);
+	STD_CAMERA_STATE = 1;
+	result = STD_combatMain(ENTITY_TABLE[0], opponent);
 	STD_removeCameraIntro();
-	MAIN_D_801350EC = 10;
+	STD_CAMERA_STATE = 10;
 	return result;
 }
 
@@ -415,7 +415,7 @@ void STD_initializeCamera(void)
 	GsSetView2(&STDVS_VIEW);
 }
 
-void STD_func_80057628(void)
+void STD_deinitializeTournament(void)
 {
 	RECT rect;
 	int32_t i;
@@ -423,9 +423,9 @@ void STD_func_80057628(void)
 	i = 0;
 	stopBGM();
 	stopSound();
-	STD_func_80058488();
-	STD_func_8005A550();
-	STD_func_80057FC4();
+	STD_removeArenaRenderer();
+	STD_removeVSPhase();
+	STD_freeArenaModel();
 	setRECT(&rect, 0, 0, 0x140, 0x1e0);
 	ClearImage(&rect, 0, 0, 0);
 	setRECT(&rect, 0x300, 0, 0xff, 0x180);
@@ -434,7 +434,7 @@ void STD_func_80057628(void)
 	ClearImage(&rect, 0, 0, 0);
 	DrawSync(0);
 	ENTITY_TABLE[1]->isOnScreen = 0;
-	loadTIMFile(STD_D_80079CA8, GENERAL_BUFFER_PTR);
+	loadTIMFile(STD_PATH_ETCDAT_SBOY_TIM, GENERAL_BUFFER_PTR);
 	fadeToBlack(1);
 
 	for (; i < 0xb; i++) {
@@ -447,7 +447,7 @@ void STD_func_80057628(void)
 	GAME_STATE = 0;
 }
 
-void STD_func_80057778(void)
+void STD_removeOverworldObjects(void)
 {
 	removeObject(0xfa2, 0);
 	removeObject(0xfa0, 0);
@@ -457,7 +457,7 @@ void STD_func_80057778(void)
 	removeObject(0xfa8, 0);
 }
 
-void STD_func_800577B4(void)
+void STD_initializeLighting(void)
 {
 	LIGHT_DATA[0].vx = 1000;
 	LIGHT_DATA[0].vy = 1000;
@@ -504,7 +504,7 @@ void STD_loadTIMToVRAM(char *path)
 	}
 }
 
-int16_t STD_func_800579D8(uint8_t *arg)
+int16_t STD_tournamentMain(uint8_t *arg)
 {
 	int32_t j;
 	int32_t m;
@@ -525,76 +525,76 @@ int16_t STD_func_800579D8(uint8_t *arg)
 		}
 	}
 	fadeToBlack(5);
-	STD_func_80064FCC(5);
+	STD_tickFrames(5);
 	loadMapSounds(0x10);
 	if (CURRENT_SCREEN == 0x6a) {
 		arena = 1;
 	} else {
 		arena = 0;
 	}
-	STD_func_80056CA8(arena, arg);
-	STD_func_8005D964();
-	STD_func_8005D9F4(local, arg);
+	STD_initializeTournament(arena, arg);
+	STD_initializeBracket();
+	STD_setupParticipants(local, arg);
 	STD_setVSPhase(0xa);
-	STD_func_80057FD0(arena);
-	STD_func_8005E5E0();
+	STD_addArenaRenderer(arena);
+	STD_addBracketIntro();
 	fadeFromBlack(5);
-	STD_func_80064FCC(0x78);
-	STD_func_8005E898();
-	MAIN_D_801350E4 = 0;
+	STD_tickFrames(0x78);
+	STD_removeBracketIntro();
+	STD_MATCH_RESULT = 0;
 	i = 0;
 	j = 0;
-	while (MAIN_D_801350E4 != -1 && i != 3) {
-		STD_func_8005DEEC(1);
+	while (STD_MATCH_RESULT != -1 && i != 3) {
+		STD_addBracket(1);
 		loadMapSounds(0x10);
-		while (STD_func_8005DFF8() == 0) {
+		while (STD_isBracketFinished() == 0) {
 			STD_battleTickFrame();
 		}
-		STD_func_8005DF94(1);
-		STD_func_80056E2C(local[i], i, arg[0]);
-		MAIN_D_801350E8 = ENTITY_TABLE[i + 2];
-		MAIN_D_801350E4 = STD_func_80057510(ENTITY_TABLE[i + 2], arena);
+		STD_removeBracket(1);
+		STD_initializeOpponent(local[i], i, arg[0]);
+		STD_OPPONENT_ENTITY = ENTITY_TABLE[i + 2];
+		STD_MATCH_RESULT = STD_runMatch(ENTITY_TABLE[i + 2], arena);
 		j++;
-		if (MAIN_D_801350E4 == 1) {
+		if (STD_MATCH_RESULT == 1) {
 			loadMapSounds(0x10);
-			STD_func_8006D15C();
+			STD_removeWinScene();
 			STD_initializeCamera();
-			MAIN_D_801350EC = 0xa;
+			STD_CAMERA_STATE = 0xa;
 		} else {
-			STD_func_8006CCD4();
+			STD_removeLoseScene();
 		}
 		removeMapEntities();
 		GAME_STATE = 5;
 		i++;
 	}
-	if (MAIN_D_801350E4 == 1) {
-		STD_func_8006BA18();
-		STD_func_8005DEEC(2);
-		while (STD_func_8005DFF8() == 0) {
+	if (STD_MATCH_RESULT == 1) {
+		STD_loadChampionModels();
+		STD_addBracket(2);
+		while (STD_isBracketFinished() == 0) {
 			STD_battleTickFrame();
 		}
 		fadeToBlack(0xa);
 		for (m = 0; m < 0xb; m++) {
 			STD_battleTickFrame();
 		}
-		STD_func_8005DF94(2);
-		STD_addEnemyHPBars();
-		STD_func_8006BE64();
+		STD_removeBracket(2);
+		STD_addPodiumRenderer();
+		STD_initializeChampionScene();
 		STD_battleTickFrame();
 		STD_battleTickFrame();
 		fadeFromBlack(0xf);
 		for (m = 0; m < 0x10 || MAIN_D_801350F0 > 0; m++) {
 			STD_battleTickFrame();
 		}
-		STD_func_8006BFB4();
-		while (MAIN_D_801350F4 == 0) {
+		STD_addChampionScene();
+		while (STD_CHAMPION_SCENE_DONE == 0) {
 			STD_battleTickFrame();
 		}
-		STD_func_8006C6D0();
-		STD_func_8006C630();
+		STD_removePodiumRenderer();
+		STD_removeChampionScene();
 	}
-	STD_func_80057628();
-	if (MAIN_D_801350E4 == 1) {
+	STD_deinitializeTournament();
+	if (STD_MATCH_RESULT == 1) {
 		return i;
 	}
 
@@ -622,63 +622,63 @@ void STD_loadArenaTIMToVRAM(char *path, int32_t count)
 }
 
 // clang-format off
-void STD_func_80057E5C(id)
+void STD_loadArenaAssets(id)
 	uint8_t id;
 // clang-format on
 {
 	int32_t i;
 
-	STD_loadArenaTIMToVRAM(STD_D_8007A338[id], ((uint8_t *)MAIN_D_801347FC.timCount)[id]);
-	MAIN_D_80135130 = malloc3(((int32_t)lookupFileSize(STD_D_8007A304[id]) + 0x7ff) & ~0x7ff);
-	readFile(STD_D_8007A304[id], MAIN_D_80135130);
-	GsMapModelingData((u_long *)&MAIN_D_80135130->flags);
-	for (i = 0; i < MAIN_D_801347FC.modelCount[id]; i++) {
-		GsLinkObject4((u_long)MAIN_D_80135130->obj, &STD_D_8007B97C[i], i);
-		GsInitCoordinate2(NULL, &STD_D_8007B83C[i].coord);
-		STD_D_8007B97C[i].attribute = 0;
-		STD_D_8007B97C[i].coord2 = &STD_D_8007B83C[i].coord;
+	STD_loadArenaTIMToVRAM(STD_ARENA_TIMS[id], ((uint8_t *)STD_ARENA_COUNTS.timCount)[id]);
+	STD_ARENA_MODEL = malloc3(((int32_t)lookupFileSize(STD_ARENA_MODELS[id]) + 0x7ff) & ~0x7ff);
+	readFile(STD_ARENA_MODELS[id], STD_ARENA_MODEL);
+	GsMapModelingData((u_long *)&STD_ARENA_MODEL->flags);
+	for (i = 0; i < STD_ARENA_COUNTS.modelCount[id]; i++) {
+		GsLinkObject4((u_long)STD_ARENA_MODEL->obj, &STD_ARENA_OBJECTS[i], i);
+		GsInitCoordinate2(NULL, &STD_ARENA_COORDS[i].coord);
+		STD_ARENA_OBJECTS[i].attribute = 0;
+		STD_ARENA_OBJECTS[i].coord2 = &STD_ARENA_COORDS[i].coord;
 	}
-	readFile(STD_D_8007A358[id], MAP_COLLISION_DATA);
+	readFile(STD_ARENA_COLLISIONS[id], MAP_COLLISION_DATA);
 }
 
-void STD_func_80057FC4(void)
+void STD_freeArenaModel(void)
 {
-	free3(MAIN_D_80135130);
+	free3(STD_ARENA_MODEL);
 }
 
 // clang-format off
 #if defined(VERSION_JP)
-void STD_func_80057FD0(which)
+void STD_addArenaRenderer(which)
 	uint8_t which;
 #else
-void STD_func_80057FD0(int16_t which)
+void STD_addArenaRenderer(int16_t which)
 #endif
 // clang-format on
 {
 	switch (which) {
 	case 0:
-		addObject(0x1a7, 0, (TickFunction)0, (RenderFunction)STD_func_80058030);
+		addObject(0x1a7, 0, (TickFunction)0, (RenderFunction)STD_renderArena0);
 		break;
 	case 1:
-		addObject(0x1a7, 0, (TickFunction)0, (RenderFunction)STD_func_80058254);
+		addObject(0x1a7, 0, (TickFunction)0, (RenderFunction)STD_renderArena1);
 		break;
 	}
 }
 
-void STD_func_80058030(void)
+void STD_renderArena0(void)
 {
 	MATRIX m;
 	int32_t i;
 
-	GsGetLw(&STD_D_8007B83C[1].coord, &m);
+	GsGetLw(&STD_ARENA_COORDS[1].coord, &m);
 	GsSetLightMatrix(&m);
-	GsGetLs(&STD_D_8007B83C[1].coord, &m);
+	GsGetLs(&STD_ARENA_COORDS[1].coord, &m);
 	GsSetLsMatrix(&m);
-	GsSortObject4(&STD_D_8007B97C[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
-	if (STD_func_8005DFF8() == 1) {
-		STD_D_8007B97C[0].attribute |= 0x200;
+	GsSortObject4(&STD_ARENA_OBJECTS[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	if (STD_isBracketFinished() == 1) {
+		STD_ARENA_OBJECTS[0].attribute |= 0x200;
 	} else {
-		STD_D_8007B97C[0].attribute = 0;
+		STD_ARENA_OBJECTS[0].attribute = 0;
 	}
 	GsClearOt(0, 0xfff, &STD_D_8007B684[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER]);
@@ -686,16 +686,16 @@ void STD_func_80058030(void)
 		if (i == 1) {
 			continue;
 		}
-		GsGetLw(&STD_D_8007B83C[i].coord, &m);
+		GsGetLw(&STD_ARENA_COORDS[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&STD_D_8007B83C[i].coord, &m);
+		GsGetLs(&STD_ARENA_COORDS[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&STD_D_8007B97C[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 2:
-			GsSortObject4(&STD_D_8007B97C[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -703,37 +703,37 @@ void STD_func_80058030(void)
 	GsSortOt(&STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 }
 
-void STD_func_80058254(void)
+void STD_renderArena1(void)
 {
 	MATRIX m;
 	int32_t i;
 
-	if (STD_func_8005DFF8() == 1) {
-		GsGetLw(&STD_D_8007B83C[3].coord, &m);
+	if (STD_isBracketFinished() == 1) {
+		GsGetLw(&STD_ARENA_COORDS[3].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&STD_D_8007B83C[3].coord, &m);
+		GsGetLs(&STD_ARENA_COORDS[3].coord, &m);
 		GsSetLsMatrix(&m);
-		GsSortObject4(&STD_D_8007B97C[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+		GsSortObject4(&STD_ARENA_OBJECTS[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	}
-	if (STD_func_8005DFF8() == 1) {
-		STD_D_8007B97C[0].attribute |= 0x200;
+	if (STD_isBracketFinished() == 1) {
+		STD_ARENA_OBJECTS[0].attribute |= 0x200;
 	} else {
-		STD_D_8007B97C[0].attribute = 0;
+		STD_ARENA_OBJECTS[0].attribute = 0;
 	}
 	GsClearOt(0, 0xfff, &STD_D_8007B684[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER]);
 	for (i = 2; i >= 0; i--) {
-		GsGetLw(&STD_D_8007B83C[i].coord, &m);
+		GsGetLw(&STD_ARENA_COORDS[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&STD_D_8007B83C[i].coord, &m);
+		GsGetLs(&STD_ARENA_COORDS[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&STD_D_8007B97C[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 1:
 		case 2:
-			GsSortObject4(&STD_D_8007B97C[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -741,7 +741,7 @@ void STD_func_80058254(void)
 	GsSortOt(&STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 }
 
-void STD_func_80058488(void)
+void STD_removeArenaRenderer(void)
 {
 	removeObject(0x1a7, 0);
 }

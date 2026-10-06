@@ -48,9 +48,9 @@ extern int32_t VIEWPORT_DISTANCE;
 extern uint8_t CURRENT_SCREEN;
 extern int32_t MAIN_D_801350F0;
 
-void STD_func_8006B1F0(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx);
-void STD_func_8006B6F4(void);
-void STD_func_8005A830(void);
+void STD_offsetTMDObjectUVs(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx);
+void STD_loadWinLoseModel(void);
+void STD_setChampionCamera(void);
 void STD_renderBattleStartText(void);
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount, int32_t *buf);
 void setEntityTextDigit(POLY_FT4 *poly, int32_t x, int32_t y);
@@ -63,102 +63,102 @@ void STD_renderFinisherChargeup(void);
 void STD_removeFinisherChargeup(void);
 void STD_shuffleBattleStartTextPieces(void);
 void STD_initializeBattleStartText(void);
-void STD_func_8006A044(void);
+void STD_removeBattleStartText(void);
 void STD_initializeBattleStartTextBurst(void);
-void STD_func_8006A508(void);
-int32_t STD_func_8006A514(void);
+void STD_removeBattleStartTextBurst(void);
+int32_t STD_isBattleStartTextFinished(void);
 void STD_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
-void STD_func_8006B1E4(int32_t i);
+void STD_removeFighterStatusBars(int32_t i);
 int32_t STD_isVersusModelSceneFinished(void);
-void STD_func_8006B6E8(void);
-void STD_func_80069468(void);
-void STD_func_8006AD68(int32_t id);
-void STD_func_8006BA18(void);
-void STD_func_8006B468(void);
-void STD_func_8006AD00(int32_t i);
-void STD_func_80069134(int16_t tech);
+void STD_removeVersusModelScene(void);
+void STD_handleCommands(void);
+void STD_renderFighterStatusBars(int32_t id);
+void STD_loadChampionModels(void);
+void STD_addVersusModelScene(void);
+void STD_addFighterStatusBars(int32_t i);
+void STD_initializeFinisherChargeup(int16_t tech);
 void GsSortBoxFill(GsBOXF *bp, GsOT *ot, unsigned short pri);
-void STD_func_8006A824(int16_t id);
+void STD_renderFinisherReadyIcon(int16_t id);
 void STD_renderVersusModelScene(void);
-void STD_func_8006BE64(void);
+void STD_initializeChampionScene(void);
 int32_t readFile(char *path, uint8_t *buffer);
-void STD_func_8006B2BC(void);
+void STD_loadVersusSceneModel(void);
 void STD_tickVersusModelScene(void);
 void STD_renderHPBarDigits(int16_t i, int16_t id);
 void STD_renderFighterHPBar(int16_t id);
 void damageTick(FighterData *fighter, Stats *stats);
-void STD_func_8006B1F0(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx);
+void STD_offsetTMDObjectUVs(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx);
 
 static void *std_hud_functions[] = {
-	STD_func_8006BE64,
-	STD_func_8006BA18,
-	STD_func_8006B6F4,
-	STD_func_8006B6E8,
+	STD_initializeChampionScene,
+	STD_loadChampionModels,
+	STD_loadWinLoseModel,
+	STD_removeVersusModelScene,
 	STD_isVersusModelSceneFinished,
 	STD_renderVersusModelScene,
 	STD_tickVersusModelScene,
-	STD_func_8006B468,
-	STD_func_8006B2BC,
-	STD_func_8006B1F0,
-	STD_func_8006B1E4,
-	STD_func_8006AD68,
-	STD_func_8006AD00,
+	STD_addVersusModelScene,
+	STD_loadVersusSceneModel,
+	STD_offsetTMDObjectUVs,
+	STD_removeFighterStatusBars,
+	STD_renderFighterStatusBars,
+	STD_addFighterStatusBars,
 	STD_renderHPBarDigits,
-	STD_func_8006A824,
+	STD_renderFinisherReadyIcon,
 	STD_renderFighterHPBar,
 	STD_renderNumber,
-	STD_func_8006A514,
-	STD_func_8006A508,
+	STD_isBattleStartTextFinished,
+	STD_removeBattleStartTextBurst,
 	STD_renderBattleStartTextBurst,
 	STD_initializeBattleStartTextBurst,
-	STD_func_8006A044,
+	STD_removeBattleStartText,
 	STD_renderBattleStartText,
 	STD_initializeBattleStartText,
 	STD_shuffleBattleStartTextPieces,
 	STD_tickNPCTournament,
 	STD_tickPartnerTournament,
 	STD_tickTamerTournament,
-	STD_func_80069468,
+	STD_handleCommands,
 	STD_removeFinisherChargeup,
 	STD_renderFinisherChargeup,
 	STD_tickFinisherChargeup,
-	STD_func_80069134,
+	STD_initializeFinisherChargeup,
 };
 
-int16_t MAIN_D_8013518C[2];
-uint8_t MAIN_D_80135190;
-int32_t MAIN_D_80135194;
+int16_t STD_FINISHER_CHARGEUP_POS[2];
+uint8_t STD_BATTLE_START_TEXT_TIMER;
+int32_t STD_BATTLE_TEXT_FINISHED;
 uint8_t MAIN_D_80135198[2];
-uint8_t MAIN_D_8013519A[2];
-uint8_t MAIN_D_8013519C[2];
-uint8_t MAIN_D_8013519E[2];
-uint8_t MAIN_D_801351A0[2];
-uint8_t MAIN_D_801351A2[2];
-int16_t MAIN_D_801351A4;
+uint8_t STD_FINISHER_FULL_FRAMES[2];
+uint8_t STD_FINISHER_PULSE_FRAME[2];
+uint8_t STD_FINISHER_BRIGHTNESS[2];
+uint8_t STD_FINISHER_SEGMENTS[2];
+uint8_t STD_FINISHER_READY[2];
+int16_t STD_WIN_LOSS_DRAW_TIMER;
 uint8_t *STD_DRAW_TMD;
 int32_t MAIN_D_801351AC;
 uint8_t *STD_DAI_TMD;
-uint8_t MAIN_D_801351B4;
+uint8_t STD_CHAMPION_SCENE_STATE;
 
 static void *std_hud_sbss_order[] = {
-	&MAIN_D_801351B4,
+	&STD_CHAMPION_SCENE_STATE,
 	&STD_DAI_TMD,
 	&MAIN_D_801351AC,
 	&STD_DRAW_TMD,
-	&MAIN_D_801351A4,
-	&MAIN_D_801351A2,
-	&MAIN_D_801351A0,
-	&MAIN_D_8013519E,
-	&MAIN_D_8013519C,
-	&MAIN_D_8013519A,
+	&STD_WIN_LOSS_DRAW_TIMER,
+	&STD_FINISHER_READY,
+	&STD_FINISHER_SEGMENTS,
+	&STD_FINISHER_BRIGHTNESS,
+	&STD_FINISHER_PULSE_FRAME,
+	&STD_FINISHER_FULL_FRAMES,
 	&MAIN_D_80135198,
-	&MAIN_D_80135194,
-	&MAIN_D_80135190,
-	&MAIN_D_8013518C,
+	&STD_BATTLE_TEXT_FINISHED,
+	&STD_BATTLE_START_TEXT_TIMER,
+	&STD_FINISHER_CHARGEUP_POS,
 };
 
 // clang-format off
-MATRIX STD_D_8007A718 = {
+MATRIX STD_BATTLE_START_TEXT_MATRIX = {
 	{
 		0x100a, 0x0000, 0x0000, 0x0000,
 		0x08e4, 0xf299, 0x0000, 0x0d5e,
@@ -167,7 +167,7 @@ MATRIX STD_D_8007A718 = {
 	{ 0x00000000, 0xfffffffe, 0x000002d4 },
 };
 
-int16_t STD_D_8007A738[155][2] = {
+int16_t STD_BATTLE_START_TEXT_POSITIONS[155][2] = {
 	{ 0xff54, 0xffd0 },
 	{ 0xff5c, 0xffd0 },
 	{ 0xff64, 0xffd0 },
@@ -325,13 +325,13 @@ int16_t STD_D_8007A738[155][2] = {
 	{ 0x00ac, 0x0024 },
 };
 
-int32_t STD_D_8007A9A4[12] = {
+int32_t STD_FINISHER_PULSE[12] = {
 	0x00000020, 0x00000040, 0x00000060, 0x00000080,
 	0x000000a0, 0x000000c0, 0x000000e0, 0x000000ff,
 	0x000000e0, 0x000000c0, 0x000000a0, 0x00000080,
 };
 
-BarSprite STD_D_8007A9D4[6] = {
+BarSprite STD_STATUS_BAR_SPRITES[6] = {
 	{ 0x01ec, 0x80, 0xa8, 0x68, 0x08, 0x0000, 0x0000 },
 	{ 0x01eb, 0x90, 0xb0, 0x0b, 0x0b, 0x0003, 0xfffe },
 	{ 0x01eb, 0x80, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
@@ -340,7 +340,7 @@ BarSprite STD_D_8007A9D4[6] = {
 	{ 0x01eb, 0x84, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
 };
 
-MATRIX STD_D_8007AA10 = {
+MATRIX STD_MODEL_SCENE_MATRIX = {
 	{
 		{ 0x1004, 0x0000, 0x0000 },
 		{ 0x0000, 0x1000, 0x0000 },
@@ -349,45 +349,45 @@ MATRIX STD_D_8007AA10 = {
 	{ 0x00000000, 0x00000000, 0x000003e8 },
 };
 
-int16_t STD_D_8007AA30[8] = {
+int16_t STD_CHAMPION_CAMERA_Y[8] = {
 	0xfe90, 0xfdfb, 0xfd7b, 0xfd0e, 0xfcb6, 0xfc70, 0xfc21, 0xfc18,
 };
 
-int16_t STD_D_8007AA40[24] = {
+int16_t STD_LOSE_DROP_Y[24] = {
 	0xfd44, 0xfd4c, 0xfd64, 0xfd8c, 0xfdc4, 0xfe0c, 0xfe64, 0xfecc,
 	0xff44, 0xffcc, 0x0064, 0x0043, 0x002c, 0x001f, 0x001c, 0x001f,
 	0x002c, 0x0043, 0x0064, 0x0056, 0x0052, 0x0056, 0x0064, 0x0000,
 };
 
-int16_t STD_D_8007AA70[14] = {
+int16_t STD_LOSE_TILT[14] = {
 	0x0005, 0x0014, 0x002f, 0x0053, 0x0082, 0x00bc, 0x0100, 0x014e,
 	0x01a7, 0x020a, 0x0278, 0x02f0, 0x0372, 0x0400,
 };
 
-int16_t STD_D_8007AA8C[18] = {
+int16_t STD_WIN_X_CURVE[18] = {
 	0x0000, 0x0001, 0x0005, 0x000b, 0x0014, 0x001f, 0x002d, 0x003d,
 	0x0050, 0x0065, 0x007d, 0x0097, 0x00b4, 0x00d3, 0x00f5, 0x0119,
 	0x0140, 0x0000,
 };
 
-char STD_D_8007AAB0[] = "\\STDDAT\\DRAW.TMD";
+char STD_PATH_STDDAT_DRAW_TMD[] = "\\STDDAT\\DRAW.TMD";
 
-uint8_t MAIN_D_801348C0[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-uint8_t MAIN_D_801348C8[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
-uint8_t MAIN_D_801348D0[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-char *MAIN_D_801348D8 = STD_D_8007AAB0;
-int16_t MAIN_D_801348DC[4] = { -273, -86, 94, 272 };
+uint8_t STD_FINISHER_SEGMENT_U[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t STD_FINISHER_SEGMENT_W[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
+uint8_t STD_FINISHER_SEGMENT_X[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+char *STD_VERSUS_MODEL_PATH = STD_PATH_STDDAT_DRAW_TMD;
+int16_t STD_VERSUS_MODEL_TARGET_X[4] = { -273, -86, 94, 272 };
 
-char STD_D_8007AAC4[] = "\\STDDAT\\WIN_LOSE.TMD";
+char STD_PATH_STDDAT_WIN_LOSE_TMD[] = "\\STDDAT\\WIN_LOSE.TMD";
 
-char STD_D_8007AADC[] = "\\STDDAT\\CHAMP.TMD";
+char STD_PATH_STDDAT_CHAMP_TMD[] = "\\STDDAT\\CHAMP.TMD";
 
-char STD_D_8007AAF0[] = "\\STDDAT\\B_DAI.TMD";
+char STD_PATH_STDDAT_B_DAI_TMD[] = "\\STDDAT\\B_DAI.TMD";
 
-char STD_D_8007AB04[] = "\\STDDAT\\T_DAI.TMD";
+char STD_PATH_STDDAT_T_DAI_TMD[] = "\\STDDAT\\T_DAI.TMD";
 // clang-format on
 
-void STD_func_80069134(int16_t tech)
+void STD_initializeFinisherChargeup(int16_t tech)
 {
 	COMBAT_DATA_PTR->player.finisherChargeup[0] = 0;
 	COMBAT_DATA_PTR->player.remainingChargeupTime[0] = 0x50;
@@ -397,8 +397,8 @@ void STD_func_80069134(int16_t tech)
 	}
 
 	COMBAT_DATA_PTR->player.bufferedCommand[0] = COMBAT_DATA_PTR->player.currentCommand[0] = 3;
-	MAIN_D_8013518C[0] = -0x8c;
-	MAIN_D_8013518C[1] = -0x4a;
+	STD_FINISHER_CHARGEUP_POS[0] = -0x8c;
+	STD_FINISHER_CHARGEUP_POS[1] = -0x4a;
 	addObject(0x19a, 0, (TickFunction)STD_tickFinisherChargeup, (RenderFunction)STD_renderFinisherChargeup);
 }
 
@@ -432,12 +432,12 @@ void STD_renderFinisherChargeup(void)
 	setClut(&prim, 272, 498);
 	setRGB0(&prim, 0x80, 0x80, 0x80);
 	setUVWH(&prim, 0x58, 0xe0, 46, 12);
-	setXYWH(&prim, MAIN_D_8013518C[0], MAIN_D_8013518C[1], 0x2e, 0xc);
+	setXYWH(&prim, STD_FINISHER_CHARGEUP_POS[0], STD_FINISHER_CHARGEUP_POS[1], 0x2e, 0xc);
 	GsSortPoly(&prim, ACTIVE_ORDERING_TABLE, 7);
 	bars = COMBAT_DATA_PTR->player.finisherChargeup[0] / 8;
 	setUVWH(&prim, 0x88, 0xe0, 4, 6);
 	for (i = 0; i < bars; i++) {
-		setXYWH(&prim, (int32_t)(MAIN_D_8013518C[0] + 3 + i * 4), MAIN_D_8013518C[1] + 3, 4, 6);
+		setXYWH(&prim, (int32_t)(STD_FINISHER_CHARGEUP_POS[0] + 3 + i * 4), STD_FINISHER_CHARGEUP_POS[1] + 3, 4, 6);
 		GsSortPoly(&prim, ACTIVE_ORDERING_TABLE, 7);
 	}
 
@@ -454,7 +454,7 @@ void STD_removeFinisherChargeup(void)
 	}
 }
 
-void STD_func_80069468(void)
+void STD_handleCommands(void)
 {
 	if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x8000) {
 		playSound(0, 2);
@@ -496,7 +496,7 @@ void STD_tickTamerTournament(int32_t instanceId)
 		BATTLE_TOGGLE_LIFEBAR = (BATTLE_TOGGLE_LIFEBAR + 1) & 1;
 	}
 	if (GAME_STATE == 4) {
-		STD_func_80069468();
+		STD_handleCommands();
 	}
 }
 
@@ -523,7 +523,7 @@ void STD_shuffleBattleStartTextPieces(void)
 
 	for (i = 0; i < 0x9b; i++) {
 		r = randomLimit(0x9b);
-		swapByte(&STD_D_8007BB94[i][0x11], &STD_D_8007BB94[r][0x11]);
+		swapByte(&STD_BATTLE_START_TEXT_PIECES[i][0x11], &STD_BATTLE_START_TEXT_PIECES[r][0x11]);
 	}
 }
 
@@ -537,9 +537,9 @@ void STD_initializeBattleStartText(void)
 	int32_t t;
 #endif
 
-	MAIN_D_80135190 = 0;
-	MAIN_D_80135194 = 0;
-	p = STD_D_8007BB94;
+	STD_BATTLE_START_TEXT_TIMER = 0;
+	STD_BATTLE_TEXT_FINISHED = 0;
+	p = STD_BATTLE_START_TEXT_PIECES;
 	for (i = 0; i < 0x9b; i++, p++) {
 		(*p)[0x11] = i;
 		(*p)[0x12] = 0x18;
@@ -548,14 +548,14 @@ void STD_initializeBattleStartText(void)
 
 	STD_shuffleBattleStartTextPieces();
 
-	p = STD_D_8007BB94;
+	p = STD_BATTLE_START_TEXT_PIECES;
 	for (i = 0; i < 0x9b; i++, p++) {
 		if (randomLimit(2) == 1) {
 			sgn = 1;
 		} else {
 			sgn = -1;
 		}
-		((int16_t *)*p)[5] = STD_D_8007A738[i][1];
+		((int16_t *)*p)[5] = STD_BATTLE_START_TEXT_POSITIONS[i][1];
 		((int8_t *)*p)[0x10] = -sgn * ((randomLimit(3) + 1) << 5);
 		if ((0 <= i) && (i < 0x33)) {
 			((int16_t *)*p)[4] = (sgn * 500) + randomLimit(100) - 50;
@@ -566,12 +566,12 @@ void STD_initializeBattleStartText(void)
 		}
 		r = randomLimit(5);
 #if defined(VERSION_JP)
-		((int16_t *)*p)[6] = (r + 8) * STD_D_8007A738[i][0] / 8;
-		((int16_t *)*p)[7] = (r + 8) * STD_D_8007A738[i][1] / 8;
+		((int16_t *)*p)[6] = (r + 8) * STD_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
+		((int16_t *)*p)[7] = (r + 8) * STD_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
 #else
-		t = STD_D_8007A738[i][0];
+		t = STD_BATTLE_START_TEXT_POSITIONS[i][0];
 		((int16_t *)*p)[6] = (r + 8) * t / 8;
-		t = STD_D_8007A738[i][1];
+		t = STD_BATTLE_START_TEXT_POSITIONS[i][1];
 		((int16_t *)*p)[7] = (r + 8) * t / 8;
 #endif
 		((int16_t *)*p)[0] = 0;
@@ -603,36 +603,36 @@ void STD_renderBattleStartText(void)
 	uint16_t clut;
 
 	GsSetProjection(0x200);
-	GsSetLsMatrix(&STD_D_8007A718);
+	GsSetLsMatrix(&STD_BATTLE_START_TEXT_MATRIX);
 
 	n = 0;
 	for (i = 0; i < 0x9b; i++) {
-		if (STD_D_8007BB94[i][0x12] != 0) {
+		if (STD_BATTLE_START_TEXT_PIECES[i][0x12] != 0) {
 			break;
 		}
 		n++;
 	}
 
 	if (n == 0x9b) {
-		clut = GetClut(256, (MAIN_D_80135190++ % 6 / 2) + 488);
-		MAIN_D_80135194 = 1;
+		clut = GetClut(256, (STD_BATTLE_START_TEXT_TIMER++ % 6 / 2) + 488);
+		STD_BATTLE_TEXT_FINISHED = 1;
 	} else {
 		clut = GetClut(256, 488);
 	}
 
-	p = STD_D_8007BB94;
+	p = STD_BATTLE_START_TEXT_PIECES;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	ot = ACTIVE_ORDERING_TABLE->org;
 	for (i = 0; i < 0x9b; i++, p++) {
-		if (((int16_t *)*p)[4] != STD_D_8007A738[i][0]) {
+		if (((int16_t *)*p)[4] != STD_BATTLE_START_TEXT_POSITIONS[i][0]) {
 			((int16_t *)*p)[4] += ((int8_t *)*p)[0x10];
 			if (((int8_t *)*p)[0x10] > 0) {
-				if (((int16_t *)*p)[4] > STD_D_8007A738[i][0]) {
-					((int16_t *)*p)[4] = STD_D_8007A738[i][0];
+				if (((int16_t *)*p)[4] > STD_BATTLE_START_TEXT_POSITIONS[i][0]) {
+					((int16_t *)*p)[4] = STD_BATTLE_START_TEXT_POSITIONS[i][0];
 				}
 			} else {
-				if (((int16_t *)*p)[4] < STD_D_8007A738[i][0]) {
-					((int16_t *)*p)[4] = STD_D_8007A738[i][0];
+				if (((int16_t *)*p)[4] < STD_BATTLE_START_TEXT_POSITIONS[i][0]) {
+					((int16_t *)*p)[4] = STD_BATTLE_START_TEXT_POSITIONS[i][0];
 				}
 			}
 		} else {
@@ -718,14 +718,14 @@ void STD_renderBattleStartText(void)
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
-void STD_func_8006A044(void)
+void STD_removeBattleStartText(void)
 {
 	removeObject(0x1a6, 0);
 }
 
 void STD_initializeBattleStartTextBurst(void)
 {
-	MAIN_D_80135194 = 0;
+	STD_BATTLE_TEXT_FINISHED = 0;
 	addObject(0x1a6, 0, NULL, (RenderFunction)STD_renderBattleStartTextBurst);
 }
 
@@ -748,7 +748,7 @@ void STD_renderBattleStartTextBurst(void)
 	int16_t cy;
 
 	GsSetProjection(0x200);
-	GsSetLsMatrix(&STD_D_8007A718);
+	GsSetLsMatrix(&STD_BATTLE_START_TEXT_MATRIX);
 
 	corner[0].vx = -4;
 	corner[0].vy = -6;
@@ -764,7 +764,7 @@ void STD_renderBattleStartTextBurst(void)
 	corner[3].vz = 0;
 
 	dead = 0;
-	p = STD_D_8007BB94;
+	p = STD_BATTLE_START_TEXT_PIECES;
 	ot = ACTIVE_ORDERING_TABLE->org;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	for (i = 0; i < 0x9b; i++, p++) {
@@ -831,20 +831,20 @@ void STD_renderBattleStartTextBurst(void)
 
 	GsSetWorkBase((PACKET *)prim);
 	if (dead == 0x9b) {
-		MAIN_D_80135194 = 1;
+		STD_BATTLE_TEXT_FINISHED = 1;
 	}
 	GsSetProjection(VIEWPORT_DISTANCE);
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
-void STD_func_8006A508(void)
+void STD_removeBattleStartTextBurst(void)
 {
 	removeObject(0x1a6, 0);
 }
 
-int32_t STD_func_8006A514(void)
+int32_t STD_isBattleStartTextFinished(void)
 {
-	return MAIN_D_80135194;
+	return STD_BATTLE_TEXT_FINISHED;
 }
 
 void STD_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
@@ -887,29 +887,29 @@ void STD_renderFighterHPBar(int16_t id)
 
 	n = (COMBAT_DATA_PTR->fighter[id].finisherProgress * 6) / COMBAT_DATA_PTR->fighter[id].finisherGoal;
 
-	if (MAIN_D_801351A0[id] != n) {
-		MAIN_D_8013519C[id] = 0;
-		MAIN_D_801351A0[id] = n;
+	if (STD_FINISHER_SEGMENTS[id] != n) {
+		STD_FINISHER_PULSE_FRAME[id] = 0;
+		STD_FINISHER_SEGMENTS[id] = n;
 	}
 
-	MAIN_D_8013519E[id] = STD_D_8007A9A4[MAIN_D_8013519C[id]];
-	if (MAIN_D_8013519C[id] < 0xb) {
-		MAIN_D_8013519C[id]++;
+	STD_FINISHER_BRIGHTNESS[id] = STD_FINISHER_PULSE[STD_FINISHER_PULSE_FRAME[id]];
+	if (STD_FINISHER_PULSE_FRAME[id] < 0xb) {
+		STD_FINISHER_PULSE_FRAME[id]++;
 	}
 
 	if (n == 6) {
-		if (MAIN_D_8013519A[id] < 0xa) {
-			MAIN_D_8013519A[id]++;
+		if (STD_FINISHER_FULL_FRAMES[id] < 0xa) {
+			STD_FINISHER_FULL_FRAMES[id]++;
 		}
-		if (MAIN_D_8013519A[id] >= 3) {
+		if (STD_FINISHER_FULL_FRAMES[id] >= 3) {
 			n++;
 		}
-		if (MAIN_D_8013519A[id] >= 5) {
+		if (STD_FINISHER_FULL_FRAMES[id] >= 5) {
 			n++;
-			STD_func_8006A824(id);
-			if (MAIN_D_8013519A[id] == 0xa) {
-				MAIN_D_801351A2[id] = 1;
-				MAIN_D_8013519C[id] %= 0xb;
+			STD_renderFinisherReadyIcon(id);
+			if (STD_FINISHER_FULL_FRAMES[id] == 0xa) {
+				STD_FINISHER_READY[id] = 1;
+				STD_FINISHER_PULSE_FRAME[id] %= 0xb;
 			}
 		}
 	}
@@ -919,17 +919,17 @@ void STD_renderFighterHPBar(int16_t id)
 	}
 }
 
-void STD_func_8006A824(int16_t id)
+void STD_renderFinisherReadyIcon(int16_t id)
 {
 	GsBOXF box;
 	POLY_FT4 *prim;
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 0x1e2);
-	if ((MAIN_D_801351A2[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
+	if ((STD_FINISHER_READY[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	} else {
-		setRGB0(prim, MAIN_D_8013519E[id], MAIN_D_8013519E[id], MAIN_D_8013519E[id]);
+		setRGB0(prim, STD_FINISHER_BRIGHTNESS[id], STD_FINISHER_BRIGHTNESS[id], STD_FINISHER_BRIGHTNESS[id]);
 	}
 
 	setUVWH(prim, 0x80, 0x88, 37, 9);
@@ -938,10 +938,10 @@ void STD_func_8006A824(int16_t id)
 	GsSetWorkBase((PACKET *)prim);
 
 	box.attribute = 0x40000000;
-	if ((MAIN_D_801351A2[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
+	if ((STD_FINISHER_READY[id] != 1) || (COMBAT_DATA_PTR->player.currentCommand[id] == 0xb)) {
 		box.r = box.g = box.b = 0x80;
 	} else {
-		box.r = box.g = box.b = MAIN_D_8013519E[id];
+		box.r = box.g = box.b = STD_FINISHER_BRIGHTNESS[id];
 	}
 
 	setWH(&box, 0x29, 0xb);
@@ -959,34 +959,34 @@ void STD_renderHPBarDigits(int16_t i, int16_t id)
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 0x100, 0x1ec);
 
-	if ((((n - 1) == i) || (MAIN_D_801351A2[id] == 1)) && (COMBAT_DATA_PTR->player.currentCommand[id] != 0xb)) {
-		setRGB0(prim, MAIN_D_8013519E[id], MAIN_D_8013519E[id], MAIN_D_8013519E[id]);
+	if ((((n - 1) == i) || (STD_FINISHER_READY[id] == 1)) && (COMBAT_DATA_PTR->player.currentCommand[id] != 0xb)) {
+		setRGB0(prim, STD_FINISHER_BRIGHTNESS[id], STD_FINISHER_BRIGHTNESS[id], STD_FINISHER_BRIGHTNESS[id]);
 	} else {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	}
 
-	setUVWH(prim, MAIN_D_801348C0[i], 0x9d, MAIN_D_801348C8[i], 15);
-	setXYWH(prim, (id == 0 ? MAIN_D_801348D0[i] - 0x8d : MAIN_D_801348D0[i] + 0x37), -0x4f, MAIN_D_801348C8[i], 15);
+	setUVWH(prim, STD_FINISHER_SEGMENT_U[i], 0x9d, STD_FINISHER_SEGMENT_W[i], 15);
+	setXYWH(prim, (id == 0 ? STD_FINISHER_SEGMENT_X[i] - 0x8d : STD_FINISHER_SEGMENT_X[i] + 0x37), -0x4f, STD_FINISHER_SEGMENT_W[i], 15);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 8, prim++);
 	GsSetWorkBase((PACKET *)prim);
 }
 
 // clang-format off
-void STD_func_8006AD00(id)
+void STD_addFighterStatusBars(id)
 	int16_t id;
 // clang-format on
 {
 	MAIN_D_80135198[id] = 0;
-	MAIN_D_8013519A[id] = 0;
-	MAIN_D_8013519C[id] = 0xb;
-	MAIN_D_8013519E[id] = 0;
-	MAIN_D_801351A0[id] = 0;
-	MAIN_D_801351A2[id] = 0;
-	addObject(0x19c, id, NULL, (RenderFunction)STD_func_8006AD68);
+	STD_FINISHER_FULL_FRAMES[id] = 0;
+	STD_FINISHER_PULSE_FRAME[id] = 0xb;
+	STD_FINISHER_BRIGHTNESS[id] = 0;
+	STD_FINISHER_SEGMENTS[id] = 0;
+	STD_FINISHER_READY[id] = 0;
+	addObject(0x19c, id, NULL, (RenderFunction)STD_renderFighterStatusBars);
 }
 
 // clang-format off
-void STD_func_8006AD68(id)
+void STD_renderFighterStatusBars(id)
 	int16_t id;
 // clang-format on
 {
@@ -1023,7 +1023,7 @@ void STD_func_8006AD68(id)
 	}
 
 	for (bar = 0; bar < 2; bar++) {
-		p = &STD_D_8007A9D4[bar * 3 + 2];
+		p = &STD_STATUS_BAR_SPRITES[bar * 3 + 2];
 		if (bar == 0) {
 			if (id == 0) {
 				x0 = -0x8c;
@@ -1068,14 +1068,14 @@ void STD_func_8006AD68(id)
 }
 
 // clang-format off
-void STD_func_8006B1E4(i)
+void STD_removeFighterStatusBars(i)
 	int16_t i;
 // clang-format on
 {
 	removeObject(0x19c, i);
 }
 
-void STD_func_8006B1F0(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx)
+void STD_offsetTMDObjectUVs(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx)
 {
 	struct TMD_STRUCT *obj;
 	uint32_t *p;
@@ -1108,37 +1108,37 @@ void STD_func_8006B1F0(uint32_t *tmd, int32_t vofs, int32_t nofs, int32_t objIdx
 	}
 }
 
-void STD_func_8006B2BC(void)
+void STD_loadVersusSceneModel(void)
 {
 	int32_t i;
 
-	MAIN_D_801351A4 = 0;
+	STD_WIN_LOSS_DRAW_TIMER = 0;
 	STD_DRAW_TMD = STD_TMD_BUFFER;
-	readFile(MAIN_D_801348D8, STD_DRAW_TMD);
+	readFile(STD_VERSUS_MODEL_PATH, STD_DRAW_TMD);
 	GsMapModelingData((u_long *)(STD_DRAW_TMD + 4));
 
 	for (i = 0; i < 4; i++) {
-		GsLinkObject4((u_long)(STD_DRAW_TMD + 0xc), &STD_D_8007C7B0[i].data.obj, i);
-		GsInitCoordinate2(NULL, &STD_D_8007C7B0[i].data.posMatrix);
-		STD_D_8007C7B0[i].data.obj.attribute = 0;
-		STD_D_8007C7B0[i].data.obj.coord2 = &STD_D_8007C7B0[i].data.posMatrix;
+		GsLinkObject4((u_long)(STD_DRAW_TMD + 0xc), &STD_VERSUS_MODEL_OBJECTS[i].data.obj, i);
+		GsInitCoordinate2(NULL, &STD_VERSUS_MODEL_OBJECTS[i].data.posMatrix);
+		STD_VERSUS_MODEL_OBJECTS[i].data.obj.attribute = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.obj.coord2 = &STD_VERSUS_MODEL_OBJECTS[i].data.posMatrix;
 	}
 
 	for (i = 0; i < 4; i++) {
-		STD_D_8007C7B0[i].data.scale.vx = 0x1000;
-		STD_D_8007C7B0[i].data.scale.vy = 0x1000;
-		STD_D_8007C7B0[i].data.scale.vz = 0x1000;
-		STD_D_8007C7B0[i].data.rotation.vx = 0;
-		STD_D_8007C7B0[i].data.rotation.vy = 0;
-		STD_D_8007C7B0[i].data.rotation.vz = 0;
-		STD_D_8007C7B0[i].data.location.vx = 0x3e8;
-		STD_D_8007C7B0[i].data.location.vy = 0x78;
-		STD_D_8007C7B0[i].data.location.vz = 0x280;
-		setupModelMatrix(&STD_D_8007C7B0[i].data);
+		STD_VERSUS_MODEL_OBJECTS[i].data.scale.vx = 0x1000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.scale.vy = 0x1000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.scale.vz = 0x1000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vx = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vy = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vz = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.location.vx = 0x3e8;
+		STD_VERSUS_MODEL_OBJECTS[i].data.location.vy = 0x78;
+		STD_VERSUS_MODEL_OBJECTS[i].data.location.vz = 0x280;
+		setupModelMatrix(&STD_VERSUS_MODEL_OBJECTS[i].data);
 	}
 }
 
-void STD_func_8006B468(void)
+void STD_addVersusModelScene(void)
 {
 	addObject(0x19d, 0, (TickFunction)STD_tickVersusModelScene, (RenderFunction)STD_renderVersusModelScene);
 }
@@ -1147,17 +1147,17 @@ void STD_tickVersusModelScene(void)
 {
 	int32_t i;
 
-	MAIN_D_801351A4++;
+	STD_WIN_LOSS_DRAW_TIMER++;
 	for (i = 0; i < 4; i++) {
-		if (MAIN_D_801351A4 > i * 5) {
-			if (STD_D_8007C7B0[i].data.location.vx != MAIN_D_801348DC[i]) {
-				STD_D_8007C7B0[i].data.location.vx -= 200;
-				if (STD_D_8007C7B0[i].data.location.vx < MAIN_D_801348DC[i]) {
-					STD_D_8007C7B0[i].data.location.vx = MAIN_D_801348DC[i];
+		if (STD_WIN_LOSS_DRAW_TIMER > i * 5) {
+			if (STD_VERSUS_MODEL_OBJECTS[i].data.location.vx != STD_VERSUS_MODEL_TARGET_X[i]) {
+				STD_VERSUS_MODEL_OBJECTS[i].data.location.vx -= 200;
+				if (STD_VERSUS_MODEL_OBJECTS[i].data.location.vx < STD_VERSUS_MODEL_TARGET_X[i]) {
+					STD_VERSUS_MODEL_OBJECTS[i].data.location.vx = STD_VERSUS_MODEL_TARGET_X[i];
 				}
 			}
 		}
-		setupModelMatrix(&STD_D_8007C7B0[i].data);
+		setupModelMatrix(&STD_VERSUS_MODEL_OBJECTS[i].data);
 	}
 }
 
@@ -1168,82 +1168,82 @@ void STD_renderVersusModelScene(void)
 	int32_t i;
 
 	GsSetProjection(0x200);
-	GsWSMATRIX = STD_D_8007AA10;
-	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
+	GsWSMATRIX = STD_MODEL_SCENE_MATRIX;
+	GsClearOt(0, 4, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 4; i++) {
-		GsGetLws(STD_D_8007C7B0[i].data.obj.coord2, &lw, &ls);
+		GsGetLws(STD_VERSUS_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007C7B0[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_VERSUS_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
-	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
+	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 	GsSetProjection(VIEWPORT_DISTANCE);
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
 int32_t STD_isVersusModelSceneFinished(void)
 {
-	if (MAIN_D_801351A4 >= 0x51) {
+	if (STD_WIN_LOSS_DRAW_TIMER >= 0x51) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
 
-void STD_func_8006B6E8(void)
+void STD_removeVersusModelScene(void)
 {
 	removeObject(0x19d, 0);
 }
 
-void STD_func_8006B6F4(void)
+void STD_loadWinLoseModel(void)
 {
 	long i;
 	uint8_t *buf;
 
 	for (i = 0x14; i < 0x29; i++) {
-		STD_D_8007CC78[i - 0x14] = ((i * 0x2000) / 40) & 0xfff;
-		STD_D_8007CCA4[i - 0x14] = (((i * 0x800) / 40) + 0x800) & 0xfff;
+		STD_WIN_ROTATION_X[i - 0x14] = ((i * 0x2000) / 40) & 0xfff;
+		STD_WIN_ROTATION_Y[i - 0x14] = (((i * 0x800) / 40) + 0x800) & 0xfff;
 		if ((i >= 0x14) && (i < 0x25)) {
-			STD_D_8007CCD0[i - 0x14] = STD_D_8007AA8C[0x24 - i] - 0xe6;
-			STD_D_8007CCFC[i - 0x14] = 0x118 - STD_D_8007AA8C[0x24 - i];
+			STD_WIN_FIRST_X[i - 0x14] = STD_WIN_X_CURVE[0x24 - i] - 0xe6;
+			STD_WIN_LAST_X[i - 0x14] = 0x118 - STD_WIN_X_CURVE[0x24 - i];
 		}
 		if ((i >= 0x25) && (i < 0x29)) {
-			STD_D_8007CCD0[i - 0x14] = STD_D_8007AA8C[i - 0x24] - 0xe6;
-			STD_D_8007CCFC[i - 0x14] = 0x118 - STD_D_8007AA8C[i - 0x24];
+			STD_WIN_FIRST_X[i - 0x14] = STD_WIN_X_CURVE[i - 0x24] - 0xe6;
+			STD_WIN_LAST_X[i - 0x14] = 0x118 - STD_WIN_X_CURVE[i - 0x24];
 		}
 	}
 
-	STD_D_8007B714[0].length = 5;
-	STD_D_8007B714[0].org = STD_D_8007B73C;
-	STD_D_8007B714[1].length = 5;
-	STD_D_8007B714[1].org = STD_D_8007B7BC;
-	buf = (uint8_t *)STD_D_8007CD28;
-	readFile(STD_D_8007AAC4, buf);
+	STD_MODEL_SCENE_ORDERING_TABLE[0].length = 5;
+	STD_MODEL_SCENE_ORDERING_TABLE[0].org = STD_MODEL_SCENE_OT_TAGS_0;
+	STD_MODEL_SCENE_ORDERING_TABLE[1].length = 5;
+	STD_MODEL_SCENE_ORDERING_TABLE[1].org = STD_MODEL_SCENE_OT_TAGS_1;
+	buf = (uint8_t *)STD_RESULT_TMD_BUFFER;
+	readFile(STD_PATH_STDDAT_WIN_LOSE_TMD, buf);
 	GsMapModelingData((u_long *)(buf + 4));
 	for (i = 0; i < 8; i++) {
-		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007F528[i].data.obj, i);
-		GsInitCoordinate2(NULL, &STD_D_8007F528[i].data.posMatrix);
-		STD_D_8007F528[i].data.obj.attribute = 0;
-		STD_D_8007F528[i].data.obj.coord2 = &STD_D_8007F528[i].data.posMatrix;
+		GsLinkObject4((u_long)(buf + 0xc), &STD_RESULT_MODEL_OBJECTS[i].data.obj, i);
+		GsInitCoordinate2(NULL, &STD_RESULT_MODEL_OBJECTS[i].data.posMatrix);
+		STD_RESULT_MODEL_OBJECTS[i].data.obj.attribute = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.obj.coord2 = &STD_RESULT_MODEL_OBJECTS[i].data.posMatrix;
 	}
 
 	for (i = 4; i < 8; i++) {
-		STD_D_8007F528[i].data.scale.vx = 0x1000;
-		STD_D_8007F528[i].data.scale.vy = 0x1000;
-		STD_D_8007F528[i].data.scale.vz = 0x1000;
-		STD_D_8007F528[i].data.rotation.vx = 0;
-		STD_D_8007F528[i].data.rotation.vy = 0;
-		STD_D_8007F528[i].data.rotation.vz = 0;
-		STD_D_8007F528[i].data.location.vx = 0;
-		STD_D_8007F528[i].data.location.vy = -0x2bc;
-		STD_D_8007F528[i].data.location.vz = 0xdc;
-		setupModelMatrix(&STD_D_8007F528[i].data);
+		STD_RESULT_MODEL_OBJECTS[i].data.scale.vx = 0x1000;
+		STD_RESULT_MODEL_OBJECTS[i].data.scale.vy = 0x1000;
+		STD_RESULT_MODEL_OBJECTS[i].data.scale.vz = 0x1000;
+		STD_RESULT_MODEL_OBJECTS[i].data.rotation.vx = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.rotation.vy = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.rotation.vz = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.location.vx = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.location.vy = -0x2bc;
+		STD_RESULT_MODEL_OBJECTS[i].data.location.vz = 0xdc;
+		setupModelMatrix(&STD_RESULT_MODEL_OBJECTS[i].data);
 	}
 }
 
-void STD_func_8006BA18(void)
+void STD_loadChampionModels(void)
 {
 	long i;
 	uint8_t *buf;
@@ -1257,96 +1257,96 @@ void STD_func_8006BA18(void)
 	n = 0x28;
 	b = 0;
 	for (i = 1; i <= n; i++) {
-		STD_D_8007F968[i - 1] = b + (a * (i * i)) / (n * n);
+		STD_CHAMPION_ORBIT_ANGLES[i - 1] = b + (a * (i * i)) / (n * n);
 	}
 
 	for (i = 0; i < n - 1; i++) {
-		STD_D_8007F968[i + 0x28] = 0x1400 - STD_D_8007F968[0x26 - i];
+		STD_CHAMPION_ORBIT_ANGLES[i + 0x28] = 0x1400 - STD_CHAMPION_ORBIT_ANGLES[0x26 - i];
 	}
 
-	buf = (uint8_t *)STD_D_8007CD28;
-	readFile(STD_D_8007AADC, buf);
+	buf = (uint8_t *)STD_RESULT_TMD_BUFFER;
+	readFile(STD_PATH_STDDAT_CHAMP_TMD, buf);
 	MAIN_D_801350F0 = 0;
 	GsMapModelingData((u_long *)(buf + 4));
 
 	for (i = 0; i < 9; i++) {
 		x = (8 - i) * -24;
-		STD_func_8006B1F0((uint32_t *)buf, x, 0x30, i);
+		STD_offsetTMDObjectUVs((uint32_t *)buf, x, 0x30, i);
 	}
 
 	for (i = 0; i < 9; i++) {
-		GsLinkObject4((u_long)(buf + 0xc), &STD_D_8007C7B0[i].data.obj, i);
-		GsInitCoordinate2(NULL, &STD_D_8007C7B0[i].data.posMatrix);
-		STD_D_8007C7B0[i].data.obj.attribute = 0x80000000;
-		STD_D_8007C7B0[i].data.obj.coord2 = &STD_D_8007C7B0[i].data.posMatrix;
+		GsLinkObject4((u_long)(buf + 0xc), &STD_VERSUS_MODEL_OBJECTS[i].data.obj, i);
+		GsInitCoordinate2(NULL, &STD_VERSUS_MODEL_OBJECTS[i].data.posMatrix);
+		STD_VERSUS_MODEL_OBJECTS[i].data.obj.attribute = 0x80000000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.obj.coord2 = &STD_VERSUS_MODEL_OBJECTS[i].data.posMatrix;
 	}
 
 	for (i = 0; i < 9; i++) {
-		STD_D_8007C7B0[i].data.scale.vx = 0x1000;
-		STD_D_8007C7B0[i].data.scale.vy = 0x2000;
-		STD_D_8007C7B0[i].data.scale.vz = 0x1000;
-		STD_D_8007C7B0[i].data.rotation.vx = 0;
-		STD_D_8007C7B0[i].data.rotation.vy = 0;
-		STD_D_8007C7B0[i].data.rotation.vz = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.scale.vx = 0x1000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.scale.vy = 0x2000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.scale.vz = 0x1000;
+		STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vx = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vy = 0;
+		STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vz = 0;
 		switch (i) {
 		case 5:
-			STD_D_8007C7B0[5].data.location.vx = 0xbe;
-			STD_D_8007C7B0[5].data.location.vy = 0xc8;
-			STD_D_8007C7B0[5].data.location.vz = 0x7bc;
+			STD_VERSUS_MODEL_OBJECTS[5].data.location.vx = 0xbe;
+			STD_VERSUS_MODEL_OBJECTS[5].data.location.vy = 0xc8;
+			STD_VERSUS_MODEL_OBJECTS[5].data.location.vz = 0x7bc;
 			break;
 		case 6:
-			STD_D_8007C7B0[6].data.location.vx = 0x168;
-			STD_D_8007C7B0[6].data.location.vy = 0xc8;
-			STD_D_8007C7B0[6].data.location.vz = 0x7bc;
+			STD_VERSUS_MODEL_OBJECTS[6].data.location.vx = 0x168;
+			STD_VERSUS_MODEL_OBJECTS[6].data.location.vy = 0xc8;
+			STD_VERSUS_MODEL_OBJECTS[6].data.location.vz = 0x7bc;
 			break;
 		case 7:
-			STD_D_8007C7B0[7].data.location.vx = 0x230;
-			STD_D_8007C7B0[7].data.location.vy = 0xc8;
-			STD_D_8007C7B0[7].data.location.vz = 0x7bc;
+			STD_VERSUS_MODEL_OBJECTS[7].data.location.vx = 0x230;
+			STD_VERSUS_MODEL_OBJECTS[7].data.location.vy = 0xc8;
+			STD_VERSUS_MODEL_OBJECTS[7].data.location.vz = 0x7bc;
 			break;
 		case 8:
-			STD_D_8007C7B0[8].data.location.vx = 0x2e4;
-			STD_D_8007C7B0[8].data.location.vy = 0xc8;
-			STD_D_8007C7B0[8].data.location.vz = 0x7bc;
+			STD_VERSUS_MODEL_OBJECTS[8].data.location.vx = 0x2e4;
+			STD_VERSUS_MODEL_OBJECTS[8].data.location.vy = 0xc8;
+			STD_VERSUS_MODEL_OBJECTS[8].data.location.vz = 0x7bc;
 			break;
 		default:
-			STD_D_8007C7B0[i].data.location.vx = i * 0xc8 - 0x2f8;
-			STD_D_8007C7B0[i].data.location.vy = 0xc8;
-			STD_D_8007C7B0[i].data.location.vz = 0x7bc;
+			STD_VERSUS_MODEL_OBJECTS[i].data.location.vx = i * 0xc8 - 0x2f8;
+			STD_VERSUS_MODEL_OBJECTS[i].data.location.vy = 0xc8;
+			STD_VERSUS_MODEL_OBJECTS[i].data.location.vz = 0x7bc;
 			break;
 		}
-		setupModelMatrix(&STD_D_8007C7B0[i].data);
+		setupModelMatrix(&STD_VERSUS_MODEL_OBJECTS[i].data);
 	}
 
 	STD_DAI_TMD = STD_TMD_BUFFER;
 	if (CURRENT_SCREEN == 0x6a) {
-		readFile(STD_D_8007AAF0, STD_DAI_TMD);
+		readFile(STD_PATH_STDDAT_B_DAI_TMD, STD_DAI_TMD);
 	} else {
-		readFile(STD_D_8007AB04, STD_DAI_TMD);
+		readFile(STD_PATH_STDDAT_T_DAI_TMD, STD_DAI_TMD);
 	}
 	GsMapModelingData((u_long *)(STD_DAI_TMD + 4));
-	GsLinkObject4((u_long)(STD_DAI_TMD + 0xc), &STD_D_8007F528[0].data.obj, 0);
-	GsInitCoordinate2(NULL, &STD_D_8007F528[0].data.posMatrix);
-	STD_D_8007F528[0].data.obj.attribute = 0;
-	STD_D_8007F528[0].data.obj.coord2 = &STD_D_8007F528[0].data.posMatrix;
-	STD_D_8007F528[0].data.scale.vx = 0x1000;
-	STD_D_8007F528[0].data.scale.vy = 0x1000;
-	STD_D_8007F528[0].data.scale.vz = 0x1000;
-	STD_D_8007F528[0].data.rotation.vx = 0;
-	STD_D_8007F528[0].data.rotation.vy = 0;
-	STD_D_8007F528[0].data.rotation.vz = 0;
-	STD_D_8007F528[0].data.location.vx = 0;
-	STD_D_8007F528[0].data.location.vy = -0x1e;
-	STD_D_8007F528[0].data.location.vz = 0;
-	setupModelMatrix(&STD_D_8007F528[0].data);
+	GsLinkObject4((u_long)(STD_DAI_TMD + 0xc), &STD_RESULT_MODEL_OBJECTS[0].data.obj, 0);
+	GsInitCoordinate2(NULL, &STD_RESULT_MODEL_OBJECTS[0].data.posMatrix);
+	STD_RESULT_MODEL_OBJECTS[0].data.obj.attribute = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.obj.coord2 = &STD_RESULT_MODEL_OBJECTS[0].data.posMatrix;
+	STD_RESULT_MODEL_OBJECTS[0].data.scale.vx = 0x1000;
+	STD_RESULT_MODEL_OBJECTS[0].data.scale.vy = 0x1000;
+	STD_RESULT_MODEL_OBJECTS[0].data.scale.vz = 0x1000;
+	STD_RESULT_MODEL_OBJECTS[0].data.rotation.vx = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.rotation.vy = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.rotation.vz = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.location.vx = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.location.vy = -0x1e;
+	STD_RESULT_MODEL_OBJECTS[0].data.location.vz = 0;
+	setupModelMatrix(&STD_RESULT_MODEL_OBJECTS[0].data);
 }
 
-void STD_func_8006BE64(void)
+void STD_initializeChampionScene(void)
 {
 	RECT rect;
 	int32_t i;
 
-	MAIN_D_801351B4 = 0;
+	STD_CHAMPION_SCENE_STATE = 0;
 	GAME_STATE = 5;
 	startAnimation(ENTITY_TABLE[1], 0x21);
 	ENTITY_TABLE[1]->posData->location.vx = 0;
@@ -1357,15 +1357,15 @@ void STD_func_8006BE64(void)
 	ENTITY_TABLE[1]->anim.locX = 0;
 	ENTITY_TABLE[1]->anim.locZ = 0;
 	ENTITY_TABLE[1]->posData->rotation.vy = 0x200;
-	STD_func_8005A830();
-	MAIN_D_801351A4 = 0;
+	STD_setChampionCamera();
+	STD_WIN_LOSS_DRAW_TIMER = 0;
 	rect.x = 0x378;
 	rect.y = 0;
 	rect.w = 6;
 	rect.h = 0x30;
 
 	for (i = 0; i < 9; i++) {
-		STD_D_8007FA08[i] = 0;
+		STD_MODEL_SCENE_STEPS[i] = 0;
 		MoveImage(&rect, (i * 6) + 0x348, 0x30);
 	}
 }

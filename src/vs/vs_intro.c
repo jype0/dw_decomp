@@ -26,7 +26,7 @@ extern int16_t VS__INTRO_DATA_RENDERED_CHARACTERS;
 extern uint8_t VS__INTRO_DATA_COLOR;
 extern int16_t VS__INTRO_DATA_POS_X;
 extern int16_t VS__INTRO_DATA_POS_Y;
-extern CameraChase INTRO_CAMERA_CHASE;
+extern CameraChase VS_INTRO_CAMERA_CHASE;
 extern int32_t VS__INTRO_STATS_ACTIVE;
 extern int16_t VS__INTRO_STATS_DATA[6];
 extern uint8_t VS_MUSIC;
@@ -81,23 +81,23 @@ static void *vs_intro_functions[] = {
 };
 
 // clang-format off
-uint8_t MAIN_D_801344F8[4] = {
+uint8_t VS__INTRO_NAME_CHAR_SIZES[4] = {
 	0x40, 0x2c, 0x26, 0x20,
 };
 
-uint8_t MAIN_D_801344FC[4] = {
+uint8_t VS__INTRO_NAME_CHAR_OFFSETS[4] = {
 	0x10, 0x07, 0x03, 0x00,
 };
 
-char MAIN_D_80134500[] = "ＨＰ";
+char VS__STR_HP[] = "ＨＰ";
 
-char MAIN_D_80134508[] = "ＭＰ";
+char VS__STR_MP[] = "ＭＰ";
 
 int16_t VS__STAT_BAR_LIMITS[6] = {
 	0x270f, 0x270f, 0x03e7, 0x03e7, 0x03e7, 0x03e7,
 };
 
-RGB8 MAIN_D_8012F438[10] = {
+RGB8 VS__INTRO_NAME_COLORS[10] = {
 	{ 0x80, 0x80, 0x80 },
 	{ 0xc8, 0x64, 0x32 },
 	{ 0x1e, 0xff, 0x1e },
@@ -153,8 +153,8 @@ void VS__drawStatLabelText(void)
 	int32_t i;
 
 	clearTextArea();
-	drawString(MAIN_D_80134500, 0, 0);
-	drawString(MAIN_D_80134508, 0, 12);
+	drawString(VS__STR_HP, 0, 0);
+	drawString(VS__STR_MP, 0, 12);
 
 	for (i = 2; i < 6; i++) {
 		drawString(MAIN_D_80124C0C[i], 0, i * 12);
@@ -214,13 +214,13 @@ void VS__addIntroText(entity, id)
 
 void VS__setPostIntroPosition(Entity *entity)
 {
-	if (INTRO_CAMERA_CHASE.timer != -1) {
-		entity->posData->location = VS_D_80071744;
-		entity->anim.locX = VS_D_80071744.vx << 15;
-		entity->anim.locY = VS_D_80071744.vy << 15;
-		entity->anim.locZ = VS_D_80071744.vz << 15;
+	if (VS_INTRO_CAMERA_CHASE.timer != -1) {
+		entity->posData->location = VS_INTRO_TARGET_POS;
+		entity->anim.locX = VS_INTRO_TARGET_POS.vx << 15;
+		entity->anim.locY = VS_INTRO_TARGET_POS.vy << 15;
+		entity->anim.locZ = VS_INTRO_TARGET_POS.vz << 15;
 		startAnimation(entity, 0x21);
-		INTRO_CAMERA_CHASE.timer = -1;
+		VS_INTRO_CAMERA_CHASE.timer = -1;
 	}
 }
 
@@ -293,10 +293,10 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 	SetPolyGT4(prim);
 	prim->tpage = getTPage(0, 0, 768, 0);
 	setClut(prim, 0, 480);
-	setRGB0(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b);
-	setRGB1(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b);
-	setRGB2(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b / 10);
-	setRGB3(prim, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].r / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].g / 10, MAIN_D_8012F438[VS__INTRO_DATA_COLOR].b / 10);
+	setRGB0(prim, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].r, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].g, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].b);
+	setRGB1(prim, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].r, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].g, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].b);
+	setRGB2(prim, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].r / 10, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].g / 10, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].b / 10);
+	setRGB3(prim, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].r / 10, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].g / 10, VS__INTRO_NAME_COLORS[VS__INTRO_DATA_COLOR].b / 10);
 
 	u = (character % 32) * 32;
 	v = (character / 8) * 32;
@@ -508,9 +508,9 @@ void VS__tickIntroName(int32_t id)
 	}
 
 	if (len == VS__INTRO_DATA_RENDERED_CHARACTERS && VS__INTRO_DATA_ANIM_FRAME == 3) {
-		if (INTRO_CAMERA_CHASE.timer == 0) {
+		if (VS_INTRO_CAMERA_CHASE.timer == 0) {
 			startAnimation(ENTITY_TABLE[id], 0x23);
-			INTRO_CAMERA_CHASE.timer = 20;
+			VS_INTRO_CAMERA_CHASE.timer = 20;
 		}
 
 		if (VS__INTRO_DATA_POS_Y >= -71) {
@@ -549,14 +549,14 @@ void VS__renderIntroName(id)
 
 	charIndex = 0;
 	for (i = 0; i < VS__INTRO_DATA_RENDERED_CHARACTERS; ++i) {
-		character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
+		character = VS__INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 		if (character == 0x3d) {
-			character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
+			character = VS__INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 		}
 
 		if (i == VS__INTRO_DATA_RENDERED_CHARACTERS - 1) {
-			y = VS__INTRO_DATA_POS_Y - MAIN_D_801344FC[VS__INTRO_DATA_ANIM_FRAME];
-			size = MAIN_D_801344F8[VS__INTRO_DATA_ANIM_FRAME];
+			y = VS__INTRO_DATA_POS_Y - VS__INTRO_NAME_CHAR_OFFSETS[VS__INTRO_DATA_ANIM_FRAME];
+			size = VS__INTRO_NAME_CHAR_SIZES[VS__INTRO_DATA_ANIM_FRAME];
 		} else {
 			y = VS__INTRO_DATA_POS_Y;
 			size = 32;
@@ -565,7 +565,7 @@ void VS__renderIntroName(id)
 		VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
 
 		if (character == 0x1f || character == 0x25) {
-			character = VS_D_8006FF20[ENTITY_TABLE[id]->type][charIndex++];
+			character = VS__INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 			VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
 		}
 	}

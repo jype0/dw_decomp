@@ -36,11 +36,11 @@ extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t VIEWPORT_DISTANCE;
-extern int32_t MAIN_D_801350F4;
-extern int16_t STD_D_8007AA70[];
-extern int16_t MAIN_D_801351A4;
-extern uint8_t MAIN_D_801351B4;
-extern int16_t STD_D_8007AA30[];
+extern int32_t STD_CHAMPION_SCENE_DONE;
+extern int16_t STD_LOSE_TILT[];
+extern int16_t STD_WIN_LOSS_DRAW_TIMER;
+extern uint8_t STD_CHAMPION_SCENE_STATE;
+extern int16_t STD_CHAMPION_CAMERA_Y[];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern DigimonEntity *BATTLE_TARGETED_DIGIMON;
@@ -79,10 +79,10 @@ void STD_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, S
 void STD_renderStunEffect(int32_t idx);
 void downloadSomeImage();
 void modifySomeImage(int32_t dim);
-void STD_addEnemyHPBars(void);
-void STD_func_8006C6D0(void);
-void STD_func_8006CCD4(void);
-void STD_func_8006D15C(void);
+void STD_addPodiumRenderer(void);
+void STD_removePodiumRenderer(void);
+void STD_removeLoseScene(void);
+void STD_removeWinScene(void);
 char *STD_initializeParticleEmitters(char *base);
 void STD_tickEFEEngine(void);
 void STD_renderEFEEngine(void);
@@ -99,13 +99,13 @@ void STD_loadMoveEFE(int16_t *moves, int16_t *effectIds, int8_t *isLoaded);
 void STD_unloadAllEFESlots(void);
 int32_t STD_startEFE(int32_t i);
 void STD_stopEFESubEffect(int32_t a, int32_t b);
-int32_t STD_func_8006EA6C(void);
-char *STD_func_8006EA78(char *p);
-char *STD_func_8006EAAC(char *p);
+int32_t STD_getEFEHeapPointer(void);
+char *STD_getEFETextureSection(char *p);
+char *STD_getEFEModelSection(char *p);
 int32_t STD_getEFEFileId(char *data);
 void STD_isTargetUnhit(void);
 void STD_markEFEFinished(void);
-void STD_func_8006EB58(void);
+void STD_getViewportDistance2(void);
 void STD_disableMapLayer(void);
 void STD_renderScreenFade(void);
 void STD_applyBoxAttackHit(void);
@@ -113,11 +113,11 @@ void STD_applyLineAttackHit(void);
 void STD_faceTargetEntity(void);
 void STD_renderScreenOverlay(void);
 void STD_initializeRibbonPoints(void);
-void STD_func_80070A40(void);
+void STD_getViewportDistance(void);
 void STD_addClutLoadPrim(void);
 void STD_drawTMDScreenSpace(void);
 void STD_loadClutColors(void);
-void STD_func_80070EA0(void);
+void STD_drawTMDYXZ(void);
 void STD_getCameraRotation(void);
 void STD_convertToViewSpace(void);
 void STD_maskVectorByScalar(void);
@@ -132,7 +132,7 @@ void STD_getSourceBoneTransform(void);
 void STD_copyToParentTransform(void);
 void STD_renderEFELine(void);
 void STD_combineRotations(void);
-void STD_func_800728D4(void);
+void STD_normalizeRotationAngles2(void);
 void STD_rotateVectorByAngles(void);
 void STD_getTargetBoneTransform(void);
 void STD_centerTransformOnEntities(void);
@@ -145,15 +145,15 @@ void STD_addVectors(void);
 void STD_copyVector(void);
 void STD_getVectorLength(void);
 void STD_setTargetToHitEntity(void);
-void STD_func_80072FF8(void);
+void STD_normalizeRotationAngles(void);
 void STD_findHitEntity(void);
 void STD_getVectorEulerAngles(void);
 void STD_printDebugValue(void);
 void STD_getRandomInRange(void);
 void STD_interpolateValue(void);
-void STD_func_800733CC(void);
-void STD_func_80073440(void);
-void STD_func_800734B4(void);
+void STD_calculateCosine(void);
+void STD_calculateSine(void);
+void STD_getSourceDigimonSize(void);
 void STD_getUVAnimTimer(void);
 void STD_checkTargetCollision(void);
 void STD_rotateTransformTowardPoint(void);
@@ -163,7 +163,7 @@ void STD_playEFESound(void);
 void STD_addSourceEntityParticleFX(void);
 void STD_copyFromParentTransform(void);
 void STD_calculatePolarOffset(void);
-void STD_func_80074A70(void);
+void STD_getTargetDigimonSize(void);
 void STD_renderParticleFlashSprite(void);
 void STD_projectPositionToScreen(void);
 void STD_renderScreenSprite(void);
@@ -181,7 +181,7 @@ void STD_addAttackObjectToTarget(void);
 void STD_setTransformToTargetBone(void);
 void STD_renderCenteredSprite(void);
 void STD_initializeEFETransform(void);
-void STD_func_80075BF8(void);
+void STD_drawTMD(void);
 void STD_initializeSubEffectInstructions(void);
 void STD_initializeUVAnim(void);
 void STD_checkTechCompatibility(void);
@@ -231,7 +231,7 @@ int32_t STD_compareLess(int32_t x);
 int32_t STD_compareNotEqual(int32_t x);
 int32_t STD_compareEqual(int32_t x);
 int16_t STD_calculateAttackHitPosition(SVECTOR *out, Entity *self, Entity *other, int32_t y);
-int32_t STD_func_800770C0(int32_t lo, int32_t hi, long t, int32_t start, int32_t end);
+int32_t STD_interpolateClamped(int32_t lo, int32_t hi, long t, int32_t start, int32_t end);
 void STD_initializeEFESubOpcodeTable(void);
 void STD_dispatchEFEOpcode(int32_t op);
 int32_t STD_runEFEScript(int32_t script);
@@ -240,9 +240,9 @@ int32_t STD_addPoisonBubble(Entity *entity);
 void STD_tickPoisonBubble(int32_t i);
 void STD_renderPoisonBubble(int32_t i);
 void STD_tickPoisonEffect(int32_t i);
-void STD_func_80077620(void);
+void STD_renderPoisonEffect(void);
 void STD_initializePoisonBubble(void);
-int32_t STD_func_80077664(Entity *entity);
+int32_t STD_addPoisonEffect(Entity *entity);
 void STD_removePoisonEffect(int32_t i, Entity *entity);
 void STD_removeAllPoisonEffects(void);
 void STD_tickConfusionEffect(int32_t i);
@@ -253,7 +253,7 @@ void STD_removeConfusionEffect(int32_t i, Entity *entity);
 void STD_resetStunSubEffects(void);
 void STD_tickStunEffect(int32_t i);
 void STD_removeAllStunSubEffects(void);
-int32_t STD_func_80078044(Entity *entity);
+int32_t STD_addStunSubEffect(Entity *entity);
 void STD_tickStunSubEffect(int32_t i);
 void STD_renderStunSubEffect(int32_t i);
 int32_t STD_addStunEffect(Entity *entity, int32_t val);
@@ -261,16 +261,16 @@ void STD_removeStunEffect(int32_t i, Entity *entity);
 void STD_removeAllStunEffects(void);
 void STD_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base);
 void STD_tickFinisherAura(int32_t i);
-void STD_func_80078BBC(VECTOR *pos, int32_t scale, SVECTOR *dir, uint8_t *col);
+void STD_renderFinisherAuraSpark(VECTOR *pos, int32_t scale, SVECTOR *dir, uint8_t *col);
 void STD_initializeFinisherAuraModel(char *tim, char *base);
 int32_t STD_addFinisherAura(Entity *entity, int32_t duration);
 void STD_removeFinisherAura(int32_t i);
-void STD_func_800791E0(void);
+void STD_removeAllFinisherAuras(void);
 void STD_renderAuraProjectile(int32_t i);
 char *STD_initializeAuraProjectiles(char *base);
 int32_t STD_addAuraProjectile(Entity *e);
-void STD_func_8006BFD4(void);
-void STD_func_8006C7D4(void);
+void STD_tickChampionScene(void);
+void STD_tickLoseScene(void);
 void STD_applyRadiusAttackHit(void);
 void STD_renderRingTube(void);
 void STD_renderRibbonStrip(void);
@@ -283,43 +283,43 @@ void STD_renderScrollingBackground(void);
 void STD_spawnEFESubEffect(void);
 int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning, void *callback, void *callbackParam, CdlLOC *loc, int32_t size);
 CdlLOC *getEFEDATEntry(int32_t id);
-void STD_func_8006BFB4(void);
-void STD_func_8006C630(void);
-void STD_func_80079874(void);
+void STD_addChampionScene(void);
+void STD_removeChampionScene(void);
+void STD_removeAllAuraProjectiles(void);
 void swapByte(uint8_t *a, uint8_t *b);
 void STD_loadNextEFEFile(EfeLoad *arg);
 void STD_initializeStunEffect(char *base);
 void STD_tickEFEUVAnimation(int32_t idx);
 void STD_setTransformToBoneMatrix(void);
 void STD_setTransformToBoneOffset(void);
-void STD_func_8006C67C(void);
+void STD_renderPodium(void);
 void STD_tickAuraProjectile(int32_t id);
-void STD_func_8006CCE0(void);
-void STD_func_8006D018(void);
-void STD_renderVersusModelScene2(void);
-void STD_func_8006C6DC(void);
-void STD_func_8006CB10(void);
-void STD_func_8006CE68(void);
+void STD_addWinScene(void);
+void STD_renderWinScene(void);
+void STD_renderChampionScene(void);
+void STD_addLoseScene(void);
+void STD_renderLoseScene(void);
+void STD_tickWinScene(void);
 void STD_tickRibbonPoints(void);
 long RotTransPers4(SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3, long *sxy0, long *sxy1, long *sxy2, long *sxy3, long *p, long *flag);
 void setRotTransMatrix(MATRIX *m);
 long RotTransPers(SVECTOR *v0, long *sxy, long *p, long *flag);
-int32_t STD_func_800770C0(int32_t lo, int32_t hi, long t, int32_t a, int32_t b);
+int32_t STD_interpolateClamped(int32_t lo, int32_t hi, long t, int32_t a, int32_t b);
 
 void EFECreateFlash();
 void EFERotateVector();
 
 static void *std_effect_functions[] = {
-	STD_func_80079874,
+	STD_removeAllAuraProjectiles,
 	STD_addAuraProjectile,
 	STD_initializeAuraProjectiles,
 	STD_renderAuraProjectile,
 	STD_tickAuraProjectile,
-	STD_func_800791E0,
+	STD_removeAllFinisherAuras,
 	STD_removeFinisherAura,
 	STD_addFinisherAura,
 	STD_initializeFinisherAuraModel,
-	STD_func_80078BBC,
+	STD_renderFinisherAuraSpark,
 	STD_renderFinisherAura,
 	STD_tickFinisherAura,
 	STD_setTMDObjectColor,
@@ -329,7 +329,7 @@ static void *std_effect_functions[] = {
 	STD_initializeStunEffect,
 	STD_renderStunSubEffect,
 	STD_tickStunSubEffect,
-	STD_func_80078044,
+	STD_addStunSubEffect,
 	STD_removeAllStunSubEffects,
 	STD_renderStunEffect,
 	STD_tickStunEffect,
@@ -341,9 +341,9 @@ static void *std_effect_functions[] = {
 	STD_tickConfusionEffect,
 	STD_removeAllPoisonEffects,
 	STD_removePoisonEffect,
-	STD_func_80077664,
+	STD_addPoisonEffect,
 	STD_initializePoisonBubble,
-	STD_func_80077620,
+	STD_renderPoisonEffect,
 	STD_tickPoisonEffect,
 	STD_renderPoisonBubble,
 	STD_tickPoisonBubble,
@@ -352,7 +352,7 @@ static void *std_effect_functions[] = {
 	STD_runEFEScript,
 	STD_dispatchEFEOpcode,
 	STD_initializeEFESubOpcodeTable,
-	STD_func_800770C0,
+	STD_interpolateClamped,
 	STD_renderParallelLines,
 	STD_calculateAttackHitPosition,
 	STD_compareEqual,
@@ -404,7 +404,7 @@ static void *std_effect_functions[] = {
 	STD_checkTechCompatibility,
 	STD_initializeUVAnim,
 	STD_initializeSubEffectInstructions,
-	STD_func_80075BF8,
+	STD_drawTMD,
 	STD_initializeEFETransform,
 	STD_renderCenteredSprite,
 	STD_setTransformToTargetBone,
@@ -422,7 +422,7 @@ static void *std_effect_functions[] = {
 	STD_renderScreenSprite,
 	STD_projectPositionToScreen,
 	STD_renderParticleFlashSprite,
-	STD_func_80074A70,
+	STD_getTargetDigimonSize,
 	STD_renderProjectedSprite,
 	STD_calculatePolarOffset,
 	STD_copyFromParentTransform,
@@ -436,15 +436,15 @@ static void *std_effect_functions[] = {
 	STD_checkTargetCollision,
 	STD_getUVAnimTimer,
 	STD_applyHomingMovement,
-	STD_func_800734B4,
-	STD_func_80073440,
-	STD_func_800733CC,
+	STD_getSourceDigimonSize,
+	STD_calculateSine,
+	STD_calculateCosine,
 	STD_interpolateValue,
 	STD_getRandomInRange,
 	STD_printDebugValue,
 	STD_getVectorEulerAngles,
 	STD_findHitEntity,
-	STD_func_80072FF8,
+	STD_normalizeRotationAngles,
 	STD_setTargetToHitEntity,
 	STD_getVectorLength,
 	STD_copyVector,
@@ -457,7 +457,7 @@ static void *std_effect_functions[] = {
 	STD_centerTransformOnEntities,
 	STD_getTargetBoneTransform,
 	STD_rotateVectorByAngles,
-	STD_func_800728D4,
+	STD_normalizeRotationAngles2,
 	STD_combineRotations,
 	STD_renderEFELine,
 	STD_copyToParentTransform,
@@ -476,11 +476,11 @@ static void *std_effect_functions[] = {
 	STD_convertToViewSpace,
 	STD_selectRandomTargetEntity,
 	STD_getCameraRotation,
-	STD_func_80070EA0,
+	STD_drawTMDYXZ,
 	STD_loadClutColors,
 	STD_drawTMDScreenSpace,
 	STD_addClutLoadPrim,
-	STD_func_80070A40,
+	STD_getViewportDistance,
 	STD_renderRadialWaves,
 	STD_initializeRibbonPoints,
 	STD_tickRibbonPoints,
@@ -493,13 +493,13 @@ static void *std_effect_functions[] = {
 	STD_applyBoxAttackHit,
 	STD_renderScreenFade,
 	STD_disableMapLayer,
-	STD_func_8006EB58,
+	STD_getViewportDistance2,
 	STD_markEFEFinished,
 	STD_isTargetUnhit,
 	STD_getEFEFileId,
-	STD_func_8006EAAC,
-	STD_func_8006EA78,
-	STD_func_8006EA6C,
+	STD_getEFEModelSection,
+	STD_getEFETextureSection,
+	STD_getEFEHeapPointer,
 	STD_stopEFESubEffect,
 	STD_startEFE,
 	STD_unloadAllEFESlots,
@@ -520,67 +520,67 @@ static void *std_effect_functions[] = {
 	STD_renderEFEEngine,
 	STD_tickEFEEngine,
 	STD_initializeParticleEmitters,
-	STD_func_8006D15C,
-	STD_func_8006D018,
-	STD_func_8006CE68,
-	STD_func_8006CCE0,
-	STD_func_8006CCD4,
-	STD_func_8006CB10,
-	STD_func_8006C7D4,
-	STD_func_8006C6DC,
-	STD_func_8006C6D0,
-	STD_func_8006C67C,
-	STD_addEnemyHPBars,
-	STD_func_8006C630,
-	STD_renderVersusModelScene2,
-	STD_func_8006BFD4,
-	STD_func_8006BFB4,
+	STD_removeWinScene,
+	STD_renderWinScene,
+	STD_tickWinScene,
+	STD_addWinScene,
+	STD_removeLoseScene,
+	STD_renderLoseScene,
+	STD_tickLoseScene,
+	STD_addLoseScene,
+	STD_removePodiumRenderer,
+	STD_renderPodium,
+	STD_addPodiumRenderer,
+	STD_removeChampionScene,
+	STD_renderChampionScene,
+	STD_tickChampionScene,
+	STD_addChampionScene,
 };
 
-char MAIN_D_801348E4[] = "%d\n";
-int8_t MAIN_D_801348E8[4] = { 1, 0, -1, 0 };
-int8_t MAIN_D_801348EC[4] = { 0, 1, 0, -1 };
-int8_t MAIN_D_801348F0[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
-int8_t MAIN_D_801348F8[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
-int8_t MAIN_D_80134900[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
-int32_t MAIN_D_80134908 = 0x808080;
-uint8_t MAIN_D_8013490C[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
-int8_t MAIN_D_80134914[6] = { 0, 16, 32, 48, 64, 80 };
-SVECTOR MAIN_D_8013491C = { 0 };
-int16_t MAIN_D_80134924[3] = { 0, 1, 2 };
-SVECTOR MAIN_D_8013492C = { 0 };
-RGB8 MAIN_D_80134934 = { 0xcc, 0xa8, 0x28 };
-SVECTOR MAIN_D_80134938 = { 0, -50, -50, 0 };
-SVECTOR MAIN_D_80134940 = { 0, -50, 50, 0 };
-SVECTOR MAIN_D_80134948 = { 0, 50, -50, 0 };
-SVECTOR MAIN_D_80134950 = { 0, 50, 50, 0 };
+char STD_FMT_D[] = "%d\n";
+int8_t STD_LINE_OFFSET_X[4] = { 1, 0, -1, 0 };
+int8_t STD_LINE_OFFSET_Y[4] = { 0, 1, 0, -1 };
+int8_t STD_WIREFRAME_BOX_SIGN_X[8] = { -1, 1, 1, -1, -1, 1, 1, -1 };
+int8_t STD_WIREFRAME_BOX_SIGN_Y[8] = { -1, -1, 1, 1, -1, -1, 1, 1 };
+int8_t STD_WIREFRAME_BOX_SIGN_Z[8] = { -1, -1, -1, -1, 1, 1, 1, 1 };
+int32_t STD_RADIAL_WAVE_COLOR = 0x808080;
+uint8_t STD_RIBBON_UVS[8] = { 104, 0, 135, 0, 104, 31, 135, 31 };
+int8_t STD_POISON_BUBBLE_FRAME_U[6] = { 0, 16, 32, 48, 64, 80 };
+SVECTOR STD_STUN_FX_ROTATION = { 0 };
+int16_t STD_FINISHER_AURA_OBJECTS[3] = { 0, 1, 2 };
+SVECTOR STD_FINISHER_AURA_ROTATION = { 0 };
+RGB8 STD_FINISHER_AURA_COLOR = { 0xcc, 0xa8, 0x28 };
+SVECTOR STD_AURA_PROJECTILE_VERTEX_0 = { 0, -50, -50, 0 };
+SVECTOR STD_AURA_PROJECTILE_VERTEX_1 = { 0, -50, 50, 0 };
+SVECTOR STD_AURA_PROJECTILE_VERTEX_2 = { 0, 50, -50, 0 };
+SVECTOR STD_AURA_PROJECTILE_VERTEX_3 = { 0, 50, 50, 0 };
 
-int32_t MAIN_D_801351B8;
-int32_t MAIN_D_801351BC;
-int32_t MAIN_D_801351C0;
-int32_t MAIN_D_801351C4;
-int32_t MAIN_D_801351C8;
-char *MAIN_D_801351CC;
-int32_t MAIN_D_801351D0;
-EfeAura *MAIN_D_801351D4;
+int32_t STD_EFE_LOAD_STATE;
+int32_t STD_EFE_LOAD_SLOT;
+int32_t STD_SAVED_DRAWING_OFFSET_X;
+int32_t STD_SAVED_DRAWING_OFFSET_Y;
+int32_t STD_CONFUSION_FX_MODEL;
+char *STD_STUN_FX_MODEL;
+int32_t STD_FINISHER_AURA_MODEL;
+EfeAura *STD_FLAT_BULLET_PTR;
 
 static void *std_effect_sbss_order[] = {
-	&MAIN_D_801351D4,
-	&MAIN_D_801351D0,
-	&MAIN_D_801351CC,
-	&MAIN_D_801351C8,
-	&MAIN_D_801351C4,
-	&MAIN_D_801351C0,
-	&MAIN_D_801351BC,
-	&MAIN_D_801351B8,
+	&STD_FLAT_BULLET_PTR,
+	&STD_FINISHER_AURA_MODEL,
+	&STD_STUN_FX_MODEL,
+	&STD_CONFUSION_FX_MODEL,
+	&STD_SAVED_DRAWING_OFFSET_Y,
+	&STD_SAVED_DRAWING_OFFSET_X,
+	&STD_EFE_LOAD_SLOT,
+	&STD_EFE_LOAD_STATE,
 };
 
 // clang-format off
-StdEfeSubOpcode STD_D_8007AB18[97] = {
+StdEfeSubOpcode STD_EFE_SUB_OPCODES[97] = {
 	{ 0x00000000, STD_checkTechCompatibility },
 	{ 0x00000001, STD_initializeUVAnim },
 	{ 0x00000002, STD_initializeSubEffectInstructions },
-	{ 0x00000003, STD_func_80075BF8 },
+	{ 0x00000003, STD_drawTMD },
 	{ 0x00000005, STD_initializeEFETransform },
 	{ 0x00000007, EFERotateVector },
 	{ 0x00000004, STD_renderCenteredSprite },
@@ -600,7 +600,7 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x00000014, STD_renderScreenSprite },
 	{ 0x00000015, STD_projectPositionToScreen },
 	{ 0x00000016, STD_renderParticleFlashSprite },
-	{ 0x00000017, STD_func_80074A70 },
+	{ 0x00000017, STD_getTargetDigimonSize },
 	{ 0x00000018, STD_renderProjectedSprite },
 	{ 0x00000019, STD_calculatePolarOffset },
 	{ 0x0000001a, STD_copyFromParentTransform },
@@ -614,15 +614,15 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x00000022, STD_checkTargetCollision },
 	{ 0x00000023, STD_getUVAnimTimer },
 	{ 0x00000024, STD_applyHomingMovement },
-	{ 0x00000025, STD_func_800734B4 },
-	{ 0x00000026, STD_func_80073440 },
-	{ 0x00000027, STD_func_800733CC },
+	{ 0x00000025, STD_getSourceDigimonSize },
+	{ 0x00000026, STD_calculateSine },
+	{ 0x00000027, STD_calculateCosine },
 	{ 0x00000028, STD_interpolateValue },
 	{ 0x00000029, STD_getRandomInRange },
 	{ 0x0000002a, STD_printDebugValue },
 	{ 0x0000002b, STD_getVectorEulerAngles },
 	{ 0x0000002c, STD_findHitEntity },
-	{ 0x0000002d, STD_func_80072FF8 },
+	{ 0x0000002d, STD_normalizeRotationAngles },
 	{ 0x0000002e, STD_setTargetToHitEntity },
 	{ 0x0000002f, STD_getVectorLength },
 	{ 0x00000030, STD_copyVector },
@@ -635,7 +635,7 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x00000037, STD_centerTransformOnEntities },
 	{ 0x00000038, STD_getTargetBoneTransform },
 	{ 0x00000039, STD_rotateVectorByAngles },
-	{ 0x0000003a, STD_func_800728D4 },
+	{ 0x0000003a, STD_normalizeRotationAngles2 },
 	{ 0x0000003b, STD_combineRotations },
 	{ 0x0000003c, STD_renderEFELine },
 	{ 0x0000003d, STD_copyToParentTransform },
@@ -654,11 +654,11 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x0000004a, STD_convertToViewSpace },
 	{ 0x0000004b, STD_selectRandomTargetEntity },
 	{ 0x0000004c, STD_getCameraRotation },
-	{ 0x0000004d, STD_func_80070EA0 },
+	{ 0x0000004d, STD_drawTMDYXZ },
 	{ 0x0000004e, STD_loadClutColors },
 	{ 0x0000004f, STD_drawTMDScreenSpace },
 	{ 0x00000050, STD_addClutLoadPrim },
-	{ 0x00000051, STD_func_80070A40 },
+	{ 0x00000051, STD_getViewportDistance },
 	{ 0x00000052, STD_renderRadialWaves },
 	{ 0x00000053, STD_initializeRibbonPoints },
 	{ 0x00000054, STD_tickRibbonPoints },
@@ -671,7 +671,7 @@ StdEfeSubOpcode STD_D_8007AB18[97] = {
 	{ 0x0000005b, STD_applyBoxAttackHit },
 	{ 0x0000005c, STD_renderScreenFade },
 	{ 0x0000005d, STD_disableMapLayer },
-	{ 0x0000005e, STD_func_8006EB58 },
+	{ 0x0000005e, STD_getViewportDistance2 },
 	{ 0x0000005f, STD_markEFEFinished },
 	{ 0x00000060, STD_isTargetUnhit },
 };
@@ -697,7 +697,7 @@ void (*STD_jtbl_8007AE20[18])(void) = {
 	STD_spawnEFESubEffect,
 };
 
-int32_t (*STD_D_8007AE68[5][8])() = {
+int32_t (*STD_EFE_VARIABLE_OPERATORS[5][8])() = {
 	STD_setInt8Variable,
 	STD_addInt8Variable,
 	STD_subtractInt8Variable,
@@ -740,7 +740,7 @@ int32_t (*STD_D_8007AE68[5][8])() = {
 	STD_shiftRightInt32Variable,
 };
 
-int32_t (*STD_D_8007AF08[6])(int32_t) = {
+int32_t (*STD_EFE_COMPARISONS[6])(int32_t) = {
 	STD_compareEqual,
 	STD_compareNotEqual,
 	STD_compareLess,
@@ -749,18 +749,18 @@ int32_t (*STD_D_8007AF08[6])(int32_t) = {
 	STD_compareGreaterOrEqual,
 };
 
-uint8_t STD_D_8007AF20[16] = {
+uint8_t STD_WIREFRAME_BOX_LINES[16] = {
 	0x00, 0x01, 0x02, 0x03, 0x05, 0x04, 0x07, 0x06,
 	0x01, 0x05, 0x06, 0x02, 0x04, 0x00, 0x03, 0x07,
 };
 
-uint8_t STD_D_8007AF30[24] = {
+uint8_t STD_RADIAL_WAVE_UVS[24] = {
 	0x07, 0x10, 0x07, 0x1f, 0x00, 0x10, 0x00, 0x1f,
 	0x08, 0x00, 0x08, 0x0f, 0x17, 0x00, 0x17, 0x0f,
 	0x17, 0x00, 0x17, 0x0f, 0x08, 0x00, 0x08, 0x0f,
 };
 
-CVECTOR STD_D_8007AF48[3] = {
+CVECTOR STD_RIBBON_COLORS[3] = {
 	{ 0x7c, 0x7c, 0x7c, 0x00 },
 	{ 0x00, 0x7c, 0x7c, 0x00 },
 	{ 0x3c, 0x7c, 0x3c, 0x00 },
@@ -787,7 +787,7 @@ GsSPRITE STD_POISON_BUBBLE_SPRITE = {
 	0x00000000,
 };
 
-VECTOR STD_D_8007AF78 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+VECTOR STD_CONFUSION_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 
 GsSPRITE STD_D_8007AF88 = {
 	0x50000000,
@@ -831,7 +831,7 @@ GsSPRITE STD_D_8007AFAC = {
 	0x00000000,
 };
 
-GsSPRITE STD_D_8007AFD0 = {
+GsSPRITE STD_STUN_DIGIT_SPRITE = {
 	0x50000000,
 	0x0000,
 	0x0000,
@@ -852,7 +852,7 @@ GsSPRITE STD_D_8007AFD0 = {
 	0x00000000,
 };
 
-GsSPRITE STD_D_8007AFF4 = {
+GsSPRITE STD_STUN_SMALL_DIGIT_SPRITE = {
 	0x50000000,
 	0x0000,
 	0x0000,
@@ -873,15 +873,15 @@ GsSPRITE STD_D_8007AFF4 = {
 	0x00000000,
 };
 
-VECTOR STD_D_8007B018 = { 0x00003000, 0x00003000, 0x00003000, 0x00000000 };
+VECTOR STD_STUN_SUB_EFFECT_SCALE = { 0x00003000, 0x00003000, 0x00003000, 0x00000000 };
 
 VECTOR STD_D_8007B028 = { 0x0000003c, 0x0000003c, 0x0000003c, 0x00000000 };
 
 VECTOR STD_D_8007B038 = { 0x0000005a, 0x0000005a, 0x0000005a, 0x00000000 };
 
-VECTOR STD_D_8007B048 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+VECTOR STD_FINISHER_AURA_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 
-EfeAuraType STD_D_8007B058[129] = {
+EfeAuraType STD_AURA_PROJECTILE_TYPES[129] = {
 	{ 0x0000, 0x0000, 0x0000, 0xff6a, 0xff38, 0xffff },
 	{ 0x0001, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070 },
 	{ 0x0002, 0x0000, 0x0000, 0xff6a, 0xff38, 0x0070 },
@@ -1015,18 +1015,18 @@ EfeAuraType STD_D_8007B058[129] = {
 // clang-format on
 
 #if defined(VERSION_JP)
-VECTOR STD_D_80085C78 = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
+VECTOR STD_AURA_PROJECTILE_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 #endif
 
-void STD_func_8006BFB4(void)
+void STD_addChampionScene(void)
 {
-	MAIN_D_801350F4 = 0;
-	addObject(0x19d, 0, (TickFunction)STD_func_8006BFD4, (RenderFunction)STD_renderVersusModelScene2);
+	STD_CHAMPION_SCENE_DONE = 0;
+	addObject(0x19d, 0, (TickFunction)STD_tickChampionScene, (RenderFunction)STD_renderChampionScene);
 }
 
-GARBAGE(STD_func_8006BFD4, 20);
+GARBAGE(STD_tickChampionScene, 20);
 
-void STD_func_8006BFD4(void)
+void STD_tickChampionScene(void)
 {
 	RECT rect;
 	SVECTOR rot;
@@ -1036,53 +1036,53 @@ void STD_func_8006BFD4(void)
 	int32_t i;
 	int32_t x;
 
-	switch (MAIN_D_801351B4) {
+	switch (STD_CHAMPION_SCENE_STATE) {
 	case 0:
-		MAIN_D_801351A4++;
+		STD_WIN_LOSS_DRAW_TIMER++;
 		for (i = 0; i < 9; i++) {
-			if (MAIN_D_801351A4 >= i + 0x3d && STD_D_8007FA08[i] < 0xb) {
-				if (STD_D_8007FA08[i] < 0xa) {
-					x = 0x378 - (STD_D_8007FA08[i] + 1) * 2;
+			if (STD_WIN_LOSS_DRAW_TIMER >= i + 0x3d && STD_MODEL_SCENE_STEPS[i] < 0xb) {
+				if (STD_MODEL_SCENE_STEPS[i] < 0xa) {
+					x = 0x378 - (STD_MODEL_SCENE_STEPS[i] + 1) * 2;
 				} else {
 					x = 0x378;
 				}
 				setRECT(&rect, x, 0, 6, 0x30);
-				STD_D_8007FA08[i]++;
+				STD_MODEL_SCENE_STEPS[i]++;
 				MoveImage(&rect, i * 6 + 0x348, 0x30);
 			}
-			if (MAIN_D_801351A4 >= i * 5) {
-				if (MAIN_D_801351A4 == i * 5 + 5) {
-					STD_D_8007C7B0[i].data.obj.attribute = 0;
+			if (STD_WIN_LOSS_DRAW_TIMER >= i * 5) {
+				if (STD_WIN_LOSS_DRAW_TIMER == i * 5 + 5) {
+					STD_VERSUS_MODEL_OBJECTS[i].data.obj.attribute = 0;
 				}
-				if (MAIN_D_801351A4 >= i * 5 + 0x14) {
-					STD_D_8007C7B0[i].data.rotation.vy = 0;
+				if (STD_WIN_LOSS_DRAW_TIMER >= i * 5 + 0x14) {
+					STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vy = 0;
 				} else {
-					STD_D_8007C7B0[i].data.rotation.vy = (STD_D_8007C7B0[i].data.rotation.vy + 0x200) & 0xfff;
+					STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vy = (STD_VERSUS_MODEL_OBJECTS[i].data.rotation.vy + 0x200) & 0xfff;
 				}
 			}
-			setupModelMatrix(&STD_D_8007C7B0[i].data);
+			setupModelMatrix(&STD_VERSUS_MODEL_OBJECTS[i].data);
 		}
-		if (MAIN_D_801351A4 >= 0x61) {
-			MAIN_D_801351A4 = 0;
-			MAIN_D_801351B4++;
+		if (STD_WIN_LOSS_DRAW_TIMER >= 0x61) {
+			STD_WIN_LOSS_DRAW_TIMER = 0;
+			STD_CHAMPION_SCENE_STATE++;
 			startAnimation(ENTITY_TABLE[1], 0x21);
 		}
 		break;
 	case 1:
-		MAIN_D_801351A4++;
+		STD_WIN_LOSS_DRAW_TIMER++;
 		for (i = 0; i < 9; i++) {
-			if (STD_D_8007C7B0[i].data.location.vy < 0x258) {
-				STD_D_8007C7B0[i].data.location.vy += 0x32;
+			if (STD_VERSUS_MODEL_OBJECTS[i].data.location.vy < 0x258) {
+				STD_VERSUS_MODEL_OBJECTS[i].data.location.vy += 0x32;
 			}
-			setupModelMatrix(&STD_D_8007C7B0[i].data);
+			setupModelMatrix(&STD_VERSUS_MODEL_OBJECTS[i].data);
 		}
 		ENTITY_TABLE[1]->posData->location.vy -= 0x19;
 		ENTITY_TABLE[1]->anim.locY -= 0xc8000;
-		STD_D_8007F528[0].data.location.vy -= 0x19;
-		setupModelMatrix(&STD_D_8007F528[0].data);
-		if (MAIN_D_801351A4 < 0x50) {
+		STD_RESULT_MODEL_OBJECTS[0].data.location.vy -= 0x19;
+		setupModelMatrix(&STD_RESULT_MODEL_OBJECTS[0].data);
+		if (STD_WIN_LOSS_DRAW_TIMER < 0x50) {
 			rot.vx = 0;
-			rot.vy = STD_D_8007F968[MAIN_D_801351A4 - 1];
+			rot.vy = STD_CHAMPION_ORBIT_ANGLES[STD_WIN_LOSS_DRAW_TIMER - 1];
 			rot.vz = 0;
 			rot.vy &= 0xfff;
 			GS_VIEWPOINT.vry = ENTITY_TABLE[1]->posData->location.vy -
@@ -1097,156 +1097,156 @@ void STD_func_8006BFD4(void)
 		} else {
 			startAnimation(ENTITY_TABLE[1], 0x2a);
 			ENTITY_TABLE[1]->anim.animFlag |= 2;
-			MAIN_D_801351A4 = 0;
-			MAIN_D_801351B4++;
+			STD_WIN_LOSS_DRAW_TIMER = 0;
+			STD_CHAMPION_SCENE_STATE++;
 		}
 		break;
 	case 2:
 		if ((ENTITY_TABLE[1]->anim.animFlag & 1) == 0) {
 			if (GS_VIEWPOINT.vpy >= -0x7cf) {
-				GS_VIEWPOINT.vpy = STD_D_8007AA30[MAIN_D_801351A4] * 2;
+				GS_VIEWPOINT.vpy = STD_CHAMPION_CAMERA_Y[STD_WIN_LOSS_DRAW_TIMER] * 2;
 			}
-			MAIN_D_801351A4++;
-			if (MAIN_D_801351A4 < 8) {
+			STD_WIN_LOSS_DRAW_TIMER++;
+			if (STD_WIN_LOSS_DRAW_TIMER < 8) {
 				VIEWPORT_DISTANCE = (uint32_t)VIEWPORT_DISTANCE + 0x14;
 			}
 		}
-		if (MAIN_D_801351A4 >= 0x15) {
-			MAIN_D_801350F4 = 1;
+		if (STD_WIN_LOSS_DRAW_TIMER >= 0x15) {
+			STD_CHAMPION_SCENE_DONE = 1;
 		}
 		break;
 	}
 }
 
-void STD_renderVersusModelScene2(void)
+void STD_renderChampionScene(void)
 {
 	MATRIX lw;
 	MATRIX ls;
 	int32_t i;
 
 	GsSetProjection(0x200);
-	GsWSMATRIX = STD_D_8007AA10;
-	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
+	GsWSMATRIX = STD_MODEL_SCENE_MATRIX;
+	GsClearOt(0, 4, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 0; i < 9; i++) {
-		GsGetLws(STD_D_8007C7B0[i].data.obj.coord2, &lw, &ls);
+		GsGetLws(STD_VERSUS_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007C7B0[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_VERSUS_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
-	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
+	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 	GsSetProjection(VIEWPORT_DISTANCE);
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
-void STD_func_8006C630(void)
+void STD_removeChampionScene(void)
 {
 	removeObject(0x19d, 0);
 	stopBGM();
 	stopSound();
 }
 
-void STD_addEnemyHPBars(void)
+void STD_addPodiumRenderer(void)
 {
-	addObject(0x1ae, 0, NULL, (RenderFunction)STD_func_8006C67C);
+	addObject(0x1ae, 0, NULL, (RenderFunction)STD_renderPodium);
 }
 
-void STD_func_8006C67C(void)
+void STD_renderPodium(void)
 {
 	MATRIX lw;
 	MATRIX ls;
 
-	GsGetLws(STD_D_8007F528[0].data.obj.coord2, &lw, &ls);
+	GsGetLws(STD_RESULT_MODEL_OBJECTS[0].data.obj.coord2, &lw, &ls);
 	GsSetLightMatrix(&lw);
 	GsSetLsMatrix(&ls);
-	GsSortObject4(&STD_D_8007F528[0].data.obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4(&STD_RESULT_MODEL_OBJECTS[0].data.obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 }
 
-void STD_func_8006C6D0(void)
+void STD_removePodiumRenderer(void)
 {
 	removeObject(0x1ae, 0);
 }
 
-void STD_func_8006C6DC(void)
+void STD_addLoseScene(void)
 {
 	int32_t i;
 
 	for (i = 0; i < 0x20; i++) {
-		STD_D_8007FA1C[i] = 0;
-		STD_D_8007FA5C[i] = i;
+		STD_LOSE_WIPE_HEIGHTS[i] = 0;
+		STD_LOSE_WIPE_ORDER[i] = i;
 	}
 
 	for (i = 0; i < 0x20; i++) {
-		swapByte(&STD_D_8007FA5C[i], &STD_D_8007FA5C[randomLimit(0x20)]);
+		swapByte(&STD_LOSE_WIPE_ORDER[i], &STD_LOSE_WIPE_ORDER[randomLimit(0x20)]);
 	}
 
-	MAIN_D_801351A4 = 0;
+	STD_WIN_LOSS_DRAW_TIMER = 0;
 
 	for (i = 0; i < 4; i++) {
-		STD_D_8007FA08[i] = 0;
+		STD_MODEL_SCENE_STEPS[i] = 0;
 	}
 
-	addObject(0x19d, 0, (TickFunction)STD_func_8006C7D4, (RenderFunction)STD_func_8006CB10);
+	addObject(0x19d, 0, (TickFunction)STD_tickLoseScene, (RenderFunction)STD_renderLoseScene);
 }
 
-void STD_func_8006C7D4(void)
+void STD_tickLoseScene(void)
 {
 	int32_t i;
 	long j;
 
-	if (MAIN_D_801351A4 < 0x8c) {
-		MAIN_D_801351A4++;
+	if (STD_WIN_LOSS_DRAW_TIMER < 0x8c) {
+		STD_WIN_LOSS_DRAW_TIMER++;
 	}
-	if (MAIN_D_801351A4 >= 0x3d && STD_D_8007FA08[0] < 0x16) {
-		STD_D_8007FA08[0]++;
+	if (STD_WIN_LOSS_DRAW_TIMER >= 0x3d && STD_MODEL_SCENE_STEPS[0] < 0x16) {
+		STD_MODEL_SCENE_STEPS[0]++;
 	}
-	if (MAIN_D_801351A4 >= 0x40 && STD_D_8007FA08[1] < 0x16) {
-		STD_D_8007FA08[1]++;
+	if (STD_WIN_LOSS_DRAW_TIMER >= 0x40 && STD_MODEL_SCENE_STEPS[1] < 0x16) {
+		STD_MODEL_SCENE_STEPS[1]++;
 	}
-	if (MAIN_D_801351A4 >= 0x43 && STD_D_8007FA08[2] < 0x16) {
-		STD_D_8007FA08[2]++;
+	if (STD_WIN_LOSS_DRAW_TIMER >= 0x43 && STD_MODEL_SCENE_STEPS[2] < 0x16) {
+		STD_MODEL_SCENE_STEPS[2]++;
 	}
-	if (MAIN_D_801351A4 >= 0x46 && STD_D_8007FA08[3] < 0x16) {
-		STD_D_8007FA08[3]++;
+	if (STD_WIN_LOSS_DRAW_TIMER >= 0x46 && STD_MODEL_SCENE_STEPS[3] < 0x16) {
+		STD_MODEL_SCENE_STEPS[3]++;
 	}
 	for (i = 0; i < 4; i++) {
-		if (STD_D_8007FA08[i] >= 0xb) {
+		if (STD_MODEL_SCENE_STEPS[i] >= 0xb) {
 			for (j = 0; j < 8; j++) {
-				if (STD_D_8007FA1C[STD_D_8007FA5C[j + i * 8]] < 0xf0) {
-					STD_D_8007FA1C[STD_D_8007FA5C[j + i * 8]] += 0x3c;
+				if (STD_LOSE_WIPE_HEIGHTS[STD_LOSE_WIPE_ORDER[j + i * 8]] < 0xf0) {
+					STD_LOSE_WIPE_HEIGHTS[STD_LOSE_WIPE_ORDER[j + i * 8]] += 0x3c;
 				}
 			}
 		}
 	}
-	if (MAIN_D_801351A4 >= 0x74) {
-		if (MAIN_D_801351A4 < 0x82) {
-			STD_D_8007F528[4].data.rotation.vx = STD_D_8007AA70[MAIN_D_801351A4 - 0x74];
-			STD_D_8007F528[5].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
-			STD_D_8007F528[6].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
-			STD_D_8007F528[7].data.rotation.vx = STD_D_8007F528[4].data.rotation.vx;
+	if (STD_WIN_LOSS_DRAW_TIMER >= 0x74) {
+		if (STD_WIN_LOSS_DRAW_TIMER < 0x82) {
+			STD_RESULT_MODEL_OBJECTS[4].data.rotation.vx = STD_LOSE_TILT[STD_WIN_LOSS_DRAW_TIMER - 0x74];
+			STD_RESULT_MODEL_OBJECTS[5].data.rotation.vx = STD_RESULT_MODEL_OBJECTS[4].data.rotation.vx;
+			STD_RESULT_MODEL_OBJECTS[6].data.rotation.vx = STD_RESULT_MODEL_OBJECTS[4].data.rotation.vx;
+			STD_RESULT_MODEL_OBJECTS[7].data.rotation.vx = STD_RESULT_MODEL_OBJECTS[4].data.rotation.vx;
 		}
-		if (MAIN_D_801351A4 == 0x7f) {
-			STD_D_8007FA08[0] = 0;
+		if (STD_WIN_LOSS_DRAW_TIMER == 0x7f) {
+			STD_MODEL_SCENE_STEPS[0] = 0;
 		}
-		if (MAIN_D_801351A4 >= 0x80) {
-			STD_D_8007F528[4].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[0]] + 0x320;
-			STD_D_8007F528[5].data.location.vy = STD_D_8007F528[4].data.location.vy;
-			STD_D_8007F528[6].data.location.vy = STD_D_8007F528[4].data.location.vy;
-			STD_D_8007F528[7].data.location.vy = STD_D_8007F528[4].data.location.vy;
+		if (STD_WIN_LOSS_DRAW_TIMER >= 0x80) {
+			STD_RESULT_MODEL_OBJECTS[4].data.location.vy = STD_LOSE_DROP_Y[STD_MODEL_SCENE_STEPS[0]] + 0x320;
+			STD_RESULT_MODEL_OBJECTS[5].data.location.vy = STD_RESULT_MODEL_OBJECTS[4].data.location.vy;
+			STD_RESULT_MODEL_OBJECTS[6].data.location.vy = STD_RESULT_MODEL_OBJECTS[4].data.location.vy;
+			STD_RESULT_MODEL_OBJECTS[7].data.location.vy = STD_RESULT_MODEL_OBJECTS[4].data.location.vy;
 		}
 	} else {
-		STD_D_8007F528[4].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[0]];
-		STD_D_8007F528[5].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[1]];
-		STD_D_8007F528[6].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[2]];
-		STD_D_8007F528[7].data.location.vy = STD_D_8007AA40[STD_D_8007FA08[3]];
+		STD_RESULT_MODEL_OBJECTS[4].data.location.vy = STD_LOSE_DROP_Y[STD_MODEL_SCENE_STEPS[0]];
+		STD_RESULT_MODEL_OBJECTS[5].data.location.vy = STD_LOSE_DROP_Y[STD_MODEL_SCENE_STEPS[1]];
+		STD_RESULT_MODEL_OBJECTS[6].data.location.vy = STD_LOSE_DROP_Y[STD_MODEL_SCENE_STEPS[2]];
+		STD_RESULT_MODEL_OBJECTS[7].data.location.vy = STD_LOSE_DROP_Y[STD_MODEL_SCENE_STEPS[3]];
 	}
 	for (i = 4; i < 8; i++) {
-		setupModelMatrix(&STD_D_8007F528[i].data);
+		setupModelMatrix(&STD_RESULT_MODEL_OBJECTS[i].data);
 	}
 }
 
-void STD_func_8006CB10(void)
+void STD_renderLoseScene(void)
 {
 	MATRIX lw;
 	MATRIX ls;
@@ -1256,115 +1256,115 @@ void STD_func_8006CB10(void)
 	for (i = 0; i < 0x20; i++) {
 		box.attribute = 0x40000000;
 		box.r = box.g = box.b = 0;
-		setWH(&box, 0xa, STD_D_8007FA1C[i]);
+		setWH(&box, 0xa, STD_LOSE_WIPE_HEIGHTS[i]);
 		box.x = (box.w * i) - 0xa0;
 		box.y = -0x78;
 		GsSortBoxFill(&box, ACTIVE_ORDERING_TABLE, 5);
 	}
 
 	GsSetProjection(0x15e);
-	GsWSMATRIX = STD_D_8007AA10;
-	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
+	GsWSMATRIX = STD_MODEL_SCENE_MATRIX;
+	GsClearOt(0, 4, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 4; i < 8; i++) {
-		GsGetLws(STD_D_8007F528[i].data.obj.coord2, &lw, &ls);
+		GsGetLws(STD_RESULT_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007F528[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_RESULT_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
-	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
+	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 	GsSetProjection(VIEWPORT_DISTANCE);
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
-void STD_func_8006CCD4(void)
+void STD_removeLoseScene(void)
 {
 	removeObject(0x19d, 0);
 }
 
-void STD_func_8006CCE0(void)
+void STD_addWinScene(void)
 {
 	int32_t i;
 
-	MAIN_D_801351A4 = 0;
-	STD_D_8007F528[0].data.location.vx = -0xfa;
-	STD_D_8007F528[0].data.location.vy = 0;
-	STD_D_8007F528[0].data.location.vz = -0x30c;
-	STD_D_8007F528[1].data.location.vx = -0x32;
-	STD_D_8007F528[1].data.location.vy = 0;
-	STD_D_8007F528[1].data.location.vz = -0x30c;
-	STD_D_8007F528[2].data.location.vx = 0x64;
-	STD_D_8007F528[2].data.location.vy = 0;
-	STD_D_8007F528[2].data.location.vz = -0x30c;
-	STD_D_8007F528[3].data.location.vx = 0x104;
-	STD_D_8007F528[3].data.location.vy = 0;
-	STD_D_8007F528[3].data.location.vz = -0x30c;
+	STD_WIN_LOSS_DRAW_TIMER = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.location.vx = -0xfa;
+	STD_RESULT_MODEL_OBJECTS[0].data.location.vy = 0;
+	STD_RESULT_MODEL_OBJECTS[0].data.location.vz = -0x30c;
+	STD_RESULT_MODEL_OBJECTS[1].data.location.vx = -0x32;
+	STD_RESULT_MODEL_OBJECTS[1].data.location.vy = 0;
+	STD_RESULT_MODEL_OBJECTS[1].data.location.vz = -0x30c;
+	STD_RESULT_MODEL_OBJECTS[2].data.location.vx = 0x64;
+	STD_RESULT_MODEL_OBJECTS[2].data.location.vy = 0;
+	STD_RESULT_MODEL_OBJECTS[2].data.location.vz = -0x30c;
+	STD_RESULT_MODEL_OBJECTS[3].data.location.vx = 0x104;
+	STD_RESULT_MODEL_OBJECTS[3].data.location.vy = 0;
+	STD_RESULT_MODEL_OBJECTS[3].data.location.vz = -0x30c;
 	for (i = 0; i < 4; i++) {
-		STD_D_8007FA08[i] = 0;
-		STD_D_8007F528[i].data.scale.vx = 0x1000;
-		STD_D_8007F528[i].data.scale.vy = 0x1000;
-		STD_D_8007F528[i].data.scale.vz = 0x1000;
-		STD_D_8007F528[i].data.rotation.vx = 0;
-		STD_D_8007F528[i].data.rotation.vy = 0;
-		STD_D_8007F528[i].data.rotation.vz = 0;
-		setupModelMatrix(&STD_D_8007F528[i].data);
+		STD_MODEL_SCENE_STEPS[i] = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.scale.vx = 0x1000;
+		STD_RESULT_MODEL_OBJECTS[i].data.scale.vy = 0x1000;
+		STD_RESULT_MODEL_OBJECTS[i].data.scale.vz = 0x1000;
+		STD_RESULT_MODEL_OBJECTS[i].data.rotation.vx = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.rotation.vy = 0;
+		STD_RESULT_MODEL_OBJECTS[i].data.rotation.vz = 0;
+		setupModelMatrix(&STD_RESULT_MODEL_OBJECTS[i].data);
 	}
-	addObject(0x19d, 0, (TickFunction)STD_func_8006CE68, (RenderFunction)STD_func_8006D018);
+	addObject(0x19d, 0, (TickFunction)STD_tickWinScene, (RenderFunction)STD_renderWinScene);
 }
 
-void STD_func_8006CE68(void)
+void STD_tickWinScene(void)
 {
 	int32_t i;
 
-	if (MAIN_D_801351A4 < 0xa0) {
-		MAIN_D_801351A4++;
+	if (STD_WIN_LOSS_DRAW_TIMER < 0xa0) {
+		STD_WIN_LOSS_DRAW_TIMER++;
 	}
 
 	for (i = 0; i < 4; i++) {
-		if (MAIN_D_801351A4 > i * 6 + 0x3c) {
-			if (STD_D_8007F528[i].data.location.vz < 0xdc) {
-				STD_D_8007F528[i].data.location.vz += 0x32;
+		if (STD_WIN_LOSS_DRAW_TIMER > i * 6 + 0x3c) {
+			if (STD_RESULT_MODEL_OBJECTS[i].data.location.vz < 0xdc) {
+				STD_RESULT_MODEL_OBJECTS[i].data.location.vz += 0x32;
 			}
-			if (STD_D_8007FA08[i] < 0x14) {
-				STD_D_8007FA08[i]++;
+			if (STD_MODEL_SCENE_STEPS[i] < 0x14) {
+				STD_MODEL_SCENE_STEPS[i]++;
 			}
-			STD_D_8007F528[i].data.rotation.vx = STD_D_8007CC78[STD_D_8007FA08[i]];
-			STD_D_8007F528[i].data.rotation.vy = STD_D_8007CCA4[STD_D_8007FA08[i]];
+			STD_RESULT_MODEL_OBJECTS[i].data.rotation.vx = STD_WIN_ROTATION_X[STD_MODEL_SCENE_STEPS[i]];
+			STD_RESULT_MODEL_OBJECTS[i].data.rotation.vy = STD_WIN_ROTATION_Y[STD_MODEL_SCENE_STEPS[i]];
 			if (i == 0) {
-				STD_D_8007F528[i].data.location.vx = STD_D_8007CCD0[STD_D_8007FA08[i]];
+				STD_RESULT_MODEL_OBJECTS[i].data.location.vx = STD_WIN_FIRST_X[STD_MODEL_SCENE_STEPS[i]];
 			}
 			if (i == 3) {
-				STD_D_8007F528[3].data.location.vx = STD_D_8007CCFC[STD_D_8007FA08[3]];
+				STD_RESULT_MODEL_OBJECTS[3].data.location.vx = STD_WIN_LAST_X[STD_MODEL_SCENE_STEPS[3]];
 			}
 		}
-		setupModelMatrix(&STD_D_8007F528[i].data);
+		setupModelMatrix(&STD_RESULT_MODEL_OBJECTS[i].data);
 	}
 }
 
-void STD_func_8006D018(void)
+void STD_renderWinScene(void)
 {
 	MATRIX lw;
 	MATRIX ls;
 	int32_t i;
 
 	GsSetProjection(0x15e);
-	GsWSMATRIX = STD_D_8007AA10;
-	GsClearOt(0, 4, &STD_D_8007B714[ACTIVE_FRAMEBUFFER]);
+	GsWSMATRIX = STD_MODEL_SCENE_MATRIX;
+	GsClearOt(0, 4, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER]);
 
 	for (i = 3; i >= 0; i--) {
-		GsGetLws(STD_D_8007F528[i].data.obj.coord2, &lw, &ls);
+		GsGetLws(STD_RESULT_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_D_8007F528[i].data.obj, &STD_D_8007B714[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4(&STD_RESULT_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
-	GsSortOt(&STD_D_8007B714[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
+	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 	GsSetProjection(VIEWPORT_DISTANCE);
 	GsSetRefView2(&GS_VIEWPOINT);
 }
 
-void STD_func_8006D15C(void)
+void STD_removeWinScene(void)
 {
 	removeObject(0x19d, 0);
 }
@@ -1373,9 +1373,9 @@ char *STD_initializeParticleEmitters(char *base)
 {
 	int32_t i;
 
-	MAIN_D_80134CCC = (EfeParticleEffect *)base;
+	EFE_PARTICLE_EMITTERS = (EfeParticleEffect *)base;
 	for (i = 0; i < 4; i++) {
-		MAIN_D_80134CCC[i].transform = NULL;
+		EFE_PARTICLE_EMITTERS[i].transform = NULL;
 	}
 
 	return base + 0x23c4;
@@ -1404,16 +1404,16 @@ void STD_tickEFEEngine(void)
 		if (EFE_DATA_ITERATOR->data != 0L) {
 			EFE_SCRIPT_HEAD = EFE_DATA_ITERATOR->data;
 			n = EFE_DATA_ITERATOR->numSubEffects;
-			MAIN_D_80134CD0 = 0;
-			while (MAIN_D_80134CD0 < n) {
-				EFE_SCRIPT_CONTEXT = &EFE_DATA_ITERATOR->subEffects[MAIN_D_80134CD0];
+			EFE_SUB_EFFECT_INDEX = 0;
+			while (EFE_SUB_EFFECT_INDEX < n) {
+				EFE_SCRIPT_CONTEXT = &EFE_DATA_ITERATOR->subEffects[EFE_SUB_EFFECT_INDEX];
 				if ((int32_t)EFE_SCRIPT_CONTEXT->inst != 0) {
 					EFE_CURRENT_DATA_SEGMENT = EFE_SCRIPT_CONTEXT->instance;
 					EFE_PREVIOUS_DATA_SEGMENT = (int32_t)EFE_SCRIPT_CONTEXT->parentInstance;
 					((EfeInstance *)(int32_t)EFE_CURRENT_DATA_SEGMENT)->frame++;
 					STD_runEFEScript((int32_t)EFE_SCRIPT_CONTEXT->inst);
 				}
-				MAIN_D_80134CD0++;
+				EFE_SUB_EFFECT_INDEX++;
 			}
 			n = EFE_DATA_ITERATOR->numObjects;
 			for (j = 0; j < n; j++) {
@@ -1520,7 +1520,7 @@ void STD_runEFESlotScript(int32_t idx)
 	STD_runEFEScript((int32_t)EFE_DATA_PTR[idx].startScript);
 }
 
-char *STD_func_8006EA78(char *p)
+char *STD_getEFETextureSection(char *p)
 {
 	EfeFileHeader *hdr;
 	char *section;
@@ -1536,7 +1536,7 @@ char *STD_func_8006EA78(char *p)
 	return section;
 }
 
-char *STD_func_8006EAAC(char *p)
+char *STD_getEFEModelSection(char *p)
 {
 	EfeFileHeader *hdr;
 	char *section;
@@ -1591,11 +1591,11 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 	moves = ld->moves;
 	m = ld->model;
 	data = (char *)m->mmdPtr;
-	tim = STD_func_8006EA78(data);
-	m->modelPtr = (TMDModel *)(tmd = STD_func_8006EAAC(data));
+	tim = STD_getEFETextureSection(data);
+	m->modelPtr = (TMDModel *)(tmd = STD_getEFEModelSection(data));
 	fileId = STD_getEFEFileId(data);
 
-	switch (MAIN_D_801351B8) {
+	switch (STD_EFE_LOAD_STATE) {
 	case 0:
 		if (tim != NULL) {
 			for (i = 0; UNKNOWN_MODEL_TAKEN[i] != 0 && i < 0x10; i++) {
@@ -1623,14 +1623,14 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 			setRECT(&rect2, im2.cx, im2.cy, im2.cw, im2.ch);
 			LoadImage(&rect2, im2.clut);
 		}
-		MAIN_D_801351B8 = 1;
+		STD_EFE_LOAD_STATE = 1;
 	case 1:
 		if (tmd != NULL) {
 			GsMapModelingData((unsigned long *)&m->modelPtr->flags);
 			updateTMDTextureData((char *)m->modelPtr, m->pixelPage, m->pixelOffsetX, m->pixelOffsetY,
 			                     m->clutPage - 0x7a08);
 		}
-		MAIN_D_801351B8 = 2;
+		STD_EFE_LOAD_STATE = 2;
 	case 2:
 		fileMove = ((EfeFileHeader *)m->mmdPtr)->effectId;
 		lastMove = ld->moves[-1];
@@ -1650,22 +1650,22 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 			*ld->isLoaded = -1;
 			goto end;
 		}
-		MAIN_D_801351BC = k;
+		STD_EFE_LOAD_SLOT = k;
 		if (EFE_LOADED_MOVE_DATA[k] == -1) {
-			MAIN_D_801351B8 = 0x15;
+			STD_EFE_LOAD_STATE = 0x15;
 		} else {
-			MAIN_D_801351B8 = 3;
+			STD_EFE_LOAD_STATE = 3;
 		}
 		return 1;
 	case 0x15:
-		idx = MAIN_D_801351BC;
+		idx = STD_EFE_LOAD_SLOT;
 		EFE_DATA_ITERATOR = &EFE_DATA_PTR[idx];
 		EFE_DATA_ITERATOR->model = m;
 		hdr = *(EfeFileHeader *)m->mmdPtr;
 		base = (char *)m->mmdPtr + 0x34;
-		MAIN_D_80134D14 += (uint32_t)hdr.tmdEnd + 0x34;
+		EFE_HEAP_POINTER += (uint32_t)hdr.tmdEnd + 0x34;
 		EFE_DATA_ITERATOR->data = (int32_t)base;
-		heap = MAIN_D_80134D14;
+		heap = EFE_HEAP_POINTER;
 		tmdp = (int32_t *)m->modelPtr;
 		if (hdr.tmdEnd - hdr.tmdStart == 0) {
 			EFE_DATA_ITERATOR->numObjects = 0;
@@ -1697,10 +1697,10 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 		EFE_DATA_STACK = EFE_SCRIPT_MEM1_DATA;
 		EFE_CALL_STACK = EFE_CALL_STACK_BUFFER;
 		*EFE_CALL_STACK++ = 0;
-		MAIN_D_801351B8 = 0x16;
+		STD_EFE_LOAD_STATE = 0x16;
 		return 1;
 	case 0x16:
-		idx = MAIN_D_801351BC;
+		idx = STD_EFE_LOAD_SLOT;
 		EFE_DATA_ITERATOR = &EFE_DATA_PTR[idx];
 		for (s = 0; s < 4; s++) {
 			EFE_SCRIPT_CURRENT_VALUE = *EFE_SCRIPT_PTR;
@@ -1716,16 +1716,16 @@ int32_t STD_setupLoadedEFEFile(EfeLoad *load)
 			EFE_SCRIPT_CONTEXT->inst = NULL;
 		}
 		ce = EFE_ACTIVE_SECTION;
-		k = MAIN_D_801351BC;
+		k = STD_EFE_LOAD_SLOT;
 		if (ce >= -1L) {
 			EFE_LOADED_MOVE_DATA[k] = EFE_DATA_ITERATOR->effectId;
 		} else {
 			EFE_LOADED_MOVE_DATA[k] = ce;
 		}
-		k = MAIN_D_801351BC;
+		k = STD_EFE_LOAD_SLOT;
 		*ld->effectIds++ = k;
 		STD_loadNextEFEFile(load);
-		MAIN_D_801351B8 = 3;
+		STD_EFE_LOAD_STATE = 3;
 		return 0;
 	}
 end:;
@@ -1740,7 +1740,7 @@ void STD_handleEFEFileLoaded(EfeLoad *load)
 	ld = load;
 	moves = ld->moves;
 	model = ld->model;
-	MAIN_D_801351B8 = 0;
+	STD_EFE_LOAD_STATE = 0;
 	setFileReadCallback2(STD_setupLoadedEFEFile, load);
 }
 
@@ -1780,7 +1780,7 @@ void STD_tickParticleEmitters(void)
 	EfeParticle *pt;
 	int32_t k;
 
-	e = MAIN_D_80134CCC;
+	e = EFE_PARTICLE_EMITTERS;
 	for (i = 0; i < 4; e++, i++) {
 		if (e->transform == NULL) {
 			continue;
@@ -1847,7 +1847,7 @@ void STD_renderParticleEmitters(void)
 	EfeParticleEffect *e;
 	EfeParticle *pt;
 
-	e = MAIN_D_80134CCC;
+	e = EFE_PARTICLE_EMITTERS;
 	for (i = 0; i < 4; e++, i++) {
 		if (e->transform == NULL) {
 			continue;
@@ -2012,11 +2012,11 @@ char *STD_initializeEFEEngine(char *base)
 	base = initializeFlashData(base);
 	base = STD_initializeAuraProjectiles(base);
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
-	MAIN_D_80134D18 = (int32_t)base;
+	EFE_HEAP_BASE = (int32_t)base;
 #if defined(VERSION_JP)
-	MAIN_D_80134D14 = MAIN_D_80134D18;
+	EFE_HEAP_POINTER = EFE_HEAP_BASE;
 #else
-	MAIN_D_80134D14 = (int32_t)base;
+	EFE_HEAP_POINTER = (int32_t)base;
 #endif
 	addObject(0x500, 0, (TickFunction)STD_tickEFEEngine, (RenderFunction)STD_renderEFEEngine);
 	STD_initializeEFESubOpcodeTable();
@@ -2028,7 +2028,7 @@ char *STD_initializeEFEEngine(char *base)
 
 void STD_removeEFEEngine(void)
 {
-	STD_func_80079874();
+	STD_removeAllAuraProjectiles();
 	STD_stopEFESounds();
 	removeObject(0x500, 0);
 }
@@ -2043,12 +2043,12 @@ void STD_loadMoveEFE(moves, effectIds, isLoaded)
 #if !defined(VERSION_JP)
 	downloadSomeImage(moves);
 #endif
-	MAIN_D_80139B20.state = -1;
-	MAIN_D_80139B20.isLoaded = isLoaded;
-	*MAIN_D_80139B20.isLoaded = 1;
-	MAIN_D_80139B20.moves = moves;
-	MAIN_D_80139B20.effectIds = effectIds;
-	STD_loadNextEFEFile(&MAIN_D_80139B20);
+	EFE_LOAD_REQUEST.state = -1;
+	EFE_LOAD_REQUEST.isLoaded = isLoaded;
+	*EFE_LOAD_REQUEST.isLoaded = 1;
+	EFE_LOAD_REQUEST.moves = moves;
+	EFE_LOAD_REQUEST.effectIds = effectIds;
+	STD_loadNextEFEFile(&EFE_LOAD_REQUEST);
 }
 
 void STD_unloadAllEFESlots(void)
@@ -2062,7 +2062,7 @@ void STD_unloadAllEFESlots(void)
 		}
 	}
 
-	MAIN_D_80134D14 = MAIN_D_80134D18;
+	EFE_HEAP_POINTER = EFE_HEAP_BASE;
 }
 
 int32_t STD_startEFE(int32_t i)
@@ -2093,9 +2093,9 @@ void STD_stopEFESubEffect(int32_t a, int32_t b)
 	EFE_SCRIPT_CONTEXT->instance->frame = -1;
 }
 
-int32_t STD_func_8006EA6C(void)
+int32_t STD_getEFEHeapPointer(void)
 {
-	return MAIN_D_80134D14;
+	return EFE_HEAP_POINTER;
 }
 
 void STD_loadNextEFEFile(EfeLoad *arg)
@@ -2135,7 +2135,7 @@ void STD_loadNextEFEFile(EfeLoad *arg)
 	}
 
 	m->useCount = id + 0x100;
-	m->mmdPtr = (void *)STD_func_8006EA6C();
+	m->mmdPtr = (void *)STD_getEFEHeapPointer();
 	p->model = m;
 	loc = *getEFEDATEntry(id + 0x100);
 	addFileReadRequest(path, (uint8_t *)m->mmdPtr, NULL, (void *)STD_handleEFEFileLoaded, arg, &loc, 0x5000);
@@ -2158,7 +2158,7 @@ void STD_markEFEFinished(void)
 	UNUSED_EFE_ARRAY[COMBAT_EFFECT_ITR] = 0;
 }
 
-void STD_func_8006EB58(void)
+void STD_getViewportDistance2(void)
 {
 	int32_t *out;
 
@@ -2213,7 +2213,7 @@ void STD_applyBoxAttackHit(void)
 	ext = EFE_POP1(EfeVector *);
 	*out = 0;
 	if (r < 0) {
-		r = MAIN_D_80134CD0;
+		r = EFE_SUB_EFFECT_INDEX;
 	}
 
 	center.vx = ((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
@@ -2221,23 +2221,23 @@ void STD_applyBoxAttackHit(void)
 	center.vz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
 	box.center = &center;
 	copyVector(&box.extent, ext);
-	MAIN_D_80134CD8 = 1;
+	EFE_HIT_ENTITY_INDEX = 1;
 	while (1) {
-		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, EFE_SCRIPT_CONTEXT->sourceEntity, MAIN_D_80134CD8)) == -1) {
+		if ((EFE_HIT_ENTITY_INDEX = findAABBHitEntity(&box, EFE_SCRIPT_CONTEXT->sourceEntity, EFE_HIT_ENTITY_INDEX)) == -1) {
 			return;
 		}
-		if (((DigimonEntity *)ENTITY_TABLE[MAIN_D_80134CD8])->stats.current.isHit == 0) {
+		if (((DigimonEntity *)ENTITY_TABLE[EFE_HIT_ENTITY_INDEX])->stats.current.isHit == 0) {
 			for (j = 1; j < 10; j++) {
 				if (ENTITY_TABLE[j] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 					break;
 				}
 			}
-			((DigimonEntity *)ENTITY_TABLE[MAIN_D_80134CD8])->stats.current.isHit = 1;
-			addAttackObject(MAIN_D_80134CD8, 1, &center, COMBAT_EFFECT_ITR, r, j);
+			((DigimonEntity *)ENTITY_TABLE[EFE_HIT_ENTITY_INDEX])->stats.current.isHit = 1;
+			addAttackObject(EFE_HIT_ENTITY_INDEX, 1, &center, COMBAT_EFFECT_ITR, r, j);
 			*out = 1;
 			return;
 		}
-		MAIN_D_80134CD8++;
+		EFE_HIT_ENTITY_INDEX++;
 	}
 }
 
@@ -2256,9 +2256,9 @@ void STD_applyRadiusAttackHit(void)
 	r = EFE_POP1(int32_t);
 	*hitFlag = 0;
 	r = r * r;
-	MAIN_D_80134CD8 = 1;
-	while (MAIN_D_80134CD8 < 10) {
-		e = ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CD8];
+	EFE_HIT_ENTITY_INDEX = 1;
+	while (EFE_HIT_ENTITY_INDEX < 10) {
+		e = ENTITY_TABLE[*(int32_t *)&EFE_HIT_ENTITY_INDEX];
 		if (e == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			goto next;
 		}
@@ -2285,13 +2285,13 @@ void STD_applyRadiusAttackHit(void)
 				break;
 			}
 		}
-		((DigimonEntity *)ENTITY_TABLE[*(int32_t *)&MAIN_D_80134CD8])->stats.current.isHit = 1;
+		((DigimonEntity *)ENTITY_TABLE[*(int32_t *)&EFE_HIT_ENTITY_INDEX])->stats.current.isHit = 1;
 		STD_calculateAttackHitPosition(&pos, e, EFE_SCRIPT_CONTEXT->sourceEntity, DIGIMON_DATA[e->type].radius);
 		pos.vy = -DIGIMON_DATA[e->type].height / 2;
-		addAttackObject(MAIN_D_80134CD8, 1, &pos, COMBAT_EFFECT_ITR, MAIN_D_80134CD0, i);
+		addAttackObject(EFE_HIT_ENTITY_INDEX, 1, &pos, COMBAT_EFFECT_ITR, EFE_SUB_EFFECT_INDEX, i);
 		*hitFlag = 1;
 next:
-		MAIN_D_80134CD8++;
+		EFE_HIT_ENTITY_INDEX++;
 	}
 }
 
@@ -2315,8 +2315,8 @@ void STD_applyLineAttackHit(void)
 	line[0].vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
 	line[1].vx = EFE_SCRIPT_CONTEXT->sourceEntity->posData->location.vx;
 	line[1].vy = EFE_SCRIPT_CONTEXT->sourceEntity->posData->location.vz;
-	for (MAIN_D_80134CD8 = 1; MAIN_D_80134CD8 < 10; MAIN_D_80134CD8++) {
-		e = ENTITY_TABLE[(*(int32_t *)&MAIN_D_80134CD8)];
+	for (EFE_HIT_ENTITY_INDEX = 1; EFE_HIT_ENTITY_INDEX < 10; EFE_HIT_ENTITY_INDEX++) {
+		e = ENTITY_TABLE[(*(int32_t *)&EFE_HIT_ENTITY_INDEX)];
 		if (e == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			continue;
 		}
@@ -2345,10 +2345,10 @@ void STD_applyLineAttackHit(void)
 				break;
 			}
 		}
-		((DigimonEntity *)ENTITY_TABLE[MAIN_D_80134CD8])->stats.current.isHit = 1;
+		((DigimonEntity *)ENTITY_TABLE[EFE_HIT_ENTITY_INDEX])->stats.current.isHit = 1;
 		STD_calculateAttackHitPosition(&pos, e, EFE_SCRIPT_CONTEXT->sourceEntity, DIGIMON_DATA[e->type].radius);
 		pos.vy = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 8);
-		addAttackObject(MAIN_D_80134CD8, 1, &pos, COMBAT_EFFECT_ITR, MAIN_D_80134CD0, j);
+		addAttackObject(EFE_HIT_ENTITY_INDEX, 1, &pos, COMBAT_EFFECT_ITR, EFE_SUB_EFFECT_INDEX, j);
 		*out = 1;
 		return;
 	}
@@ -2533,8 +2533,8 @@ void STD_renderRadialWaves(void)
 	int32_t i;
 
 	for (i = 0; i < 0x18U; i += 2) {
-		STD_D_8007AF30[i] += EFE_DATA_ITERATOR->model->pixelOffsetX;
-		STD_D_8007AF30[i + 1] += EFE_DATA_ITERATOR->model->pixelOffsetY;
+		STD_RADIAL_WAVE_UVS[i] += EFE_DATA_ITERATOR->model->pixelOffsetX;
+		STD_RADIAL_WAVE_UVS[i + 1] += EFE_DATA_ITERATOR->model->pixelOffsetY;
 	}
 	EFE_WAVE_SCRATCH->tpage = EFE_DATA_ITERATOR->model->pixelPage | 0x20;
 	EFE_WAVE_SCRATCH->clut = EFE_DATA_ITERATOR->model->clutPage + 0x40;
@@ -2558,10 +2558,10 @@ void STD_renderRadialWaves(void)
 		for (; EFE_WAVE_SCRATCH->radius < 0xbb8;
 		     EFE_WAVE_SCRATCH->radius += 0x64) {
 			EFE_WAVE_SCRATCH->height = (EFE_WAVE_SCRATCH->radius < 0x2ef)
-			                                   ? STD_func_800770C0(0xc8, 0x2ee, *(long *)&EFE_WAVE_SCRATCH->radius, 0xc8, 0xfa)
+			                                   ? STD_interpolateClamped(0xc8, 0x2ee, *(long *)&EFE_WAVE_SCRATCH->radius, 0xc8, 0xfa)
 			                           : (EFE_WAVE_SCRATCH->radius < 0x8cb)
-			                                   ? STD_func_800770C0(0x2ee, 0x8ca, *(long *)&EFE_WAVE_SCRATCH->radius, 0xfa, 0x7d)
-			                                   : STD_func_800770C0(0x8ca, 0xbb8, *(long *)&EFE_WAVE_SCRATCH->radius, 0x7d, 0xa);
+			                                   ? STD_interpolateClamped(0x2ee, 0x8ca, *(long *)&EFE_WAVE_SCRATCH->radius, 0xfa, 0x7d)
+			                                   : STD_interpolateClamped(0x8ca, 0xbb8, *(long *)&EFE_WAVE_SCRATCH->radius, 0x7d, 0xa);
 			i = EFE_WAVE_SCRATCH->phase + EFE_WAVE_SCRATCH->radius * 4 +
 			    EFE_WAVE_SCRATCH->ring * 0x309;
 			EFE_WAVE_SCRATCH->height =
@@ -2588,12 +2588,12 @@ void STD_renderRadialWaves(void)
 					(long *)&prim->x2, (long *)&prim->x3, &EFE_PROJ_SCRATCH->p,
 					&EFE_PROJ_SCRATCH->flag);
 				if ((EFE_PROJ_SCRATCH->flag & 0x80000000) == 0) {
-					((int32_t *)prim)[1] = MAIN_D_80134908;
+					((int32_t *)prim)[1] = STD_RADIAL_WAVE_COLOR;
 					prim->clut = EFE_WAVE_SCRATCH->clut;
 					prim->tpage = EFE_WAVE_SCRATCH->tpage;
-					uv = (EFE_WAVE_SCRATCH->radius == 0x12c)   ? (int16_t *)&STD_D_8007AF30[8]
-					     : (EFE_WAVE_SCRATCH->radius >= 0xb54) ? (int16_t *)&STD_D_8007AF30[16]
-					                                           : (int16_t *)STD_D_8007AF30;
+					uv = (EFE_WAVE_SCRATCH->radius == 0x12c)   ? (int16_t *)&STD_RADIAL_WAVE_UVS[8]
+					     : (EFE_WAVE_SCRATCH->radius >= 0xb54) ? (int16_t *)&STD_RADIAL_WAVE_UVS[16]
+					                                           : (int16_t *)STD_RADIAL_WAVE_UVS;
 					*(int16_t *)&prim->u0 = uv[0];
 					*(int16_t *)&prim->u1 = uv[1];
 					*(int16_t *)&prim->u2 = uv[2];
@@ -2613,12 +2613,12 @@ void STD_renderRadialWaves(void)
 		}
 	}
 	for (i = 0; i < 0x18U; i += 2) {
-		STD_D_8007AF30[i] -= EFE_DATA_ITERATOR->model->pixelOffsetX;
-		STD_D_8007AF30[i + 1] -= EFE_DATA_ITERATOR->model->pixelOffsetY;
+		STD_RADIAL_WAVE_UVS[i] -= EFE_DATA_ITERATOR->model->pixelOffsetX;
+		STD_RADIAL_WAVE_UVS[i + 1] -= EFE_DATA_ITERATOR->model->pixelOffsetY;
 	}
 }
 
-void STD_func_80070A40(void)
+void STD_getViewportDistance(void)
 {
 	int32_t *out;
 
@@ -2700,7 +2700,7 @@ void STD_loadClutColors(void)
 	}
 }
 
-void STD_func_80070EA0(void)
+void STD_drawTMDYXZ(void)
 {
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
 	EFE_SCRATCH->id = EFE_POP1(int32_t);
@@ -2749,19 +2749,19 @@ void STD_selectRandomTargetEntity(void)
 
 	excludeSelf = *--EFE_DATA_STACK;
 	for (n = rand() % 8; n >= 0; n--) {
-		MAIN_D_80134CE0++;
+		EFE_TARGET_ENTITY_INDEX++;
 		while (1) {
-			while (MAIN_D_80134CE0 < 10) {
-				entity = ENTITY_TABLE[MAIN_D_80134CE0];
+			while (EFE_TARGET_ENTITY_INDEX < 10) {
+				entity = ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX];
 				if (entity != NULL && entity->isOnMap != 0 && ((DigimonEntity *)entity)->stats.current.currentHP > 0) {
 					if (excludeSelf != 0 || entity != EFE_SCRIPT_CONTEXT->sourceEntity) {
 						goto next;
 					}
 				}
-				MAIN_D_80134CE0++;
+				EFE_TARGET_ENTITY_INDEX++;
 			}
-			if (++MAIN_D_80134CE0 >= 10) {
-				MAIN_D_80134CE0 = 1;
+			if (++EFE_TARGET_ENTITY_INDEX >= 10) {
+				EFE_TARGET_ENTITY_INDEX = 1;
 			}
 		}
 next:;
@@ -2957,9 +2957,9 @@ void STD_renderWireframeBox(void)
 	oy = DRAWING_OFFSET_Y;
 #endif
 	for (i = 0; i < 8; i++) {
-		p.vx = ex * MAIN_D_801348F0[i];
-		p.vy = ey * MAIN_D_801348F8[i];
-		p.vz = ez * MAIN_D_80134900[i];
+		p.vx = ex * STD_WIREFRAME_BOX_SIGN_X[i];
+		p.vy = ey * STD_WIREFRAME_BOX_SIGN_Y[i];
+		p.vz = ez * STD_WIREFRAME_BOX_SIGN_Z[i];
 		ApplyMatrixSV(&m, &p, &p);
 		p.vx += bx;
 		p.vy += by;
@@ -2975,7 +2975,7 @@ void STD_renderWireframeBox(void)
 	PopMatrix();
 	ot = ACTIVE_ORDERING_TABLE->org;
 	prim = (LINE_F4 *)GsGetWorkBase();
-	idx = STD_D_8007AF20;
+	idx = STD_WIREFRAME_BOX_LINES;
 	for (k = 0; k < 4; k++) {
 		SetLineF4(prim);
 		setRGB0(prim, col->red, col->green, col->blue);
@@ -3131,9 +3131,9 @@ void STD_restoreCameraView(void)
 	GsSetRefView2(&view);
 #else
 	GsSetProjection(VIEWPORT_DISTANCE);
-	DRAWING_OFFSET_X = MAIN_D_801351C0;
-	DRAWING_OFFSET_Y = MAIN_D_801351C4;
-	GsWSMATRIX = STD_D_8007FC00.m;
+	DRAWING_OFFSET_X = STD_SAVED_DRAWING_OFFSET_X;
+	DRAWING_OFFSET_Y = STD_SAVED_DRAWING_OFFSET_Y;
+	GsWSMATRIX = STD_SAVED_WS_MATRIX.m;
 	SetRotMatrix(&GsWSMATRIX);
 	SetTransMatrix(&GsWSMATRIX);
 #endif
@@ -3146,19 +3146,19 @@ void STD_setupFixedCamera(void)
 #if defined(VERSION_JP)
 	GsSetProjection(0x200);
 #else
-	STD_D_8007FC00.m = GsWSMATRIX;
-	MAIN_D_801351C0 = DRAWING_OFFSET_X;
-	MAIN_D_801351C4 = DRAWING_OFFSET_Y;
+	STD_SAVED_WS_MATRIX.m = GsWSMATRIX;
+	STD_SAVED_DRAWING_OFFSET_X = DRAWING_OFFSET_X;
+	STD_SAVED_DRAWING_OFFSET_Y = DRAWING_OFFSET_Y;
 #endif
-	MAIN_D_80139B34.vpx = 0;
-	MAIN_D_80139B34.vpz = -0x7d0;
-	MAIN_D_80139B34.vpy = 0;
-	MAIN_D_80139B34.vrx = 0;
-	MAIN_D_80139B34.vry = 0;
-	MAIN_D_80139B34.vrz = 0;
-	MAIN_D_80139B34.rz = 0;
-	MAIN_D_80139B34.super = NULL;
-	ret = GsSetRefView2(&MAIN_D_80139B34);
+	EFE_FIXED_VIEW.vpx = 0;
+	EFE_FIXED_VIEW.vpz = -0x7d0;
+	EFE_FIXED_VIEW.vpy = 0;
+	EFE_FIXED_VIEW.vrx = 0;
+	EFE_FIXED_VIEW.vry = 0;
+	EFE_FIXED_VIEW.vrz = 0;
+	EFE_FIXED_VIEW.rz = 0;
+	EFE_FIXED_VIEW.super = NULL;
+	ret = GsSetRefView2(&EFE_FIXED_VIEW);
 	DRAWING_OFFSET_X = 0xa0;
 	DRAWING_OFFSET_Y = 0x78;
 }
@@ -3237,7 +3237,7 @@ void STD_renderEFELine(void)
 	if ((depth > 0x20) && (depth < 0x1000)) {
 		if ((flags & 0x20) != 0) {
 			for (i = 0; i < 4; i++) {
-				drawLine2P(((col->red * 50 / 100) & 0xff) | (((col->green * 50 / 100) & 0xff) << 8) | (((col->blue * 50 / 100) & 0xff) << 16), y0 + MAIN_D_801348E8[i], x1 + MAIN_D_801348EC[i], y1 + MAIN_D_801348E8[i], x0 + MAIN_D_801348EC[i], depth, 5);
+				drawLine2P(((col->red * 50 / 100) & 0xff) | (((col->green * 50 / 100) & 0xff) << 8) | (((col->blue * 50 / 100) & 0xff) << 16), y0 + STD_LINE_OFFSET_X[i], x1 + STD_LINE_OFFSET_Y[i], y1 + STD_LINE_OFFSET_X[i], x0 + STD_LINE_OFFSET_Y[i], depth, 5);
 			}
 		} else {
 			drawLine2P((col->red & 0xff) | ((col->green & 0xff) << 8) | ((col->blue & 0xff) << 16), y0, x1, y1, x0, depth, 0);
@@ -3260,7 +3260,7 @@ void STD_combineRotations(void)
 	copyVector(a, &r1);
 }
 
-void STD_func_800728D4(void)
+void STD_normalizeRotationAngles2(void)
 {
 	MATRIX m;
 	EfeVector *out;
@@ -3446,10 +3446,10 @@ void STD_getVectorLength(void)
 
 void STD_setTargetToHitEntity(void)
 {
-	EFE_SCRIPT_CONTEXT->targetEntity = ENTITY_TABLE[MAIN_D_80134CD8];
+	EFE_SCRIPT_CONTEXT->targetEntity = ENTITY_TABLE[EFE_HIT_ENTITY_INDEX];
 }
 
-void STD_func_80072FF8(void)
+void STD_normalizeRotationAngles(void)
 {
 	SVECTOR in;
 	SVECTOR res;
@@ -3482,18 +3482,18 @@ void STD_findHitEntity(void)
 	center.vz = *(int32_t *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 0xc);
 	box.center = &center;
 	copyVector(&box.extent, ext);
-	MAIN_D_80134CD8 = 1;
+	EFE_HIT_ENTITY_INDEX = 1;
 	while (1) {
-		if ((MAIN_D_80134CD8 = findAABBHitEntity(&box, EFE_SCRIPT_CONTEXT->sourceEntity, MAIN_D_80134CD8)) == -1) {
+		if ((EFE_HIT_ENTITY_INDEX = findAABBHitEntity(&box, EFE_SCRIPT_CONTEXT->sourceEntity, EFE_HIT_ENTITY_INDEX)) == -1) {
 			return;
 		}
 		switch (mode) {
 		case 0:
-			if (((DigimonEntity *)ENTITY_TABLE[MAIN_D_80134CD8])->stats.current.isHit == 0) {
+			if (((DigimonEntity *)ENTITY_TABLE[EFE_HIT_ENTITY_INDEX])->stats.current.isHit == 0) {
 				*out = 1;
 				return;
 			}
-			MAIN_D_80134CD8++;
+			EFE_HIT_ENTITY_INDEX++;
 			break;
 		case 1:
 			*out = 1;
@@ -3521,7 +3521,7 @@ void STD_printDebugValue(void)
 	int32_t value;
 
 	value = EFE_POP1(int32_t);
-	printf(MAIN_D_801348E4, value);
+	printf(STD_FMT_D, value);
 }
 
 void STD_getRandomInRange(void)
@@ -3573,7 +3573,7 @@ void STD_interpolateValue(void)
 	}
 }
 
-void STD_func_800733CC(void)
+void STD_calculateCosine(void)
 {
 	int32_t angle;
 	int32_t scale;
@@ -3585,7 +3585,7 @@ void STD_func_800733CC(void)
 	*out = (scale * rcos(angle & 0xfff)) >> 12;
 }
 
-void STD_func_80073440(void)
+void STD_calculateSine(void)
 {
 	int32_t angle;
 	int32_t scale;
@@ -3597,7 +3597,7 @@ void STD_func_80073440(void)
 	*out = (scale * rsin(angle & 0xfff)) >> 12;
 }
 
-void STD_func_800734B4(void)
+void STD_getSourceDigimonSize(void)
 {
 	EfeVector *out;
 	int16_t radius;
@@ -4074,7 +4074,7 @@ void STD_renderProjectedSprite(void)
 	}
 }
 
-void STD_func_80074A70(void)
+void STD_getTargetDigimonSize(void)
 {
 	EfeVector *out;
 	int16_t radius;
@@ -4209,36 +4209,36 @@ void STD_selectNextTargetEntity(void)
 	int32_t *out;
 
 	out = EFE_POP1(int32_t *);
-	if (MAIN_D_80134CE0 >= 10) {
+	if (EFE_TARGET_ENTITY_INDEX >= 10) {
 		*out = -1;
 		return;
 	}
 
-	for (; MAIN_D_80134CE0 < 10; MAIN_D_80134CE0++) {
-		if (ENTITY_TABLE[MAIN_D_80134CE0] == NULL) {
+	for (; EFE_TARGET_ENTITY_INDEX < 10; EFE_TARGET_ENTITY_INDEX++) {
+		if (ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX] == NULL) {
 			continue;
 		}
-		if (ENTITY_TABLE[MAIN_D_80134CE0] == EFE_SCRIPT_CONTEXT->sourceEntity) {
+		if (ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX] == EFE_SCRIPT_CONTEXT->sourceEntity) {
 			continue;
 		}
-		if (ENTITY_TABLE[MAIN_D_80134CE0]->isOnMap == 0) {
+		if (ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX]->isOnMap == 0) {
 			continue;
 		}
-		if (ENTITY_TABLE[MAIN_D_80134CE0]->isOnScreen == 0) {
+		if (ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX]->isOnScreen == 0) {
 			continue;
 		}
-		if (((DigimonEntity *)ENTITY_TABLE[MAIN_D_80134CE0])->stats.current.currentHP > 0) {
+		if (((DigimonEntity *)ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX])->stats.current.currentHP > 0) {
 			break;
 		}
 	}
 
-	if (MAIN_D_80134CE0 >= 10) {
+	if (EFE_TARGET_ENTITY_INDEX >= 10) {
 		*out = -1;
 		return;
 	}
 
-	EFE_SCRIPT_CONTEXT->targetEntity = ENTITY_TABLE[MAIN_D_80134CE0];
-	*out = MAIN_D_80134CE0++;
+	EFE_SCRIPT_CONTEXT->targetEntity = ENTITY_TABLE[EFE_TARGET_ENTITY_INDEX];
+	*out = EFE_TARGET_ENTITY_INDEX++;
 }
 
 void STD_addParticleEmitter(void)
@@ -4255,7 +4255,7 @@ void STD_addParticleEmitter(void)
 	n = EFE_POP1(int32_t);
 	b = EFE_POP1(int32_t);
 	for (i = 0; i < 4; i++) {
-		if (MAIN_D_80134CCC[i].transform == NULL) {
+		if (EFE_PARTICLE_EMITTERS[i].transform == NULL) {
 			break;
 		}
 	}
@@ -4264,7 +4264,7 @@ void STD_addParticleEmitter(void)
 		return;
 	}
 
-	e = &MAIN_D_80134CCC[i];
+	e = &EFE_PARTICLE_EMITTERS[i];
 	e->type = b;
 	for (i = 0; i < 0x15; i++) {
 		e->particles[i].distance = 0;
@@ -4508,7 +4508,7 @@ void STD_addAttackObjectToTarget(void)
 		}
 	}
 
-	addAttackObject(i, 1, &pos, COMBAT_EFFECT_ITR, MAIN_D_80134CD0, j);
+	addAttackObject(i, 1, &pos, COMBAT_EFFECT_ITR, EFE_SUB_EFFECT_INDEX, j);
 }
 
 void STD_setTransformToTargetBone(void)
@@ -4589,7 +4589,7 @@ void STD_initializeEFETransform(void)
 	*dst = *src;
 }
 
-void STD_func_80075BF8(void)
+void STD_drawTMD(void)
 {
 	EFE_SCRATCH->scale = EFE_POP1(VECTOR *);
 	EFE_SCRATCH->id = EFE_POP1(int32_t);
@@ -4682,8 +4682,8 @@ void STD_checkTechCompatibility(void)
 		entry = (EfeTechBoneOffset *)((int32_t)entry + 0xa);
 	}
 
-	MAIN_D_80134CF0 = &entry->offset;
-	EFE_SCRIPT_CONTEXT->boneOffset = MAIN_D_80134CF0;
+	EFE_BONE_OFFSET = &entry->offset;
+	EFE_SCRIPT_CONTEXT->boneOffset = EFE_BONE_OFFSET;
 }
 
 void STD_spawnEFESubEffect(void)
@@ -4697,7 +4697,7 @@ void STD_spawnEFESubEffect(void)
 	EfeInstance *instance;
 
 	ip = EFE_SCRIPT_PTR;
-	MAIN_D_80134CE0 = 1;
+	EFE_TARGET_ENTITY_INDEX = 1;
 	n = ip[1];
 	instance = (EfeInstance *)(ip[2] + EFE_SCRIPT_HEAD);
 	stride = ip[4];
@@ -4767,14 +4767,14 @@ void STD_returnFromEFESubroutine(void)
 		EFE_SCRIPT_CONTEXT = EFE_POP2(EfeSubEffect *);
 		EFE_CURRENT_DATA_SEGMENT = EFE_SCRIPT_CONTEXT->instance;
 		EFE_PREVIOUS_DATA_SEGMENT = (int32_t)EFE_SCRIPT_CONTEXT->parentInstance;
-		MAIN_D_80134CE0 = EFE_POP2(int32_t);
+		EFE_TARGET_ENTITY_INDEX = EFE_POP2(int32_t);
 	}
 }
 
 void STD_dispatchEFESubOpcode(void)
 {
 	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 2);
-	STD_jtbl_8007FA7C[EFE_SCRIPT_CURRENT_VALUE >> 8]();
+	STD_EFE_SUB_OPCODE_HANDLERS[EFE_SCRIPT_CURRENT_VALUE >> 8]();
 }
 
 void STD_callEFESubroutine(void)
@@ -4782,7 +4782,7 @@ void STD_callEFESubroutine(void)
 	int16_t *ip;
 
 	ip = EFE_SCRIPT_PTR;
-	EFE_PUSH2(int32_t, MAIN_D_80134CE0);
+	EFE_PUSH2(int32_t, EFE_TARGET_ENTITY_INDEX);
 	EFE_PUSH2(EfeSubEffect *, EFE_SCRIPT_CONTEXT);
 	EFE_PUSH2(int16_t *, EFE_SCRIPT_PTR + 3);
 	EFE_SCRIPT_PTR = (int16_t *)(ip[1] + EFE_SCRIPT_HEAD);
@@ -4858,21 +4858,21 @@ void STD_branchEFEOnComparison(void)
 	ip = EFE_SCRIPT_PTR;
 	if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x400) {
 		if (ip[2] == 0) {
-			res = STD_D_8007AF08[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int32_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
+			res = STD_EFE_COMPARISONS[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int32_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
 		} else {
-			res = STD_D_8007AF08[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int32_t *)(ip[1] + EFE_SCRIPT_HEAD));
+			res = STD_EFE_COMPARISONS[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int32_t *)(ip[1] + EFE_SCRIPT_HEAD));
 		}
 	} else if ((EFE_SCRIPT_CURRENT_VALUE & 0xf00) == 0x200) {
 		if (ip[2] == 0) {
-			res = STD_D_8007AF08[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int16_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
+			res = STD_EFE_COMPARISONS[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int16_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
 		} else {
-			res = STD_D_8007AF08[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int16_t *)(ip[1] + EFE_SCRIPT_HEAD));
+			res = STD_EFE_COMPARISONS[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int16_t *)(ip[1] + EFE_SCRIPT_HEAD));
 		}
 	} else {
 		if (ip[2] == 0) {
-			res = STD_D_8007AF08[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int8_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
+			res = STD_EFE_COMPARISONS[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int8_t *)(ip[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT));
 		} else {
-			res = STD_D_8007AF08[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int8_t *)(ip[1] + EFE_SCRIPT_HEAD));
+			res = STD_EFE_COMPARISONS[EFE_SCRIPT_CURRENT_VALUE >> 12](*(int8_t *)(ip[1] + EFE_SCRIPT_HEAD));
 		}
 	}
 
@@ -4889,9 +4889,9 @@ void STD_applyEFEVariableOperator(void)
 
 	pc = (int16_t *)(int32_t)EFE_SCRIPT_PTR;
 	if (pc[2] == 0) {
-		STD_D_8007AE68[(EFE_SCRIPT_CURRENT_VALUE >> 8) & 0xf][EFE_SCRIPT_CURRENT_VALUE >> 12](pc[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
+		STD_EFE_VARIABLE_OPERATORS[(EFE_SCRIPT_CURRENT_VALUE >> 8) & 0xf][EFE_SCRIPT_CURRENT_VALUE >> 12](pc[1] + (int32_t)EFE_CURRENT_DATA_SEGMENT);
 	} else {
-		STD_D_8007AE68[(EFE_SCRIPT_CURRENT_VALUE >> 8) & 0xf][EFE_SCRIPT_CURRENT_VALUE >> 12](pc[1] + EFE_SCRIPT_HEAD);
+		STD_EFE_VARIABLE_OPERATORS[(EFE_SCRIPT_CURRENT_VALUE >> 8) & 0xf][EFE_SCRIPT_CURRENT_VALUE >> 12](pc[1] + EFE_SCRIPT_HEAD);
 	}
 
 	EFE_SCRIPT_PTR = (int16_t *)((int32_t)EFE_SCRIPT_PTR + 6);
@@ -5218,7 +5218,7 @@ void STD_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, S
 	GsSetWorkBase((PACKET *)prim);
 }
 
-int32_t STD_func_800770C0(int32_t lo, int32_t hi, long t, int32_t start, int32_t end)
+int32_t STD_interpolateClamped(int32_t lo, int32_t hi, long t, int32_t start, int32_t end)
 {
 	int32_t tmp;
 
@@ -5247,24 +5247,24 @@ void STD_renderRibbonStrip(void)
 	pts = EFE_POP1(SVECTOR *);
 
 	for (i = 0; i < 8U; i += 2) {
-		MAIN_D_8013490C[i] += EFE_DATA_ITERATOR->model->pixelOffsetX;
-		MAIN_D_8013490C[i + 1] += EFE_DATA_ITERATOR->model->pixelOffsetY;
+		STD_RIBBON_UVS[i] += EFE_DATA_ITERATOR->model->pixelOffsetX;
+		STD_RIBBON_UVS[i + 1] += EFE_DATA_ITERATOR->model->pixelOffsetY;
 	}
 
 	EFE_RIBBON_SCRATCH->tpage = EFE_DATA_ITERATOR->model->pixelPage | 0x20;
 	EFE_RIBBON_SCRATCH->clut = EFE_DATA_ITERATOR->model->clutPage + 0x80;
 	EFE_RIBBON_SCRATCH->frame = EFE_CURRENT_DATA_SEGMENT->frame;
 	i = (uint32_t)(EFE_RIBBON_SCRATCH->frame / 10) % 3;
-	EFE_RIBBON_SCRATCH->color.r = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10, STD_D_8007AF48[i].r,
-	                                                STD_D_8007AF48[(uint32_t)(i + 1) % 3].r);
-	EFE_RIBBON_SCRATCH->color.g = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10, STD_D_8007AF48[i].g,
-	                                                STD_D_8007AF48[(uint32_t)(i + 1) % 3].g);
-	EFE_RIBBON_SCRATCH->color.b = STD_func_800770C0(0, 10, EFE_RIBBON_SCRATCH->frame % 10, STD_D_8007AF48[i].b,
-	                                                STD_D_8007AF48[(uint32_t)(i + 1) % 3].b);
+	EFE_RIBBON_SCRATCH->color.r = STD_interpolateClamped(0, 10, EFE_RIBBON_SCRATCH->frame % 10, STD_RIBBON_COLORS[i].r,
+	                                                     STD_RIBBON_COLORS[(uint32_t)(i + 1) % 3].r);
+	EFE_RIBBON_SCRATCH->color.g = STD_interpolateClamped(0, 10, EFE_RIBBON_SCRATCH->frame % 10, STD_RIBBON_COLORS[i].g,
+	                                                     STD_RIBBON_COLORS[(uint32_t)(i + 1) % 3].g);
+	EFE_RIBBON_SCRATCH->color.b = STD_interpolateClamped(0, 10, EFE_RIBBON_SCRATCH->frame % 10, STD_RIBBON_COLORS[i].b,
+	                                                     STD_RIBBON_COLORS[(uint32_t)(i + 1) % 3].b);
 	if (EFE_RIBBON_SCRATCH->frame < 0xf) {
-		i = STD_func_800770C0(1, 7, EFE_RIBBON_SCRATCH->frame, 0, 0x1000);
+		i = STD_interpolateClamped(1, 7, EFE_RIBBON_SCRATCH->frame, 0, 0x1000);
 	} else {
-		i = STD_func_800770C0(0x17, 0x1e, EFE_RIBBON_SCRATCH->frame, 0x1000, 0);
+		i = STD_interpolateClamped(0x17, 0x1e, EFE_RIBBON_SCRATCH->frame, 0x1000, 0);
 	}
 	EFE_RIBBON_SCRATCH->color.r = EFE_RIBBON_SCRATCH->color.r * i >> 12;
 	EFE_RIBBON_SCRATCH->color.g = EFE_RIBBON_SCRATCH->color.g * i >> 12;
@@ -5316,10 +5316,10 @@ void STD_renderRibbonStrip(void)
 				*(int32_t *)&prim->r1 = *(int32_t *)&EFE_RIBBON_SCRATCH->colorHalf;
 				*(int32_t *)&prim->r3 = *(int32_t *)&EFE_RIBBON_SCRATCH->color;
 			}
-			*(int16_t *)&prim->u0 = *(int16_t *)MAIN_D_8013490C;
-			*(int16_t *)&prim->u1 = *(int16_t *)&MAIN_D_8013490C[2];
-			*(int16_t *)&prim->u2 = *(int16_t *)&MAIN_D_8013490C[4];
-			*(int16_t *)&prim->u3 = *(int16_t *)&MAIN_D_8013490C[6];
+			*(int16_t *)&prim->u0 = *(int16_t *)STD_RIBBON_UVS;
+			*(int16_t *)&prim->u1 = *(int16_t *)&STD_RIBBON_UVS[2];
+			*(int16_t *)&prim->u2 = *(int16_t *)&STD_RIBBON_UVS[4];
+			*(int16_t *)&prim->u3 = *(int16_t *)&STD_RIBBON_UVS[6];
 			((uint8_t *)prim)[3] = 0xc;
 			prim->code = 0x3c;
 			setSemiTrans(prim, 1);
@@ -5330,8 +5330,8 @@ void STD_renderRibbonStrip(void)
 	}
 
 	for (i = 0; i < 8U; i += 2) {
-		MAIN_D_8013490C[i] -= EFE_DATA_ITERATOR->model->pixelOffsetX;
-		MAIN_D_8013490C[i + 1] -= EFE_DATA_ITERATOR->model->pixelOffsetY;
+		STD_RIBBON_UVS[i] -= EFE_DATA_ITERATOR->model->pixelOffsetX;
+		STD_RIBBON_UVS[i + 1] -= EFE_DATA_ITERATOR->model->pixelOffsetY;
 	}
 }
 
@@ -5340,10 +5340,10 @@ void STD_initializeEFESubOpcodeTable(void)
 	int32_t i;
 
 	for (i = 0; (uint32_t)i < 0x61; i++) {
-		if ((uint32_t)((int32_t (*)[2])STD_D_8007AB18)[i][0] >= 0x61) {
+		if ((uint32_t)((int32_t (*)[2])STD_EFE_SUB_OPCODES)[i][0] >= 0x61) {
 			exit(1);
 		}
-		STD_jtbl_8007FA7C[STD_D_8007AB18[i].opcode] = STD_D_8007AB18[i].handler;
+		STD_EFE_SUB_OPCODE_HANDLERS[STD_EFE_SUB_OPCODES[i].opcode] = STD_EFE_SUB_OPCODES[i].handler;
 	}
 }
 
@@ -5372,7 +5372,7 @@ int32_t STD_runEFEScript(int32_t script)
 
 void STD_resetPoisonBubbles(void)
 {
-	setInt16WithStride(&STD_D_8007FC20[0].frame, -1, 0xc, 0xc);
+	setInt16WithStride(&STD_POISON_BUBBLES[0].frame, -1, 0xc, 0xc);
 }
 
 int32_t STD_addPoisonBubble(Entity *entity)
@@ -5381,7 +5381,7 @@ int32_t STD_addPoisonBubble(Entity *entity)
 	EfePoisonBubble *p;
 
 	for (i = 0; i < 0xc; i++) {
-		if (STD_D_8007FC20[i].frame == -1) {
+		if (STD_POISON_BUBBLES[i].frame == -1) {
 			break;
 		}
 	}
@@ -5390,7 +5390,7 @@ int32_t STD_addPoisonBubble(Entity *entity)
 		return -1;
 	}
 
-	p = &STD_D_8007FC20[i];
+	p = &STD_POISON_BUBBLES[i];
 	p->frame = 0;
 	p->entity = entity;
 	p->offsetX = (rand() % 100) - 0x32;
@@ -5404,7 +5404,7 @@ void STD_tickPoisonBubble(int32_t i)
 {
 	EfePoisonBubble *p;
 
-	p = &STD_D_8007FC20[i];
+	p = &STD_POISON_BUBBLES[i];
 	p->frame++;
 	if (p->frame >= 0x28) {
 		p->frame = -1;
@@ -5422,7 +5422,7 @@ void STD_renderPoisonBubble(int32_t i)
 	int32_t d;
 	int16_t angle;
 
-	p = &STD_D_8007FC20[i];
+	p = &STD_POISON_BUBBLES[i];
 	frame = p->frame;
 	translateConditionFXToEntity(p->entity, &pos);
 	pos.vx += p->offsetX;
@@ -5433,7 +5433,7 @@ void STD_renderPoisonBubble(int32_t i)
 	d = _sin(angle) * 0x14 / 4096;
 	screen.vx += (int16_t)(d * (int32_t)VIEWPORT_DISTANCE / otz);
 	if ((otz > 0x200) && (otz < 0x10000)) {
-		STD_POISON_BUBBLE_SPRITE.u = MAIN_D_80134914[(frame >> 1) % 6] + 0x20;
+		STD_POISON_BUBBLE_SPRITE.u = STD_POISON_BUBBLE_FRAME_U[(frame >> 1) % 6] + 0x20;
 		renderSprite(&STD_POISON_BUBBLE_SPRITE, screen.vx, screen.vy, otz, 0x4ea4, 0x4ea4);
 	}
 }
@@ -5442,7 +5442,7 @@ void STD_tickPoisonEffect(int32_t i)
 {
 	EfePoison *p;
 
-	p = &STD_D_8007FCB0[i];
+	p = &STD_POISON_EFFECTS[i];
 	p->frame++;
 	p->frame %= 0x1e;
 	if (p->frame == 1) {
@@ -5450,7 +5450,7 @@ void STD_tickPoisonEffect(int32_t i)
 	}
 }
 
-void STD_func_80077620(void)
+void STD_renderPoisonEffect(void)
 {
 }
 
@@ -5459,19 +5459,19 @@ void STD_initializePoisonBubble(void)
 	int32_t i;
 
 	for (i = 0; i < 4; i++) {
-		STD_D_8007FCB0[i].frame = -1;
+		STD_POISON_EFFECTS[i].frame = -1;
 	}
 
 	STD_resetPoisonBubbles();
 }
 
-int32_t STD_func_80077664(Entity *entity)
+int32_t STD_addPoisonEffect(Entity *entity)
 {
 	int32_t i;
 	EfePoison *p;
 
 	for (i = 0; i < 4; i++) {
-		if (STD_D_8007FCB0[i].frame == -1) {
+		if (STD_POISON_EFFECTS[i].frame == -1) {
 			break;
 		}
 	}
@@ -5480,10 +5480,10 @@ int32_t STD_func_80077664(Entity *entity)
 		return -1;
 	}
 
-	p = &STD_D_8007FCB0[i];
+	p = &STD_POISON_EFFECTS[i];
 	p->frame = 0;
 	p->entity = entity;
-	addObject(0x808, i, STD_tickPoisonEffect, (RenderFunction)STD_func_80077620);
+	addObject(0x808, i, STD_tickPoisonEffect, (RenderFunction)STD_renderPoisonEffect);
 
 	return i;
 }
@@ -5492,7 +5492,7 @@ void STD_removePoisonEffect(int32_t i, Entity *entity)
 {
 	EfePoison *p;
 
-	p = &STD_D_8007FCB0[i];
+	p = &STD_POISON_EFFECTS[i];
 	if ((i >= 0) && (i < 4) && (p->entity == entity)) {
 		p->frame = -1;
 		removeObject(0x808, i);
@@ -5516,7 +5516,7 @@ void STD_tickConfusionEffect(int32_t i)
 {
 	EfeConfusion *p;
 
-	p = &STD_D_8007FCD0[i];
+	p = &STD_CONFUSION_EFFECTS[i];
 	p->angle += 7;
 	p->spin += 0x5b;
 }
@@ -5531,7 +5531,7 @@ void STD_renderConfusionEffect(int32_t idx)
 	EfeConfusion *p;
 	int32_t i;
 
-	p = &STD_D_8007FCD0[idx];
+	p = &STD_CONFUSION_EFFECTS[idx];
 	for (i = 0; i < 3; i++) {
 		translateConditionFXToEntity(p->entity, &pos);
 		ang = p->angle + (i * 0xaa);
@@ -5541,15 +5541,15 @@ void STD_renderConfusionEffect(int32_t idx)
 		rot.vx = 0;
 		rot.vy = p->offsets[i] + (p->spin - 0x400 + (i * 0x555));
 		rot.vz = 0xe3;
-		renderTMDModel((uint8_t *)MAIN_D_801351C8, 0, &coord, NULL, &trans, &rot, &STD_D_8007AF78);
+		renderTMDModel((uint8_t *)STD_CONFUSION_FX_MODEL, 0, &coord, NULL, &trans, &rot, &STD_CONFUSION_SCALE);
 	}
 }
 
 void STD_initializeConfusionEffect(char *base)
 {
-	MAIN_D_801351C8 = (int32_t)base;
-	GsMapModelingData((unsigned long *)((char *)MAIN_D_801351C8 + 4));
-	setInt16WithStride(&STD_D_8007FCD0[0].frame, -1, 4, 0x10);
+	STD_CONFUSION_FX_MODEL = (int32_t)base;
+	GsMapModelingData((unsigned long *)((char *)STD_CONFUSION_FX_MODEL + 4));
+	setInt16WithStride(&STD_CONFUSION_EFFECTS[0].frame, -1, 4, 0x10);
 }
 
 int32_t STD_addConfusionEffect(Entity *entity)
@@ -5558,7 +5558,7 @@ int32_t STD_addConfusionEffect(Entity *entity)
 	EfeConfusion *p;
 
 	for (i = 0; i < 4; i++) {
-		if (STD_D_8007FCD0[i].frame == -1) {
+		if (STD_CONFUSION_EFFECTS[i].frame == -1) {
 			break;
 		}
 	}
@@ -5567,7 +5567,7 @@ int32_t STD_addConfusionEffect(Entity *entity)
 		return -1;
 	}
 
-	p = &STD_D_8007FCD0[i];
+	p = &STD_CONFUSION_EFFECTS[i];
 	p->frame = 0;
 	p->angle = 0;
 	p->spin = 0;
@@ -5585,7 +5585,7 @@ void STD_removeConfusionEffect(int32_t i, Entity *entity)
 {
 	EfeConfusion *p;
 
-	p = &STD_D_8007FCD0[i];
+	p = &STD_CONFUSION_EFFECTS[i];
 	if ((i >= 0) && (i < 4) && (p->entity == entity)) {
 		p->frame = -1;
 		removeObject(0x806, i);
@@ -5600,12 +5600,12 @@ void STD_initializeStunEffect(base)
 	int32_t i;
 
 	for (i = 0; i < 5; i++) {
-		STD_D_8007FD10[i].frame = -1;
+		STD_STUN_EFFECTS[i].frame = -1;
 	}
 
 	STD_resetStunSubEffects();
-	MAIN_D_801351CC = base;
-	GsMapModelingData((unsigned long *)(MAIN_D_801351CC + 4));
+	STD_STUN_FX_MODEL = base;
+	GsMapModelingData((unsigned long *)(STD_STUN_FX_MODEL + 4));
 }
 
 void STD_resetStunSubEffects(void)
@@ -5613,7 +5613,7 @@ void STD_resetStunSubEffects(void)
 	int32_t i;
 
 	for (i = 0; i < 0x19; i++) {
-		STD_D_8007FD4C[i].frame = -1;
+		STD_STUN_SUB_EFFECTS[i].frame = -1;
 	}
 }
 
@@ -5621,12 +5621,12 @@ void STD_tickStunEffect(int32_t i)
 {
 	EfeStun *p;
 
-	p = &STD_D_8007FD10[i];
+	p = &STD_STUN_EFFECTS[i];
 	p->frame++;
 	switch (p->state) {
 	case 0:
 		if ((p->frame % 6) == 0) {
-			STD_func_80078044(p->entity);
+			STD_addStunSubEffect(p->entity);
 		}
 		if (p->frame >= p->duration) {
 			p->state = 1;
@@ -5657,7 +5657,7 @@ void STD_renderStunEffect(int32_t idx)
 	int32_t value;
 	int32_t cy;
 
-	p = &STD_D_8007FD10[idx];
+	p = &STD_STUN_EFFECTS[idx];
 	switch (p->state) {
 	case 0:
 		value = (p->duration - p->frame) * 100 / 20;
@@ -5681,27 +5681,27 @@ void STD_renderStunEffect(int32_t idx)
 	pos.vz = p->entity->posData->location.vz;
 	otz = worldPosToScreenPos(&pos, &screen);
 
-	STD_D_8007AFD0.x = screen.vx;
-	STD_D_8007AFD0.y = screen.vy;
-	STD_D_8007AFD0.scalex = scale;
-	STD_D_8007AFD0.scaley = scale;
-	STD_D_8007AFD0.mx = 0xe;
-	STD_D_8007AFD0.u = (value / 1000 % 10) * 8;
-	GsSortSprite(&STD_D_8007AFD0, ACTIVE_ORDERING_TABLE, 0x22);
-	STD_D_8007AFD0.mx = 7;
-	STD_D_8007AFD0.u = (value / 100 % 10) * 8;
-	GsSortSprite(&STD_D_8007AFD0, ACTIVE_ORDERING_TABLE, 0x22);
+	STD_STUN_DIGIT_SPRITE.x = screen.vx;
+	STD_STUN_DIGIT_SPRITE.y = screen.vy;
+	STD_STUN_DIGIT_SPRITE.scalex = scale;
+	STD_STUN_DIGIT_SPRITE.scaley = scale;
+	STD_STUN_DIGIT_SPRITE.mx = 0xe;
+	STD_STUN_DIGIT_SPRITE.u = (value / 1000 % 10) * 8;
+	GsSortSprite(&STD_STUN_DIGIT_SPRITE, ACTIVE_ORDERING_TABLE, 0x22);
+	STD_STUN_DIGIT_SPRITE.mx = 7;
+	STD_STUN_DIGIT_SPRITE.u = (value / 100 % 10) * 8;
+	GsSortSprite(&STD_STUN_DIGIT_SPRITE, ACTIVE_ORDERING_TABLE, 0x22);
 
-	STD_D_8007AFF4.x = screen.vx;
-	STD_D_8007AFF4.y = screen.vy;
-	STD_D_8007AFF4.scalex = scale;
-	STD_D_8007AFF4.scaley = scale;
-	STD_D_8007AFF4.mx = -2;
-	STD_D_8007AFF4.u = (value / 10 % 10) * 4;
-	GsSortSprite(&STD_D_8007AFF4, ACTIVE_ORDERING_TABLE, 0x22);
-	STD_D_8007AFF4.mx = -8;
-	STD_D_8007AFF4.u = (value % 10) * 4;
-	GsSortSprite(&STD_D_8007AFF4, ACTIVE_ORDERING_TABLE, 0x22);
+	STD_STUN_SMALL_DIGIT_SPRITE.x = screen.vx;
+	STD_STUN_SMALL_DIGIT_SPRITE.y = screen.vy;
+	STD_STUN_SMALL_DIGIT_SPRITE.scalex = scale;
+	STD_STUN_SMALL_DIGIT_SPRITE.scaley = scale;
+	STD_STUN_SMALL_DIGIT_SPRITE.mx = -2;
+	STD_STUN_SMALL_DIGIT_SPRITE.u = (value / 10 % 10) * 4;
+	GsSortSprite(&STD_STUN_SMALL_DIGIT_SPRITE, ACTIVE_ORDERING_TABLE, 0x22);
+	STD_STUN_SMALL_DIGIT_SPRITE.mx = -8;
+	STD_STUN_SMALL_DIGIT_SPRITE.u = (value % 10) * 4;
+	GsSortSprite(&STD_STUN_SMALL_DIGIT_SPRITE, ACTIVE_ORDERING_TABLE, 0x22);
 
 	STD_D_8007AF88.x = screen.vx;
 	STD_D_8007AF88.y = screen.vy;
@@ -5723,18 +5723,18 @@ void STD_removeAllStunSubEffects(void)
 	int32_t i;
 
 	for (i = 0; i < 0x19; i++) {
-		STD_D_8007FD4C[i].frame = -1;
+		STD_STUN_SUB_EFFECTS[i].frame = -1;
 		removeObject(0x810, i);
 	}
 }
 
-int32_t STD_func_80078044(Entity *entity)
+int32_t STD_addStunSubEffect(Entity *entity)
 {
 	int32_t i;
 	EfeStunSpark *p;
 
 	for (i = 0; i < 0x19; i++) {
-		if (STD_D_8007FD4C[i].frame == -1) {
+		if (STD_STUN_SUB_EFFECTS[i].frame == -1) {
 			break;
 		}
 	}
@@ -5743,7 +5743,7 @@ int32_t STD_func_80078044(Entity *entity)
 		return -1;
 	}
 
-	p = &STD_D_8007FD4C[i];
+	p = &STD_STUN_SUB_EFFECTS[i];
 	p->frame = 0;
 	p->entity = entity;
 	addObject(0x810, i, STD_tickStunSubEffect, STD_renderStunSubEffect);
@@ -5755,7 +5755,7 @@ void STD_tickStunSubEffect(int32_t i)
 {
 	EfeStunSpark *p;
 
-	p = &STD_D_8007FD4C[i];
+	p = &STD_STUN_SUB_EFFECTS[i];
 	p->frame++;
 	if (p->frame >= 0x10) {
 		p->frame = -1;
@@ -5773,7 +5773,7 @@ void STD_renderStunSubEffect(int32_t i)
 	EfeStunSpark *p;
 	int32_t s;
 
-	p = &STD_D_8007FD4C[i];
+	p = &STD_STUN_SUB_EFFECTS[i];
 	pos.vx = p->entity->posData->location.vx;
 	pos.vy = lerp(-DIGIMON_DATA[p->entity->type].height * 113 / 100, p->entity->posData->location.vy, 0, 0xf, p->frame);
 	pos.vz = p->entity->posData->location.vz;
@@ -5782,11 +5782,11 @@ void STD_renderStunSubEffect(int32_t i)
 		s = lerp(s * 10 / 100, s, 0, 4, p->frame);
 	}
 
-	rot = MAIN_D_8013491C;
-	scale = STD_D_8007B018;
+	rot = STD_STUN_FX_ROTATION;
+	scale = STD_STUN_SUB_EFFECT_SCALE;
 	copyVector(&trans, &pos);
 	scale.vx = scale.vz = s;
-	renderTMDModel((uint8_t *)MAIN_D_801351CC, 0, &coord, NULL, &trans, &rot, &scale);
+	renderTMDModel((uint8_t *)STD_STUN_FX_MODEL, 0, &coord, NULL, &trans, &rot, &scale);
 }
 
 // clang-format off
@@ -5799,7 +5799,7 @@ int32_t STD_addStunEffect(entity, val)
 	EfeStun *p;
 
 	for (i = 0; i < 5; i++) {
-		if (STD_D_8007FD10[i].frame == -1) {
+		if (STD_STUN_EFFECTS[i].frame == -1) {
 			break;
 		}
 	}
@@ -5808,7 +5808,7 @@ int32_t STD_addStunEffect(entity, val)
 		return -1;
 	}
 
-	p = &STD_D_8007FD10[i];
+	p = &STD_STUN_EFFECTS[i];
 	p->frame = 0;
 	p->duration = val;
 	p->state = 0;
@@ -5822,7 +5822,7 @@ void STD_removeStunEffect(int32_t i, Entity *entity)
 {
 	EfeStun *p;
 
-	p = &STD_D_8007FD10[i];
+	p = &STD_STUN_EFFECTS[i];
 	if ((i >= 0) && (i < 5) && (p->entity == entity)) {
 		p->frame = -1;
 		removeObject(0x80f, i);
@@ -5835,7 +5835,7 @@ void STD_removeAllStunEffects(void)
 
 	STD_removeAllStunSubEffects();
 	for (i = 0; i < 5; i++) {
-		STD_D_8007FD10[i].frame = -1;
+		STD_STUN_EFFECTS[i].frame = -1;
 		removeObject(0x80f, i);
 	}
 }
@@ -5901,7 +5901,7 @@ void STD_tickFinisherAura(int32_t i)
 	EfeFinisherAura *p;
 	Entity *entity;
 
-	p = &STD_D_8007FE14[i];
+	p = &STD_FINISHER_AURAS[i];
 	entity = p->entity;
 	p->frame++;
 	if (p->frame > p->duration) {
@@ -5923,7 +5923,7 @@ void STD_renderFinisherAura(int32_t id)
 	Entity *e;
 	int32_t sy;
 
-	fa = &STD_D_8007FE14[id];
+	fa = &STD_FINISHER_AURAS[id];
 	e = fa->entity;
 
 	if (fa->frame < 10) {
@@ -5943,35 +5943,35 @@ void STD_renderFinisherAura(int32_t id)
 	sy = sy * DIGIMON_DATA[e->type].height / 350;
 	sy = sy * 85 / 100 + sy * 15 / 100 * _sin(t) / 0x1000;
 
-	rot = MAIN_D_8013492C;
-	scale = STD_D_8007B048;
+	rot = STD_FINISHER_AURA_ROTATION;
+	scale = STD_FINISHER_AURA_SCALE;
 	copyVector(&trans, &e->posData->location);
 	scale.vx = scale.vz = sx;
 	scale.vy = sy;
-	renderTMDModel(*(uint8_t **)&MAIN_D_801351D0, MAIN_D_80134924[fa->frame / 2 % 3], &coord, NULL, &trans, &rot, &scale);
-	renderTMDModel(*(uint8_t **)&MAIN_D_801351D0, 3, &coord, NULL, &trans, &rot, &scale);
+	renderTMDModel(*(uint8_t **)&STD_FINISHER_AURA_MODEL, STD_FINISHER_AURA_OBJECTS[fa->frame / 2 % 3], &coord, NULL, &trans, &rot, &scale);
+	renderTMDModel(*(uint8_t **)&STD_FINISHER_AURA_MODEL, 3, &coord, NULL, &trans, &rot, &scale);
 	rot.vy = rand();
 	scale.vx = scale.vz = sx * 140 / 100;
-	renderTMDModel(*(uint8_t **)&MAIN_D_801351D0, 4, &coord, NULL, &trans, &rot, &scale);
+	renderTMDModel(*(uint8_t **)&STD_FINISHER_AURA_MODEL, 4, &coord, NULL, &trans, &rot, &scale);
 
 	if (fa->frame < 7) {
 		RGB8 col;
 		int32_t i;
 		int32_t s;
 
-		col = MAIN_D_80134934;
+		col = STD_FINISHER_AURA_COLOR;
 		s = fa->frame * 0x1000 / 7;
 		s = s * DIGIMON_DATA[e->type].radius / 150;
 		col.r = (uint32_t)col.r * (7 - fa->frame) / 7;
 		col.g = (uint32_t)col.g * (7 - fa->frame) / 7;
 		col.b = (uint32_t)col.b * (7 - fa->frame) / 7;
 		for (i = 0; i < 20; i += 2) {
-			STD_func_80078BBC(&e->posData->location, s, &STD_D_8007FE24[i], (uint8_t *)&col);
+			STD_renderFinisherAuraSpark(&e->posData->location, s, &STD_FINISHER_AURA_SPARKS[i], (uint8_t *)&col);
 		}
 	}
 }
 
-void STD_func_80078BBC(VECTOR *pos, int32_t scale, SVECTOR *dir, uint8_t *col)
+void STD_renderFinisherAuraSpark(VECTOR *pos, int32_t scale, SVECTOR *dir, uint8_t *col)
 {
 	POLY_FT3 *prim;
 	SVECTOR c;
@@ -6024,21 +6024,21 @@ void STD_initializeFinisherAuraModel(char *tim, char *base)
 		GetClut(image.cx, image.cy);
 	}
 
-	MAIN_D_801351D0 = (int32_t)base;
-	GsMapModelingData((unsigned long *)((char *)MAIN_D_801351D0 + 4));
+	STD_FINISHER_AURA_MODEL = (int32_t)base;
+	GsMapModelingData((unsigned long *)((char *)STD_FINISHER_AURA_MODEL + 4));
 	ca = STD_D_8007B028;
 	cb = STD_D_8007B038;
-	STD_setTMDObjectColor(0, (int32_t *)&ca, MAIN_D_801351D0);
-	STD_setTMDObjectColor(1, (int32_t *)&ca, MAIN_D_801351D0);
-	STD_setTMDObjectColor(2, (int32_t *)&ca, MAIN_D_801351D0);
-	STD_setTMDObjectColor(3, (int32_t *)&cb, MAIN_D_801351D0);
-	STD_setTMDObjectColor(4, (int32_t *)&ca, MAIN_D_801351D0);
+	STD_setTMDObjectColor(0, (int32_t *)&ca, STD_FINISHER_AURA_MODEL);
+	STD_setTMDObjectColor(1, (int32_t *)&ca, STD_FINISHER_AURA_MODEL);
+	STD_setTMDObjectColor(2, (int32_t *)&ca, STD_FINISHER_AURA_MODEL);
+	STD_setTMDObjectColor(3, (int32_t *)&cb, STD_FINISHER_AURA_MODEL);
+	STD_setTMDObjectColor(4, (int32_t *)&ca, STD_FINISHER_AURA_MODEL);
 
 	for (j = 0; j < 2; j++) {
-		STD_D_8007FE14[j].frame = -1;
+		STD_FINISHER_AURAS[j].frame = -1;
 	}
 
-	p = STD_D_8007FE24;
+	p = STD_FINISHER_AURA_SPARKS;
 	for (i = 0; i < 0xa; i++) {
 		v.vx = (rand() % 30) + 30;
 		v.vy = 0;
@@ -6059,7 +6059,7 @@ int32_t STD_addFinisherAura(Entity *entity, int32_t duration)
 	EfeFinisherAura *p;
 
 	for (i = 0; i < 2; i++) {
-		if (STD_D_8007FE14[i].frame < 0) {
+		if (STD_FINISHER_AURAS[i].frame < 0) {
 			break;
 		}
 	}
@@ -6068,7 +6068,7 @@ int32_t STD_addFinisherAura(Entity *entity, int32_t duration)
 		return -1;
 	}
 
-	p = &STD_D_8007FE14[i];
+	p = &STD_FINISHER_AURAS[i];
 	p->frame = 0;
 	p->duration = duration;
 	p->entity = entity;
@@ -6080,10 +6080,10 @@ int32_t STD_addFinisherAura(Entity *entity, int32_t duration)
 void STD_removeFinisherAura(int32_t i)
 {
 	removeObject(0x80d, i);
-	STD_D_8007FE14[i].frame = -1;
+	STD_FINISHER_AURAS[i].frame = -1;
 }
 
-void STD_func_800791E0(void)
+void STD_removeAllFinisherAuras(void)
 {
 	int32_t i;
 
@@ -6099,7 +6099,7 @@ void STD_tickAuraProjectile(int32_t id)
 	int32_t hit;
 	int32_t j;
 
-	a = &MAIN_D_801351D4[id];
+	a = &STD_FLAT_BULLET_PTR[id];
 	a->frame++;
 	if (a->frame >= 0x3a) {
 		a->frame = -1;
@@ -6141,16 +6141,16 @@ void STD_renderAuraProjectile(int32_t i)
 	EfeAura *aura;
 	POLY_FT4 *prim;
 
-	aura = &MAIN_D_801351D4[i];
+	aura = &STD_FLAT_BULLET_PTR[i];
 	prim = (POLY_FT4 *)GsGetWorkBase();
 #if defined(VERSION_JP)
-	scale = STD_D_80085C78;
+	scale = STD_AURA_PROJECTILE_SCALE;
 #endif
 	RotMatrix(&aura->rotation, &m);
-	ApplyMatrixSV(&m, &MAIN_D_80134938, &a);
-	ApplyMatrixSV(&m, &MAIN_D_80134940, &b);
-	ApplyMatrixSV(&m, &MAIN_D_80134948, &c);
-	ApplyMatrixSV(&m, &MAIN_D_80134950, &d);
+	ApplyMatrixSV(&m, &STD_AURA_PROJECTILE_VERTEX_0, &a);
+	ApplyMatrixSV(&m, &STD_AURA_PROJECTILE_VERTEX_1, &b);
+	ApplyMatrixSV(&m, &STD_AURA_PROJECTILE_VERTEX_2, &c);
+	ApplyMatrixSV(&m, &STD_AURA_PROJECTILE_VERTEX_3, &d);
 	addVector(&a, &aura->position);
 	addVector(&b, &aura->position);
 	addVector(&c, &aura->position);
@@ -6169,10 +6169,10 @@ char *STD_initializeAuraProjectiles(char *base)
 	int32_t i;
 
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
-	MAIN_D_801351D4 = (EfeAura *)base;
+	STD_FLAT_BULLET_PTR = (EfeAura *)base;
 	base = (char *)((int32_t)base + 0x120);
 	for (i = 0; i < 8; i++) {
-		MAIN_D_801351D4[i].frame = -1;
+		STD_FLAT_BULLET_PTR[i].frame = -1;
 	}
 
 	return base;
@@ -6185,9 +6185,9 @@ int32_t STD_addAuraProjectile(Entity *e)
 	EfeAuraType *type;
 	MATRIX *q;
 
-	aura = MAIN_D_801351D4;
-	type = STD_D_8007B058;
-	type = &STD_D_8007B058[getOriginalType(e->type)];
+	aura = STD_FLAT_BULLET_PTR;
+	type = STD_AURA_PROJECTILE_TYPES;
+	type = &STD_AURA_PROJECTILE_TYPES[getOriginalType(e->type)];
 	for (i = 0; i < 8; i++) {
 		if (aura[i].frame < 0) {
 			break;
@@ -6222,13 +6222,13 @@ int32_t STD_addAuraProjectile(Entity *e)
 	return i;
 }
 
-void STD_func_80079874(void)
+void STD_removeAllAuraProjectiles(void)
 {
 	int32_t i;
 
 	for (i = 0; i < 8; i++) {
-		if (MAIN_D_801351D4[i].frame >= 0) {
-			MAIN_D_801351D4[i].frame = -1;
+		if (STD_FLAT_BULLET_PTR[i].frame >= 0) {
+			STD_FLAT_BULLET_PTR[i].frame = -1;
 			removeObject(0x179, (int16_t)i);
 		}
 	}

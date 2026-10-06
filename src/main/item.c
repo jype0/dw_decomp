@@ -4621,7 +4621,7 @@ void handleStatusItems(int32_t itemId)
 			handleDoubleFloppy(itemId);
 			return;
 		case 10:
-			COMBAT_DATA_PTR->fighter[0].flags |= 0x100;
+			COMBAT_DATA_PTR->fighter[0].flags |= FIGHTER_FLAG_PROTECTED;
 			break;
 		case 0xd:
 			if (handleMedicineHealing(3, 2) == 1) {

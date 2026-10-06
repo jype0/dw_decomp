@@ -197,7 +197,7 @@ int16_t DIRECTIONS[4] = {
 	0x0000, 0x0400, 0x0800, 0x0c00,
 };
 
-char MAIN_D_80134518[] = "与えた";
+char VS__STR_ATAETA[] = "与えた";
 
 uint8_t VS__COMMANDS[8] = {
 	0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x00,
@@ -287,10 +287,10 @@ void VS__combatInit(void)
 		fighter->cooldown = 0;
 		fighter->finisherProgress = 0;
 		fighter->statusFxId = -1;
-		fighter->unk11 = -1;
+		fighter->activeEffectSlot = -1;
 		fighter->speedBuffer = 100;
 		fighter->unk15 = 0;
-		fighter->unk16 = 0;
+		fighter->hasCollidedWhileDistanceCmd = 0;
 
 		if (stats->base.brain < 400) {
 			fighter->buffsRemaining = stats->base.brain / 100 + 1;
@@ -772,22 +772,22 @@ void VS__tickBattle(void)
 		} else {
 			target = NULL;
 		}
-		if (*flags & 0x20) {
+		if (*flags & FIGHTER_FLAG_ATTACKING) {
 			VS__tickDigimonAttacking(&entity->entity, target, i);
-		} else if ((*flags & 0x10) || (*flags & 0x80)) {
+		} else if ((*flags & FIGHTER_FLAG_KNOCKED_BACK) || (*flags & FIGHTER_FLAG_BLOCKING)) {
 			VS__tickDigimonHitByAttack(&entity->entity, fighter, i);
 		} else if (fighter->moveRange != -1) {
-			if (*flags & 8) {
+			if (*flags & FIGHTER_FLAG_FLATTENED) {
 				VS__tickDigimonFlat(entity, target, fighter, i);
-			} else if (*flags & 4) {
+			} else if (*flags & FIGHTER_FLAG_STUNNED) {
 				VS__tickDigimonStun(&entity->entity);
-			} else if (*flags & 2) {
+			} else if (*flags & FIGHTER_FLAG_CONFUSED) {
 				VS__tickDigimonConfusion(entity, target, fighter, i);
-			} else if (*flags & 0x2000) {
+			} else if (*flags & FIGHTER_FLAG_SENILE) {
 				VS__tickDigimonSenile(entity, fighter);
-			} else if (*flags & 0x800) {
+			} else if (*flags & FIGHTER_FLAG_ON_CHARGEUP) {
 				VS__tickDigimonOnChargeup(entity, target, fighter);
-			} else if (*flags & 0x1000) {
+			} else if (*flags & FIGHTER_FLAG_ON_COOLDOWN) {
 				VS__tickDigimonOnCooldown(entity, target, fighter);
 			} else {
 				VS__tickDigimonOther(entity, target, fighter, i);
@@ -812,10 +812,10 @@ void VS__tickBattle(void)
 	}
 
 	for (i = 0; ENEMY_COUNT >= i; i++) {
-		if (COMBAT_DATA_PTR->fighter[i].flags & 0x20) {
+		if (COMBAT_DATA_PTR->fighter[i].flags & FIGHTER_FLAG_ATTACKING) {
 			break;
 		}
-		if (COMBAT_DATA_PTR->fighter[i].flags & 0x10) {
+		if (COMBAT_DATA_PTR->fighter[i].flags & FIGHTER_FLAG_KNOCKED_BACK) {
 			break;
 		}
 		if (VS_CAMERA_STATE == 7) {
@@ -1005,7 +1005,7 @@ void VS__resetFlatten(int16_t combatId)
 	fighter = &COMBAT_DATA_PTR->fighter[combatId];
 
 	entity->flatSprite = -1;
-	fighter->flags &= 0xfff7;
+	fighter->flags &= ~FIGHTER_FLAG_FLATTENED;
 	fighter->flatTimer = 0;
 	entity->posData->scale.vx = 0x1000;
 	entity->posData->scale.vy = 0x1000;
@@ -1111,11 +1111,11 @@ void VS__addTimeoutWindow(void)
 	RegisteredDigimon *fighter1;
 	RegisteredDigimon *fighter2;
 
-	fighter1 = &VS_DIGIMON_P1_PTR[VS_D_800716A8.fighters[0][VS_CURRENT_BATTLE]];
-	fighter2 = &VS_DIGIMON_P2_PTR[VS_D_800716A8.fighters[1][VS_CURRENT_BATTLE]];
+	fighter1 = &VS_DIGIMON_P1_PTR[VS_BATTLE_SETUP.fighters[0][VS_CURRENT_BATTLE]];
+	fighter2 = &VS_DIGIMON_P2_PTR[VS_BATTLE_SETUP.fighters[1][VS_CURRENT_BATTLE]];
 
 	clearTextArea();
-	drawString(MAIN_D_80134518, 6, 0);
+	drawString(VS__STR_ATAETA, 6, 0);
 	drawString(STR_DAMEEJI, 0, 12);
 	drawString(fighter1->name, (120 - (strlen(fighter1->name) * 6)) / 2, 24);
 	drawString(fighter2->name, (120 - (strlen(fighter2->name) * 6)) / 2, 36);
@@ -1135,14 +1135,14 @@ void VS__faintDigimon(DigimonEntity *entity, FighterData *fighter,
                       int16_t fighterId)
 {
 	entity->stats.current.isHit = 1;
-	fighter->flags |= 0x8000;
+	fighter->flags |= FIGHTER_FLAG_DEAD;
 
 	startAnimation(&entity->entity, 0x2b);
 	VS__resetFlatten(fighterId);
 	VS_removeStatusEffects(entity, fighter);
 
-	fighter->flags &= 0xff40;
-	fighter->flags |= 0x40;
+	fighter->flags &= ~(FIGHTER_FLAG_POISONED | FIGHTER_FLAG_CONFUSED | FIGHTER_FLAG_STUNNED | FIGHTER_FLAG_FLATTENED | FIGHTER_FLAG_KNOCKED_BACK | FIGHTER_FLAG_ATTACKING | FIGHTER_FLAG_BLOCKING);
+	fighter->flags |= FIGHTER_FLAG_TRANSFORMING;
 	fighter->moveRange = -1;
 
 	VS_resetFighterAction(fighter);
@@ -1215,7 +1215,7 @@ void VS__tickDigimonFlat(DigimonEntity *entity, DigimonEntity *other,
 
 	VS__tickDigimonAttackRanged(entity, other, data, 0x79);
 
-	if ((data->flags & 0x20) != 0) {
+	if ((data->flags & FIGHTER_FLAG_ATTACKING) != 0) {
 		entity->entity.flatSprite = 2;
 	}
 }
@@ -1237,13 +1237,13 @@ void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
 		return;
 	}
 
-	if ((data->flags & 0x1000) != 0 &&
-	    ((data->flags & 0x1000) != 0 || (data->flags & 0x800) != 0)) {
+	if ((data->flags & FIGHTER_FLAG_ON_COOLDOWN) != 0 &&
+	    ((data->flags & FIGHTER_FLAG_ON_COOLDOWN) != 0 || (data->flags & FIGHTER_FLAG_ON_CHARGEUP) != 0)) {
 		VS__confusedRotate(&entity->entity);
 		VS__setWalking(&entity->entity, &entity->stats, data->flags);
 		collisionGrace(NULL, &entity->entity, 280, 200);
 		if (data->cooldown < 2) {
-			data->flags &= 0xefff;
+			data->flags &= ~FIGHTER_FLAG_ON_COOLDOWN;
 			data->cooldown = 0;
 		}
 	} else if (other == NULL) {
@@ -1252,7 +1252,7 @@ void VS__tickDigimonConfusion(DigimonEntity *entity, DigimonEntity *other,
 			collisionGrace(NULL, &entity->entity, 280, 200);
 		}
 
-		if ((data->flags & 0x20) != 0) {
+		if ((data->flags & FIGHTER_FLAG_ATTACKING) != 0) {
 			return;
 		}
 
@@ -1286,7 +1286,7 @@ void VS__tickDigimonSenile(DigimonEntity *entity, FighterData *data)
 {
 	data->senileTimer--;
 	if (data->senileTimer == 0) {
-		data->flags &= 0xdfbf;
+		data->flags &= ~(FIGHTER_FLAG_TRANSFORMING | FIGHTER_FLAG_SENILE);
 	} else {
 		handleBattleIdle(entity, &entity->stats, data->flags);
 	}
@@ -1315,7 +1315,7 @@ void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
 				                 data->flags);
 				entityLookAtLocation(&entity->entity,
 				                     &other->entity.posData->location);
-				data->unk16 = 0;
+				data->hasCollidedWhileDistanceCmd = 0;
 				break;
 			case 2:
 				VS__setWalking(&entity->entity, &entity->stats,
@@ -1326,7 +1326,7 @@ void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
 		}
 
 		if (data->cooldown < 2) {
-			data->flags &= 0xf7bf;
+			data->flags &= ~(FIGHTER_FLAG_TRANSFORMING | FIGHTER_FLAG_ON_CHARGEUP);
 			data->cooldown = 0;
 		}
 	} else if (result == 0) {
@@ -1335,9 +1335,9 @@ void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
 			handleBattleIdle(entity, &entity->stats, data->flags);
 			entityLookAtLocation(&entity->entity,
 			                     &other->entity.posData->location);
-			data->unk16 = 0;
+			data->hasCollidedWhileDistanceCmd = 0;
 			if (data->speedBuffer > 0) {
-				data->flags &= 0xf7ff;
+				data->flags &= ~FIGHTER_FLAG_ON_CHARGEUP;
 			}
 			break;
 		case 1:
@@ -1346,7 +1346,7 @@ void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
 			                                      data->queuedAnim);
 			if (data->speedBuffer == 100 ||
 			    data->speedBuffer >= MOVE_DATA[tech].power) {
-				data->flags &= 0xf7ff;
+				data->flags &= ~FIGHTER_FLAG_ON_CHARGEUP;
 			}
 			break;
 		case 2:
@@ -1354,7 +1354,7 @@ void VS__tickDigimonOnChargeup(DigimonEntity *entity, DigimonEntity *other,
 			               data->flags);
 			VS__tickDigimonRotateKeepDistance(entity, other, data);
 			if (data->speedBuffer == 100) {
-				data->flags &= 0xf7ff;
+				data->flags &= ~FIGHTER_FLAG_ON_CHARGEUP;
 			}
 			break;
 		}
@@ -1381,7 +1381,7 @@ void VS__tickDigimonOnCooldown(DigimonEntity *entity, DigimonEntity *other,
 	}
 
 	if (data->cooldown < 2) {
-		data->flags &= 0xefbf;
+		data->flags &= ~(FIGHTER_FLAG_TRANSFORMING | FIGHTER_FLAG_ON_COOLDOWN);
 		data->cooldown = 0;
 	}
 }
@@ -1438,7 +1438,7 @@ int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
 		handleBattleIdle(entity, &entity->stats, data->flags);
 		entityLookAtLocation(&entity->entity,
 		                     &ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[data->targetId]]->posData->location);
-		data->unk16 = 0;
+		data->hasCollidedWhileDistanceCmd = 0;
 
 		return 1;
 	case 5:
@@ -1452,7 +1452,7 @@ int32_t VS__tickDigimonHoldDistance(DigimonEntity *entity, DigimonEntity *other,
 			VS__setWalking(&entity->entity, &entity->stats, data->flags);
 			VS__tickDigimonRotateKeepDistance(entity, other, data);
 		} else {
-			data->unk16 = 0;
+			data->hasCollidedWhileDistanceCmd = 0;
 			handleBattleIdle(entity, &entity->stats, data->flags);
 			entityLookAtLocation(&entity->entity,
 			                     &other->entity.posData->location);
@@ -1511,7 +1511,7 @@ int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
 				return 0;
 			}
 			startAnimation(&entity->entity, data->queuedAnim);
-			data->flags |= 0x20;
+			data->flags |= FIGHTER_FLAG_ATTACKING;
 			VS_playMoveEffect(entity, other, data);
 			return 0;
 		}
@@ -1529,7 +1529,7 @@ int32_t VS__tickDigimonAttackClose(DigimonEntity *entity, DigimonEntity *other,
 			return 0;
 		}
 		startAnimation(&entity->entity, data->queuedAnim);
-		data->flags |= 0x20;
+		data->flags |= FIGHTER_FLAG_ATTACKING;
 		VS_playMoveEffect(entity, other, data);
 		return 0;
 	}
@@ -1555,7 +1555,7 @@ void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
 
 		++data->unk15;
 		if (data->unk15 > 160) {
-			data->flags &= 0xffbf;
+			data->flags &= ~FIGHTER_FLAG_TRANSFORMING;
 			data->unk15 = 0;
 		}
 
@@ -1585,7 +1585,7 @@ void VS__tickDigimonAttackRanged(DigimonEntity *entity, DigimonEntity *other,
 
 		handleBattleIdle(entity, &entity->stats, data->flags);
 
-		if ((data->flags & 8) != 0) {
+		if ((data->flags & FIGHTER_FLAG_FLATTENED) != 0) {
 			if (BATTLE_FRAME_COUNT % 40 == 0) {
 				VS_startFighterMove(entity, other, data);
 			} else {
@@ -1645,12 +1645,12 @@ void VS__tickDigimonRotateKeepDistance(DigimonEntity *entity, DigimonEntity *oth
 	entityLookAtLocation(&entity->entity, &other->entity.posData->location);
 	away = (*rot + 0x800) & 0xfff;
 
-	if (data->unk16 == 0) {
+	if (data->hasCollidedWhileDistanceCmd == 0) {
 		*rot = away;
 
 		hit = entityCheckCollision(NULL, &entity->entity, 280, 200);
 		if (hit != -1) {
-			data->unk16 = 1;
+			data->hasCollidedWhileDistanceCmd = 1;
 			VS__tickDigimonRotationKeepDistanceCollision(&entity->entity, rot, hit, orig);
 		}
 
@@ -1749,7 +1749,7 @@ void VS__tickDigimonAttackingLogic(int32_t fighterId)
 		entity->entity.anim.animFlag &= 5;
 	}
 
-	if ((fighter->flags & 0x28) == 0x28) {
+	if ((fighter->flags & (FIGHTER_FLAG_FLATTENED | FIGHTER_FLAG_ATTACKING)) == 0x28) {
 		--fighter->flatAttackTimer;
 		switch (fighter->flatAttackTimer) {
 		case 28:
@@ -1773,44 +1773,44 @@ void VS__tickDigimonAttackingLogic(int32_t fighterId)
 		FINISHING_ENTITY = NULL;
 	}
 
-	fighter->unk16 = 0;
+	fighter->hasCollidedWhileDistanceCmd = 0;
 
-	if (fighter->flags & 0x20) {
+	if (fighter->flags & FIGHTER_FLAG_ATTACKING) {
 		if (fighterId == 0) {
 			++COMBAT_DATA_PTR->player.hitCount;
 		}
 
-		fighter->flags &= 0xfbff;
-		fighter->flags |= 0x1000;
+		fighter->flags &= ~FIGHTER_FLAG_10;
+		fighter->flags |= FIGHTER_FLAG_ON_COOLDOWN;
 		fighter->cooldown = 40;
 
 		VS_addFinisherProgress(fighter, fighter->finisherGoal * 2 / 50);
 	}
 
 	if (fighter->invulnerableTimer <= 0) {
-		if (fighter->flags & 0x8) {
+		if (fighter->flags & FIGHTER_FLAG_FLATTENED) {
 			entity->entity.flatSprite = 0;
 		}
 
-		if ((fighter->flags & 0x20) == 0) {
+		if ((fighter->flags & FIGHTER_FLAG_ATTACKING) == 0) {
 			entity->stats.current.isHit = 0;
 		}
 
-		if (fighter->flags & 0x80) {
-			fighter->flags &= 0xff7f;
+		if (fighter->flags & FIGHTER_FLAG_BLOCKING) {
+			fighter->flags &= ~FIGHTER_FLAG_BLOCKING;
 			VS__clearFighterDataTables(fighter);
 		} else {
-			fighter->flags &= 0xff0f;
+			fighter->flags &= ~(FIGHTER_FLAG_KNOCKED_BACK | FIGHTER_FLAG_ATTACKING | FIGHTER_FLAG_TRANSFORMING | FIGHTER_FLAG_BLOCKING);
 		}
 	}
 
-	if ((fighter->flags & 0x10) == 0) {
+	if ((fighter->flags & FIGHTER_FLAG_KNOCKED_BACK) == 0) {
 		if (fighter->flatTimer == -1) {
 			fighter->flatTimer = 0x41;
 		}
 	} else {
 		fighter->senileTimer = 0;
-		fighter->flags &= 0xdfff;
+		fighter->flags &= ~FIGHTER_FLAG_SENILE;
 	}
 }
 
@@ -1860,7 +1860,7 @@ void VS__tickDigimonMaintainDistance(DigimonEntity *entity, DigimonEntity *other
 		VS__tickDigimonAttackLookAtTarget(entity, &other->entity.posData->location,
 		                                  280, 200);
 	} else {
-		data->unk16 = 0;
+		data->hasCollidedWhileDistanceCmd = 0;
 		handleBattleIdle(entity, &entity->stats, data->flags);
 		entityLookAtLocation(&entity->entity,
 		                     &other->entity.posData->location);

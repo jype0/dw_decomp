@@ -41,7 +41,7 @@ extern char BTL_STR_MP_BONUS_PERCENT[];
 extern char BTL_STR_REDUCED_BY[];
 #endif
 extern char BTL_STR_LEARNED[];
-extern MATRIX BTL_D_80072FF4;
+extern MATRIX BTL_BATTLE_START_TEXT_MATRIX;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
@@ -121,10 +121,10 @@ char BTL_STR_COMMAND_RUN[] = "Run";
 char BTL_STR_COMMAND_ATTACK[] = "Attack";
 char BTL_STR_COMMAND_CHANGE[] = "Change";
 #endif
-uint8_t MAIN_D_80134728[5] = { 0, 11, 25, 39, 50 };
-uint8_t MAIN_D_80134730[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
-uint8_t MAIN_D_80134738[4] = { 0x50, 0x68, 0x58, 0x68 };
-uint8_t MAIN_D_8013473C[4] = { 0xa8, 0x90, 0x90, 0x80 };
+uint8_t BTL_COMMAND_LABEL_U[5] = { 0, 11, 25, 39, 50 };
+uint8_t BTL_COMMAND_LABEL_W[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
+uint8_t BTL_DEATH_COUNTDOWN_DIGIT_U[4] = { 0x50, 0x68, 0x58, 0x68 };
+uint8_t BTL_DEATH_COUNTDOWN_DIGIT_V[4] = { 0xa8, 0x90, 0x90, 0x80 };
 #if defined(VERSION_JP)
 char BTL_STR_YELLOW[] = "C7";
 char BTL_STR_DROPPED[] = "C1はRC7";
@@ -141,12 +141,12 @@ char BTL_STR_MP_BONUS_10[] = "10";
 char BTL_STR_MP_BONUS_5[] = "5";
 char BTL_STR_MP_BONUS_PERCENT[] = "%!#W";
 #endif
-uint8_t MAIN_D_80134764[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
-uint8_t MAIN_D_8013476C[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
-uint8_t MAIN_D_80134774[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t BTL_FINISHER_SEGMENT_U[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
+uint8_t BTL_FINISHER_SEGMENT_W[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
+uint8_t BTL_FINISHER_SEGMENT_X[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
 
-int16_t MAIN_D_80135090[2];
-int8_t MAIN_D_80135094;
+int16_t BTL_FINISHER_CHARGEUP_POS[2];
+int8_t BTL_COMMAND_MENU_ACTIVE;
 int32_t BATTLE_END_TYPING;
 RECT BATTLE_END_BOX;
 uint8_t *BATTLE_END_CURSOR;
@@ -159,28 +159,28 @@ int16_t BATTLE_END_ROWS_DRAWN;
 int16_t BATTLE_END_VISIBLE_ROWS;
 int16_t BATTLE_END_WAIT_FRAMES;
 int16_t BATTLE_END_WAIT_TIMER;
-uint8_t MAIN_D_801350BC[4];
-int32_t MAIN_D_801350C0;
-uint8_t MAIN_D_801350C4;
-uint8_t MAIN_D_801350C5;
-uint8_t MAIN_D_801350C6;
-uint8_t MAIN_D_801350C7;
-uint8_t MAIN_D_801350C8;
-uint8_t MAIN_D_801350C9;
-uint8_t MAIN_D_801350CA;
-uint8_t MAIN_D_801350CB;
+uint8_t BTL_BATTLE_START_TEXT_TIMER[4];
+int32_t BTL_BATTLE_TEXT_FINISHED;
+uint8_t BTL_STATUS_BARS_STEP;
+uint8_t BTL_FINISHER_FULL_FRAMES;
+uint8_t BTL_FINISHER_PULSE_FRAME;
+uint8_t BTL_FINISHER_BRIGHTNESS;
+uint8_t BTL_FINISHER_SEGMENTS;
+uint8_t BTL_FINISHER_READY;
+uint8_t BTL_MP_BAR_STEP;
+uint8_t BTL_HP_BAR_STEP;
 
 static void *battle_hud_sbss_order[] = {
-	&MAIN_D_801350CB,
-	&MAIN_D_801350CA,
-	&MAIN_D_801350C9,
-	&MAIN_D_801350C8,
-	&MAIN_D_801350C7,
-	&MAIN_D_801350C6,
-	&MAIN_D_801350C5,
-	&MAIN_D_801350C4,
-	&MAIN_D_801350C0,
-	MAIN_D_801350BC,
+	&BTL_HP_BAR_STEP,
+	&BTL_MP_BAR_STEP,
+	&BTL_FINISHER_READY,
+	&BTL_FINISHER_SEGMENTS,
+	&BTL_FINISHER_BRIGHTNESS,
+	&BTL_FINISHER_PULSE_FRAME,
+	&BTL_FINISHER_FULL_FRAMES,
+	&BTL_STATUS_BARS_STEP,
+	&BTL_BATTLE_TEXT_FINISHED,
+	BTL_BATTLE_START_TEXT_TIMER,
 #if defined(VERSION_JP)
 	&BATTLE_END_WAIT_TIMER,
 	&BATTLE_END_WAIT_FRAMES,
@@ -206,8 +206,8 @@ static void *battle_hud_sbss_order[] = {
 #endif
 	&BATTLE_END_BOX,
 	&BATTLE_END_TYPING,
-	&MAIN_D_80135094,
-	&MAIN_D_80135090,
+	&BTL_COMMAND_MENU_ACTIVE,
+	&BTL_FINISHER_CHARGEUP_POS,
 };
 
 // clang-format off
@@ -244,7 +244,7 @@ int8_t BTL_SHOUT_DROP_OFFSETS[20] = {
 	31, 32, 34, 36,
 };
 
-uint8_t BTL_D_80072E7C[6][10] = {
+uint8_t BTL_COMMAND_MENU_LAYOUTS[6][10] = {
 	{ 0x00, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
 	{ 0x00, 0x01, 0x02, 0x04, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
 	{ 0x00, 0x01, 0x02, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff },
@@ -253,15 +253,15 @@ uint8_t BTL_D_80072E7C[6][10] = {
 	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff },
 };
 
-int16_t BTL_D_80072EB8[8] = {
+int16_t BTL_COMMAND_MENU_SLIDE_Y[8] = {
 	0xff88, 0xff96, 0xffa2, 0xffac, 0xffb3, 0xffb8, 0xffbb, 0xffbc,
 };
 
-int16_t BTL_D_80072EC8[8] = {
+int16_t BTL_COMMAND_MENU_SLIDE_X[8] = {
 	0xff68, 0xff69, 0xff6c, 0xff71, 0xff78, 0xff82, 0xff8e, 0xff9c,
 };
 
-uint8_t BTL_D_80072ED8[8][2] = {
+uint8_t BTL_COMMAND_ICON_UVS[8][2] = {
 	{ 0x00, 0xc0 },
 	{ 0x20, 0xc0 },
 	{ 0x40, 0xc0 },
@@ -272,7 +272,7 @@ uint8_t BTL_D_80072ED8[8][2] = {
 	{ 0x00, 0x00 },
 };
 
-uint8_t BTL_D_80072EE8[8][2] = {
+uint8_t BTL_SPECIAL_ICON_UVS[8][2] = {
 	{ 0x00, 0xd0 },
 	{ 0x20, 0xd0 },
 	{ 0x40, 0xd0 },
@@ -295,7 +295,7 @@ const int8_t BTL_SHOUT_DROP_OFFSETS[20] = {
 	31, 32, 34, 36,
 };
 
-const uint8_t BTL_D_80072E7C[6][10] = {
+const uint8_t BTL_COMMAND_MENU_LAYOUTS[6][10] = {
 	{ 0x00, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
 	{ 0x00, 0x01, 0x02, 0x04, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
 	{ 0x00, 0x01, 0x02, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff },
@@ -304,15 +304,15 @@ const uint8_t BTL_D_80072E7C[6][10] = {
 	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff },
 };
 
-const int16_t BTL_D_80072EB8[8] = {
+const int16_t BTL_COMMAND_MENU_SLIDE_Y[8] = {
 	0xff88, 0xff96, 0xffa2, 0xffac, 0xffb3, 0xffb8, 0xffbb, 0xffbc,
 };
 
-const int16_t BTL_D_80072EC8[8] = {
+const int16_t BTL_COMMAND_MENU_SLIDE_X[8] = {
 	0xff68, 0xff69, 0xff6c, 0xff71, 0xff78, 0xff82, 0xff8e, 0xff9c,
 };
 
-const uint8_t BTL_D_80072ED8[8][2] = {
+const uint8_t BTL_COMMAND_ICON_UVS[8][2] = {
 	{ 0x00, 0xc0 },
 	{ 0x20, 0xc0 },
 	{ 0x40, 0xc0 },
@@ -323,7 +323,7 @@ const uint8_t BTL_D_80072ED8[8][2] = {
 	{ 0x00, 0x00 },
 };
 
-const uint8_t BTL_D_80072EE8[8][2] = {
+const uint8_t BTL_SPECIAL_ICON_UVS[8][2] = {
 	{ 0x00, 0xd0 },
 	{ 0x20, 0xd0 },
 	{ 0x40, 0xd0 },
@@ -375,23 +375,23 @@ void BTL_initializeFinisherChargeup(void)
 	v.vz = loc->vz;
 	gte_ldv0(&v);
 	gte_rtps();
-	gte_stsxy((int32_t *)MAIN_D_80135090);
-	MAIN_D_80135090[0] = (int16_t)MAIN_D_80135090[0] - (0xb7 - DRAWING_OFFSET_X);
-	MAIN_D_80135090[1] = (int16_t)MAIN_D_80135090[1] - (0x8c - DRAWING_OFFSET_Y);
-	if (MAIN_D_80135090[0] >= 0x65) {
-		MAIN_D_80135090[0] = 0x64;
+	gte_stsxy((int32_t *)BTL_FINISHER_CHARGEUP_POS);
+	BTL_FINISHER_CHARGEUP_POS[0] = (int16_t)BTL_FINISHER_CHARGEUP_POS[0] - (0xb7 - DRAWING_OFFSET_X);
+	BTL_FINISHER_CHARGEUP_POS[1] = (int16_t)BTL_FINISHER_CHARGEUP_POS[1] - (0x8c - DRAWING_OFFSET_Y);
+	if (BTL_FINISHER_CHARGEUP_POS[0] >= 0x65) {
+		BTL_FINISHER_CHARGEUP_POS[0] = 0x64;
 	}
 
-	if (MAIN_D_80135090[0] < -0x64) {
-		MAIN_D_80135090[0] = -0x64;
+	if (BTL_FINISHER_CHARGEUP_POS[0] < -0x64) {
+		BTL_FINISHER_CHARGEUP_POS[0] = -0x64;
 	}
 
-	if (MAIN_D_80135090[1] >= 0x65) {
-		MAIN_D_80135090[1] = 0x64;
+	if (BTL_FINISHER_CHARGEUP_POS[1] >= 0x65) {
+		BTL_FINISHER_CHARGEUP_POS[1] = 0x64;
 	}
 
-	if (MAIN_D_80135090[1] < -0x64) {
-		MAIN_D_80135090[1] = -0x64;
+	if (BTL_FINISHER_CHARGEUP_POS[1] < -0x64) {
+		BTL_FINISHER_CHARGEUP_POS[1] = -0x64;
 	}
 
 	addObject(0x19a, 0, (TickFunction)BTL_tickFinisherChargeup, (RenderFunction)BTL_renderFinisherChargeup);
@@ -427,12 +427,12 @@ void BTL_renderFinisherChargeup(void)
 	setClut(&prim, 272, 498);
 	setRGB0(&prim, 0x80, 0x80, 0x80);
 	setUVWH(&prim, 0x58, 0xe0, 46, 12);
-	setXYWH(&prim, MAIN_D_80135090[0], MAIN_D_80135090[1], 0x2e, 0xc);
+	setXYWH(&prim, BTL_FINISHER_CHARGEUP_POS[0], BTL_FINISHER_CHARGEUP_POS[1], 0x2e, 0xc);
 	GsSortPoly(&prim, ACTIVE_ORDERING_TABLE, 7);
 	bars = COMBAT_DATA_PTR->player.finisherChargeup[0] / 8;
 	setUVWH(&prim, 0x88, 0xe0, 4, 6);
 	for (i = 0; i < bars; i++) {
-		setXYWH(&prim, (int32_t)(MAIN_D_80135090[0] + 3 + i * 4), MAIN_D_80135090[1] + 3, 4, 6);
+		setXYWH(&prim, (int32_t)(BTL_FINISHER_CHARGEUP_POS[0] + 3 + i * 4), BTL_FINISHER_CHARGEUP_POS[1] + 3, 4, 6);
 		GsSortPoly(&prim, ACTIVE_ORDERING_TABLE, 7);
 	}
 
@@ -453,7 +453,7 @@ void BTL_initializeDeathCountdown(void)
 {
 	GsSPRITE *sp;
 
-	sp = &BTL_D_80073E54;
+	sp = &BTL_DEATH_COUNTDOWN_SPRITE;
 	sp->attribute = 0;
 	sp->tpage = getTPage(0, 0, 896, 256);
 	sp->u = 0x32;
@@ -464,14 +464,14 @@ void BTL_initializeDeathCountdown(void)
 	sp->r = 0x80;
 	sp->g = 0x80;
 	sp->b = 0x80;
-	BTL_D_80073E78.data.sprite = *sp;
-	sp = &BTL_D_80073E78.data.sprite;
+	BTL_DEATH_COUNTDOWN.data.sprite = *sp;
+	sp = &BTL_DEATH_COUNTDOWN.data.sprite;
 	do {
 		sp->mx = 8;
 		sp->my = 8;
 		setWH(sp, 0x10, 0x10);
 	} while (0);
-	BTL_D_80073E78.data.timer = -1;
+	BTL_DEATH_COUNTDOWN.data.timer = -1;
 }
 
 void BTL_addDeathCountdown(Entity *entity)
@@ -482,12 +482,12 @@ void BTL_addDeathCountdown(Entity *entity)
 #if !defined(VERSION_JP)
 	int16_t py;
 
-	if (BTL_D_80073E78.data.timer != -1) {
+	if (BTL_DEATH_COUNTDOWN.data.timer != -1) {
 		return;
 	}
 #endif
-	BTL_D_80073E78.data.timer = 0;
-	BTL_D_80073E78.data.step = 0;
+	BTL_DEATH_COUNTDOWN.data.timer = 0;
+	BTL_DEATH_COUNTDOWN.data.step = 0;
 	getEntityScreenPos(entity, 1, &pos);
 	if (pos.vx >= 0x8d) {
 		pos.vx = 0x8c;
@@ -502,23 +502,23 @@ void BTL_addDeathCountdown(Entity *entity)
 		pos.vy = -0x64;
 	}
 #if defined(VERSION_JP)
-	sprite = &BTL_D_80073E54;
-	shadow = &BTL_D_80073E78.data.sprite;
+	sprite = &BTL_DEATH_COUNTDOWN_SPRITE;
+	shadow = &BTL_DEATH_COUNTDOWN.data.sprite;
 	shadow->cy = sprite->cy = 0x1ed;
 	shadow->rotate = sprite->rotate = 0;
 	shadow->x = sprite->x = pos.vx;
 	shadow->y = sprite->y = pos.vy;
 #else
-	shadow = &BTL_D_80073E78.data.sprite;
+	shadow = &BTL_DEATH_COUNTDOWN.data.sprite;
 	do {
-		BTL_D_80073E54.cy = 0x1ed;
+		BTL_DEATH_COUNTDOWN_SPRITE.cy = 0x1ed;
 		shadow->cy = 0x1ed;
-		BTL_D_80073E54.rotate = 0;
+		BTL_DEATH_COUNTDOWN_SPRITE.rotate = 0;
 		shadow->rotate = 0;
-		BTL_D_80073E54.x = pos.vx;
+		BTL_DEATH_COUNTDOWN_SPRITE.x = pos.vx;
 		shadow->x = pos.vx;
 		py = pos.vy;
-		BTL_D_80073E54.y = py;
+		BTL_DEATH_COUNTDOWN_SPRITE.y = py;
 		shadow->y = py;
 	} while (0);
 #endif
@@ -532,42 +532,42 @@ void BTL_tickDeathCountdown(void)
 	long frame;
 
 	if (TAMER_ITEM.worldItem.type == 0xff) {
-		base = &BTL_D_80073E54;
-		spin = &BTL_D_80073E78.data.sprite;
+		base = &BTL_DEATH_COUNTDOWN_SPRITE;
+		spin = &BTL_DEATH_COUNTDOWN.data.sprite;
 		do {
-			BTL_D_80073E78.data.timer++;
-			if ((BTL_D_80073E78.data.timer % 31) == 0) {
-				BTL_D_80073E78.data.step = 0;
+			BTL_DEATH_COUNTDOWN.data.timer++;
+			if ((BTL_DEATH_COUNTDOWN.data.timer % 31) == 0) {
+				BTL_DEATH_COUNTDOWN.data.step = 0;
 			}
-			BTL_D_80073E78.data.step++;
-			frame = (BTL_D_80073E78.data.timer + 0x1d) / 30;
+			BTL_DEATH_COUNTDOWN.data.step++;
+			frame = (BTL_DEATH_COUNTDOWN.data.timer + 0x1d) / 30;
 			if (frame < 5) {
-				spin->u = MAIN_D_80134738[frame - 1];
-				spin->v = MAIN_D_8013473C[frame - 1];
+				spin->u = BTL_DEATH_COUNTDOWN_DIGIT_U[frame - 1];
+				spin->v = BTL_DEATH_COUNTDOWN_DIGIT_V[frame - 1];
 			} else {
 				spin->u = 0x58;
 				spin->v = 0x80;
 			}
-			if ((BTL_D_80073E78.data.step > 0) && (BTL_D_80073E78.data.step < 0x15)) {
-				if (BTL_D_80073E78.data.step == 1) {
+			if ((BTL_DEATH_COUNTDOWN.data.step > 0) && (BTL_DEATH_COUNTDOWN.data.step < 0x15)) {
+				if (BTL_DEATH_COUNTDOWN.data.step == 1) {
 					base->scalex = base->scaley = 0x1000;
 					spin->rotate = base->rotate = 0;
 				}
-				if ((BTL_D_80073E78.data.step >= 2) && (BTL_D_80073E78.data.step < 5)) {
+				if ((BTL_DEATH_COUNTDOWN.data.step >= 2) && (BTL_DEATH_COUNTDOWN.data.step < 5)) {
 					spin->scaley = spin->scalex += 0x199;
-				} else if ((BTL_D_80073E78.data.step >= 5) && (BTL_D_80073E78.data.step < 8)) {
+				} else if ((BTL_DEATH_COUNTDOWN.data.step >= 5) && (BTL_DEATH_COUNTDOWN.data.step < 8)) {
 					spin->scaley = spin->scalex -= 0x199;
 				} else {
 					spin->scalex = spin->scaley = 0x1000;
 				}
-				if ((BTL_D_80073E78.data.step % 3) == 0) {
+				if ((BTL_DEATH_COUNTDOWN.data.step % 3) == 0) {
 					base->cy++;
 					if (base->cy >= 0x1f0) {
 						base->cy = 0x1ed;
 					}
 				}
 			} else {
-				spin->scalex = spin->scaley = base->scaley = base->scalex = ((0x64 - ((BTL_D_80073E78.data.step - 0x14) * 5)) << 0xc) / 100;
+				spin->scalex = spin->scaley = base->scaley = base->scalex = ((0x64 - ((BTL_DEATH_COUNTDOWN.data.step - 0x14) * 5)) << 0xc) / 100;
 				base->rotate += 0x40000;
 				spin->rotate = base->rotate;
 			}
@@ -582,18 +582,18 @@ void BTL_tickDeathCountdown(void)
 
 void BTL_renderDeathCountdown(void)
 {
-	GsSortSprite(&BTL_D_80073E78.data.sprite, ACTIVE_ORDERING_TABLE, 7);
-	GsSortSprite(&BTL_D_80073E54, ACTIVE_ORDERING_TABLE, 7);
-	if (BTL_D_80073E78.data.timer >= 0x96) {
+	GsSortSprite(&BTL_DEATH_COUNTDOWN.data.sprite, ACTIVE_ORDERING_TABLE, 7);
+	GsSortSprite(&BTL_DEATH_COUNTDOWN_SPRITE, ACTIVE_ORDERING_TABLE, 7);
+	if (BTL_DEATH_COUNTDOWN.data.timer >= 0x96) {
 		BTL_removeDeathCountdown();
 	}
 }
 
 void BTL_removeDeathCountdown(void)
 {
-	if (BTL_D_80073E78.data.timer != -1) {
+	if (BTL_DEATH_COUNTDOWN.data.timer != -1) {
 		removeObject(0x197, 0);
-		BTL_D_80073E78.data.timer = -1;
+		BTL_DEATH_COUNTDOWN.data.timer = -1;
 	}
 }
 
@@ -869,7 +869,7 @@ void BTL_shuffleBattleStartTextPieces(void)
 
 	for (i = 0; i < 0x9b; i++) {
 		r = randomLimit(0x9b);
-		swapByte(&BTL_D_800742A0[i][0x11], &BTL_D_800742A0[r][0x11]);
+		swapByte(&BTL_BATTLE_START_TEXT_PIECES[i][0x11], &BTL_BATTLE_START_TEXT_PIECES[r][0x11]);
 	}
 }
 
@@ -883,9 +883,9 @@ void BTL_initializeBattleStartText(void)
 	int32_t t;
 #endif
 
-	MAIN_D_801350BC[0] = 0;
-	MAIN_D_801350C0 = 0;
-	p = BTL_D_800742A0;
+	BTL_BATTLE_START_TEXT_TIMER[0] = 0;
+	BTL_BATTLE_TEXT_FINISHED = 0;
+	p = BTL_BATTLE_START_TEXT_PIECES;
 	for (i = 0; i < 0x9b; i++, p++) {
 		(*p)[0x11] = i;
 		(*p)[0x12] = 0x18;
@@ -894,14 +894,14 @@ void BTL_initializeBattleStartText(void)
 
 	BTL_shuffleBattleStartTextPieces();
 
-	p = BTL_D_800742A0;
+	p = BTL_BATTLE_START_TEXT_PIECES;
 	for (i = 0; i < 0x9b; i++, p++) {
 		if (randomLimit(2) == 1) {
 			sgn = 1;
 		} else {
 			sgn = -1;
 		}
-		((int16_t *)*p)[5] = BTL_D_80073014[i][1];
+		((int16_t *)*p)[5] = BTL_BATTLE_START_TEXT_POSITIONS[i][1];
 		((int8_t *)*p)[0x10] = -sgn * ((randomLimit(3) + 1) << 5);
 		if ((0 <= i) && (i < 0x33)) {
 			((int16_t *)*p)[4] = (sgn * 500) + randomLimit(100) - 50;
@@ -912,12 +912,12 @@ void BTL_initializeBattleStartText(void)
 		}
 		r = randomLimit(5);
 #if defined(VERSION_JP)
-		((int16_t *)*p)[6] = (r + 8) * BTL_D_80073014[i][0] / 8;
-		((int16_t *)*p)[7] = (r + 8) * BTL_D_80073014[i][1] / 8;
+		((int16_t *)*p)[6] = (r + 8) * BTL_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
+		((int16_t *)*p)[7] = (r + 8) * BTL_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
 #else
-		t = BTL_D_80073014[i][0];
+		t = BTL_BATTLE_START_TEXT_POSITIONS[i][0];
 		((int16_t *)*p)[6] = (r + 8) * t / 8;
-		t = BTL_D_80073014[i][1];
+		t = BTL_BATTLE_START_TEXT_POSITIONS[i][1];
 		((int16_t *)*p)[7] = (r + 8) * t / 8;
 #endif
 		((int16_t *)*p)[0] = 0;
@@ -949,36 +949,36 @@ void BTL_renderBattleStartText(void)
 	uint16_t clut;
 
 	GsSetProjection(0x200);
-	GsSetLsMatrix(&BTL_D_80072FF4);
+	GsSetLsMatrix(&BTL_BATTLE_START_TEXT_MATRIX);
 
 	n = 0;
 	for (i = 0; i < 0x9b; i++) {
-		if (BTL_D_800742A0[i][0x12] != 0) {
+		if (BTL_BATTLE_START_TEXT_PIECES[i][0x12] != 0) {
 			break;
 		}
 		n++;
 	}
 
 	if (n == 0x9b) {
-		clut = GetClut(256, (MAIN_D_801350BC[0]++ % 6 / 2) + 488);
-		MAIN_D_801350C0 = 1;
+		clut = GetClut(256, (BTL_BATTLE_START_TEXT_TIMER[0]++ % 6 / 2) + 488);
+		BTL_BATTLE_TEXT_FINISHED = 1;
 	} else {
 		clut = GetClut(256, 488);
 	}
 
-	p = BTL_D_800742A0;
+	p = BTL_BATTLE_START_TEXT_PIECES;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	ot = ACTIVE_ORDERING_TABLE->org;
 	for (i = 0; i < 0x9b; i++, p++) {
-		if (((int16_t *)*p)[4] != BTL_D_80073014[i][0]) {
+		if (((int16_t *)*p)[4] != BTL_BATTLE_START_TEXT_POSITIONS[i][0]) {
 			((int16_t *)*p)[4] += ((int8_t *)*p)[0x10];
 			if (((int8_t *)*p)[0x10] > 0) {
-				if (((int16_t *)*p)[4] > BTL_D_80073014[i][0]) {
-					((int16_t *)*p)[4] = BTL_D_80073014[i][0];
+				if (((int16_t *)*p)[4] > BTL_BATTLE_START_TEXT_POSITIONS[i][0]) {
+					((int16_t *)*p)[4] = BTL_BATTLE_START_TEXT_POSITIONS[i][0];
 				}
 			} else {
-				if (((int16_t *)*p)[4] < BTL_D_80073014[i][0]) {
-					((int16_t *)*p)[4] = BTL_D_80073014[i][0];
+				if (((int16_t *)*p)[4] < BTL_BATTLE_START_TEXT_POSITIONS[i][0]) {
+					((int16_t *)*p)[4] = BTL_BATTLE_START_TEXT_POSITIONS[i][0];
 				}
 			}
 		} else {
@@ -1071,7 +1071,7 @@ void BTL_removeBattleStartText(void)
 
 void BTL_initializeBattleStartTextBurst(void)
 {
-	MAIN_D_801350C0 = 0;
+	BTL_BATTLE_TEXT_FINISHED = 0;
 	addObject(0x1a6, 0, NULL, (RenderFunction)BTL_renderBattleStartTextBurst);
 }
 
@@ -1094,7 +1094,7 @@ void BTL_renderBattleStartTextBurst(void)
 	int16_t cy;
 
 	GsSetProjection(0x200);
-	GsSetLsMatrix(&BTL_D_80072FF4);
+	GsSetLsMatrix(&BTL_BATTLE_START_TEXT_MATRIX);
 
 	corner[0].vx = -4;
 	corner[0].vy = -6;
@@ -1110,7 +1110,7 @@ void BTL_renderBattleStartTextBurst(void)
 	corner[3].vz = 0;
 
 	dead = 0;
-	p = BTL_D_800742A0;
+	p = BTL_BATTLE_START_TEXT_PIECES;
 	ot = ACTIVE_ORDERING_TABLE->org;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	for (i = 0; i < 0x9b; i++, p++) {
@@ -1177,7 +1177,7 @@ void BTL_renderBattleStartTextBurst(void)
 
 	GsSetWorkBase((PACKET *)prim);
 	if (dead == 0x9b) {
-		MAIN_D_801350C0 = 1;
+		BTL_BATTLE_TEXT_FINISHED = 1;
 	}
 	GsSetProjection(VIEWPORT_DISTANCE);
 	GsSetRefView2(&GS_VIEWPOINT);
@@ -1190,7 +1190,7 @@ void BTL_removeBattleStartTextBurst(void)
 
 int32_t BTL_isBattleStartTextFinished(void)
 {
-	return MAIN_D_801350C0;
+	return BTL_BATTLE_TEXT_FINISHED;
 }
 
 void BTL_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
@@ -1227,38 +1227,38 @@ void BTL_renderFinisherGauge(int16_t idx)
 	int32_t hp;
 	int32_t i;
 
-	if (MAIN_D_801350C4 != 7) {
+	if (BTL_STATUS_BARS_STEP != 7) {
 		return;
 	}
 
 	hp = COMBAT_DATA_PTR->fighter[idx].finisherProgress * 6 / COMBAT_DATA_PTR->fighter[idx].finisherGoal;
 
-	if (MAIN_D_801350C8 != hp) {
-		MAIN_D_801350C6 = 0;
-		MAIN_D_801350C8 = hp;
+	if (BTL_FINISHER_SEGMENTS != hp) {
+		BTL_FINISHER_PULSE_FRAME = 0;
+		BTL_FINISHER_SEGMENTS = hp;
 	}
 
-	MAIN_D_801350C7 = BTL_D_80073290[MAIN_D_801350C6];
-	if (MAIN_D_801350C6 < 0xb) {
-		MAIN_D_801350C6++;
+	BTL_FINISHER_BRIGHTNESS = BTL_FINISHER_PULSE[BTL_FINISHER_PULSE_FRAME];
+	if (BTL_FINISHER_PULSE_FRAME < 0xb) {
+		BTL_FINISHER_PULSE_FRAME++;
 	}
 
 	if (hp == 6) {
-		if (MAIN_D_801350C5 < 0xa) {
-			MAIN_D_801350C5++;
+		if (BTL_FINISHER_FULL_FRAMES < 0xa) {
+			BTL_FINISHER_FULL_FRAMES++;
 		}
 
-		if (MAIN_D_801350C5 >= 3) {
+		if (BTL_FINISHER_FULL_FRAMES >= 3) {
 			hp++;
 		}
 
-		if (MAIN_D_801350C5 >= 5) {
+		if (BTL_FINISHER_FULL_FRAMES >= 5) {
 			hp++;
 			BTL_renderFinisherReadyIcon();
 
-			if (MAIN_D_801350C5 == 0xa) {
-				MAIN_D_801350C9 = 1;
-				MAIN_D_801350C6 %= 0xb;
+			if (BTL_FINISHER_FULL_FRAMES == 0xa) {
+				BTL_FINISHER_READY = 1;
+				BTL_FINISHER_PULSE_FRAME %= 0xb;
 			}
 		}
 	}
@@ -1275,10 +1275,10 @@ void BTL_renderFinisherReadyIcon(void)
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 482);
-	if ((MAIN_D_801350C9 != 1) || (COMBAT_DATA_PTR->player.currentCommand[0] == 0xb)) {
+	if ((BTL_FINISHER_READY != 1) || (COMBAT_DATA_PTR->player.currentCommand[0] == 0xb)) {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	} else {
-		setRGB0(prim, MAIN_D_801350C7, MAIN_D_801350C7, MAIN_D_801350C7);
+		setRGB0(prim, BTL_FINISHER_BRIGHTNESS, BTL_FINISHER_BRIGHTNESS, BTL_FINISHER_BRIGHTNESS);
 	}
 
 	setUVWH(prim, 0x80, 0x88, 37, 9);
@@ -1287,10 +1287,10 @@ void BTL_renderFinisherReadyIcon(void)
 	GsSetWorkBase((PACKET *)prim);
 
 	box.attribute = 0x40000000;
-	if ((MAIN_D_801350C9 != 1) || (COMBAT_DATA_PTR->player.currentCommand[0] == 0xb)) {
+	if ((BTL_FINISHER_READY != 1) || (COMBAT_DATA_PTR->player.currentCommand[0] == 0xb)) {
 		box.r = box.g = box.b = 0x80;
 	} else {
-		box.r = box.g = box.b = MAIN_D_801350C7;
+		box.r = box.g = box.b = BTL_FINISHER_BRIGHTNESS;
 	}
 
 	setWH(&box, 0x29, 0xb);
@@ -1307,60 +1307,60 @@ void BTL_renderFinisherGaugeSegment(int16_t i, int16_t idx)
 	hp = COMBAT_DATA_PTR->fighter[idx].finisherProgress * 6 / COMBAT_DATA_PTR->fighter[idx].finisherGoal;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	setEntityTextDigit(prim, 256, 492);
-	if ((((hp - 1) == i) || (MAIN_D_801350C9 == 1)) && (COMBAT_DATA_PTR->player.currentCommand[0] != 0xb)) {
-		setRGB0(prim, MAIN_D_801350C7, MAIN_D_801350C7, MAIN_D_801350C7);
+	if ((((hp - 1) == i) || (BTL_FINISHER_READY == 1)) && (COMBAT_DATA_PTR->player.currentCommand[0] != 0xb)) {
+		setRGB0(prim, BTL_FINISHER_BRIGHTNESS, BTL_FINISHER_BRIGHTNESS, BTL_FINISHER_BRIGHTNESS);
 	} else {
 		setRGB0(prim, 0x80, 0x80, 0x80);
 	}
 
-	setUVWH(prim, MAIN_D_80134764[i], 0x9d, MAIN_D_8013476C[i], 15);
-	setXYWH(prim, MAIN_D_80134774[i] + 0x37, -0x4f, MAIN_D_8013476C[i], 15);
+	setUVWH(prim, BTL_FINISHER_SEGMENT_U[i], 0x9d, BTL_FINISHER_SEGMENT_W[i], 15);
+	setXYWH(prim, BTL_FINISHER_SEGMENT_X[i] + 0x37, -0x4f, BTL_FINISHER_SEGMENT_W[i], 15);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 0xa, prim++);
 	GsSetWorkBase((PACKET *)prim);
 }
 
 void BTL_initializePartnerStatusBars(void)
 {
-	MAIN_D_801350C4 = 0;
-	MAIN_D_801350C5 = 0;
-	MAIN_D_801350C6 = 0xb;
-	MAIN_D_801350C7 = 0;
-	MAIN_D_801350C8 = 0;
-	MAIN_D_801350C9 = 0;
-	MAIN_D_801350CB = MAIN_D_801350CA = 0;
+	BTL_STATUS_BARS_STEP = 0;
+	BTL_FINISHER_FULL_FRAMES = 0;
+	BTL_FINISHER_PULSE_FRAME = 0xb;
+	BTL_FINISHER_BRIGHTNESS = 0;
+	BTL_FINISHER_SEGMENTS = 0;
+	BTL_FINISHER_READY = 0;
+	BTL_HP_BAR_STEP = BTL_MP_BAR_STEP = 0;
 	addObject(0x19c, 0, (TickFunction)BTL_tickPartnerStatusBars, (RenderFunction)BTL_renderPartnerStatusBars);
 }
 
 void BTL_tickPartnerStatusBars(void)
 {
-	if (MAIN_D_80135094 != 1) {
-		if (MAIN_D_801350C4 != 0) {
-			MAIN_D_801350C4--;
+	if (BTL_COMMAND_MENU_ACTIVE != 1) {
+		if (BTL_STATUS_BARS_STEP != 0) {
+			BTL_STATUS_BARS_STEP--;
 		}
-		if (MAIN_D_801350CA != 0) {
-			MAIN_D_801350CA--;
+		if (BTL_MP_BAR_STEP != 0) {
+			BTL_MP_BAR_STEP--;
 		}
-		if (MAIN_D_801350C4 < 5) {
-			if (MAIN_D_801350CB != 0) {
-				MAIN_D_801350CB--;
+		if (BTL_STATUS_BARS_STEP < 5) {
+			if (BTL_HP_BAR_STEP != 0) {
+				BTL_HP_BAR_STEP--;
 			}
 		}
 		return;
 	}
 
-	if (MAIN_D_801350C4 < 7) {
-		MAIN_D_801350C4++;
+	if (BTL_STATUS_BARS_STEP < 7) {
+		BTL_STATUS_BARS_STEP++;
 	}
 
-	if (MAIN_D_801350C4 != 0) {
-		if (MAIN_D_801350CB < 7) {
-			MAIN_D_801350CB++;
+	if (BTL_STATUS_BARS_STEP != 0) {
+		if (BTL_HP_BAR_STEP < 7) {
+			BTL_HP_BAR_STEP++;
 		}
 	}
 
-	if (MAIN_D_801350C4 >= 3) {
-		if (MAIN_D_801350CA < 7) {
-			MAIN_D_801350CA++;
+	if (BTL_STATUS_BARS_STEP >= 3) {
+		if (BTL_MP_BAR_STEP < 7) {
+			BTL_MP_BAR_STEP++;
 		}
 	}
 }
@@ -1400,14 +1400,14 @@ void BTL_renderPartnerStatusBars(int16_t idx)
 	}
 
 	for (bar = 0; bar < 2; bar++) {
-		p = &BTL_D_800732C0[(bar * 3) + 2];
+		p = &BTL_STATUS_BAR_SPRITES[(bar * 3) + 2];
 		if (bar == 0) {
-			x0 = BTL_D_80073280[MAIN_D_801350CB];
+			x0 = BTL_STATUS_BAR_X[BTL_HP_BAR_STEP];
 			y0 = -0x64;
 			cur = PARTNER_ENTITY.digimonEntity.stats.current.currentHP;
 			fill = *hpPtr * 50 / maxHp;
 		} else {
-			x0 = BTL_D_80073280[MAIN_D_801350CA];
+			x0 = BTL_STATUS_BAR_X[BTL_MP_BAR_STEP];
 			y0 = -0x58;
 			cur = PARTNER_ENTITY.digimonEntity.stats.current.currentMP;
 			fill = *mpPtr * 50 / maxMp;

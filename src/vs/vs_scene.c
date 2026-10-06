@@ -138,22 +138,22 @@ static void *vs_scene_functions[] = {
 };
 
 #if defined(VERSION_JP)
-char MAIN_D_80134A50[] = "ＷＩＮ";
-char MAIN_D_80134A54[] = "ＬＯＳＥ";
+char VS_STR_WIN[] = "ＷＩＮ";
+char VS_STR_LOSE[] = "ＬＯＳＥ";
 #else
-char MAIN_D_80134A50[] = "Win";
-char MAIN_D_80134A54[] = "Lose";
+char VS_STR_WIN[] = "Win";
+char VS_STR_LOSE[] = "Lose";
 #endif
-uint8_t MAIN_D_80134A5C[4] = { 3, 4, 2, 0 };
-uint8_t MAIN_D_80134A60[4] = { 4, 1, 1, 0 };
+uint8_t VS_ARENA_MODEL_COUNTS[4] = { 3, 4, 2, 0 };
+uint8_t VS_ARENA_TIM_COUNTS[4] = { 4, 1, 1, 0 };
 
 uint8_t VS_STATE_WINS[2];
 uint8_t VS_STATE_LOSSES[2];
-int16_t MAIN_D_8013525C;
-int16_t MAIN_D_8013525E;
+int16_t VS_STATE_TIMER;
+int16_t VS_STATE_OFFSET;
 uint8_t VS_STATE_STATE;
-uint8_t MAIN_D_80135261;
-uint8_t MAIN_D_80135262;
+uint8_t VS_STATE_ROUND;
+uint8_t VS_STATE_DONE;
 int16_t VS_CURRENT_BATTLE;
 int32_t VS_CAMERA_STATE;
 RegisteredDigimon *VS_DIGIMON_P1_PTR;
@@ -188,17 +188,17 @@ static void *vs_scene_sbss_order[] = {
 	&VS_DIGIMON_P1_PTR,
 	&VS_CAMERA_STATE,
 	&VS_CURRENT_BATTLE,
-	&MAIN_D_80135262,
-	&MAIN_D_80135261,
+	&VS_STATE_DONE,
+	&VS_STATE_ROUND,
 	&VS_STATE_STATE,
-	&MAIN_D_8013525E,
-	&MAIN_D_8013525C,
+	&VS_STATE_OFFSET,
+	&VS_STATE_TIMER,
 	&VS_STATE_LOSSES,
 	&VS_STATE_WINS,
 };
 
 // clang-format off
-uint8_t VS_D_8006FA28[68] = {
+uint8_t VS_DIGIMON_SPRITE_CLUT[68] = {
 	0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x01,
 	0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00,
@@ -210,7 +210,7 @@ uint8_t VS_D_8006FA28[68] = {
 	0x04, 0x03, 0x00, 0x00,
 };
 
-VsTextPiece VS_D_8006FA6C[21] = {
+VsTextPiece VS_VERSUS_TEXT_PIECES[21] = {
 	{
 		0x0024,
 		0x000c,
@@ -465,11 +465,11 @@ VsTextPiece VS_D_8006FA6C[21] = {
 	},
 };
 
-char VS_D_8006FB94[] = "\\STDDAT\\STDTIM.BIN";
+char VS_PATH_STDDAT_STDTIM_BIN[] = "\\STDDAT\\STDTIM.BIN";
 
-char VS_D_8006FBA8[] = "\\STDDAT\\16TAISEN.TIM";
+char VS_PATH_STDDAT_16TAISEN_TIM[] = "\\STDDAT\\16TAISEN.TIM";
 
-uint16_t VS_D_8006FBC0[216] = {
+uint16_t VS_FONT_CHARS[216] = {
 	0x82a0, 0x82a2, 0x82a4, 0x82a6, 0x82a8, 0x82a9, 0x82ab, 0x82ad,
 	0x82af, 0x82b1, 0x82b3, 0x82b5, 0x82b7, 0x82b9, 0x82bb, 0x82bd,
 	0x82bf, 0x82c2, 0x82c4, 0x82c6, 0x82c8, 0x82c9, 0x82ca, 0x82cb,
@@ -499,7 +499,7 @@ uint16_t VS_D_8006FBC0[216] = {
 	0x91e5, 0x8b86, 0x8bc9, 0x926e, 0x8d96, 0x8a47, 0x907d, 0x8140,
 };
 
-int16_t VS_D_8006FD70[216] = {
+int16_t VS_FONT_GLYPHS[216] = {
 	0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x000f, 0x0010, 0x0011,
 	0x0012, 0x0013, 0x001e, 0x001f, 0x0020, 0x0021, 0x0022, 0x002d,
 	0x002e, 0x002f, 0x0030, 0x0031, 0x003c, 0x003d, 0x003e, 0x003f,
@@ -529,7 +529,7 @@ int16_t VS_D_8006FD70[216] = {
 	0x00a1, 0x00a2, 0x00a3, 0x00af, 0x00b0, 0x00b1, 0x00b2, 0x0056,
 };
 
-uint8_t VS_D_8006FF20[116][14] = {
+uint8_t VS__INTRO_DIGIMON_NAMES[116][14] = {
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -996,38 +996,38 @@ uint8_t VS_D_8006FF20[116][14] = {
 	},
 };
 
-char VS_D_80070578[] = "\\STDDAT\\T_TOGI.TMD";
+char VS_PATH_ARENA_MODEL_STDDAT_T_TOGI_TMD[] = "\\STDDAT\\T_TOGI.TMD";
 
-char VS_D_8007058C[] = "\\STDDAT\\B_TOGI.TMD";
+char VS_PATH_ARENA_MODEL_STDDAT_B_TOGI_TMD[] = "\\STDDAT\\B_TOGI.TMD";
 
-char VS_D_800705A0[] = "\\STDDAT\\E_TOGI.TMD";
+char VS_PATH_ARENA_MODEL_STDDAT_E_TOGI_TMD[] = "\\STDDAT\\E_TOGI.TMD";
 
-char *VS_D_800705B4[3] = {
-	VS_D_80070578,
-	VS_D_8007058C,
-	VS_D_800705A0,
+char *VS_ARENA_MODELS[3] = {
+	VS_PATH_ARENA_MODEL_STDDAT_T_TOGI_TMD,
+	VS_PATH_ARENA_MODEL_STDDAT_B_TOGI_TMD,
+	VS_PATH_ARENA_MODEL_STDDAT_E_TOGI_TMD,
 };
 
-char VS_D_800705C0[] = "\\STDDAT\\T_TOGI.TIM";
+char VS_PATH_ARENA_TIM_STDDAT_T_TOGI_TIM[] = "\\STDDAT\\T_TOGI.TIM";
 
-char VS_D_800705D4[] = "\\STDDAT\\B_TOGI.TIM";
+char VS_PATH_ARENA_TIM_STDDAT_B_TOGI_TIM[] = "\\STDDAT\\B_TOGI.TIM";
 
-char VS_D_800705E8[] = "\\STDDAT\\E_TOGI.TIM";
+char VS_PATH_ARENA_TIM_STDDAT_E_TOGI_TIM[] = "\\STDDAT\\E_TOGI.TIM";
 
-char *VS_D_800705FC[3] = {
-	VS_D_800705C0,
-	VS_D_800705D4,
-	VS_D_800705E8,
+char *VS_ARENA_TIMS[3] = {
+	VS_PATH_ARENA_TIM_STDDAT_T_TOGI_TIM,
+	VS_PATH_ARENA_TIM_STDDAT_B_TOGI_TIM,
+	VS_PATH_ARENA_TIM_STDDAT_E_TOGI_TIM,
 };
 
-char VS_D_80070608[] = "\\STDDAT\\B_TOGI.ATR";
+char VS_PATH_ARENA_COLLISION_STDDAT_B_TOGI_ATR[] = "\\STDDAT\\B_TOGI.ATR";
 
-char VS_D_8007061C[] = "\\STDDAT\\E_TOGI.ATR";
+char VS_PATH_ARENA_COLLISION_STDDAT_E_TOGI_ATR[] = "\\STDDAT\\E_TOGI.ATR";
 
-char *VS_D_80070630[3] = {
-	VS_D_80070608,
-	VS_D_80070608,
-	VS_D_8007061C,
+char *VS_ARENA_COLLISIONS[3] = {
+	VS_PATH_ARENA_COLLISION_STDDAT_B_TOGI_ATR,
+	VS_PATH_ARENA_COLLISION_STDDAT_B_TOGI_ATR,
+	VS_PATH_ARENA_COLLISION_STDDAT_E_TOGI_ATR,
 };
 
 // clang-format on
@@ -1037,12 +1037,12 @@ void VS_initializeVS(void)
 	int16_t result;
 
 	VS_resetMatchState();
-	VS_loadVSAssets(VS_D_800716A8.stage);
+	VS_loadVSAssets(VS_BATTLE_SETUP.stage);
 	VS_addInputObjects();
 	VS_CURRENT_BATTLE = -1;
 	VS_playVersusIntroSequence();
 	VS_CURRENT_BATTLE = 0;
-	while (VS_CURRENT_BATTLE < VS_D_800716A8.battleCount) {
+	while (VS_CURRENT_BATTLE < VS_BATTLE_SETUP.battleCount) {
 #if !defined(VERSION_JP)
 		PLAYTIME_FRAMES = 0;
 #endif
@@ -1058,27 +1058,27 @@ void VS_initializeVS(void)
 		loadDigimonSounds(5, ENTITY_TABLE[2]->type);
 		VS_setVSPhase(0xa);
 		VS_addArenaRenderers();
-		VS__runIntro(VS_D_800716A8.stage);
+		VS__runIntro(VS_BATTLE_SETUP.stage);
 		VS_CAMERA_STATE = 1;
 		result = VS__combatMain();
 		VS_removeCameraIntro();
 		VS_removeVSPhase();
 		VS_removeArenaRenderers();
 		if (result == 1) {
-			VS_D_80071690[0][VS_CURRENT_BATTLE] = 1;
-			VS_D_8007169C[1][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_WON[0][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST[1][VS_CURRENT_BATTLE] = 1;
 			VS_STATE_WINS[0]++;
 			VS_STATE_LOSSES[1]++;
 		}
 		if (result == -1) {
-			VS_D_80071690[1][VS_CURRENT_BATTLE] = 1;
-			VS_D_8007169C[0][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_WON[1][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST[0][VS_CURRENT_BATTLE] = 1;
 			VS_STATE_WINS[1]++;
 			VS_STATE_LOSSES[0]++;
 		}
 		if (result == 2) {
-			VS_D_8007169C[0][VS_CURRENT_BATTLE] = 1;
-			VS_D_8007169C[1][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST[0][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST[1][VS_CURRENT_BATTLE] = 1;
 			VS_STATE_LOSSES[0]++;
 			VS_STATE_LOSSES[1]++;
 		}
@@ -1096,16 +1096,16 @@ void VS_resetMatchState(void)
 	int32_t i;
 	int32_t j = 0;
 
-	MAIN_D_8013525C = 0;
-	MAIN_D_8013525E = 0;
+	VS_STATE_TIMER = 0;
+	VS_STATE_OFFSET = 0;
 	VS_STATE_STATE = 0;
-	MAIN_D_80135261 = 0;
+	VS_STATE_ROUND = 0;
 	VS_STATE_WINS[0] = VS_STATE_WINS[1] = 0;
 	VS_STATE_LOSSES[0] = VS_STATE_LOSSES[1] = 0;
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 5; j++) {
-			VS_D_80071690[i][j] = 0;
-			VS_D_8007169C[i][j] = 0;
+			VS_ROUND_WON[i][j] = 0;
+			VS_ROUND_LOST[i][j] = 0;
 		}
 	}
 }
@@ -1143,8 +1143,8 @@ void VS_loadVSAssets(int32_t arena)
 	VS_initializeConfusionEffect(VS_CONFUSION_MODEL);
 	VS_initializeStunEffect(VS_STUN_MODEL);
 	initializeBuffModel(VS_BUFF_MODEL);
-	VS_loadTIMToVRAM(VS_D_8006FB94);
-	loadTIMFile(VS_D_8006FBA8, GENERAL_BUFFER);
+	VS_loadTIMToVRAM(VS_PATH_STDDAT_STDTIM_BIN);
+	loadTIMFile(VS_PATH_STDDAT_16TAISEN_TIM, GENERAL_BUFFER);
 }
 
 void VS_addInputObjects(void)
@@ -1166,8 +1166,8 @@ void VS_loadFighterEntities(uint8_t slot)
 	int32_t type2;
 	int32_t prev;
 
-	fighter1 = &VS_DIGIMON_P1_PTR[VS_D_800716A8.fighters[0][slot]];
-	fighter2 = &VS_DIGIMON_P2_PTR[VS_D_800716A8.fighters[1][slot]];
+	fighter1 = &VS_DIGIMON_P1_PTR[VS_BATTLE_SETUP.fighters[0][slot]];
+	fighter2 = &VS_DIGIMON_P2_PTR[VS_BATTLE_SETUP.fighters[1][slot]];
 
 	type1 = fighter1->digimonId;
 	if (ENTITY_TABLE[1] == NULL || ENTITY_TABLE[1]->type != type1) {
@@ -1266,7 +1266,7 @@ void VS_renderVersusFlash(void)
 	prim->tpage = getTPage(0, 0, 320, 0);
 	prim->clut = GetClut(0x40, 0x1e9);
 	setUVDataPolyFT4(prim, 0x30, 0x10, 0x4e, 0x18);
-	setPosDataPolyFT4(prim, -0x27, MAIN_D_80135261 * 20 - 0x39, 0x4e, 0x18);
+	setPosDataPolyFT4(prim, -0x27, VS_STATE_ROUND * 20 - 0x39, 0x4e, 0x18);
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 	GsSetWorkBase((PACKET *)prim);
 }
@@ -1291,23 +1291,23 @@ void VS_renderFighterNamePlate(int16_t side)
 	uint8_t type;
 
 	if (side == 0) {
-		offset = MAIN_D_8013525E;
+		offset = VS_STATE_OFFSET;
 	} else {
-		offset = -MAIN_D_8013525E;
+		offset = -VS_STATE_OFFSET;
 	}
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0; i < VS_D_800716A8.battleCount; i++) {
+	for (i = 0; i < VS_BATTLE_SETUP.battleCount; i++) {
 		if (side == 0) {
-			fighter1 = &VS_DIGIMON_P1_PTR[VS_D_800716A8.fighters[0][i]];
+			fighter1 = &VS_DIGIMON_P1_PTR[VS_BATTLE_SETUP.fighters[0][i]];
 			type = fighter1->digimonId;
 		} else {
-			fighter2 = &VS_DIGIMON_P2_PTR[VS_D_800716A8.fighters[1][i]];
+			fighter2 = &VS_DIGIMON_P2_PTR[VS_BATTLE_SETUP.fighters[1][i]];
 			type = fighter2->digimonId;
 		}
 		SetPolyFT4(prim);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->tpage = getTPage(0, 0, 896, 0);
-		prim->clut = GetClut(0x120, VS_D_8006FA28[type] + 0x1e0);
+		prim->clut = GetClut(0x120, VS_DIGIMON_SPRITE_CLUT[type] + 0x1e0);
 		if (type == 0x73) {
 			u = 0xe0;
 			v = 0xe0;
@@ -1318,7 +1318,7 @@ void VS_renderFighterNamePlate(int16_t side)
 		w = (u != 0xf0) ? 0x10 : 0xf;
 		h = (v != 0xf0) ? 0x10 : 0xf;
 		setUVDataPolyFT4(prim, u, v, w, h);
-		if (i == MAIN_D_80135261) {
+		if (i == VS_STATE_ROUND) {
 			setPosDataPolyFT4(prim, offset + (side * 0x9a - 0x77), i * 20 - 0x39, w, h);
 		} else {
 			setPosDataPolyFT4(prim, side * 0x9a - 0x77, i * 20 - 0x39, w, h);
@@ -1339,13 +1339,13 @@ void VS_renderFighterNamePlate(int16_t side)
 			c = *name++;
 			c = ((c & 0xff) << 8) + ((c & 0xff00) >> 8);
 			for (m = 0; m < 0xd8; m++) {
-				if (c == VS_D_8006FBC0[m]) {
+				if (c == VS_FONT_CHARS[m]) {
 					g = m;
 					break;
 				}
 			}
-			setUVDataPolyFT4(prim, (VS_D_8006FD70[g] % 15) * 8, (VS_D_8006FD70[g] / 15) * 8, 8, 8);
-			if (i == MAIN_D_80135261) {
+			setUVDataPolyFT4(prim, (VS_FONT_GLYPHS[g] % 15) * 8, (VS_FONT_GLYPHS[g] / 15) * 8, 8, 8);
+			if (i == VS_STATE_ROUND) {
 				setPosDataPolyFT4(prim, offset + (side * 0x9a - 0x5f + n * 8), i * 20 - 0x35, 8, 8);
 			} else {
 				setPosDataPolyFT4(prim, side * 0x9a - 0x5f + n * 8, i * 20 - 0x35, 8, 8);
@@ -1371,14 +1371,14 @@ void VS_renderRoundPips(slot)
 	x = -0x98;
 	y = -0x56;
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0; i < VS_D_800716A8.battleCount; i++) {
-		if (i < MAIN_D_80135261) {
+	for (i = 0; i < VS_BATTLE_SETUP.battleCount; i++) {
+		if (i < VS_STATE_ROUND) {
 			SetPolyFT4(prim);
 			prim->tpage = getTPage(0, 0, 320, 0);
 			setRGB0(prim, 0x80, 0x80, 0x80);
 			prim->clut = GetClut(0x40, 0x1e9);
-			if (i < MAIN_D_80135261) {
-				if (VS_D_80071690[slot][i] == 1) {
+			if (i < VS_STATE_ROUND) {
+				if (VS_ROUND_WON[slot][i] == 1) {
 					setUVDataPolyFT4(prim, 0x30, 0x28, 0x10, 0x10);
 				} else {
 					setUVDataPolyFT4(prim, 0x40, 0x28, 0x10, 0x10);
@@ -1411,22 +1411,22 @@ void VS_renderVersusBanner(slot)
 	x = -0x98;
 	y = -0x56;
 	if (slot == 0) {
-		offset = MAIN_D_8013525E;
+		offset = VS_STATE_OFFSET;
 	} else {
-		offset = -MAIN_D_8013525E;
+		offset = -VS_STATE_OFFSET;
 	}
 	prim = (POLY_FT4 *)GsGetWorkBase();
-	for (i = 0; i < VS_D_800716A8.battleCount; i++) {
+	for (i = 0; i < VS_BATTLE_SETUP.battleCount; i++) {
 		SetPolyFT4(prim);
 		prim->tpage = getTPage(0, 0, 384, 0);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		prim->clut = GetClut(0, slot + 0x1e8);
-		if (i < MAIN_D_80135261) {
+		if (i < VS_STATE_ROUND) {
 			setUVDataPolyFT4(prim, 0, 0xec, 0x86, 0x13);
 			setPosDataPolyFT4(prim, x + 8 + slot * 0x9a, y + 0x1b + i * 20, 0x85, 0x14);
 		} else {
 			setUVDataPolyFT4(prim, 0, 0xd8, 0x86, 0x14);
-			if (i == MAIN_D_80135261) {
+			if (i == VS_STATE_ROUND) {
 				setPosDataPolyFT4(prim, offset + (x + 8 + slot * 0x9a), y + 0x1b + i * 20, 0x85, 0x14);
 			} else {
 				setPosDataPolyFT4(prim, x + 8 + slot * 0x9a, y + 0x1b + i * 20, 0x85, 0x14);
@@ -1448,7 +1448,7 @@ void VS_renderVersusText(void)
 
 	x = -0x98;
 	y = -0x56;
-	p = VS_D_8006FA6C;
+	p = VS_VERSUS_TEXT_PIECES;
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	for (i = 0; i < 0x15; i++, p++) {
 		SetPolyFT4(prim);
@@ -1521,12 +1521,12 @@ void VS_playVersusIntroSequence(void)
 	int32_t i;
 
 	clearTextArea();
-	drawString(MAIN_D_80134A50, 0, 0);
-	drawString(MAIN_D_80134A54, 0, 0xc);
+	drawString(VS_STR_WIN, 0, 0);
+	drawString(VS_STR_LOSE, 0, 0xc);
 	drawString(MAIN_D_80124C54, 0, 0xf0);
 	fadeFromBlack(3);
 	i = 3;
-	if (VS_CURRENT_BATTLE == VS_D_800716A8.battleCount - 1) {
+	if (VS_CURRENT_BATTLE == VS_BATTLE_SETUP.battleCount - 1) {
 		if (VS_STATE_WINS[0] > VS_STATE_WINS[1]) {
 			VS_addResultModelScene(ENTITY_TABLE[1]);
 			VS_setVersusModelSceneTimer(0x3c);
@@ -1546,14 +1546,14 @@ void VS_playVersusIntroSequence(void)
 		i++;
 	}
 	addObject(0x19d, 0, (TickFunction)VS_tickVersusIntro, (RenderFunction)VS_renderVersusIntro);
-	MAIN_D_80135262 = 0;
-	MAIN_D_8013525C = 0;
-	while (MAIN_D_80135262 == 0) {
+	VS_STATE_DONE = 0;
+	VS_STATE_TIMER = 0;
+	while (VS_STATE_DONE == 0) {
 		VS_tickFrame();
 	}
-	MAIN_D_80135262 = 0;
+	VS_STATE_DONE = 0;
 	removeObject(0x19d, 0);
-	if (VS_CURRENT_BATTLE == VS_D_800716A8.battleCount - 1) {
+	if (VS_CURRENT_BATTLE == VS_BATTLE_SETUP.battleCount - 1) {
 		if (VS_STATE_WINS[0] != VS_STATE_WINS[1]) {
 			VS_removeResultModelScene();
 		}
@@ -1561,7 +1561,7 @@ void VS_playVersusIntroSequence(void)
 			VS_removeVersusModelScene();
 		}
 	}
-	if (VS_CURRENT_BATTLE != VS_D_800716A8.battleCount - 1) {
+	if (VS_CURRENT_BATTLE != VS_BATTLE_SETUP.battleCount - 1) {
 		fadeToBlack(3);
 		for (i = 0; i < 4; i++) {
 			VS_tickFrame();
@@ -1580,44 +1580,44 @@ void VS_tickVersusIntro(void)
 {
 	switch (VS_STATE_STATE) {
 	case 0:
-		MAIN_D_8013525E++;
-		if (MAIN_D_8013525E == 10) {
+		VS_STATE_OFFSET++;
+		if (VS_STATE_OFFSET == 10) {
 			VS_STATE_STATE++;
 		}
 		break;
 	case 1:
-		MAIN_D_8013525C++;
-		if (MAIN_D_8013525C == 20) {
+		VS_STATE_TIMER++;
+		if (VS_STATE_TIMER == 20) {
 			VS_STATE_STATE++;
-			MAIN_D_80135262 = 1;
+			VS_STATE_DONE = 1;
 		}
 		break;
 	case 2:
-		MAIN_D_8013525E--;
-		if (MAIN_D_8013525E == 0) {
+		VS_STATE_OFFSET--;
+		if (VS_STATE_OFFSET == 0) {
 			VS_STATE_STATE++;
-			MAIN_D_8013525C = 0;
+			VS_STATE_TIMER = 0;
 		}
 		break;
 	case 3:
-		MAIN_D_8013525C++;
-		if (MAIN_D_8013525C == 10) {
+		VS_STATE_TIMER++;
+		if (VS_STATE_TIMER == 10) {
 			VS_STATE_STATE++;
 		}
 		break;
 	case 4:
-		MAIN_D_80135261++;
-		if (MAIN_D_80135261 == VS_D_800716A8.battleCount) {
+		VS_STATE_ROUND++;
+		if (VS_STATE_ROUND == VS_BATTLE_SETUP.battleCount) {
 			VS_STATE_STATE++;
 		} else {
 			VS_STATE_STATE = 0;
-			MAIN_D_8013525C = 0;
+			VS_STATE_TIMER = 0;
 		}
 		break;
 	case 5:
-		MAIN_D_8013525C++;
-		if (MAIN_D_8013525C == 0x50) {
-			MAIN_D_80135262 = 1;
+		VS_STATE_TIMER++;
+		if (VS_STATE_TIMER == 0x50) {
+			VS_STATE_DONE = 1;
 		}
 		break;
 	}
@@ -1643,17 +1643,17 @@ void VS_loadArenaAssets(void)
 {
 	int32_t i;
 
-	VS_loadArenaTIMToVRAM(VS_D_800705FC[VS_D_800716A8.stage], MAIN_D_80134A60[VS_D_800716A8.stage]);
+	VS_loadArenaTIMToVRAM(VS_ARENA_TIMS[VS_BATTLE_SETUP.stage], VS_ARENA_TIM_COUNTS[VS_BATTLE_SETUP.stage]);
 	VS_STAGE_MODEL_PTR = (TMDModel *)TAMER_MODEL_BUFFER;
-	readFile(VS_D_800705B4[VS_D_800716A8.stage], VS_STAGE_MODEL_PTR);
+	readFile(VS_ARENA_MODELS[VS_BATTLE_SETUP.stage], VS_STAGE_MODEL_PTR);
 	GsMapModelingData((u_long *)&VS_STAGE_MODEL_PTR->flags);
-	for (i = 0; i < MAIN_D_80134A5C[VS_D_800716A8.stage]; i++) {
-		GsLinkObject4((u_long)VS_STAGE_MODEL_PTR->obj, &VS_D_800719CC[i], i);
-		GsInitCoordinate2(NULL, &VS_D_8007188C[i].coord);
-		VS_D_800719CC[i].attribute = 0;
-		VS_D_800719CC[i].coord2 = &VS_D_8007188C[i].coord;
+	for (i = 0; i < VS_ARENA_MODEL_COUNTS[VS_BATTLE_SETUP.stage]; i++) {
+		GsLinkObject4((u_long)VS_STAGE_MODEL_PTR->obj, &VS_ARENA_OBJECTS[i], i);
+		GsInitCoordinate2(NULL, &VS_ARENA_COORDS[i].coord);
+		VS_ARENA_OBJECTS[i].attribute = 0;
+		VS_ARENA_OBJECTS[i].coord2 = &VS_ARENA_COORDS[i].coord;
 	}
-	readFile(VS_D_80070630[VS_D_800716A8.stage], MAP_COLLISION_DATA);
+	readFile(VS_ARENA_COLLISIONS[VS_BATTLE_SETUP.stage], MAP_COLLISION_DATA);
 }
 
 void VS_unloadArenaAssets(void)
@@ -1662,7 +1662,7 @@ void VS_unloadArenaAssets(void)
 
 void VS_addArenaRenderers(void)
 {
-	switch (VS_D_800716A8.stage) {
+	switch (VS_BATTLE_SETUP.stage) {
 	case 0:
 		addObject(0x1a7, 0, NULL, (RenderFunction)VS_renderArenaViewLeft);
 		break;
@@ -1680,25 +1680,25 @@ void VS_renderArenaViewLeft(void)
 	MATRIX m;
 	int32_t i;
 
-	GsGetLw(&VS_D_8007188C[1].coord, &m);
+	GsGetLw(&VS_ARENA_COORDS[1].coord, &m);
 	GsSetLightMatrix(&m);
-	GsGetLs(&VS_D_8007188C[1].coord, &m);
+	GsGetLs(&VS_ARENA_COORDS[1].coord, &m);
 	GsSetLsMatrix(&m);
-	GsSortObject4(&VS_D_800719CC[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
-	VS_D_800719CC[0].attribute |= 0x200;
+	GsSortObject4(&VS_ARENA_OBJECTS[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	VS_ARENA_OBJECTS[0].attribute |= 0x200;
 	GsClearOt(0, 0xfff, &VS_D_800716D4[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &VS_D_800716FC[ACTIVE_FRAMEBUFFER]);
 	for (i = 2; i >= 0; i--) {
-		GsGetLw(&VS_D_8007188C[i].coord, &m);
+		GsGetLw(&VS_ARENA_COORDS[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&VS_D_8007188C[i].coord, &m);
+		GsGetLs(&VS_ARENA_COORDS[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&VS_D_800719CC[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 2:
-			GsSortObject4(&VS_D_800719CC[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -1711,26 +1711,26 @@ void VS_renderArenaViewRight(void)
 	MATRIX m;
 	int32_t i;
 
-	GsGetLw(&VS_D_8007188C[3].coord, &m);
+	GsGetLw(&VS_ARENA_COORDS[3].coord, &m);
 	GsSetLightMatrix(&m);
-	GsGetLs(&VS_D_8007188C[3].coord, &m);
+	GsGetLs(&VS_ARENA_COORDS[3].coord, &m);
 	GsSetLsMatrix(&m);
-	GsSortObject4(&VS_D_800719CC[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
-	VS_D_800719CC[0].attribute |= 0x200;
+	GsSortObject4(&VS_ARENA_OBJECTS[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	VS_ARENA_OBJECTS[0].attribute |= 0x200;
 	GsClearOt(0, 0xfff, &VS_D_800716D4[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &VS_D_800716FC[ACTIVE_FRAMEBUFFER]);
 	for (i = 2; i >= 0; i--) {
-		GsGetLw(&VS_D_8007188C[i].coord, &m);
+		GsGetLw(&VS_ARENA_COORDS[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&VS_D_8007188C[i].coord, &m);
+		GsGetLs(&VS_ARENA_COORDS[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&VS_D_800719CC[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 1:
 		case 2:
-			GsSortObject4(&VS_D_800719CC[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -1743,20 +1743,20 @@ void VS_renderArenaViewFull(void)
 	MATRIX m;
 	int32_t i;
 
-	VS_D_800719CC[0].attribute |= 0x200;
+	VS_ARENA_OBJECTS[0].attribute |= 0x200;
 	GsClearOt(0, 0xfff, &VS_D_800716D4[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &VS_D_800716FC[ACTIVE_FRAMEBUFFER]);
 	for (i = 1; i >= 0; i--) {
-		GsGetLw(&VS_D_8007188C[i].coord, &m);
+		GsGetLw(&VS_ARENA_COORDS[i].coord, &m);
 		GsSetLightMatrix(&m);
-		GsGetLs(&VS_D_8007188C[i].coord, &m);
+		GsGetLs(&VS_ARENA_COORDS[i].coord, &m);
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&VS_D_800719CC[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 1:
-			GsSortObject4(&VS_D_800719CC[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}

@@ -11,7 +11,7 @@
 
 extern uint32_t POLLED_INPUT;
 extern int32_t TRAINING_COMPLETE;
-extern int8_t TRAINING_ANIM_IDS[][2];
+extern int8_t TRN_TRAINING_ANIM_IDS[][2];
 
 void createCameraMovement(VECTOR *pos, int32_t speed);
 void storeMapObjectPosition();
@@ -109,7 +109,7 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 	case 1:
 		TRN_func_800888A0(4);
 		if (tickEntityWalkTo(0xfc, 0xff, TRN_D_8008F320.vx, TRN_D_8008F320.vz, 0) == 1) {
-			startAnimation(ENTITY_TABLE[1], TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
+			startAnimation(ENTITY_TABLE[1], TRN_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
 			PARTNER_ENTITY.digimonEntity.entity.anim.animFlag |= 2;
 			MAIN_D_8013537E = 0;
 			if (instanceId == 0) {
@@ -128,7 +128,7 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 		MAIN_D_8013537E++;
 		MAIN_D_8013537A++;
 		PARTNER_ENTITY.digimonEntity.entity.anim.animFlag |= 2;
-		if (MAIN_D_8013537E == TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][1]) {
+		if (MAIN_D_8013537E == TRN_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][1]) {
 			createParticleFX(0, 0, &TRN_D_8008F340[0], NULL, 0);
 			createParticleFX(0, 0, &TRN_D_8008F340[1], NULL, 0);
 			createParticleFX(0, 0, &TRN_D_8008F340[2], NULL, 0);
@@ -151,7 +151,7 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 		}
 		if (MAIN_D_8013537E >= 0x29) {
 			MAIN_D_8013537E = 0;
-			startAnimation(ENTITY_TABLE[1], TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
+			startAnimation(ENTITY_TABLE[1], TRN_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
 			TRAINING_STATE = 2;
 		}
 		r = 10;
@@ -196,7 +196,7 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 	case 7:
 		MAIN_D_8013537E++;
 		MAIN_D_8013537A++;
-		if (MAIN_D_8013537E == TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][1]) {
+		if (MAIN_D_8013537E == TRN_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][1]) {
 			createParticleFX(0, 0, &TRN_D_8008F340[0], NULL, 0);
 			createParticleFX(0, 0, &TRN_D_8008F340[1], NULL, 0);
 			createParticleFX(0, 0, &TRN_D_8008F340[2], NULL, 0);
@@ -214,7 +214,7 @@ void TRN_tickOffenseTraining(int32_t instanceId)
 		if (MAIN_D_8013537E == 0x2e) {
 			setMapObjectsFlag(0x27, 4, 0);
 			setMapObjectsFlag(MAIN_D_8013536C, MAIN_D_8013536E, 1);
-			startAnimation(ENTITY_TABLE[1], TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
+			startAnimation(ENTITY_TABLE[1], TRN_TRAINING_ANIM_IDS[PARTNER_ENTITY.digimonEntity.entity.type][0]);
 			MAIN_D_8013537E = 0;
 			TRAINING_STATE = 7;
 		}

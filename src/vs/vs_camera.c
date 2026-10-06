@@ -93,29 +93,29 @@ static void *vs_camera_functions[] = {
 	VS_applyCamera,
 };
 
-CameraChase INTRO_CAMERA_CHASE;
+CameraChase VS_INTRO_CAMERA_CHASE;
 int32_t VS_IS_TIMER_INITIALIZED;
 
 static void *vs_camera_sbss_order[] = {
 	&VS_IS_TIMER_INITIALIZED,
-	&INTRO_CAMERA_CHASE,
+	&VS_INTRO_CAMERA_CHASE,
 };
 
-SVECTOR INTRO_CAMERA_STAGE1_POS = { 0 };
-SVECTOR INTRO_CAMERA_STAGE1_ROT = { 0, -1592, 0, 0 };
-SVECTOR MAIN_D_80134A74 = { 0 };
-SVECTOR MAIN_D_80134A7C = { 0, -1592, 0, 0 };
+SVECTOR VS_INTRO_CAMERA_STAGE1_POS = { 0 };
+SVECTOR VS_INTRO_CAMERA_STAGE1_ROT = { 0, -1592, 0, 0 };
+SVECTOR VS_CAMERA_CHASE_OFFSET = { 0 };
+SVECTOR VS_CAMERA_CHASE_ROTATION = { 0, -1592, 0, 0 };
 SVECTOR MAIN_D_80134A84 = { 0 };
 SVECTOR MAIN_D_80134A8C = { 0 };
-SVECTOR MAIN_D_80134A94 = { 0 };
-SVECTOR MAIN_D_80134A9C = { 0 };
-SVECTOR INTRO_CAMERA_STAGE2_POS = { 0 };
-SVECTOR INTRO_CAMERA_STAGE2_ROT = { -227, 1479, 0, 0 };
+SVECTOR VS_CAMERA_INTRO_OFFSET = { 0 };
+SVECTOR VS_CAMERA_INTRO_ROTATION = { 0 };
+SVECTOR VS_INTRO_CAMERA_STAGE2_POS = { 0 };
+SVECTOR VS_INTRO_CAMERA_STAGE2_ROT = { -227, 1479, 0, 0 };
 SVECTOR MAIN_D_80134AB4 = { 0 };
 
 // clang-format off
 
-CameraPreset VS_D_8007063C[9] = {
+CameraPreset VS_CAMERA_PRESETS[9] = {
 	{ 0x00e0, 0x0140, 0x0000, 0x0000, 0x00c8, 0x05dc },
 	{ 0x00e0, 0x0ec0, 0x0000, 0x0000, 0x00c8, 0x05dc },
 	{ 0x0fa0, 0x0140, 0x0000, 0x0000, 0x0104, 0x04b0 },
@@ -127,7 +127,7 @@ CameraPreset VS_D_8007063C[9] = {
 	{ 0x00e0, 0x0800, 0x0000, 0x0000, 0x0208, 0x0bb8 },
 };
 
-int16_t VS_D_800706A8[5][3] = {
+int16_t VS_RANDOM_VIEWPOINTS[5][3] = {
 	{ 0xfe00, 0xfe00, 0xfb50 },
 	{ 0x0200, 0xfe00, 0xfb50 },
 	{ 0xfe00, 0xfe00, 0x04b0 },
@@ -349,9 +349,9 @@ void VS_selectRandomCamera(entity, mode, sub)
 	VS_FOCUSED_ENTITY = &entity->entity;
 	STDVS_VIEW.super = NULL;
 	if (sub != 3) {
-		p = &VS_D_8007063C[mode];
+		p = &VS_CAMERA_PRESETS[mode];
 	} else {
-		p = &VS_D_8007063C[randomLimit(3) + 6];
+		p = &VS_CAMERA_PRESETS[randomLimit(3) + 6];
 	}
 	VS_setCameraParams(p->unk0, p->unk2, p->unk4, p->unk6, p->unk8, p->unkA);
 	if (mode < 5) {
@@ -382,9 +382,9 @@ void VS_setRandomViewpoint(Entity *entity, int32_t idx)
 		VS_FOCUSED_ENTITY = entity;
 		VS_CAMERA_STATE = 4;
 		RotMatrix(&VS_FOCUSED_ENTITY->posData->rotation, &m);
-		v.vx = VS_D_800706A8[idx][0];
-		v.vy = VS_D_800706A8[idx][1];
-		v.vz = VS_D_800706A8[idx][2];
+		v.vx = VS_RANDOM_VIEWPOINTS[idx][0];
+		v.vy = VS_RANDOM_VIEWPOINTS[idx][1];
+		v.vz = VS_RANDOM_VIEWPOINTS[idx][2];
 		ApplyMatrixLV(&m, &v, &out);
 		out.vx += VS_FOCUSED_ENTITY->posData->location.vx;
 		out.vz += VS_FOCUSED_ENTITY->posData->location.vz;
@@ -393,9 +393,9 @@ void VS_setRandomViewpoint(Entity *entity, int32_t idx)
 		GS_VIEWPOINT.vpz = out.vz;
 	} else {
 		VS_CAMERA_STATE = 6;
-		GS_VIEWPOINT.vpx = VS_D_800706A8[idx][0];
-		GS_VIEWPOINT.vpy = VS_D_800706A8[idx][1];
-		GS_VIEWPOINT.vpz = VS_D_800706A8[idx][2];
+		GS_VIEWPOINT.vpx = VS_RANDOM_VIEWPOINTS[idx][0];
+		GS_VIEWPOINT.vpy = VS_RANDOM_VIEWPOINTS[idx][1];
+		GS_VIEWPOINT.vpz = VS_RANDOM_VIEWPOINTS[idx][2];
 	}
 
 	GS_VIEWPOINT.rz = 0;
@@ -469,8 +469,8 @@ void VS_updateCameraLerp(int32_t t, int8_t flip)
 	int32_t dist;
 	int32_t dbl;
 
-	off = INTRO_CAMERA_STAGE2_POS;
-	rot = INTRO_CAMERA_STAGE2_ROT;
+	off = VS_INTRO_CAMERA_STAGE2_POS;
+	rot = VS_INTRO_CAMERA_STAGE2_ROT;
 	base = ((((DIGIMON_DATA[VS_FOCUSED_ENTITY->type].height +
 	           DIGIMON_DATA[VS_FOCUSED_ENTITY->type].radius) /
 	          2) *
@@ -543,7 +543,7 @@ void VS_tickCameraChase(void)
 	int32_t dist;
 	int32_t i;
 
-	cc = &INTRO_CAMERA_CHASE;
+	cc = &VS_INTRO_CAMERA_CHASE;
 	if (cc->timer < 0x14) {
 		return;
 	}
@@ -554,14 +554,14 @@ void VS_tickCameraChase(void)
 		startAnimation(VS_FOCUSED_ENTITY, 0x23);
 	}
 	if (cc->phase == 0) {
-		dist = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &VS_FOCUSED_ENTITY->posData->location);
+		dist = VS_getFighterDistance(&VS_CAMERA_CHASE_LAST_POS, &VS_INTRO_TARGET_POS, &VS_FOCUSED_ENTITY->posData->location);
 		if (dist >= 0x23) {
-			VS_D_80071754 = VS_FOCUSED_ENTITY->posData->location;
+			VS_CAMERA_CHASE_LAST_POS = VS_FOCUSED_ENTITY->posData->location;
 			cc->phase = 1;
 			VS_CAMERA_STATE = 8;
 		} else {
-			off = INTRO_CAMERA_STAGE1_POS;
-			rot = INTRO_CAMERA_STAGE1_ROT;
+			off = VS_INTRO_CAMERA_STAGE1_POS;
+			rot = VS_INTRO_CAMERA_STAGE1_ROT;
 			if (cc->side == 0) {
 				rot.vy = lerp(-0x638, -0x293, 0, 0x23, dist);
 			} else {
@@ -578,9 +578,9 @@ void VS_tickCameraChase(void)
 			goto inc;
 		}
 	}
-	t = VS_getFighterDistance(&VS_D_80071754, &VS_D_80071744, &VS_FOCUSED_ENTITY->posData->location);
+	t = VS_getFighterDistance(&VS_CAMERA_CHASE_LAST_POS, &VS_INTRO_TARGET_POS, &VS_FOCUSED_ENTITY->posData->location);
 	VS_updateCameraLerp(t, cc->side);
-	if (VS_isPositionNearEntity(VS_FOCUSED_ENTITY, &VS_D_80071744) == 1) {
+	if (VS_isPositionNearEntity(VS_FOCUSED_ENTITY, &VS_INTRO_TARGET_POS) == 1) {
 		for (i = 0; i < 3; i++) {
 			if (((DigimonEntity *)VS_FOCUSED_ENTITY)->stats.base.moves[i] != 0xff) {
 				startAnimation(VS_FOCUSED_ENTITY, ((DigimonEntity *)VS_FOCUSED_ENTITY)->stats.base.moves[i]);
@@ -607,19 +607,19 @@ void VS_startCameraChase(entity, dx, side)
 	int32_t dist;
 
 	VS_FOCUSED_ENTITY = entity;
-	copyVector(&VS_D_80071754, &VS_FOCUSED_ENTITY->posData->location);
-	VS_D_80071744.vx = VS_D_80071754.vx - dx;
-	VS_D_80071744.vy = VS_D_80071754.vy;
-	VS_D_80071744.vz = VS_D_80071754.vz;
+	copyVector(&VS_CAMERA_CHASE_LAST_POS, &VS_FOCUSED_ENTITY->posData->location);
+	VS_INTRO_TARGET_POS.vx = VS_CAMERA_CHASE_LAST_POS.vx - dx;
+	VS_INTRO_TARGET_POS.vy = VS_CAMERA_CHASE_LAST_POS.vy;
+	VS_INTRO_TARGET_POS.vz = VS_CAMERA_CHASE_LAST_POS.vz;
 	startAnimation(VS_FOCUSED_ENTITY, 0x21);
 	VS_CAMERA_STATE = 9;
-	INTRO_CAMERA_CHASE.timer = 0;
-	INTRO_CAMERA_CHASE.phase = 0;
-	INTRO_CAMERA_CHASE.side = side;
+	VS_INTRO_CAMERA_CHASE.timer = 0;
+	VS_INTRO_CAMERA_CHASE.phase = 0;
+	VS_INTRO_CAMERA_CHASE.side = side;
 	addObject(0x1aa, 0, (TickFunction)VS_tickCameraChase, NULL);
-	off = MAIN_D_80134A74;
-	rot = MAIN_D_80134A7C;
-	if (INTRO_CAMERA_CHASE.side == 0) {
+	off = VS_CAMERA_CHASE_OFFSET;
+	rot = VS_CAMERA_CHASE_ROTATION;
+	if (VS_INTRO_CAMERA_CHASE.side == 0) {
 		rot.vy = -0x638;
 	} else {
 		rot.vy = 0x638;
@@ -680,8 +680,8 @@ void VS_startCameraIntro(Entity *target, Entity *entity)
 	VS_CAMERA_STATE = 8;
 	addObject(0x1ad, 0, (TickFunction)VS_tickCameraIntro, NULL);
 
-	off = MAIN_D_80134A94;
-	rot = MAIN_D_80134A9C;
+	off = VS_CAMERA_INTRO_OFFSET;
+	rot = VS_CAMERA_INTRO_ROTATION;
 	delta.vx = entity->posData->location.vx - target->posData->location.vx;
 	delta.vz = entity->posData->location.vz - target->posData->location.vz;
 	VS_D_80071A0C[1] = (-_atan(delta.vz, delta.vx) + 0x7de) & 0xfff;

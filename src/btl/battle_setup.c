@@ -27,17 +27,17 @@ void startBattleIdleAnimation(DigimonEntity *entity, Stats *stats, int32_t flags
 void playSound(int32_t soundId, uint32_t flag);
 void clearTamerWaypoints(void);
 
-int16_t MAIN_D_801346D8[4] = { 0, 1024, 2048, 3072 };
+int16_t BTL_CARDINAL_ROTATIONS[4] = { 0, 1024, 2048, 3072 };
 uint8_t BRAIN_TO_COMMAND_MAP[5] = { 3, 4, 5, 7, 8 };
 
-uint8_t MAIN_D_80135078;
-long MAIN_D_8013507C;
-int32_t MAIN_D_80135080;
+uint8_t BTL_SAVED_CHARGE_MODE;
+long BTL_FINISHER_AURA_ID;
+int32_t BTL_FINISHER_TIMER;
 
 static void *battle_setup_sbss_order[] = {
-	&MAIN_D_80135080,
-	&MAIN_D_8013507C,
-	&MAIN_D_80135078,
+	&BTL_FINISHER_TIMER,
+	&BTL_FINISHER_AURA_ID,
+	&BTL_SAVED_CHARGE_MODE,
 };
 
 void BTL_initializeCombat(void)
@@ -52,14 +52,14 @@ void BTL_initializeCombat(void)
 
 	BTL_initializeDeathCountdown();
 	resetFlattenGlobal();
-	MAIN_D_8013507C = -1;
+	BTL_FINISHER_AURA_ID = -1;
 	BTL_initializePartnerTile();
 	BTL_initializeEnemyHPBarSprites();
 	COMBAT_DATA_PTR->player.remainingChargeupTime[0] = -1;
-	MAIN_D_80135078 = PARTNER_ENTITY.digimonEntity.stats.current.chargeMode;
+	BTL_SAVED_CHARGE_MODE = PARTNER_ENTITY.digimonEntity.stats.current.chargeMode;
 	FINISHING_ENTITY = NULL;
 	FLEE_DISABLED[1] = 0;
-	MAIN_D_80135080 = 0;
+	BTL_FINISHER_TIMER = 0;
 	DEATH_COUNTDOWN = FLEE_TIMER = 0;
 	BATTLE_TOGGLE_LIFEBAR = 0;
 	BATTLE_FRAME_COUNT = 1;
@@ -101,10 +101,10 @@ void BTL_initializeCombat(void)
 		f->cooldown = 0;
 		f->finisherProgress = 0;
 		f->statusFxId = -1;
-		f->unk11 = -1;
+		f->activeEffectSlot = -1;
 		f->speedBuffer = 0x64;
 		f->unk15 = 0;
-		f->unk16 = 0;
+		f->hasCollidedWhileDistanceCmd = 0;
 		if (stats->base.brain < 0x190) {
 			f->buffsRemaining = (stats->base.brain / 100) + 1;
 		} else if (stats->base.brain < 0x258) {
@@ -342,20 +342,20 @@ int32_t BTL_isBattleFinished(void)
 	if (entity->anim.animId == 0x2c) {
 		DEATH_COUNTDOWN = 0;
 		if (!(entity->anim.animFlag & 1)) {
-			COMBAT_DATA_PTR->fighter[0].flags &= 0x7fff;
+			COMBAT_DATA_PTR->fighter[0].flags &= ~FIGHTER_FLAG_DEAD;
 			PARTNER_ENTITY.digimonEntity.stats.current.isHit = 0;
 			if (NO_AI_FLAG != 0) {
-				if (MAIN_D_8013507C != -1) {
-					BTL_removeFinisherAura(MAIN_D_8013507C);
+				if (BTL_FINISHER_AURA_ID != -1) {
+					BTL_removeFinisherAura(BTL_FINISHER_AURA_ID);
 				}
 				NO_AI_FLAG = 0;
 				FINISHING_ENTITY = NULL;
 			}
 			for (i = 0; ENEMY_COUNT >= i; i++) {
 				COMBAT_DATA_PTR->fighter[i].cooldown = 0;
-				COMBAT_DATA_PTR->fighter[i].flags &= 0xc3bf;
+				COMBAT_DATA_PTR->fighter[i].flags &= ~(FIGHTER_FLAG_TRANSFORMING | FIGHTER_FLAG_10 | FIGHTER_FLAG_ON_CHARGEUP | FIGHTER_FLAG_ON_COOLDOWN | FIGHTER_FLAG_SENILE);
 				stats = &((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]])->stats;
-				if (!(COMBAT_DATA_PTR->fighter[i].flags & 0x8000) || ((stats->current.currentHP - COMBAT_DATA_PTR->fighter[i].hpDamageBuffer) > 0)) {
+				if (!(COMBAT_DATA_PTR->fighter[i].flags & FIGHTER_FLAG_DEAD) || ((stats->current.currentHP - COMBAT_DATA_PTR->fighter[i].hpDamageBuffer) > 0)) {
 					COMBAT_DATA_PTR->fighter[i].moveRange = 0;
 				}
 			}

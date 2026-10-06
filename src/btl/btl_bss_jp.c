@@ -5,7 +5,7 @@
 #include <dw/types.h>
 
 // clang-format off
-GsSPRITE BTL_D_80073E54 = {
+GsSPRITE BTL_DEATH_COUNTDOWN_SPRITE = {
 	0x00000000,
 	0x0000,
 	0x0000,
@@ -26,7 +26,7 @@ GsSPRITE BTL_D_80073E54 = {
 	0x00000000,
 };
 
-BtlDeathCountdownRaw BTL_D_80073E78 = {
+BtlDeathCountdownRaw BTL_DEATH_COUNTDOWN = {
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -167,7 +167,7 @@ char BTL_END_BOX_TEXTBUFFER[1024] = {
 	0x5f, 0x63, 0x68, 0x61, 0x72, 0x67, 0x65, 0x2e,
 };
 
-uint8_t BTL_D_800742A0[155][20] = {
+uint8_t BTL_BATTLE_START_TEXT_PIECES[155][20] = {
 	{
 		0x63, 0x20, 0x0d, 0x0a, 0x23, 0x20, 0x20, 0x20,
 		0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
@@ -945,7 +945,7 @@ uint8_t BTL_D_800742A0[155][20] = {
 	},
 };
 
-void (*BTL_D_80074EBC[97])(void) = {
+void (*BTL_EFE_SUB_OPCODE_HANDLERS[97])(void) = {
 	(void (*)(void))0x6346415f, (void (*)(void))0x736f6168,
 	(void (*)(void))0x0d20632e, (void (*)(void))0x2020230a,
 	(void (*)(void))0x20202020, (void (*)(void))0x20202020,
@@ -997,7 +997,7 @@ void (*BTL_D_80074EBC[97])(void) = {
 	(void (*)(void))0x20202023,
 };
 
-EfePoisonBubble BTL_D_80075040[12] = {
+EfePoisonBubble BTL_POISON_BUBBLES[12] = {
 	{ 0x2020, 0x2020, 0x2020, 0x2020, (Entity *)0x20202020 },
 	{ 0x2020, 0x2020, 0x2020, 0x2020, (Entity *)0x5d333220 },
 	{ 0x7320, 0x7465, 0x525f, 0x4e49, (Entity *)0x46415f47 },
@@ -1012,14 +1012,14 @@ EfePoisonBubble BTL_D_80075040[12] = {
 	{ 0x646e, 0x6920, 0x206e, 0x564f, (Entity *)0x5f5f314c },
 };
 
-EfePoison BTL_D_800750D0[4] = {
+EfePoison BTL_POISON_EFFECTS[4] = {
 	{ 0x4641, 0x705f, (Entity *)0x6c617261 },
 	{ 0x2e32, 0x2063, (Entity *)0x20230a0d },
 	{ 0x2020, 0x2020, (Entity *)0x20202020 },
 	{ 0x2020, 0x2020, (Entity *)0x20202020 },
 };
 
-EfeConfusion BTL_D_800750F0[4] = {
+EfeConfusion BTL_CONFUSION_EFFECTS[4] = {
 	{
 		0x2020,
 		0x2020,
@@ -1050,7 +1050,7 @@ EfeConfusion BTL_D_800750F0[4] = {
 	},
 };
 
-EfeStun BTL_D_80075130[5] = {
+EfeStun BTL_STUN_EFFECTS[5] = {
 	{ 0x2023, 0x2020, 0x2020, 0x2020, (Entity *)0x20202020 },
 	{ 0x2020, 0x2020, 0x2020, 0x2020, (Entity *)0x20202020 },
 	{ 0x2020, 0x3220, 0x5d35, 0x4020, (Entity *)0x28203737 },
@@ -1058,7 +1058,7 @@ EfeStun BTL_D_80075130[5] = {
 	{ 0x6465, 0x6920, 0x206e, 0x564f, (Entity *)0x5f5f314c },
 };
 
-EfeStunSpark BTL_D_8007516C[25] = {
+EfeStunSpark BTL_STUN_SUB_EFFECTS[25] = {
 	{ 0x4641, 0x705f, (Entity *)0x6c617261 },
 	{ 0x2e32, 0x2063, (Entity *)0x20230a0d },
 	{ 0x2020, 0x2020, (Entity *)0x20202020 },
@@ -1086,12 +1086,12 @@ EfeStunSpark BTL_D_8007516C[25] = {
 	{ 0x4767, 0x5053, (Entity *)0x7046415f },
 };
 
-EfeFinisherAura BTL_D_80075234[2] = {
+EfeFinisherAura BTL_FINISHER_AURAS[2] = {
 	{ 0x7261, 0x6c61, (Entity *)0x756e5f32 },
 	{ 0x626d, 0x7265, (Entity *)0x504f544c },
 };
 
-SVECTOR BTL_D_80075244[20] = {
+SVECTOR BTL_FINISHER_AURA_SPARKS[20] = {
 	{ 0x2820, 0x6f6c, 0x6163, 0x296c },
 	{ 0x6420, 0x6665, 0x6e69, 0x6465 },
 	{ 0x6920, 0x206e, 0x564f, 0x314c },
@@ -1114,7 +1114,7 @@ SVECTOR BTL_D_80075244[20] = {
 	{ 0x2020, 0x2020, 0x2020, 0x3332 },
 };
 
-BtlParticleVelocity BTL_D_800752E4[20] = {
+BtlParticleVelocity BTL_ITEM_PARTICLE_VELOCITIES[20] = {
 	{ 0x205d, 0x4767, 0x5053 },
 	{ 0x415f, 0x7046, 0x7261 },
 	{ 0x6c61, 0x5f32, 0x7266 },
@@ -1137,7 +1137,7 @@ BtlParticleVelocity BTL_D_800752E4[20] = {
 	{ 0x4544, 0x2052, 0x6c28 },
 };
 
-BtlParticleDrag BTL_D_8007535C[20] = {
+BtlParticleDrag BTL_ITEM_PARTICLE_DRAG[20] = {
 	{ 0x636f, 0x6c61 },
 	{ 0x2029, 0x6564 },
 	{ 0x6966, 0x656e },
@@ -1160,7 +1160,7 @@ BtlParticleDrag BTL_D_8007535C[20] = {
 	{ 0x6645, 0x6566 },
 };
 
-BtlItemParticleEffect BTL_D_800753AC[4] = {
+BtlItemParticleEffect BTL_ITEM_PARTICLE_EFFECTS[4] = {
 	{
 		0x7463,
 		0x6620,
@@ -2147,7 +2147,7 @@ BtlItemParticleEffect BTL_D_800753AC[4] = {
 	},
 };
 
-EfeBuffDisk BTL_D_80075C7C[1] = {
+EfeBuffDisk BTL_BUFF_DISKS[1] = {
 	{
 		0x2020,
 		0x2020,
@@ -2161,7 +2161,7 @@ EfeBuffDisk BTL_D_80075C7C[1] = {
 	},
 };
 
-EfeTrailEffect BTL_D_80075CA0[1] = {
+EfeTrailEffect BTL_BUFF_TRAILS[1] = {
 	{
 		0x6665,
 		0x6e69,
@@ -2244,23 +2244,23 @@ EfeTrailEffect BTL_D_80075CA0[1] = {
 	},
 };
 
-int16_t BTL_D_80075DCC[8] = {
+int16_t BTL_BUFF_TRAIL_A_X[8] = {
 	0x205d, 0x4367, 0x4148, 0x504d, 0x535f, 0x4554, 0x2050, 0x6c28,
 };
 
-int16_t BTL_D_80075DDC[8] = {
+int16_t BTL_BUFF_TRAIL_A_Z[8] = {
 	0x636f, 0x6c61, 0x2029, 0x6564, 0x6966, 0x656e, 0x2064, 0x6e69,
 };
 
-int16_t BTL_D_80075DEC[8] = {
+int16_t BTL_BUFF_TRAIL_B_X[8] = {
 	0x7220, 0x7365, 0x6c75, 0x2e74, 0x2063, 0x0a0d, 0x2023, 0x2020,
 };
 
-int16_t BTL_D_80075DFC[8] = {
+int16_t BTL_BUFF_TRAIL_B_Z[8] = {
 	0x2020, 0x2020, 0x2020, 0x2020, 0x2020, 0x2020, 0x3120, 0x5d35,
 };
 
-EfeBuffRings BTL_D_80075E0C[1] = {
+EfeBuffRings BTL_BUFF_RINGS[1] = {
 	{
 		0x7320,
 		0x7465,
@@ -2289,7 +2289,7 @@ EfeBuffRings BTL_D_80075E0C[1] = {
 	},
 };
 
-SVECTOR BTL_D_80075E78[32] = {
+SVECTOR BTL_BUFF_RING_SPARKS[32] = {
 	{ 0x3531, 0x205d, 0x4367, 0x4148 },
 	{ 0x504d, 0x455f, 0x444e, 0x2820 },
 	{ 0x6c67, 0x626f, 0x6c61, 0x2029 },

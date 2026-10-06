@@ -6,17 +6,17 @@
 #include <dw/vs.h>
 
 // clang-format off
-int8_t VS_D_80071690[2][5] = {
+int8_t VS_ROUND_WON[2][5] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00, 0x00, 0x00 },
 };
 
-uint8_t VS_D_8007169C[2][5] = {
+uint8_t VS_ROUND_LOST[2][5] = {
 	{ 0x00, 0x00, 0x00, 0x00, 0x00 },
 	{ 0x00, 0x00, 0x00, 0x00, 0x00 },
 };
 
-VsBattleSetup VS_D_800716A8 = {
+VsBattleSetup VS_BATTLE_SETUP = {
 	{
 		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
 		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
@@ -63,16 +63,16 @@ GsOT_TAG VS_D_80071734[4] = {
 	{ 0x000000, 0x00 },
 };
 
-VECTOR VS_D_80071744 = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
+VECTOR VS_INTRO_TARGET_POS = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
 
-VECTOR VS_D_80071754 = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
+VECTOR VS_CAMERA_CHASE_LAST_POS = { 0x00000000, 0x00000000, 0x00000000, 0x00000000 };
 
-GsOT VS_D_80071764[2] = {
+GsOT VS_MODEL_SCENE_ORDERING_TABLE[2] = {
 	{ 0x00000000, NULL, 0x00000000, 0x00000000, NULL },
 	{ 0x00000000, NULL, 0x00000000, 0x00000000, NULL },
 };
 
-GsOT_TAG VS_D_8007178C[32] = {
+GsOT_TAG VS_MODEL_SCENE_OT_TAGS_0[32] = {
 	{ 0x000000, 0x00 },
 	{ 0x000000, 0x00 },
 	{ 0x000000, 0x00 },
@@ -107,7 +107,7 @@ GsOT_TAG VS_D_8007178C[32] = {
 	{ 0x000000, 0x00 },
 };
 
-GsOT_TAG VS_D_8007180C[32] = {
+GsOT_TAG VS_MODEL_SCENE_OT_TAGS_1[32] = {
 	{ 0x000000, 0x00 },
 	{ 0x000000, 0x00 },
 	{ 0x000000, 0x00 },
@@ -142,7 +142,7 @@ GsOT_TAG VS_D_8007180C[32] = {
 	{ 0x120001, 0x00 },
 };
 
-GsCOORDINATE2Raw VS_D_8007188C[4] = {
+GsCOORDINATE2Raw VS_ARENA_COORDS[4] = {
 	{
 		{
 			0x32, 0x15, 0x00, 0x00, 0xa3, 0x00, 0x10, 0x00,
@@ -201,7 +201,7 @@ GsCOORDINATE2Raw VS_D_8007188C[4] = {
 	},
 };
 
-GsDOBJ2 VS_D_800719CC[4] = {
+GsDOBJ2 VS_ARENA_OBJECTS[4] = {
 	{
 		0x196b0012,
 		(GsCOORDINATE2 *)0x00b60000,
@@ -274,7 +274,7 @@ int32_t VS_D_80071AF0[18] = {
 	0x7478656e, 0x00646d43,
 };
 
-uint8_t VS_D_80071B38[155][20] = {
+uint8_t VS_BATTLE_START_TEXT_PIECES[155][20] = {
 	{
 		0x72, 0x00, 0x12, 0x15, 0x00, 0x00, 0x23, 0x00,
 		0x06, 0x00, 0x04, 0x50, 0x06, 0x00, 0x00, 0x07,
@@ -1053,7 +1053,7 @@ uint8_t VS_D_80071B38[155][20] = {
 };
 
 
-PositionDataRaw VS_D_80072754[4] = {
+PositionDataRaw VS_VERSUS_MODEL_OBJECTS[4] = {
 	{
 		{
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00,
@@ -1140,13 +1140,13 @@ PositionDataRaw VS_D_80072754[4] = {
 	},
 };
 
-int16_t VS_D_80072974[22] = {
+int16_t VS_RESULT_ROTATION_X[22] = {
 	0x0000, 0x0507, 0x0000, 0x0014, 0x0000, 0x0404, 0x0000, 0x002c,
 	0x0000, 0x0705, 0x0000, 0x0034, 0x0000, 0x0706, 0x0000, 0x0040,
 	0x0000, 0x0904, 0x0000, 0x0048, 0x0000, 0x0705,
 };
 
-int16_t VS_D_800729A0[22] = {
+int16_t VS_RESULT_ROTATION_Y[22] = {
 	0x0000, 0x0050, 0x0000, 0x0706, 0x0000, 0x005c, 0x0000, 0x0904,
 	0x0000, 0x0078, 0x0000, 0x0c07, 0x0000, 0x007c, 0x0000, 0x0b07,
 	0x0000, 0x00a0, 0x0000, 0x0c07, 0x0000, 0x00ac,
@@ -1164,13 +1164,13 @@ int16_t VS_D_800729F8[22] = {
 	0x0000, 0x0170, 0x0000, 0x0d07, 0x0000, 0x01a0,
 };
 
-int16_t VS_D_80072A24[22] = {
+int16_t VS_RESULT_LAST_X[22] = {
 	0x0000, 0x0b07, 0x0000, 0x01a4, 0x0000, 0x0c07, 0x0000, 0x01c0,
 	0x0000, 0x0f04, 0x0000, 0x01d0, 0x0000, 0x0d07, 0x0000, 0x01f8,
 	0x0000, 0x0e07, 0x0000, 0x0230, 0x0000, 0x0d07,
 };
 
-PositionDataRaw VS_D_80072A50[7] = {
+PositionDataRaw VS_RESULT_MODEL_OBJECTS[7] = {
 	{
 		{
 			0x00, 0x00, 0x74, 0x02, 0x00, 0x00, 0x07, 0x0d,
@@ -1320,12 +1320,12 @@ PositionDataRaw VS_D_80072A50[7] = {
 	},
 };
 
-int16_t VS_D_80072E08[10] = {
+int16_t VS_RESULT_MODEL_STEPS[10] = {
 	0x0000, 0x0008, 0x0000, 0x0001, 0x000b, 0x0211, 0x0000, 0x0010,
 	0x0000, 0x0008,
 };
 
-void (*VS_jtbl_80072E1C[97])(void) = {
+void (*VS_EFE_SUB_OPCODE_HANDLERS[97])(void) = {
 	(void (*)(void))0x00010000, (void (*)(void))0x021d000b,
 	(void (*)(void))0x00180000, (void (*)(void))0x00080000,
 	(void (*)(void))0x00010000, (void (*)(void))0x0229000b,
@@ -1377,7 +1377,7 @@ void (*VS_jtbl_80072E1C[97])(void) = {
 	(void (*)(void))0x00100000,
 };
 
-MATRIXRaw VS_D_80072FA0 = {
+MATRIXRaw VS_SAVED_WS_MATRIX = {
 	{
 		0x00, 0x00, 0x22, 0x01, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00,
@@ -1386,7 +1386,7 @@ MATRIXRaw VS_D_80072FA0 = {
 	},
 };
 
-EfePoisonBubble VS_D_80072FC0[12] = {
+EfePoisonBubble VS_POISON_BUBBLES[12] = {
 	{ 0x0000, 0x0137, 0x0000, 0x0000, (Entity *)0x00000000 },
 	{ 0x0000, 0x0010, 0x0000, 0x0146, (Entity *)0x00000000 },
 	{ 0x0000, 0x0000, 0x0000, 0x0010, (Entity *)0x01540000 },
@@ -1401,14 +1401,14 @@ EfePoisonBubble VS_D_80072FC0[12] = {
 	{ 0x0000, 0x0000, 0x0000, 0x0000, (Entity *)0x00100000 },
 };
 
-EfePoison VS_D_80073050[4] = {
+EfePoison VS_POISON_EFFECTS[4] = {
 	{ 0x0000, 0x01e3, (Entity *)0x00000000 },
 	{ 0x0000, 0x0000, (Entity *)0x00100000 },
 	{ 0x0000, 0x01ef, (Entity *)0x00c40000 },
 	{ 0x0000, 0x0090, (Entity *)0x00110000 },
 };
 
-EfeConfusion VS_D_80073070[4] = {
+EfeConfusion VS_CONFUSION_EFFECTS[4] = {
 	{
 		0x0009,
 		0x01f4,
@@ -1439,7 +1439,7 @@ EfeConfusion VS_D_80073070[4] = {
 	},
 };
 
-EfeStun VS_D_800730B0[5] = {
+EfeStun VS_STUN_EFFECTS[5] = {
 	{ 0x0000, 0x0279, 0x0000, 0x0000, (Entity *)0x00000000 },
 	{ 0x0000, 0x0010, 0x0000, 0x0284, (Entity *)0x00000000 },
 	{ 0x0000, 0x0000, 0x0000, 0x0010, (Entity *)0x028d0000 },
@@ -1447,7 +1447,7 @@ EfeStun VS_D_800730B0[5] = {
 	{ 0x0000, 0x029b, 0x0000, 0x0000, (Entity *)0x00000000 },
 };
 
-EfeStunSpark VS_D_800730EC[25] = {
+EfeStunSpark VS_STUN_SUB_EFFECTS[25] = {
 	{ 0x0000, 0x0010, (Entity *)0x02a50000 },
 	{ 0x0000, 0x0000, (Entity *)0x00000000 },
 	{ 0x0000, 0x0010, (Entity *)0x02ad0000 },
@@ -1475,12 +1475,12 @@ EfeStunSpark VS_D_800730EC[25] = {
 	{ 0x5f42, 0x5453, (Entity *)0x67005045 },
 };
 
-EfeFinisherAura VS_D_800731B4[2] = {
+EfeFinisherAura VS_FINISHER_AURAS[2] = {
 	{ 0x4843, 0x5f52, (Entity *)0x70544144 },
 	{ 0x0032, 0x4367, (Entity *)0x445f5248 },
 };
 
-SVECTOR VS_D_800731C4[20] = {
+SVECTOR VS_FINISHER_AURA_SPARKS[20] = {
 	{ 0x5441, 0x3170, 0x6d00, 0x6d65 },
 	{ 0x625f, 0x7461, 0x6c74, 0x0065 },
 	{ 0x6e69, 0x7469, 0x434d, 0x0042 },

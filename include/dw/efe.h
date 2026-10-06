@@ -331,27 +331,27 @@ extern int16_t EFE_LOADED_MOVE_DATA[];
 extern EfeInstance *EFE_CURRENT_DATA_SEGMENT;
 extern int32_t EFE_PREVIOUS_DATA_SEGMENT;
 
-extern EfeParticleEffect *MAIN_D_80134CCC;
-extern int32_t MAIN_D_80134CD0;
+extern EfeParticleEffect *EFE_PARTICLE_EMITTERS;
+extern int32_t EFE_SUB_EFFECT_INDEX;
 extern long COMBAT_EFFECT_ITR;
-extern int32_t MAIN_D_80134CD8;
-extern long MAIN_D_80134CE0;
+extern int32_t EFE_HIT_ENTITY_INDEX;
+extern long EFE_TARGET_ENTITY_INDEX;
 extern int32_t EFE_ACTIVE_SECTION;
 extern EfeSubEffect *EFE_SCRIPT_CONTEXT;
 extern int32_t EFE_SCRIPT_REGISTER;
-extern EfeBoneOffset *MAIN_D_80134CF0;
+extern EfeBoneOffset *EFE_BONE_OFFSET;
 extern int32_t *EFE_CALL_STACK;
 extern int16_t *EFE_SCRIPT_PTR;
 extern int16_t EFE_SCRIPT_CURRENT_VALUE;
 extern int32_t EFE_SCRIPT_HEAD;
 extern EfeSlot *EFE_DATA_ITERATOR;
 extern EfeSlot *EFE_DATA_PTR;
-extern int32_t MAIN_D_80134D14;
-extern int32_t MAIN_D_80134D18;
+extern int32_t EFE_HEAP_POINTER;
+extern int32_t EFE_HEAP_BASE;
 extern int16_t UNUSED_EFE_ARRAY[];
-extern EfeLoad MAIN_D_80139B20;
+extern EfeLoad EFE_LOAD_REQUEST;
 extern EfeSound EFE_SOUND_DATA[10];
-extern GsRVIEW2 MAIN_D_80139B34;
+extern GsRVIEW2 EFE_FIXED_VIEW;
 extern int32_t EFE_CALL_STACK_BUFFER[16];
 
 #endif

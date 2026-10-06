@@ -17,84 +17,84 @@ void BTL_removeCommandMenu(void);
  */
 const BtlCommandShout BTL_COMMAND_SHOUT = { -1, 0, 0, 0 };
 
-int16_t MAIN_D_80135084;
-int16_t MAIN_D_80135086;
-uint8_t MAIN_D_80135088;
-uint8_t MAIN_D_80135089;
-uint8_t MAIN_D_8013508A;
-uint8_t MAIN_D_8013508B;
-uint8_t MAIN_D_8013508C;
+int16_t BTL_COMMAND_MENU_X;
+int16_t BTL_COMMAND_MENU_Y;
+uint8_t BTL_COMMAND_MENU_BLINK;
+uint8_t BTL_COMMAND_MENU_TIMER;
+uint8_t BTL_COMMAND_MENU_X_STEP;
+uint8_t BTL_COMMAND_MENU_Y_STEP;
+uint8_t BTL_COMMAND_MENU_LAYOUT;
 
 static void *command_menu_sbss_order[] = {
-	&MAIN_D_8013508C,
-	&MAIN_D_8013508B,
-	&MAIN_D_8013508A,
-	&MAIN_D_80135089,
-	&MAIN_D_80135088,
-	&MAIN_D_80135086,
-	&MAIN_D_80135084,
+	&BTL_COMMAND_MENU_LAYOUT,
+	&BTL_COMMAND_MENU_Y_STEP,
+	&BTL_COMMAND_MENU_X_STEP,
+	&BTL_COMMAND_MENU_TIMER,
+	&BTL_COMMAND_MENU_BLINK,
+	&BTL_COMMAND_MENU_Y,
+	&BTL_COMMAND_MENU_X,
 };
 
 void BTL_initializeCommandMenu(void)
 {
-	MAIN_D_80135094 = 1;
-	MAIN_D_80135084 = -0x98;
-	MAIN_D_80135086 = -0x78;
-	MAIN_D_80135088 = 0;
-	MAIN_D_80135089 = 0;
-	MAIN_D_8013508A = 0;
-	MAIN_D_8013508B = 0;
+	BTL_COMMAND_MENU_ACTIVE = 1;
+	BTL_COMMAND_MENU_X = -0x98;
+	BTL_COMMAND_MENU_Y = -0x78;
+	BTL_COMMAND_MENU_BLINK = 0;
+	BTL_COMMAND_MENU_TIMER = 0;
+	BTL_COMMAND_MENU_X_STEP = 0;
+	BTL_COMMAND_MENU_Y_STEP = 0;
 
 	switch (COMBAT_DATA_PTR->player.numCommands[0]) {
 	case 3:
-		MAIN_D_8013508C = 0;
+		BTL_COMMAND_MENU_LAYOUT = 0;
 		break;
 	case 4:
-		MAIN_D_8013508C = 1;
+		BTL_COMMAND_MENU_LAYOUT = 1;
 		break;
 	case 5:
-		MAIN_D_8013508C = 2;
+		BTL_COMMAND_MENU_LAYOUT = 2;
 		break;
 	case 7:
-		MAIN_D_8013508C = 3;
+		BTL_COMMAND_MENU_LAYOUT = 3;
 		break;
 	case 8:
-		MAIN_D_8013508C = 4;
+		BTL_COMMAND_MENU_LAYOUT = 4;
 		break;
 	case 9:
-		MAIN_D_8013508C = 5;
+		BTL_COMMAND_MENU_LAYOUT = 5;
 		break;
 	}
 
-	MAIN_D_801346F8 = 0;
+	BTL_COMMAND_MENU_CLOSED_FRAMES = 0;
 	addObject(0x198, 0, (TickFunction)BTL_tickCommandMenu, BTL_renderCommandMenu);
 }
 
 void BTL_tickCommandMenu(void)
 {
-	MAIN_D_80135089++;
+	BTL_COMMAND_MENU_TIMER++;
 
-	if (MAIN_D_80135094 == 1) {
-		if (MAIN_D_8013508B < 7) {
-			MAIN_D_8013508B++;
+	if (BTL_COMMAND_MENU_ACTIVE == 1) {
+		if (BTL_COMMAND_MENU_Y_STEP < 7) {
+			BTL_COMMAND_MENU_Y_STEP++;
 		}
-		if ((MAIN_D_8013508B == 7) && (MAIN_D_8013508A < 7)) {
-			MAIN_D_8013508A++;
+		if ((BTL_COMMAND_MENU_Y_STEP == 7) && (BTL_COMMAND_MENU_X_STEP < 7)) {
+			BTL_COMMAND_MENU_X_STEP++;
 		}
-		MAIN_D_80135086 = BTL_D_80072EB8[MAIN_D_8013508B];
-		MAIN_D_80135084 = BTL_D_80072EC8[MAIN_D_8013508A];
-		if ((GAME_STATE == 1) && ((MAIN_D_80135089 % 8) == 0)) {
-			MAIN_D_80135088 = (MAIN_D_80135088 + 1) & 1;
+		BTL_COMMAND_MENU_Y = BTL_COMMAND_MENU_SLIDE_Y[BTL_COMMAND_MENU_Y_STEP];
+		BTL_COMMAND_MENU_X = BTL_COMMAND_MENU_SLIDE_X[BTL_COMMAND_MENU_X_STEP];
+		if ((GAME_STATE == 1) && ((BTL_COMMAND_MENU_TIMER % 8) == 0)) {
+			BTL_COMMAND_MENU_BLINK = (BTL_COMMAND_MENU_BLINK + 1) & 1;
 		}
 	} else {
-		if (MAIN_D_8013508A != 0) {
-			MAIN_D_8013508A--;
+		if (BTL_COMMAND_MENU_X_STEP != 0) {
+			BTL_COMMAND_MENU_X_STEP--;
 		}
-		if ((MAIN_D_8013508A == 0) && (MAIN_D_8013508B != 0)) {
-			MAIN_D_8013508B--;
+		if ((BTL_COMMAND_MENU_X_STEP == 0) && (BTL_COMMAND_MENU_Y_STEP != 0)) {
+			BTL_COMMAND_MENU_Y_STEP--;
 		}
-		MAIN_D_80135086 = BTL_D_80072EB8[MAIN_D_8013508B];
-		MAIN_D_80135084 = BTL_D_80072EC8[MAIN_D_8013508A];
+		BTL_COMMAND_MENU_Y = BTL_COMMAND_MENU_SLIDE_Y[BTL_COMMAND_MENU_Y_STEP];
+		BTL_COMMAND_MENU_X = BTL_COMMAND_MENU_SLIDE_X[BTL_COMMAND_MENU_X_STEP];
 	}
 }
 
@@ -164,11 +164,11 @@ int16_t arg0;
 		}
 		x = (int16_t)base - (i * 0xe);
 		if ((count % 2) == 0) {
-			setXY4(prim, x, ((i % 2) == 0) ? MAIN_D_80135084 + 3 : MAIN_D_80135084 + 0xd, x + 0x10, ((i % 2) == 0) ? MAIN_D_80135084 + 3 : MAIN_D_80135084 + 0xd, x, ((i % 2) == 0) ? MAIN_D_80135086 - 0xd : MAIN_D_80135086 - 3, x + 0x10, ((i % 2) == 0) ? MAIN_D_80135086 - 0xd : MAIN_D_80135086 - 3);
+			setXY4(prim, x, ((i % 2) == 0) ? BTL_COMMAND_MENU_X + 3 : BTL_COMMAND_MENU_X + 0xd, x + 0x10, ((i % 2) == 0) ? BTL_COMMAND_MENU_X + 3 : BTL_COMMAND_MENU_X + 0xd, x, ((i % 2) == 0) ? BTL_COMMAND_MENU_Y - 0xd : BTL_COMMAND_MENU_Y - 3, x + 0x10, ((i % 2) == 0) ? BTL_COMMAND_MENU_Y - 0xd : BTL_COMMAND_MENU_Y - 3);
 		} else {
-			setXY4(prim, x, ((i % 2) == 1) ? MAIN_D_80135084 + 3 : MAIN_D_80135084 + 0xd, x + 0x10, ((i % 2) == 1) ? MAIN_D_80135084 + 3 : MAIN_D_80135084 + 0xd, x, ((i % 2) == 1) ? MAIN_D_80135086 - 0xd : MAIN_D_80135086 - 3, x + 0x10, ((i % 2) == 1) ? MAIN_D_80135086 - 0xd : MAIN_D_80135086 - 3);
+			setXY4(prim, x, ((i % 2) == 1) ? BTL_COMMAND_MENU_X + 3 : BTL_COMMAND_MENU_X + 0xd, x + 0x10, ((i % 2) == 1) ? BTL_COMMAND_MENU_X + 3 : BTL_COMMAND_MENU_X + 0xd, x, ((i % 2) == 1) ? BTL_COMMAND_MENU_Y - 0xd : BTL_COMMAND_MENU_Y - 3, x + 0x10, ((i % 2) == 1) ? BTL_COMMAND_MENU_Y - 0xd : BTL_COMMAND_MENU_Y - 3);
 		}
-		if ((i == COMBAT_DATA_PTR->player.hoveredCommand[0]) && (MAIN_D_80135088 == 1)) {
+		if ((i == COMBAT_DATA_PTR->player.hoveredCommand[0]) && (BTL_COMMAND_MENU_BLINK == 1)) {
 			prim->u0 += 0x10;
 			prim->u1 += 0x10;
 			prim->u2 += 0x10;
@@ -183,7 +183,7 @@ int16_t arg0;
 		setTPage(prim, 0, 0, 960, 256);
 		setClut(prim, 272, 497);
 		setRGB0(prim, 0x80, 0x80, 0x80);
-		setUVWH(prim, MAIN_D_80134728[BTL_D_80072E7C[MAIN_D_8013508C][i]], 0xe0, MAIN_D_80134730[BTL_D_80072E7C[MAIN_D_8013508C][i]], 31);
+		setUVWH(prim, BTL_COMMAND_LABEL_U[BTL_COMMAND_MENU_LAYOUTS[BTL_COMMAND_MENU_LAYOUT][i]], 0xe0, BTL_COMMAND_LABEL_W[BTL_COMMAND_MENU_LAYOUTS[BTL_COMMAND_MENU_LAYOUT][i]], 31);
 		if (i > 0) {
 			rowY = ((i - 1) * 0xe) + 0xb;
 		} else {
@@ -194,7 +194,7 @@ int16_t arg0;
 		} else {
 			width = 0xe;
 		}
-		setXY4(prim, rowY - 0x8f, MAIN_D_80135084, (rowY - 0x8f) + width, MAIN_D_80135084, rowY - 0x8f, MAIN_D_80135086, (rowY - 0x8f) + width, MAIN_D_80135086);
+		setXY4(prim, rowY - 0x8f, BTL_COMMAND_MENU_X, (rowY - 0x8f) + width, BTL_COMMAND_MENU_X, rowY - 0x8f, BTL_COMMAND_MENU_Y, (rowY - 0x8f) + width, BTL_COMMAND_MENU_Y);
 		AddPrim(ACTIVE_ORDERING_TABLE->org + 7, prim++);
 	}
 
@@ -203,19 +203,19 @@ int16_t arg0;
 
 void BTL_removeCommandMenu(void)
 {
-	if (MAIN_D_80135094 != -1) {
-		MAIN_D_801346F8 = 0;
-		MAIN_D_80135094 = -1;
+	if (BTL_COMMAND_MENU_ACTIVE != -1) {
+		BTL_COMMAND_MENU_CLOSED_FRAMES = 0;
+		BTL_COMMAND_MENU_ACTIVE = -1;
 		removeObject(0x198, 0);
 	}
 }
 
 int32_t BTL_isCommandMenuClosed(void)
 {
-	if ((MAIN_D_8013508A == 0) && (MAIN_D_8013508B == 0)) {
+	if ((BTL_COMMAND_MENU_X_STEP == 0) && (BTL_COMMAND_MENU_Y_STEP == 0)) {
 		BTL_removeCommandMenu();
-		MAIN_D_801346F8++;
-		if (MAIN_D_801346F8 >= 4) {
+		BTL_COMMAND_MENU_CLOSED_FRAMES++;
+		if (BTL_COMMAND_MENU_CLOSED_FRAMES >= 4) {
 			return 1;
 		}
 	}

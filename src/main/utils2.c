@@ -62,7 +62,7 @@ void renderPauseBox(int32_t instanceId);
 void setPosDataPolyFT4(POLY_FT4 *prim, int16_t posX, int16_t posY, int16_t width, int16_t height);
 void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width, int16_t height);
 void drawEntityTextIcon(int16_t x, int16_t y, uint8_t u, int32_t otOffset);
-int32_t STD_func_800579D8(uint8_t *arg);
+int32_t STD_tournamentMain(uint8_t *arg);
 
 extern uint8_t ITEM_CLUT_DATA[];
 extern uint8_t MAP_LAYER_ENABLED;
@@ -648,7 +648,7 @@ void startTournament(void)
 	freeArray((uint32_t *)pool);
 	stopBGM();
 	loadDynamicLibrary(STD_REL, &isComplete, 0, NULL, NULL);
-	result = STD_func_800579D8(&t.cup);
+	result = STD_tournamentMain(&t.cup);
 	thunkReinitializeAfterTournament();
 	unsetTrigger(0x25);
 	id = readPStat(3);

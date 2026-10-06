@@ -5,10 +5,27 @@
 
 #include <dw/types.h>
 
+#define FIGHTER_FLAG_POISONED		(1 << 0)
+#define FIGHTER_FLAG_CONFUSED		(1 << 1)
+#define FIGHTER_FLAG_STUNNED		(1 << 2)
+#define FIGHTER_FLAG_FLATTENED		(1 << 3)
+#define FIGHTER_FLAG_KNOCKED_BACK	(1 << 4)
+#define FIGHTER_FLAG_ATTACKING		(1 << 5)
+#define FIGHTER_FLAG_TRANSFORMING	(1 << 6)
+#define FIGHTER_FLAG_BLOCKING		(1 << 7)
+#define FIGHTER_FLAG_PROTECTED		(1 << 8)
+#define FIGHTER_FLAG_9			(1 << 9)
+#define FIGHTER_FLAG_10			(1 << 10)
+#define FIGHTER_FLAG_ON_CHARGEUP	(1 << 11)
+#define FIGHTER_FLAG_ON_COOLDOWN	(1 << 12)
+#define FIGHTER_FLAG_SENILE		(1 << 13)
+#define FIGHTER_FLAG_14			(1 << 14)
+#define FIGHTER_FLAG_DEAD		(1 << 15)
+
 typedef struct {
 	int32_t statusFxId;
 	int32_t effectSlot[4];
-	int32_t unk11;
+	int32_t activeEffectSlot;
 	int16_t finisherGoal;
 	int16_t finisherProgress;
 	int16_t poisonTimer;
@@ -29,7 +46,7 @@ typedef struct {
 	uint8_t queuedAnim;
 	uint8_t buffsRemaining;
 	uint8_t buffPrioTimer;
-	uint8_t unk16;
+	uint8_t hasCollidedWhileDistanceCmd;
 	int8_t table1[150];
 	int8_t table2[150];
 } FighterData;
