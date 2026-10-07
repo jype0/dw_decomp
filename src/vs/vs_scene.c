@@ -1065,20 +1065,20 @@ void VS_initializeVS(void)
 		VS_removeVSPhase();
 		VS_removeArenaRenderers();
 		if (result == 1) {
-			VS_ROUND_WON[0][VS_CURRENT_BATTLE] = 1;
-			VS_ROUND_LOST[1][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_WON.flags[0][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST.flags[1][VS_CURRENT_BATTLE] = 1;
 			VS_STATE_WINS[0]++;
 			VS_STATE_LOSSES[1]++;
 		}
 		if (result == -1) {
-			VS_ROUND_WON[1][VS_CURRENT_BATTLE] = 1;
-			VS_ROUND_LOST[0][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_WON.flags[1][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST.flags[0][VS_CURRENT_BATTLE] = 1;
 			VS_STATE_WINS[1]++;
 			VS_STATE_LOSSES[0]++;
 		}
 		if (result == 2) {
-			VS_ROUND_LOST[0][VS_CURRENT_BATTLE] = 1;
-			VS_ROUND_LOST[1][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST.flags[0][VS_CURRENT_BATTLE] = 1;
+			VS_ROUND_LOST.flags[1][VS_CURRENT_BATTLE] = 1;
 			VS_STATE_LOSSES[0]++;
 			VS_STATE_LOSSES[1]++;
 		}
@@ -1104,8 +1104,8 @@ void VS_resetMatchState(void)
 	VS_STATE_LOSSES[0] = VS_STATE_LOSSES[1] = 0;
 	for (i = 0; i < 2; i++) {
 		for (j = 0; j < 5; j++) {
-			VS_ROUND_WON[i][j] = 0;
-			VS_ROUND_LOST[i][j] = 0;
+			VS_ROUND_WON.flags[i][j] = 0;
+			VS_ROUND_LOST.flags[i][j] = 0;
 		}
 	}
 }
@@ -1378,7 +1378,7 @@ void VS_renderRoundPips(slot)
 			setRGB0(prim, 0x80, 0x80, 0x80);
 			prim->clut = GetClut(0x40, 0x1e9);
 			if (i < VS_STATE_ROUND) {
-				if (VS_ROUND_WON[slot][i] == 1) {
+				if (VS_ROUND_WON.flags[slot][i] == 1) {
 					setUVDataPolyFT4(prim, 0x30, 0x28, 0x10, 0x10);
 				} else {
 					setUVDataPolyFT4(prim, 0x40, 0x28, 0x10, 0x10);

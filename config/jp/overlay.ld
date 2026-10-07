@@ -319,7 +319,7 @@ SECTIONS
 			BUILD_DIR/src/vs/vs_main.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_hud.c.o(.data .data.*);
 			BUILD_DIR/src/vs/vs_effect.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/vs/data/3251C.data.s.o(.data .data.*));
+			KEEP(BUILD_DIR/src/vs/vs_bss_jp.c.o(.data .data.*));
 			LONG(0);
 		}
 	}

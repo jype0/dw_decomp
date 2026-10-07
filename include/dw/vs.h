@@ -30,6 +30,33 @@ typedef struct {
 	uint8_t battleCount;
 } VsBattleSetup;
 
+/* Hack to match overlay .bss */
+typedef union {
+	uint8_t raw[12];
+	int8_t flags[2][5];
+} VsRoundFlagsRaw;
+
+typedef struct {
+	uint8_t slotIds[40];
+	uint8_t selectionState;
+	uint8_t listPage;
+	uint8_t listPageCount;
+	uint8_t slotCount;
+	uint8_t detailPage;
+	uint8_t unk1;
+	uint8_t unk2;
+	uint8_t detailScrollDir;
+	uint8_t unk4;
+	uint8_t unk5;
+	uint8_t unk6;
+	uint8_t unk7;
+	uint8_t selectedSlot;
+	uint8_t selectedMask;
+	uint8_t unk9;
+	uint8_t unk10[24];
+	uint8_t lastSlot;
+} VsSelectDigimonData;
+
 typedef struct {
 	int32_t opcode;
 	void (*handler)(void);
@@ -91,8 +118,8 @@ extern uint16_t VS_FONT_CHARS[];
 extern int16_t VS_FONT_GLYPHS[];
 extern uint8_t VS__INTRO_DIGIMON_NAMES[][14];
 
-extern int8_t VS_ROUND_WON[2][5];
-extern uint8_t VS_ROUND_LOST[2][5];
+extern VsRoundFlagsRaw VS_ROUND_WON;
+extern VsRoundFlagsRaw VS_ROUND_LOST;
 extern VsBattleSetup VS_BATTLE_SETUP;
 extern GsOT_TAG VS_D_800716B4[];
 extern GsOT_TAG VS_D_800716C4[];

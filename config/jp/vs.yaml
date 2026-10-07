@@ -115,6 +115,6 @@ segments:
       - [0x3156C, .data, vs_main]
       - [0x31650, .data, vs_hud]
       - [0x319C0, .data, vs_effect]
-      - [0x3251C, data]
+      - [0x3251C, .data, vs_bss_jp]
 
   - [0x3417C]

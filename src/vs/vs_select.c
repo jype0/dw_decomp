@@ -20,27 +20,6 @@
 #include <dw/world_object.h>
 
 typedef struct {
-	uint8_t slotIds[40];
-	uint8_t selectionState;
-	uint8_t listPage;
-	uint8_t listPageCount;
-	uint8_t slotCount;
-	uint8_t detailPage;
-	uint8_t unk1;
-	uint8_t unk2;
-	uint8_t detailScrollDir;
-	uint8_t unk4;
-	uint8_t unk5;
-	uint8_t unk6;
-	uint8_t unk7;
-	uint8_t selectedSlot;
-	uint8_t selectedMask;
-	uint8_t unk9;
-	uint8_t unk10[24];
-	uint8_t lastSlot;
-} VsSelectDigimonData;
-
-typedef struct {
 	int16_t clutX;
 	int16_t clutY;
 	uint8_t u;
