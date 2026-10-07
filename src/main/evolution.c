@@ -18,7 +18,6 @@ void setDigimonRaised(int32_t type);
 
 extern uint8_t CURRENT_SCREEN;
 extern int32_t NANIMON_TRIGGER;
-extern int16_t EVOLUTION_TARGET;
 
 extern Stats DEATH_STATS;
 
@@ -666,6 +665,9 @@ EvolutionPath EVOLUTION_PATHS[62] = {
 	},
 };
 // clang-format on
+
+int16_t EVOLUTION_TARGET;
+uint8_t HAS_USED_EVOITEM;
 
 GARBAGE(getFreshEvolutionTarget, 10);
 

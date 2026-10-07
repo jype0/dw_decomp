@@ -28,7 +28,6 @@ extern int8_t TAMER_WAYPOINT_X[];
 extern int8_t TAMER_WAYPOINT_Y[];
 extern uint8_t BATTLE_TOGGLE_LIFEBAR;
 extern int32_t IS_TAMERLESS_BATTLE;
-extern int32_t PLAYER_COMBAT_IDLE_TIMER;
 
 void BTL_getRemainingEnemies(Entity *self, int16_t *out, int16_t *count);
 void entityLookAtTile(Entity *entity, int32_t tileX, int32_t tileY);
@@ -40,6 +39,8 @@ void handleFleeing(void);
 void tamerTickBattle(int32_t instanceId);
 void partnerTickBattle(int32_t instanceId);
 void NPCEntityTickBattle(int32_t instanceId);
+
+int32_t PLAYER_COMBAT_IDLE_TIMER;
 
 static void *battle_tick_functions[] = {
 	NPCEntityTickBattle,

@@ -23,17 +23,9 @@ extern int32_t HAS_BUTTERFLY;
 extern int32_t BUTTERFLY_ID;
 extern int8_t PARTNER_STATE;
 extern int8_t PARTNER_SUB_STATE;
-extern int8_t PARTNER_ANIMATION;
-extern int8_t IS_STANDING_STILL;
-extern int16_t MAIN_D_80134E28;
 extern int16_t EVOLUTION_TARGET;
-extern int8_t EMOTION_ANIM_TIMEOUT;
 extern int8_t STOP_DISTANCE_TIMER;
-extern uint8_t HEALTH_SHOE_FRAMES;
-extern int16_t WILD_POOP_ID;
 extern uint8_t POOP_TO_EAT;
-extern int32_t SOME_SCRIPT_SYNC_BIT;
-extern int16_t EVO_SEQUENCE_UNUSED;
 
 extern int8_t MAIN_STATE;
 extern int8_t GAME_STATE;
@@ -121,6 +113,35 @@ void loadMapSounds(int32_t soundId);
 void checkShopMap(int32_t mapId);
 void checkArenaMap(int32_t mapId);
 void readMapTFS(int32_t mapId);
+
+int8_t IS_STANDING_STILL;
+int8_t EMOTION_ANIM_TIMEOUT;
+uint8_t HEALTH_SHOE_FRAMES;
+int16_t MAIN_D_80134E28;
+int16_t WILD_POOP_ID;
+int8_t PARTNER_ANIMATION;
+int32_t SOME_SCRIPT_SYNC_BIT;
+int16_t EVO_SEQUENCE_UNUSED;
+
+static void *partner_sbss_order[] = {
+	&EVO_SEQUENCE_UNUSED,
+	&SOME_SCRIPT_SYNC_BIT,
+#if defined(VERSION_JP)
+	&WILD_POOP_ID,
+	&MAIN_D_80134E28,
+	&HEALTH_SHOE_FRAMES,
+	&IS_STANDING_STILL,
+	&EMOTION_ANIM_TIMEOUT,
+	&PARTNER_ANIMATION,
+#else
+	&PARTNER_ANIMATION,
+	&WILD_POOP_ID,
+	&MAIN_D_80134E28,
+	&HEALTH_SHOE_FRAMES,
+	&EMOTION_ANIM_TIMEOUT,
+	&IS_STANDING_STILL,
+#endif
+};
 
 static void *partner_text_order[] = {
 	getScriptSyncBit,

@@ -4,11 +4,11 @@
 #define CUSTOM_RNG_FACTOR	0x41c650ad
 #define CUSTOM_RNG_VALUE	0x3039
 
-extern uint32_t CUSTOM_RNG_VAL1;
-
 // clang-format off
 uint32_t CUSTOM_RNG_VAL2 = 0x0013cc25;
 // clang-format on
+
+uint32_t CUSTOM_RNG_VAL1;
 
 int32_t customRandom(long min, long max)
 {

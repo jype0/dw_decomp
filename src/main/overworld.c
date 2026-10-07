@@ -57,17 +57,14 @@ extern int32_t IS_SCRIPT_PAUSED;
 extern uint16_t CURRENT_SCRIPT_ID;
 extern long LOADED_DIGIMON_MODELS[8];
 extern int8_t GAME_STATE;
-extern int8_t NPC_ACTIVE_ANIM[8];
 extern MapDigimonEntity MAP_DIGIMON_TABLE[];
 extern int16_t NPC_COLLISION_STATE[];
 extern int32_t NPC_IS_WALKING_TOWARDS[];
 extern int8_t TALKED_TO_ENTITY;
-extern int8_t NINJAMON_FX_COUNTER;
 extern int16_t NINJAMON_EFFECT_X[];
 extern int16_t NINJAMON_EFFECT_Y[];
 extern int8_t NINJAMON_EFFECT_X_OFFSET[];
 extern int8_t NINJAMON_EFFECT_Y_OFFSET[];
-extern int16_t MAP_OBJECT_INSTANCE_COUNT;
 extern LocalMapObject LOCAL_MAP_OBJECTS[];
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
@@ -255,6 +252,16 @@ int16_t MIST_CLUT_Y[2] = {
 	0x0050, 0x0010,
 };
 // clang-format on
+
+int16_t MAP_OBJECT_INSTANCE_COUNT;
+int8_t NINJAMON_FX_COUNTER;
+int8_t NPC_ACTIVE_ANIM[8];
+
+static void *overworld_sbss_order[] = {
+	NPC_ACTIVE_ANIM,
+	&NINJAMON_FX_COUNTER,
+	&MAP_OBJECT_INSTANCE_COUNT,
+};
 
 void clearMapObjects(LocalMapObjectInstance *instances)
 {

@@ -67,11 +67,6 @@ int32_t STD_tournamentMain(uint8_t *arg);
 extern uint8_t ITEM_CLUT_DATA[];
 extern uint8_t MAP_LAYER_ENABLED;
 extern RGB8 TEXT_COLORS[];
-extern uint32_t PAUSE_INPUT;
-extern uint32_t PAUSE_INPUT_PREVIOUS;
-extern uint8_t PAUSE_BOX_VISIBLE;
-extern uint8_t PAUSE_STATE;
-extern int32_t MAIN_D_80134E7C;
 extern char btl_START[];
 extern char dget_START[];
 extern char doo2_START[];
@@ -165,6 +160,20 @@ char MAIN_D_80134430[] = "ポーズ";
 char MAIN_D_80134430[] = "Pause";
 #endif
 // clang-format on
+
+uint32_t PAUSE_INPUT;
+uint32_t PAUSE_INPUT_PREVIOUS;
+uint8_t PAUSE_BOX_VISIBLE;
+uint8_t PAUSE_STATE;
+int32_t MAIN_D_80134E7C;
+
+static void *utils2_sbss_order[] = {
+	&MAIN_D_80134E7C,
+	&PAUSE_STATE,
+	&PAUSE_BOX_VISIBLE,
+	&PAUSE_INPUT_PREVIOUS,
+	&PAUSE_INPUT,
+};
 
 void drawEntityText(int32_t color, int16_t n, int16_t x, int16_t y,
 			int16_t value, int32_t layer)

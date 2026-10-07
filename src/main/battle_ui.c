@@ -58,17 +58,13 @@ void removeBattleEndBox(int32_t id);
 extern uint8_t MOVE_LEARN_CHANCES[58][3];
 extern int16_t ENEMY_COUNT;
 extern int32_t HAS_TAKEN_DAMAGE;
-extern uint16_t BITS_TO_GAIN;
-extern int32_t SHOULD_SKIP_BIT_COUNTING;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern POLY_FT4 BIT_TEXT;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern int16_t STATS_GAINS[6];
-extern int16_t POST_BATTLE_STATS_TIMER;
 extern int8_t BTL_END_BOX_TEXTBUFFER[];
-extern int8_t STAT_BOX_HAS_GAIN[6];
 extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 extern uint8_t GAME_STATE;
@@ -84,6 +80,18 @@ char STR_SHOJIKIN[] = "所持金";
 #else
 char BITS_LABEL[] = "Bits";
 #endif
+
+uint16_t BITS_TO_GAIN;
+int8_t STAT_BOX_HAS_GAIN[6];
+int32_t SHOULD_SKIP_BIT_COUNTING;
+int16_t POST_BATTLE_STATS_TIMER;
+
+static void *battle_ui_sbss_order[] = {
+	&POST_BATTLE_STATS_TIMER,
+	&SHOULD_SKIP_BIT_COUNTING,
+	STAT_BOX_HAS_GAIN,
+	&BITS_TO_GAIN,
+};
 
 static void *battle_ui_functions[] = {
 	removeBattleEndBox,

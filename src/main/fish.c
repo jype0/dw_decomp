@@ -12,6 +12,8 @@ int32_t isTriggerSet(uint16_t trigger);
 
 extern int32_t FISHING_MAP_COUNT;
 
+FishingData *FISHING_DATA_PTR;
+
 int32_t getBestFishingRod(void)
 {
 	if (isTriggerSet(TRIGGER_HAVE_AMAZING_ROD) == 1) {

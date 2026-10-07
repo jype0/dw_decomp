@@ -7,12 +7,13 @@
 #include <dw/model.h>
 #include <dw/script.h>
 
-extern int16_t NEW_GAME_JIJIMON_TICK_COUNT;
 extern GsF_LIGHT LIGHT_DATA[3];
 
 void tickNewGameJijimon(int32_t instanceId);
 void loadNewGameScene(void);
 void unloadNewGameScene(void);
+
+int16_t NEW_GAME_JIJIMON_TICK_COUNT;
 
 static void *new_game_functions[] = {
 	unloadNewGameScene,

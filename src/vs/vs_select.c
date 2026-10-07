@@ -42,14 +42,6 @@ typedef struct {
 } VsUISprite;
 
 extern VsSelectDigimonData VS__SELECT_DIGIMON_DATA[2];
-extern int8_t VS__PRESS_START_BOX_CREATED[2];
-extern int32_t VS__BOTH_SELECTED;
-extern int16_t VS__MODE_STATE;
-extern uint8_t VS__SELECT_BOX_DATA_SELECTION_COUNT;
-extern uint8_t VS__SELECT_BOX_DATA_SELECTION;
-extern uint8_t VS__SELECT_BOX_DATA_ANIM_FRAME;
-extern uint8_t VS__SELECT_BOX_DATA_HAS_SELECTED;
-extern uint8_t VS__SELECT_BOX_DATA_TIMER;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
                   int32_t f, int32_t g, int32_t h, int32_t i);
@@ -218,6 +210,26 @@ VsUISprite MAP_SELECT_SPRITES[8] = {
 	{ 0x01ee, 0x78, 0x4c, 0x34, 0x3c, 0x08, 0x1f },
 };
 // clang-format on
+
+int16_t VS__MODE_STATE;
+int8_t VS__PRESS_START_BOX_CREATED[2];
+int32_t VS__BOTH_SELECTED;
+uint8_t VS__SELECT_BOX_DATA_SELECTION_COUNT;
+uint8_t VS__SELECT_BOX_DATA_SELECTION;
+uint8_t VS__SELECT_BOX_DATA_ANIM_FRAME;
+uint8_t VS__SELECT_BOX_DATA_HAS_SELECTED;
+uint8_t VS__SELECT_BOX_DATA_TIMER;
+
+static void *vs_select_sbss_order[] = {
+	&VS__SELECT_BOX_DATA_TIMER,
+	&VS__SELECT_BOX_DATA_HAS_SELECTED,
+	&VS__SELECT_BOX_DATA_ANIM_FRAME,
+	&VS__SELECT_BOX_DATA_SELECTION,
+	&VS__SELECT_BOX_DATA_SELECTION_COUNT,
+	&VS__BOTH_SELECTED,
+	VS__PRESS_START_BOX_CREATED,
+	&VS__MODE_STATE,
+};
 
 void VS__loadTextures(void)
 {

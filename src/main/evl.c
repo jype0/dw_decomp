@@ -10,13 +10,13 @@
 
 #include "common.h"
 
-extern int8_t IS_LOAD_EVL_COMPLETE;
-
 void stopBGM(void);
 void stopSound(void);
 void loadMapSounds2();
 void isSoundLoaded();
 void loadVLALL();
+
+int8_t IS_LOAD_EVL_COMPLETE;
 
 void* evl_functions[] = {
 	evoSequenceAlwaysTrue,

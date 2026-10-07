@@ -21,16 +21,9 @@
 
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
-extern int16_t VS__INTRO_DATA_FRAME_COUNT;
-extern int16_t VS__INTRO_DATA_RENDERED_CHARACTERS;
-extern uint8_t VS__INTRO_DATA_COLOR;
-extern int16_t VS__INTRO_DATA_POS_X;
-extern int16_t VS__INTRO_DATA_POS_Y;
 extern CameraChase VS_INTRO_CAMERA_CHASE;
-extern int32_t VS__INTRO_STATS_ACTIVE;
 extern int16_t VS__INTRO_STATS_DATA[6];
 extern uint8_t VS_MUSIC;
-extern uint8_t VS__INTRO_DATA_ANIM_FRAME;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,
                   int32_t f, int32_t g, int32_t h, int32_t i);
@@ -111,6 +104,24 @@ RGB8 VS__INTRO_NAME_COLORS[10] = {
 };
 
 // clang-format on
+
+int32_t VS__INTRO_STATS_ACTIVE;
+int16_t VS__INTRO_DATA_FRAME_COUNT;
+int16_t VS__INTRO_DATA_RENDERED_CHARACTERS;
+uint8_t VS__INTRO_DATA_COLOR;
+int16_t VS__INTRO_DATA_POS_X;
+int16_t VS__INTRO_DATA_POS_Y;
+uint8_t VS__INTRO_DATA_ANIM_FRAME;
+
+static void *vs_intro_sbss_order[] = {
+	&VS__INTRO_DATA_ANIM_FRAME,
+	&VS__INTRO_DATA_POS_Y,
+	&VS__INTRO_DATA_POS_X,
+	&VS__INTRO_DATA_COLOR,
+	&VS__INTRO_DATA_RENDERED_CHARACTERS,
+	&VS__INTRO_DATA_FRAME_COUNT,
+	&VS__INTRO_STATS_ACTIVE,
+};
 
 // clang-format off
 void VS__placePlayer1(stage)

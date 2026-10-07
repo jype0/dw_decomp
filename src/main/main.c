@@ -44,9 +44,6 @@ extern GsOT_TAG GS_OT_TAGS_0[];
 extern GsOT_TAG GS_OT_TAGS_1[];
 extern GsOT GS_ORDERING_TABLE[2];
 
-extern int32_t ACTIVE_FRAMEBUFFER;
-
-extern int32_t FIRST_SCREEN_FRAME_COUNTER;
 typedef struct {
 	int16_t spawnX[10];
 	int16_t spawnY[10];
@@ -69,26 +66,14 @@ extern int32_t CURRENT_MENU;
 extern int32_t TARGET_MENU;
 extern int32_t IS_SCRIPT_PAUSED;
 extern GsRVIEW2 GS_VIEWPOINT_COPY;
-extern int32_t VIEWPORT_DISTANCE;
-extern int32_t VIEWPORT_DISTANCE_COPY;
-extern int32_t DRAWING_OFFSET_X_COPY;
-extern int32_t DRAWING_OFFSET_Y_COPY;
-extern GsOT *ACTIVE_ORDERING_TABLE;
 extern PACKET GS_WORK_BASES[2][0x14000];
 extern int16_t FADE_OUT_CURRENT;
-extern int32_t DRAWING_OFFSET_X;
-extern int32_t DRAWING_OFFSET_Y;
 
 extern DR_OFFSET DR_OFFSETS[2];
-
-extern uint8_t MAP_LAYER_ENABLED;
-
 
 void GsSetNearClip(long clip);
 
 uint16_t MAIN_func_800F19B0(int32_t param_1, int32_t param_2);
-
-extern GsOT *ACTIVE_ORDERING_TABLE;
 
 void renderMainMenuBackground(void);
 void checkShopMap(int32_t mapId);
@@ -168,16 +153,8 @@ void fillEFEXTable(void);
 void initializeFadeData(void);
 int32_t loadTIMFile(char *path, void *buffer);
 
-extern int8_t MAIN_STATE;
-extern int32_t FIRST_SCREEN_PRESSED_START;
-
 int32_t main(void);
 void applyDrawOffset(int32_t offset);
-extern int32_t POLLED_INPUT;
-extern int32_t POLLED_INPUT_PREVIOUS;
-extern int32_t CHANGED_INPUT;
-extern int32_t GAME_INPUT_REPEAT_TIMER;
-extern int32_t MENU_INPUT_REPEAT_TIMER;
 void pollInputGame(void);
 void pollInputMenu(void);
 void renderPressStartToContinue(void);
@@ -6024,6 +6001,72 @@ int16_t ITEM_THROW_HEIGHT[24] = {
 };
 // clang-format on
 
+int32_t GAME_INPUT_REPEAT_TIMER;
+int32_t MENU_INPUT_REPEAT_TIMER;
+int32_t FIRST_SCREEN_FRAME_COUNTER;
+int32_t FIRST_SCREEN_PRESSED_START;
+int8_t MAIN_STATE;
+int32_t MONEY;
+int16_t HOUR;
+int16_t MINUTE;
+int32_t DRAWING_OFFSET_X;
+int32_t DRAWING_OFFSET_Y;
+uint8_t MAP_LAYER_ENABLED;
+int32_t ACTIVE_FRAMEBUFFER;
+GsOT *ACTIVE_ORDERING_TABLE;
+int32_t VIEWPORT_DISTANCE;
+int32_t VIEWPORT_DISTANCE_COPY;
+int32_t DRAWING_OFFSET_X_COPY;
+int32_t DRAWING_OFFSET_Y_COPY;
+int32_t POLLED_INPUT;
+int32_t POLLED_INPUT_PREVIOUS;
+int32_t CHANGED_INPUT;
+int32_t IS_IN_MENU;
+DigimonEntity *BATTLE_TARGETED_DIGIMON;
+DigimonEntity *BATTLE_ATTACKING_DIGIMON;
+uint16_t PLAYTIME_MINUTES;
+uint16_t PLAYTIME_HOURS;
+uint16_t PLAYTIME_FRAMES;
+uint8_t YEAR;
+int16_t DAY;
+uint16_t LAST_HANDLED_FRAME;
+uint16_t CURRENT_FRAME;
+int8_t GAME_STATE;
+
+static void *main_sbss_order[] = {
+	&GAME_STATE,
+	&CURRENT_FRAME,
+	&LAST_HANDLED_FRAME,
+	&DAY,
+	&YEAR,
+	&PLAYTIME_FRAMES,
+	&PLAYTIME_HOURS,
+	&PLAYTIME_MINUTES,
+	&BATTLE_ATTACKING_DIGIMON,
+	&BATTLE_TARGETED_DIGIMON,
+	&IS_IN_MENU,
+	&CHANGED_INPUT,
+	&POLLED_INPUT_PREVIOUS,
+	&POLLED_INPUT,
+	&DRAWING_OFFSET_Y_COPY,
+	&DRAWING_OFFSET_X_COPY,
+	&VIEWPORT_DISTANCE_COPY,
+	&VIEWPORT_DISTANCE,
+	&ACTIVE_ORDERING_TABLE,
+	&ACTIVE_FRAMEBUFFER,
+	&MAP_LAYER_ENABLED,
+	&DRAWING_OFFSET_Y,
+	&DRAWING_OFFSET_X,
+	&MINUTE,
+	&HOUR,
+	&MONEY,
+	&MAIN_STATE,
+	&FIRST_SCREEN_PRESSED_START,
+	&FIRST_SCREEN_FRAME_COUNTER,
+	&MENU_INPUT_REPEAT_TIMER,
+	&GAME_INPUT_REPEAT_TIMER,
+};
+
 int32_t main(void)
 {
 	int32_t partnerId;
@@ -6342,7 +6385,6 @@ void newGameScene(void)
 
 extern VECTOR STORED_TAMER_POS;
 int32_t entityCheckCollision(Entity *source, Entity *entity, int32_t arg2, int32_t arg3);
-extern int32_t MONEY;
 extern uint8_t PREVIOUS_SCREEN;
 extern uint8_t PREVIOUS_EXIT;
 extern int8_t TAMER_PREVIOUS_TILE_X;

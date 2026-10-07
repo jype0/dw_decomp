@@ -29,11 +29,8 @@ extern uint8_t VS_MUSIC;
 extern int32_t VIEWPORT_DISTANCE;
 extern int16_t VS_DAMAGE[2];
 extern int32_t P2_AOE_TIMER;
-extern int32_t VS__IS_DRAW;
-extern int32_t VS_ACTIVE_FINISHER_AURA_ID;
 extern int32_t VS_TIMER_ACTIVE;
 extern int32_t VS_DISABLE_HITTING;
-extern uint8_t VS__CHARGE_MODES[4];
 extern int16_t VS_DEFAULT_CAM_MIN_DISTANCE;
 extern int32_t VS_CAMERA_STATE;
 extern uint8_t VS_CAMERA_TIMER;
@@ -41,12 +38,7 @@ extern uint8_t VS_TIMER;
 extern int16_t VS_DISCIPLINE[2];
 extern uint8_t PAUSE_BOX_VISIBLE;
 extern uint8_t PAUSE_STATE;
-extern uint8_t VS__PAUSING_PLAYER;
-extern uint32_t VS__CURRENT_INPUT;
-extern uint32_t VS__PREVIOUS_INPUT;
-extern uint8_t VS__BATTLE_RESULT_TIMER;
 extern int16_t VS_CURRENT_BATTLE;
-extern int32_t VS_FINISHER_TIMER;
 extern int32_t COMBAT_AREA_Y;
 extern int32_t COMBAT_AREA_X;
 
@@ -205,6 +197,26 @@ uint8_t VS__COMMANDS[8] = {
 
 /* Damage */
 char STR_DAMEEJI[] = "ダメージ";
+
+uint8_t VS__PAUSING_PLAYER;
+uint32_t VS__CURRENT_INPUT;
+uint32_t VS__PREVIOUS_INPUT;
+uint8_t VS__CHARGE_MODES[4];
+int32_t VS__IS_DRAW;
+uint8_t VS__BATTLE_RESULT_TIMER;
+int32_t VS_FINISHER_TIMER;
+int32_t VS_ACTIVE_FINISHER_AURA_ID;
+
+static void *vs_combat_sbss_order[] = {
+	&VS_ACTIVE_FINISHER_AURA_ID,
+	&VS_FINISHER_TIMER,
+	&VS__BATTLE_RESULT_TIMER,
+	&VS__IS_DRAW,
+	VS__CHARGE_MODES,
+	&VS__PREVIOUS_INPUT,
+	&VS__CURRENT_INPUT,
+	&VS__PAUSING_PLAYER,
+};
 
 // clang-format on
 

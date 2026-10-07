@@ -46,6 +46,16 @@ uint8_t HOUR_POINT_Y[24] = {
 	26, 23, 19, 15, 12,  8,  6,  6,
 };
 
+uint16_t SUBFRAME_COUNT;
+int16_t CLOCK_OFFSET_X;
+int8_t IS_GAMETIME_RUNNING;
+
+static void *clock_sbss_order[] = {
+	&IS_GAMETIME_RUNNING,
+	&CLOCK_OFFSET_X,
+	&SUBFRAME_COUNT,
+};
+
 static void *clock_text_order[] = {
 	startGameTime,
 	stopGameTime,

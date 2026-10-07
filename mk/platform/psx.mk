@@ -74,10 +74,6 @@ $(BUILD_DIR)/asm/%.s.o: $(ASM_DIR)/%.s
 $(BUILD_DIR)/generated/%.s.o: $(GEN_DIR)/%.s
 	$(assemble)
 
-$(MAIN_SBSS) &: $(CONFIG_DIR)/sbss.yaml $(CONFIG_DIR)/symbols.txt
-	@mkdir -p $(dir $@)
-	tools/gen_bss.py $^ $(GEN_DIR)/
-
 $(MAIN_BSS) &: $(CONFIG_DIR)/bss.yaml $(CONFIG_DIR)/symbols.txt
 	@mkdir -p $(dir $@)
 	tools/gen_bss.py $^ $(GEN_DIR)/

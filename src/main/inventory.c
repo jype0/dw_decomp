@@ -97,6 +97,7 @@ char CONFIRM_LABEL_YES[4] = "Yes";
 char CONFIRM_LABEL_NO[] = "No";
 #endif
 
+int16_t DOOA_STORED_DIGIMON_Y;
 int32_t INVENTORY_UNUSED;
 int32_t INVENTORY_ACTION;
 int32_t IS_INVENTORY_INITIALIZED;
@@ -123,6 +124,7 @@ static void *inventory_sbss_order[] = {
 	&IS_INVENTORY_INITIALIZED,
 	&INVENTORY_ACTION,
 	&INVENTORY_UNUSED,
+	&DOOA_STORED_DIGIMON_Y,
 };
 
 void *inventory_text_order[] = {

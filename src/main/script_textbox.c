@@ -14,10 +14,8 @@
 #include <dw/ui.h>
 
 extern uint8_t TEXTBOX_OPEN_TIMER;
-extern int32_t MAIN_D_80134F94;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
-extern int8_t DRAW_STRING2_IS_FIXED_WIDTH;
 extern int32_t ACTIVE_SCRIPT;
 extern char *BGM_TRACK_NAMES[];
 extern char *TOURNAMENT_NAMES[];
@@ -51,6 +49,11 @@ int32_t getSpeakerName(int32_t speakerId, uint8_t *buf);
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag);
 void renderUIBox(int32_t boxId);
 void createTextbox(int32_t boxId, int32_t flags, RECT *rect, RECT *origin, void *tick, void *render);
+
+int32_t MAIN_D_80134F94;
+#if !defined(VERSION_JP)
+int8_t DRAW_STRING2_IS_FIXED_WIDTH;
+#endif
 
 static void *script_textbox_functions[] = {
 	showTextboxReady,

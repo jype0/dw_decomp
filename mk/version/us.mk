@@ -2,15 +2,6 @@ EXE_NAME := SLUS_010.32
 
 PSYQ_INCLUDE := external/psyq_headers/mw_lib41/include
 
-MAIN_SBSS := \
-	$(GEN_DIR)/unk_0x80134C4C.sbss.s \
-	$(GEN_DIR)/unk_0x80134CC0.sbss.s \
-	$(GEN_DIR)/unk_0x80134D9C.sbss.s \
-	$(GEN_DIR)/unk_0x80134E1C.sbss.s \
-	$(GEN_DIR)/unk_0x80134E50.sbss.s \
-	$(GEN_DIR)/unk_0x80134E68.sbss.s \
-	$(GEN_DIR)/unk_0x80134E90.sbss.s
-
 MAIN_BSS := \
 	$(GEN_DIR)/libapi.bss.s \
 	$(GEN_DIR)/libetc.bss.s \
@@ -34,7 +25,7 @@ MAIN_BSS := \
 	$(GEN_DIR)/unk_0x801555D0.bss.s \
 	$(GEN_DIR)/unk_0x801BF768.bss.s
 
-MAIN_GEN_SRC := $(MAIN_BSS) $(MAIN_SBSS)
+MAIN_GEN_SRC := $(MAIN_BSS)
 
 MAIN_C_SRC := \
 	src/main/_psstart.c \

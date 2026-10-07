@@ -3,7 +3,7 @@
 #include <dw/kar.h>
 #include <dw/utils.h>
 
-extern uint8_t KAR_LOADING_COMPLETE;
+uint8_t KAR_LOADING_COMPLETE;
 
 void checkCurlingMap(int32_t mapId)
 {
