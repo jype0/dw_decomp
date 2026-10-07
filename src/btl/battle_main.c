@@ -40,8 +40,8 @@ extern int8_t PARTNER_WAYPOINT_COUNT;
 extern int8_t PARTNER_WAYPOINT_CURRENT;
 extern int8_t PARTNER_WAYPOINT_X[];
 extern int8_t PARTNER_WAYPOINT_Y[];
-extern const uint8_t BTL_COMMAND_ICON_UVS[8][2];
-extern const uint8_t BTL_SPECIAL_ICON_UVS[8][2];
+extern uint8_t BTL_COMMAND_ICON_UVS[8][2];
+extern uint8_t BTL_SPECIAL_ICON_UVS[8][2];
 
 void removeObject(int32_t objectId, int32_t instanceId);
 void addObject(int32_t objectId, int32_t instanceId, void *tick, void *render);

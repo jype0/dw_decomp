@@ -105,10 +105,9 @@ segments:
       - [0x20280, .rodata, battle_main]
       - [0x20294, .rodata, battle_setup]
       - [0x202B0, .rodata, command_menu]
-      - [0x202D8, .rodata, command_shout]
-      - [0x20324, .rodata, battle_hud]
-      - [0x20418, .rodata, battle_effect]
-      - [0x20B24, .data, battle_effect]
+      - [0x202CC, .data, command_shout]
+      - [0x20324, .data, battle_hud]
+      - [0x20418, .data, battle_effect]
       - [0x21374, .data, btl_bss_us]
 
   - [0x2349C]

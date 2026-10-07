@@ -11,12 +11,6 @@ void BTL_tickCommandMenu(void);
 void BTL_renderCommandMenu(int32_t arg0);
 void BTL_removeCommandMenu(void);
 
-/*
- * command_shout.c state is defined here because it's in .rodata section but
- * it gets modified.
- */
-const BtlCommandShout BTL_COMMAND_SHOUT = { -1, 0, 0, 0 };
-
 int16_t BTL_COMMAND_MENU_X;
 int16_t BTL_COMMAND_MENU_Y;
 uint8_t BTL_COMMAND_MENU_BLINK;

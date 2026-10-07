@@ -214,12 +214,12 @@ static void *battle_hud_sbss_order[] = {
 #if defined(VERSION_JP)
 extern char *BTL_COMMAND_NAMES[];
 #else
-const char BTL_STR_COMMAND_YOUR_CALL[] = "Your Call";
-const char BTL_STR_COMMAND_MODERATE[] = "Moderate";
-const char BTL_STR_COMMAND_DISTANCE[] = "Distance";
-const char BTL_STR_COMMAND_DEFENSIVE[] = "Defensive";
+char BTL_STR_COMMAND_YOUR_CALL[] = "Your Call";
+char BTL_STR_COMMAND_MODERATE[] = "Moderate";
+char BTL_STR_COMMAND_DISTANCE[] = "Distance";
+char BTL_STR_COMMAND_DEFENSIVE[] = "Defensive";
 
-const char *BTL_COMMAND_NAMES[8] = {
+char *BTL_COMMAND_NAMES[8] = {
 	BTL_STR_COMMAND_RUN,
 	BTL_STR_COMMAND_ATTACK,
 	BTL_STR_COMMAND_YOUR_CALL,
@@ -231,7 +231,6 @@ const char *BTL_COMMAND_NAMES[8] = {
 };
 #endif
 
-#if defined(VERSION_JP)
 int8_t BTL_SHOUT_HOP_OFFSETS[20] = {
 	0, -8, -14, -20, -25, -30, -34, -36,
 	-38, -39, -40, -39, -38, -36, -34, -30,
@@ -282,58 +281,6 @@ uint8_t BTL_SPECIAL_ICON_UVS[8][2] = {
 	{ 0xc0, 0xd0 },
 	{ 0x00, 0x00 },
 };
-#else
-const int8_t BTL_SHOUT_HOP_OFFSETS[20] = {
-	0, -8, -14, -20, -25, -30, -34, -36,
-	-38, -39, -40, -39, -38, -36, -34, -30,
-	-34, -36, -38, -39,
-};
-
-const int8_t BTL_SHOUT_DROP_OFFSETS[20] = {
-	0, 1, 2, 4, 6, 10, 15, 20,
-	26, 32, 40, 36, 34, 32, 31, 30,
-	31, 32, 34, 36,
-};
-
-const uint8_t BTL_COMMAND_MENU_LAYOUTS[6][10] = {
-	{ 0x00, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
-	{ 0x00, 0x01, 0x02, 0x04, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
-	{ 0x00, 0x01, 0x02, 0x01, 0x03, 0xff, 0xff, 0xff, 0xff, 0xff },
-	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff, 0xff, 0xff },
-	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x04, 0xff, 0xff },
-	{ 0x00, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x03, 0xff },
-};
-
-const int16_t BTL_COMMAND_MENU_SLIDE_Y[8] = {
-	0xff88, 0xff96, 0xffa2, 0xffac, 0xffb3, 0xffb8, 0xffbb, 0xffbc,
-};
-
-const int16_t BTL_COMMAND_MENU_SLIDE_X[8] = {
-	0xff68, 0xff69, 0xff6c, 0xff71, 0xff78, 0xff82, 0xff8e, 0xff9c,
-};
-
-const uint8_t BTL_COMMAND_ICON_UVS[8][2] = {
-	{ 0x00, 0xc0 },
-	{ 0x20, 0xc0 },
-	{ 0x40, 0xc0 },
-	{ 0x60, 0xc0 },
-	{ 0x80, 0xc0 },
-	{ 0xa0, 0xc0 },
-	{ 0xc0, 0xc0 },
-	{ 0x00, 0x00 },
-};
-
-const uint8_t BTL_SPECIAL_ICON_UVS[8][2] = {
-	{ 0x00, 0xd0 },
-	{ 0x20, 0xd0 },
-	{ 0x40, 0xd0 },
-	{ 0x60, 0xd0 },
-	{ 0x80, 0xd0 },
-	{ 0xa0, 0xd0 },
-	{ 0xc0, 0xd0 },
-	{ 0x00, 0x00 },
-};
-#endif
 // clang-format on
 
 void BTL_drawHoveredCommandName(void)

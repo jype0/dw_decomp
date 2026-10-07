@@ -122,7 +122,6 @@ extern int8_t BTL_COMMAND_MENU_CLOSED_FRAMES;
 extern uint8_t BTL_COMMAND_LABEL_U[5];
 extern uint8_t BTL_COMMAND_LABEL_W[8];
 
-#if defined(VERSION_JP)
 extern int8_t BTL_SHOUT_HOP_OFFSETS[20];
 extern int8_t BTL_SHOUT_DROP_OFFSETS[20];
 extern uint8_t BTL_COMMAND_MENU_LAYOUTS[6][10];
@@ -132,17 +131,6 @@ extern int16_t BTL_BATTLE_START_TEXT_POSITIONS[155][2];
 extern int16_t BTL_STATUS_BAR_X[8];
 extern int32_t BTL_FINISHER_PULSE[12];
 extern BarSprite BTL_STATUS_BAR_SPRITES[6];
-#else
-extern const int8_t BTL_SHOUT_HOP_OFFSETS[20];
-extern const int8_t BTL_SHOUT_DROP_OFFSETS[20];
-extern const uint8_t BTL_COMMAND_MENU_LAYOUTS[6][10];
-extern const int16_t BTL_COMMAND_MENU_SLIDE_Y[8];
-extern const int16_t BTL_COMMAND_MENU_SLIDE_X[8];
-extern const int16_t BTL_BATTLE_START_TEXT_POSITIONS[155][2];
-extern const int16_t BTL_STATUS_BAR_X[8];
-extern const int32_t BTL_FINISHER_PULSE[12];
-extern const BarSprite BTL_STATUS_BAR_SPRITES[6];
-#endif
 extern GsSPRITE BTL_DEATH_COUNTDOWN_SPRITE;
 extern BtlDeathCountdownRaw BTL_DEATH_COUNTDOWN;
 extern char BTL_END_BOX_TEXTBUFFER[1024];

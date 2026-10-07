@@ -7,11 +7,11 @@
 #include <dw/script.h>
 #include <dw/world_object.h>
 
-extern BtlCommandShout BTL_COMMAND_SHOUT;
-
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
 void BTL_removeCommandShout(void);
 void BTL_renderCommandShout(void);
+
+BtlCommandShout BTL_COMMAND_SHOUT = { -1, 0, 0, 0 };
 
 #if defined(VERSION_JP)
 char BTL_STR_SHOUT_RUN[] = "にげろ";
@@ -38,7 +38,7 @@ char BTL_STR_COMMAND_DISTANCE[] = "はなれる";
 char BTL_STR_COMMAND_DEFENSE[] = "ガマンする";
 char BTL_STR_COMMAND_CHANGE[] = "ターゲットをかえる";
 
-char *BTL_COMMAND_NAMES[7] = {
+char *BTL_COMMAND_NAMES[8] = {
 	BTL_STR_COMMAND_RUN,
 	BTL_STR_SHOUT_ATTACK,
 	BTL_STR_COMMAND_YOUR_CALL,
@@ -46,6 +46,7 @@ char *BTL_COMMAND_NAMES[7] = {
 	BTL_STR_COMMAND_DISTANCE,
 	BTL_STR_COMMAND_DEFENSE,
 	BTL_STR_COMMAND_CHANGE,
+	NULL,
 };
 
 char BTL_STR_SHOUT_EXCLAMATION[] = "！";
@@ -54,12 +55,12 @@ char BTL_STR_SHOUT_RUN[] = "Run!";
 char BTL_STR_SHOUT_ATTACK[] = "Attack!";
 char BTL_STR_SHOUT_CHANGE[] = "Change!";
 
-const char BTL_STR_SHOUT_YOUR_CALL[] = "Your Call!";
-const char BTL_STR_SHOUT_MODERATE[] = "Moderate!";
-const char BTL_STR_SHOUT_DISTANCE[] = "Distance!";
-const char BTL_STR_SHOUT_DEFENSE[] = "Defense!";
+char BTL_STR_SHOUT_YOUR_CALL[] = "Your Call!";
+char BTL_STR_SHOUT_MODERATE[] = "Moderate!";
+char BTL_STR_SHOUT_DISTANCE[] = "Distance!";
+char BTL_STR_SHOUT_DEFENSE[] = "Defense!";
 
-const char *BTL_SHOUTS[7] = {
+char *BTL_SHOUTS[7] = {
 	BTL_STR_SHOUT_RUN,
 	BTL_STR_SHOUT_ATTACK,
 	BTL_STR_SHOUT_YOUR_CALL,

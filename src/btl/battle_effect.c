@@ -26,12 +26,6 @@
 
 #include "common.h"
 
-#if defined(VERSION_JP)
-#define BTL_EFFECT_CONST
-#else
-#define BTL_EFFECT_CONST const
-#endif
-
 typedef struct {
 	int32_t opcode;
 	void (*handler)(void);
@@ -587,20 +581,20 @@ char BTL_STR_MP_CONSUMPTION_BONUS[] = "C1かしこさによる「ＭＰ消費減
 char BTL_STR_MP_BONUS_PERCENT[] = "％だけ減るぞ！W";
 char BTL_STR_LEARNED[] = "RC1を覚えた！W";
 #else
-const char BTL_STR_LISTENS_TO[32] = "Listens to #C1! #W";
-const char BTL_STR_DROPPED[] = "#R#C1dropped #C7";
-const char BTL_STR_WAS_INJURED[] = "#C1#R was injured #W";
-const char BTL_STR_SET_TECHNIQUE[20] = "#C7set technique #R";
-const char BTL_STR_PUT_UP_WITH_IT[] = "#C7Put up with it! #R";
-const char BTL_STR_MOVE_AWAY_CHANGE_TARGET[32] = "#C7Move away!#RChange target!#R";
-const char BTL_STR_KEEP_IT_DOWN[] = "#C7Keep it down!#R";
-const char BTL_STR_GO_ALL_THE_WAY[] = "#C7Go all the way!#R";
-const char BTL_STR_MP_CONSUMPTION_BONUS[] = "#C1MP Consumption Bonus!";
-const char BTL_STR_REDUCED_BY[] = "reduced by";
-const char BTL_STR_LEARNED[16] = "#R#C1learned!#W";
+char BTL_STR_LISTENS_TO[32] = "Listens to #C1! #W";
+char BTL_STR_DROPPED[] = "#R#C1dropped #C7";
+char BTL_STR_WAS_INJURED[] = "#C1#R was injured #W";
+char BTL_STR_SET_TECHNIQUE[20] = "#C7set technique #R";
+char BTL_STR_PUT_UP_WITH_IT[] = "#C7Put up with it! #R";
+char BTL_STR_MOVE_AWAY_CHANGE_TARGET[32] = "#C7Move away!#RChange target!#R";
+char BTL_STR_KEEP_IT_DOWN[] = "#C7Keep it down!#R";
+char BTL_STR_GO_ALL_THE_WAY[] = "#C7Go all the way!#R";
+char BTL_STR_MP_CONSUMPTION_BONUS[] = "#C1MP Consumption Bonus!";
+char BTL_STR_REDUCED_BY[] = "reduced by";
+char BTL_STR_LEARNED[16] = "#R#C1learned!#W";
 #endif
 
-BTL_EFFECT_CONST MATRIX BTL_BATTLE_START_TEXT_MATRIX = {
+MATRIX BTL_BATTLE_START_TEXT_MATRIX = {
 	{
 		0x100a, 0x0000, 0x0000, 0x0000,
 		0x08e4, 0xf299, 0x0000, 0x0d5e,
@@ -609,7 +603,7 @@ BTL_EFFECT_CONST MATRIX BTL_BATTLE_START_TEXT_MATRIX = {
 	{ 0x00000000, 0xfffffffe, 0x000002d4 },
 };
 
-BTL_EFFECT_CONST int16_t BTL_BATTLE_START_TEXT_POSITIONS[155][2] = {
+int16_t BTL_BATTLE_START_TEXT_POSITIONS[155][2] = {
 	{ 0xff54, 0xffd0 },
 	{ 0xff5c, 0xffd0 },
 	{ 0xff64, 0xffd0 },
@@ -767,17 +761,17 @@ BTL_EFFECT_CONST int16_t BTL_BATTLE_START_TEXT_POSITIONS[155][2] = {
 	{ 0x00ac, 0x0024 },
 };
 
-BTL_EFFECT_CONST int16_t BTL_STATUS_BAR_X[8] = {
+int16_t BTL_STATUS_BAR_X[8] = {
 	0x00a0, 0x0081, 0x0068, 0x0053, 0x0042, 0x0037, 0x0030, 0x002e,
 };
 
-BTL_EFFECT_CONST int32_t BTL_FINISHER_PULSE[12] = {
+int32_t BTL_FINISHER_PULSE[12] = {
 	0x00000020, 0x00000040, 0x00000060, 0x00000080,
 	0x000000a0, 0x000000c0, 0x000000e0, 0x000000ff,
 	0x000000e0, 0x000000c0, 0x000000a0, 0x00000080,
 };
 
-BTL_EFFECT_CONST BarSprite BTL_STATUS_BAR_SPRITES[6] = {
+BarSprite BTL_STATUS_BAR_SPRITES[6] = {
 	{ 0x01ec, 0x80, 0xa8, 0x68, 0x08, 0x0000, 0x0000 },
 	{ 0x01eb, 0x90, 0xb0, 0x0b, 0x0b, 0x0003, 0xfffe },
 	{ 0x01eb, 0x80, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
@@ -786,7 +780,7 @@ BTL_EFFECT_CONST BarSprite BTL_STATUS_BAR_SPRITES[6] = {
 	{ 0x01eb, 0x84, 0xb0, 0x02, 0x02, 0x0012, 0x0003 },
 };
 
-BTL_EFFECT_CONST EFESubOpcode BTL_EFE_SUB_OPCODES[97] = {
+EFESubOpcode BTL_EFE_SUB_OPCODES[97] = {
 	{ 0, BTL_checkTechCompatibility },
 	{ 1, BTL_initializeUVAnim },
 	{ 2, BTL_initializeSubEffectInstructions },
