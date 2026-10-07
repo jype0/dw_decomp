@@ -34,7 +34,15 @@ typedef struct {
 	int8_t tamerWaypointActive;
 } SavedState;
 
+typedef struct {
+	GsVIEW2 view;
+	GsCOORDINATE2 coord;
+	SVECTOR rotation;
+	VECTOR translation;
+} StdVsCamera;
+
 extern uint8_t *GENERAL_BUFFER_PTR;
 extern SavedState SAVED_STATE;
+extern StdVsCamera STDVS_CAMERA;
 
 #endif

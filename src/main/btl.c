@@ -39,7 +39,6 @@ extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT GS_ORDERING_TABLE[];
 extern PACKET GS_WORK_BASES[2][0x14000];
 extern DR_OFFSET DR_OFFSETS[2];
-extern FleeBubbleState FLEE_BUBBLE_DATA[];
 
 int32_t isInvisible(Entity *entity);
 void getEntityTile(Entity *entity, int8_t *outTileX, int8_t *outTileY);
@@ -110,6 +109,8 @@ uint8_t CONCAVE_SCREENS[NUM_CONCAVE_SCREENS] = {
 
 uint8_t IS_PREDEFINED_BATTLE;
 int8_t LOAD_EFE_STATE;
+
+FleeBubbleState FLEE_BUBBLE_DATA[8];
 
 int32_t isScreenConcave(void)
 {

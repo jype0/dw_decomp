@@ -7,6 +7,7 @@
 #include <dw/clock.h>
 #include <dw/font.h>
 #include <dw/garbage.h>
+#include <dw/graphics.h>
 #include <dw/main.h>
 #include <dw/model.h>
 #include <dw/params.h>
@@ -34,13 +35,8 @@ typedef struct {
 	uint8_t tpage;
 } VsTextPiece;
 
-extern GsVIEW2 STDVS_VIEW;
-extern GsCOORDINATE2 MAIN_D_801B1BBC;
-extern SVECTOR STDVS_VIEW_ROTATION[];
-extern VECTOR STDVS_VIEW_TRANSLATION;
 extern int32_t VIEWPORT_DISTANCE;
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern GsF_LIGHT LIGHT_DATA[];
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
@@ -1479,26 +1475,26 @@ GARBAGE(VS_initializeLighting, 1);
 
 void VS_initializeLighting(int32_t mode)
 {
-	LIGHT_DATA[0].vx = 1000;
-	LIGHT_DATA[0].vy = 1000;
-	LIGHT_DATA[0].vz = 1000;
-	LIGHT_DATA[0].r = 255;
-	LIGHT_DATA[0].g = 255;
-	LIGHT_DATA[0].b = 255;
-	GsSetFlatLight(0, &LIGHT_DATA[0]);
-	LIGHT_DATA[1].vx = -1000;
-	LIGHT_DATA[1].vy = 1000;
-	LIGHT_DATA[1].vz = -1000;
-	LIGHT_DATA[1].r = 160;
-	LIGHT_DATA[1].g = 160;
-	LIGHT_DATA[1].b = 160;
-	GsSetFlatLight(1, &LIGHT_DATA[1]);
-	LIGHT_DATA[2].vx = -20;
-	LIGHT_DATA[2].vy = 20;
-	LIGHT_DATA[2].vz = 100;
-	LIGHT_DATA[2].r = 96;
-	LIGHT_DATA[2].g = 96;
-	LIGHT_DATA[2].b = 96;
+	LIGHT_DATA.light[0].vx = 1000;
+	LIGHT_DATA.light[0].vy = 1000;
+	LIGHT_DATA.light[0].vz = 1000;
+	LIGHT_DATA.light[0].r = 255;
+	LIGHT_DATA.light[0].g = 255;
+	LIGHT_DATA.light[0].b = 255;
+	GsSetFlatLight(0, &LIGHT_DATA.light[0]);
+	LIGHT_DATA.light[1].vx = -1000;
+	LIGHT_DATA.light[1].vy = 1000;
+	LIGHT_DATA.light[1].vz = -1000;
+	LIGHT_DATA.light[1].r = 160;
+	LIGHT_DATA.light[1].g = 160;
+	LIGHT_DATA.light[1].b = 160;
+	GsSetFlatLight(1, &LIGHT_DATA.light[1]);
+	LIGHT_DATA.light[2].vx = -20;
+	LIGHT_DATA.light[2].vy = 20;
+	LIGHT_DATA.light[2].vz = 100;
+	LIGHT_DATA.light[2].r = 96;
+	LIGHT_DATA.light[2].g = 96;
+	LIGHT_DATA.light[2].b = 96;
 	GsSetAmbient(0x400, 0x400, 0x400);
 	GsSetLightMode(0);
 }
@@ -1813,15 +1809,15 @@ void VS_initializeCamera(void)
 {
 	VIEWPORT_DISTANCE = 500;
 	GsSetProjection(VIEWPORT_DISTANCE);
-	STDVS_VIEW_ROTATION[0].vx = 100;
-	STDVS_VIEW_ROTATION[0].vy = 0;
-	STDVS_VIEW_ROTATION[0].vz = 0;
-	STDVS_VIEW_TRANSLATION.vx = 0;
-	STDVS_VIEW_TRANSLATION.vy = 500;
-	STDVS_VIEW_TRANSLATION.vz = 3000;
-	STDVS_VIEW.super = NULL;
-	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
-	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
-	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&STDVS_VIEW);
+	STDVS_CAMERA.rotation.vx = 100;
+	STDVS_CAMERA.rotation.vy = 0;
+	STDVS_CAMERA.rotation.vz = 0;
+	STDVS_CAMERA.translation.vx = 0;
+	STDVS_CAMERA.translation.vy = 500;
+	STDVS_CAMERA.translation.vz = 3000;
+	STDVS_CAMERA.view.super = NULL;
+	RotMatrix(&STDVS_CAMERA.rotation, &STDVS_CAMERA.view.view);
+	TransMatrix(&STDVS_CAMERA.view.view, &STDVS_CAMERA.translation);
+	STDVS_CAMERA.coord.flg = 0;
+	GsSetView2(&STDVS_CAMERA.view);
 }

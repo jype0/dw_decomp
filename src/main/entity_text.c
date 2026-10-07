@@ -27,7 +27,6 @@ typedef struct {
 	uint8_t activeList[8]; /* entries in the order they show, 0xFF ends */
 } EntityTextData;
 
-extern EntityTextData ENTITY_TEXT_DATA[4];
 /* How far a number moves down on each of its first 21 frames. */
 int8_t ENTITY_TEXT_Y_OFFSETS[24] = {
 	0, -7, -5, -5, -2, -1, 1, 2, 5, 5, 7, -4,
@@ -35,6 +34,9 @@ int8_t ENTITY_TEXT_Y_OFFSETS[24] = {
 };
 /* The u of each icon in its texture page. */
 uint8_t ENTITY_TEXT_ICON_U[8] = { 0xB0, 0xC8, 0xB8, 0xC0, 0xD0, 0, 0, 0 };
+
+EntityTextData ENTITY_TEXT_DATA[4];
+
 void getEntityScreenPos(Entity *entity, int32_t mode, DVECTOR *out);
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
 			  int32_t *digits);

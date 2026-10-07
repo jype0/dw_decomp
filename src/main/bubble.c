@@ -50,7 +50,6 @@ void renderSprite(GsSPRITE* sprite, int32_t x, int32_t y, int32_t distance,
 extern int32_t VIEWPORT_DISTANCE;
 extern int32_t DRAWING_OFFSET_Y;
 extern int32_t IS_IN_MENU;
-extern ConditionBubble CONDITION_BUBBLES[];
 
 GsSPRITE CONDITION_SPRITES[12] = {
 	/* 0: Hungry */
@@ -417,6 +416,8 @@ ConditionIcon *CONDITION_BUBBLE_TYPES[8] = {
 	&CONDITION_ICON_INJURED,
 	&CONDITION_ICON_EVOLVING,
 };
+
+ConditionBubble CONDITION_BUBBLES[3];
 
 void initializeConditionBubbles(void)
 {

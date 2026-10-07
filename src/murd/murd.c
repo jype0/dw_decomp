@@ -10,6 +10,7 @@
 #include <dw/file.h>
 #include <dw/file_queue.h>
 #include <dw/garbage.h>
+#include <dw/graphics.h>
 #include <dw/main.h>
 #include <dw/model.h>
 #include <dw/murd.h>
@@ -33,7 +34,6 @@ typedef struct {
 	int16_t pad;
 } MurdScene;
 
-extern GsF_LIGHT LIGHT_DATA[3];
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
 
@@ -193,27 +193,27 @@ void MURD_tickScene(int32_t instanceId)
 		MURD_setOtherEntitiesVisible(0);
 		MURD_createLivesBox(entity);
 		stopBGM();
-		LIGHT_DATA[0].vx = 0x1e;
-		LIGHT_DATA[0].vy = 0x64;
-		LIGHT_DATA[0].vz = 0x1e;
-		LIGHT_DATA[0].r = 0x40;
-		LIGHT_DATA[0].g = 0x40;
-		LIGHT_DATA[0].b = 0x40;
-		GsSetFlatLight(0, &LIGHT_DATA[0]);
-		LIGHT_DATA[1].vx = -0x1e;
-		LIGHT_DATA[1].vy = 0x64;
-		LIGHT_DATA[1].vz = 0;
-		LIGHT_DATA[1].r = 0x28;
-		LIGHT_DATA[1].g = 0x28;
-		LIGHT_DATA[1].b = 0x28;
-		GsSetFlatLight(1, &LIGHT_DATA[1]);
-		LIGHT_DATA[2].vx = 0;
-		LIGHT_DATA[2].vy = 0x64;
-		LIGHT_DATA[2].vz = -0x1e;
-		LIGHT_DATA[2].r = 0x26;
-		LIGHT_DATA[2].g = 0x26;
-		LIGHT_DATA[2].b = 0x26;
-		GsSetFlatLight(2, &LIGHT_DATA[2]);
+		LIGHT_DATA.light[0].vx = 0x1e;
+		LIGHT_DATA.light[0].vy = 0x64;
+		LIGHT_DATA.light[0].vz = 0x1e;
+		LIGHT_DATA.light[0].r = 0x40;
+		LIGHT_DATA.light[0].g = 0x40;
+		LIGHT_DATA.light[0].b = 0x40;
+		GsSetFlatLight(0, &LIGHT_DATA.light[0]);
+		LIGHT_DATA.light[1].vx = -0x1e;
+		LIGHT_DATA.light[1].vy = 0x64;
+		LIGHT_DATA.light[1].vz = 0;
+		LIGHT_DATA.light[1].r = 0x28;
+		LIGHT_DATA.light[1].g = 0x28;
+		LIGHT_DATA.light[1].b = 0x28;
+		GsSetFlatLight(1, &LIGHT_DATA.light[1]);
+		LIGHT_DATA.light[2].vx = 0;
+		LIGHT_DATA.light[2].vy = 0x64;
+		LIGHT_DATA.light[2].vz = -0x1e;
+		LIGHT_DATA.light[2].r = 0x26;
+		LIGHT_DATA.light[2].g = 0x26;
+		LIGHT_DATA.light[2].b = 0x26;
+		GsSetFlatLight(2, &LIGHT_DATA.light[2]);
 		setMapLayerEnabled(0);
 		break;
 	case 1:

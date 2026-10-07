@@ -67,6 +67,8 @@ RGB8 PARTICLE_COLOR1[18] = {
 };
 // clang-format on
 
+HealingParticle HEALING_PARTICLES[NUM_HEALING_INSTANCES];
+
 void tickHealingParticles(int32_t instance) {
     int32_t i;
     HealingParticle *particle;

@@ -5,16 +5,16 @@ PSYQ_INCLUDE := external/psyq_headers/mw_lib43/include
 MWCC_OPT_LEVEL := 0
 
 MAIN_BSS := \
-	$(GEN_DIR)/unk_0x8013E6A8.bss.s \
-	$(GEN_DIR)/unk_0x80140CF4.bss.s \
-	$(GEN_DIR)/unk_0x801414B8.bss.s \
-	$(GEN_DIR)/unk_0x80146048.bss.s \
+	$(GEN_DIR)/libapi.bss.s \
+	$(GEN_DIR)/libetc.bss.s \
+	$(GEN_DIR)/libgpu.bss.s \
+	$(GEN_DIR)/libgs.bss.s \
+	$(GEN_DIR)/libgte.bss.s \
+	$(GEN_DIR)/libcd.bss.s \
 	$(GEN_DIR)/libspu.bss.s \
 	$(GEN_DIR)/libsnd.bss.s \
-	$(GEN_DIR)/unk_0x80157B14.bss.s \
-	$(GEN_DIR)/unk_0x80167BCC.bss.s \
-	$(GEN_DIR)/unk_0x80168460.bss.s \
-	$(GEN_DIR)/unk_0x80168920.bss.s
+	$(GEN_DIR)/libds.bss.s \
+	$(GEN_DIR)/libmcrd.bss.s
 
 MAIN_GEN_SRC := $(MAIN_BSS)
 

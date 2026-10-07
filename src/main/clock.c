@@ -18,7 +18,6 @@ void addTamerLevel(int32_t chance, int32_t amount);
 void updateBGM();
 void renderStatusBars(int32_t isGameTimeRunning);
 
-extern GsSPRITE CLOCK_SPRITE;
 extern uint16_t LAST_HANDLED_FRAME;
 extern int8_t GAME_STATE;
 extern uint8_t MAP_LAYER_ENABLED;
@@ -55,6 +54,8 @@ static void *clock_sbss_order[] = {
 	&CLOCK_OFFSET_X,
 	&SUBFRAME_COUNT,
 };
+
+GsSPRITE CLOCK_SPRITE;
 
 static void *clock_text_order[] = {
 	startGameTime,

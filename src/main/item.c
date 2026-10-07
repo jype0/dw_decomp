@@ -57,6 +57,12 @@ void addTamerLevel(int32_t chance, int32_t amount);
 Inventory INVENTORY;
 TamerItem TAMER_ITEM;
 DroppedItem DROPPED_ITEMS[11];
+int8_t TAMER_WAYPOINT_Y[30];
+int8_t TAMER_WAYPOINT_X[30];
+int8_t PARTNER_WAYPOINT_Y[30];
+int8_t PARTNER_WAYPOINT_X[30];
+StatsGains INITIAL_COMBAT_STATS[4];
+CombatData COMBAT_DATA;
 
 // clang-format off
 #if defined(VERSION_JP)
@@ -4630,6 +4636,12 @@ void *item_text_order[] = {
 };
 
 static void *item_bss_order[] = {
+	&COMBAT_DATA,
+	INITIAL_COMBAT_STATS,
+	PARTNER_WAYPOINT_X,
+	PARTNER_WAYPOINT_Y,
+	TAMER_WAYPOINT_X,
+	TAMER_WAYPOINT_Y,
 	DROPPED_ITEMS,
 	&TAMER_ITEM,
 	&INVENTORY,

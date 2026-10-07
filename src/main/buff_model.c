@@ -3,8 +3,6 @@
 #include <dw/model.h>
 #include <dw/world_object.h>
 
-extern TMDModel *BUFF_MODEL[];
-
 void tickBuffModel(int32_t instanceId);
 void renderBuffModel(void);
 void morphBuffModel(int32_t model, int32_t compIdx, int32_t color);
@@ -19,6 +17,8 @@ static void *buff_model_sbss_order[] = {
 	&BUFF_MODEL_FRAME,
 	BUFF_MODEL_MORPH_VALUE,
 };
+
+TMDModel *BUFF_MODEL[6];
 
 static void *buff_model_functions[] = {
 	removeBuffModelObject,

@@ -2,6 +2,7 @@
 #include <libgte.h>
 
 #include <dw/battle.h>
+#include <dw/main.h>
 #include <dw/math.h>
 #include <dw/params.h>
 #include <dw/rng.h>
@@ -10,10 +11,6 @@
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
-extern GsVIEW2 STDVS_VIEW;
-extern GsCOORDINATE2 MAIN_D_801B1BBC;
-extern SVECTOR STDVS_VIEW_ROTATION[];
-extern VECTOR STDVS_VIEW_TRANSLATION;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern int16_t BATTLE_FRAME_COUNT;
@@ -148,11 +145,11 @@ int32_t VS_D_800706C8[22] = {
 
 void VS_applyCamera(void)
 {
-	STDVS_VIEW.super = NULL;
-	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
-	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
-	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&STDVS_VIEW);
+	STDVS_CAMERA.view.super = NULL;
+	RotMatrix(&STDVS_CAMERA.rotation, &STDVS_CAMERA.view.view);
+	TransMatrix(&STDVS_CAMERA.view.view, &STDVS_CAMERA.translation);
+	STDVS_CAMERA.coord.flg = 0;
+	GsSetView2(&STDVS_CAMERA.view);
 }
 
 void VS_setCameraOrbit(void)
@@ -183,18 +180,18 @@ void VS_setCameraOrbit(void)
 		d = 0x1068;
 	}
 	ang = 0x1000 - _atan(diff.vx, diff.vz);
-	STDVS_VIEW_TRANSLATION.vx = b->vx + (int32_t)diff.vx / 2 + (d * diff.vz) / dist;
-	STDVS_VIEW_TRANSLATION.vy = -0x3e8;
-	STDVS_VIEW_TRANSLATION.vz = b->vz + diff.vz / 2 - (d * diff.vx) / dist;
-	STDVS_VIEW_ROTATION[0].vx = _atan(d, -0x2bc) + 0x800;
-	STDVS_VIEW_ROTATION[0].vy = ang + 0x800;
-	STDVS_VIEW_ROTATION[0].vz = 0;
-	STDVS_VIEW.view = GsIDMATRIX;
-	STDVS_VIEW.super = &MAIN_D_801B1BBC;
-	RotMatrixYXZ(STDVS_VIEW_ROTATION, &MAIN_D_801B1BBC.coord);
-	TransMatrix(&MAIN_D_801B1BBC.coord, &STDVS_VIEW_TRANSLATION);
-	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&STDVS_VIEW);
+	STDVS_CAMERA.translation.vx = b->vx + (int32_t)diff.vx / 2 + (d * diff.vz) / dist;
+	STDVS_CAMERA.translation.vy = -0x3e8;
+	STDVS_CAMERA.translation.vz = b->vz + diff.vz / 2 - (d * diff.vx) / dist;
+	STDVS_CAMERA.rotation.vx = _atan(d, -0x2bc) + 0x800;
+	STDVS_CAMERA.rotation.vy = ang + 0x800;
+	STDVS_CAMERA.rotation.vz = 0;
+	STDVS_CAMERA.view.view = GsIDMATRIX;
+	STDVS_CAMERA.view.super = &STDVS_CAMERA.coord;
+	RotMatrixYXZ(&STDVS_CAMERA.rotation, &STDVS_CAMERA.coord.coord);
+	TransMatrix(&STDVS_CAMERA.coord.coord, &STDVS_CAMERA.translation);
+	STDVS_CAMERA.coord.flg = 0;
+	GsSetView2(&STDVS_CAMERA.view);
 }
 
 void VS_setCameraYXZ(void)
@@ -204,17 +201,17 @@ void VS_setCameraYXZ(void)
 
 	a = &ENTITY_TABLE[1]->posData->location;
 	b = &ENTITY_TABLE[2]->posData->location;
-	STDVS_VIEW.view = GsIDMATRIX;
-	STDVS_VIEW.super = &MAIN_D_801B1BBC;
-	STDVS_VIEW_TRANSLATION.vx = a->vx + (b->vx - a->vx) / 2;
-	STDVS_VIEW_TRANSLATION.vz = a->vz + (b->vz - a->vz) / 2;
-	STDVS_VIEW_TRANSLATION.vy = -0x1f40;
-	STDVS_VIEW_ROTATION[0].vy = STDVS_VIEW_ROTATION[0].vz = 0;
-	STDVS_VIEW_ROTATION[0].vx = -0x400;
-	RotMatrixYXZ(STDVS_VIEW_ROTATION, &MAIN_D_801B1BBC.coord);
-	TransMatrix(&MAIN_D_801B1BBC.coord, &STDVS_VIEW_TRANSLATION);
-	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&STDVS_VIEW);
+	STDVS_CAMERA.view.view = GsIDMATRIX;
+	STDVS_CAMERA.view.super = &STDVS_CAMERA.coord;
+	STDVS_CAMERA.translation.vx = a->vx + (b->vx - a->vx) / 2;
+	STDVS_CAMERA.translation.vz = a->vz + (b->vz - a->vz) / 2;
+	STDVS_CAMERA.translation.vy = -0x1f40;
+	STDVS_CAMERA.rotation.vy = STDVS_CAMERA.rotation.vz = 0;
+	STDVS_CAMERA.rotation.vx = -0x400;
+	RotMatrixYXZ(&STDVS_CAMERA.rotation, &STDVS_CAMERA.coord.coord);
+	TransMatrix(&STDVS_CAMERA.coord.coord, &STDVS_CAMERA.translation);
+	STDVS_CAMERA.coord.flg = 0;
+	GsSetView2(&STDVS_CAMERA.view);
 }
 
 void VS_setViewpointRotationFromEntity(void)
@@ -247,15 +244,15 @@ void VS_setCameraLookAtEntity(void)
 	diff.vx = otherPos->vx - selfPos->vx;
 	diff.vy = 0;
 	diff.vz = otherPos->vz - selfPos->vz;
-	STDVS_VIEW_ROTATION[0].vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
-	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
-	v = STDVS_VIEW_TRANSLATION;
-	ApplyMatrixLV(&STDVS_VIEW.view, &VS_FOCUSED_ENTITY->posData->location, &out);
+	STDVS_CAMERA.rotation.vy = (-_atan(diff.vz, diff.vx) + 0x800) & 0xfff;
+	RotMatrix(&STDVS_CAMERA.rotation, &STDVS_CAMERA.view.view);
+	v = STDVS_CAMERA.translation;
+	ApplyMatrixLV(&STDVS_CAMERA.view.view, &VS_FOCUSED_ENTITY->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
-	TransMatrix(&STDVS_VIEW.view, &v);
-	GsSetView2(&STDVS_VIEW);
+	TransMatrix(&STDVS_CAMERA.view.view, &v);
+	GsSetView2(&STDVS_CAMERA.view);
 }
 
 void VS_applyViewpoint(void)
@@ -266,23 +263,23 @@ void VS_applyViewpoint(void)
 
 void VS_setCameraSimple(void)
 {
-	STDVS_VIEW_ROTATION[0].vy += 2;
-	STDVS_VIEW_ROTATION[0].vy &= 0xfff;
-	STDVS_VIEW.super = NULL;
-	RotMatrix(STDVS_VIEW_ROTATION, &STDVS_VIEW.view);
-	TransMatrix(&STDVS_VIEW.view, &STDVS_VIEW_TRANSLATION);
-	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&STDVS_VIEW);
+	STDVS_CAMERA.rotation.vy += 2;
+	STDVS_CAMERA.rotation.vy &= 0xfff;
+	STDVS_CAMERA.view.super = NULL;
+	RotMatrix(&STDVS_CAMERA.rotation, &STDVS_CAMERA.view.view);
+	TransMatrix(&STDVS_CAMERA.view.view, &STDVS_CAMERA.translation);
+	STDVS_CAMERA.coord.flg = 0;
+	GsSetView2(&STDVS_CAMERA.view);
 }
 
 void VS_setCameraParams(int16_t a, int16_t b, int16_t c, int16_t d, int16_t e, int16_t f)
 {
-	STDVS_VIEW_ROTATION[0].vx = a;
-	STDVS_VIEW_ROTATION[0].vy = b;
-	STDVS_VIEW_ROTATION[0].vz = c;
-	STDVS_VIEW_TRANSLATION.vx = d;
-	STDVS_VIEW_TRANSLATION.vy = e;
-	STDVS_VIEW_TRANSLATION.vz = f;
+	STDVS_CAMERA.rotation.vx = a;
+	STDVS_CAMERA.rotation.vy = b;
+	STDVS_CAMERA.rotation.vz = c;
+	STDVS_CAMERA.translation.vx = d;
+	STDVS_CAMERA.translation.vy = e;
+	STDVS_CAMERA.translation.vz = f;
 }
 
 void VS_setVSPhase(int32_t arg)
@@ -347,7 +344,7 @@ void VS_selectRandomCamera(entity, mode, sub)
 		}
 	}
 	VS_FOCUSED_ENTITY = &entity->entity;
-	STDVS_VIEW.super = NULL;
+	STDVS_CAMERA.view.super = NULL;
 	if (sub != 3) {
 		p = &VS_CAMERA_PRESETS[mode];
 	} else {
@@ -436,19 +433,19 @@ void VS_setCameraToEntity(void)
 	VECTOR v;
 	VECTOR out;
 
-	rot = STDVS_VIEW_ROTATION[0];
+	rot = STDVS_CAMERA.rotation;
 	rot.vy -= VS_FOCUSED_ENTITY->posData->rotation.vy;
 	rot.vy &= 0xfff;
-	RotMatrix(&rot, &STDVS_VIEW.view);
-	v = STDVS_VIEW_TRANSLATION;
-	ApplyMatrixLV(&STDVS_VIEW.view,
+	RotMatrix(&rot, &STDVS_CAMERA.view.view);
+	v = STDVS_CAMERA.translation;
+	ApplyMatrixLV(&STDVS_CAMERA.view.view,
 	              &VS_FOCUSED_ENTITY->posData->location, &out);
 	v.vx -= out.vx;
 	v.vy -= out.vy;
 	v.vz -= out.vz;
-	TransMatrix(&STDVS_VIEW.view, &v);
-	MAIN_D_801B1BBC.flg = 0;
-	GsSetView2(&STDVS_VIEW);
+	TransMatrix(&STDVS_CAMERA.view.view, &v);
+	STDVS_CAMERA.coord.flg = 0;
+	GsSetView2(&STDVS_CAMERA.view);
 }
 
 int32_t VS_getFighterDistance(VECTOR *self, VECTOR *other, VECTOR *target)

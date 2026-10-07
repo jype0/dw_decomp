@@ -166,7 +166,6 @@ void uploadMapTileImages(MapTileData *tiles, int16_t index);
 int32_t worldPosToScreenPos(SVECTOR *pos, DVECTOR *out);
 
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern VECTOR CAMERA_TARGET;
 extern int32_t COMBAT_AREA_X;
 extern int32_t COMBAT_AREA_Y;
 extern uint16_t CURRENT_FRAME;
@@ -183,13 +182,9 @@ extern GsRVIEW2 GS_VIEWPOINT_COPY;
 extern MATRIX GsWSMATRIX;
 extern int16_t HOUR;
 extern int32_t IS_SCRIPT_PAUSED;
-extern GsF_LIGHT LIGHT_DATA[];
 extern int32_t LOADED_DIGIMON_MODELS[];
 extern int16_t DOOA_STORED_DIGIMON_Y;
-extern u_long *MAP_CLUTS[];
 extern int8_t MAP_COLLISION_DATA[];
-extern GsF_LIGHT MAP_LIGHTS[];
-extern int8_t MAP_TILES[];
 extern int8_t PARTNER_STATE;
 extern int8_t PARTNER_TAMER_PREVIOUS_TILE_X;
 extern int8_t PARTNER_TAMER_PREVIOUS_TILE_Y;
@@ -3313,6 +3308,20 @@ static void *map_sbss_order[] = {
 	&DAYTIME_TRANSITION_FRAME,
 };
 
+int8_t MAP_TILES[35];
+MapTiles MAP_TILE_DATA;
+GsF_LIGHT MAP_LIGHTS[3];
+u_long *MAP_CLUTS[3];
+VECTOR CAMERA_TARGET;
+
+static void *map_bss_order[] = {
+	&CAMERA_TARGET,
+	MAP_CLUTS,
+	MAP_LIGHTS,
+	&MAP_TILE_DATA,
+	MAP_TILES,
+};
+
 void initializePartnerWaypoint(void)
 {
 	int16_t tileX;
@@ -4580,14 +4589,14 @@ int32_t loadMapSetup(int32_t *data)
 	GsSetRefView2(&GS_VIEWPOINT);
 
 	for (i = 0; i < 3; i++) {
-		LIGHT_DATA[i].vx = *data++;
-		LIGHT_DATA[i].vy = *data++;
-		LIGHT_DATA[i].vz = *data++;
-		LIGHT_DATA[i].r = *data++;
-		LIGHT_DATA[i].g = *data++;
-		LIGHT_DATA[i].b = *data++;
-		GsSetFlatLight(i, &LIGHT_DATA[i]);
-		MAP_LIGHTS[i] = LIGHT_DATA[i];
+		LIGHT_DATA.light[i].vx = *data++;
+		LIGHT_DATA.light[i].vy = *data++;
+		LIGHT_DATA.light[i].vz = *data++;
+		LIGHT_DATA.light[i].r = *data++;
+		LIGHT_DATA.light[i].g = *data++;
+		LIGHT_DATA.light[i].b = *data++;
+		GsSetFlatLight(i, &LIGHT_DATA.light[i]);
+		MAP_LIGHTS[i] = LIGHT_DATA.light[i];
 	}
 
 	ambientR = *data++;
@@ -4750,10 +4759,10 @@ void updateTimeOfDay(void)
 		}
 
 		for (i = 0; i < 3; i++) {
-			LIGHT_DATA[i].r = (red * MAP_LIGHTS[i].r) / 10;
-			LIGHT_DATA[i].g = (green * MAP_LIGHTS[i].g) / 10;
-			LIGHT_DATA[i].b = (green * MAP_LIGHTS[i].b) / 10;
-			GsSetFlatLight(i, &LIGHT_DATA[i]);
+			LIGHT_DATA.light[i].r = (red * MAP_LIGHTS[i].r) / 10;
+			LIGHT_DATA.light[i].g = (green * MAP_LIGHTS[i].g) / 10;
+			LIGHT_DATA.light[i].b = (green * MAP_LIGHTS[i].b) / 10;
+			GsSetFlatLight(i, &LIGHT_DATA.light[i]);
 		}
 	}
 
@@ -4984,17 +4993,17 @@ void tickDaytimeTransition(transition)
 
 			for (i = 0; i < 3; i++) {
 				if (transition == 0) {
-					LIGHT_DATA[i].g = MAP_LIGHTS[i].g * 7 / 10;
-					LIGHT_DATA[i].b = MAP_LIGHTS[i].b * 7 / 10;
+					LIGHT_DATA.light[i].g = MAP_LIGHTS[i].g * 7 / 10;
+					LIGHT_DATA.light[i].b = MAP_LIGHTS[i].b * 7 / 10;
 				} else if (transition == 1) {
-					LIGHT_DATA[i].r = MAP_LIGHTS[i].r / 2;
-					LIGHT_DATA[i].g = MAP_LIGHTS[i].g / 2;
-					LIGHT_DATA[i].b = MAP_LIGHTS[i].b / 2;
+					LIGHT_DATA.light[i].r = MAP_LIGHTS[i].r / 2;
+					LIGHT_DATA.light[i].g = MAP_LIGHTS[i].g / 2;
+					LIGHT_DATA.light[i].b = MAP_LIGHTS[i].b / 2;
 				} else {
-					LIGHT_DATA[i] = MAP_LIGHTS[i];
+					LIGHT_DATA.light[i] = MAP_LIGHTS[i];
 				}
 
-				GsSetFlatLight(i, &LIGHT_DATA[i]);
+				GsSetFlatLight(i, &LIGHT_DATA.light[i]);
 			}
 
 			removeObject(0xfbe, transition);

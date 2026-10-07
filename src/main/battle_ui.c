@@ -61,7 +61,6 @@ extern int32_t HAS_TAKEN_DAMAGE;
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern POLY_FT4 BIT_TEXT;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern int16_t STATS_GAINS[6];
 extern int8_t BTL_END_BOX_TEXTBUFFER[];
@@ -92,6 +91,8 @@ static void *battle_ui_sbss_order[] = {
 	STAT_BOX_HAS_GAIN,
 	&BITS_TO_GAIN,
 };
+
+POLY_FT4 BIT_TEXT;
 
 static void *battle_ui_functions[] = {
 	removeBattleEndBox,

@@ -1,5 +1,6 @@
 #include <libgpu.h>
 #include <libgs.h>
+#include <dw/entity.h>
 #include <dw/ui.h>
 
 #include "common.h"
@@ -78,6 +79,9 @@ char MAIN_D_80124C54[] = {
 	0x82, 0x57, 0x82, 0x58, 0x00,
 };
 // clang-format on
+
+UIBoxData UI_BOX_DATA[6];
+StatsGains STATS_GAINS;
 
 void initializeUIBoxData(void)
 {

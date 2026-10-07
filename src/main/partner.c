@@ -143,6 +143,9 @@ static void *partner_sbss_order[] = {
 #endif
 };
 
+VECTOR TOILET_TARGET_POS1;
+VECTOR TOILET_TARGET_POS2;
+
 static void *partner_text_order[] = {
 	getScriptSyncBit,
 	callDigimonRoutine,

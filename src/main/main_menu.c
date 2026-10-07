@@ -171,6 +171,8 @@ static void *main_menu_sbss_order[] = {
 	&CONNECTED_CARDS,
 };
 
+SaveSlotPreview SAVEGAME_SLOT_INFO[15];
+
 extern int8_t MAIN_STATE;
 extern uint8_t CURRENT_SCREEN;
 extern uint8_t PREVIOUS_SCREEN;
@@ -195,7 +197,6 @@ extern int16_t MINUTE;
 extern uint16_t PLAYTIME_FRAMES;
 extern uint16_t PLAYTIME_HOURS;
 extern uint16_t PLAYTIME_MINUTES;
-extern SaveSlotPreview SAVEGAME_SLOT_INFO[15];
 extern int32_t CHANGED_INPUT;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
@@ -1222,7 +1223,7 @@ char *BATTLE_MODE_ITEMS[4] = {
 #if defined(VERSION_JP)
 char SAVE_FILE_NAME[32] = "BISLPS-01797DMR*";
 
-extern SaveFile SAVE_FILE;
+SaveFile SAVE_FILE;
 
 char MAIN_D_8013392C[68] = "デジモン　　　　　　　　　　　　　　　　　　　　　　　　　　　　";
 #else

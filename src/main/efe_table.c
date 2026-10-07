@@ -10,10 +10,11 @@ int8_t* EFEX_PATH_ARRAY[] = {
     "\\ETCDAT\\EX.TMD"
 };
 
+EFEX_FileLookup EFEX_TABLE[MAX_EFEX_FILES];
+
 // TODO: define once 4 unreferenced bytes after array are understood
 // it appears as though only the first 3 entries of this array are used,
 // effectively wasting 1KB of RAM
-extern EFEX_FileLookup EFEX_TABLE[MAX_EFEX_FILES];
 
 // is called from main() once and never again
 // the populated table is never read from

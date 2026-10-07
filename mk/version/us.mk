@@ -8,22 +8,11 @@ MAIN_BSS := \
 	$(GEN_DIR)/libgpu.bss.s \
 	$(GEN_DIR)/libgs.bss.s \
 	$(GEN_DIR)/libgte.bss.s \
-	$(GEN_DIR)/model.bss.s \
-	$(GEN_DIR)/unk_0x80137A24.bss.s \
 	$(GEN_DIR)/libcd.bss.s \
-	$(GEN_DIR)/unk_0x8013C038.bss.s \
-	$(GEN_DIR)/unk_0x8013D590.bss.s \
 	$(GEN_DIR)/libspu.bss.s \
 	$(GEN_DIR)/libsnd.bss.s \
-	$(GEN_DIR)/unk_0x8014F060.bss.s \
-	$(GEN_DIR)/unk_0x80154F80.bss.s \
 	$(GEN_DIR)/libds.bss.s \
-	$(GEN_DIR)/butterfly.bss.s \
-	$(GEN_DIR)/libmcrd.bss.s \
-	$(GEN_DIR)/bubble.bss.s \
-	$(GEN_DIR)/battle_ui.bss.s \
-	$(GEN_DIR)/unk_0x801555D0.bss.s \
-	$(GEN_DIR)/unk_0x801BF768.bss.s
+	$(GEN_DIR)/libmcrd.bss.s
 
 MAIN_GEN_SRC := $(MAIN_BSS)
 

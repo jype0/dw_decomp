@@ -6,7 +6,6 @@
 #include <dw/types.h>
 
 extern _GsFCALL GsFCALL4;
-extern AttackObject ATTACK_OBJECTS[17];
 
 PACKET *GsTMDfastF3L();
 PACKET *GsTMDfastG3L();
@@ -49,6 +48,8 @@ AttackObject RESET_ATTACK_OBJECT = {
 	0x00000000,
 };
 // clang-format on
+
+AttackObject ATTACK_OBJECTS[17];
 
 void setRotTransMatrix(MATRIX *m)
 {

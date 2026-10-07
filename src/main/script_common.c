@@ -1083,6 +1083,8 @@ static void *script_common_sbss_order[] = {
 	&MONOCHROMON_BUBBLE_TIMER,
 };
 
+char NAMING_BUFFER[20];
+
 int32_t shopFillBuyItemList()
 {
 	uint8_t itemId;

@@ -42,7 +42,15 @@ typedef struct {
 
 typedef struct {
 	uint32_t usedRows;
+#if defined(VERSION_JP)
+	/*
+	 * BUG: the code loops over six boxes, so boxes 4 and 5 overrun into
+	 * DIALOGUE_SELECTION and the partner's ENTITY_TEXT_DATA slot.
+	 */
+	TextBoxData box[4];
+#else
 	TextBoxData box[6];
+#endif
 } TextBoxTable;
 
 extern RGB8 UI_BOX_COLORS[];

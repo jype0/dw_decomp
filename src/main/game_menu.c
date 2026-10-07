@@ -162,7 +162,6 @@ extern GsOT_TAG *FRAMEBUFFER1_ORIGIN;
 extern GsOT *FRAMEBUFFER_OT[2];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
-extern GsF_LIGHT LIGHT_DATA[3];
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern char *MOVE_NAMES[];
@@ -3839,7 +3838,7 @@ int8_t entityId;
 	GsSetRefView2(&GS_VIEWPOINT);
 
 	for (i = 0; i < 3; i++) {
-		GsSetFlatLight(i, &LIGHT_DATA[i]);
+		GsSetFlatLight(i, &LIGHT_DATA.light[i]);
 	}
 
 	setEntityPosition(entityId, savedPos.vx, savedPos.vy, savedPos.vz);

@@ -14,6 +14,8 @@ extern int32_t FISHING_MAP_COUNT;
 
 FishingData *FISHING_DATA_PTR;
 
+int16_t FISH_RECORD_SIZE[8];
+
 int32_t getBestFishingRod(void)
 {
 	if (isTriggerSet(TRIGGER_HAVE_AMAZING_ROD) == 1) {

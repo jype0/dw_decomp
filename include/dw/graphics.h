@@ -21,4 +21,12 @@ typedef union {
 	GsCOORDINATE2 coord;
 } GsCOORDINATE2Raw;
 
+/* Hack to match main .bss */
+typedef struct {
+	GsF_LIGHT light[3];
+	int32_t unused;
+} FlatLights;
+
+extern FlatLights LIGHT_DATA;
+
 #endif

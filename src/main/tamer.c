@@ -119,13 +119,11 @@ extern uint8_t TEXTBOX_OPEN_TIMER;
 extern uint8_t TARGET_MAP;
 extern uint8_t CURRENT_EXIT;
 extern uint8_t PREVIOUS_EXIT;
-extern VECTOR STORED_TAMER_POS;
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t MAIN_D_80185BB0[3];
 extern int32_t MAIN_D_80185BB4[3];
 extern int32_t MAIN_D_80185BBC[3];
 
-extern VECTOR PREVIOUS_CAMERA_POS;
 extern int32_t IS_IN_MENU;
 extern int8_t MAIN_D_80134DF9;
 extern int16_t MAIN_D_801386A4[16];
@@ -140,7 +138,6 @@ extern uint8_t ACTIVE_BGM_FONT;
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern uint8_t SKIP_DAYTIME_TRANSITION;
-extern uint8_t UNKNOWN_TAMER_DATA[10];
 extern uint16_t CURRENT_FRAME;
 extern int16_t MINUTE;
 extern int16_t HOUR;
@@ -148,7 +145,6 @@ extern int16_t DAY;
 extern uint8_t YEAR;
 extern int32_t MONEY;
 extern int32_t NPC_IS_WALKING_TOWARDS[8];
-extern VECTOR ROTATION_DATA[8];
 
 typedef struct {
 	VECTOR location;
@@ -174,7 +170,19 @@ typedef struct {
 	int16_t targetExit[10];
 } MapWarps;
 
-extern MapWarps MAP_WARPS;
+uint8_t UNKNOWN_TAMER_DATA[10];
+VECTOR ROTATION_DATA[8];
+VECTOR STORED_TAMER_POS;
+MapWarps MAP_WARPS;
+VECTOR PREVIOUS_CAMERA_POS;
+
+static void *tamer_bss_order[] = {
+	&PREVIOUS_CAMERA_POS,
+	&MAP_WARPS,
+	&STORED_TAMER_POS,
+	ROTATION_DATA,
+	UNKNOWN_TAMER_DATA,
+};
 
 void entityLookAtLocation(Entity *entity, VECTOR *pos);
 void setupEntityMatrix(int32_t entityId);

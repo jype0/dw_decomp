@@ -4,16 +4,17 @@
 #include <dw/btl.h>
 #include <dw/entity.h>
 #include <dw/garbage.h>
+#include <dw/graphics.h>
 #include <dw/model.h>
 #include <dw/script.h>
-
-extern GsF_LIGHT LIGHT_DATA[3];
 
 void tickNewGameJijimon(int32_t instanceId);
 void loadNewGameScene(void);
 void unloadNewGameScene(void);
 
 int16_t NEW_GAME_JIJIMON_TICK_COUNT;
+
+FlatLights LIGHT_DATA;
 
 static void *new_game_functions[] = {
 	unloadNewGameScene,
@@ -67,27 +68,27 @@ void loadNewGameScene(void)
 	result = GsSetRefView2(&view);
 	DRAWING_OFFSET_X = 0xa0;
 	DRAWING_OFFSET_Y = 0xb9;
-	LIGHT_DATA[0].vx = 0x1e;
-	LIGHT_DATA[0].vy = 0x64;
-	LIGHT_DATA[0].vz = 0x1e;
-	LIGHT_DATA[0].r = 0x40;
-	LIGHT_DATA[0].g = 0x40;
-	LIGHT_DATA[0].b = 0x40;
-	GsSetFlatLight(0, &LIGHT_DATA[0]);
-	LIGHT_DATA[1].vx = -0x1e;
-	LIGHT_DATA[1].vy = 0x64;
-	LIGHT_DATA[1].vz = 0;
-	LIGHT_DATA[1].r = 0x28;
-	LIGHT_DATA[1].g = 0x28;
-	LIGHT_DATA[1].b = 0x28;
-	GsSetFlatLight(1, &LIGHT_DATA[1]);
-	LIGHT_DATA[2].vx = 0;
-	LIGHT_DATA[2].vy = 0x64;
-	LIGHT_DATA[2].vz = -0x1e;
-	LIGHT_DATA[2].r = 0x26;
-	LIGHT_DATA[2].g = 0x26;
-	LIGHT_DATA[2].b = 0x26;
-	GsSetFlatLight(2, &LIGHT_DATA[2]);
+	LIGHT_DATA.light[0].vx = 0x1e;
+	LIGHT_DATA.light[0].vy = 0x64;
+	LIGHT_DATA.light[0].vz = 0x1e;
+	LIGHT_DATA.light[0].r = 0x40;
+	LIGHT_DATA.light[0].g = 0x40;
+	LIGHT_DATA.light[0].b = 0x40;
+	GsSetFlatLight(0, &LIGHT_DATA.light[0]);
+	LIGHT_DATA.light[1].vx = -0x1e;
+	LIGHT_DATA.light[1].vy = 0x64;
+	LIGHT_DATA.light[1].vz = 0;
+	LIGHT_DATA.light[1].r = 0x28;
+	LIGHT_DATA.light[1].g = 0x28;
+	LIGHT_DATA.light[1].b = 0x28;
+	GsSetFlatLight(1, &LIGHT_DATA.light[1]);
+	LIGHT_DATA.light[2].vx = 0;
+	LIGHT_DATA.light[2].vy = 0x64;
+	LIGHT_DATA.light[2].vz = -0x1e;
+	LIGHT_DATA.light[2].r = 0x26;
+	LIGHT_DATA.light[2].g = 0x26;
+	LIGHT_DATA.light[2].b = 0x26;
+	GsSetFlatLight(2, &LIGHT_DATA.light[2]);
 	GsSetAmbient(0x800, 0x800, 0x800);
 }
 

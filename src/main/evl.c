@@ -18,6 +18,8 @@ void loadVLALL();
 
 int8_t IS_LOAD_EVL_COMPLETE;
 
+EvoSequenceData EVO_SEQUENCE_DATA;
+
 void* evl_functions[] = {
 	evoSequenceAlwaysTrue,
 	getEvoSequenceState,

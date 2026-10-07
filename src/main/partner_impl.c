@@ -200,11 +200,8 @@ int8_t ITEM_TAKE_DISTANCE[66] = {
 	10, 10, 10, 10, 10, 10, 10, 10, 15, 15, 10, 10, 10, 10, 10,
 };
 
-extern uint8_t POOP_MODEL_BUFFER[2048];
 extern uint8_t ITEM_CLUT_DATA[];
 extern uint8_t EVOLUTION_ITEM_TARGET[];
-extern GsDOBJ2 POOP_OBJECT;
-extern GsCOORDINATE2 POOP_POSITION;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
 extern int8_t GAME_STATE;
@@ -263,10 +260,25 @@ static void *partner_impl_sbss_order[] = {
 	&IS_NATURAL_DEATH,
 };
 
+uint8_t POOP_MODEL_BUFFER[2048];
+GsDOBJ2 POOP_OBJECT;
+GsCOORDINATE2 POOP_POSITION;
+PartnerPara PARTNER_PARA;
+Stats DEATH_STATS;
+PoopPile WORLD_POOP[100];
+
+static void *partner_impl_bss_order[] = {
+	WORLD_POOP,
+	&DEATH_STATS,
+	&PARTNER_PARA,
+	&POOP_POSITION,
+	&POOP_OBJECT,
+	POOP_MODEL_BUFFER,
+};
+
 extern uint16_t CURRENT_FRAME;
 extern uint16_t LAST_HANDLED_FRAME;
 extern int32_t IS_SCRIPT_PAUSED;
-extern Stats DEATH_STATS;
 
 void writePStat(int32_t id, uint8_t value);
 void callScriptSection(int32_t a, int32_t b, int32_t c);

@@ -170,13 +170,8 @@ void initializeEFE();
 void getEFEDATEntry();
 void renderParticleFlash();
 
-extern CloudFXEntry CLOUD_FX_DATA[60];
-extern EntityParticleFX ENTITY_PARTICLE_FX_DATA[20];
 #if !defined(VERSION_JP)
-extern u_long SOME_IMAGE_DATA[];
 #endif
-extern ParticleFX PARTICLE_FX_DATA[4];
-extern EfeParticleField FX_PARTICLE_DATA[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
@@ -277,6 +272,38 @@ static void *efe_sbss_order[] = {
 	&EFE_DATA_STACK,
 	&FLASH_INSTANCE,
 	&EFE_FLASH_DATA,
+};
+
+ParticleFX PARTICLE_FX_DATA[4];
+EfeParticleField FX_PARTICLE_DATA[50];
+EntityParticleFX ENTITY_PARTICLE_FX_DATA[20];
+CloudFXEntry CLOUD_FX_DATA[60];
+#if !defined(VERSION_JP)
+u_long SOME_IMAGE_DATA[896];
+#endif
+int16_t EFE_LOADED_MOVE_DATA[17];
+int32_t EFE_SCRIPT_MEM1_DATA[32];
+int16_t UNUSED_EFE_ARRAY[16];
+EfeSound EFE_SOUND_DATA[10];
+EfeLoad EFE_LOAD_REQUEST;
+GsRVIEW2 EFE_FIXED_VIEW;
+int32_t EFE_CALL_STACK_BUFFER[16];
+
+static void *efe_bss_order[] = {
+	EFE_CALL_STACK_BUFFER,
+	&EFE_FIXED_VIEW,
+	&EFE_LOAD_REQUEST,
+	EFE_SOUND_DATA,
+	UNUSED_EFE_ARRAY,
+	EFE_SCRIPT_MEM1_DATA,
+	EFE_LOADED_MOVE_DATA,
+#if !defined(VERSION_JP)
+	SOME_IMAGE_DATA,
+#endif
+	CLOUD_FX_DATA,
+	ENTITY_PARTICLE_FX_DATA,
+	FX_PARTICLE_DATA,
+	PARTICLE_FX_DATA,
 };
 
 GARBAGE(initializeParticleFX, 8);

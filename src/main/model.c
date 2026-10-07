@@ -15,11 +15,6 @@
 #include <dw/params.h>
 #include <dw/world_object.h>
 
-extern ModelComponent NPC_MODELS[5];
-extern ModelComponent TAMER_MODEL;
-extern ModelComponent PARTNER_MODEL;
-extern int32_t NPC_MODEL_TAKEN[5];
-extern int32_t UNKNOWN_MODEL_TAKEN[16];
 extern uint8_t PARTNER_MODEL_BUFFER[];
 extern uint8_t TAMER_MODEL_BUFFER[];
 
@@ -2693,6 +2688,22 @@ char MAIN_D_8011D478[12] = "CHDAT\\MTN0\\";
 
 char MAIN_D_8011D484[12] = "CHDAT\\MMD0\\";
 // clang-format on
+
+ModelComponent NPC_MODELS[5];
+int32_t NPC_MODEL_TAKEN[5];
+ModelComponent TAMER_MODEL;
+ModelComponent PARTNER_MODEL;
+ModelComponent UNKNOWN_MODEL[16];
+int32_t UNKNOWN_MODEL_TAKEN[16];
+
+static void *model_bss_order[] = {
+	UNKNOWN_MODEL_TAKEN,
+	UNKNOWN_MODEL,
+	&PARTNER_MODEL,
+	&TAMER_MODEL,
+	NPC_MODEL_TAKEN,
+	NPC_MODELS,
+};
 
 static inline int8_t *model_s8ptr(uint8_t *arg0)
 {

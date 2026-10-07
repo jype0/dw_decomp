@@ -22,7 +22,11 @@
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern CameraChase VS_INTRO_CAMERA_CHASE;
+#if defined(VERSION_JP)
 extern int16_t VS__INTRO_STATS_DATA[6];
+#else
+int16_t VS__INTRO_STATS_DATA[6];
+#endif
 extern uint8_t VS_MUSIC;
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e,

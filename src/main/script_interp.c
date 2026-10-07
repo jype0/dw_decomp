@@ -28,16 +28,10 @@
 
 extern int8_t MAIN_STATE;
 extern int16_t SCRIPT_MAP_CHANGE_STATE;
-extern ScriptCameraMovement SCRIPT_MOVEMENT[22];
 extern uint8_t PREVIOUS_SCREEN;
 extern uint8_t PREVIOUS_EXIT;
 extern uint8_t CURRENT_EXIT;
 extern int8_t TALKED_TO_ENTITY;
-extern uint8_t MAPHEAD_SCRIPT_BUFFER[];
-extern uint8_t SCRIPT_OFFSET_TABLE[];
-extern uint8_t MAP_SCRIPT_BUFFER[];
-extern ScriptState SCRIPT_STATE;
-extern uint8_t TEXTBOX_LINES_BUFFER[];
 
 void unsetCameraFollowPlayer(void);
 int32_t scriptTickChangeMap(int32_t param_1, int32_t param_2, int32_t param_3);
@@ -282,6 +276,38 @@ static void *script_interp_sbss_order[] = {
 	&WAIT_FOR_ENTITY_ID,
 	&SCRIPT_MAP_CHANGE_SHOW_NAME,
 	&MAIN_D_80134F9C,
+};
+
+#if defined(VERSION_JP)
+uint8_t MAPHEAD_SCRIPT_BUFFER[0x6000];
+#else
+uint8_t MAPHEAD_SCRIPT_BUFFER[0x61a8];
+#endif
+uint8_t SCRIPT_OFFSET_TABLE[0x2000];
+#if defined(VERSION_JP)
+uint8_t MAP_SCRIPT_BUFFER[0x2000];
+#else
+uint8_t MAP_SCRIPT_BUFFER[0x4000];
+#endif
+ScriptState SCRIPT_STATE;
+uint8_t TEXTBOX_LINES_BUFFER[0x540];
+ScriptCameraMovement SCRIPT_MOVEMENT[22];
+jmp_buf SCRIPT_JMP_BUF;
+int32_t LOADED_DIGIMON_MODELS[8];
+TextBoxTable TEXTBOX_DATA;
+DialogueSelection DIALOGUE_SELECTION;
+
+static void *script_interp_bss_order[] = {
+	&DIALOGUE_SELECTION,
+	&TEXTBOX_DATA,
+	LOADED_DIGIMON_MODELS,
+	&SCRIPT_JMP_BUF,
+	SCRIPT_MOVEMENT,
+	TEXTBOX_LINES_BUFFER,
+	&SCRIPT_STATE,
+	MAP_SCRIPT_BUFFER,
+	SCRIPT_OFFSET_TABLE,
+	MAPHEAD_SCRIPT_BUFFER,
 };
 
 int32_t tickScript(void)
