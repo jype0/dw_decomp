@@ -26,6 +26,8 @@ options:
   symbol_addrs_path:
     - config/jp/symbols.txt
     - config/jp/symbols_vs.txt
+  reloc_addrs_path:
+    - config/jp/relocs_vs.txt
 
   undefined_funcs_auto_path: build/jp/psx/generated/undefined_funcs_auto_vs.txt
   undefined_syms_auto_path: build/jp/psx/generated/undefined_syms_auto_vs.txt

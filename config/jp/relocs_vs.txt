@@ -1,0 +1,4 @@
+rom:0x00009720 reloc:MIPS_NONE symbol:NONE
+rom:0x00009740 reloc:MIPS_NONE symbol:NONE
+rom:0x0000A008 reloc:MIPS_NONE symbol:NONE
+rom:0x0000A028 reloc:MIPS_NONE symbol:NONE
