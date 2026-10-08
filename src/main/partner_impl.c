@@ -438,7 +438,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 	loadPartnerSounds(type);
 	PARTNER_ENTITY.digimonEntity.entity.isOnMap = 1;
 	PARTNER_ENTITY.digimonEntity.entity.isOnScreen = 1;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	PARTNER_PARA.condition = 0;
 #endif
 	setSleepTimes(&PARTNER_PARA, type);
@@ -446,7 +446,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 	PARTNER_PARA.missedSleepHours = 0;
 	PARTNER_PARA.poopLevel = RAISE_DATA[type].poopTimer;
 	PARTNER_PARA.poopingTimer = -1;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	PARTNER_PARA.virusBar = 0;
 	PARTNER_PARA.tiredness = 0;
 #endif
@@ -458,7 +458,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 	PARTNER_PARA.energyLevel = RAISE_DATA[type].energyThreshold;
 	PARTNER_PARA.remainingLifetime = 360;
 	PARTNER_PARA.weight = RAISE_DATA[type].defaultWeight;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	PARTNER_PARA.trainBoostFlag = PARTNER_PARA.trainBoostValue =
 		PARTNER_PARA.trainBoostTimer = 0;
 	PARTNER_PARA.careMistakes = PARTNER_PARA.battles =
@@ -646,7 +646,7 @@ void setFoodTimer(int16_t type)
 			PARTNER_PARA.nextHungerHour -= 24;
 		}
 	}
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	else
 #endif
 	if (level == 2) {
@@ -709,7 +709,7 @@ void setFoodTimer(int16_t type)
 #endif
 	}
 
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 calculateTimer:
 #endif
 	if (HOUR <= PARTNER_PARA.nextHungerHour) {
@@ -1587,7 +1587,7 @@ void handleConditionBubble(void)
 void partnerHandleFoodFeed(int32_t itemType)
 {
 	if (PARTNER_PARA.condition & 4) {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 		if (((itemType < 0x26) || (itemType >= 0x47)) &&
 		    (itemType != 0x79) && (itemType != 0x7a)) {
 			return;
@@ -1607,7 +1607,7 @@ void partnerHandleFoodFeed(int32_t itemType)
 		     RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].favoriteFood) ||
 		    !(PARTNER_PARA.energyLevel <
 		      RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold)) {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			PARTNER_ANIMATION = 0xb;
 #endif
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0xb);
@@ -1821,7 +1821,7 @@ void tickSicknessMechanics(void)
 			PARTNER_PARA.timesBeingSick++;
 			PARTNER_PARA.sicknessTimer = 1;
 			PARTNER_PARA.happiness -= 20;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			PARTNER_PARA.sicknessCounter = 0;
 #endif
 		}
@@ -1863,7 +1863,7 @@ void tickSicknessMechanics(void)
 		PARTNER_PARA.sicknessTimer = 1;
 		PARTNER_PARA.condition &= ~0x20;
 		PARTNER_PARA.injuryTimer = 0;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	}
 	if (!wasSick && ((PARTNER_PARA.condition & 0x40) != 0)) {
 #endif
@@ -2052,7 +2052,7 @@ void tickConditions(void)
 	tickUnhappinessMechanics();
 	tickConditionBoundaries();
 	PARTNER_PARA.areaEffectTimer++;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	if (PARTNER_PARA.areaEffectTimer > 28800)
 		PARTNER_PARA.areaEffectTimer = 0;
 #endif

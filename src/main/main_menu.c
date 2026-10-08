@@ -34,6 +34,12 @@
 #define NO_TEXT_W 0x1c
 #endif
 
+#if VERSION_IS(JP_BOMBOM)
+#define VS_RETURN_MENU 0x47
+#else
+#define VS_RETURN_MENU 0
+#endif
+
 /* MemCardSync command and result type */
 #if VERSION_REGION_IS(NTSCJ)
 typedef long MemCardSyncWord;
@@ -193,6 +199,9 @@ extern uint16_t CURRENT_FRAME;
 extern uint16_t LAST_HANDLED_FRAME;
 extern uint8_t YEAR;
 extern int16_t DAY;
+#if VERSION_IS(JP_BOMBOM)
+extern int16_t SECRET_CODE;
+#endif
 extern int16_t HOUR;
 extern int16_t MINUTE;
 extern uint16_t PLAYTIME_FRAMES;
@@ -233,6 +242,10 @@ void renderConfirmRegister();
 void renderCantRegister(void);
 void renderDoYouWantToSave(void);
 void renderCantRegisterBaby(void);
+#if VERSION_IS(JP_BOMBOM)
+void renderBattleModeMenu(void);
+void renderInsertGameCardPrompt(void);
+#endif
 void drawMainMenuStrings();
 void drawSaveSlotText(int32_t slot, int32_t row);
 char *formatInteger(int32_t value, char *buf, int32_t digits);
@@ -299,6 +312,10 @@ void *main_menu_order_anchor[] = {
 	formatInteger,
 	drawSaveSlotText,
 	drawMainMenuStrings,
+#if VERSION_IS(JP_BOMBOM)
+	renderInsertGameCardPrompt,
+	renderBattleModeMenu,
+#endif
 	renderCantRegisterBaby,
 	renderDoYouWantToSave,
 	renderCantRegister,
@@ -436,7 +453,7 @@ char MAIN_D_8013107C[] = "ゲーム中セーブ";
 
 char MAIN_D_80131090[] = "対戦デジモンの登録";
 
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_801310A4[] = "スペシャルアイテム記録";
 
 #endif
@@ -466,7 +483,7 @@ char MAIN_D_8013118C[] = "空きブロックがありません";
 
 char MAIN_D_8013119C[] = "対戦デジモンが登録されていません";
 
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_801311B4[] = "アイテムがいっぱいです";
 
 char MAIN_D_801311C0[] = "すでにアイテムがあります";
@@ -480,7 +497,7 @@ char MAIN_D_80131200[] = "番の冒険を消しますか？　　　　";
 
 char MAIN_D_80131218[] = "番の記録を読みこみますか？";
 
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_80131228[] = "番のデータにアイテムを追加？";
 
 char MAIN_D_80131234[] = "冒険を始める";
@@ -552,7 +569,7 @@ char MAIN_D_80131580[] = "幼年期のデジモンなので、メモリーカー
 
 char MAIN_D_801315A0[] = "対戦用に登録できません";
 
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_801315C0[] = "スロット１にゲームデータの";
 
 char MAIN_D_801315D0[] = "入ったメモリーカードを";
@@ -767,7 +784,7 @@ char SAVEGAME_ID_LABEL[16][6] = {
 	"１５",
 };
 
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 MenuHighlight MENU_HIGHLIGHTS[22] = {
 #else
 MenuHighlight MENU_HIGHLIGHTS[19] = {
@@ -943,7 +960,7 @@ MenuHighlight MENU_HIGHLIGHTS[19] = {
 		0x0024,
 		0x000c,
 	},
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 	{
 		0xff,
 		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
@@ -1207,7 +1224,7 @@ int8_t MENU_VIEWS[] = {
 	0x0c, 0x05, 0x0d, 0x05, 0x07, 0x08, 0x05, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0x0e, 0x0f, 0x10, 0x05,
 	0x05, 0x05, 0x0c, 0x05, 0x11, 0x12, 0x13,
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	0x14,
 	0xff, 0x15, 0x05, 0x05, 0x07, 0x08, 0x05, 0x05,
 #endif
@@ -1228,7 +1245,7 @@ char *SLOT_ACTION_TITLES[] = {
 	MAIN_D_8013107C,
 	MAIN_D_80131030,
 	MAIN_D_80131090,
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	MAIN_D_801310A4,
 #endif
 };
@@ -1252,7 +1269,7 @@ char *MEMORY_CARD_ERROR_MESSAGES[] = {
 	STR_EMPTY,
 	MAIN_D_8013118C,
 	MAIN_D_8013119C,
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	MAIN_D_801311B4,
 	MAIN_D_801311C0,
 #endif
@@ -1265,13 +1282,13 @@ char *SLOT_ACTION_QUESTIONS[] = {
 	STR_EMPTY,
 	STR_EMPTY,
 	MAIN_D_80131218,
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	STR_EMPTY,
 	MAIN_D_80131228,
 #endif
 };
 
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char *BATTLE_MODE_ITEMS[4] = {
 	MAIN_D_80131234,
 	MAIN_D_80131030,
@@ -1873,6 +1890,52 @@ void renderCantRegisterBaby(void)
 	renderMenuBox(0x24, 0x40, 0xF8, 0x2E);
 }
 
+#if VERSION_IS(JP_BOMBOM)
+void renderBattleModeMenu(void)
+{
+	POLY_FT4 *cur;
+
+	cur = (POLY_FT4 *)GsGetWorkBase();
+	renderText(cur++, 0x5e, 0x37, 0, 0, 0x84, 0xc, 0);
+	renderText(cur++, 0x5e, 0x43, 0, 0xc, 0x84, 0xc, 0);
+	renderText(cur++, 0x5e, 0x4f, 0, 0x18, 0x84, 0xc, 0);
+	if (SECRET_CODE != -1) {
+		renderText(cur++, 0x5e, 0x5b, 0, 0x24, 0x84, 0xc, 0);
+	}
+	GsSetWorkBase((PACKET *)cur);
+	if (SECRET_CODE != -1) {
+		renderMenuBox(0x54, 0x32, 0x98, 0x3a);
+	} else {
+		renderMenuBox(0x54, 0x32, 0x98, 0x2e);
+	}
+}
+
+void renderInsertGameCardPrompt(void)
+{
+	POLY_FT4 *cur;
+	int32_t disabled;
+	int32_t slotMask;
+
+	cur = (POLY_FT4 *)GsGetWorkBase();
+	renderText(cur++, 0x46, 0x37, 0, 0, 0xb4, 0x24, 0);
+	if (MEMORY_CARD_ID == 0) {
+		slotMask = 1;
+	} else {
+		slotMask = 0x10;
+	}
+	if (CONNECTED_CARDS & slotMask) {
+		disabled = 0;
+	} else {
+		disabled = 1;
+	}
+	renderText(cur++, 0x46, 0x65, 0, 0x24, YES_TEXT_W, 0xc, disabled);
+	renderText(cur++, 0x46, 0x71, NO_TEXT_U, 0x24, NO_TEXT_W, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x3c, 0x32, 0xc8, 0x2e);
+	renderMenuBox(0x3c, 0x60, 0x38, 0x22);
+}
+#endif
+
 void drawMainMenuStrings(int32_t menu)
 {
 #if VERSION_REGION_IS(NTSCJ)
@@ -2146,7 +2209,7 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_801315A0, 0, 0x18);
 		break;
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 	case 20:
 		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
 		DrawSync(0);
@@ -2589,9 +2652,16 @@ void tickMainMenu(void)
 	int32_t hi;
 	int32_t oldScroll;
 	uint8_t loadComplete;
+#if VERSION_IS(JP_BOMBOM)
+	uint8_t demoLoadComplete;
+#endif
 	MenuCursor *cursor;
 	int32_t input;
 	int32_t status;
+#if VERSION_IS(JP_BOMBOM)
+	int32_t i;
+	Inventory *inventory;
+#endif
 
 	updateMemoryCardState();
 	if (TARGET_MENU != CURRENT_MENU) {
@@ -2678,7 +2748,7 @@ void tickMainMenu(void)
 		break;
 
 	case 3:
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		if (MAIN_MENU_TICKS >= 3) {
 #elif !VERSION_REGION_IS(NTSCJ)
 		if (((CHANGED_INPUT != CANCEL_BUTTON) && (CHANGED_INPUT != CONFIRM_BUTTON)) ||
@@ -2694,7 +2764,7 @@ void tickMainMenu(void)
 			if (MAIN_MENU_TICKS >= 0x12D) {
 				TARGET_MENU = MEMORY_CARD_RETURN_MENU;
 			}
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 		}
 #endif
 		break;
@@ -3307,11 +3377,11 @@ void tickMainMenu(void)
 					MEMORY_CARD_OPERATION = 0;
 				}
 			} else {
-				TARGET_MENU = 0;
+				TARGET_MENU = VS_RETURN_MENU;
 			}
 			break;
 		case 2:
-			TARGET_MENU = 0;
+			TARGET_MENU = VS_RETURN_MENU;
 			break;
 		}
 		break;
@@ -3431,7 +3501,7 @@ void tickMainMenu(void)
 			addObject(0xFA3, 0, NULL, (RenderFunction)renderMainMenuBackground);
 			addObject(0x1388, 0, (TickFunction)tickMainMenu,
 				  (RenderFunction)renderMainMenu);
-			TARGET_MENU = 0;
+			TARGET_MENU = VS_RETURN_MENU;
 		}
 		break;
 
@@ -3673,6 +3743,215 @@ void tickMainMenu(void)
 			TARGET_MENU = 0x45;
 		}
 		break;
+#if VERSION_IS(JP_BOMBOM)
+
+	case 0x47:
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[20];
+		if (SECRET_CODE != -1) {
+			cursor->count = 4;
+		} else {
+			cursor->count = 3;
+		}
+		input = tickMenuInput(cursor, 1);
+		switch (input) {
+		case 1:
+			switch (cursor->pos) {
+			case 0:
+				TARGET_MENU = 9;
+				MEMORY_CARD_ID = -1;
+				MEMORY_CARD_SLOT = -1;
+				initializeDefaultSavegame();
+				loadSavegame(&SAVE_FILE.saves[0]);
+				break;
+			case 1:
+				VS_PLAYER_INDEX = 0;
+				TARGET_MENU = 0x32;
+				MAIN_MENU_ACTION = 5;
+				break;
+			case 2:
+				TARGET_MENU = 0x48;
+				MAIN_MENU_ACTION = 5;
+				break;
+			case 3:
+				TARGET_MENU = 0x49;
+				MEMORY_CARD_ID = 0;
+				MAIN_MENU_ACTION = 7;
+				break;
+			}
+			break;
+		case 2:
+			break;
+		}
+		break;
+
+	case 0x48:
+		if (MAIN_MENU_TICKS >= 3) {
+			removeObject(0x1388, 0);
+			removeObject(0xFA3, 0);
+			loadDynamicLibrary(VS_REL, &demoLoadComplete, 0, 0, 0);
+			VS_initializeTrialBattle(VS__REGISTERED_DIGIMON_BUFFER,
+					  &VS__REGISTERED_DIGIMON_BUFFER[0x28]);
+			addObject(0xFA3, 0, NULL, (RenderFunction)renderMainMenuBackground);
+			addObject(0x1388, 0, (TickFunction)tickMainMenu,
+				  (RenderFunction)renderMainMenu);
+			TARGET_MENU = 0x47;
+		}
+		break;
+
+	case 0x49:
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[21];
+		input = tickMenuInput(cursor, 1);
+		switch (input) {
+		case 1:
+			switch (cursor->pos) {
+			case 0:
+				if (CONNECTED_CARDS & 1) {
+					TARGET_MENU = 0x4A;
+					MEMORY_CARD_OPERATION = 0;
+				}
+				break;
+			case 1:
+				TARGET_MENU = 0x47;
+				break;
+			}
+			break;
+		case 2:
+			TARGET_MENU = 0x47;
+			break;
+		}
+		break;
+
+	case 0x4A:
+		if (MAIN_MENU_TICKS >= 3) {
+			MemCardSync(0, &command, &result);
+			if (MemCardAccept(MEMORY_CARD_ID) == 0) {
+				setMemoryCardReadError(0, 0x47);
+				break;
+			}
+			MemCardSync(0, &command, &result);
+			result = isMemcardUnformatted(MEMORY_CARD_ID, result);
+			if (result == 0) {
+				TARGET_MENU = 0x4B;
+			} else {
+				setMemoryCardReadError(result, 0x47);
+			}
+		}
+		break;
+
+	case 0x4B:
+		TARGET_MENU = 0x4C;
+		SAVE_FILE_NAME[0xF] = 0x3F;
+		loadSaveSlotData(MEMORY_CARD_ID, SAVE_FILE_NAME,
+				 SAVEGAME_SLOT_INFO, 0x47);
+		break;
+
+	case 0x4C:
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[7];
+		input = tickSelectSlotInput(cursor, 1);
+		slot = cursor->pos + cursor->scroll;
+		if (input != 2) {
+			if (input == 1) {
+				if (SAVEGAME_SLOT_INFO[slot].valid == 1) {
+					TARGET_MENU = 0x4D;
+					MEMORY_CARD_SLOT = slot;
+				}
+			}
+		} else {
+			TARGET_MENU = 0x49;
+		}
+		TARGET_MENU = getMenuOnCardChange(0x47);
+		break;
+
+	case 0x4D:
+		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[8];
+		input = tickMenuInput(cursor, 1);
+		if (input != 2) {
+			if (input == 1) {
+				if (cursor->pos == 0) {
+					TARGET_MENU = 0x4E;
+					MEMORY_CARD_OPERATION = 2;
+				} else {
+					goto cancel_add_item;
+				}
+			}
+		} else {
+	cancel_add_item:
+			TARGET_MENU = 0x4C;
+		}
+		TARGET_MENU = getMenuOnCardChange(0x47);
+		break;
+
+	case 0x4E:
+		if (MAIN_MENU_TICKS >= 3) {
+			MemCardSync(0, &command, &result);
+			SAVE_FILE_NAME[0xF] = HEX_DIGITS[MEMORY_CARD_SLOT];
+			status = MemCardReadFile(MEMORY_CARD_ID, SAVE_FILE_NAME,
+					    (void *)&SAVE_FILE, 0, 0x2000);
+			if (status != 1) {
+				setMemoryCardReadError(0, 0x47);
+			}
+			MemCardSync(0, &command, &result);
+			if (result == 0) {
+				if (SAVE_FILE.saves[0].checksum ==
+				    createSavegameChecksum(0)) {
+					loadSavegame(&SAVE_FILE.saves[0]);
+					TARGET_MENU = 0x4F;
+					MEMORY_CARD_OPERATION = 1;
+					break;
+				}
+				if (SAVE_FILE.saves[1].checksum ==
+				    createSavegameChecksum(1)) {
+					SAVE_FILE.saves[0] =
+						SAVE_FILE.saves[1];
+					loadSavegame(&SAVE_FILE.saves[0]);
+					TARGET_MENU = 0x4F;
+					MEMORY_CARD_OPERATION = 1;
+					break;
+				}
+				result = 2;
+			}
+			setMemoryCardReadError(result, 0x47);
+		}
+		break;
+
+	case 0x4F:
+		if (MAIN_MENU_TICKS >= 3) {
+			inventory = &SAVE_FILE.saves[0].inventory;
+			for (i = 0; i < inventory->size; i++) {
+				if (inventory->types.array[i] == 0xff) {
+					inventory->amounts.array[i] = 1;
+					inventory->types.array[i] = SECRET_CODE + 0x7e;
+					i = 0x63;
+				}
+				if ((SECRET_CODE + 0x7e) == inventory->types.array[i]) {
+					i = 0x64;
+				}
+			}
+			if (i < 0x64) {
+				setMemoryCardReadError(9, 0x47);
+				break;
+			}
+			if (i == 0x65) {
+				setMemoryCardReadError(0xa, 0x47);
+				break;
+			}
+			MemCardSync(0, &command, &result);
+			SAVE_FILE.saves[0].checksum = createSavegameChecksum(0);
+			SAVE_FILE.saves[1] = SAVE_FILE.saves[0];
+			status = MemCardWriteFile(MEMORY_CARD_ID, SAVE_FILE_NAME,
+						  (void *)&SAVE_FILE, 0, 0x2000);
+			if (status != 1) {
+				setMemoryCardReadError(0, 0x47);
+			}
+			MemCardSync(0, &command, &result);
+			if (result == 0) {
+				TARGET_MENU = 0x47;
+				break;
+			}
+			setMemoryCardReadError(status, 0x47);
+		}
+		break;
+#endif
 	}
 }
 
@@ -4220,6 +4499,14 @@ void renderMainMenu(void)
 		case 19:
 			renderCantRegisterBaby();
 			break;
+#if VERSION_IS(JP_BOMBOM)
+		case 20:
+			renderBattleModeMenu();
+			break;
+		case 21:
+			renderInsertGameCardPrompt();
+			break;
+#endif
 		}
 	}
 }

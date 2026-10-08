@@ -9,6 +9,8 @@
 
 #include <dw/anim.h>
 #include <dw/attack_object.h>
+#include <dw/bubble.h>
+#include <dw/butterfly.h>
 #include <dw/clock.h>
 #include <dw/combat.h>
 #include <dw/entity.h>
@@ -18,12 +20,16 @@
 #include <dw/item.h>
 #include <dw/main.h>
 #include <dw/map.h>
+#include <dw/map_object.h>
 #include <dw/model.h>
 #include <dw/params.h>
+#include <dw/partner.h>
 #include <dw/tamer.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/utils.h>
 #include <dw/version.h>
+#include <dw/vs.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -57,8 +63,21 @@ extern int32_t CURRENT_MENU;
 extern int32_t TARGET_MENU;
 extern int32_t IS_SCRIPT_PAUSED;
 extern int16_t FADE_OUT_CURRENT;
+#if VERSION_IS(JP_BOMBOM)
+extern int32_t HAS_BUTTERFLY;
+extern int32_t BUTTERFLY_ID;
+extern int32_t CONDITION_BUBBLE_TYPE;
+extern int32_t CONDITION_BUBBLE_ID;
+extern int32_t CONDITION_BUBBLE_TIMER;
+#endif
 
 void GsSetNearClip(long clip);
+#if VERSION_IS(JP_BOMBOM)
+void checkFishingMap(int32_t mapId, int32_t arg1);
+int32_t isUIBoxAvailable(int32_t id);
+void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
+		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow);
+#endif
 
 uint16_t MAIN_func_800F19B0(int32_t param_1, int32_t param_2);
 
@@ -145,6 +164,10 @@ void applyDrawOffset(int32_t offset);
 void pollInputGame(void);
 void pollInputMenu(void);
 void renderPressStartToContinue(void);
+#if VERSION_IS(JP_BOMBOM)
+int32_t tickTrialEnd(void);
+void renderTrialEndBox(void);
+#endif
 int32_t entityIsOffScreen(Entity *entity, int32_t width, int32_t height);
 
 /* Order anchor (reversed): pins symtab/section order to address order.
@@ -158,11 +181,17 @@ void *main_order_anchor[] = {
 	initializeInventoryModules,
 	initializeEffectData,
 	view_init,
+#if VERSION_IS(JP_BOMBOM)
+	renderTrialEndBox,
+#endif
 	renderMainMenuBackground,
 	renderPressStartToContinue,
 	pollInputMenu,
 	pollInputGame,
 	applyDrawOffset,
+#if VERSION_IS(JP_BOMBOM)
+	tickTrialEnd,
+#endif
 	gameLoop,
 #if VERSION_EQUAL_OR_NEWER(US)
 	recalculatePPandArena,
@@ -194,6 +223,12 @@ GsOT *FRAMEBUFFER_OT[2] = {
 
 uint8_t *GENERAL_BUFFER_PTR = GENERAL_BUFFER;
 
+#if VERSION_IS(JP_BOMBOM)
+int16_t SECRET_CODE_CANDIDATE = -1;
+
+int16_t SECRET_CODE = -1;
+#endif
+
 char MAIN_D_8012CE64[20] = "\\ETCDAT\\FI_INFO.TIM";
 
 char MAIN_D_8012CE78[20] = "\\ETCNA\\TITLE256.TIM";
@@ -201,6 +236,12 @@ char MAIN_D_8012CE78[20] = "\\ETCNA\\TITLE256.TIM";
 char MAIN_D_8012CE8C[] = "\\ETCDAT\\ETCTIM.BIN";
 
 char MAIN_D_8012CEA0[] = "\\ETCNA\\TITLE2.TIM";
+
+#if VERSION_IS(JP_BOMBOM)
+char STR_KONKAI_HA_KOKOMADE_DESU[] = "今回はここまでです。";
+
+char STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI[] = "このつづきは、製品でお楽しみ下さい。";
+#endif
 
 DigimonPara DIGIMON_DATA[180] = {
 #if VERSION_REGION_IS(NTSCJ)
@@ -1892,7 +1933,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x01, 0x04, 0xff },
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x01,
 #else
 		0x00,
@@ -1912,7 +1953,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x04, 0x02, 0xff },
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x08,
 #else
 		0x00,
@@ -1932,7 +1973,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x02, 0x04, 0xff },
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x05,
 #else
 		0x00,
@@ -2000,7 +2041,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x01,
 		0x03,
 		{ 0x03, 0xff, 0xff },
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x16,
 		0x28,
 #else
@@ -2600,7 +2641,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x17,
 		0x64,
 		{
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 			0x30, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
 #else
 			0x2c, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
@@ -6002,6 +6043,23 @@ Entity *ENTITY_TABLE[10] = {
 	NULL,
 };
 
+#if VERSION_IS(JP_BOMBOM)
+int16_t SECRET_CODES[3][12] = {
+	{
+		0x1000, 0x1000, 0x4000, 0x4000, 0x8000, 0x2000, 0x8000, 0x2000,
+		0x0020, 0x0040, 0x0080, 0x0010,
+	},
+	{
+		0x2000, 0x0020, 0x0020, 0x4000, 0x0040, 0x0040, 0x8000, 0x0080,
+		0x0080, 0x1000, 0x0010, 0x0010,
+	},
+	{
+		0x4000, 0x8000, 0x1000, 0x2000, 0x4000, 0x8000, 0x1000, 0x2000,
+		0x4000, 0x8000, 0x1000, 0x2000,
+	},
+};
+#endif
+
 int16_t ITEM_THROW_HEIGHT[24] = {
 	0xff10, 0xfea7, 0xfe48, 0xfdf3, 0xfda8, 0xfd67, 0xfd30, 0xfd03,
 	0xfce0, 0xfcc7, 0xfcb8, 0xfcb3, 0xfcb8, 0xfcc7, 0xfce0, 0xfd03,
@@ -6029,6 +6087,11 @@ int32_t DRAWING_OFFSET_Y_COPY;
 int32_t POLLED_INPUT;
 int32_t POLLED_INPUT_PREVIOUS;
 int32_t CHANGED_INPUT;
+#if VERSION_IS(JP_BOMBOM)
+int16_t SECRET_CODE_PROGRESS;
+int8_t TRIAL_END_STATE;
+int8_t TRIAL_END_TIMER;
+#endif
 int32_t IS_IN_MENU;
 DigimonEntity *BATTLE_TARGETED_DIGIMON;
 DigimonEntity *BATTLE_ATTACKING_DIGIMON;
@@ -6045,7 +6108,9 @@ static void *main_sbss_order[] = {
 	&GAME_STATE,
 	&CURRENT_FRAME,
 	&LAST_HANDLED_FRAME,
+#if !VERSION_IS(JP_BOMBOM)
 	&DAY,
+#endif
 	&YEAR,
 	&PLAYTIME_FRAMES,
 	&PLAYTIME_HOURS,
@@ -6053,6 +6118,11 @@ static void *main_sbss_order[] = {
 	&BATTLE_ATTACKING_DIGIMON,
 	&BATTLE_TARGETED_DIGIMON,
 	&IS_IN_MENU,
+#if VERSION_IS(JP_BOMBOM)
+	&TRIAL_END_TIMER,
+	&TRIAL_END_STATE,
+	&SECRET_CODE_PROGRESS,
+#endif
 	&CHANGED_INPUT,
 	&POLLED_INPUT_PREVIOUS,
 	&POLLED_INPUT,
@@ -6068,6 +6138,9 @@ static void *main_sbss_order[] = {
 	&MINUTE,
 	&HOUR,
 	&MONEY,
+#if VERSION_IS(JP_BOMBOM)
+	&DAY,
+#endif
 	&MAIN_STATE,
 	&FIRST_SCREEN_PRESSED_START,
 	&FIRST_SCREEN_FRAME_COUNTER,
@@ -6128,6 +6201,11 @@ static void *main_bss_order[] = {
 int32_t main(void)
 {
 	int32_t partnerId;
+#if VERSION_IS(JP_BOMBOM)
+	uint8_t showDemo;
+
+	showDemo = 0;
+#endif
 
 	initializeHeap();
 	SsInit();
@@ -6161,7 +6239,20 @@ int32_t main(void)
 		loadTIMFile(MAIN_D_8012CE78, GENERAL_BUFFER_PTR);
 		FIRST_SCREEN_PRESSED_START = 0;
 		while (FIRST_SCREEN_PRESSED_START == 0) {
+#if VERSION_IS(JP_BOMBOM)
+			switch (showDemo) {
+			case 0:
+				playMovie(0, 1);
+				break;
+			case 1:
+				loadDynamicLibrary(VS_REL, NULL, 0, 0, 0);
+				VS_playDemo();
+				break;
+			}
+			showDemo = (showDemo + 1) & 1;
+#else
 			playMovie(0, 1);
+#endif
 			initializeMusic();
 			runLandingScreen();
 			finalizeMusic();
@@ -6201,7 +6292,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6219,7 +6310,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6228,6 +6319,30 @@ int32_t main(void)
 		}
 
 		fadeFromBlack(0x28);
+#if VERSION_IS(JP_BOMBOM)
+		while (MAIN_STATE != 3) {
+			if ((DAY >= 5) && (tamerGetState() == 0)) {
+				fadeToBlack(0x28);
+				tamerSetState(6);
+				partnerSetState(0xb);
+				break;
+			}
+			gameLoop();
+		}
+		while (FADE_OUT_CURRENT < 0x1f) {
+			gameLoop();
+		}
+		unloadMapParts();
+		clearDroppedItems();
+		checkFishingMap(0, 0);
+		cleanupGame();
+		finalizeMusic();
+		initializeMusic();
+		while (tickTrialEnd() != 1) {
+			gameLoop();
+		}
+		finalizeMusic();
+#else
 #if VERSION_EQUAL_OR_NEWER(US)
 		recalculatePPandArena();
 #endif
@@ -6237,6 +6352,7 @@ int32_t main(void)
 		cleanupGame();
 		finalizeMusic();
 		playMovie(3, 1);
+#endif
 	}
 }
 
@@ -6299,9 +6415,15 @@ void runLandingScreen(void)
 {
 	int32_t done;
 	int32_t timer;
+#if VERSION_IS(JP_BOMBOM)
+	int32_t i;
+#endif
 
 	done = 0;
 	timer = 0x258;
+#if VERSION_IS(JP_BOMBOM)
+	SECRET_CODE = -1;
+#endif
 	addObject(0xfa3, 0, NULL, (RenderFunction)renderPressStartToContinue);
 	FADE_OUT_CURRENT = 0;
 	fadeFromBlack(0x28);
@@ -6309,6 +6431,35 @@ void runLandingScreen(void)
 	while (--timer > 0) {
 		pollInputMenu();
 
+#if VERSION_IS(JP_BOMBOM)
+		if ((!(CHANGED_INPUT != 0) == 0) && (SECRET_CODE == -1)) {
+			switch (SECRET_CODE_CANDIDATE) {
+			case -1:
+				for (i = 0; i < 1; i++) {
+					if (CHANGED_INPUT & SECRET_CODES[i][0]) {
+						SECRET_CODE_CANDIDATE = i;
+					}
+				}
+				SECRET_CODE_PROGRESS = 1;
+				break;
+			case 0:
+			case 1:
+			case 2:
+				if (CHANGED_INPUT & SECRET_CODES[SECRET_CODE_CANDIDATE][SECRET_CODE_PROGRESS]) {
+					SECRET_CODE_PROGRESS++;
+					if (SECRET_CODE_PROGRESS == 12) {
+						SECRET_CODE = SECRET_CODE_CANDIDATE;
+						playSound(0, 0x18);
+					}
+				} else {
+					SECRET_CODE_CANDIDATE = -1;
+					SECRET_CODE_PROGRESS = 0;
+				}
+				break;
+			}
+		}
+
+#endif
 		if ((POLLED_INPUT & 0x800) != 0) {
 			if ((FADE_OUT_CURRENT == 0) && (FADE_IN_CURRENT == 0)) {
 				playSound(0, 3);
@@ -6362,6 +6513,9 @@ void runMainMenu(void)
 	CHECKED_MEMORY_CARD = 0x10;
 	CURRENT_MENU = -1;
 	TARGET_MENU = 0;
+#if VERSION_IS(JP_BOMBOM)
+	TARGET_MENU = 0x47;
+#endif
 	loadTIMFile(MAIN_D_8012CEA0, GENERAL_BUFFER_PTR);
 	addObject(0x1388, 0, (TickFunction)tickMainMenu, (RenderFunction)renderMainMenu);
 	addObject(0xfa3, 0, NULL, (RenderFunction)renderMainMenuBackground);
@@ -6473,7 +6627,7 @@ void initializeLoadedMap(void)
 	initializeDrawingOffsets(MAP_TILE_DATA.tiles);
 
 	for (i = 0; i < 8; i++) {
-#if VERSION_IS(JP)
+#if VERSION_EQUAL_OR_OLDER(JP_BOMBOM)
 		NPC_ENTITIES[i].digimonEntity.entity.isOnScreen =
 			entityIsOffScreen(&NPC_ENTITIES[i].digimonEntity.entity, 320, 240) ^ 1;
 #else
@@ -6631,6 +6785,70 @@ void gameLoop(void)
 	handlePause();
 }
 
+#if VERSION_IS(JP_BOMBOM)
+int32_t tickTrialEnd(void)
+{
+	RECT targetRect;
+	RECT sourceRect;
+
+	switch (TRIAL_END_STATE) {
+	case 0:
+		if (FADE_OUT_CURRENT >= 0x28) {
+			if (CONDITION_BUBBLE_TYPE != -1) {
+				removeConditionBubble(CONDITION_BUBBLE_ID);
+				CONDITION_BUBBLE_TIMER = 0;
+				CONDITION_BUBBLE_TYPE = -1;
+			}
+			if (HAS_BUTTERFLY == 0) {
+				unsetButterfly(BUTTERFLY_ID);
+				HAS_BUTTERFLY = -1;
+			}
+			clearTextArea();
+			drawString(STR_KONKAI_HA_KOKOMADE_DESU, 0, 0xc);
+			TRIAL_END_STATE = 1;
+		}
+		break;
+	case 1:
+		drawString(STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI, 0, 0x18);
+		fadeFromBlack(0x28);
+		TRIAL_END_STATE = 2;
+		break;
+	case 2:
+		if (FADE_IN_CURRENT >= 0x28) {
+			TRIAL_END_STATE = 3;
+		}
+		break;
+	case 3:
+		if (isUIBoxAvailable(1) == 1) {
+			setRECT(&targetRect, -130, 42, 262, 59);
+			setRECT(&sourceRect, -5, -5, 10, 10);
+			createAnimatedUIBox(1, 0, 2, &targetRect, &sourceRect, NULL, (RenderFunction)renderTrialEndBox);
+			TRIAL_END_TIMER = 0;
+			TRIAL_END_STATE = 4;
+		}
+		break;
+	case 4:
+		if (TRIAL_END_TIMER >= 0x78) {
+			setRECT(&targetRect, -5, -5, 10, 10);
+			removeAnimatedUIBox(1, &targetRect);
+			TRIAL_END_TIMER = 0;
+			TRIAL_END_STATE = 5;
+		}
+		TRIAL_END_TIMER++;
+		break;
+	case 5:
+		if ((isUIBoxAvailable(1) == 1) && (TRIAL_END_TIMER >= 0x64)) {
+			TRIAL_END_TIMER = 0;
+			TRIAL_END_STATE = 0;
+			return 1;
+		}
+		TRIAL_END_TIMER++;
+		break;
+	}
+	return 0;
+}
+#endif
+
 void applyDrawOffset(int32_t offset)
 {
 	AddPrim((char *)GS_ORDERING_TABLE[offset].org + 0x80,
@@ -6700,10 +6918,31 @@ void renderPressStartToContinue(void)
 		setUVWH(prim, 0, 0xf1, 121, 10);
 #if VERSION_IS(JP)
 		setRGB0(prim, 0x80, 0x80, 0x80);
+#elif VERSION_IS(JP_BOMBOM)
+		setRGB0(prim, 0x80, 0x80, 0x80);
+		switch (SECRET_CODE) {
+		case -1:
+			break;
+		case 0:
+			setRGB0(prim, 0x80, 0, 0);
+			break;
+		case 1:
+			setRGB0(prim, 0, 0x80, 0);
+			break;
+		case 2:
+			setRGB0(prim, 0, 0, 0x80);
+			break;
+		}
 #else
 		setRGB0(prim, 0, 0x80, 0);
 #endif
+#if VERSION_IS(JP_BOMBOM)
+		if (SECRET_CODE != -1) {
+			setTPage(prim, 1, 0, 768, 0);
+		}
+#else
 		setTPage(prim, 1, 0, 768, 0);
+#endif
 		setClut(prim, 0, 480);
 		AddPrim(ot + 30, prim++);
 	}
@@ -6751,6 +6990,13 @@ void renderMainMenuBackground(void)
 	AddPrim(ot + 30, prim++);
 	GsSetWorkBase((PACKET *)prim);
 }
+
+#if VERSION_IS(JP_BOMBOM)
+void renderTrialEndBox(void)
+{
+	renderString(0, -0x7d, 0x2d, 0xf0, 0x18, 0, 0xc, 5, 0);
+}
+#endif
 
 GARBAGE_ARRAY(view_init, (&SAVED_STATE.partnerType), 1, 1);
 

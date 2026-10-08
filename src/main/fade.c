@@ -145,7 +145,7 @@ void renderFade(uint8_t progress)
 
 void fadeToWhite(int16_t frames)
 {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	if (FADE_OUT_CURRENT || FADE_IN_CURRENT) {
 		removeObject(4005, 0);
 	}

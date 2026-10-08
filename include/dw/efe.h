@@ -326,6 +326,13 @@ typedef struct {
 } ParticleFlashData;
 
 extern EfeFlashData *EFE_FLASH_DATA;
+
+void removeEntityParticleFX(int32_t id);
+void removeAllCloudFX(void);
+#if VERSION_IS(JP_BOMBOM)
+void removeAllParticleFX(void);
+void removeEFEFlash(int32_t id);
+#endif
 extern int32_t *EFE_DATA_STACK;
 extern int32_t EFE_SCRIPT_MEM1_DATA[];
 extern int16_t EFE_LOADED_MOVE_DATA[];
