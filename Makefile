@@ -4,7 +4,7 @@ VERSION ?= us
 TOOLCHAIN ?= mwcc
 PLATFORM ?= psx
 
-VERSIONS := us jp
+VERSIONS := us jp jp_rev1
 CONFIG := $(PLATFORM)/$(TOOLCHAIN)
 CONFIGS := psx/mwcc psx/gcc
 MATCHING_CONFIG := psx/mwcc
@@ -23,7 +23,7 @@ CONFIG_DIR := config/$(VERSION)
 ASM_DIR := asm/$(VERSION)
 GEN_DIR := build/$(VERSION)/$(PLATFORM)/generated
 
-VERSION_MACRO := VERSION_$(shell echo $(VERSION) | tr a-z A-Z)
+VERSION_MACROS := VERSION_$(shell echo $(VERSION) | tr a-z A-Z)
 
 PYTHON := python3
 

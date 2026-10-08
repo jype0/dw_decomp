@@ -1,0 +1,13 @@
+fillEnabledTournamentTable = 0x80080840;
+buildScheduleLabels = 0x80080A30;
+buildScheduleEntries = 0x80080BD4;
+initTournamentInfo = 0x80080F30;
+tournamentCheckFair = 0x80081188;
+isTournamentEnabled = 0x80081244;
+tournamentCheckEligible = 0x80081560;
+renderTournamentTextbox = 0x8008161C;
+tickTournamentSchedule = 0x800816EC;
+renderTournamentSchedule = 0x80081A1C;
+tickTournamentInfo = 0x80081D40;
+renderTournamentInfo = 0x80081DCC;
+initTournamentSchedule = 0x80081ECC;
