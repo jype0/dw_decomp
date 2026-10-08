@@ -153,17 +153,10 @@ static void ENDI_updateEnding(int32_t objectId)
 	int32_t peakFrame;
 	SVECTOR base;
 
-#if VERSION_REGION_IS(NTSCJ)
-	state = &ENDI_DATA.state;
+	state = &ENDI_STATE;
 	entity = state->entity;
 	state->frame++;
 	switch (state->phase) {
-#else
-	entity = ENDI_DATA.state.entity;
-	ENDI_DATA.state.frame++;
-	state = &ENDI_DATA.state;
-	switch (ENDI_DATA.state.phase) {
-#endif
 	case 0:
 		ENDI_fadeClut(ENDI_CLUT_BUFFER, entity, ENDI_FADE_CLUT_BUFFER, 0, 60, state->frame);
 		ENDI_spawnParticle(entity, state->frame % (DIGIMON_DATA[entity->type].boneCount - 1) + 1);
@@ -217,7 +210,7 @@ static void ENDI_renderEndingObject(int32_t objectId)
 {
 	EndingState *state;
 
-	state = &ENDI_DATA.state;
+	state = &ENDI_STATE;
 }
 
 static void ENDI_startParticles(void)
@@ -407,7 +400,7 @@ int32_t ENDI_tickEnding(entity, isInitialized)
 	EndingState *state;
 	int32_t instanceId;
 
-	state = &ENDI_DATA.state;
+	state = &ENDI_STATE;
 	instanceId = 0;
 	if (isInitialized != 0) {
 		return state->frame;

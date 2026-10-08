@@ -22,13 +22,12 @@ typedef struct {
 	Entity *entity;
 	int16_t phase;
 	int16_t velocity;
+	int32_t pad;
 } EndingState;
 
 typedef struct {
 	int32_t flag;
 	SVECTOR base;
-	EndingState state;
-	int32_t pad;
 } EndiData;
 
 extern u_long *ENDI_FADE_CLUT_BUFFER;
@@ -37,6 +36,7 @@ extern RGB8 ENDI_PARTICLE_COLOR;
 
 extern EndiParticle ENDI_PARTICLES[NUM_ENDI_PARTICLES];
 extern EndiData ENDI_DATA;
+extern EndingState ENDI_STATE;
 
 int32_t ENDI_tickEnding(Entity *entity, int32_t isInitialized);
 

@@ -15,4 +15,5 @@ ENDI_tickEndingParticles = 0x80060EC4;
 ENDI_renderParticles = 0x80060ECC;
 ENDI_tickEnding = 0x80061208;
 ENDI_PARTICLES = 0x800612DC; // size:0x780
-ENDI_DATA = 0x80061A5C; // size:0x1C
+ENDI_DATA = 0x80061A5C; // size:0xC
+ENDI_STATE = 0x80061A68; // size:0x10

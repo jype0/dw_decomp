@@ -406,6 +406,6 @@ EndiParticle ENDI_PARTICLES[NUM_ENDI_PARTICLES] = {
 EndiData ENDI_DATA = {
 	0x20200a0d,
 	{ 0x3038, 0x4630, 0x3732, 0x3045 },
-	{ 0x30303020, (Entity *)0x34303030, 0x2030, 0x742e },
-	0x0,
 };
+
+EndingState ENDI_STATE = { 0x30303020, (Entity *)0x34303030, 0x2030, 0x742e, 0x0 };
