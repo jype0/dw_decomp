@@ -8,7 +8,9 @@
 #include <dw/attack_object.h>
 #include <dw/btl.h>
 #include <dw/combat.h>
+#include <dw/efe.h>
 #include <dw/entity.h>
+#include <dw/fade.h>
 #include <dw/file_queue.h>
 #include <dw/font.h>
 #include <dw/garbage.h>
@@ -128,6 +130,14 @@ void VS__tickVSInput(void);
 void VS__tickDigimonP1(int32_t instanceId);
 void VS__tickDigimonP2(int32_t instanceId);
 
+#if VERSION_IS(JP_BOMBOM)
+void VS_setupDemoCombat(void);
+int16_t VS_checkDemoEndCondition(void);
+void VS_tickDemoDigimonAI(int32_t fighterId);
+void VS_cleanupDemoCombat(void);
+void VS_runDemoCombat(void);
+#endif
+
 static void *vs_combat_functions[] = {
 #if !VERSION_REGION_IS(NTSCJ)
 	VS__tickDigimonP2,
@@ -139,12 +149,17 @@ static void *vs_combat_functions[] = {
 	VS__renderTimeoutWindow,
 	VS__renderTimeoutText,
 	VS__combatMain,
+#if VERSION_IS(JP_BOMBOM)
+	VS_runDemoCombat,
+#endif
 	VS__tickDigimonRotationKeepDistanceCollision,
 	VS__clearFighterDataTables,
 	VS__initializePlayerMarker,
 	VS___setWalking,
 	VS__hasAffordableMoves2,
+#if !VERSION_IS(JP_BOMBOM)
 	VS__increaseSpeedBuffer,
+#endif
 	VS__getBaseDistance,
 	VS__tickDigimonMaintainDistance,
 	VS__tickDigimonWaitingDistance,
@@ -167,20 +182,40 @@ static void *vs_combat_functions[] = {
 	VS__tickDigimonHitByAttack,
 	VS__tickDigimonAttacking,
 	VS__getDigitCount,
+#if !VERSION_IS(JP_BOMBOM)
 	VS__faintDigimon,
+#endif
 	VS__addTimeoutWindow,
 	VS__tickBattleResultScreen,
+#if !VERSION_IS(JP_BOMBOM)
 	VS__areAllEnemyDigimonDead,
 	VS__resetFlatten,
+#endif
 	VS__removePlayerMarker,
+#if !VERSION_IS(JP_BOMBOM)
 	VS__deinitializeStatusEffects,
+#endif
 	VS__isButtonsPressed,
 	VS__deinitializeCombat,
 	VS__handlePause,
+#if !VERSION_IS(JP_BOMBOM)
 	VS__tickBattle,
+#endif
 	VS__tickDigimonAI,
 	VS__checkEndCondition,
 	VS__combatSetup,
+#if VERSION_IS(JP_BOMBOM)
+	VS__deinitializeStatusEffects,
+	VS__areAllEnemyDigimonDead,
+	VS__resetFlatten,
+	VS__faintDigimon,
+	VS__increaseSpeedBuffer,
+	VS_cleanupDemoCombat,
+	VS__tickBattle,
+	VS_tickDemoDigimonAI,
+	VS_checkDemoEndCondition,
+	VS_setupDemoCombat,
+#endif
 	VS__combatInit,
 };
 
@@ -199,6 +234,9 @@ uint8_t VS__COMMANDS[8] = {
 /* Damage */
 char STR_DAMEEJI[] = "ダメージ";
 
+#if VERSION_IS(JP_BOMBOM)
+int32_t VS_DEMO_SKIPPED;
+#endif
 uint8_t VS__PAUSING_PLAYER;
 uint32_t VS__CURRENT_INPUT;
 uint32_t VS__PREVIOUS_INPUT;
@@ -217,6 +255,9 @@ static void *vs_combat_sbss_order[] = {
 	&VS__PREVIOUS_INPUT,
 	&VS__CURRENT_INPUT,
 	&VS__PAUSING_PLAYER,
+#if VERSION_IS(JP_BOMBOM)
+	&VS_DEMO_SKIPPED,
+#endif
 };
 
 // clang-format on
@@ -391,6 +432,338 @@ void VS__combatInit(void)
 	VS_addCommandMenu(1);
 }
 
+#if VERSION_IS(JP_BOMBOM)
+void VS_setupDemoCombat(void)
+{
+	int32_t frames;
+	int32_t effect;
+	int32_t finished;
+	int32_t moveCount;
+	int16_t moves[18];
+	int16_t effectIds[18];
+	long i;
+	long j;
+	DigimonEntity *entity;
+	int8_t isBusy;
+
+	GAME_STATE = 5;
+	startAnimation(ENTITY_TABLE[1], 0x21);
+	entityLookAtLocation(ENTITY_TABLE[1], &ENTITY_TABLE[2]->posData->location);
+	startAnimation(ENTITY_TABLE[2], 0x21);
+	entityLookAtLocation(ENTITY_TABLE[2], &ENTITY_TABLE[1]->posData->location);
+	moveCount = 0;
+	VS_initializeEFEEngine((char *)GENERAL_BUFFER_PTR);
+
+	for (i = 0; i <= ENEMY_COUNT; ++i) {
+		entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+		entity->stats.current.unk1 = -1;
+		entity->stats.current.efeSubEffect = -1;
+
+		for (j = 0; j < 4; ++j) {
+			if (entity->stats.base.moves[j] != 0xff) {
+				effect = DIGIMON_DATA[entity->entity.type].moves[entity->stats.base.moves[j] - 0x2e] + 0x100;
+				moves[moveCount++] = effect;
+			}
+		}
+	}
+
+	moves[moveCount] = -1;
+	VS_loadMoveEFE(moves, effectIds, &isBusy);
+
+	while (isBusy > 0) {
+		tickFileReadQueue(0);
+	}
+
+	VS_DEFAULT_CAM_MIN_DISTANCE = 200;
+	VS_initializeBattleStartText();
+
+	frames = 0;
+	finished = 0;
+	playSound(0, 0x10);
+
+	while (frames < 60 || finished == 0) {
+		if (VS_DEFAULT_CAM_MIN_DISTANCE < 4200) {
+			VS_DEFAULT_CAM_MIN_DISTANCE += 400;
+		}
+
+		++frames;
+		finished = VS_isBattleStartTextFinished();
+		if (POLLED_INPUT & 0x800) {
+			VS_DEMO_SKIPPED = 1;
+		}
+		if (VS_DEMO_SKIPPED == 1) {
+			break;
+		}
+		VS_tickFrame();
+	}
+
+	VS_removeBattleStartText();
+	VS_initializeBattleStartTextBurst();
+	playSound(0, 0x11);
+
+	while (VS_isBattleStartTextFinished() == 0) {
+		if (VS_DEFAULT_CAM_MIN_DISTANCE > 1000) {
+			VS_DEFAULT_CAM_MIN_DISTANCE -= 400;
+		}
+
+		if (POLLED_INPUT & 0x800) {
+			VS_DEMO_SKIPPED = 1;
+		}
+		if (VS_DEMO_SKIPPED == 1) {
+			break;
+		}
+		VS_tickFrame();
+	}
+
+	VS_removeBattleStartTextBurst();
+
+	moveCount = 0;
+	for (i = 0; i <= ENEMY_COUNT; ++i) {
+		entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+
+		for (j = 0; j < 4; ++j) {
+			if (entity->stats.base.moves[j] == 0xff) {
+				COMBAT_DATA_PTR->fighter[i].effectSlot[j] = -1;
+			} else {
+				COMBAT_DATA_PTR->fighter[i].effectSlot[j] = effectIds[moveCount++];
+			}
+		}
+	}
+
+	VS_DEFAULT_CAM_MIN_DISTANCE = 1000;
+	VS_TIMER_ACTIVE = 1;
+	VS_CAMERA_STATE = 1;
+	GAME_STATE = 4;
+}
+
+int16_t VS_checkDemoEndCondition(void)
+{
+	Entity *other;
+	int32_t i;
+
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
+		return 0;
+	}
+
+	if (COMBAT_DATA_PTR->fighter[1].hpDamageBuffer != 0) {
+		return 0;
+	}
+#endif
+
+	if (ENTITY_TABLE[1]->anim.animId == 0x2b &&
+	    (ENTITY_TABLE[1]->anim.animFlag & 1) == 0) {
+		if (VS__areAllEnemyDigimonDead() == 0) {
+			return -1;
+		}
+
+		for (i = 1; i <= ENEMY_COUNT; ++i) {
+			other = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+			if (other->anim.animId != 0x2b ||
+			    (other->anim.animFlag & 1) != 0) {
+				return 0;
+			}
+		}
+
+		return 2;
+	}
+
+	for (i = 1; i <= ENEMY_COUNT; ++i) {
+		other = ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]];
+		if (other->anim.animId != 0x2b ||
+		    (other->anim.animFlag & 1) != 0) {
+			break;
+		}
+	}
+
+	if (i == ENEMY_COUNT + 1) {
+		if (((DigimonEntity *)ENTITY_TABLE[1])->stats.current.currentHP -
+		            COMBAT_DATA_PTR->fighter[0].hpDamageBuffer >
+		    0) {
+			return 1;
+		}
+
+		if (ENTITY_TABLE[1]->anim.animId != 0x2b ||
+		    (ENTITY_TABLE[1]->anim.animFlag & 1) != 0) {
+			return 0;
+		}
+
+		return 2;
+	}
+
+	if (VS_TIMER == 0) {
+		if ((*(DigimonEntity **)&ENTITY_TABLE[1])->stats.current.currentHP -
+		            (*(FighterData **)&COMBAT_DATA_PTR)->hpDamageBuffer <=
+		    0) {
+			return 0;
+		}
+
+		if (VS__areAllEnemyDigimonDead() != 0) {
+			return 0;
+		}
+
+		VS_DAMAGE[0] = VS_STARTING_HP[0] - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[0]])->stats.current.currentHP;
+		VS_DAMAGE[1] = VS_STARTING_HP[1] - ((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats.current.currentHP;
+		COMBAT_DATA_PTR->fighter[0].hpDamageBuffer = 0;
+		COMBAT_DATA_PTR->fighter[1].hpDamageBuffer = 0;
+
+		if (VS_DAMAGE[0] > VS_DAMAGE[1]) {
+			return -1;
+		}
+
+		if (VS_DAMAGE[0] < VS_DAMAGE[1]) {
+			return 1;
+		}
+
+		if (VS_DAMAGE[0] == VS_DAMAGE[1]) {
+			return 2;
+		}
+	}
+
+	return 0;
+}
+
+// clang-format off
+void VS_tickDemoDigimonAI(fighterId)
+	int16_t fighterId;
+// clang-format on
+{
+	FighterData *data;
+	uint16_t *flags;
+	FighterData *otherData;
+	Stats *stats;
+	DigimonEntity *entity;
+	DigimonEntity *other;
+	int16_t otherId;
+
+	entity = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[fighterId]];
+	stats = &entity->stats;
+	data = &COMBAT_DATA_PTR->fighter[fighterId];
+	flags = &data->flags;
+
+	if (BATTLE_FRAME_COUNT % 20 == 0 && data->buffPrioTimer != 0) {
+		data->buffPrioTimer--;
+	}
+
+	if (COMBAT_DATA_PTR->player.commandDelay[fighterId] == 0) {
+		COMBAT_DATA_PTR->player.currentCommand[fighterId] =
+			COMBAT_DATA_PTR->player.bufferedCommand[fighterId];
+	} else if ((*flags & 0x800e) == 0 && data->flatTimer == 0) {
+		COMBAT_DATA_PTR->player.commandDelay[fighterId]--;
+	}
+
+	if (NO_AI_FLAG == 0) {
+		if ((stats->current.currentHP > data->hpDamageBuffer) &&
+		    (stats->base.brain <= 300) &&
+		    (BATTLE_FRAME_COUNT % ((stats->base.brain / 2 + 1) * 20) == 0) &&
+		    (70 - VS_DISCIPLINE[fighterId] > randomLimit(100))) {
+			*flags |= 0x2000;
+			data->senileTimer = 100;
+		}
+
+		if (data->cooldown > 1) {
+			data->cooldown--;
+		}
+
+		if ((*flags & 0x2000) == 0) {
+			VS__increaseSpeedBuffer(data, stats);
+		}
+	}
+
+	if ((*flags & 0x80b0) != 0) {
+		return;
+	}
+
+	otherId = (fighterId + 1) & 1;
+	other = (DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[otherId]];
+	otherData = &COMBAT_DATA_PTR->fighter[otherId];
+
+	if (stats->current.currentHP == 0) {
+		VS__faintDigimon(entity, data, fighterId);
+
+		VS_DISABLE_HITTING = 1;
+		return;
+	}
+
+	if ((other->stats.current.currentHP <= otherData->hpDamageBuffer) ||
+	    (entity->stats.current.currentHP <= data->hpDamageBuffer)) {
+		handleBattleIdle(entity, stats, *flags);
+		data->moveRange = -1;
+		VS__resetFlatten(fighterId);
+		VS_removeStatusEffects(entity, data);
+		*flags = 0;
+		*flags |= 0x40;
+		return;
+	}
+
+	if ((*flags & 0x40) != 0) {
+		return;
+	}
+
+	if ((*flags & 0x8) != 0) {
+		data->queuedAnim = 0;
+		data->targetId = otherId;
+		data->moveRange = 2;
+		entity->entity.flatSprite = 0;
+		data->flags |= 0x40;
+		return;
+	}
+
+	if ((*flags & 0x4) != 0) {
+		return;
+	}
+
+	if ((*flags & 0x2) != 0) {
+		VS_queueRandomMove(entity, data, (long)fighterId);
+		return;
+	}
+
+	if ((*flags & 0x800) != 0) {
+		return;
+	}
+
+	if ((*flags & 0x1000) != 0) {
+		return;
+	}
+
+	if ((*flags & 0x2000) != 0) {
+		return;
+	}
+
+	data->targetId = otherId;
+	VS_selectPartnerMove(entity, data, fighterId);
+}
+
+void VS_cleanupDemoCombat(void)
+{
+	int32_t i;
+
+	GAME_STATE = 5;
+	VS__deinitializeStatusEffects();
+	for (i = 0; i < 12; i++) {
+		removeEFEFlash(i);
+	}
+	for (i = 0; i < 20; i++) {
+		removeEntityParticleFX(i);
+	}
+	removeAllCloudFX();
+	removeAllParticleFX();
+	for (i = 0; i <= ENEMY_COUNT; i++) {
+		removeEntityText(i);
+		VS__resetFlatten(i);
+		VS_removeStatusEffects((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i]],
+		                       &COMBAT_DATA_PTR->fighter[i]);
+		COMBAT_DATA_PTR->fighter[i].flags = 0;
+	}
+	VS_removeFighterStatusBars(0);
+	VS_removeFighterStatusBars(1);
+	VS_removeFighterCounter();
+	stopBGM();
+	stopSound();
+	GAME_STATE = 0;
+}
+#endif
+
 void VS__combatSetup(void)
 {
 	int32_t frames;
@@ -487,7 +860,7 @@ int16_t VS__checkEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}
@@ -2038,6 +2411,52 @@ void VS__tickDigimonRotationKeepDistanceCollision(Entity *entity, int16_t *rotat
 		collisionGrace(0, entity, 0x118, 0xc8);
 	}
 }
+
+#if VERSION_IS(JP_BOMBOM)
+void VS_runDemoCombat(void)
+{
+	int16_t result;
+
+	VS_DEMO_SKIPPED = 0;
+	VS__PAUSING_PLAYER = 0;
+	COMBAT_AREA_X = 0;
+	COMBAT_AREA_Y = 0;
+
+	stopBGM();
+	stopSound();
+	playMusic(VS_MUSIC, 2);
+	VS__combatInit();
+	VS_removeCommandMenu(0);
+	VS_removeCommandMenu(1);
+	VS_removeFighterCounter();
+	VS_addFighterCounter(0x1e);
+	VS_setupDemoCombat();
+
+	while (1) {
+		result = VS_checkDemoEndCondition();
+		if (POLLED_INPUT & 0x800) {
+			VS_DEMO_SKIPPED = 1;
+		}
+		if ((result != 0) || (VS_DEMO_SKIPPED == 1)) {
+			break;
+		}
+
+		VS_tickDemoDigimonAI(0);
+		VS_tickDemoDigimonAI(1);
+		VS__tickBattle();
+		VS_tickFrame();
+	}
+
+	VS_tickFrame();
+	fadeToBlack(1);
+	VS_tickFrame();
+	VS_tickFrame();
+	VS_cleanupDemoCombat();
+	stopBGM();
+	stopSound();
+	VS_removeResultModelScene();
+}
+#endif
 
 int32_t VS__combatMain(void)
 {

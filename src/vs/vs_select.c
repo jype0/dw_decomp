@@ -244,7 +244,7 @@ void VS__loadTextures(void)
 	int32_t i;
 	int32_t j;
 
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	ENTITY_TABLE[0]->isOnScreen = 0;
 #endif
 	loadTIMFile(VS__PATH_ETCDAT_SYSTEM_W_TIM, GENERAL_BUFFER);

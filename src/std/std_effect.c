@@ -2041,7 +2041,7 @@ void STD_loadMoveEFE(moves, effectIds, isLoaded)
 	int8_t *isLoaded;
 // clang-format on
 {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	downloadSomeImage();
 #endif
 	EFE_LOAD_REQUEST.state = -1;

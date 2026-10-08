@@ -229,7 +229,7 @@ KarOffTbl KAR_D_8005AB8C = {
 	},
 };
 
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
 #endif
 
@@ -973,7 +973,7 @@ void KAR_setupMatch(int32_t mode)
 	KarWeightTbl weights;
 	KarOffTbl types;
 	int32_t n;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	KarSpawnX spawnX;
 #endif
 	int32_t p;
@@ -1659,7 +1659,7 @@ void KAR_checkStonesStopped(void)
 
 void KAR_updateCollisions(void)
 {
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 	int32_t a;
 	KarStone *stone;
 	int32_t i;
@@ -1693,7 +1693,7 @@ void KAR_updateCollisions(void)
 #endif
 #endif
 
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 	collided = 0;
 #endif
 
@@ -1723,7 +1723,7 @@ void KAR_updateCollisions(void)
 					tz2 = stone->pos.vz * step;
 					cur[p * 5 + i].vx = (tx1 + tx2) / 10;
 					cur[p * 5 + i].vz = (tz1 + tz2) / 10;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 					cur[p * 5 + i].vy = stone->target.vy;
 #endif
 				}
@@ -1736,7 +1736,7 @@ void KAR_updateCollisions(void)
 					if (KAR_D_8005B5A0[b / 5].row.stones[b % 5].state > 0) {
 						dist = KAR_distance(cur[a].vx - cur[b].vx, cur[a].vz - cur[b].vz);
 						if (dist < 0x96) {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 							collided = 1;
 #endif
 							if (step == 0) {
@@ -1756,7 +1756,7 @@ void KAR_updateCollisions(void)
 			prev[i] = cur[i];
 		}
 
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 		if ((collided != 0) && (step == 0xa)) {
 			step--;
 		}
@@ -2361,7 +2361,7 @@ int8_t KAR_tickYesNoPrompt(void)
 				MAIN_D_80135250 = (MAIN_D_80135250 == 3) ? 4 : 3;
 				playSound(0, 2);
 			}
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			else
 #endif
 			if ((POLLED_INPUT & 0x4000) != 0 && (POLLED_INPUT_PREVIOUS & 0x4000) == 0) {
@@ -3133,13 +3133,13 @@ void KAR_tickMatchState(void)
 			if ((POLLED_INPUT & CONFIRM_BUTTON) && !(POLLED_INPUT_PREVIOUS & CONFIRM_BUTTON)) {
 				KAR_beginAiming();
 			}
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			else
 #endif
 			if ((POLLED_INPUT & 0x1000) && !(POLLED_INPUT_PREVIOUS & 0x1000)) {
 				KAR_selectPreviousStone();
 			}
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 			else
 #endif
 			if ((POLLED_INPUT & 0x4000) && !(POLLED_INPUT_PREVIOUS & 0x4000)) {

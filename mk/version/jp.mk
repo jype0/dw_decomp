@@ -192,4 +192,8 @@ VS_C_SRC := \
 	src/vs/vs_scene.c \
 	src/vs/vs_select.c
 
+ifeq ($(VERSION),jp_bombom)
+VS_C_SRC += src/vs/vs_demo.c
+endif
+
 $(eval $(call overlay,VS,vs))

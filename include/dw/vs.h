@@ -9,6 +9,13 @@
 #include <dw/entity.h>
 #include <dw/graphics.h>
 #include <dw/types.h>
+#include <dw/version.h>
+
+#define VS_FINISHER_TIM	((char *)0x80052ae0)
+#define VS_FINISHER_MODEL	((char *)0x80053800)
+#define VS_CONFUSION_MODEL	((char *)0x80054838)
+#define VS_STUN_MODEL		((char *)0x80054d00)
+#define VS_BUFF_MODEL		((TMDModel *)0x80055328)
 
 typedef struct {
 	int16_t hp;
@@ -161,6 +168,10 @@ extern EfeFinisherAura VS_FINISHER_AURAS[2];
 extern SVECTOR VS_FINISHER_AURA_SPARKS[];
 
 void VS__initialize(RegisteredDigimon *fightersP1, RegisteredDigimon *fightersP2);
+#if VERSION_IS(JP_BOMBOM)
+void VS_playDemo(void);
+void VS_initializeTrialBattle(RegisteredDigimon *fightersP1, RegisteredDigimon *fightersP2);
+#endif
 int32_t VS_addAuraProjectile(Entity *e);
 void VS_addCommandMenu(uint8_t index);
 void VS_addFighterCounter(int32_t arg);

@@ -460,7 +460,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 				if (0 < RotNclip3(&verts[tri->v0], &verts[tri->v1], &verts[tri->v2],
 				                  (long *)&poly3->x0, (long *)&poly3->x1, (long *)&poly3->x2,
 				                  &p, &otz, &flag)) {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 					otz >>= 2;
 					if ((otz > 32) && (otz < 4096)) {
 #endif
@@ -477,7 +477,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 #endif
 						AddPrim(ACTIVE_ORDERING_TABLE->org + otz, poly3);
 						packet = (uint8_t *)++poly3;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 					}
 #endif
 				}
@@ -503,7 +503,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 				                  &verts[quad->v3], (long *)&poly4->x0, (long *)&poly4->x1,
 				                  (long *)&poly4->x2, (long *)&poly4->x3,
 				                  &p, &otz, &flag)) {
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 					otz >>= 2;
 					if ((otz > 32) && (otz < 4096)) {
 #endif
@@ -522,7 +522,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 #endif
 						AddPrim(ACTIVE_ORDERING_TABLE->org + otz, poly4);
 						packet = (uint8_t *)++poly4;
-#if VERSION_EQUAL_OR_NEWER(US)
+#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
 					}
 #endif
 				}

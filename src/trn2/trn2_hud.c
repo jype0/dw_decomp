@@ -235,7 +235,7 @@ int16_t TRN2_calculateTrainingMultiplier(type, mode)
 	if (0) {
 		t = 0;
 	}
-#if VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 	(void)t;
 #else
 	result += t / 60;
