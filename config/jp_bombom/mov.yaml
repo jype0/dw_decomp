@@ -1,0 +1,66 @@
+name: mov
+sha1: d74fc2494d68c73c0a80c7ee8a58ace9288eeffb
+options:
+  basename: mov
+  target_path: disks/jp_bombom/MOV_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_bombom/mov
+  src_path: src/mov
+  asset_path: build/jp_bombom/psx/generated/assets/mov
+  build_path: build
+
+  ld_script_path: build/jp_bombom/psx/generated/mov.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014685C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_bombom/symbols.txt
+    - config/jp_bombom/symbols_mov.txt
+
+  undefined_funcs_auto_path: build/jp_bombom/psx/generated/undefined_funcs_auto_mov.txt
+  undefined_syms_auto_path: build/jp_bombom/psx/generated/undefined_syms_auto_mov.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_mov
+  symbol_name_format_no_rom: $VRAM_mov
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80010000
+    align: 4
+    subalign: 4
+
+  - name: mov
+    type: code
+    start: 0x40
+    vram: 0x80010040
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, mov]
+      - [0xB70, .data, mov]
+      - [0xC10, .data, mov_bss_jp_bombom]
+
+  - [0x7364C]

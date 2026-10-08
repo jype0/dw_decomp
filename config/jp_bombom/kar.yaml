@@ -1,0 +1,67 @@
+name: kar
+sha1: 2ead66a209b4f3042cdac3dfb60904875fe38095
+options:
+  basename: kar
+  target_path: disks/jp_bombom/KAR_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_bombom/kar
+  src_path: src/kar
+  asset_path: build/jp_bombom/psx/generated/assets/kar
+  build_path: build
+
+  ld_script_path: build/jp_bombom/psx/generated/kar.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014685C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_bombom/symbols.txt
+    - config/jp_bombom/symbols_kar.txt
+
+  undefined_funcs_auto_path: build/jp_bombom/psx/generated/undefined_funcs_auto_kar.txt
+  undefined_syms_auto_path: build/jp_bombom/psx/generated/undefined_syms_auto_kar.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_kar
+  symbol_name_format_no_rom: $VRAM_kar
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80053800
+    align: 4
+    subalign: 4
+
+  - name: kar
+    type: code
+    start: 0x40
+    vram: 0x80053840
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, kar]
+      - [0x981C, .rodata, kar]
+      - [0x988C, .data, kar]
+      - [0xA360, .data, kar_bss_jp_bombom]
+
+  - [0x127A8]

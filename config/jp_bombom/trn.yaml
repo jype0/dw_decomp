@@ -1,0 +1,84 @@
+name: trn
+sha1: 226d12df3c185b2ec81659620252475113b8e24c
+options:
+  basename: trn
+  target_path: disks/jp_bombom/TRN_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_bombom/trn
+  src_path: src/trn
+  asset_path: build/jp_bombom/psx/generated/assets/trn
+  build_path: build
+
+  ld_script_path: build/jp_bombom/psx/generated/trn.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014685C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_bombom/symbols.txt
+    - config/jp_bombom/symbols_trn.txt
+
+  undefined_funcs_auto_path: build/jp_bombom/psx/generated/undefined_funcs_auto_trn.txt
+  undefined_syms_auto_path: build/jp_bombom/psx/generated/undefined_syms_auto_trn.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_trn
+  symbol_name_format_no_rom: $VRAM_trn
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80088800
+    align: 4
+    subalign: 4
+
+  - name: trn
+    type: code
+    start: 0x40
+    vram: 0x80088840
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, trn_reward]
+      - [0x28C8, c, trn_hp]
+      - [0x2F74, c, trn_mp]
+      - [0x3588, c, trn_off]
+      - [0x413C, c, trn_def]
+      - [0x4C68, c, trn_speed]
+      - [0x51AC, c, trn_brain]
+      - [0x58E4, c, trn_hud]
+      - [0x67D8, c, trn_slots]
+      - [0x79A8, .rodata, trn_hp]
+      - [0x79C0, .rodata, trn_off]
+      - [0x79E4, .rodata, trn_speed]
+      - [0x79FC, .rodata, trn_def]
+      - [0x7A38, .rodata, trn_mp]
+      - [0x7A54, .rodata, trn_brain]
+      - [0x7A6C, .rodata, trn_reward]
+      - [0x7A84, .rodata, trn_slots]
+      - [0x7AA0, .data, trn_reward]
+      - [0x7C14, .data, trn_hud]
+      - [0x7D34, .data, trn_slots]
+      - [0x7D88, .data, trn_bss_jp_bombom]
+
+  - [0x7E3C]

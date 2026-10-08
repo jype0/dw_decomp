@@ -1,0 +1,66 @@
+name: dooa
+sha1: 5758d5a830b618a6a149660a93193065ebc85f6a
+options:
+  basename: dooa
+  target_path: disks/jp_bombom/DOOA_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_bombom/dooa
+  src_path: src/dooa
+  asset_path: build/jp_bombom/psx/generated/assets/dooa
+  build_path: build
+
+  ld_script_path: build/jp_bombom/psx/generated/dooa.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014685C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_bombom/symbols.txt
+    - config/jp_bombom/symbols_dooa.txt
+
+  undefined_funcs_auto_path: build/jp_bombom/psx/generated/undefined_funcs_auto_dooa.txt
+  undefined_syms_auto_path: build/jp_bombom/psx/generated/undefined_syms_auto_dooa.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_dooa
+  symbol_name_format_no_rom: $VRAM_dooa
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80080000
+    align: 4
+    subalign: 4
+
+  - name: dooa
+    type: code
+    start: 0x40
+    vram: 0x80080040
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, dooa]
+      - [0x6270, .data, dooa]
+      - [0x635C, .data, dooa_bss_jp_bombom]
+
+  - [0x9244]

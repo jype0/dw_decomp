@@ -1,4 +1,4 @@
-EXE_NAME := SLPS_017.97
+EXE_NAME ?= SLPS_017.97
 
 PSYQ_INCLUDE := external/psyq_headers/mw_lib43/include
 
