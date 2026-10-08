@@ -160,7 +160,7 @@ int16_t arg;
 	case 0x63:
 		TRN2_D_8008DC1C.vx = 0;
 		TRN2_D_8008DC1C.vy = 0;
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		TRN2_D_8008DC1C.vz = -0x78;
 #else
 		TRN2_D_8008DC1C.vz = -0x96;

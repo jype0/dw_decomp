@@ -234,7 +234,11 @@ int16_t TRN2_calculateTrainingMultiplier(type, mode)
 	if (0) {
 		t = 0;
 	}
+#if defined(VERSION_JP_REV1)
+	(void)t;
+#else
 	result += t / 60;
+#endif
 	result = (num * 10) / den;
 	return result;
 }

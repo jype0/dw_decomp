@@ -486,7 +486,7 @@ int16_t VS__checkEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}

@@ -428,7 +428,9 @@ void BTL_addDeathCountdown(Entity *entity)
 	GsSPRITE *shadow;
 #if !defined(VERSION_JP)
 	int16_t py;
+#endif
 
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	if (BTL_DEATH_COUNTDOWN.data.timer != -1) {
 		return;
 	}

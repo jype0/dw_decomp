@@ -228,7 +228,7 @@ KarOffTbl KAR_D_8005AB8C = {
 	},
 };
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
 #endif
 
@@ -971,10 +971,10 @@ void KAR_setupMatch(int32_t mode)
 	KarModelIds models;
 	KarWeightTbl weights;
 	KarOffTbl types;
-#if !defined(VERSION_JP)
+	int32_t n;
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	KarSpawnX spawnX;
 #endif
-	int32_t n;
 	int32_t p;
 	int32_t i;
 	KarStone *stone;
@@ -1027,7 +1027,7 @@ void KAR_setupMatch(int32_t mode)
 				stone->rotation.vz = 0;
 				stone->state = -1;
 			} else if (i < obstacles) {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 				stone->pos.vy = 0;
 				stone->pos.vx = rand() % 0x5dc - 0x2ee;
 #else
@@ -1658,6 +1658,22 @@ void KAR_checkStonesStopped(void)
 
 void KAR_updateCollisions(void)
 {
+#if defined(VERSION_JP_REV1)
+	int32_t a;
+	KarStone *stone;
+	int32_t i;
+	int32_t p;
+	int32_t b;
+	int32_t step;
+	VECTOR cur[15];
+	VECTOR prev[15];
+	int32_t tx1;
+	int32_t tx2;
+	int32_t tz1;
+	int32_t tz2;
+	int32_t dist;
+	int8_t collided;
+#else
 	int32_t i;
 	int32_t p;
 	int32_t step;
@@ -1674,8 +1690,9 @@ void KAR_updateCollisions(void)
 #if !defined(VERSION_JP)
 	int32_t collided;
 #endif
+#endif
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	collided = 0;
 #endif
 
@@ -1705,7 +1722,7 @@ void KAR_updateCollisions(void)
 					tz2 = stone->pos.vz * step;
 					cur[p * 5 + i].vx = (tx1 + tx2) / 10;
 					cur[p * 5 + i].vz = (tz1 + tz2) / 10;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 					cur[p * 5 + i].vy = stone->target.vy;
 #endif
 				}
@@ -1718,7 +1735,7 @@ void KAR_updateCollisions(void)
 					if (KAR_D_8005B5A0[b / 5].row.stones[b % 5].state > 0) {
 						dist = KAR_distance(cur[a].vx - cur[b].vx, cur[a].vz - cur[b].vz);
 						if (dist < 0x96) {
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 							collided = 1;
 #endif
 							if (step == 0) {
@@ -1738,7 +1755,7 @@ void KAR_updateCollisions(void)
 			prev[i] = cur[i];
 		}
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		if ((collided != 0) && (step == 0xa)) {
 			step--;
 		}
@@ -1977,7 +1994,7 @@ void KAR_collideMovingStones(KarStone *stoneA, VECTOR a, KarStone *stoneB, VECTO
 		stoneB->speed += (int16_t)(share1 - share2);
 		if (stoneA->speed > stoneB->speed) {
 			while (d < 0x97) {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 				stoneA->pos.vx = p1.vx - r * rcos(ang) / 4096;
 				stoneA->pos.vz = p1.vz - r * rsin(ang) / 4096;
 #else
@@ -2343,7 +2360,7 @@ int8_t KAR_tickYesNoPrompt(void)
 				MAIN_D_80135250 = (MAIN_D_80135250 == 3) ? 4 : 3;
 				playSound(0, 2);
 			}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			else
 #endif
 			if ((POLLED_INPUT & 0x4000) != 0 && (POLLED_INPUT_PREVIOUS & 0x4000) == 0) {
@@ -3115,13 +3132,13 @@ void KAR_tickMatchState(void)
 			if ((POLLED_INPUT & CONFIRM_BUTTON) && !(POLLED_INPUT_PREVIOUS & CONFIRM_BUTTON)) {
 				KAR_beginAiming();
 			}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			else
 #endif
 			if ((POLLED_INPUT & 0x1000) && !(POLLED_INPUT_PREVIOUS & 0x1000)) {
 				KAR_selectPreviousStone();
 			}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			else
 #endif
 			if ((POLLED_INPUT & 0x4000) && !(POLLED_INPUT_PREVIOUS & 0x4000)) {
@@ -3135,7 +3152,7 @@ void KAR_tickMatchState(void)
 			int32_t targetAngle;
 
 			targetAngle = KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].angle;
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			if (KAR_tickHintBox(1) != 0) {
 				if ((POLLED_INPUT & 0x2000) && (MAIN_D_8013524C < -0x18F)) {
 					if (MAIN_D_80135254 > 0) {
@@ -3190,13 +3207,13 @@ void KAR_tickMatchState(void)
 					break;
 				}
 			}
-			if ((MAIN_D_8013524C + 0xA >= targetAngle) &&
+			if ((targetAngle <= MAIN_D_8013524C + 0xA) &&
 			    (targetAngle >= MAIN_D_8013524C - 0xA)) {
 				KAR_beginThrow();
 				if (MAIN_D_80135250 != 0) {
 					MAIN_D_80135250 = 1;
 				}
-			} else if (MAIN_D_8013524C < targetAngle) {
+			} else if (targetAngle > MAIN_D_8013524C) {
 				KAR_turnAimLeft(0xA);
 			} else {
 				KAR_turnAimRight(-0xA);

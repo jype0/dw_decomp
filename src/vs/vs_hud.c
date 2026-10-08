@@ -780,7 +780,7 @@ void VS_renderBattleStartText(void)
 	SVECTOR q3;
 	POLY_FT4 *ft;
 	uint16_t clut;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	MATRIX m;
 
 	m = GsWSMATRIX;
@@ -898,7 +898,7 @@ void VS_renderBattleStartText(void)
 
 	GsSetWorkBase((PACKET *)prim);
 	GsSetProjection(VIEWPORT_DISTANCE);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	GsSetRefView2(&GS_VIEWPOINT);
 #else
 	GsWSMATRIX = m;
@@ -933,7 +933,7 @@ void VS_renderBattleStartTextBurst(void)
 	POLY_FT4 *ft;
 	int16_t cx;
 	int16_t cy;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	MATRIX saved;
 
 	saved = GsWSMATRIX;
@@ -1025,7 +1025,7 @@ void VS_renderBattleStartTextBurst(void)
 		VS_BATTLE_TEXT_FINISHED = 1;
 	}
 	GsSetProjection(VIEWPORT_DISTANCE);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	GsSetRefView2(&GS_VIEWPOINT);
 #else
 	GsWSMATRIX = saved;

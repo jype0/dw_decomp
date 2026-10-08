@@ -39,7 +39,7 @@ extern int32_t UNKNOWN_MODEL_TAKEN[16];
 
 int32_t doSomethingWithSomePoints(int16_t *rect, DVECTOR *line);
 void downloadSomeImage();
-void modifySomeImage(int32_t dim);
+void modifySomeImage(long dim);
 int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning, void *callback, void *callbackParam, CdlLOC *loc, int32_t size);
 CdlLOC *getEFEDATEntry(int32_t id);
 char *VS_initializeParticleEmitters(char *base);
@@ -1686,8 +1686,8 @@ void VS_loadMoveEFE(moves, effectIds, isLoaded)
 	int8_t *isLoaded;
 // clang-format on
 {
-#if !defined(VERSION_JP)
-	downloadSomeImage(moves);
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+	downloadSomeImage();
 #endif
 	EFE_LOAD_REQUEST.state = -1;
 	EFE_LOAD_REQUEST.isLoaded = isLoaded;
@@ -1771,7 +1771,7 @@ void VS_disableMapLayer(void)
 
 void VS_renderScreenFade(void)
 {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	int32_t ofx;
 	int32_t ofy;
 	POLY_FT4 *p;
@@ -1793,7 +1793,10 @@ void VS_renderScreenFade(void)
 	p++;
 	GsSetWorkBase((PACKET *)p);
 #else
-	modifySomeImage(EFE_POP1(int32_t));
+	int32_t c;
+
+	c = EFE_POP1(int32_t);
+	modifySomeImage(c);
 #endif
 }
 
@@ -2548,7 +2551,7 @@ void VS_renderWireframeBox(void)
 	by = base->vy;
 	bz = base->vz;
 	PushMatrix();
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	getDrawingOffsetCopy(&ox, &oy);
 #else
 	ox = DRAWING_OFFSET_X;
@@ -2714,7 +2717,7 @@ void VS_render2DTexturedQuad(void)
 
 void VS_restoreCameraView(void)
 {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	GsRVIEW2 view;
 	int32_t dist;
 	int32_t x;
@@ -2739,9 +2742,9 @@ void VS_restoreCameraView(void)
 
 void VS_setupFixedCamera(void)
 {
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	int32_t ret;
 
-#if defined(VERSION_JP)
 	GsSetProjection(0x200);
 #else
 	VS_SAVED_WS_MATRIX.m = GsWSMATRIX;
@@ -2756,7 +2759,11 @@ void VS_setupFixedCamera(void)
 	EFE_FIXED_VIEW.vrz = 0;
 	EFE_FIXED_VIEW.rz = 0;
 	EFE_FIXED_VIEW.super = NULL;
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	ret = GsSetRefView2(&EFE_FIXED_VIEW);
+#else
+	GsSetRefView2(&EFE_FIXED_VIEW);
+#endif
 	DRAWING_OFFSET_X = 0xa0;
 	DRAWING_OFFSET_Y = 0x78;
 }
@@ -3739,10 +3746,8 @@ void VS_projectPositionToScreen(void)
 void VS_renderScreenSprite(void)
 {
 	GsSPRITE sprite;
-#if defined(VERSION_JP)
 	int32_t ox;
 	int32_t oy;
-#endif
 	ModelComponent *m;
 	int32_t flip;
 	int32_t depth;
@@ -3763,13 +3768,15 @@ void VS_renderScreenSprite(void)
 	sprite.x = EFE_POP1(int32_t);
 
 	if (flip < 0) {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		getDrawingOffsetCopy(&ox, &oy);
 		sprite.x += (int16_t)(0xa0 - ox);
 		sprite.y += (int16_t)(0x78 - oy);
 #else
-		sprite.x += (int16_t)(0xa0 - DRAWING_OFFSET_X);
-		sprite.y += (int16_t)(0x78 - DRAWING_OFFSET_Y);
+		ox = DRAWING_OFFSET_X;
+		oy = DRAWING_OFFSET_Y;
+		sprite.x += (int16_t)(0xa0 - ox);
+		sprite.y += (int16_t)(0x78 - oy);
 #endif
 		sprite.cy = -flip + (m->clutPage >> 6);
 	} else {
@@ -3781,7 +3788,7 @@ void VS_renderScreenSprite(void)
 	sprite.cx = (m->clutPage & 0x3f) << 4;
 	sprite.r = sprite.g = sprite.b = 0x80;
 
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
 #else
 	if ((depth >= 0) && (depth < 0x1000)) {
@@ -4792,7 +4799,7 @@ void VS_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, SV
 		depth = worldPosToScreenPos(a, (DVECTOR *)&prim->x0);
 		if ((depth > 0x200) && (depth < 0x10000)) {
 			depth = worldPosToScreenPos(b, (DVECTOR *)&prim->x1);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			getDrawingOffsetCopy(&ox, &oy);
 #else
 			ox = DRAWING_OFFSET_X;

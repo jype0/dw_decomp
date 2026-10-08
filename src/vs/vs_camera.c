@@ -819,7 +819,7 @@ void VS_tickFighterCounter(void)
 
 void VS_renderFighterCounter(void)
 {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	VS_renderCounterDigits(-0xd, -0x61, 2, VS_TIMER, 0);
 #else
 	VS_renderCounterDigits(-0xd, -0x61, 2, VS_TIMER, 3);

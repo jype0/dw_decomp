@@ -300,7 +300,7 @@ void STD_initializeOpponent(int16_t type, int16_t slot, uint8_t tier)
 	stats->base.brain = mul * (base + base * (0x1e - randomLimit(0x3d)) / 100) / div;
 	stats->base.hp = mul * (base * 10 + base * 10 * (0x1e - randomLimit(0x3d)) / 100) / div;
 	stats->base.mp = mul * (base * 10 + base * 10 * (0x1e - randomLimit(0x3d)) / 100) / div;
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	stats->current.currentHP = stats->base.hp;
 	stats->current.currentMP = stats->base.mp;
 #endif
@@ -322,7 +322,7 @@ void STD_initializeOpponent(int16_t type, int16_t slot, uint8_t tier)
 	if (stats->base.mp >= 0x2710) {
 		stats->base.mp = 0x270f;
 	}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	stats->current.currentHP = stats->base.hp;
 	stats->current.currentMP = stats->base.mp;
 #endif
@@ -447,7 +447,7 @@ void STD_removeOverworldObjects(void)
 {
 	removeObject(0xfa2, 0);
 	removeObject(0xfa0, 0);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	removeObject(0xfa6, 0);
 #endif
 	removeObject(0xfa8, 0);

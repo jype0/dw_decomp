@@ -111,7 +111,7 @@ static void *vs_scene_functions[] = {
 	VS_loadArenaTIMToVRAM,
 	VS_renderVersusIntro,
 	VS_tickVersusIntro,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	VS_tickPlaytime,
 #endif
 	VS_playVersusIntroSequence,
@@ -1039,14 +1039,14 @@ void VS_initializeVS(void)
 	VS_playVersusIntroSequence();
 	VS_CURRENT_BATTLE = 0;
 	while (VS_CURRENT_BATTLE < VS_BATTLE_SETUP.battleCount) {
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		PLAYTIME_FRAMES = 0;
 #endif
 		VS_loadFighterEntities(VS_CURRENT_BATTLE);
 		ENTITY_TABLE[1]->isOnScreen = 1;
 		ENTITY_TABLE[2]->isOnScreen = 1;
 		VSLoadSounds();
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		((DigimonEntity *)ENTITY_TABLE[1])->stats.current.vabId = 4;
 		((DigimonEntity *)ENTITY_TABLE[2])->stats.current.vabId = 5;
 #endif
@@ -1147,7 +1147,7 @@ void VS_addInputObjects(void)
 {
 	addObject(0x1b2, 0, (TickFunction)VS__tickVSInput, NULL);
 	addObject(0x1b2, 1, (TickFunction)VS__tickVSInput, NULL);
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	PLAYTIME_FRAMES = 0;
 	addObject(0xfb9, 0, (TickFunction)VS_tickPlaytime, NULL);
 #endif
@@ -1231,7 +1231,7 @@ void VS_unloadFighterEntities(void)
 {
 	int32_t type;
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	PLAYTIME_FRAMES = 0;
 	removeObject(0xfb9, 0);
 #endif
@@ -1565,7 +1565,7 @@ void VS_playVersusIntroSequence(void)
 	}
 }
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 void VS_tickPlaytime(void)
 {
 	PLAYTIME_FRAMES++;

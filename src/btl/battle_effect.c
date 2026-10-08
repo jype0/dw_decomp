@@ -2320,7 +2320,7 @@ void BTL_renderRingTube(void)
 			if (j == 9) {
 				goto wrap;
 			}
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			if (q[2] < 0x21 || q[5] < 0x21 || q[32] < 0x21 || q[35] < 0x21) {
 #else
 			if (q[2] < 0x21 || q[2] >= 0x1000 || q[5] < 0x21 || q[5] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000 ||
@@ -2338,7 +2338,7 @@ emit:
 			p++;
 			continue;
 wrap:
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			if (q[2] < 0x21 || q[-25] < 0x21 || q[32] < 0x21 || q[5] < 0x21) {
 #else
 			if (q[2] < 0x21 || q[2] >= 0x1000 || q[-25] < 0x21 || q[-25] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000 ||
@@ -4021,7 +4021,7 @@ void BTL_renderScreenSprite(void)
 	sprite.cx = (m->clutPage & 0x3f) << 4;
 	sprite.r = sprite.g = sprite.b = 0x80;
 
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
 #else
 	if ((depth >= 0) && (depth < 0x1000)) {
