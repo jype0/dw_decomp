@@ -63,7 +63,7 @@ void VS__renderIntroStatNumber(int32_t x, int32_t y, int32_t digits, int32_t val
 void VS__combatInit(void);
 void VS__combatSetup(void);
 int16_t VS__checkEndCondition(void);
-void VS__tickDigimonAi(int32_t fighterId);
+void VS__tickDigimonAI(int32_t fighterId);
 void VS__tickBattle(void);
 void VS__handlePause(void);
 int16_t VS__deinitializeCombat(int16_t lostP1, int16_t lostP2);
@@ -178,7 +178,7 @@ static void *vs_combat_functions[] = {
 	VS__deinitializeCombat,
 	VS__handlePause,
 	VS__tickBattle,
-	VS__tickDigimonAi,
+	VS__tickDigimonAI,
 	VS__checkEndCondition,
 	VS__combatSetup,
 	VS__combatInit,
@@ -573,7 +573,7 @@ int16_t VS__checkEndCondition(void)
 }
 
 // clang-format off
-void VS__tickDigimonAi(fighterId)
+void VS__tickDigimonAI(fighterId)
 	int16_t fighterId;
 // clang-format on
 {
@@ -2058,8 +2058,8 @@ int32_t VS__combatMain(void)
 			break;
 		}
 
-		VS__tickDigimonAi(0);
-		VS__tickDigimonAi(1);
+		VS__tickDigimonAI(0);
+		VS__tickDigimonAI(1);
 		VS__tickBattle();
 		VS_tickFrame();
 		VS__handlePause();
