@@ -1,0 +1,68 @@
+name: fish
+sha1: 59c352db0bc77b09f90cfb5bc8a40dc04393867c
+options:
+  basename: fish
+  target_path: disks/jp_trial/FISH_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_trial/fish
+  src_path: src/fish
+  asset_path: build/jp_trial/psx/generated/assets/fish
+  build_path: build
+
+  ld_script_path: build/jp_trial/psx/generated/fish.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014684C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_trial/symbols.txt
+    - config/jp_trial/symbols_fish.txt
+
+  undefined_funcs_auto_path: build/jp_trial/psx/generated/undefined_funcs_auto_fish.txt
+  undefined_syms_auto_path: build/jp_trial/psx/generated/undefined_syms_auto_fish.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_fish
+  symbol_name_format_no_rom: $VRAM_fish
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80070000
+    align: 4
+    subalign: 4
+
+  - name: fish
+    type: code
+    start: 0x40
+    vram: 0x80070040
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, fish]
+      - [0xDD2C, c, fish_model]
+      - [0xE034, .rodata, fish]
+      - [0xE0C8, .data, fish]
+      - [0xEA68, .data, fish_bss_jp_trial]
+
+  - [0x11890]

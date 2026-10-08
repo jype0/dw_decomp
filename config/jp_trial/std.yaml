@@ -1,0 +1,110 @@
+name: std
+sha1: 5c0879baa8ad3277309c8b1eb4635134de4d6251
+options:
+  basename: std
+  target_path: disks/jp_trial/STD_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_trial/std
+  src_path: src/std
+  asset_path: build/jp_trial/psx/generated/assets/std
+  build_path: build
+
+  ld_script_path: build/jp_trial/psx/generated/std.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014684C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_trial/symbols.txt
+    - config/jp_trial/symbols_std.txt
+  reloc_addrs_path:
+    - config/jp_trial/relocs_std.txt
+
+  undefined_funcs_auto_path: build/jp_trial/psx/generated/undefined_funcs_auto_std.txt
+  undefined_syms_auto_path: build/jp_trial/psx/generated/undefined_syms_auto_std.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_std
+  symbol_name_format_no_rom: $VRAM_std
+
+segments:
+  - name: texture
+    type: rodata
+    start: 0x0
+    vram: 0x80052AE0
+    align: 4
+    subalign: 4
+
+  - name: model_0
+    type: rodata
+    start: 0xD20
+    vram: 0x80053800
+    align: 4
+    subalign: 4
+
+  - name: model_1
+    type: rodata
+    start: 0x1D58
+    vram: 0x80054838
+    align: 4
+    subalign: 4
+
+  - name: model_2
+    type: rodata
+    start: 0x2220
+    vram: 0x80054D00
+    align: 4
+    subalign: 4
+
+  - name: model_3
+    type: rodata
+    start: 0x2848
+    vram: 0x80055328
+    align: 4
+    subalign: 4
+
+  - name: header
+    type: rodata
+    start: 0x4188
+    vram: 0x80056C68
+    align: 4
+    subalign: 4
+
+  - name: std
+    type: code
+    start: 0x41C8
+    vram: 0x80056CA8
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x41C8, c, std_setup]
+      - [0x5E70, c, std_main]
+      - [0x1B290, c, std_hud]
+      - [0x1F240, c, std_effect]
+      - [0x31300, .rodata, std_main]
+      - [0x313C8, .data, std_setup]
+      - [0x316D0, .data, std_main]
+      - [0x3215C, .data, std_hud]
+      - [0x3255C, .data, std_effect]
+      - [0x330B8, .data, std_bss_jp_trial]
+
+  - [0x37918]

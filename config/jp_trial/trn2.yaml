@@ -1,0 +1,85 @@
+name: trn2
+sha1: e776c8e70354a99116726ea24172e806d05cc762
+options:
+  basename: trn2
+  target_path: disks/jp_trial/TRN2_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_trial/trn2
+  src_path: src/trn2
+  asset_path: build/jp_trial/psx/generated/assets/trn2
+  build_path: build
+
+  ld_script_path: build/jp_trial/psx/generated/trn2.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014684C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_trial/symbols.txt
+    - config/jp_trial/symbols_trn2.txt
+
+  undefined_funcs_auto_path: build/jp_trial/psx/generated/undefined_funcs_auto_trn2.txt
+  undefined_syms_auto_path: build/jp_trial/psx/generated/undefined_syms_auto_trn2.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_trn2
+  symbol_name_format_no_rom: $VRAM_trn2
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80088800
+    align: 4
+    subalign: 4
+
+  - name: trn2
+    type: code
+    start: 0x40
+    vram: 0x80088840
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, trn2_hp_map99]
+      - [0x560, c, trn2_def_map99]
+      - [0xBA4, c, trn2_hp_map107]
+      - [0x1198, c, trn2_mp]
+      - [0x1538, c, trn2_off]
+      - [0x1E88, c, trn2_def_map108]
+      - [0x23F8, c, trn2_reward]
+      - [0x35C8, c, trn2_hud]
+      - [0x4DB0, c, trn2_slots]
+      - [0x5F80, .rodata, trn2_hp_map107]
+      - [0x5F98, .rodata, trn2_hp_map99]
+      - [0x5FB0, .rodata, trn2_mp]
+      - [0x5FCC, .rodata, trn2_off]
+      - [0x5FE8, .rodata, trn2_reward]
+      - [0x6004, .rodata, trn2_def_map108]
+      - [0x6020, .rodata, trn2_def_map99]
+      - [0x603C, .rodata, trn2_hud]
+      - [0x6054, .rodata, trn2_slots]
+      - [0x6070, .data, trn2_off]
+      - [0x60F8, .data, trn2_hud]
+      - [0x6218, .data, trn2_slots]
+      - [0x626C, .data, trn2_bss_jp]
+
+  - [0x6310]

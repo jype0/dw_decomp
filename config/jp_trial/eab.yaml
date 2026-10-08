@@ -1,0 +1,66 @@
+name: eab
+sha1: e56e431c694f126c49147fdc52f93519a2e66c2b
+options:
+  basename: eab
+  target_path: disks/jp_trial/EAB_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/jp_trial/eab
+  src_path: src/eab
+  asset_path: build/jp_trial/psx/generated/assets/eab
+  build_path: build
+
+  ld_script_path: build/jp_trial/psx/generated/eab.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x8014684C
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/jp_trial/symbols.txt
+    - config/jp_trial/symbols_eab.txt
+
+  undefined_funcs_auto_path: build/jp_trial/psx/generated/undefined_funcs_auto_eab.txt
+  undefined_syms_auto_path: build/jp_trial/psx/generated/undefined_syms_auto_eab.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_eab
+  symbol_name_format_no_rom: $VRAM_eab
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80060000
+    align: 4
+    subalign: 4
+
+  - name: eab
+    type: code
+    start: 0x40
+    vram: 0x80060040
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, c, eab]
+      - [0x1D7C, .data, eab]
+      - [0x1E70, .data, eab_bss_jp_trial]
+
+  - [0x26F0]
