@@ -160,7 +160,7 @@ void EFECreateFlash(void);
 void tickEFEFlash();
 void renderEFEFlash(int32_t id);
 int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y);
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 void downloadSomeImage();
 void modifySomeImage(long dim);
 #endif
@@ -179,7 +179,7 @@ static void *efe_functions[] = {
 	getEFEDATEntry,
 	initializeEFE,
 	findEFEDATFile,
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	modifySomeImage,
 	downloadSomeImage,
 #endif
@@ -187,7 +187,7 @@ static void *efe_functions[] = {
 	renderEFEFlash,
 	tickEFEFlash,
 	EFECreateFlash,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	removeEFEFlash,
 #endif
 	initializeFlashData,
@@ -202,7 +202,7 @@ static void *efe_functions[] = {
 	tickEntityParticleFX,
 	initializeEntityParticleFX,
 	addEntityParticleFX,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	removeAllParticleFX,
 #endif
 	renderParticleFX,
@@ -281,7 +281,7 @@ ParticleFX PARTICLE_FX_DATA[4];
 EfeParticleField FX_PARTICLE_DATA[50];
 EntityParticleFX ENTITY_PARTICLE_FX_DATA[20];
 CloudFXEntry CLOUD_FX_DATA[60];
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 u_long SOME_IMAGE_DATA[896];
 #endif
 int16_t EFE_LOADED_MOVE_DATA[17];
@@ -300,7 +300,7 @@ static void *efe_bss_order[] = {
 	UNUSED_EFE_ARRAY,
 	EFE_SCRIPT_MEM1_DATA,
 	EFE_LOADED_MOVE_DATA,
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	SOME_IMAGE_DATA,
 #endif
 	CLOUD_FX_DATA,
@@ -558,7 +558,7 @@ void renderParticleFX(int32_t id)
 	}
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void removeAllParticleFX(void)
 {
 	int32_t i;
@@ -754,7 +754,7 @@ char *initializeFlashData(char *base)
 	return base + sizeof(EfeFlashData) * 12;
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void removeEFEFlash(int32_t id)
 {
 	/* BUG: the || makes this true for every non-negative id */
@@ -931,7 +931,7 @@ int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y)
 	data->offsetY = y;
 }
 
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 void downloadSomeImage(void)
 {
 	RECT r;

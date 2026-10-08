@@ -6331,7 +6331,7 @@ void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance,
 			  (uint32_t)distance);
 	sprite->scaley = ((uint32_t)(height * VIEWPORT_DISTANCE) /
 			  (uint32_t)distance);
-#if VERSION_IS(JP)
+#if VERSION_EQUAL_OR_OLDER(JP_TRIAL)
 	GsSortSprite(sprite, ACTIVE_ORDERING_TABLE, distance >> 4);
 #else
 	distance = distance >> 4;

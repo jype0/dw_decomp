@@ -329,7 +329,7 @@ extern EfeFlashData *EFE_FLASH_DATA;
 
 void removeEntityParticleFX(int32_t id);
 void removeAllCloudFX(void);
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void removeAllParticleFX(void);
 void removeEFEFlash(int32_t id);
 #endif

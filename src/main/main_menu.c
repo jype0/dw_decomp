@@ -34,10 +34,16 @@
 #define NO_TEXT_W 0x1c
 #endif
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 #define VS_RETURN_MENU 0x47
 #else
 #define VS_RETURN_MENU 0
+#endif
+
+#if VERSION_IS(JP_TRIAL)
+#define SECRET_CODE_ITEM 0x7d
+#elif VERSION_IS(JP_BOMBOM)
+#define SECRET_CODE_ITEM 0x7e
 #endif
 
 /* MemCardSync command and result type */
@@ -199,7 +205,7 @@ extern uint16_t CURRENT_FRAME;
 extern uint16_t LAST_HANDLED_FRAME;
 extern uint8_t YEAR;
 extern int16_t DAY;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 extern int16_t SECRET_CODE;
 #endif
 extern int16_t HOUR;
@@ -242,7 +248,7 @@ void renderConfirmRegister();
 void renderCantRegister(void);
 void renderDoYouWantToSave(void);
 void renderCantRegisterBaby(void);
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void renderBattleModeMenu(void);
 void renderInsertGameCardPrompt(void);
 #endif
@@ -312,7 +318,7 @@ void *main_menu_order_anchor[] = {
 	formatInteger,
 	drawSaveSlotText,
 	drawMainMenuStrings,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	renderInsertGameCardPrompt,
 	renderBattleModeMenu,
 #endif
@@ -453,7 +459,7 @@ char MAIN_D_8013107C[] = "ゲーム中セーブ";
 
 char MAIN_D_80131090[] = "対戦デジモンの登録";
 
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_801310A4[] = "スペシャルアイテム記録";
 
 #endif
@@ -483,7 +489,7 @@ char MAIN_D_8013118C[] = "空きブロックがありません";
 
 char MAIN_D_8013119C[] = "対戦デジモンが登録されていません";
 
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_801311B4[] = "アイテムがいっぱいです";
 
 char MAIN_D_801311C0[] = "すでにアイテムがあります";
@@ -497,7 +503,7 @@ char MAIN_D_80131200[] = "番の冒険を消しますか？　　　　";
 
 char MAIN_D_80131218[] = "番の記録を読みこみますか？";
 
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_80131228[] = "番のデータにアイテムを追加？";
 
 char MAIN_D_80131234[] = "冒険を始める";
@@ -569,7 +575,7 @@ char MAIN_D_80131580[] = "幼年期のデジモンなので、メモリーカー
 
 char MAIN_D_801315A0[] = "対戦用に登録できません";
 
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char MAIN_D_801315C0[] = "スロット１にゲームデータの";
 
 char MAIN_D_801315D0[] = "入ったメモリーカードを";
@@ -784,7 +790,7 @@ char SAVEGAME_ID_LABEL[16][6] = {
 	"１５",
 };
 
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 MenuHighlight MENU_HIGHLIGHTS[22] = {
 #else
 MenuHighlight MENU_HIGHLIGHTS[19] = {
@@ -960,7 +966,7 @@ MenuHighlight MENU_HIGHLIGHTS[19] = {
 		0x0024,
 		0x000c,
 	},
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 	{
 		0xff,
 		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
@@ -1224,7 +1230,7 @@ int8_t MENU_VIEWS[] = {
 	0x0c, 0x05, 0x0d, 0x05, 0x07, 0x08, 0x05, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0x0e, 0x0f, 0x10, 0x05,
 	0x05, 0x05, 0x0c, 0x05, 0x11, 0x12, 0x13,
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	0x14,
 	0xff, 0x15, 0x05, 0x05, 0x07, 0x08, 0x05, 0x05,
 #endif
@@ -1245,7 +1251,7 @@ char *SLOT_ACTION_TITLES[] = {
 	MAIN_D_8013107C,
 	MAIN_D_80131030,
 	MAIN_D_80131090,
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	MAIN_D_801310A4,
 #endif
 };
@@ -1269,7 +1275,7 @@ char *MEMORY_CARD_ERROR_MESSAGES[] = {
 	STR_EMPTY,
 	MAIN_D_8013118C,
 	MAIN_D_8013119C,
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	MAIN_D_801311B4,
 	MAIN_D_801311C0,
 #endif
@@ -1282,13 +1288,13 @@ char *SLOT_ACTION_QUESTIONS[] = {
 	STR_EMPTY,
 	STR_EMPTY,
 	MAIN_D_80131218,
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	STR_EMPTY,
 	MAIN_D_80131228,
 #endif
 };
 
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 char *BATTLE_MODE_ITEMS[4] = {
 	MAIN_D_80131234,
 	MAIN_D_80131030,
@@ -1890,7 +1896,7 @@ void renderCantRegisterBaby(void)
 	renderMenuBox(0x24, 0x40, 0xF8, 0x2E);
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void renderBattleModeMenu(void)
 {
 	POLY_FT4 *cur;
@@ -2209,7 +2215,7 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_801315A0, 0, 0x18);
 		break;
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 	case 20:
 		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
 		DrawSync(0);
@@ -2652,13 +2658,13 @@ void tickMainMenu(void)
 	int32_t hi;
 	int32_t oldScroll;
 	uint8_t loadComplete;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	uint8_t demoLoadComplete;
 #endif
 	MenuCursor *cursor;
 	int32_t input;
 	int32_t status;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	int32_t i;
 	Inventory *inventory;
 #endif
@@ -2748,7 +2754,7 @@ void tickMainMenu(void)
 		break;
 
 	case 3:
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		if (MAIN_MENU_TICKS >= 3) {
 #elif !VERSION_REGION_IS(NTSCJ)
 		if (((CHANGED_INPUT != CANCEL_BUTTON) && (CHANGED_INPUT != CONFIRM_BUTTON)) ||
@@ -2764,7 +2770,7 @@ void tickMainMenu(void)
 			if (MAIN_MENU_TICKS >= 0x12D) {
 				TARGET_MENU = MEMORY_CARD_RETURN_MENU;
 			}
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 		}
 #endif
 		break;
@@ -3743,7 +3749,7 @@ void tickMainMenu(void)
 			TARGET_MENU = 0x45;
 		}
 		break;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 
 	case 0x47:
 		cursor = (MenuCursor *)&MENU_HIGHLIGHTS[20];
@@ -3920,10 +3926,10 @@ void tickMainMenu(void)
 			for (i = 0; i < inventory->size; i++) {
 				if (inventory->types.array[i] == 0xff) {
 					inventory->amounts.array[i] = 1;
-					inventory->types.array[i] = SECRET_CODE + 0x7e;
+					inventory->types.array[i] = SECRET_CODE + SECRET_CODE_ITEM;
 					i = 0x63;
 				}
-				if ((SECRET_CODE + 0x7e) == inventory->types.array[i]) {
+				if ((SECRET_CODE + SECRET_CODE_ITEM) == inventory->types.array[i]) {
 					i = 0x64;
 				}
 			}
@@ -4499,7 +4505,7 @@ void renderMainMenu(void)
 		case 19:
 			renderCantRegisterBaby();
 			break;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 		case 20:
 			renderBattleModeMenu();
 			break;

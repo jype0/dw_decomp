@@ -448,7 +448,7 @@ void tamerTick(int16_t instanceId)
 
 void tamerTickOverworld(int16_t instanceId)
 {
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	if ((DAY >= 5) && (IS_SCRIPT_PAUSED == 1)) {
 		return;
 	}

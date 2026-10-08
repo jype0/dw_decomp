@@ -63,7 +63,7 @@ extern int32_t CURRENT_MENU;
 extern int32_t TARGET_MENU;
 extern int32_t IS_SCRIPT_PAUSED;
 extern int16_t FADE_OUT_CURRENT;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 extern int32_t HAS_BUTTERFLY;
 extern int32_t BUTTERFLY_ID;
 extern int32_t CONDITION_BUBBLE_TYPE;
@@ -72,7 +72,7 @@ extern int32_t CONDITION_BUBBLE_TIMER;
 #endif
 
 void GsSetNearClip(long clip);
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void checkFishingMap(int32_t mapId, int32_t arg1);
 int32_t isUIBoxAvailable(int32_t id);
 void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
@@ -164,7 +164,7 @@ void applyDrawOffset(int32_t offset);
 void pollInputGame(void);
 void pollInputMenu(void);
 void renderPressStartToContinue(void);
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int32_t tickTrialEnd(void);
 void renderTrialEndBox(void);
 #endif
@@ -181,7 +181,7 @@ void *main_order_anchor[] = {
 	initializeInventoryModules,
 	initializeEffectData,
 	view_init,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	renderTrialEndBox,
 #endif
 	renderMainMenuBackground,
@@ -189,7 +189,7 @@ void *main_order_anchor[] = {
 	pollInputMenu,
 	pollInputGame,
 	applyDrawOffset,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	tickTrialEnd,
 #endif
 	gameLoop,
@@ -223,7 +223,7 @@ GsOT *FRAMEBUFFER_OT[2] = {
 
 uint8_t *GENERAL_BUFFER_PTR = GENERAL_BUFFER;
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int16_t SECRET_CODE_CANDIDATE = -1;
 
 int16_t SECRET_CODE = -1;
@@ -237,7 +237,7 @@ char MAIN_D_8012CE8C[] = "\\ETCDAT\\ETCTIM.BIN";
 
 char MAIN_D_8012CEA0[] = "\\ETCNA\\TITLE2.TIM";
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 char STR_KONKAI_HA_KOKOMADE_DESU[] = "今回はここまでです。";
 
 char STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI[] = "このつづきは、製品でお楽しみ下さい。";
@@ -1933,7 +1933,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x01, 0x04, 0xff },
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x01,
 #else
 		0x00,
@@ -1953,7 +1953,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x04, 0x02, 0xff },
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x08,
 #else
 		0x00,
@@ -1973,7 +1973,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x02, 0x04, 0xff },
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x05,
 #else
 		0x00,
@@ -2041,7 +2041,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x01,
 		0x03,
 		{ 0x03, 0xff, 0xff },
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 		0x16,
 		0x28,
 #else
@@ -2641,7 +2641,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x17,
 		0x64,
 		{
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
 			0x30, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
 #else
 			0x2c, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
@@ -6043,7 +6043,7 @@ Entity *ENTITY_TABLE[10] = {
 	NULL,
 };
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int16_t SECRET_CODES[3][12] = {
 	{
 		0x1000, 0x1000, 0x4000, 0x4000, 0x8000, 0x2000, 0x8000, 0x2000,
@@ -6087,7 +6087,7 @@ int32_t DRAWING_OFFSET_Y_COPY;
 int32_t POLLED_INPUT;
 int32_t POLLED_INPUT_PREVIOUS;
 int32_t CHANGED_INPUT;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int16_t SECRET_CODE_PROGRESS;
 int8_t TRIAL_END_STATE;
 int8_t TRIAL_END_TIMER;
@@ -6108,7 +6108,7 @@ static void *main_sbss_order[] = {
 	&GAME_STATE,
 	&CURRENT_FRAME,
 	&LAST_HANDLED_FRAME,
-#if !VERSION_IS(JP_BOMBOM)
+#if !VERSION_IS(JP_TRIAL) && !VERSION_IS(JP_BOMBOM)
 	&DAY,
 #endif
 	&YEAR,
@@ -6118,7 +6118,7 @@ static void *main_sbss_order[] = {
 	&BATTLE_ATTACKING_DIGIMON,
 	&BATTLE_TARGETED_DIGIMON,
 	&IS_IN_MENU,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	&TRIAL_END_TIMER,
 	&TRIAL_END_STATE,
 	&SECRET_CODE_PROGRESS,
@@ -6138,7 +6138,7 @@ static void *main_sbss_order[] = {
 	&MINUTE,
 	&HOUR,
 	&MONEY,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	&DAY,
 #endif
 	&MAIN_STATE,
@@ -6201,7 +6201,7 @@ static void *main_bss_order[] = {
 int32_t main(void)
 {
 	int32_t partnerId;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	uint8_t showDemo;
 
 	showDemo = 0;
@@ -6239,7 +6239,7 @@ int32_t main(void)
 		loadTIMFile(MAIN_D_8012CE78, GENERAL_BUFFER_PTR);
 		FIRST_SCREEN_PRESSED_START = 0;
 		while (FIRST_SCREEN_PRESSED_START == 0) {
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 			switch (showDemo) {
 			case 0:
 				playMovie(0, 1);
@@ -6292,7 +6292,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6310,7 +6310,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6319,7 +6319,7 @@ int32_t main(void)
 		}
 
 		fadeFromBlack(0x28);
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 		while (MAIN_STATE != 3) {
 			if ((DAY >= 5) && (tamerGetState() == 0)) {
 				fadeToBlack(0x28);
@@ -6415,13 +6415,13 @@ void runLandingScreen(void)
 {
 	int32_t done;
 	int32_t timer;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	int32_t i;
 #endif
 
 	done = 0;
 	timer = 0x258;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	SECRET_CODE = -1;
 #endif
 	addObject(0xfa3, 0, NULL, (RenderFunction)renderPressStartToContinue);
@@ -6431,11 +6431,15 @@ void runLandingScreen(void)
 	while (--timer > 0) {
 		pollInputMenu();
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 		if ((!(CHANGED_INPUT != 0) == 0) && (SECRET_CODE == -1)) {
 			switch (SECRET_CODE_CANDIDATE) {
 			case -1:
+#if VERSION_IS(JP_TRIAL)
+				for (i = 0; i < 3; i++) {
+#else
 				for (i = 0; i < 1; i++) {
+#endif
 					if (CHANGED_INPUT & SECRET_CODES[i][0]) {
 						SECRET_CODE_CANDIDATE = i;
 					}
@@ -6513,7 +6517,7 @@ void runMainMenu(void)
 	CHECKED_MEMORY_CARD = 0x10;
 	CURRENT_MENU = -1;
 	TARGET_MENU = 0;
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	TARGET_MENU = 0x47;
 #endif
 	loadTIMFile(MAIN_D_8012CEA0, GENERAL_BUFFER_PTR);
@@ -6785,7 +6789,7 @@ void gameLoop(void)
 	handlePause();
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int32_t tickTrialEnd(void)
 {
 	RECT targetRect;
@@ -6918,7 +6922,7 @@ void renderPressStartToContinue(void)
 		setUVWH(prim, 0, 0xf1, 121, 10);
 #if VERSION_IS(JP)
 		setRGB0(prim, 0x80, 0x80, 0x80);
-#elif VERSION_IS(JP_BOMBOM)
+#elif VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		switch (SECRET_CODE) {
 		case -1:
@@ -6936,7 +6940,7 @@ void renderPressStartToContinue(void)
 #else
 		setRGB0(prim, 0, 0x80, 0);
 #endif
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 		if (SECRET_CODE != -1) {
 			setTPage(prim, 1, 0, 768, 0);
 		}
@@ -6991,7 +6995,7 @@ void renderMainMenuBackground(void)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void renderTrialEndBox(void)
 {
 	renderString(0, -0x7d, 0x2d, 0xf0, 0x18, 0, 0xc, 5, 0);

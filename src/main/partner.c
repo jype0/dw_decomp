@@ -849,7 +849,7 @@ void partnerTickWalking(void)
 					       (uint8_t)PARTNER_ANIMATION);
 			}
 		}
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 		IS_STANDING_STILL = 1;
 #endif
 	}
@@ -870,7 +870,7 @@ void partnerTickWalking(void)
 		}
 
 		EMOTION_ANIM_TIMEOUT = -1;
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 		IS_STANDING_STILL = 1;
 #endif
 	}
@@ -924,7 +924,7 @@ void partnerTickWalking(void)
 		}
 
 		STOP_DISTANCE_TIMER++;
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 		IS_STANDING_STILL = 2;
 #endif
 	}
@@ -1055,7 +1055,7 @@ void setPartnerIdle(void)
 {
 	if (((PARTNER_ANIMATION != 1) &&
 	     (PARTNER_ANIMATION != 0))
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	    || (IS_STANDING_STILL != 2)
 #endif
 	) {
