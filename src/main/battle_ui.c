@@ -118,12 +118,9 @@ void battleStatsGainsAndDrops(uint8_t *droppedItems)
 	int32_t den;
 	int32_t partnerStat;
 	int32_t enemyStat;
-	int32_t i;
+	long i;
 	int32_t stat;
 	int32_t chance;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t type;
-#endif
 
 	for (i = 0; i < 6; i++) {
 		STATS_GAINS[i] = 0;
@@ -189,20 +186,10 @@ void battleStatsGainsAndDrops(uint8_t *droppedItems)
 				continue;
 			}
 
-#if VERSION_REGION_IS(NTSCJ)
 			if (DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i + 1]]->type].dropChance > randomLimit(100)) {
 				droppedItems[i] = DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i + 1]]->type].dropItem;
 				continue;
 			}
-#else
-			type = ENTITY_TABLE[(COMBAT_DATA_PTR->player.entityIds + 1)[i]]->type;
-
-			chance = DIGIMON_DATA[type].dropChance;
-			if (randomLimit(100) < chance) {
-				droppedItems[i] = DIGIMON_DATA[type].dropItem;
-				continue;
-			}
-#endif
 		}
 		droppedItems[i] = 0xff;
 	}
@@ -300,10 +287,7 @@ void handleBattleEndBox(void)
 {
 	uint8_t droppedItems[3];
 	RECT boxPosition;
-	int32_t i;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t slot;
-#endif
+	long i;
 	int32_t done;
 
 	initializeBitText();
@@ -317,7 +301,6 @@ void handleBattleEndBox(void)
 	setRECT(&boxPosition, -78, 54, 156, 24);
 	BTL_initializeBattleEndText(0x60, 2, &boxPosition);
 
-#if VERSION_REGION_IS(NTSCJ)
 	for (i = 0; i < 3; i++) {
 		if (droppedItems[i] == 0xff) {
 			continue;
@@ -325,17 +308,6 @@ void handleBattleEndBox(void)
 
 		BTL_appendItemDroppedText(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i + 1]]);
 	}
-#else
-	for (i = 0; i < 3; i++) {
-		slot = i;
-
-		if (droppedItems[i] == 0xff) {
-			continue;
-		}
-
-		BTL_appendItemDroppedText(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[slot + 1]]);
-	}
-#endif
 
 	if (!(PARTNER_PARA.condition & 0x20)) {
 		if (HAS_TAKEN_DAMAGE == 1) {
@@ -414,7 +386,6 @@ void handleBattleEndBox(void)
 		BTL_battleTickFrame();
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
 	for (i = 0; i < ENEMY_COUNT; i++) {
 		if (droppedItems[i] == 0xff) {
 			continue;
@@ -423,18 +394,6 @@ void handleBattleEndBox(void)
 		spawnDroppedItems(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i + 1]],
 				  droppedItems[i]);
 	}
-#else
-	for (i = 0; i < ENEMY_COUNT; i++) {
-		slot = i;
-
-		if (droppedItems[i] == 0xff) {
-			continue;
-		}
-
-		spawnDroppedItems(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[slot + 1]],
-				  droppedItems[i]);
-	}
-#endif
 
 	resetStatsAfterCombat();
 	removeBattleEndBox(0);

@@ -42,7 +42,7 @@ void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h,
 			   int32_t layer);
 void loadStackedTIMFile(char *path);
 void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
-		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow);
+		  uint8_t u, uint8_t v, long layer, int32_t shadow);
 void pauseFrame(void);
 void renderItemSprite(uint8_t type, int16_t x, int16_t y, int32_t layer);
 void setItemTexture(POLY_FT4 *p, uint8_t id);
@@ -241,12 +241,9 @@ void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h,
 }
 
 void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
-		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow)
+		  uint8_t u, uint8_t v, long layer, int32_t shadow)
 {
 	POLY_FT4 *prim;
-#if !VERSION_REGION_IS(NTSCJ)
-	GsOT *ot;
-#endif
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
 	initStringFT4(prim);
@@ -254,11 +251,7 @@ void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
 		TEXT_COLORS[color].b);
 	setUVDataPolyFT4(prim, u, v, w, h);
 	setPosDataPolyFT4(prim, x, y, w, h);
-#if VERSION_REGION_IS(NTSCJ)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
-#else
-	AddPrim((ot = ACTIVE_ORDERING_TABLE)->org + layer, prim++);
-#endif
 	if (shadow != 0) {
 		initStringFT4(prim);
 		setRGB0(prim, 0, 0, 0);

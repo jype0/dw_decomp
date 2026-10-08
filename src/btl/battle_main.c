@@ -705,15 +705,9 @@ void BTL_tickPartnerWaypointTrail(void)
 	int8_t tamerTileY;
 	int8_t partnerTileX;
 	int8_t partnerTileY;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t j;
-#endif
-	int32_t n;
+	long n;
 	int16_t src;
 	int16_t dst;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t i;
-#endif
 
 	getEntityTile(ENTITY_TABLE[1], &partnerTileX, &partnerTileY);
 	if ((partnerTileX != PARTNER_PREVIOUS_TILE_X) || (partnerTileY != PARTNER_PREVIOUS_TILE_Y)) {
@@ -721,26 +715,12 @@ void BTL_tickPartnerWaypointTrail(void)
 		if (isFiveTileWidePathBlocked(tamerTileX, tamerTileY, partnerTileX, partnerTileY) == 1) {
 			if (PARTNER_WAYPOINT_COUNT != 0) {
 				if (isFiveTileWidePathBlocked(partnerTileX, partnerTileY, PARTNER_WAYPOINT_X[PARTNER_WAYPOINT_CURRENT], PARTNER_WAYPOINT_Y[PARTNER_WAYPOINT_CURRENT]) == 1) {
-#if VERSION_REGION_IS(NTSCJ)
 					for (n = PARTNER_WAYPOINT_COUNT; n > 0; n--) {
 						src = (PARTNER_WAYPOINT_CURRENT + n - 1) % 30;
 						dst = (PARTNER_WAYPOINT_CURRENT + n) % 30;
 						PARTNER_WAYPOINT_X[dst] = PARTNER_WAYPOINT_X[src];
 						PARTNER_WAYPOINT_Y[dst] = PARTNER_WAYPOINT_Y[src];
 					}
-#else
-					n = PARTNER_WAYPOINT_COUNT;
-					i = (*(int8_t *)&PARTNER_WAYPOINT_CURRENT) + n;
-					while (n > 0) {
-						j = i - 1;
-						src = j % 30;
-						dst = i % 30;
-						PARTNER_WAYPOINT_X[dst] = PARTNER_WAYPOINT_X[src];
-						PARTNER_WAYPOINT_Y[dst] = PARTNER_WAYPOINT_Y[src];
-						n--;
-						i = j;
-					}
-#endif
 					setPartnerWaypoint(PARTNER_WAYPOINT_CURRENT, PARTNER_PREVIOUS_TILE_X, PARTNER_PREVIOUS_TILE_Y);
 				}
 			} else {

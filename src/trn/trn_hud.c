@@ -326,9 +326,7 @@ void TRN_closeUIBox(id)
 
 void TRN_tickSlotSession(void)
 {
-#if VERSION_REGION_IS(NTSCJ)
 	RECT rect = { -8, -8, 16, 16 };
-#endif
 	int16_t *p = MAIN_D_801353A0;
 
 	switch (p[1]) {

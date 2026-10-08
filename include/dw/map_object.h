@@ -40,7 +40,7 @@ void loadDoors(int16_t doorEntryId);
 void loadDirtCartModel(void);
 void loadDirtPileModel(void);
 void initializeChest(void);
-void loadWarpCrystals(int32_t mapId);
+void loadWarpCrystals(int16_t mapId);
 void spawnBoulder(void);
 void projectPosition(GsCOORDINATE2 *coord, VECTOR *trans, SVECTOR *rot,
 		     VECTOR *scale);

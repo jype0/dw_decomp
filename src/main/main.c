@@ -76,7 +76,7 @@ void GsSetNearClip(long clip);
 void checkFishingMap(int32_t mapId, int32_t arg1);
 int32_t isUIBoxAvailable(int32_t id);
 void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
-		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow);
+		  uint8_t u, uint8_t v, long layer, int32_t shadow);
 #endif
 
 uint16_t MAIN_func_800F19B0(int32_t param_1, int32_t param_2);

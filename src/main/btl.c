@@ -334,9 +334,6 @@ int32_t handleBattleStart(id)
 void loadBattleData(int32_t entityId, int32_t count)
 {
 	int32_t unused;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t type;
-#endif
 	int32_t move;
 	int32_t slot;
 	int32_t n;
@@ -354,13 +351,8 @@ void loadBattleData(int32_t entityId, int32_t count)
 		if (IS_PREDEFINED_BATTLE == 1) {
 			playMusic(0x21, 0);
 		} else {
-#if VERSION_REGION_IS(NTSCJ)
 			if ((ENTITY_TABLE[entityId]->type >= 0x43) &&
-			    (ENTITY_TABLE[entityId]->type < 0x70)) {
-#else
-			type = ENTITY_TABLE[entityId]->type;
-			if ((type >= 0x43) && (type < 0x70)) {
-#endif
+			    (ENTITY_TABLE[entityId]->type < 0x70L)) {
 				playMusic(0x21, ENEMY_MUSIC_MAPPING[ENTITY_TABLE[entityId]->type - 0x43]);
 			} else {
 				playMusic(0x21, 1);

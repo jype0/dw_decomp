@@ -248,8 +248,8 @@ int16_t EFE_SCRIPT_CURRENT_VALUE;
 int32_t EFE_SCRIPT_HEAD;
 EfeSlot *EFE_DATA_ITERATOR;
 EfeSlot *EFE_DATA_PTR;
-int32_t EFE_HEAP_POINTER;
-int32_t EFE_HEAP_BASE;
+char *EFE_HEAP_POINTER;
+char *EFE_HEAP_BASE;
 
 static void *efe_sbss_order[] = {
 	&EFE_HEAP_BASE,

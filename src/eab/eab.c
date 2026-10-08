@@ -131,7 +131,7 @@ VECTOR EAB_D_800617C0 = { 0x000000ff, 0x000000ff, 0x000000ff, 0x00000000 };
 
 void EAB_setModelColor(VECTOR *color)
 {
-	int32_t *rec;
+	TMD_P_TNF4 *prim;
 	struct TMD_STRUCT *obj;
 	int32_t idx;
 	int32_t i;
@@ -142,16 +142,16 @@ void EAB_setModelColor(VECTOR *color)
 	obj = (struct TMD_STRUCT *)(BOSS_EFE_TMD + 0xc);
 	obj += idx;
 	count = obj->primn;
-	rec = (int32_t *)obj->primtop;
+	prim = (TMD_P_TNF4 *)obj->primtop;
 	for (i = 0; i < count; i++) {
-		t = *rec >> 24;
+		t = *(int32_t *)prim >> 24;
 		switch (t) {
 		case 0x2d:
 		case 0x2f:
-			((char (*)[0x20])((char *)rec + 0x14))[0][0] = (int16_t)color->vx;
-			((char (*)[0x20])((char *)rec + 0x15))[0][0] = (int16_t)color->vy;
-			((char (*)[0x20])((char *)rec + 0x16))[0][0] = (int16_t)color->vz;
-			rec += 8;
+			*(int8_t *)&prim->r0 = (int16_t)color->vx;
+			*(int8_t *)&prim->g0 = (int16_t)color->vy;
+			*(int8_t *)&prim->b0 = (int16_t)color->vz;
+			prim += 1;
 			break;
 		}
 	}

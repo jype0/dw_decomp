@@ -38,7 +38,7 @@ typedef struct {
 
 void addScreenPolyFT3(void *prim, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2);
 int32_t addScreenPolyFT4(POLY_FT4 *poly, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3);
-void DOO2_setScratchTop(int32_t size);
+void DOO2_setScratchTop(long size);
 void DOO2_tickShardSet(int32_t slot);
 void DOO2_releaseShardSet(int32_t slot);
 void DOO2_renderTriShard(Doo2Shard *drift, int32_t unused1, int16_t speed, int16_t unused3, ModelComponent *model);
@@ -152,20 +152,11 @@ GsSPRITE DOO2_EGG_CURSOR_SPRITE = {
 };
 // clang-format on
 
-void DOO2_setScratchTop(int32_t size)
+void DOO2_setScratchTop(long size)
 {
-#if VERSION_REGION_IS(NTSCJ)
 	if ((size & 3) != 0) {
 		size += 4 - (size & 3);
 	}
-#else
-	int32_t rem;
-
-	rem = size & 3;
-	if (rem != 0) {
-		size += 4 - rem;
-	}
-#endif
 	MAIN_D_80135310 = size;
 }
 
@@ -613,13 +604,7 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 	SVECTOR p1;
 	SVECTOR p2;
 	SVECTOR p3;
-#if VERSION_REGION_IS(NTSCJ)
-	int16_t center[3];
-#else
-	int16_t cx;
-	int16_t cy;
-	int16_t cz;
-#endif
+	SVECTOR center;
 	TMD_P_TG3 *tri;
 	TMD_P_TG4 *quad;
 	Doo2ModelDesc *model;
@@ -670,21 +655,12 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 			p0 = *va;
 			p1 = *vb;
 			p2 = *vc;
-#if VERSION_REGION_IS(NTSCJ)
-			center[0] = (p0.vx + p1.vx + p2.vx) / 3;
-			center[1] = (p0.vy + p1.vy + p2.vy) / 3;
-			center[2] = (p0.vz + p1.vz + p2.vz) / 3;
-			((Doo2Shard *)out)->centerX = center[0];
-			((Doo2Shard *)out)->centerY = center[1];
-			((Doo2Shard *)out)->centerZ = center[2];
-#else
-			cx = (p0.vx + p1.vx + p2.vx) / 3;
-			cy = (p0.vy + p1.vy + p2.vy) / 3;
-			cz = (p0.vz + p1.vz + p2.vz) / 3;
-			((Doo2Shard *)out)->centerX = cx;
-			((Doo2Shard *)out)->centerY = cy;
-			((Doo2Shard *)out)->centerZ = cz;
-#endif
+			center.vx = (p0.vx + p1.vx + p2.vx) / 3;
+			center.vy = (p0.vy + p1.vy + p2.vy) / 3;
+			center.vz = (p0.vz + p1.vz + p2.vz) / 3;
+			((Doo2Shard *)out)->centerX = center.vx;
+			((Doo2Shard *)out)->centerY = center.vy;
+			((Doo2Shard *)out)->centerZ = center.vz;
 			((Doo2Shard *)out)->offsetX = 0;
 			((Doo2Shard *)out)->offsetY = 0;
 			((Doo2Shard *)out)->offsetZ = 0;
@@ -702,21 +678,12 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 			p1 = *vb;
 			p2 = *vc;
 			p3 = *vd;
-#if VERSION_REGION_IS(NTSCJ)
-			center[0] = (p0.vx + p1.vx + p2.vx) / 3;
-			center[1] = (p0.vy + p1.vy + p2.vy) / 3;
-			center[2] = (p0.vz + p1.vz + p2.vz) / 3;
-			((Doo2Shard *)out)->centerX = center[0];
-			((Doo2Shard *)out)->centerY = center[1];
-			((Doo2Shard *)out)->centerZ = center[2];
-#else
-			cx = (p0.vx + p1.vx + p2.vx) / 3;
-			cy = (p0.vy + p1.vy + p2.vy) / 3;
-			cz = (p0.vz + p1.vz + p2.vz) / 3;
-			((Doo2Shard *)out)->centerX = cx;
-			((Doo2Shard *)out)->centerY = cy;
-			((Doo2Shard *)out)->centerZ = cz;
-#endif
+			center.vx = (p0.vx + p1.vx + p2.vx) / 3;
+			center.vy = (p0.vy + p1.vy + p2.vy) / 3;
+			center.vz = (p0.vz + p1.vz + p2.vz) / 3;
+			((Doo2Shard *)out)->centerX = center.vx;
+			((Doo2Shard *)out)->centerY = center.vy;
+			((Doo2Shard *)out)->centerZ = center.vz;
 			((Doo2Shard *)out)->offsetX = 0;
 			((Doo2Shard *)out)->offsetY = 0;
 			((Doo2Shard *)out)->offsetZ = 0;
@@ -727,11 +694,6 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 		}
 	}
 
-#if !VERSION_REGION_IS(NTSCJ)
-	(void)cx;
-	(void)cy;
-	(void)cz;
-#endif
 
 	MAIN_D_80135310 = out;
 	return slot;

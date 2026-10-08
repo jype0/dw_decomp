@@ -332,7 +332,7 @@ void STD_setCameraToEntity(void);
 void STD_setCameraLookAtEntity(void);
 void swapShort(int16_t *a, int16_t *b);
 void STD_renderBracketDigimon(int16_t id);
-void STD_renderMoveName(int32_t i);
+void STD_renderMoveName(uint8_t i);
 void STD_setCameraOrbit(void);
 void STD_removeAllStunEffects(void);
 void STD_removeAllFinisherAuras(void);
@@ -7192,16 +7192,12 @@ uint8_t STD_isFighterDefeated(uint8_t index)
 	return 0;
 }
 
-void STD_renderMoveName(int32_t i)
+void STD_renderMoveName(uint8_t i)
 {
 	RECT rect;
 	uint8_t cmd;
 	int16_t tech;
-#if !VERSION_REGION_IS(NTSCJ)
-	uint32_t n;
 
-	n = i;
-#endif
 	setRECT(&rect, 0, (i * 12) + 0xd8, 0x90, 0xc);
 	clearTextSubArea(&rect);
 	cmd = COMBAT_DATA_PTR->player.availableCommands[i][COMBAT_DATA_PTR->player.hoveredCommand[i]];
@@ -7214,11 +7210,7 @@ void STD_renderMoveName(int32_t i)
 		drawString(STD_COMMAND_NAMES[cmd - 1], 0, (i * 12) + 0xd8);
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, (i * 160) - 0x8c, STD_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);
-#else
-	renderString(0, (int32_t)(n * 160) - 0x8c, STD_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);
-#endif
 }
 
 void STD_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, uint8_t index)

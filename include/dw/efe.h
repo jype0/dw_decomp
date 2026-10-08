@@ -111,13 +111,9 @@ typedef struct {
 	int16_t startOffset;
 	int16_t startVelocity;
 	int16_t acceleration;
-#if VERSION_REGION_IS(NTSCJ)
 	struct {
 		int8_t r, g, b;
 	} color;
-#else
-	RGB8 color;
-#endif
 	int8_t type;
 	EfeParticle particles[21];
 } EfeParticleEffect;
@@ -354,8 +350,8 @@ extern int16_t EFE_SCRIPT_CURRENT_VALUE;
 extern int32_t EFE_SCRIPT_HEAD;
 extern EfeSlot *EFE_DATA_ITERATOR;
 extern EfeSlot *EFE_DATA_PTR;
-extern int32_t EFE_HEAP_POINTER;
-extern int32_t EFE_HEAP_BASE;
+extern char *EFE_HEAP_POINTER;
+extern char *EFE_HEAP_BASE;
 extern int16_t UNUSED_EFE_ARRAY[];
 extern EfeLoad EFE_LOAD_REQUEST;
 extern EfeSound EFE_SOUND_DATA[10];

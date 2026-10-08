@@ -84,7 +84,7 @@ int16_t VS_calculateElementBonus(int16_t arg0, int16_t arg1);
 int32_t VS_countLivingEnemies(void);
 void VS_calculateScoreRanks(int32_t *values, int32_t *groups, int32_t count);
 uint8_t VS_isFighterDefeated(uint8_t index);
-void VS_renderMoveName(int32_t i);
+void VS_renderMoveName(uint8_t i);
 void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, int32_t index);
 void addEntityText(Entity *entity, long slot, int32_t color, int32_t value, uint8_t flag);
 void addWithLimit(/* int16_t *value, int16_t amount, int16_t limit */);
@@ -1818,16 +1818,12 @@ uint8_t VS_isFighterDefeated(uint8_t index)
 	return 0;
 }
 
-void VS_renderMoveName(int32_t i)
+void VS_renderMoveName(uint8_t i)
 {
 	RECT rect;
 	uint8_t cmd;
 	int16_t tech;
-#if !VERSION_REGION_IS(NTSCJ)
-	uint32_t n;
 
-	n = i;
-#endif
 	setRECT(&rect, 0, (i * 12) + 0xd8, 0x90, 0xc);
 	clearTextSubArea(&rect);
 	cmd = COMBAT_DATA_PTR->player.availableCommands[i][COMBAT_DATA_PTR->player.hoveredCommand[i]];
@@ -1840,11 +1836,7 @@ void VS_renderMoveName(int32_t i)
 		drawString(VS_COMMAND_NAMES[cmd - 1], 0, (i * 12) + 0xd8);
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, (i * 160) - 0x8c, VS_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);
-#else
-	renderString(0, (int32_t)(n * 160) - 0x8c, VS_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);
-#endif
 }
 
 void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, int32_t index)

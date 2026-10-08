@@ -68,7 +68,7 @@ void STD_removeBattleStartText(void);
 void STD_initializeBattleStartTextBurst(void);
 void STD_removeBattleStartTextBurst(void);
 int32_t STD_isBattleStartTextFinished(void);
-void STD_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
+void STD_renderNumber(int32_t a, int16_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
 void STD_removeFighterStatusBars(int32_t i);
 int32_t STD_isVersusModelSceneFinished(void);
 void STD_removeVersusModelScene(void);
@@ -533,10 +533,7 @@ void STD_initializeBattleStartText(void)
 	uint8_t (*p)[20];
 	int32_t sgn;
 	int32_t i;
-	int32_t r;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t t;
-#endif
+	long r;
 
 	STD_BATTLE_START_TEXT_TIMER = 0;
 	STD_BATTLE_TEXT_FINISHED = 0;
@@ -566,15 +563,8 @@ void STD_initializeBattleStartText(void)
 			((int16_t *)*p)[4] = (sgn * 700) + randomLimit(100) - 50;
 		}
 		r = randomLimit(5);
-#if VERSION_REGION_IS(NTSCJ)
 		((int16_t *)*p)[6] = (r + 8) * STD_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
 		((int16_t *)*p)[7] = (r + 8) * STD_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
-#else
-		t = STD_BATTLE_START_TEXT_POSITIONS[i][0];
-		((int16_t *)*p)[6] = (r + 8) * t / 8;
-		t = STD_BATTLE_START_TEXT_POSITIONS[i][1];
-		((int16_t *)*p)[7] = (r + 8) * t / 8;
-#endif
 		((int16_t *)*p)[0] = 0;
 		((int16_t *)*p)[1] = 0;
 		((int16_t *)*p)[2] = 0;
@@ -848,30 +838,20 @@ int32_t STD_isBattleStartTextFinished(void)
 	return STD_BATTLE_TEXT_FINISHED;
 }
 
-void STD_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
+void STD_renderNumber(int32_t a, int16_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
 {
 	POLY_FT4 *prim;
 	int32_t i;
 	int32_t count;
 	int32_t buf[4];
-#if !VERSION_REGION_IS(NTSCJ)
-	uint32_t width;
-#endif
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_REGION_IS(NTSCJ)
-	width = digits;
-#endif
 	convertValueToDigits(digits, value, &count, buf);
 	for (i = count - 1; i >= 0; i--) {
 		setEntityTextDigit(prim, 256, 492);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		setUVDataPolyFT4(prim, buf[i] * 7, 172, 7, 11);
-#if VERSION_REGION_IS(NTSCJ)
 		setPosDataPolyFT4(prim, x + ((digits - 1) - i) * 7, y, 7, 11);
-#else
-		setPosDataPolyFT4(prim, x + (((int32_t)width - 1) - i) * 7, y, 7, 11);
-#endif
 		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 	}
 	GsSetWorkBase((PACKET *)prim);

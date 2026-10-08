@@ -1536,9 +1536,6 @@ void KAR_updateRingMarkers(void)
 	int32_t distance;
 	int8_t mask;
 	int32_t p;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t byteOffset;
-#endif
 	int32_t stoneIndex;
 	KarStone *stone;
 
@@ -1571,25 +1568,12 @@ void KAR_updateRingMarkers(void)
 				}
 			}
 		}
-#if VERSION_REGION_IS(NTSCJ)
 		for (p = 0; p < 4; p++) {
 			if ((MAIN_D_80135257 >> p) & 1) {
 				flags.ring[p] = 1;
 			}
 			setMapObjectsFlag(objects.ring[p].start, objects.ring[p].count, flags.ring[p] ^ 1);
 		}
-#else
-		for (p = 0, byteOffset = 0; p < 4; p++, byteOffset += 4) {
-			if ((MAIN_D_80135257 >> p) & 1) {
-				flags.ring[p] = 1;
-			}
-			setMapObjectsFlag(*(int16_t *)((uint8_t *)&objects.starts + byteOffset),
-			                  *(int16_t *)((uint8_t *)&objects.countView.counts + byteOffset), flags.ring[p] ^ 1);
-			/* Preserve the output loop's weighting as well. */
-			if (!objects.ring) {
-			}
-		}
-#endif
 	}
 	if (MAIN_D_80135244 == 0xD) {
 		int8_t ring;
@@ -1688,9 +1672,7 @@ void KAR_updateCollisions(void)
 	int32_t dist;
 	int32_t a;
 	int32_t b;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t collided;
-#endif
+	int8_t collided;
 #endif
 
 #if VERSION_EQUAL_OR_NEWER(JP_TRIAL)

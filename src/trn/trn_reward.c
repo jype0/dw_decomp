@@ -842,9 +842,7 @@ void TRN_renderNewOrdersBox(void)
 int32_t TRN_tryLearnMove(int32_t type)
 {
 	uint8_t special[3];
-#if VERSION_REGION_IS(NTSCJ)
 	int8_t unused[7] = { 0, 5, 2, 4, 2, 3, 6 };
-#endif
 	int8_t moveId[3];
 	int8_t weight[3];
 	int8_t move;

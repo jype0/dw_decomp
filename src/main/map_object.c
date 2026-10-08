@@ -438,7 +438,7 @@ void renderChest(int32_t instanceId)
 	}
 }
 
-void loadWarpCrystals(int32_t mapId)
+void loadWarpCrystals(int16_t mapId)
 {
 	uint8_t *buf;
 	int32_t i;

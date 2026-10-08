@@ -229,7 +229,7 @@ int32_t VS_addStunSubEffect(Entity *entity);
 void VS_tickStunSubEffect(int32_t i);
 void VS_renderStunSubEffect(int32_t i);
 void VS_initializeStunEffect(char *base);
-void VS_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base);
+void VS_setTMDObjectColor(int32_t idx, VECTOR *color, int32_t base);
 void VS_tickFinisherAura(int32_t i);
 void VS_renderFinisherAura(int32_t idx);
 void VS_renderFinisherAuraSpark(VECTOR *pos, int32_t scale, SVECTOR *dir, uint8_t *col);
@@ -1090,7 +1090,7 @@ void VS_stopEFESounds(void)
 
 char *VS_getEFEHeapPointer(void)
 {
-	return (char *)EFE_HEAP_POINTER;
+	return EFE_HEAP_POINTER;
 }
 
 void VS_loadNextEFEFile(EfeLoad *arg)
@@ -1229,7 +1229,7 @@ int32_t VS_setupLoadedEFEFile(EfeLoad *load)
 	int32_t n;
 	EfeFileHeader hdr;
 	char *base;
-	int32_t heap;
+	char *heap;
 	int32_t *tmdp;
 	int32_t ce;
 	int32_t s;
@@ -1545,7 +1545,7 @@ drawLine:
 			gte_rtps();
 			gte_stsxy(&s1v);
 			gte_stszotz(&z);
-			drawLine2P((uint8_t)e->color.r | ((uint8_t)e->color.g << 8) | ((uint8_t)e->color.b << 16),
+			drawLine2P((e->color.r & 0xff) | ((e->color.g & 0xff) << 8) | ((e->color.b & 0xff) << 16),
 			           s0v.vx, s0v.vy, s1v.vx, s1v.vy,
 			           (depth + z) >> 3, 0);
 			goto nextParticle;
@@ -1659,12 +1659,8 @@ char *VS_initializeEFEEngine(char *base)
 	base = initializeFlashData(base);
 	base = VS_initializeAuraProjectiles(base);
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
-	EFE_HEAP_BASE = (int32_t)base;
-#if VERSION_REGION_IS(NTSCJ)
+	EFE_HEAP_BASE = base;
 	EFE_HEAP_POINTER = EFE_HEAP_BASE;
-#else
-	EFE_HEAP_POINTER = (int32_t)base;
-#endif
 	addObject(0x500, 0, (TickFunction)VS_tickEFEEngine, (RenderFunction)VS_renderEFEEngine);
 	VS_initializeEFESubOpcodeTable();
 	base = (char *)((int32_t)base + 0x41000);
@@ -3888,69 +3884,32 @@ void VS_addParticleEmitter(void)
 
 void VS_setEFEModelObjectColor(void)
 {
-#if VERSION_REGION_IS(NTSCJ)
-	char *prim;
 	EfeColor *color;
-	int32_t *ent;
 	int32_t idx;
+	struct TMD_STRUCT *obj;
+	TMD_P_TNF4 *prim;
 	int32_t i;
 	int32_t count;
 	uint8_t t;
 
 	color = EFE_POP1(EfeColor *);
 	idx = EFE_POP1(int32_t);
-	ent = (int32_t *)EFE_DATA_ITERATOR->model->modelPtr->obj;
-	ent = (int32_t *)((int32_t)ent + (idx * 28));
-	count = ent[5];
-	prim = (char *)ent[4];
+	obj = EFE_DATA_ITERATOR->model->modelPtr->obj;
+	obj += idx;
+	count = obj->primn;
+	prim = (TMD_P_TNF4 *)obj->primtop;
 	for (i = 0; i < count; i++) {
 		t = *(int32_t *)prim >> 24;
 		switch (t) {
 		case 0x2d:
 		case 0x2f:
-			prim[0x14] = (int16_t)color->red;
-			prim[0x15] = (int16_t)color->green;
-			prim[0x16] = (int16_t)color->blue;
-			prim += 0x20;
+			*(int8_t *)&prim->r0 = (int16_t)color->red;
+			*(int8_t *)&prim->g0 = (int16_t)color->green;
+			*(int8_t *)&prim->b0 = (int16_t)color->blue;
+			prim += 1;
 			break;
 		}
 	}
-#else
-	int32_t *rec;
-	EfeColor *color;
-	int32_t idx;
-	int32_t i;
-	int32_t count;
-	int32_t t;
-
-	char (*pr)[0x20];
-	char (*pg)[0x20];
-	char (*pb)[0x20];
-	int32_t *ent;
-
-	color = EFE_POP1(EfeColor *);
-	idx = EFE_POP1(int32_t);
-	ent = (int32_t *)EFE_DATA_ITERATOR->model->modelPtr->obj;
-	ent = (int32_t *)((int32_t)ent + (idx * 28));
-	rec = (int32_t *)ent[4];
-	count = ent[5];
-	pr = (char (*)[0x20])((char *)rec + 0x14);
-	i = 0;
-	pg = (char (*)[0x20])((char *)rec + 0x15);
-	pb = (char (*)[0x20])((char *)rec + 0x16);
-	for (; i < count; i++) {
-		t = (*rec >> 24) & 0xff;
-		if ((t == 0x2f) || (t == 0x2d)) {
-			(*pr)[0] = (int16_t)color->red;
-			(*pg)[0] = (int16_t)color->green;
-			(*pb)[0] = (int16_t)color->blue;
-			rec = (int32_t *)((int32_t)rec + 0x20);
-			pr++;
-			pg++;
-			pb++;
-		}
-	}
-#endif
 }
 
 void VS_copyTargetEntityPosition(void)
@@ -4161,32 +4120,16 @@ void VS_renderCenteredSprite(void)
 
 void VS_initializeEFETransform(void)
 {
-#if VERSION_REGION_IS(NTSCJ)
 	int32_t *dst;
 	int32_t *src;
-#else
-	int32_t *src;
-	int32_t *dst;
-	int32_t *chk;
-#endif
 
 	dst = &((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
-#if VERSION_REGION_IS(NTSCJ)
-	if (EFE_PREVIOUS_DATA_SEGMENT == NULL) {
+	if (EFE_PREVIOUS_DATA_SEGMENT == 0L) {
 		VS_setTransformToBoneOffset();
 		return;
 	}
 
 	src = (int32_t *)((int32_t)EFE_PREVIOUS_DATA_SEGMENT + 4);
-#else
-	chk = (int32_t *)EFE_PREVIOUS_DATA_SEGMENT;
-	if (chk == NULL) {
-		VS_setTransformToBoneOffset();
-		return;
-	}
-
-	src = (int32_t *)((int32_t)chk + 4);
-#endif
 	*dst++ = *src++;
 	*dst++ = *src++;
 	*dst++ = *src++;
@@ -5447,60 +5390,30 @@ void VS_removeAllStunEffects(void)
 	}
 }
 
-void VS_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base)
+void VS_setTMDObjectColor(int32_t idx, VECTOR *color, int32_t base)
 {
-#if VERSION_REGION_IS(NTSCJ)
+	struct TMD_STRUCT *obj;
+	TMD_P_TNF4 *prim;
 	int32_t i;
 	int32_t count;
 	uint8_t t;
-	struct TMD_STRUCT *obj;
-	char *prim;
 
 	obj = (struct TMD_STRUCT *)((uint32_t)base + 0xc);
-	obj = (struct TMD_STRUCT *)((int32_t)obj + (idx * 28));
+	obj += idx;
 	count = obj->primn;
-	prim = (char *)obj->primtop;
+	prim = (TMD_P_TNF4 *)obj->primtop;
 	for (i = 0; i < count; i++) {
 		t = *(int32_t *)prim >> 24;
 		switch (t) {
 		case 0x2d:
 		case 0x2f:
-			prim[0x14] = (int16_t)color[0];
-			prim[0x15] = (int16_t)color[1];
-			prim[0x16] = (int16_t)color[2];
-			prim = (char *)((int32_t)prim + 0x20);
+			*(int8_t *)&prim->r0 = (int16_t)color->vx;
+			*(int8_t *)&prim->g0 = (int16_t)color->vy;
+			*(int8_t *)&prim->b0 = (int16_t)color->vz;
+			prim += 1;
 			break;
 		}
 	}
-#else
-	int32_t *rec;
-	int32_t i;
-	int32_t count;
-	int32_t t;
-
-	char (*pr)[0x20];
-	char (*pg)[0x20];
-	char (*pb)[0x20];
-
-	rec = (int32_t *)((int32_t)((uint32_t)base + 0xc) + (idx * 28));
-	count = rec[5];
-	rec = (int32_t *)rec[4];
-	pr = (char (*)[0x20])((char *)rec + 0x14);
-	pg = (char (*)[0x20])((char *)rec + 0x15);
-	pb = (char (*)[0x20])((char *)rec + 0x16);
-	for (i = 0; i < count; i++) {
-		t = (*rec >> 24) & 0xff;
-		if ((t == 0x2f) || (t == 0x2d)) {
-			(*pr)[0] = (int16_t)color[0];
-			(*pg)[0] = (int16_t)color[1];
-			(*pb)[0] = (int16_t)color[2];
-			rec = (int32_t *)((int32_t)rec + 0x20);
-			pr++;
-			pg++;
-			pb++;
-		}
-	}
-#endif
 }
 
 void VS_tickFinisherAura(int32_t i)
@@ -5635,11 +5548,11 @@ void VS_initializeFinisherAuraModel(char *tim, char *base)
 	GsMapModelingData((unsigned long *)((char *)VS_FINISHER_AURA_MODEL + 4));
 	ca = VS_D_80071054;
 	cb = VS_D_80071064;
-	VS_setTMDObjectColor(0, (int32_t *)&ca, VS_FINISHER_AURA_MODEL);
-	VS_setTMDObjectColor(1, (int32_t *)&ca, VS_FINISHER_AURA_MODEL);
-	VS_setTMDObjectColor(2, (int32_t *)&ca, VS_FINISHER_AURA_MODEL);
-	VS_setTMDObjectColor(3, (int32_t *)&cb, VS_FINISHER_AURA_MODEL);
-	VS_setTMDObjectColor(4, (int32_t *)&ca, VS_FINISHER_AURA_MODEL);
+	VS_setTMDObjectColor(0, &ca, VS_FINISHER_AURA_MODEL);
+	VS_setTMDObjectColor(1, &ca, VS_FINISHER_AURA_MODEL);
+	VS_setTMDObjectColor(2, &ca, VS_FINISHER_AURA_MODEL);
+	VS_setTMDObjectColor(3, &cb, VS_FINISHER_AURA_MODEL);
+	VS_setTMDObjectColor(4, &ca, VS_FINISHER_AURA_MODEL);
 
 	for (j = 0; j < 2; j++) {
 		VS_FINISHER_AURAS[j].frame = -1;

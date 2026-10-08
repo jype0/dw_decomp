@@ -50,7 +50,7 @@ void VS__tickDigimonP2(int32_t instanceId);
 void VS_shuffleBattleStartTextPieces(void);
 void VS_renderBattleStartText(void);
 void VS_renderBattleStartTextBurst(void);
-void VS_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
+void VS_renderNumber(int32_t a, int16_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
 void VS_renderFighterHPBar(int16_t id);
 void VS_renderHPBarFill(int16_t id);
 void VS_renderHPBarDigits(int16_t i, int16_t id);
@@ -70,7 +70,7 @@ void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount, int32_t *
 void swapByte(uint8_t *a, uint8_t *b);
 void addObject(int32_t objectId, int32_t instanceId, void *tick, void *render);
 void removeObject(int32_t objectId, int32_t instanceId);
-void VS_renderMoveName(int32_t i);
+void VS_renderMoveName(uint8_t i);
 void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, uint8_t index);
 void damageTick(FighterData *fighter, Stats *stats);
 
@@ -712,10 +712,7 @@ void VS_initializeBattleStartText(void)
 	uint8_t (*p)[20];
 	int32_t sgn;
 	int32_t i;
-	int32_t r;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t t;
-#endif
+	long r;
 
 	VS_BATTLE_START_TEXT_TIMER = 0;
 	VS_BATTLE_TEXT_FINISHED = 0;
@@ -745,15 +742,8 @@ void VS_initializeBattleStartText(void)
 			((int16_t *)*p)[4] = (sgn * 700) + randomLimit(100) - 50;
 		}
 		r = randomLimit(5);
-#if VERSION_REGION_IS(NTSCJ)
 		((int16_t *)*p)[6] = (r + 8) * VS_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
 		((int16_t *)*p)[7] = (r + 8) * VS_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
-#else
-		t = VS_BATTLE_START_TEXT_POSITIONS[i][0];
-		((int16_t *)*p)[6] = (r + 8) * t / 8;
-		t = VS_BATTLE_START_TEXT_POSITIONS[i][1];
-		((int16_t *)*p)[7] = (r + 8) * t / 8;
-#endif
 		((int16_t *)*p)[0] = 0;
 		((int16_t *)*p)[1] = 0;
 		((int16_t *)*p)[2] = 0;
@@ -1043,30 +1033,20 @@ int32_t VS_isBattleStartTextFinished(void)
 	return VS_BATTLE_TEXT_FINISHED;
 }
 
-void VS_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
+void VS_renderNumber(int32_t a, int16_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
 {
 	POLY_FT4 *prim;
 	int32_t i;
 	int32_t count;
 	int32_t buf[4];
-#if !VERSION_REGION_IS(NTSCJ)
-	uint32_t width;
-#endif
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_REGION_IS(NTSCJ)
-	width = digits;
-#endif
 	convertValueToDigits(digits, value, &count, buf);
 	for (i = count - 1; i >= 0; i--) {
 		setEntityTextDigit(prim, 256, 492);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		setUVDataPolyFT4(prim, buf[i] * 7, 172, 7, 11);
-#if VERSION_REGION_IS(NTSCJ)
 		setPosDataPolyFT4(prim, x + ((digits - 1) - i) * 7, y, 7, 11);
-#else
-		setPosDataPolyFT4(prim, x + (((int32_t)width - 1) - i) * 7, y, 7, 11);
-#endif
 		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 	}
 	GsSetWorkBase((PACKET *)prim);

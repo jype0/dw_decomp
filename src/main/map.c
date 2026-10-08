@@ -55,7 +55,7 @@ void loadMapImage2(uint8_t *tim, int8_t id);
 void loadMapObjects(LocalMapObjectInstance *mapObjects, uint8_t *data, int32_t mapId);
 int32_t loadMapSounds(int32_t mapSoundId);
 void initializeTrainingPoop(void);
-void loadWarpCrystals(int32_t mapId);
+void loadWarpCrystals(int16_t mapId);
 int32_t readFile(char *path, void *dest);
 void removeMapEntities(void);
 int32_t removeObject(int32_t objectId, int16_t instanceId);
@@ -123,7 +123,7 @@ void fillTileData(MapTileData *tile, uint8_t *imagePtr, int16_t texU, int16_t te
 void getDrawingOffsetCopy(int32_t *x, int32_t *y);
 void getEntityTile(Entity *entity, int8_t *outTileX, int8_t *outTileY);
 int32_t getFileCityTopMap(void);
-int32_t getMapSoundId(int32_t mapId);
+int32_t getMapSoundId(int16_t mapId);
 int32_t getOriginalType(int32_t type);
 void getViewportDistanceCopy(int32_t *out);
 void handleTileUpdate(int32_t input, int32_t force);
@@ -136,7 +136,7 @@ int32_t isOffScreen(DVECTOR *xy, int16_t w, int16_t h);
 int32_t isRectInRect(RECT *rect, int32_t x1, int32_t y1, int32_t x2, int32_t y2);
 int32_t isTileOffScreen(int8_t tileX, int8_t tileZ);
 int32_t lerp(int32_t start, int32_t end, int32_t t0, int32_t t1, int32_t t);
-void loadMap(int32_t mapId);
+void loadMap(int16_t mapId);
 int32_t loadMapSetup(int32_t *data);
 void moveCameraByDiff(VECTOR *from, VECTOR *to);
 void readMapTFS(int32_t mapId);
@@ -4417,7 +4417,7 @@ void renderMap(int32_t arg0)
 	CAMERA_Y_PREVIOUS = MAP_TILE_DATA.cameraY;
 }
 
-void loadMap(int32_t mapId)
+void loadMap(int16_t mapId)
 {
 	int32_t *offsets;
 	long entityOffset;
@@ -4429,10 +4429,6 @@ void loadMap(int32_t mapId)
 	int32_t i;
 	char path[32];
 	int32_t result;
-#if !VERSION_REGION_IS(NTSCJ)
-	uint32_t idx;
-	LocalMapObjectInstance *objects;
-#endif
 
 	offsets = (int32_t *)GENERAL_BUFFER_PTR;
 	if (SKIP_MAP_FILE_READ == 0) {
@@ -4442,7 +4438,6 @@ void loadMap(int32_t mapId)
 
 	setupOffset = *offsets++;
 	result = loadMapSetup((int32_t *)(GENERAL_BUFFER_PTR + setupOffset));
-#if VERSION_REGION_IS(NTSCJ)
 	clearMapObjects(MAP_TILE_DATA.objects);
 
 	if ((MAP_ENTRIES[mapId].num8bppImages != 0) ||
@@ -4465,31 +4460,6 @@ void loadMap(int32_t mapId)
 		loadMapObjects(MAP_TILE_DATA.objects,
 			       GENERAL_BUFFER_PTR + objectOffset, mapId);
 	}
-#else
-	clearMapObjects(objects = MAP_TILE_DATA.objects);
-
-	idx = mapId;
-	if ((MAP_ENTRIES[mapId].num8bppImages != 0) ||
-	    (MAP_ENTRIES[mapId].num4bppImages != 0)) {
-		if (MAP_ENTRIES[mapId].num8bppImages != 0) {
-			for (i = 0; i < MAP_ENTRIES[idx].num8bppImages; i++) {
-				image8Offset = *offsets++;
-				loadMapImage1(GENERAL_BUFFER_PTR + image8Offset);
-			}
-		}
-
-		if (MAP_ENTRIES[mapId].num4bppImages != 0) {
-			for (i = 0; i < MAP_ENTRIES[idx].num4bppImages; i++) {
-				image4Offset = *offsets++;
-				loadMapImage2(GENERAL_BUFFER_PTR + image4Offset, i);
-			}
-		}
-
-		objectOffset = *offsets++;
-		loadMapObjects(objects, GENERAL_BUFFER_PTR + objectOffset,
-			       mapId);
-	}
-#endif
 
 	entityOffset = *offsets++;
 
@@ -4639,10 +4609,7 @@ int32_t loadMapSetup(int32_t *data)
 	return *data;
 }
 
-// clang-format off
-int32_t getMapSoundId(mapId)
-	int16_t mapId;
-// clang-format on
+int32_t getMapSoundId(int16_t mapId)
 {
 	return MAP_ENTRIES[mapId].flags & 0x1f;
 }
@@ -5302,10 +5269,6 @@ void tickCameraMovement(instanceId)
 	int16_t oldCameraX;
 	int16_t oldCameraY;
 	uint32_t flags;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t remX;
-	int32_t remY;
-#endif
 
 	if (CAMERA_HAS_TARGET == 0) {
 		SetRotMatrix(&GsWSMATRIX);
@@ -5348,25 +5311,13 @@ void tickCameraMovement(instanceId)
 		CAMERA_MOVE_DELTA_X = (CAMERA_MOVE_DIFF_X - CAMERA_DATA) % instanceId;
 		CAMERA_MOVE_DELTA_Y = (CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) % instanceId;
 
-#if VERSION_REGION_IS(NTSCJ)
 		if (CAMERA_MOVE_DELTA_X < 0) {
-			CAMERA_MOVE_DELTA_X = -CAMERA_MOVE_DELTA_X;
+			CAMERA_MOVE_DELTA_X *= -1;
 		}
 
 		if (CAMERA_MOVE_DELTA_Y < 0) {
-			CAMERA_MOVE_DELTA_Y = -CAMERA_MOVE_DELTA_Y;
+			CAMERA_MOVE_DELTA_Y *= -1;
 		}
-#else
-		remX = CAMERA_MOVE_DELTA_X;
-		if (remX < 0) {
-			CAMERA_MOVE_DELTA_X = -remX;
-		}
-
-		remY = CAMERA_MOVE_DELTA_Y;
-		if (remY < 0) {
-			CAMERA_MOVE_DELTA_Y = -remY;
-		}
-#endif
 
 		unsetCameraFollowPlayer();
 		CAMERA_HAS_TARGET = 1;

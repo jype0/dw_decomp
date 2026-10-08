@@ -69,7 +69,7 @@ void BTL_tickBattleEndText(void);
 void BTL_renderBattleEndText(int32_t n);
 int32_t BTL_isEndBoxTextFinished(void);
 void BTL_shuffleBattleStartTextPieces(void);
-void BTL_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
+void BTL_renderNumber(int32_t a, int16_t digits, int16_t x, int16_t y, int16_t value, int32_t layer);
 void BTL_renderFinisherReadyIcon(void);
 void BTL_renderPartnerStatusBars(int16_t idx);
 void BTL_tickPartnerStatusBars(void);
@@ -427,9 +427,6 @@ void BTL_addDeathCountdown(Entity *entity)
 	DVECTOR pos;
 	GsSPRITE *sprite;
 	GsSPRITE *shadow;
-#if !VERSION_REGION_IS(NTSCJ)
-	int16_t py;
-#endif
 
 #if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	if (BTL_DEATH_COUNTDOWN.data.timer != -1) {
@@ -451,27 +448,12 @@ void BTL_addDeathCountdown(Entity *entity)
 	if (pos.vy < -0x64) {
 		pos.vy = -0x64;
 	}
-#if VERSION_REGION_IS(NTSCJ)
 	sprite = &BTL_DEATH_COUNTDOWN_SPRITE;
-	shadow = &BTL_DEATH_COUNTDOWN.data.sprite;
+	shadow = (GsSPRITE *)&BTL_DEATH_COUNTDOWN;
 	shadow->cy = sprite->cy = 0x1ed;
 	shadow->rotate = sprite->rotate = 0;
 	shadow->x = sprite->x = pos.vx;
 	shadow->y = sprite->y = pos.vy;
-#else
-	shadow = &BTL_DEATH_COUNTDOWN.data.sprite;
-	do {
-		BTL_DEATH_COUNTDOWN_SPRITE.cy = 0x1ed;
-		shadow->cy = 0x1ed;
-		BTL_DEATH_COUNTDOWN_SPRITE.rotate = 0;
-		shadow->rotate = 0;
-		BTL_DEATH_COUNTDOWN_SPRITE.x = pos.vx;
-		shadow->x = pos.vx;
-		py = pos.vy;
-		BTL_DEATH_COUNTDOWN_SPRITE.y = py;
-		shadow->y = py;
-	} while (0);
-#endif
 	addObject(0x197, 0, (TickFunction)BTL_tickDeathCountdown, (RenderFunction)BTL_renderDeathCountdown);
 }
 
@@ -828,10 +810,7 @@ void BTL_initializeBattleStartText(void)
 	uint8_t (*p)[20];
 	int32_t sgn;
 	int32_t i;
-	int32_t r;
-#if !VERSION_REGION_IS(NTSCJ)
-	int32_t t;
-#endif
+	long r;
 
 	BTL_BATTLE_START_TEXT_TIMER[0] = 0;
 	BTL_BATTLE_TEXT_FINISHED = 0;
@@ -861,15 +840,8 @@ void BTL_initializeBattleStartText(void)
 			((int16_t *)*p)[4] = (sgn * 700) + randomLimit(100) - 50;
 		}
 		r = randomLimit(5);
-#if VERSION_REGION_IS(NTSCJ)
 		((int16_t *)*p)[6] = (r + 8) * BTL_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
 		((int16_t *)*p)[7] = (r + 8) * BTL_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
-#else
-		t = BTL_BATTLE_START_TEXT_POSITIONS[i][0];
-		((int16_t *)*p)[6] = (r + 8) * t / 8;
-		t = BTL_BATTLE_START_TEXT_POSITIONS[i][1];
-		((int16_t *)*p)[7] = (r + 8) * t / 8;
-#endif
 		((int16_t *)*p)[0] = 0;
 		((int16_t *)*p)[1] = 0;
 		((int16_t *)*p)[2] = 0;
@@ -1143,30 +1115,20 @@ int32_t BTL_isBattleStartTextFinished(void)
 	return BTL_BATTLE_TEXT_FINISHED;
 }
 
-void BTL_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
+void BTL_renderNumber(int32_t a, int16_t digits, int16_t x, int16_t y, int16_t value, int32_t layer)
 {
 	POLY_FT4 *prim;
 	int32_t i;
 	int32_t count;
 	int32_t buf[4];
-#if !VERSION_REGION_IS(NTSCJ)
-	uint32_t width;
-#endif
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_REGION_IS(NTSCJ)
-	width = digits;
-#endif
 	convertValueToDigits(digits, value, &count, buf);
 	for (i = count - 1; i >= 0; i--) {
 		setEntityTextDigit(prim, 256, 492);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		setUVDataPolyFT4(prim, buf[i] * 7, 172, 7, 11);
-#if VERSION_REGION_IS(NTSCJ)
 		setPosDataPolyFT4(prim, x + ((digits - 1) - i) * 7, y, 7, 11);
-#else
-		setPosDataPolyFT4(prim, x + (((int32_t)width - 1) - i) * 7, y, 7, 11);
-#endif
 		AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 	}
 	GsSetWorkBase((PACKET *)prim);
