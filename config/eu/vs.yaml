@@ -1,0 +1,99 @@
+name: vs
+sha1: 2627465a888501b113098ca46894e5df1ccd4441
+options:
+  basename: vs
+  target_path: disks/eu/VS_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/eu/vs
+  src_path: src/vs
+  asset_path: build/eu/psx/generated/assets/vs
+  build_path: build
+
+  ld_script_path: build/eu/psx/generated/vs.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x80142BF4
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/eu/symbols.txt
+
+  undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_vs.txt
+  undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_vs.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_vs
+  symbol_name_format_no_rom: $VRAM_vs
+
+segments:
+  - name: texture
+    type: rodata
+    start: 0x0
+    vram: 0x80052AE0
+    align: 4
+    subalign: 4
+
+  - name: model_0
+    type: rodata
+    start: 0xD20
+    vram: 0x80053800
+    align: 4
+    subalign: 4
+
+  - name: model_1
+    type: rodata
+    start: 0x1D58
+    vram: 0x80054838
+    align: 4
+    subalign: 4
+
+  - name: model_2
+    type: rodata
+    start: 0x2220
+    vram: 0x80054D00
+    align: 4
+    subalign: 4
+
+  - name: model_3
+    type: rodata
+    start: 0x2848
+    vram: 0x80055328
+    align: 4
+    subalign: 4
+
+  - name: header
+    type: rodata
+    start: 0x4188
+    vram: 0x80056C68
+    align: 4
+    subalign: 4
+
+  - name: vs
+    type: code
+    start: 0x41C8
+    vram: 0x80056CA8
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x41C8, asm, vs]
+      - [0x30188, data, vs]
+
+  - [0x33808]

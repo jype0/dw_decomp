@@ -1,0 +1,64 @@
+name: dget
+sha1: c0cafaa8e2bd14268b8e895d0b7ad633fa658044
+options:
+  basename: dget
+  target_path: disks/eu/DGET_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/eu/dget
+  src_path: src/dget
+  asset_path: build/eu/psx/generated/assets/dget
+  build_path: build
+
+  ld_script_path: build/eu/psx/generated/dget.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x80142BF4
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/eu/symbols.txt
+
+  undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_dget.txt
+  undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_dget.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_dget
+  symbol_name_format_no_rom: $VRAM_dget
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80080800
+    align: 4
+    subalign: 4
+
+  - name: dget
+    type: code
+    start: 0x40
+    vram: 0x80080840
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, asm, dget]
+      - [0x1984, data, dget]
+
+  - [0x19A0]

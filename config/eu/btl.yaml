@@ -1,0 +1,99 @@
+name: btl
+sha1: 8397b2f2acfca9bfa2cbd67ef3f898080201163f
+options:
+  basename: btl
+  target_path: disks/eu/BTL_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/eu/btl
+  src_path: src/btl
+  asset_path: build/eu/psx/generated/assets/btl
+  build_path: build
+
+  ld_script_path: build/eu/psx/generated/btl.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x80142BF4
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/eu/symbols.txt
+
+  undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_btl.txt
+  undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_btl.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_btl
+  symbol_name_format_no_rom: $VRAM_btl
+
+segments:
+  - name: texture
+    type: rodata
+    start: 0x0
+    vram: 0x80052AE0
+    align: 4
+    subalign: 4
+
+  - name: model_0
+    type: rodata
+    start: 0xD20
+    vram: 0x80053800
+    align: 4
+    subalign: 4
+
+  - name: model_1
+    type: rodata
+    start: 0x1D58
+    vram: 0x80054838
+    align: 4
+    subalign: 4
+
+  - name: model_2
+    type: rodata
+    start: 0x2220
+    vram: 0x80054D00
+    align: 4
+    subalign: 4
+
+  - name: model_3
+    type: rodata
+    start: 0x2848
+    vram: 0x80055328
+    align: 4
+    subalign: 4
+
+  - name: header
+    type: rodata
+    start: 0x4188
+    vram: 0x80056C68
+    align: 4
+    subalign: 4
+
+  - name: btl
+    type: code
+    start: 0x41C8
+    vram: 0x80056CA8
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x41C8, asm, btl]
+      - [0x2888C, data, btl]
+
+  - [0x2BBB0]

@@ -1,0 +1,65 @@
+name: main
+sha1: a805aad8bb6b2a12b145bd2172697aff7a28d25e
+options:
+  basename: main
+  target_path: disks/eu/SLES_029.14
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/eu/main
+  src_path: src/main
+  asset_path: build/eu/psx/generated/assets/main
+  build_path: build
+
+  ld_script_path: build/eu/psx/generated/main.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x80142BF4
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/eu/symbols.txt
+
+  undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_main.txt
+  undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_main.txt
+
+  ld_gp_expression: main_SDATA_START + 0x8000
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+segments:
+  - name: header
+    type: data
+    start: 0x0
+    vram: 0x80090000
+    align: 4
+    subalign: 4
+
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80090800
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x800, asm, main]
+      - [0x89E88, rodata, main]
+      - [0x8B938, data, main]
+      - [0xAABF4, sdata, main]
+
+  - [0xABD18]

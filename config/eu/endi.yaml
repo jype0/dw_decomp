@@ -1,0 +1,64 @@
+name: endi
+sha1: 9edf32a06a8f08139369a39bd45b7a731ed99ec1
+options:
+  basename: endi
+  target_path: disks/eu/ENDI_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/eu/endi
+  src_path: src/endi
+  asset_path: build/eu/psx/generated/assets/endi
+  build_path: build
+
+  ld_script_path: build/eu/psx/generated/endi.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x80142BF4
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/eu/symbols.txt
+
+  undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_endi.txt
+  undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_endi.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_endi
+  symbol_name_format_no_rom: $VRAM_endi
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80060000
+    align: 4
+    subalign: 4
+
+  - name: endi
+    type: code
+    start: 0x40
+    vram: 0x80060040
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, asm, endi]
+      - [0x12BC, data, endi]
+
+  - [0x1A54]

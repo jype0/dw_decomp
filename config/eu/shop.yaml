@@ -1,0 +1,64 @@
+name: shop
+sha1: a061b5eb229bcf287f23f1c2747892f2d38c7512
+options:
+  basename: shop
+  target_path: disks/eu/SHOP_REL.BIN
+  base_path: ../..
+  platform: psx
+  compiler: PSYQ
+
+  asm_path: asm/eu/shop
+  src_path: src/shop
+  asset_path: build/eu/psx/generated/assets/shop
+  build_path: build
+
+  ld_script_path: build/eu/psx/generated/shop.ld
+
+  global_vram_start: 0x80000000
+  global_vram_end: 0x80200000
+
+  gp_value: 0x80142BF4
+
+  generate_asm_macros_files: False
+
+  section_order: [".text", ".rodata", ".data", ".sdata", ".sbss", ".bss"]
+
+  symbol_addrs_path:
+    - config/eu/symbols.txt
+
+  undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_shop.txt
+  undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_shop.txt
+
+  string_encoding: ASCII
+  data_string_encoding: ASCII
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+  migrate_rodata_to_functions: False
+
+  create_data_pads: False
+
+  use_gp_rel_macro: True
+
+  symbol_name_format: $VRAM_shop
+  symbol_name_format_no_rom: $VRAM_shop
+
+segments:
+  - name: header
+    type: rodata
+    start: 0x0
+    vram: 0x80080800
+    align: 4
+    subalign: 4
+
+  - name: shop
+    type: code
+    start: 0x40
+    vram: 0x80080840
+    align: 4
+    subalign: 4
+    subsegments:
+      - [0x40, asm, shop]
+      - [0x7860, data, shop]
+
+  - [0x7E68]

@@ -4,7 +4,7 @@ VERSION ?= us
 TOOLCHAIN ?= mwcc
 PLATFORM ?= psx
 
-VERSIONS := jp jp_trial jp_bombom us jp_rev1
+VERSIONS := jp jp_trial jp_bombom us jp_rev1 eu
 CONFIG := $(PLATFORM)/$(TOOLCHAIN)
 CONFIGS := psx/mwcc psx/gcc
 MATCHING_CONFIG := psx/mwcc
