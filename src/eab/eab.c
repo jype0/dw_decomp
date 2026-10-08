@@ -59,6 +59,32 @@ void EAB_tickParticle(int32_t id);
 void EAB_renderParticle(int32_t id);
 
 static void *eab_functions[] = {
+#if VERSION_IS(EU)
+	EAB_tick,
+	EAB_startBuildup,
+	EAB_tickParticle,
+	EAB_renderParticle,
+	EAB_removeParticles,
+	EAB_calculateCameraOrbit,
+	EAB_renderBackdrop,
+	EAB_addParticle,
+	EAB_setEntitiesVisible,
+	EAB_renderFlash,
+	EAB_initializeParticles,
+	EAB_tickSpawn,
+	EAB_renderSpawn,
+	EAB_removeRings,
+	EAB_addSpawnRing,
+	EAB_tickSpawnRing,
+	EAB_renderSpawnRing,
+	EAB_tickBuildupRing,
+	EAB_renderBuildupRing,
+	EAB_addBuildupRing,
+	EAB_initializeRings,
+	EAB_setModelColor,
+	EAB_tickBuildup,
+	EAB_renderBuildup,
+#else
 	EAB_tick,
 	EAB_startBuildup,
 	EAB_renderParticle,
@@ -88,6 +114,7 @@ static void *eab_functions[] = {
 	EAB_renderBuildup,
 	EAB_tickBuildup,
 	EAB_setModelColor,
+#endif
 };
 
 // clang-format off

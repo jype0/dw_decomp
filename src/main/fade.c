@@ -21,6 +21,30 @@ void setPosDataPolyFT4(POLY_FT4 *prim, int16_t posX, int16_t posY, int16_t width
 void setUVDataPolyFT4(POLY_FT4 *prim, int16_t xPos, int16_t yPos, int16_t width, int16_t height);
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
+#if VERSION_IS(EU)
+static void *fade_functions[] = {
+	fadeFromWhite,
+	fadeToWhite,
+	renderFade,
+	fadeFromBlack,
+	renderFadeIn,
+	fadeToBlack,
+	renderFadeOut,
+	initializeFadeData,
+};
+
+static void *fade_sbss_order[] = {
+	&FADE_OUT_IN_PROGRESS,
+	&FADE_OUT_CURRENT,
+	&FADE_IN_CURRENT,
+	&FADE_PROGRESS,
+	&FADE_MODE,
+	&FADE_PROTECTION,
+	&FADE_DATA,
+	&FADE_IN_TARGET,
+};
+#endif
+
 // Garbage function to force sbss symbol order and ensure
 // correct codegen for renderFadeOut()
 static void __garbage__()

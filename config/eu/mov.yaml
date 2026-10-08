@@ -25,6 +25,7 @@ options:
 
   symbol_addrs_path:
     - config/eu/symbols.txt
+    - config/eu/symbols_mov.txt
 
   undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_mov.txt
   undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_mov.txt

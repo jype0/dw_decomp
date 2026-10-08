@@ -5,6 +5,7 @@
 #include <dw/sound.h>
 #include <dw/trn2.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern int32_t TRAINING_COMPLETE;
@@ -32,12 +33,21 @@ int8_t MAIN_D_801353BC;
 int8_t MAIN_D_801353BD;
 
 static void *trn2_hp_map99_sbss_order[] = {
+#if VERSION_IS(EU)
+	&MAIN_D_801353B4,
+	&MAIN_D_801353B6,
+	&MAIN_D_801353B8,
+	&MAIN_D_801353BA,
+	&MAIN_D_801353BC,
+	&MAIN_D_801353BD,
+#else
 	&MAIN_D_801353BD,
 	&MAIN_D_801353BC,
 	&MAIN_D_801353BA,
 	&MAIN_D_801353B8,
 	&MAIN_D_801353B6,
 	&MAIN_D_801353B4,
+#endif
 };
 
 void TRN2_tickHpTrainingMap99(instanceId)

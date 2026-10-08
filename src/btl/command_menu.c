@@ -3,6 +3,7 @@
 
 #include <dw/btl.h>
 #include <dw/combat.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 void setPosDataPolyFT4(POLY_FT4 *prim, int32_t posX, int32_t posY, int32_t width, int32_t height);
@@ -20,6 +21,15 @@ uint8_t BTL_COMMAND_MENU_Y_STEP;
 uint8_t BTL_COMMAND_MENU_LAYOUT;
 
 static void *command_menu_sbss_order[] = {
+#if VERSION_IS(EU)
+	&BTL_COMMAND_MENU_X,
+	&BTL_COMMAND_MENU_Y,
+	&BTL_COMMAND_MENU_BLINK,
+	&BTL_COMMAND_MENU_TIMER,
+	&BTL_COMMAND_MENU_X_STEP,
+	&BTL_COMMAND_MENU_Y_STEP,
+	&BTL_COMMAND_MENU_LAYOUT,
+#else
 	&BTL_COMMAND_MENU_LAYOUT,
 	&BTL_COMMAND_MENU_Y_STEP,
 	&BTL_COMMAND_MENU_X_STEP,
@@ -27,7 +37,18 @@ static void *command_menu_sbss_order[] = {
 	&BTL_COMMAND_MENU_BLINK,
 	&BTL_COMMAND_MENU_Y,
 	&BTL_COMMAND_MENU_X,
+#endif
 };
+
+#if VERSION_IS(EU)
+static void *command_menu_functions[] = {
+	BTL_isCommandMenuClosed,
+	BTL_removeCommandMenu,
+	BTL_tickCommandMenu,
+	BTL_renderCommandMenu,
+	BTL_initializeCommandMenu,
+};
+#endif
 
 void BTL_initializeCommandMenu(void)
 {

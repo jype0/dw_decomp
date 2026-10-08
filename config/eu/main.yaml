@@ -25,6 +25,7 @@ options:
 
   symbol_addrs_path:
     - config/eu/symbols.txt
+    - config/eu/symbols_main.txt
 
   undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_main.txt
   undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_main.txt
@@ -58,8 +59,41 @@ segments:
     subalign: 4
     subsegments:
       - [0x800, asm, main]
+      - [0x12E08, c, file]
+      - [0x13440, c, math]
+      - [0x137C4, asm]
+      - [0x1F024, c, fade]
+      - [0x1F518, asm]
+      - [0x6E548, c, line]
+      - [0x6E98C, c, vecmath]
+      - [0x6FF68, c, rng]
+      - [0x70030, asm]
+      - [0x72904, c, tournament]
+      - [0x72F18, asm]
+      - [0x74F8C, c, kar]
+      - [0x74FD4, asm]
+      - [0x750E0, c, sound_async]
+      - [0x75A80, asm]
       - [0x89E88, rodata, main]
+      - [0x8B4B4, .rodata, vecmath]
+      - [0x8B5B4, rodata]
       - [0x8B938, data, main]
+      - [0x9A308, .data, toilet_data]
+      - [0x9A358, .data, door_mapdata]
+      - [0x9A868, data]
+      - [0xA5920, .data, tournament]
+      - [0xA592C, data]
+      - [0xA59C8, .data, sound_async]
+      - [0xA5A24, data]
       - [0xAABF4, sdata, main]
+      - [0xAB58C, .sdata, rng]
+      - [0xAB590, sdata]
+      - [0xAB594, .sdata, sound_async]
+      - [0xAB5B4, sdata]
+      - [0xAB704, .sdata, btl/battle_setup]
+      - [0xAB714, sdata]
+      - [0xABBFC, .sdata, doo2/doo2]
+      - [0xABC18, sdata]
+      - [0xABCF4, .sdata, eab/eab]
 
   - [0xABD18]

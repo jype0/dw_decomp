@@ -6,6 +6,7 @@
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 #include "common.h"
 
@@ -52,8 +53,13 @@ static void *sound_async_functions[] = {
 	uploadSoundBuffer,
 	loadSoundCompleteCallback,
 	loadVHBFile,
+#if VERSION_IS(EU)
+	concatStrings2,
+	loadSoundFinishCallback,
+#else
 	loadSoundFinishCallback,
 	concatStrings2,
+#endif
 	loadFullVHB,
 };
 

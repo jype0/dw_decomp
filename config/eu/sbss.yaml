@@ -1,0 +1,20 @@
+name: sbss
+start: 0x8013BD18
+end: 0x8013C4C8
+subsegments:
+  - [0x8013BD18, unk_0x8013BD18]
+  - [0x8013BD80, fade]
+  - [0x8013BD90, unk_0x8013BD90]
+  - [0x8013BFF8, rng]
+  - [0x8013BFFC, unk_0x8013BFFC]
+  - [0x8013C018, kar]
+  - [0x8013C01C, sound_async]
+  - [0x8013C020, unk_0x8013C020]
+  - [0x8013C0F4, battle_setup]
+  - [0x8013C100, command_menu]
+  - [0x8013C10C, unk_0x8013C10C]
+  - [0x8013C3D4, doo2]
+  - [0x8013C3E8, unk_0x8013C3E8]
+  - [0x8013C480, trn2_hp_map99]
+  - [0x8013C48A, unk_0x8013C48A]
+  - [0x8013C4C0, eab]

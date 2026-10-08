@@ -61,8 +61,13 @@ static void *doo2_functions[] = {
 	DOO2_fadeClut,
 	DOO2_saveClutTile,
 	DOO2_saveModelClut,
+#if VERSION_IS(EU)
+	DOO2_tickEggBox,
+	DOO2_renderEggIcons,
+#else
 	DOO2_renderEggIcons,
 	DOO2_tickEggBox,
+#endif
 	DOO2_renderQuadShard,
 	DOO2_renderTriShard,
 #if VERSION_REGION_IS(NTSCJ)
@@ -88,8 +93,13 @@ Doo2ModelVertex *MAIN_D_80135318;
 int16_t MAIN_D_8013531C[3];
 
 static void *doo2_sbss_order[] = {
+#if VERSION_IS(EU)
+	&MAIN_D_80135318,
+	&MAIN_D_8013531C,
+#else
 	&MAIN_D_8013531C,
 	&MAIN_D_80135318,
+#endif
 	&MAIN_D_80135314,
 	&MAIN_D_80135310,
 };

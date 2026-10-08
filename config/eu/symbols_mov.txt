@@ -1,0 +1,4 @@
+MOV_waitForFlip = 0x80010538;
+MOV_readFrame = 0x800105FC;
+MOV_playMovie = 0x800107A4;
+MOV_MOVIES = 0x80082BF4; // size:0xA0

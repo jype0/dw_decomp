@@ -25,6 +25,7 @@ options:
 
   symbol_addrs_path:
     - config/eu/symbols.txt
+    - config/eu/symbols_fish.txt
 
   undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_fish.txt
   undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_fish.txt
@@ -59,6 +60,7 @@ segments:
     subalign: 4
     subsegments:
       - [0x40, asm, fish]
+      - [0xDD98, c, fish_model]
       - [0xE0A0, data, fish]
 
   - [0x119D0]

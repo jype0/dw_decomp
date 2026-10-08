@@ -12,8 +12,14 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/btl/data/model_3.rodata.s.o(.rodata .rodata.*));
 			btl_HEADER = .;
 			KEEP(BUILD_DIR/asm/btl/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/btl/btl.s.o(.text .text.*));
+			BUILD_DIR/src/btl/battle_setup.c.o(.text .text.*);
+			KEEP(BUILD_DIR/asm/btl/5498.s.o(.text .text.*));
+			BUILD_DIR/src/btl/command_menu.c.o(.text .text.*);
+			KEEP(BUILD_DIR/asm/btl/122F0.s.o(.text .text.*));
 			KEEP(BUILD_DIR/asm/btl/data/btl.data.s.o(.data .data.*));
+			BUILD_DIR/src/btl/battle_setup.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/btl/command_menu.c.o(.rodata .rodata.*);
+			KEEP(BUILD_DIR/asm/btl/data/288D8.data.s.o(.data .data.*));
 			LONG(0);
 		}
 	}
@@ -38,8 +44,10 @@ SECTIONS
 
 			doo2_HEADER = .;
 			KEEP(BUILD_DIR/asm/doo2/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/doo2/doo2.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/doo2/data/doo2.data.s.o(.data .data.*));
+			BUILD_DIR/src/doo2/doo2.c.o(.text .text.*);
+			BUILD_DIR/src/doo2/doo2.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/doo2/doo2.c.o(.data .data.*);
+			KEEP(BUILD_DIR/asm/doo2/data/27EC.data.s.o(.data .data.*));
 			LONG(0);
 		}
 	}
@@ -64,8 +72,10 @@ SECTIONS
 
 			eab_HEADER = .;
 			KEEP(BUILD_DIR/asm/eab/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/eab/eab.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/eab/data/eab.data.s.o(.data .data.*));
+			BUILD_DIR/src/eab/eab.c.o(.text .text.*);
+			BUILD_DIR/src/eab/eab.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/eab/eab.c.o(.data .data.*);
+			KEEP(BUILD_DIR/asm/eab/data/1E70.data.s.o(.data .data.*));
 			LONG(0);
 		}
 	}
@@ -104,6 +114,8 @@ SECTIONS
 			fish_HEADER = .;
 			KEEP(BUILD_DIR/asm/fish/data/header.rodata.s.o(.rodata .rodata.*));
 			KEEP(BUILD_DIR/asm/fish/fish.s.o(.text .text.*));
+			BUILD_DIR/src/fish/fish_model.c.o(.text .text.*);
+			BUILD_DIR/src/fish/fish_model.c.o(.rodata .rodata.*);
 			KEEP(BUILD_DIR/asm/fish/data/fish.data.s.o(.data .data.*));
 			LONG(0);
 		}
@@ -186,8 +198,14 @@ SECTIONS
 
 			trn2_HEADER = .;
 			KEEP(BUILD_DIR/asm/trn2/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/trn2/trn2.s.o(.text .text.*));
+			BUILD_DIR/src/trn2/trn2_hp_map99.c.o(.text .text.*);
+			KEEP(BUILD_DIR/asm/trn2/560.s.o(.text .text.*));
+			BUILD_DIR/src/trn2/trn2_mp.c.o(.text .text.*);
+			KEEP(BUILD_DIR/asm/trn2/1488.s.o(.text .text.*));
 			KEEP(BUILD_DIR/asm/trn2/data/trn2.data.s.o(.data .data.*));
+			BUILD_DIR/src/trn2/trn2_hp_map99.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_mp.c.o(.rodata .rodata.*);
+			KEEP(BUILD_DIR/asm/trn2/data/5F20.data.s.o(.data .data.*));
 			LONG(0);
 		}
 	}

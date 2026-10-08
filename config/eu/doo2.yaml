@@ -25,6 +25,7 @@ options:
 
   symbol_addrs_path:
     - config/eu/symbols.txt
+    - config/eu/symbols_doo2.txt
 
   undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_doo2.txt
   undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_doo2.txt
@@ -58,7 +59,8 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, doo2]
-      - [0x2788, data, doo2]
+      - [0x40, c, doo2]
+      - [0x2788, .data, doo2]
+      - [0x27EC, data]
 
   - [0xC3F0]
