@@ -10,8 +10,9 @@
 #include <dw/std.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 #define DIGIT_WIDTH 12
 #else
 #define DIGIT_WIDTH 8
@@ -20,7 +21,7 @@
 void damageTick(FighterData* fighter, Stats* stats);
 void sortItemsById(uint8_t *data, long count);
 void initStringFT4(POLY_FT4* poly);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void renderNumber(int32_t color, int16_t x, int16_t y, int16_t n,
 		  int32_t value, int32_t layer);
 #else
@@ -104,7 +105,7 @@ void damageTick(FighterData* fighter, Stats* stats)
 		fighter->hpDamageBuffer -= 1;
 	}
 
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	if (stats->current.currentHP < 0) {
 #else
 	if (stats->current.currentHP <= 0) {
@@ -202,7 +203,7 @@ void initStringFT4(POLY_FT4* poly)
 	setClut(poly, 0xD0, 0x1E8);
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void renderNumber(int32_t color, int16_t x, int16_t y, int16_t n,
 		  int32_t value, int32_t layer)
 #else
@@ -231,7 +232,7 @@ void renderNumber(int32_t color, int16_t x, int16_t y, int32_t n,
 	GsSetWorkBase((PACKET *)prim);
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
 			  int32_t *digits)
 {

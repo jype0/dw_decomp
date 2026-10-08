@@ -29,6 +29,7 @@
 #include <dw/types.h>
 #include <dw/ui.h>
 #include <dw/vecmath.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -562,7 +563,7 @@ uint8_t STD_BRAIN_TO_COMMAND_MAP[5] = { 2, 3, 4, 5, 6 };
 uint8_t STD_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t STD_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
 uint8_t STD_YOUR_CALL_WIDE_PRIO[4] = { 10, 5, 0, 0 };
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char STD_STR_COMMAND_RUN[] = "にげる";
 #else
 char STD_STR_COMMAND_RUN[] = "Run";
@@ -1287,7 +1288,7 @@ StdSrcA598 STD_BRACKET_PATHS[8] = {
 /* Damage */
 char STD_STR_DAMEEJI[] = "ダメージ";
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char STD_STR_COMMAND_ATTACK[] = "おもいっきり";
 char STD_STR_COMMAND_AUTO[] = "おまかせ";
 char STD_STR_COMMAND_MODERATE[] = "ほどほど";
@@ -1670,7 +1671,7 @@ void STD_renderIntroNameChar(int16_t x, int16_t y, int16_t size, uint8_t charact
 	}
 
 	setXYWH(prim, x, y, size, size);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
 
@@ -1680,7 +1681,7 @@ void STD_renderIntroNameChar(int16_t x, int16_t y, int16_t size, uint8_t charact
 void STD_runIntro(int16_t which)
 {
 	int32_t dist;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int16_t id;
 #else
 	int32_t id;
@@ -1701,7 +1702,7 @@ void STD_runIntro(int16_t which)
 	STD_placePlayer2(which);
 	STD_drawStatLabelText();
 	STD_startCameraChase(ENTITY_TABLE[1], dist, 0);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	id = STD_getEntityIndex(ENTITY_TABLE[1]);
 #else
 	idn = STD_getEntityIndex(ENTITY_TABLE[1]);
@@ -1733,7 +1734,7 @@ void STD_runIntro(int16_t which)
 	STD_LOADING_VAB_ID = loadSB();
 
 	STD_startCameraChase(STD_OPPONENT_ENTITY, -dist, 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	id = STD_getEntityIndex(STD_OPPONENT_ENTITY);
 #else
 	idn = STD_getEntityIndex(STD_OPPONENT_ENTITY);
@@ -2517,7 +2518,7 @@ void STD_tickCameraIntro(void)
 	int16_t *p;
 
 	p = &STD_D_8007B9BC[6];
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if ((p[0] >= 0x1e) && (p[0] < 0x3c)) {
 #else
 	if ((STD_D_8007B9BC[6] >= 0x1e) && (p[0] < 0x3c)) {
@@ -3071,7 +3072,7 @@ void STD_renderBracketDigimon(int16_t id)
 	uint8_t tile;
 	uint8_t u;
 	uint8_t v;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	uint8_t w;
 	uint8_t h;
 #else
@@ -3099,7 +3100,7 @@ void STD_renderBracketDigimon(int16_t id)
 	if (v == 0xf0) {
 		h = 0xf;
 	}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	setUVDataPolyFT4(prim, u, v, w, h);
 	setPosDataPolyFT4(prim, STD_BRACKET_SLOTS[id].unk0, STD_BRACKET_SLOTS[id].unk2, w, h);
 #else
@@ -3162,7 +3163,7 @@ void STD_renderBracketGlyph(int16_t x, int16_t y, uint8_t n, int32_t layer)
 	v = (n / 8) * 8;
 	setUVDataPolyFT4(prim, u, v, (u != 0xf8) ? 8 : 7, (v != 0xf8) ? 8 : 7);
 	setPosDataPolyFT4(prim, x, y, 8, 8);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 #endif
 	GsSetWorkBase((PACKET *)prim);
@@ -3767,7 +3768,7 @@ int16_t STD_checkEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}
@@ -3871,7 +3872,7 @@ void STD_initializeCombat(Entity *entity, Entity *other)
 	STD_FINISHER_AURA_ID = -1;
 	COMBAT_DATA_PTR->player.remainingChargeupTime[0] = -1;
 	STD_SAVED_CHARGE_MODE = PARTNER_ENTITY.digimonEntity.stats.current.chargeMode;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	FINISHING_ENTITY = NULL;
 	STD_FINISHER_TIMER = 0;
 	FLEE_DISABLED[1] = 0;
@@ -7196,7 +7197,7 @@ void STD_renderMoveName(int32_t i)
 	RECT rect;
 	uint8_t cmd;
 	int16_t tech;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint32_t n;
 
 	n = i;
@@ -7213,7 +7214,7 @@ void STD_renderMoveName(int32_t i)
 		drawString(STD_COMMAND_NAMES[cmd - 1], 0, (i * 12) + 0xd8);
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, (i * 160) - 0x8c, STD_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);
 #else
 	renderString(0, (int32_t)(n * 160) - 0x8c, STD_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);

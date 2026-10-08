@@ -8,6 +8,7 @@
 #include <dw/graphics.h>
 #include <dw/model.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 #define EFE_POP(ptr, type) ((type)*--(ptr))
 #define EFE_PUSH(ptr, type, value) (*(ptr)++ = (int32_t)(type)(value))
@@ -110,7 +111,7 @@ typedef struct {
 	int16_t startOffset;
 	int16_t startVelocity;
 	int16_t acceleration;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	struct {
 		int8_t r, g, b;
 	} color;

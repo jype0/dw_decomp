@@ -17,6 +17,7 @@
 #include <dw/sound_async.h>
 #include <dw/types.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #define BTL_FINISHER_TIM	((char *)0x80052ae0)
@@ -270,7 +271,7 @@ int32_t handleBattleStart(id)
 		}
 		if (concave != 0) {
 			getEntityTile(ENTITY_TABLE[0], &tx0, &ty0);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 			if (0) {
 				ty1 = 0;
 			}
@@ -333,7 +334,7 @@ int32_t handleBattleStart(id)
 void loadBattleData(int32_t entityId, int32_t count)
 {
 	int32_t unused;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t type;
 #endif
 	int32_t move;
@@ -353,7 +354,7 @@ void loadBattleData(int32_t entityId, int32_t count)
 		if (IS_PREDEFINED_BATTLE == 1) {
 			playMusic(0x21, 0);
 		} else {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			if ((ENTITY_TABLE[entityId]->type >= 0x43) &&
 			    (ENTITY_TABLE[entityId]->type < 0x70)) {
 #else

@@ -10,6 +10,7 @@
 #include <dw/params.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 int32_t lerp(int32_t a, int32_t b, int32_t c, int32_t d, int32_t t);
@@ -152,7 +153,7 @@ static void ENDI_updateEnding(int32_t objectId)
 	int32_t peakFrame;
 	SVECTOR base;
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	state = &ENDI_DATA.state;
 	entity = state->entity;
 	state->frame++;

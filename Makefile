@@ -23,7 +23,7 @@ CONFIG_DIR := config/$(VERSION)
 ASM_DIR := asm/$(VERSION)
 GEN_DIR := build/$(VERSION)/$(PLATFORM)/generated
 
-VERSION_MACROS := VERSION_$(shell echo $(VERSION) | tr a-z A-Z)
+VERSION_MACRO := VERSION_$(shell echo $(VERSION) | tr a-z A-Z)
 
 PYTHON := python3
 

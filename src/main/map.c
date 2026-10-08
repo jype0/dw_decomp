@@ -23,6 +23,7 @@
 #include <dw/types.h>
 #include <dw/utils.h>
 #include <dw/vecmath.h>
+#include <dw/version.h>
 
 typedef struct {
 	int16_t cameraX;
@@ -327,7 +328,7 @@ int16_t COLLISION_GRACE_ROTATION[8][4] = {
 	{ 0x0000, 0x0c00, 0x0400, 0x0800 },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char STR_MAP_NAME_NATIVE_FOREST[] = "迷わずの森";
 
 char STR_MAP_NAME_COELA_POINT[] = "シーラ岬";
@@ -692,7 +693,7 @@ char *MAP_NAME_PTR[70] = {
 	STR_MAP_NAME_ROBOT_HOUSE,
 	STR_MAP_NAME_MANSION_2ND_FLOOR,
 	STR_MAP_NAME_MANSION_ATTIC,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	STR_MAP_NAME_MANSION_DOT_BASEMENT,
 #else
 	STR_MAP_NAME_MANSION_BASEMENT,
@@ -3262,7 +3263,7 @@ static void *map_sbss_order[] = {
 	&MERAMON_SHAKE_WIDTH,
 	&MERAMON_SHAKE_HEIGHT,
 	&MERAMON_SHAKE_BACKUP_OFFSET_Y,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	&MERAMON_SHAKE_DATA,
 	&MERAMON_SHAKE_FRAME_COUNT,
 #else
@@ -4428,7 +4429,7 @@ void loadMap(int32_t mapId)
 	int32_t i;
 	char path[32];
 	int32_t result;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint32_t idx;
 	LocalMapObjectInstance *objects;
 #endif
@@ -4441,7 +4442,7 @@ void loadMap(int32_t mapId)
 
 	setupOffset = *offsets++;
 	result = loadMapSetup((int32_t *)(GENERAL_BUFFER_PTR + setupOffset));
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	clearMapObjects(MAP_TILE_DATA.objects);
 
 	if ((MAP_ENTRIES[mapId].num8bppImages != 0) ||
@@ -5301,7 +5302,7 @@ void tickCameraMovement(instanceId)
 	int16_t oldCameraX;
 	int16_t oldCameraY;
 	uint32_t flags;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t remX;
 	int32_t remY;
 #endif
@@ -5347,7 +5348,7 @@ void tickCameraMovement(instanceId)
 		CAMERA_MOVE_DELTA_X = (CAMERA_MOVE_DIFF_X - CAMERA_DATA) % instanceId;
 		CAMERA_MOVE_DELTA_Y = (CAMERA_MOVE_DIFF_Y - CAMERA_MOVE_DRAW_OFFSET_Y) % instanceId;
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		if (CAMERA_MOVE_DELTA_X < 0) {
 			CAMERA_MOVE_DELTA_X = -CAMERA_MOVE_DELTA_X;
 		}
@@ -5878,7 +5879,7 @@ void renderMapName(mapId)
 	int32_t length;
 
 	length = strlen(MAP_NAME_PTR[MAP_ENTRIES[mapId].loadingName]);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, -12 - (length / 2) * 6, -6, (length / 2) * 12, 12, 0,
 		     0, 0, 0);
 #else
@@ -5891,7 +5892,7 @@ void reinitializeAfterTournament(void)
 {
 	addObject(0xfa2, 0, tickGameClock, renderGameClock);
 	addObject(0xfa0, 0, NULL, renderMap);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	addObject(0xfa6, 0, tickConditions, NULL);
 #endif
 	addObject(0xfa8, 0, NULL, renderPoop);
@@ -6330,7 +6331,7 @@ void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance,
 			  (uint32_t)distance);
 	sprite->scaley = ((uint32_t)(height * VIEWPORT_DISTANCE) /
 			  (uint32_t)distance);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	GsSortSprite(sprite, ACTIVE_ORDERING_TABLE, distance >> 4);
 #else
 	distance = distance >> 4;
@@ -6456,7 +6457,7 @@ int32_t processSomeArenaArrays(int32_t count, int32_t t, int32_t *keys,
 		lo--;
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	dx = keys[lo + 1] - keys[lo];
 	dt = t - keys[lo];
 

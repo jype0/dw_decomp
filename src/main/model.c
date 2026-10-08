@@ -13,6 +13,7 @@
 #include <dw/file_queue.h>
 #include <dw/model.h>
 #include <dw/params.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern uint8_t PARTNER_MODEL_BUFFER[];
@@ -2984,7 +2985,7 @@ int16_t z;
 	}
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 {
 	LINE_F4 *lf3;

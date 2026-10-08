@@ -11,6 +11,7 @@
 #include <dw/params.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern int32_t POLLED_INPUT;
@@ -71,7 +72,7 @@ void updateInventoryInputRepeatCounter();
 int32_t isInventoryButtonPressed(int32_t mask);
 void tickInventoryOptionSelector(uint8_t *cursor, int32_t unused, int16_t max);
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char SORT_LABEL_BATTLE[] = "戦闘配置";
 char SORT_LABEL_RAISE[] = "育成配置";
 char SORT_LABEL_BASIC[] = "基本配置";
@@ -87,7 +88,7 @@ uint8_t ITEM_SORT_ORDER[3][6] = {
 	{ 0x02, 0x05, 0x00, 0x01, 0x04, 0x03 },
 	{ 0x02, 0x00, 0x01, 0x03, 0x05, 0x04 },
 };
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char ITEM_MENU_LABELS[4][8] = { "使う", "移動", "せいり", "捨てる" };
 char CONFIRM_LABEL_YES[] = "はい";
 char CONFIRM_LABEL_NO[] = "いいえ";
@@ -448,7 +449,7 @@ int32_t createInventoryView(void)
 	}
 	box = &UI_BOX_DATA[0];
 	if (box->frame == 0) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		INVENTORY_UNUSED = 0;
 		INVENTORY_TYPE_OFFSET = 0;
 		INVENTORY_ROW_OFFSET = 0;

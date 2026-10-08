@@ -20,6 +20,7 @@
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -127,7 +128,7 @@ static void *evl_functions[] = {
 	EVL_scaleBaseStats,
 	EVL_applyEvolution,
 	EVL_initEvoSequence,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	EVL_renderSparkStreak,
 	EVL_tickSpark,
 #else

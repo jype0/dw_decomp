@@ -2,6 +2,7 @@
 
 #include <dw/clock.h>
 #include <dw/fade.h>
+#include <dw/version.h>
 
 #include "common.h"
 
@@ -63,7 +64,7 @@ void fadeFromBlack(int16_t frames)
 {
 	removeObject(4005, 0);
 	FADE_OUT_CURRENT = 0;
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	removeObject(4005, 0);
 #endif
 
@@ -144,7 +145,7 @@ void renderFade(uint8_t progress)
 
 void fadeToWhite(int16_t frames)
 {
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	if (FADE_OUT_CURRENT || FADE_IN_CURRENT) {
 		removeObject(4005, 0);
 	}
@@ -154,7 +155,7 @@ void fadeToWhite(int16_t frames)
 	FADE_OUT_CURRENT = 1;
 	FADE_MODE = 1;
 
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	if (!FADE_OUT_IN_PROGRESS) {
 		addObject(4005, 0, 0, renderFadeOut);
 	}

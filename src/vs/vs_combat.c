@@ -21,6 +21,7 @@
 #include <dw/sound.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
@@ -128,7 +129,7 @@ void VS__tickDigimonP1(int32_t instanceId);
 void VS__tickDigimonP2(int32_t instanceId);
 
 static void *vs_combat_functions[] = {
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	VS__tickDigimonP2,
 	VS__tickDigimonP1,
 	VS__tickVSInput,
@@ -251,7 +252,7 @@ void VS__combatInit(void)
 		COMBAT_DATA_PTR->player.remainingChargeupTime[i] = -1;
 	}
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	FLEE_DISABLED[1] = 0;
 #endif
 	FLEE_DISABLED[0] = 1;
@@ -259,7 +260,7 @@ void VS__combatInit(void)
 	BATTLE_FRAME_COUNT = 1;
 	VS_TIMER_ACTIVE = 0;
 	VS_DISABLE_HITTING = 0;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	FLEE_DISABLED[1] = 0;
 #endif
 	P2_AOE_TIMER = 0;
@@ -486,7 +487,7 @@ int16_t VS__checkEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}
@@ -2155,7 +2156,7 @@ void VS__renderPlayerMarker(id)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 void VS__tickVSInput(void)
 {
 	if (GAME_STATE == 4) {

@@ -19,6 +19,7 @@
 #include <dw/sound.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -228,13 +229,13 @@ KarOffTbl KAR_D_8005AB8C = {
 	},
 };
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
 #endif
 
 char KAR_D_8005ABA4[20] = "\\ETCDAT\\KARRING.TMD";
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char KAR_STR_START_GAME[] = "ゲームをはじめる";
 char KAR_STR_EXPLAIN_GAME[] = "説明を聞く？";
 #else
@@ -244,7 +245,7 @@ char KAR_D_8005ABB8[] = "Start GameExplain Game";
 KarWeightTbl MAIN_D_80134A08 = { { 30, 25, 35, 30 } };
 RECT MAIN_D_80134A10 = { -130, 42, 262, 59 };
 RECT MAIN_D_80134A18 = { 75, -5, 10, 10 };
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 KarStrPair MAIN_D_80134A20 = { { KAR_STR_START_GAME, KAR_STR_EXPLAIN_GAME } };
 #else
 KarStrPair MAIN_D_80134A20 = { { KAR_D_8005ABB8, NULL } };
@@ -252,7 +253,7 @@ KarStrPair MAIN_D_80134A20 = { { KAR_D_8005ABB8, NULL } };
 RECT MAIN_D_80134A28 = { -130, 42, 262, 59 };
 RECT MAIN_D_80134A30 = { 0, 0, 10, 10 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char KAR_STR_EMPTY[] = "";
 char KAR_STR_PENGUINMON[] = "ペンモン";
 char KAR_PENGUINMON_LINE_1[] = "「まず、カーリングダマのタイプを";
@@ -499,7 +500,7 @@ KarOffTbl KAR_D_8005B04C = {
 	},
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char KAR_STR_METALMAMEMON[] = "メタルマメモン";
 char KAR_METALMAMEMON_LINE_1[] = "「そうだな。まずはカーリングダマの";
 char KAR_METALMAMEMON_LINE_2[] = "　タイプを選ぶ。」";
@@ -972,7 +973,7 @@ void KAR_setupMatch(int32_t mode)
 	KarWeightTbl weights;
 	KarOffTbl types;
 	int32_t n;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	KarSpawnX spawnX;
 #endif
 	int32_t p;
@@ -1027,7 +1028,7 @@ void KAR_setupMatch(int32_t mode)
 				stone->rotation.vz = 0;
 				stone->state = -1;
 			} else if (i < obstacles) {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 				stone->pos.vy = 0;
 				stone->pos.vx = rand() % 0x5dc - 0x2ee;
 #else
@@ -1535,7 +1536,7 @@ void KAR_updateRingMarkers(void)
 	int32_t distance;
 	int8_t mask;
 	int32_t p;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t byteOffset;
 #endif
 	int32_t stoneIndex;
@@ -1570,7 +1571,7 @@ void KAR_updateRingMarkers(void)
 				}
 			}
 		}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		for (p = 0; p < 4; p++) {
 			if ((MAIN_D_80135257 >> p) & 1) {
 				flags.ring[p] = 1;
@@ -1658,7 +1659,7 @@ void KAR_checkStonesStopped(void)
 
 void KAR_updateCollisions(void)
 {
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 	int32_t a;
 	KarStone *stone;
 	int32_t i;
@@ -1687,12 +1688,12 @@ void KAR_updateCollisions(void)
 	int32_t dist;
 	int32_t a;
 	int32_t b;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t collided;
 #endif
 #endif
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	collided = 0;
 #endif
 
@@ -1722,7 +1723,7 @@ void KAR_updateCollisions(void)
 					tz2 = stone->pos.vz * step;
 					cur[p * 5 + i].vx = (tx1 + tx2) / 10;
 					cur[p * 5 + i].vz = (tz1 + tz2) / 10;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 					cur[p * 5 + i].vy = stone->target.vy;
 #endif
 				}
@@ -1735,7 +1736,7 @@ void KAR_updateCollisions(void)
 					if (KAR_D_8005B5A0[b / 5].row.stones[b % 5].state > 0) {
 						dist = KAR_distance(cur[a].vx - cur[b].vx, cur[a].vz - cur[b].vz);
 						if (dist < 0x96) {
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 							collided = 1;
 #endif
 							if (step == 0) {
@@ -1755,7 +1756,7 @@ void KAR_updateCollisions(void)
 			prev[i] = cur[i];
 		}
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		if ((collided != 0) && (step == 0xa)) {
 			step--;
 		}
@@ -1994,7 +1995,7 @@ void KAR_collideMovingStones(KarStone *stoneA, VECTOR a, KarStone *stoneB, VECTO
 		stoneB->speed += (int16_t)(share1 - share2);
 		if (stoneA->speed > stoneB->speed) {
 			while (d < 0x97) {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 				stoneA->pos.vx = p1.vx - r * rcos(ang) / 4096;
 				stoneA->pos.vz = p1.vz - r * rsin(ang) / 4096;
 #else
@@ -2360,14 +2361,14 @@ int8_t KAR_tickYesNoPrompt(void)
 				MAIN_D_80135250 = (MAIN_D_80135250 == 3) ? 4 : 3;
 				playSound(0, 2);
 			}
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 			else
 #endif
 			if ((POLLED_INPUT & 0x4000) != 0 && (POLLED_INPUT_PREVIOUS & 0x4000) == 0) {
 				MAIN_D_80135250 = (MAIN_D_80135250 == 3) ? 4 : 3;
 				playSound(0, 2);
 			}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			renderString(0, UI_BOX_DATA[0].finalPos.x + 6, UI_BOX_DATA[0].finalPos.y + 6, 0xfc, 0x1a, 0, 0xdc, 6, 1);
 			renderSelectionCursor(finalPos.x + 6, finalPos.y + 7 + ((MAIN_D_80135250 - 3) * 13), 0x80, 0xd, 6);
 #else
@@ -2746,13 +2747,13 @@ int32_t KAR_chooseOpponentShot(void)
 int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 {
 	KarStrTbl strs;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	KarStrPair highlights;
 #endif
 	KarOffTbl offs;
 
 	strs = KAR_D_8005AF58;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	highlights = KAR_PENGUINMON_HIGHLIGHTS;
 #endif
 	offs = KAR_D_8005B04C;
@@ -2763,7 +2764,7 @@ int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 	}
 
 	drawString(strs.text[offs.start[idx] + n], 0, (n * 13) + 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if ((idx == 1) && (n == 7)) {
 		setTextColor(10);
 		drawString(highlights.text[0], 0, (n * 13) + 1);
@@ -2780,13 +2781,13 @@ int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 int32_t KAR_drawHintPageMetalMamemon(int32_t idx, int8_t n)
 {
 	KarStrTbl strs;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	KarStrPair highlights;
 #endif
 	KarOffTbl offs;
 
 	strs = KAR_D_8005B318;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	highlights = KAR_METALMAMEMON_HIGHLIGHTS;
 #endif
 	offs = KAR_D_8005B40C;
@@ -2797,7 +2798,7 @@ int32_t KAR_drawHintPageMetalMamemon(int32_t idx, int8_t n)
 	}
 
 	drawString(strs.text[offs.start[idx] + n], 0, (n * 13) + 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if ((idx == 1) && (n == 7)) {
 		setTextColor(10);
 		drawString(highlights.text[0], 0, (n * 13) + 1);
@@ -3132,13 +3133,13 @@ void KAR_tickMatchState(void)
 			if ((POLLED_INPUT & CONFIRM_BUTTON) && !(POLLED_INPUT_PREVIOUS & CONFIRM_BUTTON)) {
 				KAR_beginAiming();
 			}
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 			else
 #endif
 			if ((POLLED_INPUT & 0x1000) && !(POLLED_INPUT_PREVIOUS & 0x1000)) {
 				KAR_selectPreviousStone();
 			}
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 			else
 #endif
 			if ((POLLED_INPUT & 0x4000) && !(POLLED_INPUT_PREVIOUS & 0x4000)) {
@@ -3152,7 +3153,7 @@ void KAR_tickMatchState(void)
 			int32_t targetAngle;
 
 			targetAngle = KAR_D_8005B5A0[MAIN_D_8013523C].row.stones[MAIN_D_8013523A].angle;
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 			if (KAR_tickHintBox(1) != 0) {
 				if ((POLLED_INPUT & 0x2000) && (MAIN_D_8013524C < -0x18F)) {
 					if (MAIN_D_80135254 > 0) {

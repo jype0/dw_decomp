@@ -12,6 +12,7 @@
 #include <dw/sound.h>
 #include <dw/tamer.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern GsOT *ACTIVE_ORDERING_TABLE;
@@ -38,7 +39,7 @@ void getVRAMModeCoords(int32_t mode, int32_t *outX, int32_t *outClut);
 int32_t advanceTextbox(int32_t boxId);
 void setupDialogueBox(uint8_t owner);
 uint16_t showTextboxReady(uint8_t boxId, uint8_t speakerId);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 int32_t drawTextboxStrings(int32_t boxId);
 #else
 int32_t drawTextboxStrings(int32_t boxId, int32_t flag);
@@ -51,7 +52,7 @@ void renderUIBox(int32_t boxId);
 void createTextbox(int32_t boxId, int32_t flags, RECT *rect, RECT *origin, void *tick, void *render);
 
 int32_t MAIN_D_80134F94;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 int8_t DRAW_STRING2_IS_FIXED_WIDTH;
 #endif
 
@@ -121,13 +122,13 @@ void renderScriptDialogueBox(void)
 }
 
 // clang-format off
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 int32_t drawTextboxStrings(boxId)
 #else
 int32_t drawTextboxStrings(boxId, flag)
 #endif
 	uint8_t boxId;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t flag;
 #endif
 // clang-format on
@@ -160,7 +161,7 @@ int32_t drawTextboxStrings(boxId, flag)
 	}
 
 	while (x != 0) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		done = drawString2(buf, px, row);
 #else
 		done = drawString2(buf, px, row, flag);
@@ -316,7 +317,7 @@ void renderDialogueSelectionCursor(x, y)
 		return;
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderSelectionCursor(x - 1, (long)y + DIALOGUE_SELECTION.cursorOffsetY + DIALOGUE_SELECTION.current * 13,
 	                      DIALOGUE_SELECTION.cursorWidth, 0xd, 6);
 #else
@@ -404,7 +405,7 @@ void initializeTextbox(void)
 	TEXTBOX_OPEN_TIMER = 0;
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void tickTextboxHandling(void)
 #else
 void tickTextboxHandling(int32_t flag)
@@ -440,7 +441,7 @@ void tickTextboxHandling(int32_t flag)
 					}
 				}
 				if (drew == 0 && box->registered == 0) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 					drew = drawTextboxStrings(i & 0xff);
 #else
 					drew = drawTextboxStrings(i & 0xff, flag);
@@ -618,13 +619,13 @@ void registerTextbox(boxId, row, rows, doubleBuffer, mode)
 	clearTextSubArea(&rect);
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y)
 #else
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 #endif
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 #ifdef __MWERKS__
 	extern void drawGlyph();
 #endif
@@ -635,7 +636,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 	uint8_t ch;
 	int16_t pos;
 	int16_t rem;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint16_t adv;
 #endif
 	uint16_t glyph;
@@ -666,7 +667,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 				pos = pos + rem;
 			}
 			break;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 		case 0x16:
 			str++;
 			setRECT(&rect, x + pos - 6, y, 0x69, 0xc);
@@ -729,7 +730,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 		case 0xd:
 			return 0;
 		default:
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			glyph = ch + (*str++ << 8);
 #else
 			if (isAsciiEncoded((char *)&ch) != 0) {
@@ -743,7 +744,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 				setRECT(&rect, x + pos, y, 0xc, 0xc);
 				clearTextSubArea(&rect);
 			} else {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 				drawGlyph(glyph, x + pos, y);
 #else
 				y2 = y;
@@ -754,7 +755,7 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 #endif
 			}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			pos += 0xc;
 #else
 			pos += adv;
@@ -971,7 +972,7 @@ void renderUIBox(int32_t boxId)
 void scriptShowSelection(void)
 {
 	uint8_t optionCount;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint16_t height;
 #endif
 
@@ -983,7 +984,7 @@ void scriptShowSelection(void)
 	SCRIPT_POINTER = SCRIPT_POINTER + (optionCount + 1) * 2;
 	DIALOGUE_SELECTION.cursorWidth = showTextbox(0, CURRENT_DIALOGUE_OWNER);
 	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * 12 + 2;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	height = DIALOGUE_SELECTION.cursorWidth;
 
 	if (height > 0xf0) {

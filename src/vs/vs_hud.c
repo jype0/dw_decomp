@@ -12,6 +12,7 @@
 #include <dw/math.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/vs.h>
 
 #include "common.h"
@@ -28,7 +29,7 @@ extern uint8_t VS_COMMAND_MENU_LAYOUTS[][10];
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern char MAIN_D_801A8B98[];
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 extern int16_t VS_DISCIPLINE[2];
 #endif
 
@@ -40,7 +41,7 @@ void VS_renderCommandMenu(uint8_t id);
 void VS_renderTargetCursor(uint8_t id);
 void VS_tickTargetCursor(uint8_t id);
 void VS_removeTargetCursor(uint8_t index);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void VS___tickVSInput(int32_t player);
 void VS__tickVSInput(int32_t instanceId);
 void VS__tickDigimonP1(int32_t instanceId);
@@ -102,7 +103,7 @@ static void *vs_hud_functions[] = {
 	VS_renderBattleStartText,
 	VS_initializeBattleStartText,
 	VS_shuffleBattleStartTextPieces,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	VS__tickDigimonP2,
 	VS__tickDigimonP1,
 	VS__tickVSInput,
@@ -620,7 +621,7 @@ void VS_removeTargetCursor(uint8_t index)
 	}
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void VS___tickVSInput(int32_t player)
 {
 	uint32_t input;
@@ -712,7 +713,7 @@ void VS_initializeBattleStartText(void)
 	int32_t sgn;
 	int32_t i;
 	int32_t r;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t t;
 #endif
 
@@ -744,7 +745,7 @@ void VS_initializeBattleStartText(void)
 			((int16_t *)*p)[4] = (sgn * 700) + randomLimit(100) - 50;
 		}
 		r = randomLimit(5);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		((int16_t *)*p)[6] = (r + 8) * VS_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
 		((int16_t *)*p)[7] = (r + 8) * VS_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
 #else
@@ -780,7 +781,7 @@ void VS_renderBattleStartText(void)
 	SVECTOR q3;
 	POLY_FT4 *ft;
 	uint16_t clut;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	MATRIX m;
 
 	m = GsWSMATRIX;
@@ -898,7 +899,7 @@ void VS_renderBattleStartText(void)
 
 	GsSetWorkBase((PACKET *)prim);
 	GsSetProjection(VIEWPORT_DISTANCE);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	GsSetRefView2(&GS_VIEWPOINT);
 #else
 	GsWSMATRIX = m;
@@ -933,7 +934,7 @@ void VS_renderBattleStartTextBurst(void)
 	POLY_FT4 *ft;
 	int16_t cx;
 	int16_t cy;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	MATRIX saved;
 
 	saved = GsWSMATRIX;
@@ -1025,7 +1026,7 @@ void VS_renderBattleStartTextBurst(void)
 		VS_BATTLE_TEXT_FINISHED = 1;
 	}
 	GsSetProjection(VIEWPORT_DISTANCE);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	GsSetRefView2(&GS_VIEWPOINT);
 #else
 	GsWSMATRIX = saved;
@@ -1048,12 +1049,12 @@ void VS_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t va
 	int32_t i;
 	int32_t count;
 	int32_t buf[4];
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint32_t width;
 #endif
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	width = digits;
 #endif
 	convertValueToDigits(digits, value, &count, buf);
@@ -1061,7 +1062,7 @@ void VS_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t va
 		setEntityTextDigit(prim, 256, 492);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		setUVDataPolyFT4(prim, buf[i] * 7, 172, 7, 11);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		setPosDataPolyFT4(prim, x + ((digits - 1) - i) * 7, y, 7, 11);
 #else
 		setPosDataPolyFT4(prim, x + (((int32_t)width - 1) - i) * 7, y, 7, 11);

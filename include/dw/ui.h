@@ -4,6 +4,7 @@
 #include <libgpu.h>
 #include <dw/graphics.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 typedef struct {
@@ -42,7 +43,7 @@ typedef struct {
 
 typedef struct {
 	uint32_t usedRows;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	/*
 	 * BUG: the code loops over six boxes, so boxes 4 and 5 overrun into
 	 * DIALOGUE_SELECTION and the partner's ENTITY_TEXT_DATA slot.

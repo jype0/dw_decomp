@@ -22,6 +22,7 @@
 #include <dw/rng.h>
 #include <dw/sound.h>
 #include <dw/vecmath.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -568,7 +569,7 @@ static void *battle_effect_sbss_order[] = {
 };
 
 // clang-format off
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char BTL_STR_LISTENS_TO[] = "C1の命令を聞くようになった！W";
 char BTL_STR_WHITE_WAIT[] = "C1を落としたW";
 char BTL_STR_WAS_INJURED[] = "C1はRケガをしてしまったW";
@@ -1227,7 +1228,7 @@ EfeAuraType BTL_AURA_PROJECTILE_TYPES[129] = {
 	{ 0xffff, 0xffff, 0x0000, 0x0000, 0x0000, 0x0000 },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 VECTOR BTL_AURA_PROJECTILE_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 #endif
 
@@ -1928,7 +1929,7 @@ char *BTL_initializeEFEEngine(char *base)
 	base = BTL_initializeAuraProjectiles(base);
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
 	EFE_HEAP_BASE = (int32_t)base;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	EFE_HEAP_POINTER = EFE_HEAP_BASE;
 #else
 	EFE_HEAP_POINTER = (int32_t)base;
@@ -2320,7 +2321,7 @@ void BTL_renderRingTube(void)
 			if (j == 9) {
 				goto wrap;
 			}
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 			if (q[2] < 0x21 || q[5] < 0x21 || q[32] < 0x21 || q[35] < 0x21) {
 #else
 			if (q[2] < 0x21 || q[2] >= 0x1000 || q[5] < 0x21 || q[5] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000 ||
@@ -2338,7 +2339,7 @@ emit:
 			p++;
 			continue;
 wrap:
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 			if (q[2] < 0x21 || q[-25] < 0x21 || q[32] < 0x21 || q[5] < 0x21) {
 #else
 			if (q[2] < 0x21 || q[2] >= 0x1000 || q[-25] < 0x21 || q[-25] >= 0x1000 || q[32] < 0x21 || q[32] >= 0x1000 ||
@@ -4021,7 +4022,7 @@ void BTL_renderScreenSprite(void)
 	sprite.cx = (m->clutPage & 0x3f) << 4;
 	sprite.r = sprite.g = sprite.b = 0x80;
 
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
 #else
 	if ((depth >= 0) && (depth < 0x1000)) {
@@ -4120,7 +4121,7 @@ void BTL_addParticleEmitter(void)
 
 void BTL_setEFEModelObjectColor(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	char *prim;
 	EfeColor *color;
 	int32_t *ent;
@@ -4393,7 +4394,7 @@ void BTL_renderCenteredSprite(void)
 
 void BTL_initializeEFETransform(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int32_t *dst;
 	int32_t *src;
 #else
@@ -4403,7 +4404,7 @@ void BTL_initializeEFETransform(void)
 #endif
 
 	dst = &((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if (EFE_PREVIOUS_DATA_SEGMENT == NULL) {
 		BTL_setTransformToBoneOffset();
 		return;
@@ -5675,7 +5676,7 @@ void BTL_removeAllStunEffects(void)
 
 void BTL_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int32_t i;
 	int32_t count;
 	uint8_t t;
@@ -5964,7 +5965,7 @@ void BTL_tickAuraProjectile(int32_t id)
 void BTL_renderAuraProjectile(int32_t i)
 {
 	MATRIX m;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	VECTOR scale;
 #endif
 	SVECTOR a;
@@ -5976,7 +5977,7 @@ void BTL_renderAuraProjectile(int32_t i)
 
 	aura = &BTL_FLAT_BULLET_PTR[i];
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	scale = BTL_AURA_PROJECTILE_SCALE;
 #endif
 	RotMatrix(&aura->rotation, &m);

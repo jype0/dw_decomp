@@ -13,6 +13,7 @@
 #include <dw/sound.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 
 typedef struct {
 	uint8_t b[11];
@@ -227,7 +228,7 @@ static void *script_common_text_order[] = {
 };
 
 // clang-format off
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char STR_BGM_TRACK_NON_BEWILDERING_FOREST_THEME[] = "迷わずの森のテーマ";
 
 char STR_BGM_TRACK_NON_BEWILDERING_FOREST_NIGHT_THEME[] = "迷わずの森・夜のテーマ";
@@ -704,7 +705,7 @@ GsSPRITE MONOCHROMON_BUBBLE_SPRITE = {
 
 AmountBoxLayout AMOUNT_BOX_LAYOUT = {
 	{
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		{ 0x001a, 0x0007, 0x0008 },
 		{ 0x0032, 0x001b, 0x0005 },
 		{ 0x0056, 0x002b, 0x0002 },
@@ -722,7 +723,7 @@ AmountBoxLayout AMOUNT_BOX_LAYOUT = {
 
 ConfirmBoxLayout CONFIRM_BOX_LAYOUT = {
 	{
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		{ 0x0000, 0x0000, 0x0004, 0x0002, 0x0060 },
 		{ 0x0000, 0x000c, 0x0010, 0x0012, 0x0018 },
 		{ 0x0018, 0x000c, 0x003a, 0x0012, 0x0024 },
@@ -813,7 +814,7 @@ char *BGM_TRACK_NAMES[63] = {
 	STR_BGM_TRACK_BEATLAND_THEME,
 	STR_BGM_TRACK_BEATLAND_NIGHT_THEME,
 	STR_BGM_TRACK_SECRET_BEACH_CAVE_THEME,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	STR_BGM_TRACK_MT_INFINITY_THEME,
 #else
 	STR_BGM_TRACK_MT_PANORAMA_THEME,
@@ -938,7 +939,7 @@ char *TOURNAMENT_NAMES[23] = {
 };
 
 char *TOURNAMENT_GRADES[23] = {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	STR_TOURNAMENT_GRADE_D,
 	STR_TOURNAMENT_GRADE_C,
 	STR_TOURNAMENT_GRADE_B,
@@ -1018,7 +1019,7 @@ uint8_t TOURNAMENT_SCHEDULE[180] = {
 BattleEntry BIRDRA_TRANSPORT_TARGETS[6] = {
 	{ 0x26, 0x09, 0x00dd, 0x000003e8 },
 	{ 0x46, 0x09, 0x00be, 0x000003e8 },
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	{ 0x4f, 0x09, 0x0051, 0x000005dc },
 #else
 	{ 0x4f, 0x09, 0x00bc, 0x000005dc },
@@ -1360,7 +1361,7 @@ void renderItemMenuAmountBox(void)
 		i++;
 		entry += 1;
 	}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, entry->x + x, entry->y + y, entry->chars * 12, 0xc, 0x90, 0x60, 3, 1);
 #endif
 }
@@ -1423,7 +1424,7 @@ void updateItemMenuAmountBoxString(void)
 	}
 
 	out += len;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	*out++ = 0xc;
 	*out++ = 0;
 	out = intToStringSJIS(out, SHOP_ITEM_PRICE, 5, 0);
@@ -1956,7 +1957,7 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	idx = ITEM_MENU_TYPE + ((ITEM_MENU_LEFT->topRow + 5) + row);
 	if (isTriggerSet(idx) != 0) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		*out++ = 0x82;
 		*out++ = 0x85;
 #else
@@ -2560,7 +2561,7 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiB
 	setRECT(&rect, -0x84, -0xb, 0x108, 0x16);
 	createTextbox(3, flags, &rect, origin, tickItemMenuDescriptionBox, renderItemMenuDescriptionBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
 	strcpy(out, ITEM_DESC_PTR[item]);
 #else
@@ -2951,7 +2952,7 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		strcpy(out, ITEM_PARA[type].name);
 		len = strlen(ITEM_PARA[type].name);
 		out += len;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		*out++ = 0xc;
 		*out++ = 0;
 #endif
@@ -2959,7 +2960,7 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		*out++ = 0;
 
 		if (ITEM_MENU_TYPE != 5) {
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 			*out++ = 0x16;
 			*out++ = 0;
 #endif
@@ -2987,7 +2988,7 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			*out++ = 0;
 		}
 amountPart:
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		if (ITEM_MENU_TYPE != 0 && ITEM_MENU_TYPE != 7) {
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
 		}
@@ -3042,7 +3043,7 @@ void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		strcpy(out, DIGIMON_DATA[id].name);
 		len = strlen(DIGIMON_DATA[id].name);
 		out += len;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		*out++ = 0xc;
 #else
 		*out++ = 0x17;
@@ -3124,7 +3125,7 @@ void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast
 	out = padWithSpaces(out, 0xc, len);
 	*out++ = 0xf;
 	*out++ = 0;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	*out++ = 0x1b;
 	*out++ = 0;
 #endif
@@ -3171,7 +3172,7 @@ void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 		p += 0x20;
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	drawString2(p, outX, row * 12);
 #else
 	drawString2(p, outX, row * 12, 1);
@@ -3455,7 +3456,7 @@ void renderShopBitsBox(void)
 	x = UI_BOX_DATA[2].finalPos.x + 6;
 	y = UI_BOX_DATA[2].finalPos.y + 4;
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, x, y, 0x48, 0xc, 0, rowPx, 4, 1);
 	renderString(0, x, y + 0xd, 0x48, 0xc, 0x48, rowPx, 4, 1);
 #else

@@ -12,6 +12,7 @@
 #include <dw/move.h>
 #include <dw/params.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
@@ -159,7 +160,7 @@ uint8_t VS_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t VS_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
 uint8_t VS_YOUR_CALL_WIDE_PRIO[4] = { 10, 5, 0, 0 };
 int8_t MAIN_D_80134AC8[2] = { -1, -1 };
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char VS_STR_COMMAND_RUN[] = "にげる";
 char VS_STR_COMMAND_ATTACK[] = "おもいっきり";
 char VS_STR_COMMAND_AUTO[] = "おまかせ";
@@ -1822,7 +1823,7 @@ void VS_renderMoveName(int32_t i)
 	RECT rect;
 	uint8_t cmd;
 	int16_t tech;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint32_t n;
 
 	n = i;
@@ -1839,7 +1840,7 @@ void VS_renderMoveName(int32_t i)
 		drawString(VS_COMMAND_NAMES[cmd - 1], 0, (i * 12) + 0xd8);
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, (i * 160) - 0x8c, VS_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);
 #else
 	renderString(0, (int32_t)(n * 160) - 0x8c, VS_COMMAND_MENU_TOP[i] - 0xe, 0x90, 0xc, 0, (i * 12) + 0xd8, 7, 1);

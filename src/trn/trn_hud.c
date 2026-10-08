@@ -11,6 +11,7 @@
 #include <dw/trn.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern uint32_t POLLED_INPUT;
@@ -325,7 +326,7 @@ void TRN_closeUIBox(id)
 
 void TRN_tickSlotSession(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	RECT rect = { -8, -8, 16, 16 };
 #endif
 	int16_t *p = MAIN_D_801353A0;

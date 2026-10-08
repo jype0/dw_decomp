@@ -11,6 +11,7 @@
 #include <dw/sound.h>
 #include <dw/trigger.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 typedef struct {
 	uint8_t data[8];
@@ -60,7 +61,7 @@ void itemMenuCursorUp(ItemMenuBox *box, int32_t style);
 void itemMenuCursorDown(ItemMenuBox *box, int32_t style);
 static inline int32_t getActiveBGMFont(void);
 static inline int32_t getActiveBGMVariant(void);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void renderKeeperBox(ItemMenuBox *box);
 #else
 void renderKeeperBox(ItemMenuBox *box, int8_t flag);
@@ -205,7 +206,7 @@ uint8_t MOJYAMON_ITEMS_GET[12] = {
 	0x15, 0x00, 0x00, 0x00,
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char STR_YOUR_NAME[] = "おぬしの名前";
 
 char STR_DIGIMON_NAME[] = "デジモンの名前";
@@ -217,7 +218,7 @@ char STR_HIRAGANA_KATAKANA_ALPHANUMERIC_BACK_DONE[] = "かなカナ英数戻る�
 
 char MAIN_D_80130450[] = "あいうえお";
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_8013045C[] = "かきくけこ";
 #else
 char MAIN_D_8013045C[] = "かきくけと";
@@ -361,7 +362,7 @@ char *CHAR_PAGE1_LEFT[9] = {
 	MAIN_D_80130540,
 };
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801306F0[] = "ａｂｃｄｅ";
 
 char MAIN_D_801306FC[] = "ｆｇｈｉｊ";
@@ -379,7 +380,7 @@ char MAIN_D_80130738[] = "０１２３４";
 
 char MAIN_D_80130744[] = "５６７８９";
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char *CHAR_PAGE1_RIGHT[9] = {
 	MAIN_D_80130738,
 	MAIN_D_80130744,
@@ -454,7 +455,7 @@ BoxLabel MAIN_D_801307C0 = { "Keeping" };
 char MAIN_D_801307CC[20] = "You have Will trade";
 #endif
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801345F4[4] = "";
 
 char MAIN_D_801345F8[] = "Name";
@@ -499,7 +500,7 @@ SelectionBoxOffsetData NAMING_HEIGHT = { {
 } };
 
 SelectionBoxOffsetData NAMING_CHAR_X = { {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	0x00, 0x1b, 0x00, 0x1b, 0x04, 0x04, 0x00, 0x1c,
 #else
 	0x00, 0x2d, 0x00, 0x2d, 0x04, 0x04, 0x00, 0x2e,
@@ -507,7 +508,7 @@ SelectionBoxOffsetData NAMING_CHAR_X = { {
 } };
 
 SelectionBoxOffsetData NAMING_CHAR_WIDTH = { {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	0x04, 0x04, 0x04, 0x04, 0x1b, 0x1b, 0x04, 0x04,
 #else
 	0x04, 0x04, 0x04, 0x04, 0x2e, 0x2e, 0x04, 0x04,
@@ -515,7 +516,7 @@ SelectionBoxOffsetData NAMING_CHAR_WIDTH = { {
 } };
 // clang-format on
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 #define NAMING_DELETE 3
 #define NAMING_OK 4
 #define NAMING_LABELS 5
@@ -873,7 +874,7 @@ void tickItemKeeper(void)
 		SCRIPT_TEXTBOX_MODE = 2;
 		break;
 	case 4:
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		setInputRepeatMask(0x5030);
 #else
 		setInputRepeatMask(0x5060);
@@ -1104,18 +1105,18 @@ int32_t newGameStateMachine(void)
 	switch (SCRIPT_STATE_2) {
 	case 0:
 		setTrigger(TRIGGER_49);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		strcpy(DIGIMON_DATA[0].name, "？？？");
 #else
 		strcpy(DIGIMON_DATA[0].name, &MAIN_D_80134600[7]);
 #endif
 		setupNewGameDialogueBox();
 		showNewGameDialogue(0x10, 2);
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 		DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
 		break;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	case 1:
 		break;
 #endif
@@ -1165,7 +1166,7 @@ int32_t newGameStateMachine(void)
 		setInputRepeatMask(0xf000);
 		setupNameSelectorBox();
 		setupNameDisplayBox();
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 		DRAW_STRING2_IS_FIXED_WIDTH = 1;
 #endif
 		SCRIPT_STATE_2 = 1;
@@ -1182,14 +1183,14 @@ int32_t newGameStateMachine(void)
 		if ((NAMING_BOX_FLAG & 2) != 0) {
 			triggerBoxCloseFlag(1);
 			triggerBoxCloseFlag(2);
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 			DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
 			SCRIPT_STATE_2 = 0x16;
 		} else {
 			triggerBoxCloseFlag(1);
 			triggerBoxCloseFlag(2);
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 			DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
 			SCRIPT_STATE_2 = 0x16;
@@ -1981,7 +1982,7 @@ void tickItemKeeperWindow(void)
 
 void renderKeeperBoxLeft(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderKeeperBox(ITEM_MENU_LEFT);
 #else
 	renderKeeperBox(ITEM_MENU_LEFT, 0);
@@ -2007,7 +2008,7 @@ void updateKeeperTextbox(int32_t boxIndex)
 
 void renderKeeperBoxRight(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderKeeperBox(ITEM_MENU_RIGHT);
 #else
 	renderKeeperBox(ITEM_MENU_RIGHT, 1);
@@ -2280,7 +2281,7 @@ void keeperScrollRightToItem(uint8_t item)
 	updateKeeperTextbox(1);
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void renderKeeperBox(ItemMenuBox *box)
 #else
 void renderKeeperBox(ItemMenuBox *box, int8_t flag)
@@ -2289,7 +2290,7 @@ void renderKeeperBox(ItemMenuBox *box, int8_t flag)
 	GsBOXF rect;
 	int32_t x;
 	int32_t clut;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	BoxLabel label1;
 	BoxLabel label2;
 	int32_t color;
@@ -2302,7 +2303,7 @@ void renderKeeperBox(ItemMenuBox *box, int8_t flag)
 	int16_t x2;
 
 	boxId = box->boxId;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	label1 = MAIN_D_801307B4;
 	label2 = MAIN_D_801307C0;
 #endif
@@ -2320,7 +2321,7 @@ draw:
 	getVRAMModeCoords(tbox->vramMode, &x, &clut);
 	y = 0x6c;
 	y += tbox->backPage * tbox->vramRows * 12;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, bx + 0x38, by + 5, 0x24, 0xc, x, y, 6 - boxId, 1);
 #else
 	if (flag != 0) {
@@ -2575,7 +2576,7 @@ void renderMojyaTradeMenu(void)
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	y = 0x6c;
 	y += box->backPage * box->vramRows * 12;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, bx + 0x14, by + 5, 0x3c, 0xc, x, y, 5, 1);
 	renderString(0, bx + 0x7a, by + 5, 0x3c, 0xc, x + 0x3c, y, 5, 1);
 #else
@@ -2611,7 +2612,7 @@ void setupNewGameDialogueBox(void)
 	uint8_t flags;
 
 	flags = 0x81;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	DRAW_STRING2_IS_FIXED_WIDTH = 0;
 #endif
 	for (i = 2; i < 10; i++) {
@@ -2654,7 +2655,7 @@ void setupNameSelectorBox(void)
 	RECT rect1;
 	DVECTOR screenPos;
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	DRAW_STRING2_IS_FIXED_WIDTH = 1;
 #endif
 	if ((NAMING_BOX_FLAG & 2) == 0) {
@@ -2776,7 +2777,7 @@ void tickNamingBox(void)
 			return;
 		}
 		switch (special) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		case 0:
 		case 1:
 		case 2:
@@ -2941,7 +2942,7 @@ void updateNamingPreview(void)
 		len = strlen(NAMING_PROMPT_TAMER);
 	} else {
 		strcpy(out, NAMING_PROMPT_DIGIMON);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		len = strlen(NAMING_PROMPT_DIGIMON);
 #else
 		len = strlen((int32_t)MAIN_D_801345F4 + 1);
@@ -2955,7 +2956,7 @@ void updateNamingPreview(void)
 	out = padWithSpaces(out, 6, len);
 	terminateString(out, 1);
 	out = TEXTBOX_LINES_PTR;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	drawString2(out, 0, 0);
 #else
 	drawString2(out, 0, 0, 1);
@@ -2968,7 +2969,7 @@ void namingDeleteLast(void)
 		if (NAMING_CURRENT_LETTER == 0) {
 			NAMING_BUFFER[0] = 0;
 		} else {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			NAMING_BUFFER[NAMING_CURRENT_LETTER * 2] = 0;
 			NAMING_CURRENT_LETTER--;
 #else
@@ -3162,7 +3163,7 @@ void renderSelectionBox(void)
 	} else {
 		idx = ((NAMING_SELECTOR & 0x7fff) * 3) + 3;
 		baseX = (bx + NAMING_CTRL_BOXES[idx]) - 4;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		baseY = (by + NAMING_CTRL_BOXES[idx + 1]) - 4;
 #else
 		baseY = (by + (&NAMING_CTRL_BOXES[1])[idx]) - 4;
@@ -3215,7 +3216,7 @@ void renderNameDisplayBox(void)
 	for (i = 0; i < 6; i++, sx += 0xe, v += 0xc) {
 		renderString(0, sx, y6, 0xc, 0xc, v, 0, 4, 1);
 	}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderNamingUnderscore(2, NAMING_CURRENT_LETTER * 0xe + 0x3b, 0x22, 0xc);
 #else
 	renderNamingUnderscore(2, NAMING_CURRENT_LETTER * 0xc + 4, 0x10, 0xc);

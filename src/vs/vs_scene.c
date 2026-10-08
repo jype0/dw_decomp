@@ -13,6 +13,7 @@
 #include <dw/params.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
@@ -111,7 +112,7 @@ static void *vs_scene_functions[] = {
 	VS_loadArenaTIMToVRAM,
 	VS_renderVersusIntro,
 	VS_tickVersusIntro,
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	VS_tickPlaytime,
 #endif
 	VS_playVersusIntroSequence,
@@ -133,7 +134,7 @@ static void *vs_scene_functions[] = {
 	VS_resetMatchState,
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char VS_STR_WIN[] = "ＷＩＮ";
 char VS_STR_LOSE[] = "ＬＯＳＥ";
 #else
@@ -1039,14 +1040,14 @@ void VS_initializeVS(void)
 	VS_playVersusIntroSequence();
 	VS_CURRENT_BATTLE = 0;
 	while (VS_CURRENT_BATTLE < VS_BATTLE_SETUP.battleCount) {
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		PLAYTIME_FRAMES = 0;
 #endif
 		VS_loadFighterEntities(VS_CURRENT_BATTLE);
 		ENTITY_TABLE[1]->isOnScreen = 1;
 		ENTITY_TABLE[2]->isOnScreen = 1;
 		VSLoadSounds();
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		((DigimonEntity *)ENTITY_TABLE[1])->stats.current.vabId = 4;
 		((DigimonEntity *)ENTITY_TABLE[2])->stats.current.vabId = 5;
 #endif
@@ -1147,7 +1148,7 @@ void VS_addInputObjects(void)
 {
 	addObject(0x1b2, 0, (TickFunction)VS__tickVSInput, NULL);
 	addObject(0x1b2, 1, (TickFunction)VS__tickVSInput, NULL);
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	PLAYTIME_FRAMES = 0;
 	addObject(0xfb9, 0, (TickFunction)VS_tickPlaytime, NULL);
 #endif
@@ -1231,7 +1232,7 @@ void VS_unloadFighterEntities(void)
 {
 	int32_t type;
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	PLAYTIME_FRAMES = 0;
 	removeObject(0xfb9, 0);
 #endif
@@ -1346,7 +1347,7 @@ void VS_renderFighterNamePlate(int16_t side)
 			} else {
 				setPosDataPolyFT4(prim, side * 0x9a - 0x5f + n * 8, i * 20 - 0x35, 8, 8);
 			}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 #endif
 		}
@@ -1565,7 +1566,7 @@ void VS_playVersusIntroSequence(void)
 	}
 }
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 void VS_tickPlaytime(void)
 {
 	PLAYTIME_FRAMES++;

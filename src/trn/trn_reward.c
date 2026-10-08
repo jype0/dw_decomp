@@ -10,6 +10,7 @@
 #include <dw/script.h>
 #include <dw/trn.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 extern int16_t STATS_GAINS[6];
 extern char *MOVE_NAMES[];
@@ -70,7 +71,7 @@ int8_t TRN_TRAINING_ANIM_IDS[67][2] = {
 	{ 0x2e, 0xa }, { 0x2e, 0xa }, { 0x2e, 0xa },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char TRN_D_8008F0D8[] = "「思いっきり！」";
 
 char TRN_D_8008F0F0[] = "「ほどほど！」";
@@ -121,7 +122,7 @@ int8_t TRN_D_8008F184[8][3] = {
 	{ 0xa, 0x5, 0x0 },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char TRN_D_8008F19C[] = "をおぼえた。";
 #else
 char TRN_D_8008F19C[] = "was mastered!";
@@ -841,7 +842,7 @@ void TRN_renderNewOrdersBox(void)
 int32_t TRN_tryLearnMove(int32_t type)
 {
 	uint8_t special[3];
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int8_t unused[7] = { 0, 5, 2, 4, 2, 3, 6 };
 #endif
 	int8_t moveId[3];

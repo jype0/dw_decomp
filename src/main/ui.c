@@ -2,6 +2,7 @@
 #include <libgs.h>
 #include <dw/entity.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 #include "common.h"
 
@@ -56,7 +57,7 @@ RGB8 UI_BOX_COLORS[5] = {
 };
 
 char MAIN_D_80124C0C[6][12] = {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	"最大ＨＰ",
 	"最大ＭＰ",
 	"攻撃力",

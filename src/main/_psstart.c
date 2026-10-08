@@ -8,6 +8,7 @@
 #ifdef __MWERKS__
 
 #include <__rts_info_t__.h>
+#include <dw/version.h>
 
 #ifdef __cplusplus
 extern "C" void InitHeap();
@@ -55,7 +56,7 @@ asm void __start(void)
 	move	t8,t0
 	move	t9,t0
 	
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	move	s1,t0
 #else
 	move	s0,t0

@@ -1,4 +1,5 @@
 #include "dw/file_table.h"
+#include "dw/version.h"
 
 
 int16_t ATAN_LOOKUP_TABLE[] = 
@@ -38,7 +39,7 @@ int16_t ATAN_LOOKUP_TABLE[] =
 };
 
 FileEntry FILE_OFFSET_TABLE[] = {
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
     { 0x00000019, 0x001CE000, "CARD.ALL" },
     { 0x000003B6, 0x0032A000, "ALLTIM.TIM" },
     { 0x00000A0B, 0x0001194C, "AGUM.MMD" },
@@ -854,7 +855,7 @@ FileEntry FILE_OFFSET_TABLE[] = {
     { 0x000241D5, 0x00007E3C, "TRN_REL.BIN" },
     { 0x000241E5, 0x000062E8, "TRN2_REL.BIN" },
     { 0x000241F2, 0x000341F0, "VS_REL.BIN" },
-#elif defined(VERSION_JP)
+#elif VERSION_IS(JP)
     { 0x00000019, 0x001CE000, "CARD.ALL" },
     { 0x000003B6, 0x0032A000, "ALLTIM.TIM" },
     { 0x00000A0B, 0x0001194C, "AGUM.MMD" },

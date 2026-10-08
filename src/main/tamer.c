@@ -29,8 +29,9 @@
 #include <dw/types.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801341FC[] = "「あっ！だ！」";
 char MAIN_D_80122D68[] = "「でも、持ち物がいっぱいで持てないや。」";
 char MAIN_D_80122D80[] = "「ちぇっ！　カラッポだ」";
@@ -57,13 +58,13 @@ static void *tamer_data_order[] = {
 	MAIN_D_80122D94,
 	MAIN_D_80122D80,
 	MAIN_D_80122D68,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	MAIN_D_801341FC,
 #endif
 };
 
 RECT ITEM_PICKUP_TEXT_AREA = {0, 12, 256, 200};
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801341FC[] = "Woah!";
 #endif
 RECT TAKE_CHEST_TEXT_AREA = {0, 12, 256, 200};
@@ -512,7 +513,7 @@ void tamerTickWalkingState(void)
 
 	if ((isKeyDown(0x10) != 0) &&
 	    (IS_SCRIPT_PAUSED == 1) &&
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	    (FADE_PROTECTION == 0) &&
 #endif
 	    (UI_BOX_DATA[0].state != 1) &&
@@ -792,13 +793,13 @@ void checkPendingAwards(void)
 
 void renderItemPickupTextbox(int32_t instanceId)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int32_t halfLength;
 
 	renderString(0xf, -0x7d, 0x2d, 0x48, 0xc, 0, 0xc, 5, 0);
 #endif
 	if (TAKE_CHEST_STATE == 0) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0, -0x7d, 0x39, 0x30, 0xc, 0, 0x24, 5, 0);
 		renderString(0xf, -0x4d, 0x39, 0x60, 0xc, 0, 0x18, 5, 0);
 		halfLength = strlen(ITEM_PARA[TAKE_CHEST_ITEM].name) / 2;

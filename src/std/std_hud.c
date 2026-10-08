@@ -21,6 +21,7 @@
 #include <dw/sound.h>
 #include <dw/std.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -533,7 +534,7 @@ void STD_initializeBattleStartText(void)
 	int32_t sgn;
 	int32_t i;
 	int32_t r;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t t;
 #endif
 
@@ -565,7 +566,7 @@ void STD_initializeBattleStartText(void)
 			((int16_t *)*p)[4] = (sgn * 700) + randomLimit(100) - 50;
 		}
 		r = randomLimit(5);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		((int16_t *)*p)[6] = (r + 8) * STD_BATTLE_START_TEXT_POSITIONS[i][0] / 8;
 		((int16_t *)*p)[7] = (r + 8) * STD_BATTLE_START_TEXT_POSITIONS[i][1] / 8;
 #else
@@ -853,12 +854,12 @@ void STD_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t v
 	int32_t i;
 	int32_t count;
 	int32_t buf[4];
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint32_t width;
 #endif
 
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	width = digits;
 #endif
 	convertValueToDigits(digits, value, &count, buf);
@@ -866,7 +867,7 @@ void STD_renderNumber(int32_t a, int32_t digits, int16_t x, int16_t y, int16_t v
 		setEntityTextDigit(prim, 256, 492);
 		setRGB0(prim, 0x80, 0x80, 0x80);
 		setUVDataPolyFT4(prim, buf[i] * 7, 172, 7, 11);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		setPosDataPolyFT4(prim, x + ((digits - 1) - i) * 7, y, 7, 11);
 #else
 		setPosDataPolyFT4(prim, x + (((int32_t)width - 1) - i) * 7, y, 7, 11);

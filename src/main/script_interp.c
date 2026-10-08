@@ -25,6 +25,7 @@
 #include <dw/trn2.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 
 extern int8_t MAIN_STATE;
 extern int16_t SCRIPT_MAP_CHANGE_STATE;
@@ -246,7 +247,7 @@ static void *script_interp_sbss_order[] = {
 	&TEXTBOX_ORIGIN_Z,
 	&TEXTBOX_ORIGIN_Y,
 	&TEXTBOX_ORIGIN_X,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	&ACTIVE_MAP_SCRIPT,
 	&CURRENT_SCRIPT_ID,
 	&TOURNAMENTS_LOST,
@@ -278,13 +279,13 @@ static void *script_interp_sbss_order[] = {
 	&MAIN_D_80134F9C,
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 uint8_t MAPHEAD_SCRIPT_BUFFER[0x6000];
 #else
 uint8_t MAPHEAD_SCRIPT_BUFFER[0x61a8];
 #endif
 uint8_t SCRIPT_OFFSET_TABLE[0x2000];
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 uint8_t MAP_SCRIPT_BUFFER[0x2000];
 #else
 uint8_t MAP_SCRIPT_BUFFER[0x4000];
@@ -319,7 +320,7 @@ int32_t tickScript(void)
 		return 1;
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	tickTextboxHandling();
 #else
 	tickTextboxHandling(0);

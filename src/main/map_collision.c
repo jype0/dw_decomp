@@ -2,6 +2,7 @@
 #include <dw/entity.h>
 #include <dw/params.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 #include "common.h"
 
@@ -156,7 +157,7 @@ void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY)
 	}
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void setImpassableSquare(x, y, radius)
 int16_t x;
 int16_t y;
@@ -165,14 +166,14 @@ int32_t radius;
 void setImpassableSquare(int32_t x, int32_t y, int32_t radius)
 #endif
 {
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t originalRadius;
 	int32_t originalY;
 #endif
 	int32_t tileX;
 	int32_t tileY;
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	for (tileY = y - radius; tileY < y + radius; tileY++) {
 		for (tileX = x - radius; tileX < x + radius; tileX++) {
 #else

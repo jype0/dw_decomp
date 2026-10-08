@@ -16,13 +16,14 @@
 #include <dw/params.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern CameraChase VS_INTRO_CAMERA_CHASE;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 extern int16_t VS__INTRO_STATS_DATA[6];
 #else
 int16_t VS__INTRO_STATS_DATA[6];
@@ -289,7 +290,7 @@ void VS__renderIntroStatBar(int32_t stat, int32_t value)
 	       value * 100 / VS__STAT_BAR_LIMITS[stat] - 50, stat * 16 - 26,
 	       -50, stat * 16 - 18,
 	       value * 100 / VS__STAT_BAR_LIMITS[stat] - 50, stat * 16 - 18);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
 
@@ -323,7 +324,7 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 	}
 
 	setXYWH(prim, x, y, size, size);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
 
@@ -332,7 +333,7 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 
 // clang-format off
 void VS__runIntro(stage)
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int16_t stage;
 #else
 	int32_t stage;

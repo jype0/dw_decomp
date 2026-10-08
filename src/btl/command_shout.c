@@ -5,6 +5,7 @@
 
 #include <dw/btl.h>
 #include <dw/script.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 int32_t entityGetTechFromAnim(Entity *entity, int32_t anim);
@@ -13,7 +14,7 @@ void BTL_renderCommandShout(void);
 
 BtlCommandShout BTL_COMMAND_SHOUT = { -1, 0, 0, 0 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char BTL_STR_SHOUT_RUN[] = "にげろ";
 char BTL_STR_SHOUT_ATTACK[] = "おもいっきり";
 char BTL_STR_SHOUT_YOUR_CALL[] = "まかせた";
@@ -96,7 +97,7 @@ void BTL_drawCommandShout(uint32_t command)
 		length = strlen(BTL_SHOUTS[(int32_t)command - 1]);
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	drawString(BTL_STR_SHOUT_EXCLAMATION, (length / 2) * 12, 204);
 	length += 2;
 	BTL_COMMAND_SHOUT.width = (length / 2) * 12;

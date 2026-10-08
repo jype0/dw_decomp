@@ -13,6 +13,7 @@
 #include <dw/sound.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 typedef struct {
@@ -64,7 +65,7 @@ static void *doo2_functions[] = {
 	DOO2_tickEggBox,
 	DOO2_renderQuadShard,
 	DOO2_renderTriShard,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	DOO2_releaseShardSet,
 	DOO2_renderShardSet,
 	DOO2_tickShardSet,
@@ -153,7 +154,7 @@ GsSPRITE DOO2_EGG_CURSOR_SPRITE = {
 
 void DOO2_setScratchTop(int32_t size)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if ((size & 3) != 0) {
 		size += 4 - (size & 3);
 	}
@@ -459,7 +460,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 				if (0 < RotNclip3(&verts[tri->v0], &verts[tri->v1], &verts[tri->v2],
 				                  (long *)&poly3->x0, (long *)&poly3->x1, (long *)&poly3->x2,
 				                  &p, &otz, &flag)) {
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 					otz >>= 2;
 					if ((otz > 32) && (otz < 4096)) {
 #endif
@@ -471,12 +472,12 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 						poly3->clut = tri->clut;
 						poly3->tpage = tri->tpage;
 						setPolyGT3(poly3);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 						otz >>= 2;
 #endif
 						AddPrim(ACTIVE_ORDERING_TABLE->org + otz, poly3);
 						packet = (uint8_t *)++poly3;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 					}
 #endif
 				}
@@ -502,7 +503,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 				                  &verts[quad->v3], (long *)&poly4->x0, (long *)&poly4->x1,
 				                  (long *)&poly4->x2, (long *)&poly4->x3,
 				                  &p, &otz, &flag)) {
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 					otz >>= 2;
 					if ((otz > 32) && (otz < 4096)) {
 #endif
@@ -516,12 +517,12 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 						poly4->clut = quad->clut;
 						poly4->tpage = quad->tpage;
 						setPolyGT4(poly4);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 						otz >>= 2;
 #endif
 						AddPrim(ACTIVE_ORDERING_TABLE->org + otz, poly4);
 						packet = (uint8_t *)++poly4;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 					}
 #endif
 				}
@@ -612,7 +613,7 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 	SVECTOR p1;
 	SVECTOR p2;
 	SVECTOR p3;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int16_t center[3];
 #else
 	int16_t cx;
@@ -669,7 +670,7 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 			p0 = *va;
 			p1 = *vb;
 			p2 = *vc;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			center[0] = (p0.vx + p1.vx + p2.vx) / 3;
 			center[1] = (p0.vy + p1.vy + p2.vy) / 3;
 			center[2] = (p0.vz + p1.vz + p2.vz) / 3;
@@ -701,7 +702,7 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 			p1 = *vb;
 			p2 = *vc;
 			p3 = *vd;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			center[0] = (p0.vx + p1.vx + p2.vx) / 3;
 			center[1] = (p0.vy + p1.vy + p2.vy) / 3;
 			center[2] = (p0.vz + p1.vz + p2.vz) / 3;
@@ -726,7 +727,7 @@ int32_t DOO2_buildShardSet(VECTOR *offset, u_long modelList, int32_t modelIndex)
 		}
 	}
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	(void)cx;
 	(void)cy;
 	(void)cz;

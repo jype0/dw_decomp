@@ -14,6 +14,7 @@
 #include <dw/sound.h>
 #include <dw/sound_async.h>
 #include <dw/swap.h>
+#include <dw/version.h>
 
 #include "common.h"
 
@@ -704,13 +705,13 @@ void BTL_tickPartnerWaypointTrail(void)
 	int8_t tamerTileY;
 	int8_t partnerTileX;
 	int8_t partnerTileY;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t j;
 #endif
 	int32_t n;
 	int16_t src;
 	int16_t dst;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t i;
 #endif
 
@@ -720,7 +721,7 @@ void BTL_tickPartnerWaypointTrail(void)
 		if (isFiveTileWidePathBlocked(tamerTileX, tamerTileY, partnerTileX, partnerTileY) == 1) {
 			if (PARTNER_WAYPOINT_COUNT != 0) {
 				if (isFiveTileWidePathBlocked(partnerTileX, partnerTileY, PARTNER_WAYPOINT_X[PARTNER_WAYPOINT_CURRENT], PARTNER_WAYPOINT_Y[PARTNER_WAYPOINT_CURRENT]) == 1) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 					for (n = PARTNER_WAYPOINT_COUNT; n > 0; n--) {
 						src = (PARTNER_WAYPOINT_CURRENT + n - 1) % 30;
 						dst = (PARTNER_WAYPOINT_CURRENT + n) % 30;

@@ -14,6 +14,7 @@
 #include <dw/sound.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 void BTL_tickBattleEndText();
@@ -70,7 +71,7 @@ extern uint8_t GAME_STATE;
 extern uint8_t CURRENT_SCREEN;
 
 int8_t STAT_GAIN_ENEMY_FACTORS[4] = { 10, 12, 16, 0 };
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 /* Money obtained */
 char BITS_LABEL[] = "取得金";
 char STR_BRACES[] = "｛｝";
@@ -120,7 +121,7 @@ void battleStatsGainsAndDrops(uint8_t *droppedItems)
 	int32_t i;
 	int32_t stat;
 	int32_t chance;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t type;
 #endif
 
@@ -188,7 +189,7 @@ void battleStatsGainsAndDrops(uint8_t *droppedItems)
 				continue;
 			}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			if (DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i + 1]]->type].dropChance > randomLimit(100)) {
 				droppedItems[i] = DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[i + 1]]->type].dropItem;
 				continue;
@@ -290,7 +291,7 @@ void createBitsBox(void)
 	createAnimatedUIBox(1, 0, 2, &finalPos, &startPos, tickBitBox, (RenderFunction)renderBitBox);
 
 	drawString(BITS_LABEL, 0, 72);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	drawString(STR_BRACES, 0x9c, 0xf0);
 #endif
 }
@@ -300,7 +301,7 @@ void handleBattleEndBox(void)
 	uint8_t droppedItems[3];
 	RECT boxPosition;
 	int32_t i;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	int32_t slot;
 #endif
 	int32_t done;
@@ -316,7 +317,7 @@ void handleBattleEndBox(void)
 	setRECT(&boxPosition, -78, 54, 156, 24);
 	BTL_initializeBattleEndText(0x60, 2, &boxPosition);
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	for (i = 0; i < 3; i++) {
 		if (droppedItems[i] == 0xff) {
 			continue;
@@ -413,7 +414,7 @@ void handleBattleEndBox(void)
 		BTL_battleTickFrame();
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	for (i = 0; i < ENEMY_COUNT; i++) {
 		if (droppedItems[i] == 0xff) {
 			continue;
@@ -507,7 +508,7 @@ void renderFinalBalance(int32_t layer)
 	renderString(0,
 		     UI_BOX_DATA[2].finalPos.x + 10,
 		     UI_BOX_DATA[2].finalPos.y + 10,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		     36, 12, 0, 84, 6 - layer, 0);
 #else
 		     36, 12, 0, 72, 6 - layer, 0);
@@ -548,7 +549,7 @@ void createPostBattleStatsBox(void)
 		}
 
 		if (i == 3) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			drawString(STR_SHOJIKIN, 0, 84);
 #endif
 			drawString(MAIN_D_80124C54, 0, 240);

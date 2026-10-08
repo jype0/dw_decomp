@@ -11,6 +11,7 @@
 #include <dw/math.h>
 #include <dw/params.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -161,7 +162,7 @@ void EFECreateFlash(void);
 void tickEFEFlash();
 void renderEFEFlash(int32_t id);
 int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y);
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 void downloadSomeImage();
 void modifySomeImage(long dim);
 #endif
@@ -180,7 +181,7 @@ static void *efe_functions[] = {
 	getEFEDATEntry,
 	initializeEFE,
 	findEFEDATFile,
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	modifySomeImage,
 	downloadSomeImage,
 #endif
@@ -276,7 +277,7 @@ ParticleFX PARTICLE_FX_DATA[4];
 EfeParticleField FX_PARTICLE_DATA[50];
 EntityParticleFX ENTITY_PARTICLE_FX_DATA[20];
 CloudFXEntry CLOUD_FX_DATA[60];
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 u_long SOME_IMAGE_DATA[896];
 #endif
 int16_t EFE_LOADED_MOVE_DATA[17];
@@ -295,7 +296,7 @@ static void *efe_bss_order[] = {
 	UNUSED_EFE_ARRAY,
 	EFE_SCRIPT_MEM1_DATA,
 	EFE_LOADED_MOVE_DATA,
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	SOME_IMAGE_DATA,
 #endif
 	CLOUD_FX_DATA,
@@ -796,7 +797,7 @@ void EFECreateFlash(void)
 			data->offsetX = 0;
 			data->offsetY = 0;
 		} else {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 			getDrawingOffsetCopy(&offsetX, &offsetY);
 #else
 			if (isTamerOnScreen() == 1) {
@@ -901,7 +902,7 @@ int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y)
 	data->offsetY = y;
 }
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 void downloadSomeImage(void)
 {
 	RECT r;
@@ -996,7 +997,7 @@ void renderParticleFlash(ParticleFlashData *params)
 	int32_t cellW;
 	int32_t cellH;
 	int32_t uStep;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	uint8_t w1;
 	uint8_t h1;
 #else

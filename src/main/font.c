@@ -3,8 +3,9 @@
 #include <dw/font.h>
 #include <dw/sjis.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 #define NUM_GLYPHS		992
 #else
 #define NUM_GLYPHS		79
@@ -17,7 +18,7 @@
 #define TEXT_AREA_SIZE		256
 #define TEXT_DRAW_LIMIT		(TEXT_AREA_SIZE - GLYPH_WIDTH)
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 #define NUM_RENDER_SLOTS	21
 #else
 #define NUM_RENDER_SLOTS	50
@@ -30,12 +31,12 @@
 
 typedef struct {
 	uint16_t pixelData[11];
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	uint16_t width;
 #endif
 } GlyphData;
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 // clang-format off
 uint16_t CHAR_TO_GLYPH_TABLE[NUM_GLYPHS] = {
 	0x8141, 0x8142, 0x8145, 0x8146, 0x8148, 0x8149, 0x8158, 0x815b,
@@ -1309,7 +1310,7 @@ void setTextColor(int32_t color)
 	COLORCODE_HIGHBITS = COLORCODE_LOWBITS << 4;
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void drawGlyph(uint16_t codepoint, uint16_t x, uint16_t y)
 #else
 // clang-format off
@@ -1331,7 +1332,7 @@ int32_t drawGlyph(codepoint, x, y)
 	uint8_t *drawRow;
 
 	if ((x < 0) || (x >= TEXT_DRAW_LIMIT)) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		return;
 #else
 		return 0;
@@ -1339,7 +1340,7 @@ int32_t drawGlyph(codepoint, x, y)
 	}
 
 	if ((y < 0) || (y >= TEXT_DRAW_LIMIT)) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		return;
 #else
 		return 0;
@@ -1347,7 +1348,7 @@ int32_t drawGlyph(codepoint, x, y)
 	}
 
 	code = ((codepoint & 0xff) << 8) + ((codepoint & 0xff00) >> 8);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if (code == 0x8140) {
 		return;
 	}
@@ -1438,13 +1439,13 @@ int32_t drawGlyph(codepoint, x, y)
 
 	setRECT(&rect, (x / 4) + TEXT_VRAM_X, y + TEXT_VRAM_Y, GLYPH_WIDTH / 4, GLYPH_HEIGHT);
 	LoadImage(&rect, (u_long *)(GLYPH_DRAWING_AREAS + GLYPH_DRAWING_AREA_INDEX * RENDER_SLOT_SIZE));
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 
 	return *p;
 #endif
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void drawString(str, x, y)
 	uint16_t *str;
 	uint16_t x;

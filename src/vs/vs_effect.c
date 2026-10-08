@@ -23,6 +23,7 @@
 #include <dw/sound.h>
 #include <dw/types.h>
 #include <dw/vecmath.h>
+#include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
@@ -963,7 +964,7 @@ EfeAuraType VS_AURA_PROJECTILE_TYPES[129] = {
 };
 // clang-format on
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 VECTOR VS_AURA_PROJECTILE_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 #endif
 
@@ -1659,7 +1660,7 @@ char *VS_initializeEFEEngine(char *base)
 	base = VS_initializeAuraProjectiles(base);
 	base = (char *)((int32_t)base + (4 - ((int32_t)base & 3)));
 	EFE_HEAP_BASE = (int32_t)base;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	EFE_HEAP_POINTER = EFE_HEAP_BASE;
 #else
 	EFE_HEAP_POINTER = (int32_t)base;
@@ -1686,7 +1687,7 @@ void VS_loadMoveEFE(moves, effectIds, isLoaded)
 	int8_t *isLoaded;
 // clang-format on
 {
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	downloadSomeImage();
 #endif
 	EFE_LOAD_REQUEST.state = -1;
@@ -1771,7 +1772,7 @@ void VS_disableMapLayer(void)
 
 void VS_renderScreenFade(void)
 {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	int32_t ofx;
 	int32_t ofy;
 	POLY_FT4 *p;
@@ -2551,7 +2552,7 @@ void VS_renderWireframeBox(void)
 	by = base->vy;
 	bz = base->vz;
 	PushMatrix();
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	getDrawingOffsetCopy(&ox, &oy);
 #else
 	ox = DRAWING_OFFSET_X;
@@ -2717,7 +2718,7 @@ void VS_render2DTexturedQuad(void)
 
 void VS_restoreCameraView(void)
 {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	GsRVIEW2 view;
 	int32_t dist;
 	int32_t x;
@@ -2742,7 +2743,7 @@ void VS_restoreCameraView(void)
 
 void VS_setupFixedCamera(void)
 {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	int32_t ret;
 
 	GsSetProjection(0x200);
@@ -2759,7 +2760,7 @@ void VS_setupFixedCamera(void)
 	EFE_FIXED_VIEW.vrz = 0;
 	EFE_FIXED_VIEW.rz = 0;
 	EFE_FIXED_VIEW.super = NULL;
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	ret = GsSetRefView2(&EFE_FIXED_VIEW);
 #else
 	GsSetRefView2(&EFE_FIXED_VIEW);
@@ -3768,7 +3769,7 @@ void VS_renderScreenSprite(void)
 	sprite.x = EFE_POP1(int32_t);
 
 	if (flip < 0) {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 		getDrawingOffsetCopy(&ox, &oy);
 		sprite.x += (int16_t)(0xa0 - ox);
 		sprite.y += (int16_t)(0x78 - oy);
@@ -3788,7 +3789,7 @@ void VS_renderScreenSprite(void)
 	sprite.cx = (m->clutPage & 0x3f) << 4;
 	sprite.r = sprite.g = sprite.b = 0x80;
 
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 	GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
 #else
 	if ((depth >= 0) && (depth < 0x1000)) {
@@ -3887,7 +3888,7 @@ void VS_addParticleEmitter(void)
 
 void VS_setEFEModelObjectColor(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	char *prim;
 	EfeColor *color;
 	int32_t *ent;
@@ -4160,7 +4161,7 @@ void VS_renderCenteredSprite(void)
 
 void VS_initializeEFETransform(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int32_t *dst;
 	int32_t *src;
 #else
@@ -4170,7 +4171,7 @@ void VS_initializeEFETransform(void)
 #endif
 
 	dst = &((EfeTransform *)((int32_t)EFE_CURRENT_DATA_SEGMENT + 4))->position.vx;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	if (EFE_PREVIOUS_DATA_SEGMENT == NULL) {
 		VS_setTransformToBoneOffset();
 		return;
@@ -4799,7 +4800,7 @@ void VS_renderParallelLines(SVECTOR *a, SVECTOR *b, int16_t n, SVECTOR *from, SV
 		depth = worldPosToScreenPos(a, (DVECTOR *)&prim->x0);
 		if ((depth > 0x200) && (depth < 0x10000)) {
 			depth = worldPosToScreenPos(b, (DVECTOR *)&prim->x1);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 			getDrawingOffsetCopy(&ox, &oy);
 #else
 			ox = DRAWING_OFFSET_X;
@@ -5448,7 +5449,7 @@ void VS_removeAllStunEffects(void)
 
 void VS_setTMDObjectColor(int32_t idx, int32_t *color, int32_t base)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	int32_t i;
 	int32_t count;
 	uint8_t t;
@@ -5737,7 +5738,7 @@ void VS_tickAuraProjectile(int32_t id)
 void VS_renderAuraProjectile(int32_t i)
 {
 	MATRIX m;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	VECTOR scale;
 #endif
 	SVECTOR a;
@@ -5749,7 +5750,7 @@ void VS_renderAuraProjectile(int32_t i)
 
 	aura = &VS_FLAT_BULLET_PTR[i];
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	scale = VS_AURA_PROJECTILE_SCALE;
 #endif
 	RotMatrix(&aura->rotation, &m);

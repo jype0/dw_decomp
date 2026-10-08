@@ -11,6 +11,7 @@
 #include <dw/trn.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
@@ -137,7 +138,7 @@ void TRN_tickSlotMachine(arg)
 					}
 				}
 			}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 			if ((p->state - 1 == i) && ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & CONFIRM_BUTTON)) {
 				TRN_chooseReelStop(p->state - 1, p);
 			}

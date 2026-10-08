@@ -4,12 +4,13 @@
 #include <libgpu.h>
 
 #include <dw/types.h>
+#include <dw/version.h>
 
 void initializeFontCLUT(void);
 void clearTextArea(void);
 void clearTextSubArea(RECT *rect);
 void setTextColor(int32_t color);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void drawGlyph(uint16_t codepoint, uint16_t x, uint16_t y);
 #else
 int32_t drawGlyph(/* uint16_t codepoint, uint16_t x, uint16_t y */);

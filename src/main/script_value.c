@@ -4,6 +4,7 @@
 #include <dw/params.h>
 #include <dw/script.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 typedef struct {
 	int32_t v[6];
@@ -29,7 +30,7 @@ static void *script_value_functions[] = {
 };
 
 // clang-format off
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801345CC[] = "かんばん";
 
 char MAIN_D_801345D4[] = "はこ";

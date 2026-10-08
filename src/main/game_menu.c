@@ -23,9 +23,10 @@
 #include <dw/sound.h>
 #include <dw/tamer.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 /* Colors of the two button glyphs in the medal and card view footers */
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 #define FOOTER_GLYPH1_COLOR 0xe
 #define FOOTER_GLYPH2_COLOR 0xf
 #else
@@ -329,7 +330,7 @@ uint8_t EQUIPPED_MOVES[4] = {
 
 SVECTOR MEDAL_ROTATION = { 0x0000, 0x0000, 0x0000, 0x0000 };
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 char MAIN_D_80134240[] = "Current";
 
 char MAIN_D_80134248[] = "Ending";
@@ -355,7 +356,7 @@ TriangleCursorOffsetData SELECTION_CURSOR_HEIGHT = { { 0x04, 0x04, 0x04, 0x04, 0
 
 RECT MENU_TEXT_AREA = { 0, 232, 24, 12 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char STR_YEAR_DAY[] = "年日";
 #else
 char STR_YEAR_DAY[8] = "YearDay";
@@ -365,7 +366,7 @@ DigimonTabs DIGIMON_MENU_VIEWS = { { 0x01, 0x01 } };
 
 PlayerTabs MAIN_D_801342A4 = { { 0x01, 0x01, 0x01, 0x01 } };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_80123DE8[] = "半人前";
 
 char MAIN_D_80123DF4[] = "初級";
@@ -401,7 +402,7 @@ RECT MAIN_D_801342F0 = { 0, 24, 256, 200 };
 
 RECT PLAYER_INFO_TEXT_AREA = { 0, 12, 256, 200 };
 
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 char FMT_PLAYTIME[8] = "%d : %d";
 #endif
 
@@ -423,7 +424,7 @@ GsRVIEW2 MEDAL_VIEW = {
 	-1050, 220, -10000, -1050, 220, 0, 0, NULL,
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801238A0[] = "ステータス技セット戦績";
 
 char MAIN_D_801238B0[] = "才ｇしつけ／ＬＩＦＥのろいＨＰＭＰゆうよわ";
@@ -717,7 +718,7 @@ ConditionMaskTable MAIN_D_80123DD0 = { {
 	0x00000010, 0x00000002,
 } };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_801342A8[] = "しろうと";
 
 char MAIN_D_801342B0[] = "かけだし";
@@ -892,7 +893,7 @@ IconRect MOVES_VIEW_TECHSET_TEXT[13] = {
 	{ 0x0075, 0xffe0, 0x04, 0x04, 0x78, 0x0c },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 StringRect MOVES_VIEW_STRING_SPRITES[12] = {
 	{ 0xff8e, 0xffbf, 0x009c, 0x00, 0x18 },
 	{ 0x0042, 0xffbf, 0x0030, 0xa8, 0x18 },
@@ -960,7 +961,7 @@ RECT STATS_VIEW_INSETS[13] = {
 	{ 194, 205, 54, 5 },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 StringRect STATS_VIEW_TEXT[9] = {
 	{ 0xff76, 0x0022, 0x0030, 0x48, 0x30 },
 	{ 0xff82, 0x0040, 0x0024, 0x18, 0x30 },
@@ -1038,7 +1039,7 @@ RECT TAMER_WINDOW_BOXES[11] = {
 	{ 271, 174, 18, 18 },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 StringRect TAMER_WINDOW_NAME_STRING[11] = {
 	{ 0xff88, 0xffaf, 0x0018, 0x00, 0x0c },
 	{ 0xffdb, 0xffca, 0x0054, 0x24, 0x0c },
@@ -1207,7 +1208,7 @@ char *MEDAL_NAMES[15] = {
 	STR_MEDAL_NAME_10_YEARS,
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char *MEDAL_DESCRIPTIONS[45] = {
 	STR_MEDAL_DESCRIPTION_CUP_D_C_B_A_S,
 	STR_MEDAL_DESCRIPTION_WIN_IN_ALL,
@@ -1398,7 +1399,7 @@ ChartSprite CHART_TO_SPRITES_ODD[5] = {
 	{ 0x0042, 0x001b, 0x0000, 0x0000 },
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 Inset MAIN_D_80124B48[6] = {
 	{ 0x001c, 0x002b, 0x004e, 0x0082 },
 	{ 0x0081, 0x0032, 0x003c, 0x0004 },
@@ -1446,7 +1447,7 @@ static void *game_menu_sbss_order[] = {
 	&SELECTED_CARD,
 	&MEDAL_SELECTOR_INDEX,
 	&SELECTED_MEDAL,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	&MOVE_SELECT_BOX_Y,
 	&MOVE_SELECT_BOX_X,
 #else
@@ -1625,7 +1626,7 @@ void renderGameMenu(void)
 		                  GAME_MENU_TEXT_SPRITES[i].texY + 0xbf, 0x1e, 0x7f50, 6,
 		                  disabled);
 	}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(3, 7, -0x49, 0xc, 0xc, 0, 0xe8, 6, 1);
 	renderString(3, 0x2c, -0x49, 0xc, 0xc, 0xc, 0xe8, 6, 1);
 #else
@@ -1635,7 +1636,7 @@ void renderGameMenu(void)
 	convertValueToDigits(3, DAY, &digitCount, digits);
 }
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void renderDateDigits(void)
 {
 	int32_t digitCount;
@@ -2169,7 +2170,7 @@ void tickPlayerMenu(void)
 			}
 		}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		if (PLAYER_MENU_STATE == 2 && MENU_STATE == 2) {
 #else
 		if (PLAYER_MENU_STATE == 2) {
@@ -2555,7 +2556,7 @@ void renderDigimonStatsView(void)
 		}
 		renderString(0, -0x6d, -0x42, 0x48, 0xc, 0, 0x3c, 5, 0);
 		w = strlen(DIGIMON_DATA[ENTITY_TABLE[1]->type].name);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0, -0x6d, -0x33, (w / 2) * 12, 0xc, 0x9c, 0x24, 5, 0);
 #else
 		w = w * 10;
@@ -2565,7 +2566,7 @@ void renderDigimonStatsView(void)
 		renderString(0, -0x6c, -0x32, w, 0xc, 0, 0x48, 5, 0);
 #endif
 		renderNumber(0, -0x6d, -0x22, 2, PARTNER_PARA.age, 5);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderNumber(0, -0x26, -0x22, 2, PARTNER_PARA.weight, 5);
 		renderNumber(0, 0x23, 3, 4, PARTNER_ENTITY.digimonEntity.stats.current.currentHP, 5);
 		renderString(0, 0x53, 4, 0xc, 0xc, 0x3c, 0x30, 5, 0);
@@ -2687,7 +2688,7 @@ void renderDigimonMovesView(void)
 				renderNumber(0, 0x10, j * 0xf - 0x43, 3, mv->power, 5);
 				renderNumber(0, 0x39, j * 0xf - 0x43, 3, mv->mpCost * 3, 5);
 				if (mv->range != 0) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 					renderString(0, 0x65, j * 0xf - 0x42, 0xc, 0xc,
 					             (mv->range - 1) * 0xc + 0x48, 0x6c, 5, 1);
 #else
@@ -2734,7 +2735,7 @@ void renderDigimonMovesView(void)
 				                  0x7a06, 5, 0);
 			}
 		}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0xe, -0x82, 0x19, 0xc, 0xc, 0, 0x54, 5, 1);
 		renderString(0, -0x76, 0x19, 0xa8, 0xc, 0xc, 0x54, 5, 1);
 		renderString(0, -0x82, 0x27, 0x84, 0xc, 0, 0x60, 5, 1);
@@ -2775,7 +2776,7 @@ void renderDigimonMovesView(void)
 		}
 		renderString(0, -0x87, 0x20, 0x30, 0xc, 0x3c, 0, 5, 1);
 		renderString(0, -0x81, 0x2e, 0x24, 0xc, 0, 0x6c, 5, 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0x10, -0x80, 0x4c, 0xc, 0xc, 0x24, 0x6c, 5, 1);
 		renderString(0, -0x74, 0x4c, 0x18, 0xc, 0x30, 0x6c, 5, 1);
 #else
@@ -2817,7 +2818,7 @@ void renderDigimonMovesView(void)
 		drawLine2P(0x20202, -0x92, -4, 0x92, -4, 5, 0);
 		drawLine2P(0xfad990, -0x93, -3, 0x93, -3, 5, 0);
 		drawLine2P(0x20202, -0x92, -2, 0x92, -2, 5, 0);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(3, -0x8e, -0x52, 0x54, 0xc, 0, 0x30, 5, 1);
 #else
 		renderString(3, -0x8e, -0x52, 0xa0, 0xc, 0, 0x30, 5, 1);
@@ -2840,17 +2841,17 @@ void renderDigimonMovesView(void)
 		renderRectPolyFT4(-0x7b, 0x50, 0x12, 0x10, 0xc0, 0x8c, 5, 0x7b06, 5, 0);
 		for (i = 0; i < 7; i++) {
 			icon = &MOVES_VIEW_SPRITES[i];
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 			if (i != 2) {
 #endif
 				renderRectPolyFT4(icon->posX, icon->posY, icon->width, icon->height,
 				                  icon->texX, icon->texY + 0x80, 5,
 				                  (i == 5) ? getClut(96, 489) : getClut(96, 488), 5, 0x80);
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 			}
 #endif
 		}
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderBox(-0x18, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
 #else
 		renderBox(0x52, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
@@ -2910,7 +2911,7 @@ void renderPlayerInfoView(void)
 
 		renderString(0, -0x54, -0x50, 0x48, 0xc, 0, 0x30, 5, 1);
 		renderNumber(0, 0x35, -0x36, 2, TAMER_ENTITY.tamerLevel, 5);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0, 0x28, -0x25, 0x30, 0xc, 0, (TAMER_ENTITY.tamerLevel * 12) + 0x40, 5, 1);
 #else
 		renderString(0, 0x28, -0x24, 0x64, 0xc, 0, (TAMER_ENTITY.tamerLevel * 12) + 0x40, 5, 1);
@@ -2919,7 +2920,7 @@ void renderPlayerInfoView(void)
 		renderString(0, (n * 12) + 0x28, -0x25, 0x30, 0xc, 0xb4, 0x18, 5, 1);
 		renderNumber(0, 0x35, -0x11, 2, TAMER_ENTITY.raisedCount, 5);
 		renderNumber(0, 0x29, 2, 6, MONEY, 5);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderNumber(0, 0x29, 0x16, 3, PLAYTIME_HOURS, 5);
 		renderNumber(0, 0x59, 0x16, 2, PLAYTIME_MINUTES, 5);
 #else
@@ -2965,7 +2966,7 @@ void renderDigimonMovesSelected(int16_t panel)
 	int32_t i;
 	uint8_t row;
 	uint8_t col;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	uint8_t status;
 #endif
 	uint8_t moveId;
@@ -3024,7 +3025,7 @@ void renderDigimonMovesSelected(int16_t panel)
 		renderNumber(0, (panel * 0xcb) - 0x64, 0x1b, 3, move->power, 3);
 		renderNumber(0, (panel * 0xcb) - 0x64, 0x2c, 3, move->mpCost * 3, 3);
 		renderString(0, (panel * 0xcb) - 0x64, 0x3e, 0x24, 0xc, (move->range - 1) * 0x24, 0x78, 3, 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		status = move->status;
 		if (status == 1) {
 			renderString(0, (panel * 0xcb) - 0x64, 0x4f, 0xc, 0xc, 0x84, 0x6c, 3, 1);
@@ -3295,13 +3296,13 @@ void renderEvoChartView(void)
 		                0, 0x87, 0x41, 5);
 		renderBorderBox(0xf1, 0x27, 0x38, 0x9f, 0x6996d2, 0x1e4178,
 		                0xaf, 0x64, 0x2d, 5);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0xe, -0x1a, 0x54, 0xc, 0xc, 0, 0xc, 5, 1);
 #else
 		renderString(0xf, -0x1a, 0x54, 0xc, 0xc, 0, 0xc, 5, 1);
 #endif
 		renderString(0, -0xe, 0x54, 0x3c, 0xc, 0xc, 0xc, 5, 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0xf, 0x3a, 0x54, 0xc, 0xc, 0x48, 0xc, 5, 1);
 #else
 		renderString(7, 0x3a, 0x54, 0xc, 0xc, 0x48, 0xc, 5, 1);
@@ -3480,7 +3481,7 @@ void renderEvoChartDetail(void)
 		toSprites++;
 	}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(3, -0x19, -0x4f, 0x30, 0xc, 0, 0x18, 4);
 	renderString(0, -0x56, 0x3a, 0x24, 0xc,
 	             ((DIGIMON_DATA[CHART_SELECTED_DIGIMON].level - 1) * 36) + 0x30, 0x18,
@@ -3540,7 +3541,7 @@ void renderMedalView(void)
 			if (hasMedal(i) != 0) {
 				if (MEDAL_SELECTOR_INDEX == i) {
 					if (MENU_STATE != 3) {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 						renderString(0, -0x42, 0x17, 0x84, 0xc, 0, 0x18, 5, 1);
 #else
 						renderString(0, -0x5d, 0x17, 0xac, 0xc, 0, 0x18, 5, 1);
@@ -3553,7 +3554,7 @@ void renderMedalView(void)
 					renderDigiviceMedals();
 				}
 			} else {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 				if (MEDAL_SELECTOR_INDEX == i) {
 					renderString(0, -0x42, 0x17, 0xc, 0xc, 0xe4, 0xc, 5, 1);
 					renderString(0, -0x7e, 0x27, 0xc, 0xc, 0xe4, 0xc, 5, 1);
@@ -3567,7 +3568,7 @@ void renderMedalView(void)
 			                  0xf0, 0xb0, 0x18, 0x7dc7, 5, 0);
 		}
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderInsetBox(0x5c, 0x8d, 0x88, 0xe, 5);
 #else
 		renderInsetBox(0x3e, 0x8d, 0xb0, 0xe, 5);
@@ -3576,7 +3577,7 @@ void renderMedalView(void)
 		renderString(0, -0x17, 0x55, 0x18, 0xc, 0x84, 0xc, 5, 1);
 		renderString(0, 1, 0x55, 0x24, 0xc, 0x9c, 0xc, 5, 1);
 		renderString(FOOTER_GLYPH2_COLOR, 0x2b, 0x55, 0xc, 0xc, 0x78, 0xc, 5, 1);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		renderString(0, 0x37, 0x55, 0x18, 0xc, 0x84, 0xc, 5, 1);
 		renderString(0, 0x4f, 0x55, 0x24, 0xc, 0xc0, 0xc, 5, 1);
 #else
@@ -3702,7 +3703,7 @@ int32_t drawDigimonStatsStrings(void)
 		MENU_SUB_STATE = 1;
 		break;
 	case 1:
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		drawString(DIGIMON_DATA[ENTITY_TABLE[1]->type].name, 0x9c, 0x24);
 #else
 		drawString(DIGIMON_DATA[ENTITY_TABLE[1]->type].name, 0, 0x48);
@@ -3900,7 +3901,7 @@ int32_t drawDigimonMovesText(void)
 			EQUIPPED_MOVES[1] = 0xff;
 		}
 		MENU_SUB_STATE = 2;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		DrawSync(0);
 #endif
 		break;
@@ -3914,7 +3915,7 @@ int32_t drawDigimonMovesText(void)
 			EQUIPPED_MOVES[2] = 0xff;
 		}
 		MENU_SUB_STATE = 3;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		DrawSync(0);
 #endif
 		break;
@@ -3928,7 +3929,7 @@ int32_t drawDigimonMovesText(void)
 		}
 		drawString(STATUS_VIEW_LABELS[4], 0, 0x6c);
 		MENU_SUB_STATE = 4;
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		DrawSync(0);
 #endif
 		break;
@@ -3949,7 +3950,7 @@ int32_t drawDigimonMovesText(void)
 int32_t drawPlayerInfoStrings(void)
 {
 	RECT rect;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	char buf[8];
 #endif
 	int32_t i;
@@ -3962,7 +3963,7 @@ int32_t drawPlayerInfoStrings(void)
 		MENU_SUB_STATE = 1;
 		break;
 	case 1:
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 		sprintf(buf, FMT_PLAYTIME, (int)PLAYTIME_HOURS, (int)PLAYTIME_MINUTES);
 		drawString(buf, 0, 0xe4);
 #endif
@@ -4005,7 +4006,7 @@ int32_t drawEvoChartStrings(int8_t arg)
 		/* fall through */
 	case 1:
 		drawString(CARD_CHART_LABELS[2], 0, 0x18);
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 		drawString(CARD_CHART_LABELS[3], 0, 0x24);
 		drawString(CARD_CHART_LABELS[4], 0, 0x3c);
 #endif

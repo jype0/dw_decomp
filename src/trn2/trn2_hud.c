@@ -14,6 +14,7 @@
 #include <dw/trn2.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 extern int16_t STATS_GAINS[6];
 extern int16_t INITIAL_COMBAT_STATS[][6];
@@ -234,7 +235,7 @@ int16_t TRN2_calculateTrainingMultiplier(type, mode)
 	if (0) {
 		t = 0;
 	}
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 	(void)t;
 #else
 	result += t / 60;
@@ -525,7 +526,7 @@ void TRN2_closeUIBox(id)
 
 void TRN2_tickSlotSession(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	RECT rect = { -8, -8, 16, 16 };
 #endif
 	int16_t *p = MAIN_D_801353E0;

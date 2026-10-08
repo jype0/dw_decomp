@@ -12,6 +12,7 @@
 #include <dw/model.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -69,7 +70,7 @@ static void *eab_functions[] = {
 	EAB_setEntitiesVisible,
 	EAB_renderFlash,
 	EAB_initializeParticles,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	EAB_renderSpawn,
 	EAB_tickSpawn,
 #else

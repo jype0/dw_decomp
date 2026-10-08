@@ -23,6 +23,7 @@
 #include <dw/tamer.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -71,7 +72,7 @@ int32_t tickScript(void);
 void updateTournamentRegistration(void);
 void initializeNamingBuffer(uint8_t flags);
 void initializeTextbox(void);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 void tickTextboxHandling(void);
 #else
 void tickTextboxHandling(int32_t flag);
@@ -163,7 +164,7 @@ void *main_order_anchor[] = {
 	pollInputGame,
 	applyDrawOffset,
 	gameLoop,
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 	recalculatePPandArena,
 #endif
 	initializeLoadedMap,
@@ -176,7 +177,7 @@ void *main_order_anchor[] = {
 };
 
 // clang-format off
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 DVECTOR DRAW_OFFSET_0 = { 0x00a0, 0x0078 };
 
 DVECTOR DRAW_OFFSET_1 = { 0x00a0, 0x0168 };
@@ -202,7 +203,7 @@ char MAIN_D_8012CE8C[] = "\\ETCDAT\\ETCTIM.BIN";
 char MAIN_D_8012CEA0[] = "\\ETCNA\\TITLE2.TIM";
 
 DigimonPara DIGIMON_DATA[180] = {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	{
 		"しゅじんこう",
 		0x00000011,
@@ -1891,7 +1892,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x01, 0x04, 0xff },
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 		0x01,
 #else
 		0x00,
@@ -1911,7 +1912,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x04, 0x02, 0xff },
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 		0x08,
 #else
 		0x00,
@@ -1931,7 +1932,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x02, 0x04, 0xff },
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 		0x05,
 #else
 		0x00,
@@ -1999,7 +2000,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x01,
 		0x03,
 		{ 0x03, 0xff, 0xff },
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 		0x16,
 		0x28,
 #else
@@ -2599,7 +2600,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x17,
 		0x64,
 		{
-#if defined(VERSION_JP_REV1)
+#if VERSION_IS(JP_REV1)
 			0x30, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
 #else
 			0x2c, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
@@ -6109,7 +6110,7 @@ static void *main_bss_order[] = {
 	&GS_VIEWPOINT,
 	GS_WORK_BASES,
 	DR_OFFSETS,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	GS_OT_TAGS_1,
 	GS_OT_TAGS_0,
 	GS_ORDERING_TABLE,
@@ -6200,7 +6201,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6218,7 +6219,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6227,7 +6228,7 @@ int32_t main(void)
 		}
 
 		fadeFromBlack(0x28);
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 		recalculatePPandArena();
 #endif
 		while (MAIN_STATE != 3) {
@@ -6251,7 +6252,7 @@ void initializeHeap(void)
 
 void initializeFramebuffer(void)
 {
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	RECT rect;
 	DVECTOR ofs0;
 	DVECTOR ofs1;
@@ -6412,7 +6413,7 @@ void newGameScene(void)
 		GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 		GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 		processInput();
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		tickTextboxHandling();
 #else
 		tickTextboxHandling(1);
@@ -6472,7 +6473,7 @@ void initializeLoadedMap(void)
 	initializeDrawingOffsets(MAP_TILE_DATA.tiles);
 
 	for (i = 0; i < 8; i++) {
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 		NPC_ENTITIES[i].digimonEntity.entity.isOnScreen =
 			entityIsOffScreen(&NPC_ENTITIES[i].digimonEntity.entity, 320, 240) ^ 1;
 #else
@@ -6566,7 +6567,7 @@ void initializeLoadedMap(void)
 	updateMinuteHand(HOUR, MINUTE);
 }
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 void recalculatePPandArena(void)
 {
 	uint8_t pp;
@@ -6697,7 +6698,7 @@ void renderPressStartToContinue(void)
 		SetPolyFT4(prim);
 		setXYWH(prim, -0x36, 0x32, 121, 10);
 		setUVWH(prim, 0, 0xf1, 121, 10);
-#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
+#if VERSION_IS(JP)
 		setRGB0(prim, 0x80, 0x80, 0x80);
 #else
 		setRGB0(prim, 0, 0x80, 0);
@@ -6923,7 +6924,7 @@ void handleBuffDisks(type)
 		BTL_buffStats(ENTITY_TABLE[1], 0, gain, &stats->speed, 0xb, 5);
 		break;
 	case 0x12:
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		if (offLimit < (stats->off + 20)) {
 			stats = stats;
 		} else {

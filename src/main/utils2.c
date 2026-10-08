@@ -18,6 +18,7 @@
 #include <dw/tournament.h>
 #include <dw/ui.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 
 #define shop_START		((char *)0x80080800)
 
@@ -154,7 +155,7 @@ char *REL_BIN_FILES[16] = {
 	MAIN_D_8012BA80,
 };
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 char MAIN_D_80134430[] = "ポーズ";
 #else
 char MAIN_D_80134430[] = "Pause";
@@ -243,7 +244,7 @@ void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
 		  uint8_t u, uint8_t v, int32_t layer, int32_t shadow)
 {
 	POLY_FT4 *prim;
-#if !defined(VERSION_JP)
+#if !VERSION_REGION_IS(NTSCJ)
 	GsOT *ot;
 #endif
 
@@ -253,7 +254,7 @@ void renderString(uint8_t color, int16_t x, int16_t y, int16_t w, int16_t h,
 		TEXT_COLORS[color].b);
 	setUVDataPolyFT4(prim, u, v, w, h);
 	setPosDataPolyFT4(prim, x, y, w, h);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 #else
 	AddPrim((ot = ACTIVE_ORDERING_TABLE)->org + layer, prim++);
@@ -448,7 +449,7 @@ void createPauseBox(void)
 
 	if (MAIN_D_80134E7C != 1) {
 		drawString(MAIN_D_80134430, 0x78, 0xF0);
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 		setRECT(&pos, -0x1A, -0xE, 0x30, 0x18);
 #else
 		setRECT(&pos, -0x1A, -0xE, 0x38, 0x18);
@@ -470,7 +471,7 @@ void renderPauseBox(instanceId)
 	setRECT(&box, -0xA0, -0x78, 0x140, 0xF0);
 	GsSortBoxFill(&box, ACTIVE_ORDERING_TABLE, 7 - instanceId);
 	pos = &UI_BOX_DATA[5].finalPos;
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	renderString(0, pos->x + 6, pos->y + 6, 0x24, 0xC, 0x78, 0xF0, 0, 1);
 #else
 	renderString(0, pos->x + 6, pos->y + 6, 0x2A, 0xC, 0x78, 0xF0, 0, 1);
@@ -537,7 +538,7 @@ void unlearnMove(int32_t move)
 	PARTNER_ENTITY.learnedMoves[move / 32] &= mask;
 }
 
-#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+#if VERSION_EQUAL_OR_NEWER(US)
 int32_t isTamerOnScreen(void)
 {
 	if (ENTITY_TABLE[0]->isOnScreen == 1) {

@@ -9,6 +9,7 @@
 #include <dw/params.h>
 #include <dw/trigger.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -59,7 +60,7 @@ int16_t ANGEMON_PEDESTAL_PROGRESS_Z;
 char TMD_EXTENSION[] = ".TMD";
 SVECTOR DIRT_PILE_ROTATION = { 0, 0, 0, 0 };
 SVECTOR TRAINING_POOP_ROTATION = { 0, 0, 0, 0 };
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 SVECTOR DIRT_CART_ROTATION = { 0, 0, 0, 0 };
 #endif
 SVECTOR DIRT_PILE_SIZE_ROTATION = { 0, 0, 0, 0 };
@@ -210,7 +211,7 @@ static void *map_object_bss_order[] = {
 	GENERAL_COORDS,
 	GENERAL_OBJECTS,
 	MAP_3D_OBJ,
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	DOOR_COORDS,
 	DOOR_OBJECTS,
 	GENERAL_MESH_BUFFER,
@@ -1177,7 +1178,7 @@ void renderDirtCartModel(int32_t instanceId)
 	SVECTOR rotation;
 	VECTOR *location;
 
-#if defined(VERSION_JP)
+#if VERSION_REGION_IS(NTSCJ)
 	rotation = DIRT_CART_ROTATION;
 #endif
 	if (ACTIVE_DIRT_CART_MODEL == 2) {
