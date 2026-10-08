@@ -1018,7 +1018,7 @@ uint8_t TOURNAMENT_SCHEDULE[180] = {
 BattleEntry BIRDRA_TRANSPORT_TARGETS[6] = {
 	{ 0x26, 0x09, 0x00dd, 0x000003e8 },
 	{ 0x46, 0x09, 0x00be, 0x000003e8 },
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	{ 0x4f, 0x09, 0x0051, 0x000005dc },
 #else
 	{ 0x4f, 0x09, 0x00bc, 0x000005dc },

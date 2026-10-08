@@ -512,7 +512,7 @@ void tamerTickWalkingState(void)
 
 	if ((isKeyDown(0x10) != 0) &&
 	    (IS_SCRIPT_PAUSED == 1) &&
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	    (FADE_PROTECTION == 0) &&
 #endif
 	    (UI_BOX_DATA[0].state != 1) &&

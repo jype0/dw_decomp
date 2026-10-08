@@ -537,7 +537,7 @@ void unlearnMove(int32_t move)
 	PARTNER_ENTITY.learnedMoves[move / 32] &= mask;
 }
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 int32_t isTamerOnScreen(void)
 {
 	if (ENTITY_TABLE[0]->isOnScreen == 1) {

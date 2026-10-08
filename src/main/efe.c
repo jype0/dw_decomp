@@ -161,17 +161,15 @@ void EFECreateFlash(void);
 void tickEFEFlash();
 void renderEFEFlash(int32_t id);
 int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y);
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 void downloadSomeImage();
-void modifySomeImage(int32_t dim);
+void modifySomeImage(long dim);
 #endif
 void findEFEDATFile(void);
 void initializeEFE();
 void getEFEDATEntry();
 void renderParticleFlash();
 
-#if !defined(VERSION_JP)
-#endif
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int32_t DRAWING_OFFSET_X;
 extern int32_t DRAWING_OFFSET_Y;
@@ -182,7 +180,7 @@ static void *efe_functions[] = {
 	getEFEDATEntry,
 	initializeEFE,
 	findEFEDATFile,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	modifySomeImage,
 	downloadSomeImage,
 #endif
@@ -278,7 +276,7 @@ ParticleFX PARTICLE_FX_DATA[4];
 EfeParticleField FX_PARTICLE_DATA[50];
 EntityParticleFX ENTITY_PARTICLE_FX_DATA[20];
 CloudFXEntry CLOUD_FX_DATA[60];
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 u_long SOME_IMAGE_DATA[896];
 #endif
 int16_t EFE_LOADED_MOVE_DATA[17];
@@ -297,7 +295,7 @@ static void *efe_bss_order[] = {
 	UNUSED_EFE_ARRAY,
 	EFE_SCRIPT_MEM1_DATA,
 	EFE_LOADED_MOVE_DATA,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	SOME_IMAGE_DATA,
 #endif
 	CLOUD_FX_DATA,
@@ -798,7 +796,7 @@ void EFECreateFlash(void)
 			data->offsetX = 0;
 			data->offsetY = 0;
 		} else {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			getDrawingOffsetCopy(&offsetX, &offsetY);
 #else
 			if (isTamerOnScreen() == 1) {
@@ -903,42 +901,38 @@ int32_t setEFEFlashOffset(int32_t id, int16_t x, int16_t y)
 	data->offsetY = y;
 }
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 void downloadSomeImage(void)
 {
 	RECT r;
+	u_long *data;
 
+	data = SOME_IMAGE_DATA;
 	setRECT(&r, 0x200, 0xF8, 0x100, 7);
-	StoreImage(&r, SOME_IMAGE_DATA);
+	StoreImage(&r, data);
 	DrawSync(0);
 }
 
-void modifySomeImage(int32_t dim)
+void modifySomeImage(long dim)
 {
 	int16_t buffer[0x700];
 	RECT rect;
 	int16_t *src;
 	int16_t *dst;
 	int32_t i;
+	int16_t red;
+	int16_t green;
+	int16_t blue;
+	int16_t stp;
 
 	src = (int16_t *)SOME_IMAGE_DATA;
 	dst = buffer;
 	for (i = 0; i < 0x700; i++) {
-		int16_t pixel;
-		int16_t red;
-		int16_t green;
-		int16_t blue;
-		int16_t stp;
-
-		pixel = *src;
-		red = pixel & 0x1f;
-		green = (pixel >> 5) & 0x1f;
-		blue = (pixel >> 10) & 0x1f;
-		stp = ((int16_t)pixel >> 15) & 1;
-		do {
-		} while (0);
+		red = *src & 0x1f;
+		green = (*src >> 5) & 0x1f;
+		blue = (*src >> 10) & 0x1f;
+		stp = (*src++ >> 15) & 1;
 		*dst = red * (255 - dim) / 255;
-		src++;
 		*dst += (green * (255 - dim) / 255) << 5;
 		*dst += (blue * (255 - dim) / 255) << 10;
 		*dst++ += stp << 15;

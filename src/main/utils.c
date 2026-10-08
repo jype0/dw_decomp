@@ -104,7 +104,7 @@ void damageTick(FighterData* fighter, Stats* stats)
 		fighter->hpDamageBuffer -= 1;
 	}
 
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	if (stats->current.currentHP < 0) {
 #else
 	if (stats->current.currentHP <= 0) {

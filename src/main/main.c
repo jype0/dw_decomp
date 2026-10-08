@@ -130,7 +130,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 void setDigimonRaised(uint16_t type);
 void initializeMap(void);
 void runMapHeadScript(int32_t scriptId);
-int32_t readPStat(int32_t id);
+uint8_t readPStat(int32_t id);
 void initializeUIBoxData(void);
 void initializeMedalModel(void);
 void initializeChest(void);
@@ -163,7 +163,7 @@ void *main_order_anchor[] = {
 	pollInputGame,
 	applyDrawOffset,
 	gameLoop,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	recalculatePPandArena,
 #endif
 	initializeLoadedMap,
@@ -1891,7 +1891,11 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x01, 0x04, 0xff },
+#if defined(VERSION_JP_REV1)
+		0x01,
+#else
 		0x00,
+#endif
 		0x0a,
 		{
 			0x2e, 0x2f, 0x2a, 0x10, 0x11, 0x12, 0xff, 0xff,
@@ -1907,7 +1911,11 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x04, 0x02, 0xff },
+#if defined(VERSION_JP_REV1)
+		0x08,
+#else
 		0x00,
+#endif
 		0x0a,
 		{
 			0x02, 0x01, 0x03, 0x0d, 0x09, 0x0f, 0xff, 0xff,
@@ -1923,7 +1931,11 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x02, 0x04, 0xff },
+#if defined(VERSION_JP_REV1)
+		0x05,
+#else
 		0x00,
+#endif
 		0x0a,
 		{
 			0x0c, 0x0b, 0x0a, 0x08, 0x10, 0x53, 0xff, 0xff,
@@ -1987,8 +1999,13 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x01,
 		0x03,
 		{ 0x03, 0xff, 0xff },
+#if defined(VERSION_JP_REV1)
+		0x16,
+		0x28,
+#else
 		0x04,
 		0x0a,
+#endif
 		{
 			0x25, 0x23, 0x21, 0x24, 0x22, 0xff, 0xff, 0xff,
 			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -2582,7 +2599,11 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x17,
 		0x64,
 		{
+#if defined(VERSION_JP_REV1)
+			0x30, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
+#else
 			0x2c, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
+#endif
 			0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 		},
 		0x00,
@@ -6179,7 +6200,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6197,7 +6218,7 @@ int32_t main(void)
 			runMapHeadScript(SAVED_STATE.currentScreen);
 			initializeLoadedMap();
 			addClock();
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			if (tamerGetState() != 0) {
 				tamerSetState(0);
 			}
@@ -6206,7 +6227,7 @@ int32_t main(void)
 		}
 
 		fadeFromBlack(0x28);
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		recalculatePPandArena();
 #endif
 		while (MAIN_STATE != 3) {
@@ -6451,7 +6472,7 @@ void initializeLoadedMap(void)
 	initializeDrawingOffsets(MAP_TILE_DATA.tiles);
 
 	for (i = 0; i < 8; i++) {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		NPC_ENTITIES[i].digimonEntity.entity.isOnScreen =
 			entityIsOffScreen(&NPC_ENTITIES[i].digimonEntity.entity, 320, 240) ^ 1;
 #else
@@ -6545,7 +6566,7 @@ void initializeLoadedMap(void)
 	updateMinuteHand(HOUR, MINUTE);
 }
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 void recalculatePPandArena(void)
 {
 	uint8_t pp;
@@ -6563,7 +6584,7 @@ void recalculatePPandArena(void)
 	}
 	writePStat(1, pp);
 	pp = readPStat(3);
-	if (pp >= 0x17) {
+	if ((pp < 0) || (pp >= 0x17)) {
 		if (isTriggerSet(0x25) != 0) {
 			unsetTrigger(0x25);
 		}
@@ -6676,7 +6697,7 @@ void renderPressStartToContinue(void)
 		SetPolyFT4(prim);
 		setXYWH(prim, -0x36, 0x32, 121, 10);
 		setUVWH(prim, 0, 0xf1, 121, 10);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		setRGB0(prim, 0x80, 0x80, 0x80);
 #else
 		setRGB0(prim, 0, 0x80, 0);

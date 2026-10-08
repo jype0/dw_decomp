@@ -229,7 +229,7 @@ int32_t CONDITION_BUBBLE_ID;
 int32_t CONDITION_BUBBLE_TIMER;
 
 static void *partner_impl_sbss_order[] = {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	&POOP_TO_EAT,
 	&NANIMON_TRIGGER,
 	&BUTTERFLY_ID,
@@ -437,7 +437,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 	loadPartnerSounds(type);
 	PARTNER_ENTITY.digimonEntity.entity.isOnMap = 1;
 	PARTNER_ENTITY.digimonEntity.entity.isOnScreen = 1;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	PARTNER_PARA.condition = 0;
 #endif
 	setSleepTimes(&PARTNER_PARA, type);
@@ -445,7 +445,7 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 	PARTNER_PARA.missedSleepHours = 0;
 	PARTNER_PARA.poopLevel = RAISE_DATA[type].poopTimer;
 	PARTNER_PARA.poopingTimer = -1;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	PARTNER_PARA.virusBar = 0;
 	PARTNER_PARA.tiredness = 0;
 #endif
@@ -457,17 +457,13 @@ void initializePartner(int32_t type, int32_t posX, int32_t posY,
 	PARTNER_PARA.energyLevel = RAISE_DATA[type].energyThreshold;
 	PARTNER_PARA.remainingLifetime = 360;
 	PARTNER_PARA.weight = RAISE_DATA[type].defaultWeight;
-#if !defined(VERSION_JP)
-	PARTNER_PARA.trainBoostTimer = 0;
-	PARTNER_PARA.trainBoostValue = 0;
-	PARTNER_PARA.trainBoostFlag = 0;
-	PARTNER_PARA.evoTimer = 0;
-	PARTNER_PARA.battles = 0;
-	PARTNER_PARA.careMistakes = 0;
-	PARTNER_PARA.injuryTimer = 0;
-	PARTNER_PARA.sicknessTimer = 0;
-	PARTNER_PARA.areaEffectTimer = 0;
-	PARTNER_PARA.timesBeingSick = 0;
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
+	PARTNER_PARA.trainBoostFlag = PARTNER_PARA.trainBoostValue =
+		PARTNER_PARA.trainBoostTimer = 0;
+	PARTNER_PARA.careMistakes = PARTNER_PARA.battles =
+		PARTNER_PARA.evoTimer = 0;
+	PARTNER_PARA.timesBeingSick = PARTNER_PARA.areaEffectTimer =
+		PARTNER_PARA.sicknessTimer = PARTNER_PARA.injuryTimer = 0;
 #endif
 
 	PARTNER_ENTITY.lives = 3;
@@ -639,9 +635,6 @@ void setSleepTimes(PartnerPara *para, int32_t type)
 void setFoodTimer(int16_t type)
 {
 	int32_t i;
-#if !defined(VERSION_JP)
-	int32_t nextIndex;
-#endif
 	uint8_t level;
 
 	level = DIGIMON_DATA[type].level;
@@ -652,7 +645,7 @@ void setFoodTimer(int16_t type)
 			PARTNER_PARA.nextHungerHour -= 24;
 		}
 	}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	else
 #endif
 	if (level == 2) {
@@ -661,7 +654,7 @@ void setFoodTimer(int16_t type)
 			PARTNER_PARA.nextHungerHour -= 24;
 		}
 	} else {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		for (i = 0; i < 8; i++) {
 			if (HOUR < RAISE_DATA[type].hungerTimes[i]) {
 				PARTNER_PARA.nextHungerHour =
@@ -674,7 +667,7 @@ void setFoodTimer(int16_t type)
 					RAISE_DATA[type].hungerTimes[0];
 		}
 #else
-		for (i = 0, nextIndex = 1; i < 8; i++, nextIndex++) {
+		for (i = 0; i < 8; i++) {
 			if (HOUR <= PARTNER_PARA.nextHungerHour) {
 				if (PARTNER_PARA.nextHungerHour <
 				    RAISE_DATA[type].hungerTimes[i]) {
@@ -688,12 +681,11 @@ void setFoodTimer(int16_t type)
 				goto calculateTimer;
 			}
 
-			if (RAISE_DATA[type].hungerTimes[nextIndex] == -1 ||
+			if (RAISE_DATA[type].hungerTimes[i + 1] == -1 ||
 			    i == 7) {
 				int32_t j;
-				int32_t nextJ;
 
-				for (j = 0, nextJ = 1; j < 8; j++, nextJ++) {
+				for (j = 0; j < 8; j++) {
 					if (HOUR < RAISE_DATA[type].hungerTimes[j]) {
 						PARTNER_PARA.nextHungerHour =
 							RAISE_DATA[type]
@@ -701,7 +693,7 @@ void setFoodTimer(int16_t type)
 						goto calculateTimer;
 					}
 
-					if (RAISE_DATA[type].hungerTimes[nextJ] == -1 ||
+					if (RAISE_DATA[type].hungerTimes[j + 1] == -1 ||
 					    j == 7) {
 						PARTNER_PARA.nextHungerHour =
 							RAISE_DATA[type]
@@ -716,7 +708,7 @@ void setFoodTimer(int16_t type)
 #endif
 	}
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 calculateTimer:
 #endif
 	if (HOUR <= PARTNER_PARA.nextHungerHour) {
@@ -1594,7 +1586,7 @@ void handleConditionBubble(void)
 void partnerHandleFoodFeed(int32_t itemType)
 {
 	if (PARTNER_PARA.condition & 4) {
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		if (((itemType < 0x26) || (itemType >= 0x47)) &&
 		    (itemType != 0x79) && (itemType != 0x7a)) {
 			return;
@@ -1614,7 +1606,7 @@ void partnerHandleFoodFeed(int32_t itemType)
 		     RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].favoriteFood) ||
 		    !(PARTNER_PARA.energyLevel <
 		      RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].energyThreshold)) {
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			PARTNER_ANIMATION = 0xb;
 #endif
 			startAnimation(&PARTNER_ENTITY.digimonEntity.entity, 0xb);
@@ -1828,7 +1820,7 @@ void tickSicknessMechanics(void)
 			PARTNER_PARA.timesBeingSick++;
 			PARTNER_PARA.sicknessTimer = 1;
 			PARTNER_PARA.happiness -= 20;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 			PARTNER_PARA.sicknessCounter = 0;
 #endif
 		}
@@ -1870,7 +1862,7 @@ void tickSicknessMechanics(void)
 		PARTNER_PARA.sicknessTimer = 1;
 		PARTNER_PARA.condition &= ~0x20;
 		PARTNER_PARA.injuryTimer = 0;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	}
 	if (!wasSick && ((PARTNER_PARA.condition & 0x40) != 0)) {
 #endif
@@ -2059,7 +2051,7 @@ void tickConditions(void)
 	tickUnhappinessMechanics();
 	tickConditionBoundaries();
 	PARTNER_PARA.areaEffectTimer++;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	if (PARTNER_PARA.areaEffectTimer > 28800)
 		PARTNER_PARA.areaEffectTimer = 0;
 #endif

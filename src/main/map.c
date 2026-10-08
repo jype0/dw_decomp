@@ -5891,7 +5891,7 @@ void reinitializeAfterTournament(void)
 {
 	addObject(0xfa2, 0, tickGameClock, renderGameClock);
 	addObject(0xfa0, 0, NULL, renderMap);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	addObject(0xfa6, 0, tickConditions, NULL);
 #endif
 	addObject(0xfa8, 0, NULL, renderPoop);
@@ -6330,7 +6330,7 @@ void renderSprite(GsSPRITE *sprite, int16_t x, int16_t y, int32_t distance,
 			  (uint32_t)distance);
 	sprite->scaley = ((uint32_t)(height * VIEWPORT_DISTANCE) /
 			  (uint32_t)distance);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	GsSortSprite(sprite, ACTIVE_ORDERING_TABLE, distance >> 4);
 #else
 	distance = distance >> 4;

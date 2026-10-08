@@ -3900,7 +3900,7 @@ int32_t drawDigimonMovesText(void)
 			EQUIPPED_MOVES[1] = 0xff;
 		}
 		MENU_SUB_STATE = 2;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		DrawSync(0);
 #endif
 		break;
@@ -3914,7 +3914,7 @@ int32_t drawDigimonMovesText(void)
 			EQUIPPED_MOVES[2] = 0xff;
 		}
 		MENU_SUB_STATE = 3;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		DrawSync(0);
 #endif
 		break;
@@ -3928,7 +3928,7 @@ int32_t drawDigimonMovesText(void)
 		}
 		drawString(STATUS_VIEW_LABELS[4], 0, 0x6c);
 		MENU_SUB_STATE = 4;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		DrawSync(0);
 #endif
 		break;

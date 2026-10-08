@@ -126,7 +126,7 @@ int16_t EVO_SEQUENCE_UNUSED;
 static void *partner_sbss_order[] = {
 	&EVO_SEQUENCE_UNUSED,
 	&SOME_SCRIPT_SYNC_BIT,
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 	&WILD_POOP_ID,
 	&MAIN_D_80134E28,
 	&HEALTH_SHOE_FRAMES,
@@ -848,7 +848,7 @@ void partnerTickWalking(void)
 					       (uint8_t)PARTNER_ANIMATION);
 			}
 		}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		IS_STANDING_STILL = 1;
 #endif
 	}
@@ -869,13 +869,13 @@ void partnerTickWalking(void)
 		}
 
 		EMOTION_ANIM_TIMEOUT = -1;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		IS_STANDING_STILL = 1;
 #endif
 	}
 	else if (closeness == 2) {
 		if ((anim->animId == 0) || (anim->animId == 1)) {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			if (IS_STANDING_STILL != 0) {
 #else
 			if (IS_STANDING_STILL != 2) {
@@ -894,7 +894,7 @@ void partnerTickWalking(void)
 			if ((anim->loopCount == 0) || (collision == 0)) {
 				EMOTION_ANIM_TIMEOUT = randomLimit(5) + 1;
 				setPartnerIdle();
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 				IS_STANDING_STILL = 0;
 #endif
 				STOP_DISTANCE_TIMER = 0;
@@ -923,7 +923,7 @@ void partnerTickWalking(void)
 		}
 
 		STOP_DISTANCE_TIMER++;
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		IS_STANDING_STILL = 2;
 #endif
 	}
@@ -1054,7 +1054,7 @@ void setPartnerIdle(void)
 {
 	if (((PARTNER_ANIMATION != 1) &&
 	     (PARTNER_ANIMATION != 0))
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	    || (IS_STANDING_STILL != 2)
 #endif
 	) {

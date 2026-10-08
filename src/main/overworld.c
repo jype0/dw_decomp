@@ -94,14 +94,14 @@ void buildMapOverlayPrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
 void buildSnowflakePrim(POLY_FT4 *prim, LocalMapObjectInstance *inst,
                         LocalMapObject *obj);
 void NPCEntityTickBattle(int32_t instanceId);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity);
 #else
 void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
                              int32_t instanceId);
 #endif
 void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
                                int32_t animation);
 #else
@@ -1204,7 +1204,7 @@ void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 	if (NPC_ACTIVE_ANIM[instanceId - 2] == 0) {
 		if (mapDigimon->stopAnim == 0) {
 			if (mapDigimon->lookAtTamerState == 0) {
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 				NPCEntityTickWaypointAI(mapDigimon, entity);
 #else
 				NPCEntityTickWaypointAI(mapDigimon, entity, instanceId);
@@ -1272,7 +1272,7 @@ void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 
 			NPC_COLLISION_STATE[instanceId - 2] =
 				entityCheckCollision(NULL, entity, 0, 0);
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 			if (NPC_COLLISION_STATE[instanceId - 2] == 0 &&
 			    tamerGetState() == 0) {
 				entity->anim.animFlag |= 2;
@@ -1320,7 +1320,7 @@ void NPCEntityTickOverworld(int32_t instanceId, MapDigimonEntity *mapDigimon)
 	tickAnimation(entity);
 }
 
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity)
 #else
 void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
@@ -1332,14 +1332,14 @@ void NPCEntityTickWaypointAI(MapDigimonEntity *mapDigimon, Entity *entity,
 		tickWaypointWait(mapDigimon, entity);
 		break;
 	case 1:
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		NPCEntityTickWaypointWalk(mapDigimon, entity, 2);
 #else
 		NPCEntityTickWaypointWalk(mapDigimon, entity, 2, instanceId);
 #endif
 		break;
 	case 2:
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		NPCEntityTickWaypointWalk(mapDigimon, entity, 4);
 #else
 		NPCEntityTickWaypointWalk(mapDigimon, entity, 4, instanceId);
@@ -1682,12 +1682,17 @@ void tickWaypointWait(MapDigimonEntity *mapDigimon, Entity *entity)
 	}
 }
 
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
                                int32_t animation)
 #else
-void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
-                               int32_t animation, int32_t instanceId)
+// clang-format off
+void NPCEntityTickWaypointWalk(mapDigimon, entity, animation, instanceId)
+	MapDigimonEntity *mapDigimon;
+	Entity *entity;
+	int32_t animation;
+	int16_t instanceId;
+// clang-format on
 #endif
 {
 	int16_t currentTileX;
@@ -1710,7 +1715,7 @@ void NPCEntityTickWaypointWalk(MapDigimonEntity *mapDigimon, Entity *entity,
 		mapDigimon->hasWaypointTarget = 1;
 		break;
 	case 1:
-#if defined(VERSION_JP)
+#if defined(VERSION_JP) && !defined(VERSION_JP_REV1)
 		getRotationDifference(entity->posData, &mapDigimon->targetLocation,
 		                      &mapDigimon->targetAngle, &mapDigimon->ccDiff,
 		                      &mapDigimon->cwDiff);

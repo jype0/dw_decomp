@@ -435,6 +435,10 @@ char MAIN_D_8013107C[] = "ゲーム中セーブ";
 
 char MAIN_D_80131090[] = "対戦デジモンの登録";
 
+#if defined(VERSION_JP_REV1)
+char MAIN_D_801310A4[] = "スペシャルアイテム記録";
+
+#endif
 char MAIN_D_801310B4[] = "メモリーカードチェック中";
 
 char MAIN_D_801310CC[] = "データファイルをセーブ中";
@@ -461,6 +465,12 @@ char MAIN_D_8013118C[] = "空きブロックがありません";
 
 char MAIN_D_8013119C[] = "対戦デジモンが登録されていません";
 
+#if defined(VERSION_JP_REV1)
+char MAIN_D_801311B4[] = "アイテムがいっぱいです";
+
+char MAIN_D_801311C0[] = "すでにアイテムがあります";
+
+#endif
 char MAIN_D_801311D4[] = "番に新しい冒険を記録しますか？";
 
 char MAIN_D_801311EC[] = "番の冒険の続きをしますか？　　";
@@ -469,6 +479,14 @@ char MAIN_D_80131200[] = "番の冒険を消しますか？　　　　";
 
 char MAIN_D_80131218[] = "番の記録を読みこみますか？";
 
+#if defined(VERSION_JP_REV1)
+char MAIN_D_80131228[] = "番のデータにアイテムを追加？";
+
+char MAIN_D_80131234[] = "冒険を始める";
+
+char MAIN_D_80131254[] = "メモリーカード対戦体験";
+
+#endif
 char MAIN_D_80131278[] = "メモリーカードとコントローラを";
 
 char MAIN_D_80131290[] = "ぬきさし　しないでください。";
@@ -533,6 +551,14 @@ char MAIN_D_80131580[] = "幼年期のデジモンなので、メモリーカー
 
 char MAIN_D_801315A0[] = "対戦用に登録できません";
 
+#if defined(VERSION_JP_REV1)
+char MAIN_D_801315C0[] = "スロット１にゲームデータの";
+
+char MAIN_D_801315D0[] = "入ったメモリーカードを";
+
+char MAIN_D_801315EC[] = "さしてください";
+
+#endif
 char MAIN_D_8013A0EC[] = "−−−−−−";
 #else
 char MAIN_D_80131008[] = "NEW GAME";
@@ -740,7 +766,11 @@ char SAVEGAME_ID_LABEL[16][6] = {
 	"１５",
 };
 
+#if defined(VERSION_JP_REV1)
+MenuHighlight MENU_HIGHLIGHTS[22] = {
+#else
 MenuHighlight MENU_HIGHLIGHTS[19] = {
+#endif
 	{
 		0x00,
 		{ 0x04, 0x00, 0x00, 0x00, 0x00 },
@@ -912,6 +942,35 @@ MenuHighlight MENU_HIGHLIGHTS[19] = {
 		0x0024,
 		0x000c,
 	},
+#if defined(VERSION_JP_REV1)
+	{
+		0xff,
+		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+	},
+	{
+		0x00,
+		{ 0x03, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x005e,
+		0x0037,
+		0x0084,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0046,
+		0x0065,
+		0x0024,
+		0x000c,
+	},
+#endif
 };
 
 #else
@@ -1147,7 +1206,7 @@ int8_t MENU_VIEWS[] = {
 	0x0c, 0x05, 0x0d, 0x05, 0x07, 0x08, 0x05, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0x0e, 0x0f, 0x10, 0x05,
 	0x05, 0x05, 0x0c, 0x05, 0x11, 0x12, 0x13,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	0x14,
 	0xff, 0x15, 0x05, 0x05, 0x07, 0x08, 0x05, 0x05,
 #endif
@@ -1168,7 +1227,7 @@ char *SLOT_ACTION_TITLES[] = {
 	MAIN_D_8013107C,
 	MAIN_D_80131030,
 	MAIN_D_80131090,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	MAIN_D_801310A4,
 #endif
 };
@@ -1192,7 +1251,7 @@ char *MEMORY_CARD_ERROR_MESSAGES[] = {
 	STR_EMPTY,
 	MAIN_D_8013118C,
 	MAIN_D_8013119C,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	MAIN_D_801311B4,
 	MAIN_D_801311C0,
 #endif
@@ -1205,13 +1264,20 @@ char *SLOT_ACTION_QUESTIONS[] = {
 	STR_EMPTY,
 	STR_EMPTY,
 	MAIN_D_80131218,
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	STR_EMPTY,
 	MAIN_D_80131228,
 #endif
 };
 
-#if !defined(VERSION_JP)
+#if defined(VERSION_JP_REV1)
+char *BATTLE_MODE_ITEMS[4] = {
+	MAIN_D_80131234,
+	MAIN_D_80131030,
+	MAIN_D_80131254,
+	MAIN_D_801310A4,
+};
+#elif !defined(VERSION_JP)
 char *BATTLE_MODE_ITEMS[4] = {
 	MAIN_D_80131234,
 	MAIN_D_80131240,
@@ -2079,6 +2145,25 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_801315A0, 0, 0x18);
 		break;
+#if defined(VERSION_JP_REV1)
+	case 20:
+		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
+		DrawSync(0);
+		drawString(BATTLE_MODE_ITEMS[1], 0, 0xc);
+		DrawSync(0);
+		drawString(BATTLE_MODE_ITEMS[2], 0, 0x18);
+		drawString(BATTLE_MODE_ITEMS[3], 0, 0x24);
+		break;
+	case 21:
+		drawString(MAIN_D_801315C0, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801315D0, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_801315EC, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_80139E14, 0, 0x24);
+		break;
+#endif
 	}
 #else
 	switch (view) {
@@ -2592,7 +2677,9 @@ void tickMainMenu(void)
 		break;
 
 	case 3:
-#if !defined(VERSION_JP)
+#if defined(VERSION_JP_REV1)
+		if (MAIN_MENU_TICKS >= 3) {
+#elif !defined(VERSION_JP)
 		if (((CHANGED_INPUT != CANCEL_BUTTON) && (CHANGED_INPUT != CONFIRM_BUTTON)) ||
 		    (MAIN_MENU_TICKS >= 3)) {
 #endif
@@ -2606,7 +2693,7 @@ void tickMainMenu(void)
 			if (MAIN_MENU_TICKS >= 0x12D) {
 				TARGET_MENU = MEMORY_CARD_RETURN_MENU;
 			}
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 		}
 #endif
 		break;
@@ -3990,7 +4077,7 @@ void writeSavegame(SavegamePayload *savegame)
 	int32_t restorePStat;
 	int32_t i;
 
-#if !defined(VERSION_JP)
+#if !defined(VERSION_JP) || defined(VERSION_JP_REV1)
 	recalculatePPandArena();
 #endif
 	restorePStat = 0;
