@@ -472,7 +472,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 						poly3->clut = tri->clut;
 						poly3->tpage = tri->tpage;
 						setPolyGT3(poly3);
-#if VERSION_IS(JP)
+#if VERSION_EQUAL_OR_OLDER(JP_TRIAL)
 						otz >>= 2;
 #endif
 						AddPrim(ACTIVE_ORDERING_TABLE->org + otz, poly3);
@@ -517,7 +517,7 @@ void DOO2_renderWireframeModel(GsDOBJ2 *obj, int32_t wireThreshold)
 						poly4->clut = quad->clut;
 						poly4->tpage = quad->tpage;
 						setPolyGT4(poly4);
-#if VERSION_IS(JP)
+#if VERSION_EQUAL_OR_OLDER(JP_TRIAL)
 						otz >>= 2;
 #endif
 						AddPrim(ACTIVE_ORDERING_TABLE->org + otz, poly4);

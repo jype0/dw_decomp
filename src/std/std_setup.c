@@ -323,7 +323,7 @@ void STD_initializeOpponent(int16_t type, int16_t slot, uint8_t tier)
 	if (stats->base.mp >= 0x2710) {
 		stats->base.mp = 0x270f;
 	}
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	stats->current.currentHP = stats->base.hp;
 	stats->current.currentMP = stats->base.mp;
 #endif

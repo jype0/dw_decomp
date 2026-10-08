@@ -781,7 +781,7 @@ void VS_renderBattleStartText(void)
 	SVECTOR q3;
 	POLY_FT4 *ft;
 	uint16_t clut;
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	MATRIX m;
 
 	m = GsWSMATRIX;
@@ -934,7 +934,7 @@ void VS_renderBattleStartTextBurst(void)
 	POLY_FT4 *ft;
 	int16_t cx;
 	int16_t cy;
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	MATRIX saved;
 
 	saved = GsWSMATRIX;

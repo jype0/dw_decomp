@@ -168,7 +168,7 @@ extern EfeFinisherAura VS_FINISHER_AURAS[2];
 extern SVECTOR VS_FINISHER_AURA_SPARKS[];
 
 void VS__initialize(RegisteredDigimon *fightersP1, RegisteredDigimon *fightersP2);
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void VS_playDemo(void);
 void VS_initializeTrialBattle(RegisteredDigimon *fightersP1, RegisteredDigimon *fightersP2);
 #endif

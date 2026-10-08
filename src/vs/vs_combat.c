@@ -130,7 +130,7 @@ void VS__tickVSInput(void);
 void VS__tickDigimonP1(int32_t instanceId);
 void VS__tickDigimonP2(int32_t instanceId);
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void VS_setupDemoCombat(void);
 int16_t VS_checkDemoEndCondition(void);
 void VS_tickDemoDigimonAI(int32_t fighterId);
@@ -149,7 +149,7 @@ static void *vs_combat_functions[] = {
 	VS__renderTimeoutWindow,
 	VS__renderTimeoutText,
 	VS__combatMain,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	VS_runDemoCombat,
 #endif
 	VS__tickDigimonRotationKeepDistanceCollision,
@@ -157,7 +157,7 @@ static void *vs_combat_functions[] = {
 	VS__initializePlayerMarker,
 	VS___setWalking,
 	VS__hasAffordableMoves2,
-#if !VERSION_IS(JP_BOMBOM)
+#if !VERSION_IS(JP_TRIAL) && !VERSION_IS(JP_BOMBOM)
 	VS__increaseSpeedBuffer,
 #endif
 	VS__getBaseDistance,
@@ -182,29 +182,29 @@ static void *vs_combat_functions[] = {
 	VS__tickDigimonHitByAttack,
 	VS__tickDigimonAttacking,
 	VS__getDigitCount,
-#if !VERSION_IS(JP_BOMBOM)
+#if !VERSION_IS(JP_TRIAL) && !VERSION_IS(JP_BOMBOM)
 	VS__faintDigimon,
 #endif
 	VS__addTimeoutWindow,
 	VS__tickBattleResultScreen,
-#if !VERSION_IS(JP_BOMBOM)
+#if !VERSION_IS(JP_TRIAL) && !VERSION_IS(JP_BOMBOM)
 	VS__areAllEnemyDigimonDead,
 	VS__resetFlatten,
 #endif
 	VS__removePlayerMarker,
-#if !VERSION_IS(JP_BOMBOM)
+#if !VERSION_IS(JP_TRIAL) && !VERSION_IS(JP_BOMBOM)
 	VS__deinitializeStatusEffects,
 #endif
 	VS__isButtonsPressed,
 	VS__deinitializeCombat,
 	VS__handlePause,
-#if !VERSION_IS(JP_BOMBOM)
+#if !VERSION_IS(JP_TRIAL) && !VERSION_IS(JP_BOMBOM)
 	VS__tickBattle,
 #endif
 	VS__tickDigimonAI,
 	VS__checkEndCondition,
 	VS__combatSetup,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	VS__deinitializeStatusEffects,
 	VS__areAllEnemyDigimonDead,
 	VS__resetFlatten,
@@ -234,7 +234,7 @@ uint8_t VS__COMMANDS[8] = {
 /* Damage */
 char STR_DAMEEJI[] = "ダメージ";
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int32_t VS_DEMO_SKIPPED;
 #endif
 uint8_t VS__PAUSING_PLAYER;
@@ -255,7 +255,7 @@ static void *vs_combat_sbss_order[] = {
 	&VS__PREVIOUS_INPUT,
 	&VS__CURRENT_INPUT,
 	&VS__PAUSING_PLAYER,
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	&VS_DEMO_SKIPPED,
 #endif
 };
@@ -432,7 +432,7 @@ void VS__combatInit(void)
 	VS_addCommandMenu(1);
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void VS_setupDemoCombat(void)
 {
 	int32_t frames;
@@ -541,7 +541,7 @@ int16_t VS_checkDemoEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}
@@ -860,7 +860,7 @@ int16_t VS__checkEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}
@@ -2412,7 +2412,7 @@ void VS__tickDigimonRotationKeepDistanceCollision(Entity *entity, int16_t *rotat
 	}
 }
 
-#if VERSION_IS(JP_BOMBOM)
+#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 void VS_runDemoCombat(void)
 {
 	int16_t result;

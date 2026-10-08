@@ -3768,7 +3768,7 @@ int16_t STD_checkEndCondition(void)
 	Entity *other;
 	int32_t i;
 
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	if (COMBAT_DATA_PTR->fighter[0].hpDamageBuffer != 0) {
 		return 0;
 	}

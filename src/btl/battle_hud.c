@@ -431,7 +431,7 @@ void BTL_addDeathCountdown(Entity *entity)
 	int16_t py;
 #endif
 
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	if (BTL_DEATH_COUNTDOWN.data.timer != -1) {
 		return;
 	}

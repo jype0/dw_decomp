@@ -1687,7 +1687,7 @@ void VS_loadMoveEFE(moves, effectIds, isLoaded)
 	int8_t *isLoaded;
 // clang-format on
 {
-#if VERSION_EQUAL_OR_NEWER(JP_BOMBOM)
+#if VERSION_EQUAL_OR_NEWER(JP_TRIAL)
 	downloadSomeImage();
 #endif
 	EFE_LOAD_REQUEST.state = -1;
@@ -3747,11 +3747,11 @@ void VS_projectPositionToScreen(void)
 void VS_renderScreenSprite(void)
 {
 	GsSPRITE sprite;
-	int32_t ox;
-	int32_t oy;
 	ModelComponent *m;
 	int32_t flip;
 	int32_t depth;
+	int32_t ox;
+	int32_t oy;
 
 	m = EFE_DATA_ITERATOR->model;
 	flip = EFE_POP1(int32_t);
@@ -3789,7 +3789,7 @@ void VS_renderScreenSprite(void)
 	sprite.cx = (m->clutPage & 0x3f) << 4;
 	sprite.r = sprite.g = sprite.b = 0x80;
 
-#if VERSION_IS(JP)
+#if VERSION_EQUAL_OR_OLDER(JP_TRIAL)
 	GsSortSprite(&sprite, ACTIVE_ORDERING_TABLE, (uint16_t)depth);
 #else
 	if ((depth >= 0) && (depth < 0x1000)) {
