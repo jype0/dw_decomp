@@ -195,7 +195,7 @@ SECTIONS
         BUILD_DIR/src/main/world_object.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/file.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/math.c.o(.rodata .rodata.*);
-        BUILD_DIR/src/main/file_table.c.o(.rodata .rodata.*);
+        BUILD_DIR/src/main/file_table_jp_rev1.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/graphics.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/font.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/drop_shadow.c.o(.rodata .rodata.*);
@@ -232,7 +232,7 @@ SECTIONS
         BUILD_DIR/asm/main/data/psyq/libgpu.data.s.o(.data .data.*);
         BUILD_DIR/asm/main/data/psyq/libgte.data.s.o(.data .data.*);
         BUILD_DIR/src/main/model.c.o(.data .data.*);
-        BUILD_DIR/src/main/file_table.c.o(.data .data.*);
+        BUILD_DIR/src/main/file_table_jp_rev1.c.o(.data .data.*);
         BUILD_DIR/src/main/graphics.c.o(.data .data.*);
         BUILD_DIR/src/main/font.c.o(.data .data.*);
         BUILD_DIR/src/main/partner_impl.c.o(.data .data.*);
@@ -274,7 +274,7 @@ SECTIONS
 
         main_SDATA_START = .;
         BUILD_DIR/src/main/model.c.o(.sdata .sdata.*);
-        BUILD_DIR/src/main/file_table.c.o(.sdata .sdata.*);
+        BUILD_DIR/src/main/file_table_jp_rev1.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/font.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);

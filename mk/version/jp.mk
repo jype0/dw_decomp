@@ -39,7 +39,7 @@ MAIN_C_SRC := \
 	src/main/fade.c \
 	src/main/file.c \
 	src/main/file_queue.c \
-	src/main/file_table.c \
+	src/main/file_table_$(VERSION).c \
 	src/main/fish.c \
 	src/main/font.c \
 	src/main/game_menu.c \

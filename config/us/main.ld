@@ -257,7 +257,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/math.c.o(.rodata.*);
         . = ALIGN(., 4);
-        BUILD_DIR/src/main/file_table.c.o(.rodata.*);
+        BUILD_DIR/src/main/file_table_us.c.o(.rodata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/graphics.c.o(.rodata.*);
         . = ALIGN(., 4);
@@ -407,7 +407,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/main/math.c.o(.data.*);
         . = ALIGN(., 4);
-        BUILD_DIR/src/main/file_table.c.o(.data.*);
+        BUILD_DIR/src/main/file_table_us.c.o(.data.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/graphics.c.o(.data.*);
         . = ALIGN(., 4);
@@ -561,7 +561,7 @@ SECTIONS
         main_SDATA_START = .;
         BUILD_DIR/src/main/model.c.o(.sdata.*);
         . = ALIGN(., 4);
-        BUILD_DIR/src/main/file_table.c.o(.sdata.*);
+        BUILD_DIR/src/main/file_table_us.c.o(.sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/partner_impl.c.o(.sdata.*);
         . = ALIGN(., 4);
