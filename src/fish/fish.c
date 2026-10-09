@@ -26,6 +26,7 @@
 #include <dw/types.h>
 #include <dw/ui.h>
 #include <dw/version.h>
+#include <text/fish/fish.h>
 
 #define FISH_SCRATCH		((FishScratch *)getScratchAddr(0))
 
@@ -350,10 +351,6 @@ uint8_t MAIN_D_801349B8[6] = { 34, 36, 34, 35, 37, 35 };
 SVECTOR MAIN_D_801349C0 = { 1024, 1024, 0, 0 };
 SVECTOR MAIN_D_801349C8 = { 1, 19, -48, 0 };
 SVECTOR MAIN_D_801349D0 = { 0 };
-#if VERSION_IS(US)
-char MAIN_D_801349D8[] = "Hooked!";
-#endif
-int32_t FISHING_MAP_COUNT = 2;
 
 int32_t MAIN_D_801351D8;
 int16_t MAIN_D_801351DC[3];
@@ -509,83 +506,7 @@ SVECTOR FISH_D_8007A5BC[5] = {
 
 char FISH_PATH_ROD_MODEL[16] = "\\ETCDAT\\SAO.TMD";
 
-#if !VERSION_IS(US)
-char FISH_MSG_TOOK_BAIT[] = "エサを取られてしまった…";
-
-char FISH_MSG_TOO_LATE[] = "残念、おそすぎた…";
-
-char FISH_MSG_GOT_BAIT[] = "エサを取られてしまった。";
-
-char FISH_MSG_TOO_FAST[] = "残念、はやすぎた…";
-
-char FISH_MSG_STILL_HAVE_BAIT[] = "でもまだエサは残っているぞ。";
-
-char MAIN_D_801349D8[] = "かかった！";
-
-char FISH_MSG_LENGTH_GREAT[] = "すごい！全長　メートル　　センチ！";
-
-char FISH_MSG_LENGTH_M_CM[] = "全長　メートル　　センチ";
-
-char FISH_MSG_LENGTH_CM[] = "全長　　　センチメートル";
-
-char FISH_MSG_GOT_ONE[] = "をつりあげた！";
-
-char FISH_MSG_LET_IT_GO[] = "でもかわいそうだから逃がしてあげよう。";
-
-char FISH_MSG_LINE_CUT[] = "イトが切れてしまった！";
-
-char FISH_MSG_WATCH_TENSION[] = "…次はテンションゲージをよく見て、";
-
-char FISH_MSG_BE_CALM[] = "もっと落ち着いて行こう。";
-
-char FISH_MSG_HOOK_LOST[] = "ハリが外れてしまった！";
-
-char FISH_MSG_STUCK_LINE1[] = "んっ！？";
-
-char FISH_MSG_STUCK_LINE2[] = "何かひっかかったかな？";
-
-char FISH_MSG_IT_GOT_STUCK[] = "が引っかかった！";
-
-char FISH_MSG_BAG_FULL[] = "…しかし、かばんがいっぱいで持てなかった。";
-#else
-char FISH_MSG_TOOK_BAIT[] = "They took my bait!";
-
-char FISH_MSG_TOO_LATE[] = "Too late!";
-
-char FISH_MSG_GOT_BAIT[] = "They got my bait!";
-
-char FISH_MSG_TOO_FAST[] = "Too fast!";
-
-char FISH_MSG_STILL_HAVE_BAIT[] = "But I still got my bait!";
-
-char FISH_MSG_LENGTH_GREAT[] = "Great! Total length %d m %d cm";
-
-char FISH_MSG_LENGTH_M_CM[24] = "Total length %d m %d cm";
-
-char FISH_MSG_LENGTH_CM[] = "Total length %d cm";
-
-char FISH_MSG_GOT_ONE[] = "I got one!";
-
-char FISH_MSG_LET_IT_GO[] = "It looks sad. Let it go.";
-
-char FISH_MSG_LINE_CUT[] = "My line got cut!";
-
-char FISH_MSG_WATCH_TENSION[] = "Pay attention to tension gauge";
-
-char FISH_MSG_BE_CALM[] = "and be more calm";
-
-char FISH_MSG_HOOK_LOST[] = "My hook got lost!";
-
-char FISH_MSG_STUCK_LINE1[28] = "Huh?! I wonder if something";
-
-char FISH_MSG_STUCK_LINE2[] = "got stuck? It got stuck!";
-
-char FISH_MSG_BAG_FULL_LINE1[28] = "My bag was so full, I could";
-
-char FISH_MSG_BAG_FULL_LINE2[] = "not carry it.";
-
-char FISH_MSG_IT_GOT_STUCK[] = "It got stuck!";
-#endif
+MESSAGES_TEXT
 
 DVECTOR FISH_D_8007A794[9] = {
 	{ 0xfeca, 0xfff3 },
@@ -996,6 +917,8 @@ FishingMapData FISHING_MAP_DATA[2] = {
 		0x00000008,
 	},
 };
+
+int32_t FISHING_MAP_COUNT = 2;
 // clang-format on
 
 static inline int32_t FISH_screenLeft(int32_t x)

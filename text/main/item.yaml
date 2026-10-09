@@ -1,0 +1,1327 @@
+MOVE_NAMES:
+  storage: {eu: literal}
+  entries:
+    - name: STR_MOVE_NAME_FIRE_TOWER
+      ja: ファイアータワー
+      en_us: Fire Tower
+    - name: STR_MOVE_NAME_PROMINENCE_BEAM
+      ja: プロミネンスビーム
+      en_us: Prominence Beam
+    - name: STR_MOVE_NAME_SPIT_FIRE
+      ja: スピットファイアー
+      en_us: Spit Fire
+    - name: STR_MOVE_NAME_RED_INFERNO
+      ja: レッドインフェルノ
+      en_us: Red Inferno
+    - name: STR_MOVE_NAME_MAGMA_BOMB
+      ja: マグマボム
+      en_us: Magma Bomb
+    - name: STR_MOVE_NAME_HEAT_LASER
+      ja: ヒートウェーブ
+      en_us: Heat Laser
+    - name: STR_MOVE_NAME_INIFINITY_BURN
+      ja: インフィニティバーン
+      en_us: Inifinity Burn
+      en_eu: Infinity Burn
+    - name: STR_MOVE_NAME_MELTDOWN
+      ja: メルトダウン
+      en_us: Meltdown
+    - name: STR_MOVE_NAME_THUNDER_JUSTICE
+      ja: サンダージャスティス
+      en_us: Thunder Justice
+      en_eu: Thunder bolt
+    - name: STR_MOVE_NAME_SPINNING_SHOT
+      ja: スピニングショット
+      en_us: Spinning Shot
+    - name: STR_MOVE_NAME_ELECTRIC_CLOUD
+      ja: エレキクラウド
+      en_us: Electric Cloud
+    - name: STR_MOVE_NAME_MEGALO_SPARK
+      ja: メガロスパーク
+      en_us: Megalo Spark
+    - name: STR_MOVE_NAME_STATIC_ELECT
+      ja: スタティックエレクト
+      en_us: Static Elect
+    - name: STR_MOVE_NAME_WIND_CUTTER
+      ja: ウインドカッター
+      en_us: Wind Cutter
+    - name: STR_MOVE_NAME_CONFUSED_STORM
+      ja: コンフューズストーム
+      en_us: Confused Storm
+      en_eu: Confusion Storm
+    - name: STR_MOVE_NAME_HURRICANE
+      ja: ハリケーン
+      en_us: Hurricane
+    - name: STR_MOVE_NAME_GIGA_FREEZE
+      ja: ギガフリーズ
+      en_us: Giga Freeze
+    - name: STR_MOVE_NAME_ICE_STATUE
+      ja: アイススタチュー
+      en_us: Ice Statue
+    - name: STR_MOVE_NAME_WINTER_BLAST
+      ja: ウィンターブラスト
+      en_us: Winter Blast
+    - name: STR_MOVE_NAME_ICE_NEEDLE
+      ja: アイスニードル
+      en_us: Ice Needle
+    - name: STR_MOVE_NAME_WATER_BLIT
+      ja: ウォーターブリット
+      en_us: Water Blit
+      en_eu: Water Blitz
+    - name: STR_MOVE_NAME_AQUA_MAGIC
+      ja: アクアマジック
+      en_us: Aqua Magic
+    - name: STR_MOVE_NAME_AURORA_FREEZE
+      ja: オーロラフリーズ
+      en_us: Aurora Freeze
+    - name: STR_MOVE_NAME_TEAR_DROP
+      ja: ティアドロップ
+      en_us: Tear Drop
+    - name: STR_MOVE_NAME_POWER_CRANE
+      ja: パワークレーン
+      en_us: Power Crane
+    - name: STR_MOVE_NAME_ALL_RANGE_BEAM
+      ja: オールレンジビーム
+      en_us: All Range Beam
+    - name: STR_MOVE_NAME_METAL_SPRINTER
+      ja: メタルスプリンター
+      en_us: Metal Sprinter
+    - name: STR_MOVE_NAME_PULSE_LASER
+      ja: パルスレーザー
+      en_us: Pulse Laser
+    - name: STR_MOVE_NAME_DELETE_PROGRAM
+      ja: デリートプログラム
+      en_us: Delete Program
+    - name: STR_MOVE_NAME_DG_DIMENSION
+      ja: ＤＧディメンジョン
+      en_us: DG Dimension
+    - name: STR_MOVE_NAME_FULL_POTENTIAL
+      ja: フルポテンシャル
+      en_us: Full Potential
+      en_eu: Full Power
+    - name: STR_MOVE_NAME_REVERSE_PROG
+      ja: リバースプログラム
+      en_us: Reverse Prog
+      en_eu: Devolve Program
+    - name: STR_MOVE_NAME_POISON_POWDER
+      ja: ポイズンパウダー
+      en_us: Poison Powder
+    - name: STR_MOVE_NAME_BUG
+      ja: バグ
+      en_us: Bug
+      named: [eu]
+    - name: STR_MOVE_NAME_MASS_MORPH
+      ja: マスモーフ
+      en_us: Mass Morph
+      en_eu: Moss Shield
+    - name: STR_MOVE_NAME_INSECT_PLAGUE
+      ja: インセクトプレーグ
+      en_us: Insect Plague
+    - name: STR_MOVE_NAME_CHARM_PERFUME
+      ja: チャームパヒューム
+      en_us: Charm Perfume
+    - name: STR_MOVE_NAME_POISON_CLAW
+      ja: ポイズンクロー
+      en_us: Poison Claw
+    - name: STR_MOVE_NAME_DANGER_STING
+      ja: デンジャースティング
+      en_us: Danger Sting
+    - name: STR_MOVE_NAME_GREEN_TRAP
+      ja: グリーントラップ
+      en_us: Green Trap
+    - name: STR_MOVE_NAME_TREMAR
+      ja: トレマー
+      en_us: Tremar
+      en_eu: Tremor
+    - name: STR_MOVE_NAME_MUSCLE_CHARGE
+      ja: マッスルチャージ
+      en_us: Muscle Charge
+    - name: STR_MOVE_NAME_WAR_CRY
+      ja: ウォークライ
+      en_us: War Cry
+    - name: STR_MOVE_NAME_SONIC_JAB
+      ja: マッハジャブ
+      en_us: Sonic Jab
+    - name: STR_MOVE_NAME_DYNAMITE_KICK
+      ja: ダイナマイトキック
+      en_us: Dynamite Kick
+    - name: STR_MOVE_NAME_COUNTER
+      ja: カウンター
+      en_us: Counter
+    - name: STR_MOVE_NAME_MEGATON_PUNCH
+      ja: メガトンパンチ
+      en_us: Megaton Punch
+    - name: STR_MOVE_NAME_BUSTER_DIVE
+      ja: バスターダイブ
+      en_us: Buster Dive
+    - ja: ダイナマイトキック
+      en_us: Dynamite Kick
+    - name: STR_MOVE_NAME_ODOR_SPRAY
+      ja: 超悪臭噴射
+      en_us: Odor Spray
+      en_eu: Skunk Spray
+    - name: STR_MOVE_NAME_POOP_SPD_TOSS
+      ja: 高速ウンチ投げ
+      en_us: Poop Spd Toss
+      en_eu: Quick Poop Throw
+    - name: STR_MOVE_NAME_BIG_POOP_TOSS
+      ja: 巨大ウンチ投げ
+      en_us: Big Poop Toss
+      en_eu: Giant Poop Throw
+    - name: STR_MOVE_NAME_BIG_RND_TOSS
+      ja: 巨大ウンチ乱れ投げ
+      en_us: Big Rnd Toss
+      en_eu: Big Rand Poop Throw
+    - name: STR_MOVE_NAME_POOP_RND_TOSS
+      ja: ウンチ乱れ投げ
+      en_us: Poop Rnd Toss
+      en_eu: Random Poop Throw
+    - name: STR_MOVE_NAME_RND_SPD_TOSS
+      ja: 高速ウンチ乱れ投げ
+      en_us: Rnd Spd Toss
+      en_eu: Fast Rand Poop Throw
+    - name: STR_MOVE_NAME_HORIZONTAL_KICK
+      ja: エンガチョキック
+      en_us: Horizontal Kick
+    - name: STR_MOVE_NAME_ULT_POOP_HELL
+      ja: 究極ウンチ地獄絵図
+      en_us: Ult Poop Hell
+      en_eu: Ultimate Poop Bomb
+    - ja: エンガチョキック
+      en_us: Horizontal Kick
+    - name: STR_MOVE_NAME_BLAZE_BLAST
+      ja: ファイアーブレス
+      en_us: Blaze Blast
+      en_eu: Blaze Breath
+    - name: STR_MOVE_NAME_PEPPER_BREATH
+      ja: ベビーフレイム
+      en_us: Pepper Breath
+    - name: STR_MOVE_NAME_LOVELY_ATTACK
+      ja: ラブリーアタック
+      en_us: Lovely Attack
+    - name: STR_MOVE_NAME_FIREBALL
+      ja: バーニングフィスト
+      en_us: Fireball
+    - name: STR_MOVE_NAME_DEATH_CLAW
+      ja: デスクロウ
+      en_us: Death Claw
+    - name: STR_MOVE_NAME_MEGA_FLAME
+      ja: メガフレイム
+      en_us: Mega Flame
+    - name: STR_MOVE_NAME_HOWLING_BLASTER
+      ja: フォックスファイアー
+      en_us: Howling Blaster
+    - name: STR_MOVE_NAME_PARTY_TIME
+      ja: ウンチ
+      en_us: Party time
+    - name: STR_MOVE_NAME_ELECTRIC_SHOCK
+      ja: 電撃ビリリン
+      en_us: Electric Shock
+    - name: STR_MOVE_NAME_ABDUCTION_BEAM
+      ja: アブダクション光線
+      en_us: Abduction Beam
+    - name: STR_MOVE_NAME_SMILEY_BOMB
+      ja: スマイリーボム
+      en_us: Smiley Bomb
+    - name: STR_MOVE_NAME_SPNNING_NEEDLE
+      ja: スピニングニードル
+      en_us: Spnning Needle
+      en_eu: Spinning Needle
+    - name: STR_MOVE_NAME_SPIRAL_TWISTER
+      ja: マジカルファイアー
+      en_us: Spiral Twister
+    - name: STR_MOVE_NAME_BOOM_BUBBLE
+      ja: エアショット
+      en_us: Boom Bubble
+    - name: STR_MOVE_NAME_SWEET_BREATH
+      ja: 甘い吐息
+      en_us: Sweet Breath
+    - name: STR_MOVE_NAME_BIT_BOMB
+      ja: ビットボム
+      en_us: Bit Bomb
+    - name: STR_MOVE_NAME_DEADLY_BOMB
+      ja: デッドリーボム
+      en_us: Deadly Bomb
+    - name: STR_MOVE_NAME_DRILL_SPIN
+      ja: ドリルスピン
+      en_us: Drill Spin
+    - name: STR_MOVE_NAME_ELECTRIC_THREAD
+      ja: エレクトリックスレッド
+      en_us: Electric Thread
+    - name: STR_MOVE_NAME_ENERGY_BOMB
+      ja: エネルギーボム
+      en_us: Energy Bomb
+    - name: STR_MOVE_NAME_GENOSIDE_ATTACK
+      ja: ジェノサイドアタック
+      en_us: Genoside Attack
+      en_eu: Genocide Attack
+    - name: STR_MOVE_NAME_GIGA_SCISSOR_CLAW
+      ja: ギガデストロイヤー
+      en_us: Giga Scissor Claw
+    - name: STR_MOVE_NAME_DARK_SHOT
+      ja: グラウンドゼロ
+      en_us: Dark Shot
+    - name: STR_MOVE_NAME_PUMMEL_WHACK
+      ja: 覇王拳
+      en_us: Pummel Whack
+    - name: STR_MOVE_NAME_HAND_OF_FATE
+      ja: ヘブンズナックル
+      en_us: Hand of Fate
+      en_eu: Fist of Fate
+    - name: STR_MOVE_NAME_DARK_CLAW
+      ja: ヘルズハンド
+      en_us: Dark Claw
+    - name: STR_MOVE_NAME_AERIAL_ATTACK
+      ja: ホーリーショット
+      en_us: Aerial Attack
+    - name: STR_MOVE_NAME_BONE_BOOMERANG
+      ja: 骨骨ブーメラン
+      en_us: Bone Boomerang
+    - name: STR_MOVE_NAME_SOLAR_RAY
+      ja: ハンティングキャノン
+      en_us: Solar Ray
+    - name: STR_MOVE_NAME_HYDRO_PRESSURE
+      ja: ハイドロプレッシャー
+      en_us: Hydro Pressure
+    - name: STR_MOVE_NAME_ICE_BLAST
+      ja: アイスアロー
+      en_us: Ice Blast
+    - name: STR_MOVE_NAME_IGA_SCHOOL_KNIFE_THROW
+      ja: イガ流手裏剣投げ
+      en_us: Iga School Knife Throw
+      en_eu: Iga School
+    - name: STR_MOVE_NAME_BLASTING_SPOUT
+      ja: ジェットアロー
+      en_us: Blasting Spout
+    - name: STR_MOVE_NAME_FIST_OF_THE_BEAST_KING
+      ja: 獣王拳
+      en_us: Fist of the Beast King
+      en_eu: Fist of Beast King
+    - name: STR_MOVE_NAME_DARK_NETWORK_CONCERT_CRUSH
+      ja: ラブ・セレナーデ
+      en_us: Dark Network & Concert Crush
+      en_eu: Dark + Concert Crush
+    - name: STR_MOVE_NAME_ELECTRO_SHOCKER
+      ja: メガブラスター
+      en_us: Electro Shocker
+    - name: STR_MOVE_NAME_METEOR_WING
+      ja: メテオウイング
+      en_us: Meteor Wing
+    - name: STR_MOVE_NAME_SUPER_SLAP
+      ja: 無限ビンタ
+      en_us: Super Slap
+    - name: STR_MOVE_NAME_NIGHTMARE_SYNDROMER
+      ja: ナイトメアシンドローム
+      en_us: Nightmare Syndromer
+      en_eu: Nightmare Syndrome
+    - name: STR_MOVE_NAME_FROZEN_FIRE_SHOT
+      ja: ペトラファイアー
+      en_us: Frozen Fire Shot
+    - name: STR_MOVE_NAME_POISON_IVY
+      ja: ポイズンアイビー
+      en_us: Poison Ivy
+    - name: STR_MOVE_NAME_BLUE_BLASTER
+      ja: プチファイアー
+      en_us: Blue Blaster
+    - name: STR_MOVE_NAME_SCISSOR_CLAW
+      ja: シザーアームズ
+      en_us: Scissor Claw
+    - name: STR_MOVE_NAME_SUPER_THUNDER_STRIKE
+      ja: スパークリングサンダー
+      en_us: Super Thunder Strike
+      en_eu: Thunder Justice
+    - name: STR_MOVE_NAME_SPIRAL_SWORD
+      ja: スパイラルソード
+      en_us: Spiral Sword
+    - name: STR_MOVE_NAME_VARIABLE_DARTS
+      ja: ヴァリアブルダーツ
+      en_us: Variable Darts
+    - name: STR_MOVE_NAME_VOLCANIC_STRIKE
+      ja: ヴォルケーノストライク
+      en_us: Volcanic Strike
+    - name: STR_MOVE_NAME_SUBZERO_ICE_PUNCH
+      ja: 絶対零度パンチ
+      en_us: Subzero Ice Punch
+    - name: STR_MOVE_NAME_INFINITY_CANNON
+      ja: 無限キャノン
+      en_us: Infinity Cannon
+    - ja: ウンチ
+      en_us: Party time
+      en_eu: Feces For Nanimon
+    - ja: ウンチ
+      en_us: Party time
+      en_eu: Feces For Numemon
+    - name: STR_MOVE_NAME_CRIMSON_FLARE
+      ja: クリムゾンフレア
+      en_us: Crimson Flare
+    - name: STR_MOVE_NAME_GLACIAL_BLAST
+      ja: グレイシャルブラスト
+      en_us: Glacial Blast
+      en_eu: Grey Shuffle Blast
+    - name: STR_MOVE_NAME_MAIL_STROME
+      ja: メイルストローム
+      en_us: Mail Strome
+    - name: STR_MOVE_NAME_HIGH_ELECTRO_SHOCKER
+      ja: ハイメガブラスター
+      en_us: High Electro Shocker
+      en_eu: Electro Shocker
+    - name: STR_MOVE_NAME_BUBBLE
+      ja: あわ
+      en_us: Bubble
+      en_eu: Sm Bubble  Botamon
+    - ja: あわ
+      en_us: Bubble
+      en_eu: Sm Bubble  Punimon
+    - ja: あわ
+      en_us: Bubble
+      en_eu: Sm Bubble  Poyomon
+    - ja: あわ
+      en_us: Bubble
+      en_eu: Sm Bubble  Yuramon
+    - ja: あわ
+      en_us: Bubble
+    - ja: あわ
+      en_us: Bubble
+    - ja: あわ
+      en_us: Bubble
+    - ja: あわ
+      en_us: Bubble
+    - NULL
+
+IS_SICK_SUFFIX:
+  ja: は病気になってしまった！
+  en_us: " is sick!"
+
+ITEM_NAMES:
+  storage: {default: embedded, eu: literal}
+  macro: ITEM_PARA_NAME
+  entries:
+    - name: SMALL_RECOVERY
+      ja: 回復フロッピー
+      en_us: sm.recovery
+      en_eu: sm recovery
+    - name: MEDIUM_RECOVERY
+      ja: 中回復フロッピー
+      en_us: med.recovery
+      en_eu: med recovery
+    - name: LARGE_RECOVERY
+      ja: 大回復フロッピー
+      en_us: lrg.recovery
+      en_eu: lrg recovery
+    - name: SUPER_RECOVERY
+      ja: 超回復フロッピー
+      en_us: sup.recovery
+      en_eu: sup recovery
+    - name: MP_FLOPPY
+      ja: ＭＰフロッピー
+      en_us: MP Floppy
+    - name: MEDIUM_MP
+      ja: 中ＭＰフロッピー
+      en_us: Medium MP
+    - name: LARGE_MP
+      ja: 大ＭＰフロッピー
+      en_us: Large MP
+    - name: DOUBLE_FLOPPY
+      ja: ダブルフロッピー
+      en_us: Double flop
+    - name: VARIOUS
+      ja: 色々フロッピー
+      en_us: Various
+    - name: OMNIPOTENT
+      ja: 万能フロッピー
+      en_us: Omnipotent
+      en_eu: Omni Floppy
+    - name: PROTECTION
+      ja: 対変化フロッピー
+      en_us: Protection
+      en_eu: Prot. Floppy
+    - name: RESTORE
+      ja: 再生フロッピー
+      en_us: Restore
+    - name: SUPER_RESTORE
+      ja: 超再生フロッピー
+      en_us: Sup.restore
+      en_eu: Sup Restore
+    - name: BANDAGE
+      ja: ばんそうこう
+      en_us: Bandage
+    - name: MEDICINE
+      ja: 薬
+      en_us: Medicine
+    - name: OFFENSE_DISK
+      ja: 攻撃プラグイン
+      en_us: Off. Disk
+    - name: DEFENSE_DISK
+      ja: 防御プラグイン
+      en_us: Def. Disk
+    - name: SPEED_DISK
+      ja: 高速プラグイン
+      en_us: Hispeed dsk
+    - name: OMNI_DISK
+      ja: 万能プラグイン
+      en_us: Omni Disk
+    - name: SUPER_OFFENSE_DISK
+      ja: 攻撃プラグインＳ
+      en_us: S.Off.disk
+      en_eu: S. Off. disk
+    - name: SUPER_DEFENSE_DISK
+      ja: 防御プラグインＳ
+      en_us: S.Def.disk
+      en_eu: S Def. disk
+    - name: SUPER_SPEED_DISK
+      ja: 高速プラグインＳ
+      en_us: S.speed.disk
+      en_eu: S.speed disk
+    - name: AUTOPILOT
+      ja: オートパイロット
+      en_us: Auto Pilot
+    - name: OFFENSE_CHIP
+      ja: 攻撃チップ
+      en_us: Off. Chip
+    - name: DEFENSE_CHIP
+      ja: 防御チップ
+      en_us: Def. Chip
+    - name: BRAIN_CHIP
+      ja: かしこさチップ
+      en_us: Brain Chip
+    - name: SPEED_CHIP
+      ja: すばやさチップ
+      en_us: Quick Chip
+    - name: HP_CHIP
+      ja: ＨＰチップ
+      en_us: HP Chip
+    - name: MP_CHIP
+      ja: ＭＰチップ
+      en_us: MP Chip
+    - name: DV_CHIP_A
+      ja: デビルチップＡ
+      en_us: DV Chip A
+      en_eu: Devil Chip A
+    - name: DV_CHIP_D
+      ja: デビルチップＤ
+      en_us: DV Chip D
+      en_eu: Devil Chip D
+    - name: DV_CHIP_E
+      ja: デビルチップＥ
+      en_us: DV Chip E
+      en_eu: Devil Chip E
+    - name: PORTA_POTTY
+      ja: けいたいトイレ
+      en_us: Port. potty
+      en_eu: Port. Potty
+    - name: TRAINING_MANUAL
+      ja: トレーマニュアル
+      en_us: Trn. manual
+      en_eu: Manual
+    - name: REST_PILLOW
+      ja: 安眠まくら
+      en_us: Rest pillow
+    - name: ENEMY_REPEL
+      ja: 敵よけお守り
+      en_us: Enemy repel
+      en_eu: Enemy Repel
+    - name: ENEMY_BELL
+      ja: 敵よせシグナル
+      en_us: Enemy bell
+    - name: HEALTH_SHOE
+      ja: 健康サンダル
+      en_us: Health shoe
+    - name: MEAT
+      ja: 肉
+      en_us: Meat
+    - name: GIANT_MEAT
+      ja: 巨大肉
+      en_us: Giant Meat
+    - name: SIRLOIN
+      ja: 極上肉
+      en_us: Sirloin
+    - name: SUPERCARROT
+      ja: 挑戦ニンジン
+      en_us: Supercarrot
+    - name: HAWK_RADISH
+      ja: サクラ鳥大根
+      en_us: Hawk radish
+    - name: SPINY_GREEN
+      ja: ペンペンペン草
+      en_us: Spiny green
+      en_eu: Spiny Green
+    - name: DIGIMUSHROOM
+      ja: デジタケ
+      en_us: Digimushrm
+    - name: ICE_MUSHROOM
+      ja: 雪割りキノコ
+      en_us: Ice mushrm
+      en_eu: Ice Mushrm
+    - name: DELUXE_MUSHROOM
+      ja: デラックスキノコ
+      en_us: Deluxmushrm
+      en_eu: DeluxeMushrm
+    - name: DIGIPINE
+      ja: デジぼっくり
+      en_us: Digipine
+      en_eu: Digi-Pine
+    - name: BLUE_APPLE
+      ja: ブルーリンゴ
+      en_us: Blue apple
+    - name: RED_BERRY
+      ja: アセラロ
+      en_us: Red Berry
+      en_eu: Vitamin-C
+    - name: GOLD_ACORN
+      ja: 黄金ドングリ
+      en_us: Gold Acorn
+      en_eu: Golden Acorn
+    - name: BIG_BERRY
+      ja: ヘビーいちご
+      en_us: Big Berry
+      en_eu: Big berry
+    - name: SWEET_NUT
+      ja: 天然あまぐり
+      en_us: Sweet Nut
+      en_eu: Sweet nut
+    - name: SUPER_VEGGY
+      ja: モンドレイク
+      en_us: Super veggy
+      en_eu: Power Fruit
+    - name: PRICKLYPEAR
+      ja: 食用サボテン
+      en_us: Pricklypear
+    - name: ORANGE_BANANA
+      ja: オレンジバナナ
+      en_us: Orange bana
+      en_eu: Or. Banana
+    - name: POWER_FRUIT
+      ja: ごうりき草の実
+      en_us: Power fruit
+      en_eu: Hercules'Fru
+    - name: POWER_ICE
+      ja: じょうぶ草の実
+      en_us: Power Ice
+      en_eu: Streng Berry
+    - name: SPEED_LEAF
+      ja: はやあし草の実
+      en_us: Speed Leaf
+      en_eu: Speed leaf
+    - name: SAGE_FRUIT
+      ja: ものしり草の実
+      en_us: Sage Fruit
+    - name: MUSCLE_YAM
+      ja: もりもり草の実
+      en_us: Muscle Yam
+      en_eu: Muscle yam
+    - name: CALM_BERRY
+      ja: やすらぎ草の実
+      en_us: Calm berry
+      en_eu: Calm Berry
+    - name: DIGIANCHOVY
+      ja: デジジャコ
+      en_us: Digianchovy
+    - name: DIGISNAPPER
+      ja: デジブナ
+      en_us: Digisnapper
+    - name: DIGITROUT
+      ja: デジマス
+      en_us: DigiTrout
+    - name: BLACK_TROUT
+      ja: ブラックデジマス
+      en_us: Black trout
+    - name: DIGICATFISH
+      ja: デジナマズ
+      en_us: Digicatfish
+      en_eu: DigiCatfish
+    - name: DIGISEABASS
+      ja: デジカムル
+      en_us: Digiseabass
+      en_eu: DigiSeaBass
+    - name: MOLDY_MEAT
+      ja: くさった肉
+      en_us: Moldy Meat
+    - name: HAPPYMUSHROOM
+      ja: 運だめしキノコ
+      en_us: Happymushrm
+    - name: CHAIN_MELON
+      ja: クサリカケメロン
+      en_us: Chain melon
+      en_eu: Chain Melon
+    - name: GREY_CLAWS
+      ja: 灰色の爪
+      en_us: Grey Claws
+    - name: FIREBALL
+      ja: 炎のかけら
+      en_us: Fireball
+    - name: FLAMEWING
+      ja: 燃える羽
+      en_us: Flamingwing
+      en_eu: Flaming Wing
+    - name: IRON_HOOF
+      ja: 鉄のヒヅメ
+      en_us: Iron Hoof
+    - name: MONO_STONE
+      ja: モノクロストーン
+      en_us: Mono Stone
+    - name: STEEL_DRILL
+      ja: 鋼のドリル
+      en_us: Steel drill
+      en_eu: Steel Drill
+    - name: WHITE_FANG
+      ja: 牙の化石
+      en_us: White Fang
+      en_eu: White Fossil
+    - name: BLACK_WING
+      ja: 黒い羽
+      en_us: Black Wing
+      en_eu: Black Wings
+    - name: SPIKE_CLUB
+      ja: トゲこん棒
+      en_us: Spike Club
+      en_eu: Spike club
+    - name: FLAMINGMANE
+      ja: 輝くたてがみ
+      en_us: Flamingmane
+      en_eu: Flaming Mane
+    - name: WHITE_WING
+      ja: 白い羽
+      en_us: White Wing
+      en_eu: White Wings
+    - name: TORN_TATTER
+      ja: ボロ布
+      en_us: Torn tatter
+      en_eu: Old Cloth
+    - name: ELECTRO_RING
+      ja: 電気リング
+      en_us: Electo ring
+      en_eu: Elec Ring
+    - name: RAINBOWHORN
+      ja: 虹色の笛
+      en_us: Rainbowhorn
+    - name: ROOSTER
+      ja: 風見鶏
+      en_us: Rooster
+    - name: UNIHORN
+      ja: 聖なる角
+      en_us: Unihorn
+    - name: HORN_HELMET
+      ja: 重い兜
+      en_us: Horn helmet
+      en_eu: Horn Helmet
+    - name: SCISSOR_JAW
+      ja: ギザギザはさみ
+      en_us: Scissor jaw
+      en_eu: Scissor Jaws
+    - name: FERTILIZER
+      ja: 有機肥料
+      en_us: Fertilizer
+    - name: KOGA_LAWS
+      ja: イガ流の秘伝書
+      en_us: Koga laws
+      en_eu: Koga's Laws
+    - name: WATERBOTTLE
+      ja: お供え酒
+      en_us: Waterbottle
+      en_eu: Water Bottle
+    - name: NORTH_STAR
+      ja: 北極星の印
+      en_us: North Star
+      en_eu: North star
+    - name: RED_SHELL
+      ja: 赤い貝がら
+      en_us: Red Shell
+    - name: HARD_SCALE
+      ja: 硬いウロコ
+      en_us: Hard Scale
+    - name: BLUECRYSTAL
+      ja: ミスリル
+      en_us: Bluecrystal
+      en_eu: Blue crystal
+    - name: ICE_CRYSTAL
+      ja: 氷水晶
+      en_us: Ice crystal
+      en_eu: Ice Crystal
+    - name: HAIR_GROWER
+      ja: けはえ薬
+      en_us: Hair grower
+      en_eu: Hair Grower
+    - name: SUNGLASSES
+      ja: サングラス
+      en_us: Sunglasses
+    - name: METAL_PART
+      ja: メタルパーツ
+      en_us: Metal part
+      en_eu: Metal Parts
+    - name: FATAL_BONE
+      ja: 死を呼ぶ骨
+      en_us: Fatal Bone
+    - name: CYBER_PART
+      ja: サイバーパーツ
+      en_us: Cyber part
+      en_eu: Cyber Parts
+    - name: MEGA_HAND
+      ja: メガハンド
+      en_us: Mega Hand
+    - name: SILVER_BALL
+      ja: 銀玉
+      en_us: Silver ball
+      en_eu: Silver Ball
+    - name: METAL_ARMOR
+      ja: メタルアーマー
+      en_us: Metal armor
+      en_eu: Metal Armor
+    - name: CHAINSAW
+      ja: チェンソー
+      en_us: Chainsaw
+    - name: SMALL_SPEAR
+      ja: 小さな槍
+      en_us: Small spear
+      en_eu: Small Spear
+    - name: X_BANDAGE
+      ja: 愛のばんそうこう
+      en_us: X Bandage
+    - name: RAY_GUN
+      ja: ビームガン
+      en_us: Ray Gun
+    - name: GOLD_BANANA
+      ja: 金のバナナ
+      en_us: Gold banana
+      en_eu: Gold Banana
+    - name: MYSTY_EGG
+      ja: 謎のタマゴ
+      en_us: Mysty Egg
+    - name: RED_RUBY
+      ja: 奇跡のルビー
+      en_us: Red Ruby
+    - name: BEETLEPEARL
+      ja: ビートルダイヤ
+      en_us: Beetlepearl
+    - name: CORAL_CHARM
+      ja: サンゴのお守り
+      en_us: Coral charm
+    - name: MOON_MIRROR
+      ja: 月光の鏡
+      en_us: Moon mirror
+      en_eu: Moon Mirror
+    - name: BLUE_FLUTE
+      ja: 湖のぬしの笛
+      en_us: Blue Flute
+    - name: OLD_ROD
+      ja: ぼろい釣ざお
+      en_us: old fishrod
+      en_eu: Old Rod
+    - name: AMAZING_ROD
+      ja: すごい釣ざお
+      en_us: Amazing rod
+      en_eu: Amazing Rod
+    - name: LEOMONSTONE
+      ja: レオモン族の石板
+      en_us: Leomonstone
+      en_eu: Leomon Stone
+    - name: MANSION_KEY
+      ja: 館のカギ
+      en_us: Mansion key
+      en_eu: Mansion Key
+    - name: GEAR
+      ja: はぐるま
+      en_us: Gear
+    - name: RAIN_PLANT
+      ja: 雨ふり草の実
+      en_us: Rain Plant
+    - name: STEAK
+      ja: 血のしたたる肉
+      en_us: Steak
+      en_eu: Sirloin
+    - name: FRIDGE_KEY
+      ja: れいぞうこのカギ
+      en_us: Frig Key
+      en_eu: Refrig Key
+    - name: AS_DECODER
+      ja: 古代文字解読機
+      en_us: AS Decoder
+      en_eu: S Decoder
+    - name: GIGA_HAND
+      ja: ギガハンド
+      en_us: Giga Hand
+    - name: NOBLE_MANE
+      ja: 高貴なたてがみ
+      en_us: Noble Mane
+    - name: METAL_BANANA
+      ja: メタルバナナ
+      en_us: Metalbanana
+      en_eu: Metal Banana
+
+ITEM_DESC_PTR:
+  storage: {eu: literal}
+  lines: {eu: 2}
+  empty: STR_ITEM_DESC_EMPTY
+  entries:
+    - name: STR_ITEM_DESC_SMALL_RECOVERY_500_HP
+      ja: ＨＰを５００回復する。
+      en_us: "Small Recovery: +500 HP"
+    - name: STR_ITEM_DESC_MEDIUM_RECOVERY_1500_HP
+      ja: ＨＰを１５００回復する。
+      en_us: "Medium Recovery: +1500 HP"
+    - name: STR_ITEM_DESC_LARGE_RECOVERY_5000_HP
+      ja: ＨＰを５０００回復する。
+      en_us: "Large Recovery: +5000 HP"
+    - name: STR_ITEM_DESC_SUPER_RECOVERY_FULL_HP
+      ja: ＨＰをフル回復するぞ！
+      en_us: "Super Recovery: full HP"
+    - name: STR_ITEM_DESC_RECOVER_500_MAGIC_POINTS
+      ja: ＭＰを５００回復する。
+      en_us: Recover +500 Magic Points
+      en_eu: Recover + 500 Magic Points
+    - name: STR_ITEM_DESC_MED_MP_RECOVER_1500_MP
+      ja: ＭＰを１５００回復する。
+      en_us: "Med. MP: recover +1500 MP"
+      en_eu: "Med.MP: recover + 1500 MP"
+    - name: STR_ITEM_DESC_LRG_MP_RECOVER_5000_MP
+      ja: ＭＰを５０００回復する。
+      en_us: "Lrg. MP: recover +5000 MP"
+      en_eu: "Lrg.MP: recover +5000 MP"
+    - name: STR_ITEM_DESC_RECOVERS_1500_MP_AND_HP
+      ja: ＨＰとＭＰを１５００ずつ回復する。
+      en_us: Recovers +1500 MP and HP
+    - name: STR_ITEM_DESC_CURES_STATUS_ERRORS
+      ja: 毒・マヒ・混乱・液晶化を治す。
+      en_us: Cures Status Errors
+      en_eu: Cures status
+    - name: STR_ITEM_DESC_CURES_ERRORS_REC_HP_MP
+      ja: 状態異常を治し、ＨＰ、ＭＰも回復するぞ！
+      en_us: Cures errors + rec. HP+MP
+      en_eu: Cures status + rec HP + MP
+    - name: STR_ITEM_DESC_PROTECTS_YR_COND_IN_BATTLE
+      ja: 戦闘中の全ての状態変化を防ぐぞ！
+      en_us: Protects yr cond. in battle
+      en_eu:
+        - Protects from changes to
+        - status
+    - name: STR_ITEM_DESC_CURES_COMA_REC_HALF_HP
+      ja: 仮死を治し、ＨＰは半分回復するぞ！
+      en_us: Cures Coma + rec. half HP
+    - name: STR_ITEM_DESC_CURES_COMA_ERRORS_FULL_HP
+      ja: 状態異常、仮死を治し、ＨＰも全快するぞ！
+      en_us: Cures coma, errors +full HP
+      en_eu: Cures status and asphyxiation
+    - name: STR_ITEM_DESC_CURES_WOUNDS_SOME_SICKNESS
+      ja: 「ケガ」を治し、「病気」にも効くかも？
+      en_us: Cures wounds + some sickness
+    - name: STR_ITEM_DESC_CURES_WOUNDS_SICKNESS
+      ja: 「ケガ」、「病気」を治す。
+      en_us: Cures wounds + sickness
+    - name: STR_ITEM_DESC_BOOST_OFF_POWER_IN_BATTLE
+      ja: 使った戦闘中、攻撃力がアップする。
+      en_us: Boost Off. Power in battle
+      en_eu: Boosts Off. power in battle
+    - name: STR_ITEM_DESC_BOOST_DEF_POWER_IN_BATTLE
+      ja: 使った戦闘中、防御力がアップする。
+      en_us: Boost Def. Power in battle
+      en_eu: Boosts Def. power in battle
+    - name: STR_ITEM_DESC_BOOST_SPEED_IN_BATTLE
+      ja: 使った戦闘中、すばやさがアップする。
+      en_us: Boost Speed in battle
+      en_eu: Boosts Speed in battle
+    - name: STR_ITEM_DESC_BOOST_ALL_SKILLS_IN_BATTLE
+      ja: 使った戦闘中、全能力がアップする。
+      en_us: Boost all skills in battle
+      en_eu: Boosts all skills in battle
+    - name: STR_ITEM_DESC_SUPER_BOOST_OFF_PWR_IN_BAT
+      ja: 使った戦闘中、攻撃力が大きくアップする。
+      en_us: Super boost off. pwr in bat.
+    - name: STR_ITEM_DESC_SUPER_BOOST_DEF_PWR_IN_BAT
+      ja: 使った戦闘中、防御力が大きくアップする。
+      en_us: Super boost def. pwr in bat.
+    - name: STR_ITEM_DESC_SUPER_BOOST_SPEED_IN_BATTLE
+      ja: 使った戦闘中、すばやさが大きくアップする。
+      en_us: Super boost Speed in battle
+    - name: STR_ITEM_DESC_CAN_RETURN_TO_CITY_QUICKLY
+      ja: 街に一瞬で戻ることができるぞ！
+      en_us: Can return to city quickly
+      en_eu:
+        - Enables to return to city
+        - quickly
+    - name: STR_ITEM_DESC_BOOST_MAX_OFF_PWR_LEVEL_50
+      ja: 攻撃力を永久に＋５０するぞ！
+      en_us: Boost max off. pwr level +50
+      en_eu: Boosts max off. pwr level +50
+    - name: STR_ITEM_DESC_BOOST_MAX_DEF_PWR_LEVEL_50
+      ja: 防御力を永久に＋５０するぞ！
+      en_us: Boost max def. pwr level +50
+      en_eu: Boosts max def. pwr +50
+    - name: STR_ITEM_DESC_BOOST_MAX_BRAINS_LEVEL_50
+      ja: かしこさを永久に＋５０するぞ！
+      en_us: Boost max Brains level +50
+      en_eu: Boosts max Brains level +50
+    - name: STR_ITEM_DESC_BOOST_MAX_SPEED_LEVEL_50
+      ja: すばやさを永久に＋５０するぞ！
+      en_us: Boost max Speed level +50
+      en_eu: Boosts max Speed level +50
+    - name: STR_ITEM_DESC_BOOST_MAX_HP_LEVEL_500
+      ja: ＨＰ上限を永久に＋５００するぞ！
+      en_us: Boost max HP level +500
+      en_eu: Boosts max HP level +500
+    - name: STR_ITEM_DESC_BOOST_MAX_MP_LEVEL_500
+      ja: ＭＰ上限を永久に＋５００するぞ！
+      en_us: Boost max MP level +500
+      en_eu: Boosts max MP level +500
+    - name: STR_ITEM_DESC_BOOST_OFF_PWR_BRAINS_100
+      ja: 攻撃力、かしこさを永久に＋１００。しかし…
+      en_us: Boost Off. Pwr+Brains +100
+      en_eu:
+        - Boosts Off.and Brain by 100.
+        - But…
+    - name: STR_ITEM_DESC_BOOST_DEF_PWR_SPEED_100
+      ja: 防御力、すばやさを永久に＋１００。しかし…
+      en_us: Boost Def. Pwr+Speed +100
+      en_eu:
+        - Boost Def.and Speed by 100.
+        - But…
+    - name: STR_ITEM_DESC_BOOST_OFF_PWR_SPEED_1000
+      ja: ＨＰ、ＭＰ上限を永久に＋１０００。しかし…
+      en_us: Boost Off. Pwr+Speed +1000
+      en_eu: Boost HP and MP +1000. But…?
+    - name: STR_ITEM_DESC_CAN_DO_POTTY_ANYWHERE
+      ja: 使い捨てのトイレ。トイレが無い場所も安心！
+      en_us: Can do potty anywhere
+    - name: STR_ITEM_DESC_TRAIN_BETTER_WITH_THIS
+      ja: 持っているだけで、トレーニング効果アップ！
+      en_us: Train better with this
+      en_eu: Makes training more effective
+    - name: STR_ITEM_DESC_MORE_RECOVERY_DURING_REST
+      ja: 持っているだけで、睡眠時の回復力アップ！
+      en_us: More recovery during rest
+    - name: STR_ITEM_DESC_REPELS_ENEMIES_TO_STAY_AWAY
+      ja: 持っていると敵が参加しにくくなるぞ！
+      en_us: Repels enemies to stay away
+      en_eu: Enemies stay away
+    - name: STR_ITEM_DESC_ATTRACT_ENEMIES_TO_COME
+      ja: 持っていると敵が参加しやすくなるぞ！
+      en_us: Attract enemies to come
+      en_eu: Enemies are drawn to you
+    - name: STR_ITEM_DESC_WALK_AND_HP_MP_GO_UP
+      ja: 歩くとＨＰとＭＰが少し回復。走るとダメ！
+      en_us: Walk and HP + MP go up
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL
+      ja: 食べ物。そこそこおなかがふくれる。
+      en_us: Makes Digimon a bit full
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL
+      ja: 食べ物。かなりおなかがふくれる。
+      en_us: Makes Digimon quite full .
+      en_eu: Makes Digimon quite full
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL
+      ja: 食べ物。すごくおなかがふくれる。
+      en_us: Makes Digimon very full.
+      en_eu: Makes Digimon very full
+    - name: STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT
+      ja: 食べ物。しばらくトレーニング効果アップ！
+      ja@jp: 食べ物。しばらくトレーニング効果アップ。
+      en_us: Boosts training effect
+    - ja: 食べ物。しばらくトレーニング効果アップ！
+      ja@jp: 食べ物。しばらくトレーニング効果アップ。
+      en_us: Boosts training effect
+    - name: STR_ITEM_DESC_GREATLY_REDUCES_TIREDNESS
+      ja: 食べ物。大幅に疲れがとれるぞ！
+      en_us: Greatly reduces Tiredness
+    - name: STR_ITEM_DESC_MAKE_DIGIMON_A_BIT_FULL
+      ja: 食べ物。少しおなかがふくれるぞ！
+      en_us: Make Digimon a bit full
+      en_eu: Makes Digimon a bit full
+    - name: STR_ITEM_DESC_GREATLY_BOOSTS_DISCIPLINE
+      ja: 食べ物。しつけが大幅アップ！
+      en_us: Greatly boosts Discipline
+      en_eu: Greatly increases discipline
+    - name: STR_ITEM_DESC_BOOSTS_ALL_ABILITIES
+      ja: 食べ物。全能力アップ！
+      en_us: Boosts all abilities
+      en_eu: Increases all abilities
+    - name: STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT_2
+      ja: 食べ物。しばらくトレーニング効果アップ！
+      en_us: Boosts training effect
+      en_eu: Boosts Training for a while.
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_HAPPY
+      ja: 食べ物。ごきげんが大幅アップ！
+      en_us: Makes Digimon happy
+      en_eu: Makes Digimon happy.
+    - name: STR_ITEM_DESC_GIVES_REST_BOOST_DISC_HAP
+      ja: 食べ物。疲れ回復、しつけとごきげんアップ！
+      en_us: Gives rest, boost disc.+hap
+      en_eu:
+        - Reduces fatigue, increases
+        - discipline and happiness!
+    - name: STR_ITEM_DESC_CAN_BE_SOLD_FOR_A_HIGH_PRICE
+      ja: 食べ物。高く売れるぞ！
+      en_us: Can be sold for a high price
+      en_eu: Can be sold for high price.
+    - name: STR_ITEM_DESC_MAKES_FULL_BOOSTS_WEIGHT
+      ja: 食べ物。満腹になるが体重が大きくアップ！
+      en_us: Makes full + boosts Weight!
+      en_eu:
+        - Makes Digimon full, weight
+        - gained
+    - name: STR_ITEM_DESC_RECOVERS_HP_COMPLETELY
+      ja: 食べ物。ＨＰが全快するぞ！
+      en_us: Recovers HP completely!
+      en_eu: Recovers HP completely
+    - name: STR_ITEM_DESC_RECOVERS_MP_COMPLETELY
+      ja: 食べ物。ＭＰが全快するぞ！
+      en_us: Recovers MP completely!
+    - name: STR_ITEM_DESC_LOWERS_WEIGHT
+      ja: 食べ物。体重が減るぞ！
+      en_us: Lowers Weight!
+      en_eu: Weight will decrease!
+    - name: STR_ITEM_DESC_FULLY_RECOVERS_HP_AND_MP
+      ja: 食べ物。ＨＰとＭＰが回復するぞ！
+      en_us: Fully recovers HP and MP
+      en_eu: Recovers HP and MP completely.
+    - name: STR_ITEM_DESC_BOOST_OFFENSIVE_POWER_20
+      ja: 食べ物。攻撃力が２０アップ！
+      en_us: Boost Offensive Power +20!
+      en_eu: Increases Off by 20!
+    - name: STR_ITEM_DESC_BOOST_DEFENSIVE_POWER_20
+      ja: 食べ物。防御力が２０アップ！
+      en_us: Boost Defensive Power +20!
+      en_eu: Increases Der by 20!
+    - name: STR_ITEM_DESC_BOOST_SPEED_20
+      ja: 食べ物。すばやさが２０アップ！
+      en_us: Boost Speed +20!
+      en_eu: Increases Speed by 20!
+    - name: STR_ITEM_DESC_BOOST_BRAINS_20
+      ja: 食べ物。かしこさが２０アップ！
+      en_us: Boost Brains +20!
+      en_eu: Boosts Brains +20!
+    - name: STR_ITEM_DESC_BOOST_HP_BY_200
+      ja: 食べ物。ＨＰが２００アップ！
+      en_us: Boost HP by +200!
+      en_eu: Increases HP by 200!
+    - name: STR_ITEM_DESC_BOOST_MP_BY_200
+      ja: 食べ物。ＭＰが２００アップ！
+      en_us: Boost MP by +200!
+      en_eu: Increases MP by 200!
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL_2
+      ja: 食べ物。少しおなかがふくれる。
+      en_us: Makes Digimon a bit full.
+      en_eu: Makes Digimon a bit full
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL_2
+      ja: 食べ物。そこそこおなかがふくれる。
+      en_us: Makes Digimon quite full.
+      en_eu: Makes Digimon quite full
+    - ja: 食べ物。かなりおなかがふくれる。
+      en_us: Makes Digimon very full.
+      en_eu: Makes Digimon very full
+    - ja: 食べ物。全能力アップ！
+      en_us: Boosts all abilities
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL_2
+      ja: 食べ物。すごくおなかがふくれる。
+      en_us: Makes Digimon very full
+    - name: STR_ITEM_DESC_FULL_HP_AND_MP_LIFE_SPAN
+      ja: 食べ物。ＨＰ＆ＭＰ全快、寿命ものびるぞ！
+      en_us: Full HP and MP + life span++
+      en_eu: Recovers full HP and MP!
+    - name: STR_ITEM_DESC_MAKES_DIGIMON_SOMEWHAT_FULL
+      ja: 食べ物。一応おなかはふくれるぞ！
+      en_us: Makes Digimon somewhat full
+    - name: STR_ITEM_DESC_BOOST_HAPPINESS_BUT_RISKY
+      ja: 食べ物。ごきげんアップ！でも運が悪いと…
+      en_us: Boost Happiness, but risky
+    - name: STR_ITEM_DESC_GOOD_FOR_MANY_THINGS
+      ja: 食べ物。様々なすばらしい効果がえられるぞ！
+      en_us: Good for many things
+      en_eu: Effective in many great ways!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_GREYMON
+      ja: グレイモンに進化するぞ！
+      en_us: Digivolve to Greymon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MERAMON
+      ja: メラモンに進化するぞ！
+      en_us: Digivolve to Meramon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_BIRDRAMON
+      ja: バードラモンに進化するぞ！
+      en_us: Digivolve to Birdramon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_CENTARUMON
+      ja: ケンタルモンに進化するぞ！
+      en_us: Digivolve to Centarumon!
+      en_eu: Digivolve to Centalmon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MONOCHROMON
+      ja: モノクロモンに進化するぞ！
+      en_us: Digivolve to Monochromon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_DRIMOGEMON
+      ja: ドリモゲモンに進化するぞ！
+      en_us: Digivolve to Drimogemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_TYRANNOMON
+      ja: ティラノモンに進化するぞ！
+      en_us: Digivolve to Tyrannomon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_DEVIMON
+      ja: デビモンに進化するぞ！
+      en_us: Digivolve to Devimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_OGREMON
+      ja: オーガモンに進化するぞ！
+      en_us: Digivolve to Ogremon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_LEOMON
+      ja: レオモンに進化するぞ！
+      en_us: Digivolve to Leomon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_ANGEMON
+      ja: エンジェモンに進化するぞ！
+      en_us: Digivolve to Angemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_BAKEMON
+      ja: バケモンに進化するぞ！
+      en_us: Digivolve to Bakemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_KAMINARIMON
+      ja: カミナリモンに進化するぞ！
+      en_us: Digivolve to Kaminarimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_AIRDRAMON
+      ja: エアドラモンに進化するぞ！
+      en_us: Digivolve to Airdramon!
+      en_eu: Digivolve to  Airdramon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_KOKATORIMON
+      ja: コカトリモンに進化するぞ！
+      en_us: Digivolve to Kokatorimon
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_UNIMON
+      ja: ユニモンに進化するぞ！
+      en_us: Digivolve to Unimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_KABUTERIMON
+      ja: カブテリモンに進化するぞ！
+      en_us: Digivolve to Kabuterimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_KUWAGAMON
+      ja: クワガーモンに進化するぞ！
+      en_us: Digivolve to Kuwagamon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_VEGIEMON
+      ja: ベジーモンに進化するぞ！
+      en_us: Digivolve to Vegiemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_NINJAMON
+      ja: イガモンに進化するぞ！
+      en_us: Digivolve to Ninjamon!
+      en_eu: Digivolve to Igamon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_SEADRAMON
+      ja: シードラモンに進化するぞ！
+      en_us: Digivolve to Seadramon!
+      en_eu: Digivolve to Seadramon.
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_WHAMON
+      ja: ホエーモンに進化するぞ！
+      en_us: Digivolve to Whamon!
+      en_eu: Digivolve to Whalemon.
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_SHELLMON
+      ja: シェルモンに進化するぞ！
+      en_us: Digivolve to Shellmon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_COELAMON
+      ja: シーラモンに進化するぞ！
+      en_us: Digivolve to Coelamon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_GARURUMON
+      ja: ガルルモンに進化するぞ！
+      en_us: Digivolve to Garurumon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_FRIGIMON
+      ja: ユキダルモンに進化するぞ！
+      en_us: Digivolve to Frigimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MOJYAMON
+      ja: モジャモンに進化するぞ！
+      en_us: Digivolve to Mojyamon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_NANIMON
+      ja: ナニモンに進化するぞ！
+      en_us: Digivolve to Nanimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_METALGREYMON
+      ja: メタルグレイモンに進化するぞ！
+      en_us: Digivolve to MetalGreymon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_SKULLGREYMON
+      ja: スカルグレイモンに進化するぞ！
+      en_us: Digivolve to SkullGreymon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_ANDROMON
+      ja: アンドロモンに進化するぞ！
+      en_us: Digivolve to Andromon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MEGADRAMON
+      ja: メガドラモンに進化するぞ！
+      en_us: Digivolve to Megadramon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MAMEMON
+      ja: マメモンに進化するぞ！
+      en_us: Digivolve to Mamemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_METALMAMEMON
+      ja: メタルマメモンに進化するぞ！
+      en_us: Digivolve to MetalMamemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_GIROMON
+      ja: ギロモンに進化するぞ！
+      en_us: Digivolve to Giromon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_PIXIMON
+      ja: ピッコロモンに進化するぞ！
+      en_us: Digivolve to Piximon!
+      en_eu: Digivolve to Pixiemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MONZAEMON
+      ja: もんざえモンに進化するぞ！
+      en_us: Digivolve to Monzaemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_VADEMON
+      ja: ベーダモンに進化するぞ！
+      en_us: Digivolve to Vademon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_ETEMON
+      ja: エテモンに進化するぞ！
+      en_us: Digivolve to Etemon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_DIGITAMAMON
+      ja: デジタマモンに進化するぞ！
+      en_us: Digivolve to Digitamamon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_PHOENIXMON
+      ja: ホウオウモンに進化するぞ！
+      en_us: Digivolve to Phoenixmon!
+    - name: STR_ITEM_DESC_BECOME_HERCULESKABUTERIMON
+      ja: ヘラクルカブテリモンに進化するぞ！
+      en_us: Become HerculesKabuterimon!
+      en_eu:
+        - Digivolve to
+        - HerculesKabuterimon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_MEGASEADRAMON
+      ja: メガシードラモンに進化するぞ！
+      en_us: Digivolve to MegaSeadramon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_WEREGARURUMON
+      ja: ウェアガルルモンに進化するぞ！
+      en_us: Digivolve to WereGarurumon!
+    - name: STR_ITEM_DESC_SEADRAMON_FRIENDSHIP_PROOF
+      ja: シードラモンとの友情のあかし。
+      en_us: Seadramon friendship proof
+      en_eu:
+        - Proof of Seadramon's
+        - friendship
+    - name: STR_ITEM_DESC_ENABLES_YOU_TO_FISH_AT_LAKE
+      ja: 湖で釣りができるぞ！
+      en_us: Enables you to fish at lake
+      en_eu: Enables you to fish at a lake!
+    - name: STR_ITEM_DESC_GIVES_GOOD_FISHING_AT_LAKE
+      ja: 湖で釣りができ、よく釣れるぞ！
+      en_us: Gives good fishing at lake
+      en_eu:
+        - Enable you to fish very well
+        - at a lake!
+    - name: STR_ITEM_DESC_STONE_TABLET_OF_LEOMON
+      ja: レオモンの先祖がのこした石板。
+      en_us: Stone Tablet of Leomon
+      en_eu:
+        - Stone tablet left by Leomon's
+        - ancestors.
+    - name: STR_ITEM_DESC_KEY_TO_GRAY_LORD_MANSION
+      ja: 闇貴族の館のカギ。
+      en_us: Key to Gray Lord Mansion
+      en_eu: A key to Gray Lord Mansion.
+    - name: STR_ITEM_DESC_MYSTERY_ITEM
+      ja: ？？？
+      en_us: Mystery Item
+      en_eu: "???"
+      named: [eu]
+    - name: STR_ITEM_DESC_RECOVER_1000_MP_OTHER_USES
+      ja: ＭＰが１０００回復。他にも使い道が…
+      en_us: Recover 1000 MP +other uses
+      en_eu: Recover 1000MP, and other use…
+    - ja: 食べ物。かなりおなかがふくれる。
+      en_us: Makes Digimon very full
+      en_eu: Makes Digimon very full.
+    - name: STR_ITEM_DESC_KEY_TO_OPEN_REFRIGERATOR
+      ja: れいぞうこをあけるカギ。
+      en_us: Key to open Refrigerator
+      en_eu: A key to open refrigerator
+    - name: STR_ITEM_DESC_YOU_CAN_READ_ANCIENT_SCRIPT
+      ja: 古代文字が読めるようになるぞ！
+      en_us: You can read Ancient Script
+      en_eu:
+        - Enables you to read ancient
+        - script!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_GIGADRAMON
+      ja: ギガドラモンに進化するぞ！
+      en_us: Digivolve to Gigadramon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_PANJYAMON
+      ja: パンジャモンに進化するぞ！
+      en_us: Digivolve to Panjyamon!
+    - name: STR_ITEM_DESC_DIGIVOLVE_TO_METALETEMON
+      ja: メタルエテモンに進化するぞ！
+      en_us: Digivolve to MetalEtemon!
+      en_eu:
+        - Digivolve to MetalEtemon!
+        - NULL

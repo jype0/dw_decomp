@@ -25,6 +25,7 @@
 #include <dw/types.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/main/partner_impl.h>
 
 extern int8_t PARTNER_ANIMATION;
 
@@ -33,11 +34,8 @@ extern int8_t IMMORTAL_HOUR;
 extern int16_t EVOLUTION_TARGET;
 extern uint8_t HAS_USED_EVOITEM;
 
-#if !VERSION_IS(US)
-char MAIN_D_801225A0[] = "は病気になってしまった！";
-#else
-char MAIN_D_801225A0[] = "is Sick!";
-#endif
+IS_SICK_TEXT
+
 char MAIN_D_801225AC[16] = "\\ETCNA\\UNTI.TMD";
 RaiseData RAISE_DATA[66] = {
 	{ { -1, -1, -1, -1, -1, -1, -1, -1 },

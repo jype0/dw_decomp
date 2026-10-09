@@ -33,6 +33,7 @@ include mk/sources.mk
 include mk/version/$(VERSION).mk
 include mk/toolchain/$(TOOLCHAIN).mk
 include mk/platform/$(PLATFORM).mk
+include mk/text.mk
 
 ifeq ($(CONFIG),$(MATCHING_CONFIG))
 include mk/matching.mk

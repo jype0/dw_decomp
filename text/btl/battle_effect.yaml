@@ -1,0 +1,41 @@
+MESSAGES:
+  strings:
+    BTL_STR_LISTENS_TO:
+      ja: C1の命令を聞くようになった！W
+      en_us: "Listens to #C1! #W\0\0\0\0\0\0\0\0\0\0\0\0\0"
+    BTL_STR_DROPPED:
+      ja: NULL
+      en_us: "#R#C1dropped #C7"
+    BTL_STR_WHITE_WAIT:
+      ja: C1を落としたW
+      en_us: NULL
+    BTL_STR_WAS_INJURED:
+      ja: C1はRケガをしてしまったW
+      en_us: "#C1#R was injured #W"
+    BTL_STR_SET_TECHNIQUE:
+      ja: C7「そうびした技」R
+      en_us: "#C7set technique #R"
+    BTL_STR_PUT_UP_WITH_IT:
+      ja: C7「ガマンだ！」R
+      en_us: "#C7Put up with it! #R"
+    BTL_STR_MOVE_AWAY_CHANGE_TARGET:
+      ja: C7「はなれろ！」R「ターゲット変更！」R
+      en_us: "#C7Move away!#RChange target!#R"
+    BTL_STR_KEEP_IT_DOWN:
+      ja: C7「ほどほど！」R
+      en_us: "#C7Keep it down!#R"
+    BTL_STR_GO_ALL_THE_WAY:
+      ja: C7「思いっきり！」R
+      en_us: "#C7Go all the way!#R"
+    BTL_STR_MP_CONSUMPTION_BONUS:
+      ja: C1かしこさによる「ＭＰ消費減R少ボーナス」を習得した！W技の消費ＭＰがR
+      en_us: "#C1MP Consumption Bonus!"
+    BTL_STR_REDUCED_BY:
+      ja: NULL
+      en_us: reduced by
+    BTL_STR_MP_BONUS_PERCENT:
+      ja: ％だけ減るぞ！W
+      en_us: NULL
+    BTL_STR_LEARNED:
+      ja: RC1を覚えた！W
+      en_us: "#R#C1learned!#W"

@@ -1,0 +1,278 @@
+MAP_NAMES:
+  strings:
+    STR_MAP_NAME_NATIVE_FOREST:
+      ja: 迷わずの森
+      en_us: "      Native Forest     "
+      en_eu: Native Forest
+    STR_MAP_NAME_COELA_POINT:
+      ja: シーラ岬
+      en_us: "       Coela Point      "
+      en_eu: Coela Point
+    STR_MAP_NAME_DRAGON_EYE_LAKE:
+      ja: 竜の目の湖ほとり
+      en_us: "     Dragon Eye Lake    "
+      en_eu: Dragon Eye Lake
+    STR_MAP_NAME_DRILL_TUNNEL_ENTRANCE:
+      ja: ドリルトンネル入り口
+      en_us: "  Drill Tunnel Entrance "
+      en_eu: Drill Tunnel Entrance
+    STR_MAP_NAME_DIGIMON_BRIDGE:
+      ja: デジブリッジ
+      en_us: "      Digimon Bridge    "
+      en_eu: "Digimon Bridge "
+    STR_MAP_NAME_TROPICAL_JUNGLE:
+      ja: トロピカジャングル
+      en_us: "     Tropical Jungle    "
+      en_eu: Tropical Jungle
+    STR_MAP_NAME_MANGROVE_REGION:
+      ja: マングローブ域
+      en_us: "     Mangrove Region    "
+      en_eu: Mangrove Region
+    STR_MAP_NAME_PATH_THRU_MT_PANORAMA:
+      ja: ミハラシ山道
+      en_us: " Path Thru Mt. Panorama "
+      en_eu: Path Thru Mt. Panorama
+    STR_MAP_NAME_ENTRANCE_TO_FILE_CITY:
+      ja: はじまりの街入り口
+      en_us: "  Entrance to File City "
+      en_eu: File City
+    STR_MAP_NAME_MT_PANORAMA_PLAINS:
+      ja: ミハラシ台
+      en_us: "  Mt. Panorama Plains   "
+      en_eu: Mt. Panorama Plains
+    STR_MAP_NAME_FOOT_OF_MT_PANORAMA:
+      ja: ミハラシすそ野
+      en_us: "  Foot of Mt. Panorama  "
+      en_eu: Foot of Mt. Panorama
+    STR_MAP_NAME_MT_PANORAMA_SPORE_AREA:
+      ja: ミハラシ山・ホウシ域
+      en_us: "Mt. Panorama Spore Area "
+      en_eu: Mt. Panorama Spore Area
+    STR_MAP_NAME_DRILL_TUNNEL:
+      ja: ドリルトンネル
+      en_us: "      Drill Tunnel      "
+      en_eu: Drill Tunnel
+    STR_MAP_NAME_DRILL_TUNNEL_2ND_FLOOR:
+      ja: ドリルトンネル地下２階
+      en_us: " Drill Tunnel 2nd floor "
+      en_eu: Drill Tunnel 2nd floor
+    STR_MAP_NAME_DRILL_TUNNEL_3RD_FLOOR:
+      ja: ドリルトンネル地下３階
+      en_us: " Drill Tunnel 3rd floor "
+      en_eu: Drill Tunnel 3rd floor
+    STR_MAP_NAME_RESIDENTIAL_AREA:
+      ja: ドリモゲモン居住区
+      en_us: "    Residential Area    "
+      en_eu: Residential Area
+    STR_MAP_NAME_UNDERGROUND_POND:
+      ja: 地底湖
+      en_us: "    Underground Pond    "
+      en_eu: "Underground Pond "
+    STR_MAP_NAME_LAVA_CAVE:
+      ja: 溶岩洞
+      en_us: "        Lava Cave       "
+      en_eu: Lava Cave
+    STR_MAP_NAME_OVERDELL:
+      ja: オーバーデル
+      en_us: "        Overdell        "
+      en_eu: Overdell
+    STR_MAP_NAME_OVERDELL_CEMETERY:
+      ja: オーバーデル墓地
+      en_us: "    Overdell Cemetery   "
+      en_eu: Overdell Cemetery
+    STR_MAP_NAME_GREAT_CANYON_ENTRANCE:
+      ja: グレートキャニオン入り口
+      en_us: "  Great Canyon Entrance "
+      en_eu: Great Canyon Entrance
+    STR_MAP_NAME_GREAT_CANYON_TOP_AREA:
+      ja: グレートキャニオン上層
+      en_us: "  Great Canyon Top Area "
+      en_eu: G Canyon Top Area
+    STR_MAP_NAME_GREAT_CANYON_BRIDGE:
+      ja: グレ大橋
+      en_us: "   Great Canyon Bridge  "
+      en_eu: Great Canyon Bridge
+    STR_MAP_NAME_FORTRESS_ENTRANCE:
+      ja: トリデ入り口
+      en_us: "    Fortress Entrance   "
+      en_eu: Fortress Entrance
+    STR_MAP_NAME_GREAT_CANYON_BOT_AREA:
+      ja: グレートキャニオン下層
+      en_us: " Great Canyon Bot. Area "
+      en_eu: Great Canyon Bot. Area
+    STR_MAP_NAME_OGRE_FORTRESS:
+      ja: オーガトリデ
+      en_us: "      Ogre Fortress     "
+      en_eu: Ogre Fortress
+    STR_MAP_NAME_MONOCHROME_SHOP:
+      ja: モノクロ店
+      en_us: "     Monochrome Shop    "
+      en_eu: Monochrome Shop
+    STR_MAP_NAME_GREY_LORDS_MANSION:
+      ja: 闇貴族の館
+      en_us: "   Grey Lord's Mansion  "
+      en_eu: "Grey Lord's Mansion "
+    STR_MAP_NAME_MANSION_BASEMENT:
+      ja: 闇貴族の館地下
+      en_us: "    Mansion Basement    "
+      en_eu: Grey Lord's Mansion
+    STR_MAP_NAME_UNDERGROUND_LAB:
+      ja: 地下実験場
+      en_us: "     Underground Lab    "
+      en_eu: Underground Lab
+    STR_MAP_NAME_GEAR_SAVANNA:
+      ja: ギアサバンナ
+      en_us: "      Gear Savanna      "
+      en_eu: Gear Savanna
+    STR_MAP_NAME_ANCIENT_DINO_REGION:
+      ja: ダイノ古代境入り口
+      en_us: "   Ancient Dino Region  "
+      en_eu: Ancient DinoRegion
+    STR_MAP_NAME_ANCIENT_GLACIAL_REGION:
+      ja: ダイノ古代境時静域
+      en_us: " Ancient Glacial Region "
+      en_eu: Ancient Glacial Region
+    STR_MAP_NAME_ANCIENT_SPEEDY_REGION:
+      ja: ダイノ古代境時急域
+      en_us: " Ancient Speedy Region  "
+      en_eu: Ancient Speedy Region
+    STR_MAP_NAME_FREEZELAND:
+      ja: フリーズランド
+      en_us: "       Freezeland       "
+      en_eu: Freezeland
+    STR_MAP_NAME_ICE_SANCTUARY:
+      ja: アイスサンクチュアリ
+      en_us: "      Ice Sanctuary     "
+      en_eu: Ice Sanctuary
+    STR_MAP_NAME_GREEN_GYM:
+      ja: グリーンジム
+      en_us: "        Green Gym       "
+      en_eu: Green Gym
+    STR_MAP_NAME_LEOMON_ANCESTORS_CAVE:
+      ja: レオモン先祖の洞くつ
+      en_us: " Leomon Ancestor's Cave "
+      en_eu: Leomon's ancestor's cave
+    STR_MAP_NAME_MISTY_TREES:
+      ja: ミスティツリーズ
+      en_us: "       Misty Trees      "
+      en_eu: Misty Trees
+    STR_MAP_NAME_GREAT_CANYON:
+      ja: グレートキャニオン
+      en_us: "      Great Canyon      "
+      en_eu: Great Canyon
+    STR_MAP_NAME_GEKO_SWAMP:
+      ja: ゲッコー湿地
+      en_us: "        Geko Swamp      "
+      en_eu: Geko Swamp
+    STR_MAP_NAME_VOLUME_VILLA:
+      ja: ダイオン郷
+      en_us: "      Volume Villa      "
+      en_eu: Volume Villa
+    STR_MAP_NAME_FILE_CITY:
+      ja: はじまりの街
+      en_us: "        File City       "
+      en_eu: File City
+    STR_MAP_NAME_ITEM_KEEPER:
+      ja: 預り屋
+      en_us: "      Item Keeper       "
+      en_eu: Item Keeper
+    STR_MAP_NAME_CENTAR_CLINIC:
+      ja: ケンタル医院
+      en_us: "      Centar Clinic     "
+      en_eu: Centar Clinic
+    STR_MAP_NAME_RESTAURANT:
+      ja: レストラン
+      en_us: "       Restaurant       "
+      en_eu: Restaurant
+    STR_MAP_NAME_ITEM_SHOP:
+      ja: アイテムショップ
+      en_us: "        Item Shop       "
+      en_eu: Item Shop
+    STR_MAP_NAME_JIJIMONS_HOUSE:
+      ja: ジジモンの家
+      en_us: "      Jijimon's house   "
+      en_eu: Jijimon's house
+    STR_MAP_NAME_SECRET_ITEM_SHOP:
+      ja: ひみつアイテムショップ
+      en_us: "    Secret Item Shop    "
+      en_eu: Secret Item Shop
+    STR_MAP_NAME_TOY_TOWN:
+      ja: おもちゃのまち
+      en_us: "        Toy Town        "
+      en_eu: Toy Town
+    STR_MAP_NAME_SECRET_BEACH_CAVE:
+      ja: ひみつの海岸洞
+      en_us: "    Secret Beach Cave   "
+      en_eu: Secret Beach Cave
+    STR_MAP_NAME_FACTORIAL_TOWN:
+      ja: ファクトリアルタウン
+      en_us: "     Factorial Town     "
+      en_eu: Factorial Town
+    STR_MAP_NAME_BIRDRA_TRANSPORT:
+      ja: バードラ運送
+      en_us: "     Birdra Transport   "
+      en_eu: Birdra Transport
+    STR_MAP_NAME_ARENA_LOBBY:
+      ja: 闘技場ロビー
+      en_us: "       Arena Lobby      "
+      en_eu: Arena Lobby
+    STR_MAP_NAME_TREASURE_HUNT:
+      ja: 宝探し屋
+      en_us: "      Treasure Hunt     "
+      en_eu: Treasure Hunt
+    STR_MAP_NAME_TRASH_MOUNTAIN:
+      ja: ゴミの山
+      en_us: "     Trash Mountain     "
+      en_eu: Trash Mountain
+    STR_MAP_NAME_SEWER:
+      ja: 下水道
+      en_us: "          Sewer         "
+      en_eu: sewer
+    STR_MAP_NAME_BEETLE_LAND:
+      ja: ビートランド
+      en_us: "      Beetle Land       "
+      en_eu: Beetle Land
+    STR_MAP_NAME_MT_INFINITY:
+      ja: ムゲンマウンテン
+      en_us: "      Mt. Infinity      "
+      en_eu: Mt. Infinity
+    STR_MAP_NAME_DIGIMON_CURLING:
+      ja: デジモンカーリング場
+      en_us: "     Digimon Curling    "
+      en_eu: "Digimon Curling "
+    STR_MAP_NAME_TOY_MANSION:
+      ja: おもちゃ館
+      en_us: "       Toy Mansion      "
+      en_eu: Toy Mansion
+    STR_MAP_NAME_COSTUME_HOUSE:
+      ja: ぬいぐるみハウス
+      en_us: "      Costume House     "
+      en_eu: Costume house
+    STR_MAP_NAME_ROBOT_HOUSE:
+      ja: ロボットハウス
+      en_us: "       Robot House      "
+      en_eu: Robot House
+    STR_MAP_NAME_MANSION_2ND_FLOOR:
+      ja: 闇貴族の館・２階
+      en_us: "    Mansion 2nd floor   "
+      en_eu: Grey Lord's Mansion
+    STR_MAP_NAME_MANSION_ATTIC:
+      ja: 闇貴族の館・てんじょう裏
+      en_us: "      Mansion Attic     "
+      en_eu: Grey Lord's Mansion
+    STR_MAP_NAME_MANSION_DOT_BASEMENT:
+      ja: 闇貴族の館・地下
+      en_us: NULL
+      en_eu: Mansion Basement
+    STR_MAP_NAME_BACK_DIMENSION:
+      ja: 裏次元
+      en_us: "     Back Dimension     "
+      en_eu: Back Dimension
+    STR_MAP_NAME_KUNEMONS_BED:
+      ja: クネモンのねどこ
+      en_us: "      Kunemon's Bed     "
+      en_eu: Kunemon's Bed
+    STR_MAP_NAME_AMIDA_FOREST:
+      ja: あみだ森
+      en_us: "      Amida Forest      "
+      en_eu: Amida Forest

@@ -1,0 +1,20 @@
+SPEAKERS:
+  strings:
+    MAIN_D_801345CC:
+      ja: かんばん
+      en_us: Sign
+    MAIN_D_801345D4:
+      ja: はこ
+      en_us: Box
+    MAIN_D_801345D8:
+      ja: ベタモン
+      en_us: Betamon
+    MAIN_D_8013030C:
+      ja: シーラモン
+      en_us: Coelamon
+    MAIN_D_801345E0:
+      ja: タネモン
+      en_us: Tanemon
+    MAIN_D_801345E8:
+      ja: パルモン
+      en_us: Palmon

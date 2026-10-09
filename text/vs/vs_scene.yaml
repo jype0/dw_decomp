@@ -1,0 +1,10 @@
+RESULTS:
+  strings:
+    VS_STR_WIN:
+      ja: ＷＩＮ
+      en_us: Win
+      en_eu: WIN
+    VS_STR_LOSE:
+      ja: ＬＯＳＥ
+      en_us: Lose
+      en_eu: LOSE

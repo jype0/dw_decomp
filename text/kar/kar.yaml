@@ -1,0 +1,323 @@
+MENU:
+  strings:
+    KAR_D_8005ABB8:
+      ja: NULL
+      en_us: Start GameExplain Game
+      en_eu: NULL
+    KAR_STR_START_GAME:
+      ja: ゲームをはじめる
+      en_us: NULL
+      en_eu: Start Game
+    KAR_STR_EXPLAIN_GAME:
+      ja: 説明を聞く？
+      en_us: NULL
+      en_eu: Explain game
+
+PENGUINMON_DIALOGUE:
+  strings:
+    KAR_STR_EMPTY:
+      ja: ""
+      en_us: NULL
+    KAR_STR_PENGUINMON:
+      ja: ペンモン
+      en_us: " Penguinmon "
+    KAR_PENGUINMON_LINE_1:
+      ja: 「まず、カーリングダマのタイプを
+      en_us: First of all, please choose
+    KAR_PENGUINMON_LINE_2:
+      ja: "　選んでね。」"
+      en_us: your curling stone.
+    KAR_PENGUINMON_LINE_5:
+      ja: 「重いタマ、かるいタマ、色々なタマが
+      en_us: There are heavy, medium, and
+    KAR_PENGUINMON_LINE_6:
+      ja: "　あるから使うタイミングを"
+      en_us: light ones, so think about the
+    KAR_PENGUINMON_LINE_7:
+      ja: "　良く考えてね！」"
+      en_us: best order to use them.
+    KAR_PENGUINMON_LINE_9:
+      ja: 「まれに、タマに４つ足がついているのが
+      en_us: Some stones have four pegs.
+    KAR_PENGUINMON_LINE_10:
+      ja: "　あるんだけど、それは止まったところに"
+      en_us: They stick to where they land
+    KAR_PENGUINMON_LINE_11:
+      ja: "　くっつくから、大事に使おう。」"
+      en_us: and can become very useful.
+    KAR_PENGUINMON_LINE_13:
+      ja: 「今度は、投げる方向（点線）を
+      en_us: "Move the Directional Pad "
+    KAR_PENGUINMON_LINE_14:
+      ja: "　方向キーの左右で選んでね。」"
+      en_us: "left and right to choose the "
+    MAIN_D_80134A38:
+      ja: NULL
+      en_us: " "
+    KAR_PENGUINMON_LINE_15:
+      ja: ""
+      en_us: direction of your throw.
+    KAR_PENGUINMON_LINE_17:
+      ja: 「この時、方向キーの上下で
+      en_us: Move screen up or down with
+    KAR_PENGUINMON_LINE_18:
+      ja: "　スクロールできるよ！"
+      en_us: Dir. Pad. Use X button to
+    KAR_PENGUINMON_LINE_19:
+      ja: "　投げる方向をきめたらａｈｉで決定。」"
+      en_us: select throw direction.
+    KAR_PENGUINMON_LINE_21:
+      ja: 「最後に、投げる強さを決めてね。
+      en_us: Press X button when power
+    KAR_PENGUINMON_LINE_22:
+      ja: "　パワーゲージに合わせて"
+      en_us: gauge reaches the desired
+    KAR_PENGUINMON_LINE_23:
+      ja: "　ａｈｉで決定。」"
+      en_us: level to pick throw strength.
+    KAR_PENGUINMON_LINE_25:
+      ja: 「得点は、ＧＯＯＤマークに
+      en_us: If your curling stone lands
+    KAR_PENGUINMON_LINE_26:
+      ja: "　カーリングダマをのせると２点。」"
+      en_us: and touches the GOOD mark,
+    KAR_PENGUINMON_LINE_27:
+      ja: ""
+      en_us: you get two points.
+    KAR_PENGUINMON_LINE_29:
+      ja: 「中心のＧＯＯＤマークの外、
+      en_us: If you get it on the blue
+    KAR_PENGUINMON_LINE_30:
+      ja: "　青いラインの中だと１点。」"
+      en_us: line, but outside the center
+    KAR_PENGUINMON_LINE_31:
+      ja: ""
+      en_us: GOOD mark, one point.
+    KAR_PENGUINMON_LINE_33:
+      ja: 「右下にあるＢＡＤにのせちゃうと
+      en_us: If you touch the BAD on
+    KAR_PENGUINMON_LINE_34:
+      ja: "　－２点になるから気をつけて！！」"
+      en_us: bottom right, you'll lose
+    KAR_PENGUINMON_LINE_35:
+      ja: ""
+      en_us: two points, so be careful.
+    KAR_PENGUINMON_LINE_37:
+      ja: 「あと、引き分けの場合は
+      en_us: And, in the case of a tie,
+    KAR_PENGUINMON_LINE_38:
+      ja: "　おいらの勝ちにしてね！"
+      en_us: I win!
+    KAR_PENGUINMON_LINE_39:
+      ja: "　それじゃ、ゲームスタートだよ！！」"
+      en_us: So let's start the game!!
+    KAR_PENGUINMON_LINE_41:
+      ja: 「あんちゃん、ぜんぜんたいしたこと
+      en_us: " "
+    KAR_PENGUINMON_LINE_42:
+      ja: "　ないなぁ！」"
+      en_us: You're not that great!
+    KAR_PENGUINMON_LINE_45:
+      ja: 「まだまだ勝負はこれからだい！」
+      en_us: The battle is just beginning!
+    KAR_PENGUINMON_LINE_49:
+      ja: 「あんちゃん、なかなかやるね！」
+      en_us: Hey you're pretty good!
+    KAR_PENGUINMON_LINE_53:
+      ja: 「へへへ、おいらの勝ちだぁ！」
+      en_us: Yeah! I won!
+    KAR_PENGUINMON_LINE_57:
+      ja: 「うう、おいらのまけだよ・・・」
+      en_us: "Awh, I lost. "
+    MAIN_D_80134A43:
+      ja: NULL
+      en_us: ""
+    KAR_PENGUINMON_LINE_3:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_43:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_46:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_47:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_50:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_51:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_54:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_55:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_58:
+      ja: ""
+      en_us: " "
+    KAR_PENGUINMON_LINE_59:
+      ja: ""
+      en_us: " "
+
+PENGUINMON_HIGHLIGHT_MARKS:
+  strings:
+    KAR_STR_BUTTON_MARK_COL11:
+      ja: "　　　　　　　　　　　ａ"
+      en_us: NULL
+    KAR_STR_BUTTON_MARK_COL1:
+      ja: "　ａ"
+      en_us: NULL
+
+METALMAMEMON_DIALOGUE:
+  strings:
+    KAR_STR_METALMAMEMON:
+      ja: メタルマメモン
+      en_us: " MetalMamemon "
+    KAR_METALMAMEMON_LINE_1:
+      ja: 「そうだな。まずはカーリングダマの
+      en_us: Yeah. You gotta first pick
+    KAR_METALMAMEMON_LINE_2:
+      ja: "　タイプを選ぶ。」"
+      en_us: the type of curling stone.
+    KAR_METALMAMEMON_LINE_5:
+      ja: 「おれは天才だから、色々なタマを
+      en_us: I'm a genius, so I can use
+    KAR_METALMAMEMON_LINE_6:
+      ja: "　タイミングを良く使うことができる。"
+      en_us: various stones in the right
+    KAR_METALMAMEMON_LINE_7:
+      ja: "　それが勝つヒケツさっ！」"
+      en_us: order. It's key to winning.
+    KAR_METALMAMEMON_LINE_9:
+      ja: 「４つ足がついているタマは
+      en_us: Stones with four pegs stop
+    KAR_METALMAMEMON_LINE_10:
+      ja: "　止まったところにくっつくから、"
+      en_us: and stay where they land,
+    KAR_METALMAMEMON_LINE_11:
+      ja: "　すっげー大事だぜ。」"
+      en_us: so they are very valuable.
+    KAR_METALMAMEMON_LINE_13:
+      ja: 「今度は、投げる方向（点線）を
+      en_us: Choose the direction of throw
+    KAR_METALMAMEMON_LINE_14:
+      ja: "　方向キーの左右で選べ。」"
+      en_us: with the Directional Pad,
+    KAR_METALMAMEMON_LINE_15:
+      ja: ""
+      en_us: by moving it left and right.
+    KAR_METALMAMEMON_LINE_17:
+      ja: 「この時、方向キーの上下で
+      en_us: You can scroll screen moving
+    KAR_METALMAMEMON_LINE_18:
+      ja: "　スクロールできるぜ！"
+      en_us: Directional Pad up and down.
+    KAR_METALMAMEMON_LINE_19:
+      ja: "　投げる方向をきめたらａｈｉで決定だ。」"
+      en_us: Press X button to throw it.
+    KAR_METALMAMEMON_LINE_21:
+      ja: 「最後に、投げる強さを決めろ。
+      en_us: Press X button when power
+    KAR_METALMAMEMON_LINE_23:
+      ja: "　これも、ａｈｉで決定だ。」"
+      en_us: level to pick throw strength.
+    KAR_METALMAMEMON_LINE_22:
+      ja: "　パワーゲージに合わせて"
+      en_us: "gauge reaches the desired "
+    KAR_METALMAMEMON_LINE_25:
+      ja: 「得点は、ＧＯＯＤマークに
+      en_us: "Points: If you get the"
+    KAR_METALMAMEMON_LINE_26:
+      ja: "　カーリングダマをのせると２点。」"
+      en_us: stone on the GOOD mark,
+    KAR_METALMAMEMON_LINE_33:
+      ja: 「右下にあるＢＡＤにのせると
+      en_us: If you get on right bottom
+    KAR_METALMAMEMON_LINE_34:
+      ja: "　－２点になるからせいぜい"
+      en_us: BAD mark, it will be minus
+    KAR_METALMAMEMON_LINE_35:
+      ja: "　気をつけるんだな！」"
+      en_us: two points, so be careful.
+    KAR_METALMAMEMON_LINE_37:
+      ja: 「同点は、おれの勝ち！！
+      en_us: In the case of a tie, I win!
+    KAR_METALMAMEMON_LINE_38:
+      ja: "　それじゃ、ゲームスタートだ」"
+      en_us: Start the game!!
+    KAR_METALMAMEMON_LINE_41:
+      ja: 「フッ、このまま勝つ！」
+      en_us: I'll win!
+    KAR_METALMAMEMON_LINE_45:
+      ja: 「まだ負けたわけではない！！」
+      en_us: I haven't lost yet!
+    KAR_METALMAMEMON_LINE_49:
+      ja: 「この勝負、負けるわけには！」
+      en_us: I can't lose this match!
+    KAR_METALMAMEMON_LINE_53:
+      ja: 「はっはっはっ！俺の勝ちだな！」
+      en_us: Yeah, I won!
+    KAR_METALMAMEMON_LINE_57:
+      ja: 「くっ・・・あと少しのところを・・・」
+      en_us: Awh, I almost won.
+    KAR_METALMAMEMON_LINE_3:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_27:
+      ja: ""
+      en_us: you get two points.
+    KAR_METALMAMEMON_LINE_29:
+      ja: 「中心のＧＯＯＤマークの外、
+      en_us: If you get it on the blue
+    KAR_METALMAMEMON_LINE_30:
+      ja: "　青いラインの中だと１点。」"
+      en_us: line, but outside the center
+    KAR_METALMAMEMON_LINE_31:
+      ja: ""
+      en_us: GOOD mark, one point.
+    KAR_METALMAMEMON_LINE_39:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_42:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_43:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_46:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_47:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_50:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_51:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_54:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_55:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_58:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_59:
+      ja: ""
+      en_us: ""
+    KAR_METALMAMEMON_LINE_60:
+      ja: ""
+      en_us: ""
+
+METALMAMEMON_HIGHLIGHT_MARKS:
+  strings:
+    KAR_STR_BUTTON_MARK_COL5:
+      ja: "　　　　　ａ"
+      en_us: NULL

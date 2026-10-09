@@ -19,11 +19,13 @@
 #include <dw/swap.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/btl/battle_hud.h>
 
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern StatsGains STATS_GAINS;
 extern char BTL_STR_LISTENS_TO[];
+extern char *BTL_COMMAND_NAMES[];
 #if !VERSION_IS(US)
 extern char BTL_STR_WHITE_WAIT[];
 #else
@@ -117,31 +119,13 @@ static void *battle_hud_functions[] = {
 	BTL_drawHoveredCommandName,
 };
 
-#if VERSION_IS(US)
-char BTL_STR_COMMAND_RUN[] = "Run";
-char BTL_STR_COMMAND_ATTACK[] = "Attack";
-char BTL_STR_COMMAND_CHANGE[] = "Change";
-#endif
 uint8_t BTL_COMMAND_LABEL_U[5] = { 0, 11, 25, 39, 50 };
 uint8_t BTL_COMMAND_LABEL_W[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
 uint8_t BTL_DEATH_COUNTDOWN_DIGIT_U[4] = { 0x50, 0x68, 0x58, 0x68 };
 uint8_t BTL_DEATH_COUNTDOWN_DIGIT_V[4] = { 0xa8, 0x90, 0x90, 0x80 };
-#if !VERSION_IS(US)
-char BTL_STR_YELLOW[] = "C7";
-char BTL_STR_DROPPED[] = "C1はRC7";
-char BTL_STR_MP_BONUS_20[] = "２０";
-char BTL_STR_MP_BONUS_15[] = "１５";
-char BTL_STR_MP_BONUS_10[] = "１０";
-char BTL_STR_MP_BONUS_5[] = "５";
-#else
-char BTL_STR_YELLOW[] = "#C7";
-char BTL_STR_WHITE_WAIT[] = "#C1#W";
-char BTL_STR_MP_BONUS_20[] = "20";
-char BTL_STR_MP_BONUS_15[] = "15";
-char BTL_STR_MP_BONUS_10[] = "10";
-char BTL_STR_MP_BONUS_5[] = "5";
-char BTL_STR_MP_BONUS_PERCENT[] = "%!#W";
-#endif
+
+MESSAGES_TEXT
+
 uint8_t BTL_FINISHER_SEGMENT_U[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
 uint8_t BTL_FINISHER_SEGMENT_W[8] = { 6, 4, 8, 4, 8, 8, 5, 5 };
 uint8_t BTL_FINISHER_SEGMENT_X[8] = { 0, 6, 10, 18, 22, 30, 38, 43 };
@@ -212,26 +196,6 @@ static void *battle_hud_sbss_order[] = {
 };
 
 // clang-format off
-#if !VERSION_IS(US)
-extern char *BTL_COMMAND_NAMES[];
-#else
-char BTL_STR_COMMAND_YOUR_CALL[] = "Your Call";
-char BTL_STR_COMMAND_MODERATE[] = "Moderate";
-char BTL_STR_COMMAND_DISTANCE[] = "Distance";
-char BTL_STR_COMMAND_DEFENSIVE[] = "Defensive";
-
-char *BTL_COMMAND_NAMES[8] = {
-	BTL_STR_COMMAND_RUN,
-	BTL_STR_COMMAND_ATTACK,
-	BTL_STR_COMMAND_YOUR_CALL,
-	BTL_STR_COMMAND_MODERATE,
-	BTL_STR_COMMAND_DISTANCE,
-	BTL_STR_COMMAND_DEFENSIVE,
-	BTL_STR_COMMAND_CHANGE,
-	NULL,
-};
-#endif
-
 int8_t BTL_SHOUT_HOP_OFFSETS[20] = {
 	0, -8, -14, -20, -25, -30, -34, -36,
 	-38, -39, -40, -39, -38, -36, -34, -30,

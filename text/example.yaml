@@ -1,0 +1,54 @@
+# Example YAML file for tools/gen_text.py.
+#
+# For each release, text/<dir>/<name>.yaml generates
+# build/<release>/psx/generated/text/<dir>/<name>.h, which
+# src/<dir>/<name>.c includes as <text/<dir>/<name>.h>. The header has a
+# <BLOCK>_TEXT macro for each block and a <BLOCK>_STRINGS macro for each
+# table, used where the C file defines that data.
+
+GREETING:                       # GREETING_TEXT: char GREETING[] = "...";
+  ja: ようこそ
+  ja@jp_trial: ようこそ！
+  en_us: " Welcome"             # en_eu: en_us text in full width
+LABELS:                         # LABELS_TEXT: char YES[] = "..."; ...
+  strings:
+    YES:
+      ja: はい
+      en_us: "Yes"
+    OK:
+      ja: はい                  # same text: #define OK YES
+      en_us: OK
+    BACK:
+      ja: もどる
+      en_us: NULL               # no BACK in us
+      en_eu: Back
+NAMES:                          # NAMES_TEXT: char *NAMES[] = {...};
+  storage: {eu: literal}        # eu: literals; others: named strings
+  entries:
+    - name: NAME_0              # a new text: char NAME_0[] in
+                                # NAMES_STRINGS
+      ja: なまえ
+      en_us: Name
+      named: [eu]               # a named string even where literal
+    - ja: なまえ                # same text: points to NAME_0
+      en_us: Name
+    - NULL
+HELP:
+  storage: {eu: literal}
+  lines: {eu: 2}                # strings per entry; the rest are ""
+  empty: HELP_EMPTY             # "" in literal storage points here
+  entries:
+    - name: HELP_0
+      ja: たすけて
+      en_us: Help               # eu: "Help", HELP_EMPTY
+    - name: HELP_1
+      ja: もどる
+      en_us: Back
+      en_eu: [Go back, NULL]
+TITLES:
+  storage: {default: embedded, eu: literal}
+  macro: TITLE                  # TITLE(FIRST) gives "First", where
+  entries:                      # the storage is embedded
+    - name: FIRST
+      ja: いち
+      en_us: First

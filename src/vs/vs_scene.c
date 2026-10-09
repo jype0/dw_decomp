@@ -16,6 +16,7 @@
 #include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
+#include <text/vs/vs_scene.h>
 
 typedef struct {
 	int16_t w;
@@ -128,16 +129,8 @@ static void *vs_scene_functions[] = {
 	VS_resetMatchState,
 };
 
-#if VERSION_IS(EU)
-char VS_STR_LOSE[] = "ＬＯＳＥ";
-char VS_STR_WIN[] = "ＷＩＮ";
-#elif !VERSION_IS(US)
-char VS_STR_WIN[] = "ＷＩＮ";
-char VS_STR_LOSE[] = "ＬＯＳＥ";
-#else
-char VS_STR_WIN[] = "Win";
-char VS_STR_LOSE[] = "Lose";
-#endif
+RESULTS_TEXT
+
 uint8_t VS_ARENA_MODEL_COUNTS[4] = { 3, 4, 2, 0 };
 uint8_t VS_ARENA_TIM_COUNTS[4] = { 4, 1, 1, 0 };
 

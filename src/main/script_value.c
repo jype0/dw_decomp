@@ -5,6 +5,7 @@
 #include <dw/script.h>
 #include <dw/ui.h>
 #include <dw/version.h>
+#include <text/main/script_value.h>
 
 typedef struct {
 	int32_t v[6];
@@ -30,43 +31,7 @@ static void *script_value_functions[] = {
 };
 
 // clang-format off
-#if VERSION_IS(EU)
-char MAIN_D_801345CC[] = "Ｓｉｇｎ";
-
-char MAIN_D_801345D8[] = "Ｂｅｔａｍｏｎ";
-
-char MAIN_D_8013030C[] = "Ｃｏｅｌａｍｏｎ";
-
-char MAIN_D_801345E0[] = "Ｔａｎｅｍｏｎ";
-
-char MAIN_D_801345E8[] = "Ｐａｌｍｏｎ";
-
-char MAIN_D_801345D4[] = "Ｂｏｘ";
-#elif !VERSION_IS(US)
-char MAIN_D_801345CC[] = "かんばん";
-
-char MAIN_D_801345D4[] = "はこ";
-
-char MAIN_D_801345D8[] = "ベタモン";
-
-char MAIN_D_8013030C[] = "シーラモン";
-
-char MAIN_D_801345E0[] = "タネモン";
-
-char MAIN_D_801345E8[] = "パルモン";
-#else
-char MAIN_D_801345CC[] = "Sign";
-
-char MAIN_D_801345D4[4] = "Box";
-
-char MAIN_D_801345D8[8] = "Betamon";
-
-char MAIN_D_8013030C[] = "Coelamon";
-
-char MAIN_D_801345E0[8] = "Tanemon";
-
-char MAIN_D_801345E8[] = "Palmon";
-#endif
+SPEAKERS_TEXT
 
 int16_t STATS_LIMIT_ARRAY[22] = {
 	0x03e7, 0x03e7, 0x03e7, 0x03e7, 0x270f, 0x270f, 0x270f, 0x270f,

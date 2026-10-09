@@ -24,6 +24,7 @@
 #include <dw/tamer.h>
 #include <dw/ui.h>
 #include <dw/version.h>
+#include <text/main/game_menu.h>
 
 /* Colors of the two button glyphs in the medal and card view footers */
 #if !VERSION_IS(US)
@@ -330,11 +331,26 @@ uint8_t EQUIPPED_MOVES[4] = {
 
 SVECTOR MEDAL_ROTATION = { 0x0000, 0x0000, 0x0000, 0x0000 };
 
-#if VERSION_IS(US)
-char MAIN_D_80134240[] = "Current";
+GsRVIEW2 DIGIVICE_ENTITY_VIEW = {
+	1300, 0, -3280, 0, 0, 0, 0, NULL,
+};
 
-char MAIN_D_80134248[] = "Ending";
-#endif
+GsRVIEW2 MEDAL_VIEW = {
+	-1050, 220, -10000, -1050, 220, 0, 0, NULL,
+};
+
+MENU_LABELS_TEXT
+
+StatsIconClutTable STATS_VIEW_ELEMENT_CLUT = { {
+	0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09, 0x09,
+	0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+	0x0b, 0x04, 0x04, 0x04, 0x0a,
+} };
+
+ConditionMaskTable MAIN_D_80123DD0 = { {
+	0x00000040, 0x00000020, 0x00000004, 0x00000001,
+	0x00000010, 0x00000002,
+} };
 
 char STR_OVERWORLD_EMPTY[] = "";
 
@@ -356,43 +372,13 @@ TriangleCursorOffsetData SELECTION_CURSOR_HEIGHT = { { 0x04, 0x04, 0x04, 0x04, 0
 
 RECT MENU_TEXT_AREA = { 0, 232, 24, 12 };
 
-#if !VERSION_IS(US)
-char STR_YEAR_DAY[] = "年日";
-#else
-char STR_YEAR_DAY[8] = "YearDay";
-#endif
+YEAR_DAY_TEXT
 
 DigimonTabs DIGIMON_MENU_VIEWS = { { 0x01, 0x01 } };
 
 PlayerTabs MAIN_D_801342A4 = { { 0x01, 0x01, 0x01, 0x01 } };
 
-#if !VERSION_IS(US)
-char MAIN_D_80123DE8[] = "半人前";
-
-char MAIN_D_80123DF4[] = "初級";
-
-char MAIN_D_80123E04[] = "中級";
-
-char MAIN_D_80123E10[] = "一流";
-
-char MAIN_D_801342D0[] = "天才";
-
-char MAIN_D_801342D8[] = "伝説";
-#else
-char MAIN_D_801342A8[8] = "Amateur";
-
-char MAIN_D_801342B0[] = "Novice";
-
-char MAIN_D_801342B8[8] = "Veteran";
-
-char MAIN_D_801342C0[] = "Super";
-
-char MAIN_D_801342C8[] = "Master";
-
-char MAIN_D_801342D0[] = "Genius";
-
-char MAIN_D_801342D8[] = "Legend";
-#endif
+LEVEL_TITLES_TEXT
 
 RECT DIGIMON_STATS_TEXT_AREA = { 0, 24, 256, 200 };
 
@@ -415,328 +401,6 @@ RECT MEDAL_VIEW_TEXT_AREA = { 0, 12, 256, 200 };
 RECT MEDAL_DETAIL_AREA = { 0, 24, 252, 48 };
 
 RECT CARD_VIEW_TEXT_AREA = { 0, 12, 256, 200 };
-
-GsRVIEW2 DIGIVICE_ENTITY_VIEW = {
-	1300, 0, -3280, 0, 0, 0, 0, NULL,
-};
-
-GsRVIEW2 MEDAL_VIEW = {
-	-1050, 220, -10000, -1050, 220, 0, 0, NULL,
-};
-
-#if !VERSION_IS(US)
-char MAIN_D_801238A0[] = "ステータス技セット戦績";
-
-char MAIN_D_801238B0[] = "才ｇしつけ／ＬＩＦＥのろいＨＰＭＰゆうよわ";
-
-char MAIN_D_801238D8[] = "あさがたひるがたあさよわゆうがたよるがた";
-
-char MAIN_D_80123900[] = "つけかえ技必殺技おぼえた技";
-
-char MAIN_D_80123914[] = "へルプｃｈｉ近遠全自";
-
-char MAIN_D_80123920[] = "ａｈｉを押すと、技セットモード";
-
-char MAIN_D_80123938[] = "毒混乱マヒ液晶化";
-
-char MAIN_D_8012394C[] = "技セットモードの解除はｂｈｉ";
-
-char MAIN_D_80123958[] = "近距離遠距離全体技補助技";
-
-char MAIN_D_80123970[] = "まだ３つの技をつけてない時はを選んで";
-
-char MAIN_D_80123990[] = "つけかえの時はを　ｈｉでキャンセルして";
-
-char MAIN_D_801239AC[] = "技セットヘルプを選んで　ｈｉで決定ａ";
-
-char MAIN_D_80134240[] = "は、つけかえ技として選ばれている技";
-
-char MAIN_D_801239C4[] = "は、つけかえられる技（技あり）";
-
-char MAIN_D_801239D0[] = "は、まだ覚えていない技（技なし）";
-
-char MAIN_D_801239DC[] = "は、性質でつけかえできない技";
-
-char MAIN_D_801239E8[] = "は、つけかえようとして今選んでいる技";
-
-char MAIN_D_801239F4[] = "合計戦績勝った数負けた数勝率％";
-
-char MAIN_D_80123A18[] = "ステータスデジモン表メダルカードつり";
-
-char MAIN_D_80123A3C[] = "メダルコレクションａｂｈｉｊｋｌｍｎｏ？";
-
-char MAIN_D_80123A60[] = "名前才テイマーレベル育てたデジモンひき";
-
-char MAIN_D_80123A7C[] = "持ってるお金｛｝かかった時間：テイマー";
-
-char MAIN_D_80123A98[] = "特別なアイテム集めたメダル枚";
-
-char MAIN_D_80123AB0[] = "カードリストａｈｉｊｋｌｂｈｉｍｎｏ枚";
-
-char MAIN_D_80123AD0[] = "ａｈｉｊｋｌｂｈｉｍｎｏくわしいデータ";
-
-char MAIN_D_80123AE4[] = "進化系図幼年期幼年期成長期成熟期完全体";
-
-char MAIN_D_80123B10[] = "基本体重ｇ属性活動時間必殺技";
-
-char MAIN_D_80123B20[] = "つりの記録全長";
-
-char STR_MEDAL_NAME_GRADE_CUP[] = "グレード戦制覇";
-
-char STR_MEDAL_NAME_VERSION_CUP[] = "バージョン杯制覇";
-
-char STR_MEDAL_NAME_TYPE_CUP[] = "性質杯制覇";
-
-char STR_MEDAL_NAME_SPECIAL_CUP[] = "特別杯制覇";
-
-char STR_MEDAL_NAME_100_TIMES[] = "合計１００勝";
-
-char STR_MEDAL_NAME_TECHNIQUE_MASTER[] = "全技習得";
-
-char STR_MEDAL_NAME_DIGIMON_MASTER[] = "全デジモン育成";
-
-char STR_MEDAL_NAME_MAX_ABILITIES[] = "全能力ＭＡＸ値";
-
-char STR_MEDAL_NAME_PERFECT_CURLING[] = "カーリング満点";
-
-char STR_MEDAL_NAME_100_FISH[] = "釣り１００ぴき";
-
-char MAIN_D_80134248[] = "エンディング";
-
-char STR_MEDAL_NAME_TOWN_FLOURISHING[] = "街が最大発展";
-
-char STR_MEDAL_NAME_CARD_COMPLETE[] = "カードコンプリート";
-
-char STR_MEDAL_NAME_BITS_MAXED[] = "｛｝最大";
-
-char STR_MEDAL_NAME_10_YEARS[] = "開始１０周年";
-
-char STR_MEDAL_DESCRIPTION_CUP_D_C_B_A_S[] = "グレード戦Ｄ、Ｃ、Ｂ、Ａ、Ｓ、";
-
-char STR_MEDAL_DESCRIPTION_WIN_IN_ALL[] = "全てで優勝";
-
-char STR_MEDAL_DESCRIPTION_WIN_IN_ALL_VER_1_2_3_4_0[] = "ＶＥＲ　１、２、３、４、０、全てで優勝";
-
-char STR_MEDAL_DESCRIPTION_FIRE_GRAPPLE_THUNDER_WIND[] = "ファイアー、グラップル、サンダーウインド、";
-
-char STR_MEDAL_DESCRIPTION_NATURE_COOL_METALLIC_FILTH_CUP[] = "ネイチャー、クール、メタリック、ダーティ杯";
-
-char STR_MEDAL_DESCRIPTION_WIN_IN_ALL_2[] = "の全てで優勝";
-
-char STR_MEDAL_DESCRIPTION_DINO_WING_ANIMAL_HUMAN_CUP[] = "ダイノ、ウイング、アニマル、ヒューマン杯";
-
-char STR_MEDAL_DESCRIPTION_WON_CHAMPIONSHIP_100_TIMES[] = "大会（何でもよい）で１００回優勝する";
-
-char STR_MEDAL_DESCRIPTION_MASTERED_56_SWITCH_TECHNIQUES[] = "全てのつけかえ技５６種を技リストに習得";
-
-char STR_MEDAL_DESCRIPTION_RAISED_ALL_61_DIGIMON[] = "全デジモン６１種を育てる";
-
-char STR_MEDAL_DESCRIPTION_MAXED_ALL_OF_THE_DIGIMONS[] = "デジモン１ぴきのパラメータ６種を";
-
-char STR_MEDAL_DESCRIPTION_PARAMETERS[] = "ＭＡＸにする";
-
-char STR_MEDAL_DESCRIPTION_GOT_A_PERFECT_SCORE_IN_CURLING[] = "カーリングで満点を取る";
-
-char STR_MEDAL_DESCRIPTION_100_FISH_CAUGHT[] = "釣った魚の合計１００ぴき";
-
-char STR_MEDAL_DESCRIPTION_FINISHED_THE_GAME[] = "ラスボスを倒し一度エンディングを見る";
-
-char STR_MEDAL_DESCRIPTION_JIJIMON_SAID_THE_TOWN[] = "ジジモンに最大発展完了のコメントをもらう";
-
-char STR_MEDAL_DESCRIPTION_COLLECTED_ALL_DIGIMON_CARDS[] = "デジモンカードを全種集める";
-
-char STR_MEDAL_DESCRIPTION_COLLECTED_999999_BITS[] = "｛｝を９９９９９９にする";
-
-char STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS[] = "ゲームを始めて３００日たった";
-#else
-char MAIN_D_801238A0[] = "Status  Tech";
-
-char MAIN_D_801238B0[] = "      Disc.      Life  Vir. HPMPnight";
-
-char MAIN_D_801238D8[] = "sunup  day      groggysleepy sunset ";
-
-char MAIN_D_80123900[20] = "TechsetFinal  Techs";
-
-char MAIN_D_80123914[12] = {
-	0x68, 0x65, 0x6c, 0x70, 0x20, 0x20, 0x20, 0x20,
-	0x20, 0x81, 0xa0, 0x00,
-};
-
-char MAIN_D_80123920[] = {
-	0x81, 0xa2, 0x20, 0x43, 0x68, 0x61, 0x6e, 0x67,
-	0x65, 0x20, 0x54, 0x65, 0x63, 0x68, 0x6e, 0x69,
-	0x71, 0x75, 0x65, 0x73, 0x00,
-};
-
-char MAIN_D_80123938[] = "poisconfstunflat";
-
-char MAIN_D_8012394C[] = {
-	0x81, 0x7e, 0x20, 0x43, 0x61, 0x6e, 0x63, 0x65,
-	0x6c, 0x00,
-};
-
-char MAIN_D_80123958[] = "S      L      W      A";
-
-char MAIN_D_80123970[] = "Select - choose to select tech";
-
-char MAIN_D_80123990[] = {
-	0x43, 0x61, 0x6e, 0x63, 0x65, 0x6c, 0x20, 0x2d,
-	0x20, 0x81, 0xa2, 0x20, 0x64, 0x65, 0x73, 0x65,
-	0x6c, 0x65, 0x63, 0x74, 0x73, 0x20, 0x74, 0x65,
-	0x63, 0x68, 0x00,
-};
-
-char MAIN_D_801239AC[] = "Technique Select Help";
-
-char MAIN_D_801239C4[] = "Mastered";
-
-char MAIN_D_801239D0[] = "Unmastered";
-
-char MAIN_D_801239DC[] = "Unusable";
-
-char MAIN_D_801239E8[] = "Selected";
-
-char MAIN_D_801239F4[36] = "BattleRecord Wins Losses Percentage";
-
-char MAIN_D_80123A18[] = "Player   Chart    Med. Card Fish";
-
-char MAIN_D_80123A3C[] = {
-	0x4d, 0x65, 0x64, 0x61, 0x6c, 0x73, 0x20, 0x43,
-	0x68, 0x61, 0x72, 0x74, 0x20, 0x20, 0x20, 0x81,
-	0xa2, 0x81, 0x7e, 0x20, 0x53, 0x65, 0x6c, 0x65,
-	0x63, 0x74, 0x20, 0x20, 0x43, 0x61, 0x6e, 0x63,
-	0x65, 0x6c, 0x00,
-};
-
-char MAIN_D_80123A60[] = "NameLevel           Raised";
-
-char MAIN_D_80123A7C[] = "Bits                Time";
-
-char MAIN_D_80123A98[] = "Items          Medals";
-
-char MAIN_D_80123AB0[] = {
-	0x43, 0x61, 0x72, 0x64, 0x20, 0x4c, 0x69, 0x73,
-	0x74, 0x81, 0xa2, 0x53, 0x65, 0x6c, 0x65, 0x63,
-	0x74, 0x20, 0x20, 0x20, 0x81, 0x7e, 0x43, 0x61,
-	0x6e, 0x63, 0x65, 0x6c, 0x00,
-};
-
-char MAIN_D_80123AD0[20] = {
-	0x81, 0xa2, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74,
-	0x20, 0x20, 0x20, 0x81, 0x7e, 0x43, 0x61, 0x6e,
-	0x63, 0x65, 0x6c, 0x00,
-};
-
-char MAIN_D_80123AE4[] = {
-	0x54, 0x72, 0x65, 0x65, 0x20, 0x46, 0x72, 0x65,
-	0x73, 0x68, 0x54, 0x72, 0x61, 0x69, 0x6e, 0x69,
-	0x6e, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-	0x20, 0x81, 0xa2, 0x53, 0x65, 0x6c, 0x65, 0x63,
-	0x74, 0x00,
-};
-
-char MAIN_D_80123B10[] = "RookieChampion";
-
-char MAIN_D_80123B20[] = "Ultimate";
-
-char STR_MEDAL_NAME_GRADE_CUP[] = "Grade Cup";
-
-char STR_MEDAL_NAME_VERSION_CUP[12] = "Version Cup";
-
-char STR_MEDAL_NAME_TYPE_CUP[] = "Type Cup";
-
-char STR_MEDAL_NAME_SPECIAL_CUP[12] = "Special Cup";
-
-char STR_MEDAL_NAME_100_TIMES[] = "100 Times";
-
-char STR_MEDAL_NAME_TECHNIQUE_MASTER[] = "Technique Master";
-
-char STR_MEDAL_NAME_DIGIMON_MASTER[] = "Digimon Master";
-
-char STR_MEDAL_NAME_MAX_ABILITIES[] = "Max Abilities";
-
-char STR_MEDAL_NAME_PERFECT_CURLING[16] = "Perfect Curling";
-
-char STR_MEDAL_NAME_100_FISH[] = "100 Fish";
-
-char STR_MEDAL_NAME_TOWN_FLOURISHING[] = "Town Flourishing";
-
-char STR_MEDAL_NAME_CARD_COMPLETE[] = "Card Complete";
-
-char STR_MEDAL_NAME_BITS_MAXED[] = "Bits Maxed";
-
-char STR_MEDAL_NAME_10_YEARS[] = "10 Years";
-
-char STR_MEDAL_DESCRIPTION_CUP_D_C_B_A_S[] = "Cup D C B A S";
-
-char STR_MEDAL_DESCRIPTION_WIN_IN_ALL[] = "Win in all";
-
-char STR_MEDAL_DESCRIPTION_WIN_IN_ALL_VER_1_2_3_4_0[] = "Win in all VER 1 2 3 4 0";
-
-char STR_MEDAL_DESCRIPTION_FIRE_GRAPPLE_THUNDER_WIND[] = "Fire Grapple Thunder Wind";
-
-char STR_MEDAL_DESCRIPTION_NATURE_COOL_METALLIC_FILTH_CUP[] = "Nature Cool Metallic Filth Cup";
-
-char STR_MEDAL_DESCRIPTION_DINO_WING_ANIMAL_HUMAN_CUP[] = "Dino Wing Animal Human Cup";
-
-char STR_MEDAL_DESCRIPTION_WON_CHAMPIONSHIP_100_TIMES[] = "Won Championship 100 times";
-
-char STR_MEDAL_DESCRIPTION_MASTERED_56_SWITCH_TECHNIQUES[] = "Mastered 56 switch techniques";
-
-char STR_MEDAL_DESCRIPTION_RAISED_ALL_61_DIGIMON[] = "Raised all 61 Digimon";
-
-char STR_MEDAL_DESCRIPTION_MAXED_ALL_OF_THE_DIGIMONS[] = "Maxed all of the Digimons";
-
-char STR_MEDAL_DESCRIPTION_PARAMETERS[] = "parameters";
-
-char STR_MEDAL_DESCRIPTION_GOT_A_PERFECT_SCORE_IN_CURLING[] = "Got a perfect score in curling";
-
-char STR_MEDAL_DESCRIPTION_100_FISH_CAUGHT[16] = "100 fish caught";
-
-char STR_MEDAL_DESCRIPTION_FINISHED_THE_GAME[] = "Finished the game";
-
-char STR_MEDAL_DESCRIPTION_JIJIMON_SAID_THE_TOWN[] = "Jijimon said the town";
-
-char STR_MEDAL_DESCRIPTION_IS_FLOURISHING[] = "is flourishing";
-
-char STR_MEDAL_DESCRIPTION_COLLECTED_ALL_DIGIMON_CARDS[28] = "Collected all Digimon Cards";
-
-char STR_MEDAL_DESCRIPTION_COLLECTED_999999_BITS[] = "Collected 999999 bits";
-
-char STR_MEDAL_DESCRIPTION_SURVIVED_FOR_300_DAYS[] = "Survived for 300 days!";
-#endif
-
-StatsIconClutTable STATS_VIEW_ELEMENT_CLUT = { {
-	0x08, 0x08, 0x08, 0x09, 0x09, 0x09, 0x09, 0x09,
-	0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
-	0x0b, 0x04, 0x04, 0x04, 0x0a,
-} };
-
-ConditionMaskTable MAIN_D_80123DD0 = { {
-	0x00000040, 0x00000020, 0x00000004, 0x00000001,
-	0x00000010, 0x00000002,
-} };
-
-#if !VERSION_IS(US)
-char MAIN_D_801342A8[] = "しろうと";
-
-char MAIN_D_801342B0[] = "かけだし";
-
-char MAIN_D_801342B8[] = "ベテラン";
-
-char MAIN_D_801342C0[] = "スーパー";
-
-char MAIN_D_801342C8[] = "マスター";
-#else
-char MAIN_D_80123DE8[] = "Beginner";
-
-char MAIN_D_80123DF4[] = "Intermediate";
-
-char MAIN_D_80123E04[] = "Advanced";
-
-char MAIN_D_80123E10[] = "Top rate";
-#endif
 
 EvoClutTable EVO_CHART_VIEW_COLORS = { {
 	0x7a07, 0x7a47, 0x7a87, 0x7ac7, 0x7b07,

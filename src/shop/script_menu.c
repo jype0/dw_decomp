@@ -12,6 +12,7 @@
 #include <dw/trigger.h>
 #include <dw/ui.h>
 #include <dw/version.h>
+#include <text/shop/script_menu.h>
 
 typedef struct {
 	uint8_t data[8];
@@ -206,31 +207,11 @@ uint8_t MOJYAMON_ITEMS_GET[12] = {
 	0x15, 0x00, 0x00, 0x00,
 };
 
-#if VERSION_IS(EU)
-char STR_YOUR_NAME[] = "Ｙｏｕｒ　ｎａｍｅ";
-
-char STR_DIGIMON_NAME[] = "Ｄｉｇｉｍｏｎ’ｓ　ｎａｍｅ";
-
-char STR_NAME_ENTRY[] = "Ｎａｍｅ　　";
-
-char STR_HIRAGANA_KATAKANA_ALPHANUMERIC_BACK_DONE[] = "ＢａｃｋＯＫ　　";
-#elif !VERSION_IS(US)
-char STR_YOUR_NAME[] = "おぬしの名前";
-
-char STR_DIGIMON_NAME[] = "デジモンの名前";
-
-char STR_NAME_ENTRY[] = "名前入力";
-
-char STR_HIRAGANA_KATAKANA_ALPHANUMERIC_BACK_DONE[] = "かなカナ英数戻る終了";
-#endif
+NAMING_TEXT
 
 char MAIN_D_80130450[] = "あいうえお";
 
-#if !VERSION_IS(US)
-char MAIN_D_8013045C[] = "かきくけこ";
-#else
-char MAIN_D_8013045C[] = "かきくけと";
-#endif
+HIRAGANA_KA_ROW_TEXT
 
 char MAIN_D_80130468[] = "さしすせそ";
 
@@ -370,19 +351,7 @@ char *CHAR_PAGE1_LEFT[9] = {
 	MAIN_D_80130540,
 };
 
-#if VERSION_IS(US)
-char MAIN_D_801306F0[] = "ａｂｃｄｅ";
-
-char MAIN_D_801306FC[] = "ｆｇｈｉｊ";
-
-char MAIN_D_80130708[] = "ｋｌｍｎｏ";
-
-char MAIN_D_80130714[] = "ｐｑｒｓｔ";
-
-char MAIN_D_80130720[] = "ｕｖｗｘｙ";
-
-char MAIN_D_8013072C[] = "ｚ　　　　";
-#endif
+LOWERCASE_ROWS_TEXT
 
 char MAIN_D_80130738[] = "０１２３４";
 
@@ -459,17 +428,13 @@ uint16_t NAMING_ROLLOVER_CHARS[10] = {
 BoxLabel MAIN_D_801307B4 = { "In hand" };
 
 BoxLabel MAIN_D_801307C0 = { "Keeping" };
-
-char MAIN_D_801307CC[20] = "You have Will trade";
 #endif
 
+TRADE_LABEL_TEXT
+
+NAMING_BUTTONS_TEXT
+
 #if VERSION_IS(US)
-char MAIN_D_801345F4[4] = "";
-
-char MAIN_D_801345F8[] = "Name";
-
-char MAIN_D_80134600[8] = "BackOK";
-
 uint16_t NAMING_ROLLOVER_CTRL[2] = {
 	0x0019, 0x0019,
 };

@@ -16,6 +16,7 @@
 #include <dw/ui.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/main/battle_ui.h>
 
 void BTL_tickBattleEndText();
 void renderNumber(int32_t a, int32_t x, int32_t y, int32_t digits,
@@ -71,15 +72,8 @@ extern uint8_t GAME_STATE;
 extern uint8_t CURRENT_SCREEN;
 
 int8_t STAT_GAIN_ENEMY_FACTORS[4] = { 10, 12, 16, 0 };
-#if !VERSION_IS(US)
-/* Money obtained */
-char BITS_LABEL[] = "取得金";
-char STR_BRACES[] = "｛｝";
-/* Money held */
-char STR_SHOJIKIN[] = "所持金";
-#else
-char BITS_LABEL[] = "Bits";
-#endif
+
+BITS_LABELS_TEXT
 
 uint16_t BITS_TO_GAIN;
 int8_t STAT_BOX_HAS_GAIN[6];

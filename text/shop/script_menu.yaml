@@ -1,0 +1,63 @@
+NAMING:
+  strings:
+    STR_YOUR_NAME:
+      ja: おぬしの名前
+      en_us: NULL
+      en_eu: Your name
+    STR_DIGIMON_NAME:
+      ja: デジモンの名前
+      en_us: NULL
+      en_eu: Digimon's name
+    STR_NAME_ENTRY:
+      ja: 名前入力
+      en_us: NULL
+      en_eu: "Name  "
+    STR_HIRAGANA_KATAKANA_ALPHANUMERIC_BACK_DONE:
+      ja: かなカナ英数戻る終了
+      en_us: NULL
+      en_eu: "BackOK  "
+
+HIRAGANA_KA_ROW:
+  strings:
+    MAIN_D_8013045C:
+      ja: かきくけこ
+      en_us: かきくけと
+
+LOWERCASE_ROWS:
+  strings:
+    MAIN_D_801306F0:
+      ja: NULL
+      en_us: ａｂｃｄｅ
+    MAIN_D_801306FC:
+      ja: NULL
+      en_us: ｆｇｈｉｊ
+    MAIN_D_80130708:
+      ja: NULL
+      en_us: ｋｌｍｎｏ
+    MAIN_D_80130714:
+      ja: NULL
+      en_us: ｐｑｒｓｔ
+    MAIN_D_80130720:
+      ja: NULL
+      en_us: ｕｖｗｘｙ
+    MAIN_D_8013072C:
+      ja: NULL
+      en_us: ｚ　　　　
+
+TRADE_LABEL:
+  strings:
+    MAIN_D_801307CC:
+      ja: NULL
+      en_us: You have Will trade
+
+NAMING_BUTTONS:
+  strings:
+    MAIN_D_801345F4:
+      ja: NULL
+      en_us: "\0\0\0"
+    MAIN_D_801345F8:
+      ja: NULL
+      en_us: Name
+    MAIN_D_80134600:
+      ja: NULL
+      en_us: "BackOK\0"

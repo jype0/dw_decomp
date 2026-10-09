@@ -1,0 +1,40 @@
+SORT_LABELS:
+  strings:
+    SORT_LABEL_BATTLE:
+      ja: 戦闘配置
+      en_us: Battle
+    SORT_LABEL_RAISE:
+      ja: 育成配置
+      en_us: Raise
+    SORT_LABEL_BASIC:
+      ja: 基本配置
+      en_us: Basic
+
+CONFIRM_LABELS:
+  strings:
+    CONFIRM_PROMPT:
+      ja: 本当に捨てますか？
+      en_us: Are you sure?
+    CONFIRM_LABEL_YES:
+      ja: はい
+      en_us: "Yes"
+    CONFIRM_LABEL_NO:
+      ja: いいえ
+      en_us: "No"
+
+ITEM_MENU_LABELS:
+  storage: {default: embedded}
+  macro: ITEM_MENU_LABEL
+  entries:
+    - name: USE
+      ja: 使う
+      en_us: Use
+    - name: MOVE
+      ja: 移動
+      en_us: Move
+    - name: SORT
+      ja: せいり
+      en_us: Sort
+    - name: DROP
+      ja: 捨てる
+      en_us: Drop

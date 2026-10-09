@@ -1,0 +1,61 @@
+SHOUTS:
+  strings:
+    BTL_STR_SHOUT_RUN:
+      ja: にげろ
+      en_us: Run!
+      en_eu: Run
+    BTL_STR_SHOUT_ATTACK:
+      ja: おもいっきり
+      en_us: Attack!
+      en_eu: Attack
+    BTL_STR_SHOUT_YOUR_CALL:
+      ja: まかせた
+      en_us: Your Call!
+      en_eu: Auto
+    BTL_STR_SHOUT_MODERATE:
+      ja: ほどほど
+      en_us: Moderate!
+      en_eu: Moderate
+    BTL_STR_SHOUT_DISTANCE:
+      ja: はなれろ
+      en_us: Distance!
+      en_eu: Distance
+    BTL_STR_SHOUT_DEFENSE:
+      ja: がまんだ
+      en_us: Defense!
+      en_eu: Defensive
+    BTL_STR_SHOUT_CHANGE:
+      ja: ターゲットチェンジ
+      en_us: Change!
+      en_eu: Change target
+
+COMMANDS:
+  strings:
+    BTL_STR_COMMAND_RUN:
+      ja: にげる
+      en_us: Run
+    BTL_STR_COMMAND_ATTACK:
+      ja: おもいっきり
+      en_us: Attack
+    BTL_STR_COMMAND_YOUR_CALL:
+      ja: おまかせ
+      en_us: Your Call
+      en_eu: Auto
+    BTL_STR_COMMAND_MODERATE:
+      ja: ほどほど
+      en_us: Moderate
+    BTL_STR_COMMAND_DISTANCE:
+      ja: はなれる
+      en_us: Distance
+    BTL_STR_COMMAND_DEFENSIVE:
+      ja: ガマンする
+      en_us: Defensive
+    BTL_STR_COMMAND_CHANGE:
+      ja: ターゲットをかえる
+      en_us: Change
+      en_eu: Change target
+
+BTL_STR_SHOUT_EXCLAMATION:
+  ja: ！
+  en_us: NULL
+  en_eu: "!"

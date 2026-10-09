@@ -1,0 +1,29 @@
+MESSAGES:
+  strings:
+    TRN_D_8008F0D8:
+      ja: 「思いっきり！」
+      en_us: Give it all you got!
+    TRN_D_8008F0F0:
+      ja: 「ほどほど！」
+      en_us: Take it easy!
+    TRN_D_8008F100:
+      ja: 「はなれろ！」
+      en_us: Get back!
+    TRN_D_8008F10C:
+      ja: 「ターゲット変更！」
+      en_us: Change target!
+    TRN_D_8008F11C:
+      ja: 「ガマンだ！」
+      en_us: Hang in there!
+    TRN_D_8008F12C:
+      ja: 「そうびした技」
+      en_us: Technique mastered.
+    TRN_D_8008F140:
+      ja: の命令を聞くようになった！
+      en_us: New orders!
+
+MASTERED:
+  strings:
+    TRN_D_8008F19C:
+      ja: をおぼえた。
+      en_us: was mastered!

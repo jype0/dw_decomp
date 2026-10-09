@@ -1,0 +1,65 @@
+MESSAGES:
+  strings:
+    FISH_MSG_TOOK_BAIT:
+      ja: エサを取られてしまった…
+      en_us: They took my bait!
+    FISH_MSG_TOO_LATE:
+      ja: 残念、おそすぎた…
+      en_us: Too late!
+    FISH_MSG_GOT_BAIT:
+      ja: エサを取られてしまった。
+      en_us: They got my bait!
+    FISH_MSG_TOO_FAST:
+      ja: 残念、はやすぎた…
+      en_us: Too fast!
+    FISH_MSG_STILL_HAVE_BAIT:
+      ja: でもまだエサは残っているぞ。
+      en_us: But I still got my bait!
+    MAIN_D_801349D8:
+      ja: かかった！
+      en_us: Hooked!
+    FISH_MSG_LENGTH_GREAT:
+      ja: すごい！全長　メートル　　センチ！
+      en_us: Great! Total length %d m %d cm
+    FISH_MSG_LENGTH_M_CM:
+      ja: 全長　メートル　　センチ
+      en_us: Total length %d m %d cm
+    FISH_MSG_LENGTH_CM:
+      ja: 全長　　　センチメートル
+      en_us: Total length %d cm
+    FISH_MSG_GOT_ONE:
+      ja: をつりあげた！
+      en_us: I got one!
+    FISH_MSG_LET_IT_GO:
+      ja: でもかわいそうだから逃がしてあげよう。
+      en_us: It looks sad. Let it go.
+    FISH_MSG_LINE_CUT:
+      ja: イトが切れてしまった！
+      en_us: My line got cut!
+    FISH_MSG_WATCH_TENSION:
+      ja: …次はテンションゲージをよく見て、
+      en_us: Pay attention to tension gauge
+    FISH_MSG_BE_CALM:
+      ja: もっと落ち着いて行こう。
+      en_us: and be more calm
+    FISH_MSG_HOOK_LOST:
+      ja: ハリが外れてしまった！
+      en_us: My hook got lost!
+    FISH_MSG_STUCK_LINE1:
+      ja: んっ！？
+      en_us: Huh?! I wonder if something
+    FISH_MSG_STUCK_LINE2:
+      ja: 何かひっかかったかな？
+      en_us: got stuck? It got stuck!
+    FISH_MSG_BAG_FULL_LINE1:
+      ja: NULL
+      en_us: My bag was so full, I could
+    FISH_MSG_BAG_FULL_LINE2:
+      ja: NULL
+      en_us: not carry it.
+    FISH_MSG_IT_GOT_STUCK:
+      ja: が引っかかった！
+      en_us: It got stuck!
+    FISH_MSG_BAG_FULL:
+      ja: …しかし、かばんがいっぱいで持てなかった。
+      en_us: NULL

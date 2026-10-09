@@ -1,0 +1,5 @@
+IS_SICK:
+  strings:
+    MAIN_D_801225A0:
+      ja: は病気になってしまった！
+      en_us: is Sick!

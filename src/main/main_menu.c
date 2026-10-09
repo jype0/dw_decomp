@@ -21,6 +21,7 @@
 #include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
+#include <text/main/main_menu.h>
 
 #include "common.h"
 
@@ -346,91 +347,19 @@ void *main_menu_order_anchor[] = {
 };
 
 // clang-format off
+SAVE_LABELS_TEXT
+
 #if !VERSION_IS(US)
-char STR_EMPTY[2] = "";
-
-char MAIN_D_80134674[] = "２";
-
-char MAIN_D_80134678[] = "に";
-
-char MAIN_D_8013467C[] = "が";
-
-char MAIN_D_80134680[] = "を";
-
-char MAIN_D_80134684[] = "登録名";
-
-char MAIN_D_8013D814[] = "種族";
-
-char MAIN_D_80134694[] = "ＨＰ";
-
-char MAIN_D_80134698[] = "ＭＰ";
-
-char MAIN_D_8013469C[] = "攻撃力";
-
-char MAIN_D_801346A4[] = "防御力";
-
-char MAIN_D_8013143C[] = "技１";
-
-char MAIN_D_80131448[] = "技２";
-
-char MAIN_D_80131454[] = "技３";
-
-char MAIN_D_8013D854[] = "番に";
-
-char MAIN_D_801346B4[] = "（";
-
 char MAIN_D_801346B8[4] = "）は";
-
 char MAIN_D_801346C0[2][2] = { "", "*" };
 #else
-char STR_EMPTY[2] = "";
-
-uint16_t STR_2 = 0x0032;
-
-char STR_YES_NO[] = "YesNo";
-
-char STR_YES_NO_SPACED[] = "Yes No";
-
-char MAIN_D_80134674[] = {
-	0x82, 0x51, 0x00,
-};
-
-char MAIN_D_80134678[] = {
-	0x82, 0xc9, 0x00,
-};
-
-char MAIN_D_8013467C[] = {
-	0x82, 0xaa, 0x00,
-};
-
-char MAIN_D_80134680[] = {
-	0x82, 0xf0, 0x00,
-};
-
-char MAIN_D_80134684[] = "Name";
-
-char MAIN_D_8013468C[8] = "Digimon";
-
-char MAIN_D_80134694[] = "HP";
-
-char MAIN_D_80134698[] = "MP";
-
-char MAIN_D_8013469C[8] = "Offense";
-
-char MAIN_D_801346A4[8] = "Defense";
-
-char MAIN_D_801346AC[4] = "Yes";
-
-char MAIN_D_801346B0[] = "No";
-
-char MAIN_D_801346B4[] = " ";
-
 char MAIN_D_801346B8[] = " is in";
-
 char MAIN_D_801346C0[2][2] = { ".", "*" };
+#endif
 
-char MAIN_D_801346C4[] = "Player";
+SAVE_PLAYER_LABEL_TEXT
 
+#if VERSION_IS(US)
 char FMT_NUMBER[] = "%i";
 #endif
 
@@ -438,304 +367,8 @@ struct DIRENTRY *MEMCARD_DIRENTRIES = (struct DIRENTRY *)(TEXTURE_BUFFER + 0x5c0
 
 RegisteredDigimon *VS__REGISTERED_DIGIMON_BUFFER = (RegisteredDigimon *)(TEXTURE_BUFFER + 0x4800);
 
-#if !VERSION_IS(US)
-char MAIN_D_80131008[] = "あたらしく冒険を始める";
-
-char MAIN_D_80131014[] = "冒険の続きをする";
-
-char MAIN_D_80131024[] = "冒険を消す";
-
-char MAIN_D_80131030[] = "メモリーカード対戦";
-
-char MAIN_D_8013103C[] = "スロット１で冒険を始める";
-
-char MAIN_D_8013104C[] = "スロット１から続きをする";
-
-char MAIN_D_8013105C[] = "スロット１の冒険を消す　";
-
-char MAIN_D_8013106C[] = "メモリーカードを使わない";
-
-char MAIN_D_8013107C[] = "ゲーム中セーブ";
-
-char MAIN_D_80131090[] = "対戦デジモンの登録";
-
-#if !VERSION_IS(JP)
-char MAIN_D_801310A4[] = "スペシャルアイテム記録";
-
-#endif
-char MAIN_D_801310B4[] = "メモリーカードチェック中";
-
-char MAIN_D_801310CC[] = "データファイルをセーブ中";
-
-char MAIN_D_801310E0[] = "データファイルロード中";
-
-char MAIN_D_801310F4[] = "データファイルコピー中";
-
-char MAIN_D_80131108[] = "データファイル消去中";
-
-char MAIN_D_8013111C[] = "メモリーカードフォーマット中";
-
-char MAIN_D_80131134[] = "ささっていません";
-
-char MAIN_D_80131144[] = "データエラー";
-
-char MAIN_D_80131150[] = "ぬきさししないでください";
-
-char MAIN_D_80131168[] = "フォーマットされていません";
-
-char MAIN_D_80131178[] = "ファイルがありません";
-
-char MAIN_D_8013118C[] = "空きブロックがありません";
-
-char MAIN_D_8013119C[] = "対戦デジモンが登録されていません";
-
-#if !VERSION_IS(JP)
-char MAIN_D_801311B4[] = "アイテムがいっぱいです";
-
-char MAIN_D_801311C0[] = "すでにアイテムがあります";
-
-#endif
-char MAIN_D_801311D4[] = "番に新しい冒険を記録しますか？";
-
-char MAIN_D_801311EC[] = "番の冒険の続きをしますか？　　";
-
-char MAIN_D_80131200[] = "番の冒険を消しますか？　　　　";
-
-char MAIN_D_80131218[] = "番の記録を読みこみますか？";
-
-#if !VERSION_IS(JP)
-char MAIN_D_80131228[] = "番のデータにアイテムを追加？";
-
-char MAIN_D_80131234[] = "冒険を始める";
-
-char MAIN_D_80131254[] = "メモリーカード対戦体験";
-
-#endif
-char MAIN_D_80131278[] = "メモリーカードとコントローラを";
-
-char MAIN_D_80131290[] = "ぬきさし　しないでください。";
-
-char MAIN_D_801312A0[] = "メモリーカードを使ってのセーブはできません";
-
-char MAIN_D_801312B8[] = "途中でメモリーカードをさしてもセーブは";
-
-char MAIN_D_801312D0[] = "できないのでご注意ください。";
-
-char MAIN_D_801312E4[] = "本体の電源を切ったり、リセットすると";
-
-char MAIN_D_80139DF4[] = "冒険の内容は消えてしまいます。";
-
-char MAIN_D_80139E14[] = "はいいえ";
-
-char MAIN_D_80131340[] = "使用されていません";
-
-char MAIN_D_801312FC[] = "スロット１のメモリーカードが";
-
-char MAIN_D_80131318[] = "未フォーマットです。";
-
-char MAIN_D_80131328[] = "フォーマットを行ないますか？";
-
-char MAIN_D_8013134C[] = "スロット１のメモリーカードに";
-
-char MAIN_D_8013136C[] = "このまま寝る";
-
-char MAIN_D_80131378[] = "セーブして寝る";
-
-char MAIN_D_80131390[] = "データファイルは上書きされます";
-
-char MAIN_D_801313B0[] = "データファイルをセーブしますか？";
-
-char MAIN_D_801313E4[] = "スロット１にプレイヤー１の";
-
-char MAIN_D_80131400[] = "対戦用デジモンデータの入った";
-
-char MAIN_D_8013141C[] = "メモリーカードをさしてください";
-
-char MAIN_D_80139F6C[] = "はいいいえ";
-
-char MAIN_D_80131460[] = "このデジモンを登録しますか？はいいえ";
-
-char MAIN_D_8013147C[] = "登録番号を選んでください";
-
-char MAIN_D_80139FBC[] = "を登録します";
-
-char MAIN_D_80139FCC[] = "よろしいですか？　　　　　　　　はいいえ";
-
-char MAIN_D_801314B0[] = "対戦デジモンの登録をすると同時に";
-
-char MAIN_D_801314C8[] = "データファイルもセーブされます";
-
-char MAIN_D_80131500[] = "メモリーカードを使わずにゲームを始めたので";
-
-char MAIN_D_8013151C[] = "対戦デジモンの登録は、できません。";
-
-char MAIN_D_80131568[] = "冒険の記録をセーブしますか？";
-
-char MAIN_D_80131580[] = "幼年期のデジモンなので、メモリーカード";
-
-char MAIN_D_801315A0[] = "対戦用に登録できません";
-
-#if !VERSION_IS(JP)
-char MAIN_D_801315C0[] = "スロット１にゲームデータの";
-
-char MAIN_D_801315D0[] = "入ったメモリーカードを";
-
-char MAIN_D_801315EC[] = "さしてください";
-
-#endif
-char MAIN_D_8013A0EC[] = "−−−−−−";
-#else
-char MAIN_D_80131008[] = "NEW GAME";
-
-char MAIN_D_80131014[] = "CONTINUE GAME";
-
-char MAIN_D_80131024[12] = "DELETE GAME";
-
-char MAIN_D_80131030[12] = "BATTLE MODE";
-
-char MAIN_D_8013103C[] = "START SLOT 1";
-
-char MAIN_D_8013104C[16] = "CONTINUE SLOT 1";
-
-char MAIN_D_8013105C[] = "ERASE SLOT 1";
-
-char MAIN_D_8013106C[] = "NO MEMORY CARD";
-
-char MAIN_D_8013107C[] = "SAVE SURING GAME";
-
-char MAIN_D_80131090[20] = "BATTLE REGISTRATION";
-
-char MAIN_D_801310A4[] = "SPECIAL ITEM";
-
-char MAIN_D_801310B4[] = "Checking Memory Card";
-
-char MAIN_D_801310CC[] = "Saving data file";
-
-char MAIN_D_801310E0[] = "Loading data file";
-
-char MAIN_D_801310F4[] = "Copying data file";
-
-char MAIN_D_80131108[] = "Deleting data file";
-
-char MAIN_D_8013111C[] = "Formatting Memory Card";
-
-char MAIN_D_80131134[] = "Not Inserted";
-
-char MAIN_D_80131144[] = "Data Error";
-
-char MAIN_D_80131150[24] = "Do Not Insert or Remove";
-
-char MAIN_D_80131168[] = "Not Formatted";
-
-char MAIN_D_80131178[20] = "File Does Not Exist";
-
-char MAIN_D_8013118C[] = "No Open Block";
-
-char MAIN_D_8013119C[] = "Digimon Not Registered";
-
-char MAIN_D_801311B4[] = "Item Full";
-
-char MAIN_D_801311C0[20] = "Item Already Exists";
-
-char MAIN_D_801311D4[] = "Record new adventure?";
-
-char MAIN_D_801311EC[20] = "Continue adventure?";
-
-char MAIN_D_80131200[] = "Delete adventure in?";
-
-char MAIN_D_80131218[] = "Read record?";
-
-char MAIN_D_80131228[] = "Add Item?";
-
-char MAIN_D_80131234[] = "Start Game";
-
-char MAIN_D_80131240[] = "Memory Card Battle";
-
-char MAIN_D_80131254[] = "Battle Try Out";
-
-char MAIN_D_80131264[20] = "Special Item Record";
-
-char MAIN_D_80131278[] = "Don't remove or insert";
-
-char MAIN_D_80131290[] = "a Memory Card.";
-
-char MAIN_D_801312A0[] = "YOU WON'T BE ABLE TO";
-
-char MAIN_D_801312B8[] = "SAVE TO A MEMORY CARD";
-
-char MAIN_D_801312D0[] = "EVEN IF YOU INSERT";
-
-char MAIN_D_801312E4[] = "ONE DURING GAMEPLAY.";
-
-char MAIN_D_801312FC[] = "Memory Card in Slot 1 is";
-
-char MAIN_D_80131318[] = "not formatted.";
-
-char MAIN_D_80131328[] = "Do you want to format?";
-
-char MAIN_D_80131340[] = "Not used";
-
-char MAIN_D_8013134C[] = {
-	0x83, 0x58, 0x83, 0x8d, 0x83, 0x62, 0x83, 0x67,
-	0x82, 0x50, 0x82, 0xcc, 0x83, 0x81, 0x83, 0x82,
-	0x83, 0x8a, 0x81, 0x5b, 0x83, 0x4a, 0x81, 0x5b,
-	0x83, 0x68, 0x82, 0xc9, 0x00,
-};
-
-char MAIN_D_8013136C[12] = "Go to sleep";
-
-char MAIN_D_80131378[] = "Save and go to sleep";
-
-char MAIN_D_80131390[] = "Data file will be overwritten";
-
-char MAIN_D_801313B0[] = "Do you want to save data file?";
-
-char MAIN_D_801313D0[] = "There was an error";
-
-char MAIN_D_801313E4[28] = "Please insert a Memory Card";
-
-char MAIN_D_80131400[] = "which contains Competition";
-
-char MAIN_D_8013141C[] = "Data for Player 1 in Slot 1 ";
-
-char MAIN_D_8013143C[12] = "Technique 1";
-
-char MAIN_D_80131448[12] = "Technique 2";
-
-char MAIN_D_80131454[12] = "Technique 3";
-
-char MAIN_D_80131460[] = "Do you want to register?";
-
-char MAIN_D_8013147C[] = "Select registration slot";
-
-char MAIN_D_80131498[24] = "Do you want to register";
-
-char MAIN_D_801314B0[24] = "The Competition Digimon";
-
-char MAIN_D_801314C8[] = "data will be saved during";
-
-char MAIN_D_801314E4[] = "the registration process";
-
-char MAIN_D_80131500[] = "Since you started the game";
-
-char MAIN_D_8013151C[28] = "without using a Memory Card";
-
-char MAIN_D_80131538[20] = "you cannot register";
-
-char MAIN_D_8013154C[28] = "Competition Battle Digimon.";
-
-char MAIN_D_80131568[] = "Do you want to save?";
-
-char MAIN_D_80131580[] = "training, Memory Card cannot";
-
-char MAIN_D_801315A0[] = "be registered for Competition";
-
-char MAIN_D_801315C0[] = "Please Insert";
-
-char MAIN_D_801315D0[28] = "Memory Card with saved data";
-
-char MAIN_D_801315EC[] = "in Slot 1";
-#endif
+MEMCARD_MESSAGES_TEXT
+SAVE_MESSAGES_TEXT
 
 InventoryTable DEFAULT_INVENTORY_AMOUNTS = {
 	{
@@ -755,16 +388,8 @@ InventoryTable DEFAULT_INVENTORY_TYPES = {
 	},
 };
 
-#if VERSION_IS(EU)
-char MAIN_D_801346C4[] = "Ｐｌａｙｅｒ";
+LABELS_TEXT
 
-char MAIN_D_8013468C[] = "Ｄｉｇｉｍｏｎ";
-#elif !VERSION_IS(US)
-char MAIN_D_801346C4[] = "しゅじんこう";
-
-char MAIN_D_8013468C[] = "デジモン";
-
-#endif
 CVECTOR MAIN_D_80131638[4] = {
 	{ 0x80, 0x80, 0x80, 0x00 },
 	{ 0x40, 0x40, 0x40, 0x00 },
@@ -2252,7 +1877,7 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(SLOT_ACTION_TITLES[0], 0, 0);
 		DrawSync(0);
 		drawString(SLOT_ACTION_TITLES[0], 0, 0xC);
-		drawString((char *)&STR_2, 0x76, 0xC);
+		drawString(STR_2, 0x76, 0xC);
 		DrawSync(0);
 		drawString(SLOT_ACTION_TITLES[3], 0, 0x18);
 		break;
@@ -2260,14 +1885,14 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(SLOT_ACTION_TITLES[1], 0, 0);
 		DrawSync(0);
 		drawString(SLOT_ACTION_TITLES[1], 0, 0xC);
-		drawString((char *)&STR_2, 0x9A, 0xC);
+		drawString(STR_2, 0x9A, 0xC);
 		MAIN_D_80135054 = 1;
 		break;
 	case 4:
 		drawString(SLOT_ACTION_TITLES[2], 0, 0);
 		DrawSync(0);
 		drawString(SLOT_ACTION_TITLES[2], 0, 0xC);
-		drawString((char *)&STR_2, 0x76, 0xC);
+		drawString(STR_2, 0x76, 0xC);
 		MAIN_D_80135054 = 2;
 		break;
 	case 5:
@@ -2297,10 +1922,10 @@ void drawMainMenuStrings(int32_t menu)
 		    MAIN_MENU_ACTION == 2) {
 			if (MEMORY_CARD_ID != 0) {
 				if (MAIN_D_80135054 == 1) {
-					drawString((char *)&STR_2, 0x9A, 0);
+					drawString(STR_2, 0x9A, 0);
 				}
 				if (MAIN_D_80135054 == 2) {
-					drawString((char *)&STR_2, 0x76, 0);
+					drawString(STR_2, 0x76, 0);
 				}
 			}
 		}
@@ -2312,7 +1937,7 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(MAIN_D_801312FC, 0, 0);
 		DrawSync(0);
 		if (MEMORY_CARD_ID != 0) {
-			drawString((char *)&STR_2, 0x76, 0);
+			drawString(STR_2, 0x76, 0);
 		}
 		DrawSync(0);
 		drawString(MAIN_D_80131318, 0, 0xC);
@@ -2327,10 +1952,10 @@ void drawMainMenuStrings(int32_t menu)
 		    MAIN_MENU_ACTION == 2) {
 			if (MEMORY_CARD_ID != 0) {
 				if (MAIN_D_80135054 == 1) {
-					drawString((char *)&STR_2, 0x9A, 0);
+					drawString(STR_2, 0x9A, 0);
 				}
 				if (MAIN_D_80135054 == 2) {
-					drawString((char *)&STR_2, 0x76, 0);
+					drawString(STR_2, 0x76, 0);
 				}
 			}
 		}
@@ -2413,8 +2038,8 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(STR_YES_NO, 0, 0xF0);
 		if (VS_PLAYER_INDEX == 1) {
-			drawString((char *)&STR_2, 0x76, 0x24);
-			drawString((char *)&STR_2, 0xB4, 0x24);
+			drawString(STR_2, 0x76, 0x24);
+			drawString(STR_2, 0xB4, 0x24);
 		}
 		break;
 	case 14:

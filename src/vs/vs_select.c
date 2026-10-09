@@ -19,6 +19,7 @@
 #include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
+#include <text/vs/vs_select.h>
 
 typedef struct {
 	int16_t clutX;
@@ -137,19 +138,7 @@ char VS__PATH_STDDAT_TAISEN_F_TIM[] = "\\STDDAT\\TAISEN_F.TIM";
 
 char VS__PATH_STDDAT_TIME_TIM[] = "\\STDDAT\\TIME.TIM";
 
-#if VERSION_IS(EU)
-char VS__STR_PRESS_START[] = "Ｐｒｅｓｓ　ＳＴＡＲＴ";
-
-char VS__STR_TO_BEGIN[] = "ｔｏ　ｂｅｇｉｎ．";
-#elif !VERSION_IS(US)
-char VS__STR_PRESS_START[] = "スタートボタンで";
-
-char VS__STR_TO_BEGIN[] = "決定して下さい。";
-#else
-char VS__STR_PRESS_START[12] = "Press Start";
-
-char VS__STR_TO_BEGIN[] = "to begin.";
-#endif
+PRESS_START_TEXT
 
 uint8_t DIGIMON_SPRITE_CLUT[68] = {
 	0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x01,

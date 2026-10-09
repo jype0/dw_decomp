@@ -31,6 +31,7 @@
 #include <dw/vecmath.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/std/std_main.h>
 
 #include "common.h"
 
@@ -563,18 +564,6 @@ uint8_t STD_BRAIN_TO_COMMAND_MAP[5] = { 2, 3, 4, 5, 6 };
 uint8_t STD_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t STD_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
 uint8_t STD_YOUR_CALL_WIDE_PRIO[4] = { 10, 5, 0, 0 };
-#if VERSION_IS(EU)
-char STD_STR_COMMAND_RUN[] = "Ｒｕｎ";
-#elif !VERSION_IS(US)
-char STD_STR_COMMAND_RUN[] = "にげる";
-#else
-char STD_STR_COMMAND_RUN[] = "Run";
-char STD_STR_COMMAND_ATTACK[] = "Attack";
-char STD_STR_COMMAND_AUTO[] = "Auto";
-char STD_STR_COMMAND_CHANGE[] = "Change";
-#endif
-uint8_t STD_COMMAND_LABEL_U[5] = { 0, 11, 25, 39, 50 };
-uint8_t STD_COMMAND_LABEL_W[5] = { 11, 14, 14, 11, 11 };
 
 int16_t STD_STARTING_HP[2];
 int16_t STD_DAMAGE[2];
@@ -1290,27 +1279,7 @@ StdSrcA598 STD_BRACKET_PATHS[8] = {
 /* Damage */
 char STD_STR_DAMEEJI[] = "ダメージ";
 
-#if VERSION_IS(EU)
-char STD_STR_COMMAND_ATTACK[] = "Ａｔｔａｃｋ";
-char STD_STR_COMMAND_AUTO[] = "Ａｕｔｏ";
-char STD_STR_COMMAND_MODERATE[] = "Ｍｏｄｅｒａｔｅ";
-char STD_STR_COMMAND_DISTANCE[] = "Ｄｉｓｔａｎｃｅ";
-char STD_STR_COMMAND_DEFENSIVE[] = "Ｄｅｆｅｎｓｉｖｅ";
-char STD_STR_COMMAND_CHANGE[] = "Ｃｈａｎｇｅ　ｔａｒｇｅｔ";
-#elif !VERSION_IS(US)
-char STD_STR_COMMAND_ATTACK[] = "おもいっきり";
-char STD_STR_COMMAND_AUTO[] = "おまかせ";
-char STD_STR_COMMAND_MODERATE[] = "ほどほど";
-char STD_STR_COMMAND_DISTANCE[] = "はなれる";
-char STD_STR_COMMAND_DEFENSIVE[] = "ガマンする";
-char STD_STR_COMMAND_CHANGE[] = "ターゲットをかえる";
-#else
-char STD_STR_COMMAND_MODERATE[] = "Moderate";
-
-char STD_STR_COMMAND_DISTANCE[] = "Distance";
-
-char STD_STR_COMMAND_DEFENSIVE[] = "Defensive";
-#endif
+COMMANDS_TEXT
 
 char *STD_COMMAND_NAMES[8] = {
 	STD_STR_COMMAND_RUN,
@@ -1322,6 +1291,9 @@ char *STD_COMMAND_NAMES[8] = {
 	STD_STR_COMMAND_CHANGE,
 	(void *)0x00000000,
 };
+
+uint8_t STD_COMMAND_LABEL_U[5] = { 0, 11, 25, 39, 50 };
+uint8_t STD_COMMAND_LABEL_W[5] = { 11, 14, 14, 11, 11 };
 
 uint8_t STD_COMMAND_MENU_LAYOUTS[8][10] = {
 	{ 0x00, 0x04, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },

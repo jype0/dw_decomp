@@ -19,6 +19,7 @@
 #include <dw/ui.h>
 #include <dw/utils.h>
 #include <dw/version.h>
+#include <text/main/utils2.h>
 
 #define shop_START		((char *)0x80080800)
 
@@ -155,11 +156,7 @@ char *REL_BIN_FILES[16] = {
 	MAIN_D_8012BA80,
 };
 
-#if !VERSION_IS(US)
-char MAIN_D_80134430[] = "ポーズ";
-#else
-char MAIN_D_80134430[] = "Pause";
-#endif
+PAUSE_TEXT
 // clang-format on
 
 uint32_t PAUSE_INPUT;

@@ -3,6 +3,7 @@
 #include <dw/entity.h>
 #include <dw/ui.h>
 #include <dw/version.h>
+#include <text/main/ui.h>
 
 #include "common.h"
 
@@ -58,32 +59,16 @@ RGB8 UI_BOX_COLORS[5] = {
 
 #if VERSION_IS(EU)
 char *MAIN_D_80124C0C[6] = {
-	"ＨＰ",
-	"ＭＰ",
-	"Ｏｆｆ",
-	"Ｄｅｆ",
-	"Ｓｐｅｅｄ",
-	"Ｂｒａｉｎ",
-};
 #else
 char MAIN_D_80124C0C[6][12] = {
-#if !VERSION_IS(US)
-	"最大ＨＰ",
-	"最大ＭＰ",
-	"攻撃力",
-	"防御力",
-	"すばやさ",
-	"かしこさ",
-#else
-	"HP",
-	"MP",
-	"Off",
-	"Def",
-	"Speed",
-	"Brain",
 #endif
+	STAT_LABEL(HP)
+	STAT_LABEL(MP)
+	STAT_LABEL(OFFENSE)
+	STAT_LABEL(DEFENSE)
+	STAT_LABEL(SPEED)
+	STAT_LABEL(BRAINS)
 };
-#endif
 
 char MAIN_D_80124C54[] = {
 	0x82, 0x4f, 0x82, 0x50, 0x82, 0x51, 0x82, 0x52,

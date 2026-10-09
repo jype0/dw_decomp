@@ -13,6 +13,7 @@
 #include <dw/ui.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/main/inventory.h>
 
 extern int32_t POLLED_INPUT;
 extern int32_t POLLED_INPUT_PREVIOUS;
@@ -72,40 +73,28 @@ void updateInventoryInputRepeatCounter();
 int32_t isInventoryButtonPressed(int32_t mask);
 void tickInventoryOptionSelector(uint8_t *cursor, int32_t unused, int16_t max);
 
-#if VERSION_IS(EU)
-char SORT_LABEL_BATTLE[] = "Ｂａｔｔｌｅ";
-char SORT_LABEL_RAISE[] = "Ｒａｉｓｅ";
-char SORT_LABEL_BASIC[] = "Ｂａｓｉｃ";
-char CONFIRM_PROMPT[] = "Ａｒｅ　ｙｏｕ　ｓｕｒｅ？";
-#elif !VERSION_IS(US)
-char SORT_LABEL_BATTLE[] = "戦闘配置";
-char SORT_LABEL_RAISE[] = "育成配置";
-char SORT_LABEL_BASIC[] = "基本配置";
-char CONFIRM_PROMPT[] = "本当に捨てますか？";
-#else
-char SORT_LABEL_BATTLE[] = "Battle";
-char SORT_LABEL_RAISE[] = "Raise";
-char SORT_LABEL_BASIC[] = "Basic";
-char CONFIRM_PROMPT[] = "Are you sure?";
-#endif
+SORT_LABELS_TEXT
+
+CONFIRM_LABELS_TEXT
+
 uint8_t ITEM_SORT_ORDER[3][6] = {
 	{ 0x00, 0x01, 0x03, 0x02, 0x05, 0x04 },
 	{ 0x02, 0x05, 0x00, 0x01, 0x04, 0x03 },
 	{ 0x02, 0x00, 0x01, 0x03, 0x05, 0x04 },
 };
+
+// clang-format off
 #if VERSION_IS(EU)
-char *ITEM_MENU_LABELS[4] = { "Ｕｓｅ", "Ｍｏｖｅ", "Ｓｏｒｔ", "Ｄｒｏｐ" };
-char CONFIRM_LABEL_YES[] = "Ｙｅｓ";
-char CONFIRM_LABEL_NO[] = "Ｎｏ";
-#elif !VERSION_IS(US)
-char ITEM_MENU_LABELS[4][8] = { "使う", "移動", "せいり", "捨てる" };
-char CONFIRM_LABEL_YES[] = "はい";
-char CONFIRM_LABEL_NO[] = "いいえ";
+char *ITEM_MENU_LABELS[4] = {
 #else
-char ITEM_MENU_LABELS[4][8] = { "Use", "Move", "Sort", "Drop" };
-char CONFIRM_LABEL_YES[4] = "Yes";
-char CONFIRM_LABEL_NO[] = "No";
+char ITEM_MENU_LABELS[4][8] = {
 #endif
+	ITEM_MENU_LABEL(USE)
+	ITEM_MENU_LABEL(MOVE)
+	ITEM_MENU_LABEL(SORT)
+	ITEM_MENU_LABEL(DROP)
+};
+// clang-format on
 
 int16_t DOOA_STORED_DIGIMON_Y;
 int32_t INVENTORY_UNUSED;

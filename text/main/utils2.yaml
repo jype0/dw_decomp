@@ -1,0 +1,5 @@
+PAUSE:
+  strings:
+    MAIN_D_80134430:
+      ja: ポーズ
+      en_us: Pause

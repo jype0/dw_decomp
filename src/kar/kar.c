@@ -21,6 +21,7 @@
 #include <dw/ui.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/kar/kar.h>
 
 #include "common.h"
 
@@ -48,9 +49,6 @@ extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
 extern GsOT GS_ORDERING_TABLE[];
 extern GsRVIEW2 GS_VIEWPOINT;
-
-extern char MAIN_D_80134A38[];
-extern char MAIN_D_80134A3C[];
 
 void renderSelectionCursor(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e);
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
@@ -235,15 +233,7 @@ KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
 
 char KAR_D_8005ABA4[20] = "\\ETCDAT\\KARRING.TMD";
 
-#if VERSION_IS(EU)
-char KAR_STR_START_GAME[] = "Ｓｔａｒｔ　Ｇａｍｅ";
-char KAR_STR_EXPLAIN_GAME[] = "Ｅｘｐｌａｉｎ　ｇａｍｅ";
-#elif !VERSION_IS(US)
-char KAR_STR_START_GAME[] = "ゲームをはじめる";
-char KAR_STR_EXPLAIN_GAME[] = "説明を聞く？";
-#else
-char KAR_D_8005ABB8[] = "Start GameExplain Game";
-#endif
+MENU_TEXT
 
 KarWeightTbl MAIN_D_80134A08 = { { 30, 25, 35, 30 } };
 RECT MAIN_D_80134A10 = { -130, 42, 262, 59 };
@@ -256,46 +246,13 @@ KarStrPair MAIN_D_80134A20 = { { KAR_D_8005ABB8, NULL } };
 RECT MAIN_D_80134A28 = { -130, 42, 262, 59 };
 RECT MAIN_D_80134A30 = { 0, 0, 10, 10 };
 
-#if !VERSION_IS(US)
-char KAR_STR_EMPTY[] = "";
-char KAR_STR_PENGUINMON[] = "ペンモン";
-char KAR_PENGUINMON_LINE_1[] = "「まず、カーリングダマのタイプを";
-char KAR_PENGUINMON_LINE_2[] = "　選んでね。」";
-char KAR_PENGUINMON_LINE_5[] = "「重いタマ、かるいタマ、色々なタマが";
-char KAR_PENGUINMON_LINE_6[] = "　あるから使うタイミングを";
-char KAR_PENGUINMON_LINE_7[] = "　良く考えてね！」";
-char KAR_PENGUINMON_LINE_9[] = "「まれに、タマに４つ足がついているのが";
-char KAR_PENGUINMON_LINE_10[] = "　あるんだけど、それは止まったところに";
-char KAR_PENGUINMON_LINE_11[] = "　くっつくから、大事に使おう。」";
-char KAR_PENGUINMON_LINE_13[] = "「今度は、投げる方向（点線）を";
-char KAR_PENGUINMON_LINE_14[] = "　方向キーの左右で選んでね。」";
-char KAR_PENGUINMON_LINE_17[] = "「この時、方向キーの上下で";
-char KAR_PENGUINMON_LINE_18[] = "　スクロールできるよ！";
-char KAR_PENGUINMON_LINE_19[] = "　投げる方向をきめたらａｈｉで決定。」";
-char KAR_PENGUINMON_LINE_21[] = "「最後に、投げる強さを決めてね。";
-char KAR_PENGUINMON_LINE_22[] = "　パワーゲージに合わせて";
-char KAR_PENGUINMON_LINE_23[] = "　ａｈｉで決定。」";
-char KAR_PENGUINMON_LINE_25[] = "「得点は、ＧＯＯＤマークに";
-char KAR_PENGUINMON_LINE_26[] = "　カーリングダマをのせると２点。」";
-char KAR_PENGUINMON_LINE_29[] = "「中心のＧＯＯＤマークの外、";
-char KAR_PENGUINMON_LINE_30[] = "　青いラインの中だと１点。」";
-char KAR_PENGUINMON_LINE_33[] = "「右下にあるＢＡＤにのせちゃうと";
-char KAR_PENGUINMON_LINE_34[] = "　－２点になるから気をつけて！！」";
-char KAR_PENGUINMON_LINE_37[] = "「あと、引き分けの場合は";
-char KAR_PENGUINMON_LINE_38[] = "　おいらの勝ちにしてね！";
-char KAR_PENGUINMON_LINE_39[] = "　それじゃ、ゲームスタートだよ！！」";
-char KAR_PENGUINMON_LINE_41[] = "「あんちゃん、ぜんぜんたいしたこと";
-char KAR_PENGUINMON_LINE_42[] = "　ないなぁ！」";
-char KAR_PENGUINMON_LINE_45[] = "「まだまだ勝負はこれからだい！」";
-char KAR_PENGUINMON_LINE_49[] = "「あんちゃん、なかなかやるね！」";
-char KAR_PENGUINMON_LINE_53[] = "「へへへ、おいらの勝ちだぁ！」";
-char KAR_PENGUINMON_LINE_57[] = "「うう、おいらのまけだよ・・・」";
+PENGUINMON_DIALOGUE_TEXT
 
 KarStrTbl KAR_D_8005AF58 = {{
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_1,
 	KAR_PENGUINMON_LINE_2,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_3,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_5,
 	KAR_PENGUINMON_LINE_6,
@@ -307,7 +264,7 @@ KarStrTbl KAR_D_8005AF58 = {{
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_13,
 	KAR_PENGUINMON_LINE_14,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_15,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_17,
 	KAR_PENGUINMON_LINE_18,
@@ -319,15 +276,15 @@ KarStrTbl KAR_D_8005AF58 = {{
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_25,
 	KAR_PENGUINMON_LINE_26,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_27,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_29,
 	KAR_PENGUINMON_LINE_30,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_31,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_33,
 	KAR_PENGUINMON_LINE_34,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_35,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_37,
 	KAR_PENGUINMON_LINE_38,
@@ -335,165 +292,30 @@ KarStrTbl KAR_D_8005AF58 = {{
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_41,
 	KAR_PENGUINMON_LINE_42,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_43,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_45,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_46,
+	KAR_PENGUINMON_LINE_47,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_49,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_50,
+	KAR_PENGUINMON_LINE_51,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_53,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_54,
+	KAR_PENGUINMON_LINE_55,
 	KAR_STR_PENGUINMON,
 	KAR_PENGUINMON_LINE_57,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_PENGUINMON_LINE_58,
+	KAR_PENGUINMON_LINE_59,
 	NULL,
 }};
 
-char KAR_STR_BUTTON_MARK_COL11[] = "　　　　　　　　　　　ａ";
-char KAR_STR_BUTTON_MARK_COL1[] = "　ａ";
+PENGUINMON_HIGHLIGHT_MARKS_TEXT
+
+#if !VERSION_IS(US)
 KarStrPair KAR_PENGUINMON_HIGHLIGHTS = { { KAR_STR_BUTTON_MARK_COL11, KAR_STR_BUTTON_MARK_COL1 } };
-#else
-char MAIN_D_80134A38[] = " ";
-char MAIN_D_80134A3C[8] = "I win!";
-
-char KAR_D_8005ABD0[] = " Penguinmon ";
-
-char KAR_D_8005ABE0[28] = "First of all, please choose";
-
-char KAR_D_8005ABFC[20] = "your curling stone.";
-
-char KAR_D_8005AC10[] = "There are heavy, medium, and";
-
-char KAR_D_8005AC30[] = "light ones, so think about the";
-
-char KAR_D_8005AC50[24] = "best order to use them.";
-
-char KAR_D_8005AC68[28] = "Some stones have four pegs.";
-
-char KAR_D_8005AC84[] = "They stick to where they land";
-
-char KAR_D_8005ACA4[28] = "and can become very useful.";
-
-char KAR_D_8005ACC0[] = "Move the Directional Pad ";
-
-char KAR_D_8005ACDC[] = "left and right to choose the ";
-
-char KAR_D_8005ACFC[] = "direction of your throw.";
-
-char KAR_D_8005AD18[28] = "Move screen up or down with";
-
-char KAR_D_8005AD34[] = "Dir. Pad. Use X button to";
-
-char KAR_D_8005AD50[24] = "select throw direction.";
-
-char KAR_D_8005AD68[] = "Press X button when power";
-
-char KAR_D_8005AD84[] = "gauge reaches the desired";
-
-char KAR_D_8005ADA0[] = "level to pick throw strength.";
-
-char KAR_D_8005ADC0[28] = "If your curling stone lands";
-
-char KAR_D_8005ADDC[] = "and touches the GOOD mark,";
-
-char KAR_D_8005ADF8[20] = "you get two points.";
-
-char KAR_D_8005AE0C[] = "If you get it on the blue";
-
-char KAR_D_8005AE28[] = "line, but outside the center";
-
-char KAR_D_8005AE48[] = "GOOD mark, one point.";
-
-char KAR_D_8005AE60[24] = "If you touch the BAD on";
-
-char KAR_D_8005AE78[] = "bottom right, you'll lose";
-
-char KAR_D_8005AE94[] = "two points, so be careful.";
-
-char KAR_D_8005AEB0[] = "And, in the case of a tie,";
-
-char KAR_D_8005AECC[] = "So let's start the game!!";
-
-char KAR_D_8005AEE8[] = "You're not that great!";
-
-char KAR_D_8005AF00[] = "The battle is just beginning!";
-
-char KAR_D_8005AF20[24] = "Hey you're pretty good!";
-
-char KAR_D_8005AF38[] = "Yeah! I won!";
-
-char KAR_D_8005AF48[] = "Awh, I lost. ";
-
-KarStrTbl KAR_D_8005AF58 = {{
-	KAR_D_8005ABD0,
-	KAR_D_8005ABE0,
-	KAR_D_8005ABFC,
-	MAIN_D_80134A38,
-	KAR_D_8005ABD0,
-	KAR_D_8005AC10,
-	KAR_D_8005AC30,
-	KAR_D_8005AC50,
-	KAR_D_8005ABD0,
-	KAR_D_8005AC68,
-	KAR_D_8005AC84,
-	KAR_D_8005ACA4,
-	KAR_D_8005ABD0,
-	KAR_D_8005ACC0,
-	KAR_D_8005ACDC,
-	KAR_D_8005ACFC,
-	KAR_D_8005ABD0,
-	KAR_D_8005AD18,
-	KAR_D_8005AD34,
-	KAR_D_8005AD50,
-	KAR_D_8005ABD0,
-	KAR_D_8005AD68,
-	KAR_D_8005AD84,
-	KAR_D_8005ADA0,
-	KAR_D_8005ABD0,
-	KAR_D_8005ADC0,
-	KAR_D_8005ADDC,
-	KAR_D_8005ADF8,
-	KAR_D_8005ABD0,
-	KAR_D_8005AE0C,
-	KAR_D_8005AE28,
-	KAR_D_8005AE48,
-	KAR_D_8005ABD0,
-	KAR_D_8005AE60,
-	KAR_D_8005AE78,
-	KAR_D_8005AE94,
-	KAR_D_8005ABD0,
-	KAR_D_8005AEB0,
-	MAIN_D_80134A3C,
-	KAR_D_8005AECC,
-	KAR_D_8005ABD0,
-	MAIN_D_80134A38,
-	KAR_D_8005AEE8,
-	MAIN_D_80134A38,
-	KAR_D_8005ABD0,
-	KAR_D_8005AF00,
-	MAIN_D_80134A38,
-	MAIN_D_80134A38,
-	KAR_D_8005ABD0,
-	KAR_D_8005AF20,
-	MAIN_D_80134A38,
-	MAIN_D_80134A38,
-	KAR_D_8005ABD0,
-	KAR_D_8005AF38,
-	MAIN_D_80134A38,
-	MAIN_D_80134A38,
-	KAR_D_8005ABD0,
-	KAR_D_8005AF48,
-	MAIN_D_80134A38,
-	MAIN_D_80134A38,
-	(char *)0x00000000,
-}};
-
 #endif
 
 KarOffTbl KAR_D_8005B04C = {
@@ -503,37 +325,13 @@ KarOffTbl KAR_D_8005B04C = {
 	},
 };
 
-#if !VERSION_IS(US)
-char KAR_STR_METALMAMEMON[] = "メタルマメモン";
-char KAR_METALMAMEMON_LINE_1[] = "「そうだな。まずはカーリングダマの";
-char KAR_METALMAMEMON_LINE_2[] = "　タイプを選ぶ。」";
-char KAR_METALMAMEMON_LINE_5[] = "「おれは天才だから、色々なタマを";
-char KAR_METALMAMEMON_LINE_6[] = "　タイミングを良く使うことができる。";
-char KAR_METALMAMEMON_LINE_7[] = "　それが勝つヒケツさっ！」";
-char KAR_METALMAMEMON_LINE_9[] = "「４つ足がついているタマは";
-char KAR_METALMAMEMON_LINE_10[] = "　止まったところにくっつくから、";
-char KAR_METALMAMEMON_LINE_11[] = "　すっげー大事だぜ。」";
-char KAR_METALMAMEMON_LINE_14[] = "　方向キーの左右で選べ。」";
-char KAR_METALMAMEMON_LINE_18[] = "　スクロールできるぜ！";
-char KAR_METALMAMEMON_LINE_19[] = "　投げる方向をきめたらａｈｉで決定だ。」";
-char KAR_METALMAMEMON_LINE_21[] = "「最後に、投げる強さを決めろ。";
-char KAR_METALMAMEMON_LINE_23[] = "　これも、ａｈｉで決定だ。」";
-char KAR_METALMAMEMON_LINE_33[] = "「右下にあるＢＡＤにのせると";
-char KAR_METALMAMEMON_LINE_34[] = "　－２点になるからせいぜい";
-char KAR_METALMAMEMON_LINE_35[] = "　気をつけるんだな！」";
-char KAR_METALMAMEMON_LINE_37[] = "「同点は、おれの勝ち！！";
-char KAR_METALMAMEMON_LINE_38[] = "　それじゃ、ゲームスタートだ」";
-char KAR_METALMAMEMON_LINE_41[] = "「フッ、このまま勝つ！」";
-char KAR_METALMAMEMON_LINE_45[] = "「まだ負けたわけではない！！」";
-char KAR_METALMAMEMON_LINE_49[] = "「この勝負、負けるわけには！」";
-char KAR_METALMAMEMON_LINE_53[] = "「はっはっはっ！俺の勝ちだな！」";
-char KAR_METALMAMEMON_LINE_57[] = "「くっ・・・あと少しのところを・・・」";
+METALMAMEMON_DIALOGUE_TEXT
 
 KarStrTbl KAR_D_8005B318 = {{
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_1,
 	KAR_METALMAMEMON_LINE_2,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_3,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_5,
 	KAR_METALMAMEMON_LINE_6,
@@ -543,25 +341,25 @@ KarStrTbl KAR_D_8005B318 = {{
 	KAR_METALMAMEMON_LINE_10,
 	KAR_METALMAMEMON_LINE_11,
 	KAR_STR_METALMAMEMON,
-	KAR_PENGUINMON_LINE_13,
+	KAR_METALMAMEMON_LINE_13,
 	KAR_METALMAMEMON_LINE_14,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_15,
 	KAR_STR_METALMAMEMON,
-	KAR_PENGUINMON_LINE_17,
+	KAR_METALMAMEMON_LINE_17,
 	KAR_METALMAMEMON_LINE_18,
 	KAR_METALMAMEMON_LINE_19,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_21,
-	KAR_PENGUINMON_LINE_22,
+	KAR_METALMAMEMON_LINE_22,
 	KAR_METALMAMEMON_LINE_23,
 	KAR_STR_METALMAMEMON,
-	KAR_PENGUINMON_LINE_25,
-	KAR_PENGUINMON_LINE_26,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_25,
+	KAR_METALMAMEMON_LINE_26,
+	KAR_METALMAMEMON_LINE_27,
 	KAR_STR_METALMAMEMON,
-	KAR_PENGUINMON_LINE_29,
-	KAR_PENGUINMON_LINE_30,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_29,
+	KAR_METALMAMEMON_LINE_30,
+	KAR_METALMAMEMON_LINE_31,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_33,
 	KAR_METALMAMEMON_LINE_34,
@@ -569,151 +367,34 @@ KarStrTbl KAR_D_8005B318 = {{
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_37,
 	KAR_METALMAMEMON_LINE_38,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_39,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_41,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_42,
+	KAR_METALMAMEMON_LINE_43,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_45,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_46,
+	KAR_METALMAMEMON_LINE_47,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_49,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_50,
+	KAR_METALMAMEMON_LINE_51,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_53,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_54,
+	KAR_METALMAMEMON_LINE_55,
 	KAR_STR_METALMAMEMON,
 	KAR_METALMAMEMON_LINE_57,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
-	KAR_STR_EMPTY,
+	KAR_METALMAMEMON_LINE_58,
+	KAR_METALMAMEMON_LINE_59,
+	KAR_METALMAMEMON_LINE_60,
 }};
 
-char KAR_STR_BUTTON_MARK_COL5[] = "　　　　　ａ";
+METALMAMEMON_HIGHLIGHT_MARKS_TEXT
+
+#if !VERSION_IS(US)
 KarStrPair KAR_METALMAMEMON_HIGHLIGHTS = { { KAR_STR_BUTTON_MARK_COL11, KAR_STR_BUTTON_MARK_COL5 } };
-#else
-char KAR_D_8005B058[] = " MetalMamemon ";
-
-char KAR_D_8005B068[] = "Yeah. You gotta first pick";
-
-char KAR_D_8005B084[] = "the type of curling stone.";
-
-char KAR_D_8005B0A0[] = "I'm a genius, so I can use";
-
-char KAR_D_8005B0BC[28] = "various stones in the right";
-
-char KAR_D_8005B0D8[28] = "order. It's key to winning.";
-
-char KAR_D_8005B0F4[] = "Stones with four pegs stop";
-
-char KAR_D_8005B110[] = "and stay where they land,";
-
-char KAR_D_8005B12C[] = "so they are very valuable.";
-
-char KAR_D_8005B148[] = "Choose the direction of throw";
-
-char KAR_D_8005B168[] = "with the Directional Pad,";
-
-char KAR_D_8005B184[] = "by moving it left and right.";
-
-char KAR_D_8005B1A4[] = "You can scroll screen moving";
-
-char KAR_D_8005B1C4[] = "Directional Pad up and down.";
-
-char KAR_D_8005B1E4[28] = "Press X button to throw it.";
-
-char KAR_D_8005B200[] = "gauge reaches the desired ";
-
-char KAR_D_8005B21C[] = "Points: If you get the";
-
-char KAR_D_8005B234[24] = "stone on the GOOD mark,";
-
-char KAR_D_8005B24C[] = "If you get on right bottom";
-
-char KAR_D_8005B268[] = "BAD mark, it will be minus";
-
-char KAR_D_8005B284[] = "In the case of a tie, I win!";
-
-char KAR_D_8005B2A4[] = "Start the game!!";
-
-char KAR_D_8005B2B8[] = "I'll win!";
-
-char KAR_D_8005B2C4[20] = "I haven't lost yet!";
-
-char KAR_D_8005B2D8[] = "I can't lose this match!";
-
-char KAR_D_8005B2F4[] = "Yeah, I won!";
-
-char KAR_D_8005B304[] = "Awh, I almost won.";
-
-KarStrTbl KAR_D_8005B318 = {{
-	KAR_D_8005B058,
-	KAR_D_8005B068,
-	KAR_D_8005B084,
-	&MAIN_D_80134A3C[7],
-	KAR_D_8005B058,
-	KAR_D_8005B0A0,
-	KAR_D_8005B0BC,
-	KAR_D_8005B0D8,
-	KAR_D_8005B058,
-	KAR_D_8005B0F4,
-	KAR_D_8005B110,
-	KAR_D_8005B12C,
-	KAR_D_8005B058,
-	KAR_D_8005B148,
-	KAR_D_8005B168,
-	KAR_D_8005B184,
-	KAR_D_8005B058,
-	KAR_D_8005B1A4,
-	KAR_D_8005B1C4,
-	KAR_D_8005B1E4,
-	KAR_D_8005B058,
-	KAR_D_8005AD68,
-	KAR_D_8005B200,
-	KAR_D_8005ADA0,
-	KAR_D_8005B058,
-	KAR_D_8005B21C,
-	KAR_D_8005B234,
-	KAR_D_8005ADF8,
-	KAR_D_8005B058,
-	KAR_D_8005AE0C,
-	KAR_D_8005AE28,
-	KAR_D_8005AE48,
-	KAR_D_8005B058,
-	KAR_D_8005B24C,
-	KAR_D_8005B268,
-	KAR_D_8005AE94,
-	KAR_D_8005B058,
-	KAR_D_8005B284,
-	KAR_D_8005B2A4,
-	&MAIN_D_80134A3C[7],
-	KAR_D_8005B058,
-	KAR_D_8005B2B8,
-	&MAIN_D_80134A3C[7],
-	&MAIN_D_80134A3C[7],
-	KAR_D_8005B058,
-	KAR_D_8005B2C4,
-	&MAIN_D_80134A3C[7],
-	&MAIN_D_80134A3C[7],
-	KAR_D_8005B058,
-	KAR_D_8005B2D8,
-	&MAIN_D_80134A3C[7],
-	&MAIN_D_80134A3C[7],
-	KAR_D_8005B058,
-	KAR_D_8005B2F4,
-	&MAIN_D_80134A3C[7],
-	&MAIN_D_80134A3C[7],
-	KAR_D_8005B058,
-	KAR_D_8005B304,
-	&MAIN_D_80134A3C[7],
-	&MAIN_D_80134A3C[7],
-	&MAIN_D_80134A3C[7],
-}};
-
 #endif
 
 KarOffTbl KAR_D_8005B40C = {

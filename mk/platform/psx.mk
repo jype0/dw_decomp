@@ -9,7 +9,7 @@ SPLAT := $(PYTHON) -m splat split
 ELF := $(BUILD_DIR)/$(EXE_NAME).elf
 EXE := $(BUILD_DIR)/$(EXE_NAME)
 
-INC := -Iinclude/$(TOOLCHAIN) -I$(PSYQ_INCLUDE) -Iinclude
+INC := -Iinclude/$(TOOLCHAIN) -I$(PSYQ_INCLUDE) -Iinclude -I$(GEN_DIR)
 
 LDSCRIPT := \
 	$(CONFIG_DIR)/overlay.ld \

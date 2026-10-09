@@ -15,6 +15,7 @@
 #include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
+#include <text/vs/vs_main.h>
 
 #include "common.h"
 
@@ -160,31 +161,8 @@ uint8_t VS_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t VS_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
 uint8_t VS_YOUR_CALL_WIDE_PRIO[4] = { 10, 5, 0, 0 };
 int8_t MAIN_D_80134AC8[2] = { -1, -1 };
-#if VERSION_IS(EU)
-char VS_STR_COMMAND_ATTACK[] = "Ａｔｔａｃｋ";
-char VS_STR_COMMAND_AUTO[] = "Ａｕｔｏ";
-char VS_STR_COMMAND_MODERATE[] = "Ｍｏｄｅｒａｔｅ";
-char VS_STR_COMMAND_DISTANCE[] = "Ｄｉｓｔａｎｃｅ";
-char VS_STR_COMMAND_DEFENSIVE[] = "Ｄｅｆｅｎｓｉｖｅ";
-char VS_STR_COMMAND_CHANGE[] = "Ｃｈａｎｇｅ　ｔａｒｇｅｔ";
-char VS_STR_COMMAND_RUN[] = "Ｒｕｎ";
-#elif !VERSION_IS(US)
-char VS_STR_COMMAND_RUN[] = "にげる";
-char VS_STR_COMMAND_ATTACK[] = "おもいっきり";
-char VS_STR_COMMAND_AUTO[] = "おまかせ";
-char VS_STR_COMMAND_MODERATE[] = "ほどほど";
-char VS_STR_COMMAND_DISTANCE[] = "はなれる";
-char VS_STR_COMMAND_DEFENSIVE[] = "ガマンする";
-char VS_STR_COMMAND_CHANGE[] = "ターゲットをかえる";
-#else
-char VS_STR_COMMAND_RUN[] = "Run";
-char VS_STR_COMMAND_ATTACK[] = "Attack";
-char VS_STR_COMMAND_AUTO[] = "Auto";
-char VS_STR_COMMAND_MODERATE[] = "Moderate";
-char VS_STR_COMMAND_DISTANCE[] = "Distance";
-char VS_STR_COMMAND_DEFENSIVE[] = "Defensive";
-char VS_STR_COMMAND_CHANGE[] = "Change";
-#endif
+
+COMMANDS_TEXT
 
 // clang-format off
 char *VS_COMMAND_NAMES[8] = {

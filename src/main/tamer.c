@@ -30,43 +30,12 @@
 #include <dw/ui.h>
 #include <dw/utils.h>
 #include <dw/version.h>
-
-#if !VERSION_IS(US)
-char MAIN_D_801341FC[] = "「あっ！だ！」";
-char MAIN_D_80122D68[] = "「でも、持ち物がいっぱいで持てないや。」";
-char MAIN_D_80122D80[] = "「ちぇっ！　カラッポだ」";
-char MAIN_D_80122D94[] = "テイマーレベルが上がった！！！";
-char MAIN_D_80122DAC[] = "テイマーレベルが下がった！！！";
-char MAIN_D_80122DC8[] = "おめでとうございます！";
-char MAIN_D_80122DDC[] = "あなたのすばらしい功績に対して";
-char MAIN_D_80122DF4[] = "メダルがおくられました！";
-#else
-char MAIN_D_80122D68[] = "I can't hold anymore.";
-char MAIN_D_80122D80[] = "Hey! It's empty!";
-char MAIN_D_80122D94[] = "Tamer level went up!!!";
-char MAIN_D_80122DAC[] = "Tamer level went down!!!";
-char MAIN_D_80122DC8[] = "Congratulations!";
-char MAIN_D_80122DDC[24] = "To recognize your great";
-char MAIN_D_80122DF4[] = "recors, they sent a Medal!";
-#endif
-
-static void *tamer_data_order[] = {
-	MAIN_D_80122DF4,
-	MAIN_D_80122DDC,
-	MAIN_D_80122DC8,
-	MAIN_D_80122DAC,
-	MAIN_D_80122D94,
-	MAIN_D_80122D80,
-	MAIN_D_80122D68,
-#if !VERSION_IS(US)
-	MAIN_D_801341FC,
-#endif
-};
+#include <text/main/tamer.h>
 
 RECT ITEM_PICKUP_TEXT_AREA = {0, 12, 256, 200};
-#if VERSION_IS(US)
-char MAIN_D_801341FC[] = "Woah!";
-#endif
+
+MESSAGES_TEXT
+
 RECT TAKE_CHEST_TEXT_AREA = {0, 12, 256, 200};
 RECT AWARD_SOMETHING_TEXT_AREA = {0, 12, 256, 200};
 

@@ -11,6 +11,7 @@
 #include <dw/trn.h>
 #include <dw/types.h>
 #include <dw/version.h>
+#include <text/trn/trn_reward.h>
 
 extern int16_t STATS_GAINS[6];
 extern char *MOVE_NAMES[];
@@ -71,35 +72,7 @@ int8_t TRN_TRAINING_ANIM_IDS[67][2] = {
 	{ 0x2e, 0xa }, { 0x2e, 0xa }, { 0x2e, 0xa },
 };
 
-#if !VERSION_IS(US)
-char TRN_D_8008F0D8[] = "「思いっきり！」";
-
-char TRN_D_8008F0F0[] = "「ほどほど！」";
-
-char TRN_D_8008F100[] = "「はなれろ！」";
-
-char TRN_D_8008F10C[] = "「ターゲット変更！」";
-
-char TRN_D_8008F11C[] = "「ガマンだ！」";
-
-char TRN_D_8008F12C[] = "「そうびした技」";
-
-char TRN_D_8008F140[] = "の命令を聞くようになった！";
-#else
-char TRN_D_8008F0D8[] = "Give it all you got!";
-
-char TRN_D_8008F0F0[] = "Take it easy!";
-
-char TRN_D_8008F100[] = "Get back!";
-
-char TRN_D_8008F10C[] = "Change target!";
-
-char TRN_D_8008F11C[] = "Hang in there!";
-
-char TRN_D_8008F12C[20] = "Technique mastered.";
-
-char TRN_D_8008F140[12] = "New orders!";
-#endif
+MESSAGES_TEXT
 
 uint8_t TRN_D_8008F14C[56] = {
 	0x2, 0x5, 0x0, 0x4, 0x3, 0x1, 0x6, 0x7,
@@ -122,11 +95,7 @@ int8_t TRN_D_8008F184[8][3] = {
 	{ 0xa, 0x5, 0x0 },
 };
 
-#if !VERSION_IS(US)
-char TRN_D_8008F19C[] = "をおぼえた。";
-#else
-char TRN_D_8008F19C[] = "was mastered!";
-#endif
+MASTERED_TEXT
 // clang-format on
 
 void TRN_saveTrainingStartTime(void)

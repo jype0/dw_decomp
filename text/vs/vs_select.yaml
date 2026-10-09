@@ -1,0 +1,9 @@
+PRESS_START:
+  strings:
+    VS__STR_PRESS_START:
+      ja: スタートボタンで
+      en_us: Press Start
+      en_eu: Press START
+    VS__STR_TO_BEGIN:
+      ja: 決定して下さい。
+      en_us: to begin.

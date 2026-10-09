@@ -1,0 +1,564 @@
+TRIAL_END:
+  strings:
+    STR_KONKAI_HA_KOKOMADE_DESU:
+      ja: NULL
+      ja@jp_bombom: 今回はここまでです。
+      ja@jp_trial: 今回はここまでです。
+      en_us: NULL
+    STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI:
+      ja: NULL
+      ja@jp_bombom: このつづきは、製品でお楽しみ下さい。
+      ja@jp_trial: このつづきは、製品でお楽しみ下さい。
+      en_us: NULL
+
+DIGIMON_NAMES:
+  storage: {default: embedded, eu: literal}
+  macro: DIGIMON_PARA_NAME
+  entries:
+    - name: TAMER
+      ja: しゅじんこう
+      en_us: main character
+      en_eu: "Player    "
+    - name: BOTAMON
+      ja: ボタモン
+      en_us: Botamon
+    - name: KOROMON
+      ja: コロモン
+      en_us: Koromon
+    - name: AGUMON
+      ja: アグモン
+      en_us: Agumon
+    - name: BETAMON
+      ja: ベタモン
+      en_us: Betamon
+    - name: GREYMON
+      ja: グレイモン
+      en_us: Greymon
+    - name: DEVIMON
+      ja: デビモン
+      en_us: Devimon
+    - name: AIRDRAMON
+      ja: エアドラモン
+      en_us: Airdramon
+    - name: TYRANNOMON
+      ja: ティラノモン
+      en_us: Tyrannomon
+    - name: MERAMON
+      ja: メラモン
+      en_us: Meramon
+    - name: SEADRAMON
+      ja: シードラモン
+      en_us: Seadramon
+    - name: NUMEMON
+      ja: ヌメモン
+      en_us: Numemon
+    - name: METALGREYMON
+      ja: メタルグレイモン
+      en_us: MetalGreymon
+    - name: MAMEMON
+      ja: マメモン
+      en_us: Mamemon
+    - name: MONZAEMON
+      ja: もんざえモン
+      en_us: Monzaemon
+    - name: PUNIMON
+      ja: プニモン
+      en_us: Punimon
+    - name: TSUNOMON
+      ja: ツノモン
+      en_us: Tsunomon
+    - name: GABUMON
+      ja: ガブモン
+      en_us: Gabumon
+    - name: ELECMON
+      ja: エレキモン
+      en_us: Elecmon
+    - name: KABUTERIMON
+      ja: カブテリモン
+      en_us: Kabuterimon
+    - name: ANGEMON
+      ja: エンジェモン
+      en_us: Angemon
+    - name: BIRDRAMON
+      ja: バードラモン
+      en_us: Birdramon
+    - name: GARURUMON
+      ja: ガルルモン
+      en_us: Garurumon
+    - name: FRIGIMON
+      ja: ユキダルモン
+      en_us: Frigimon
+    - name: WHAMON
+      ja: ホエーモン
+      en_us: Whamon
+    - name: VEGIEMON
+      ja: ベジーモン
+      en_us: Vegiemon
+    - name: SKULLGREYMON
+      ja: スカルグレイモン
+      en_us: SkullGreymon
+    - name: METALMAMEMON
+      ja: メタルマメモン
+      en_us: MetalMamemon
+    - name: VADEMON
+      ja: ベーダモン
+      en_us: Vademon
+    - name: POYOMON
+      ja: ポヨモン
+      en_us: Poyomon
+    - name: TOKOMON
+      ja: トコモン
+      en_us: Tokomon
+    - name: PATAMON
+      ja: パタモン
+      en_us: Patamon
+    - name: KUNEMON
+      ja: クネモン
+      en_us: Kunemon
+    - name: UNIMON
+      ja: ユニモン
+      en_us: Unimon
+    - name: OGREMON
+      ja: オーガモン
+      en_us: Ogremon
+    - name: SHELLMON
+      ja: シェルモン
+      en_us: Shellmon
+    - name: CENTARUMON
+      ja: ケンタルモン
+      en_us: Centarumon
+    - name: BAKEMON
+      ja: バケモン
+      en_us: Bakemon
+    - name: DRIMOGEMON
+      ja: ドリモゲモン
+      en_us: Drimogemon
+    - name: SUKAMON
+      ja: スカモン
+      en_us: Sukamon
+    - name: ANDROMON
+      ja: アンドロモン
+      en_us: Andromon
+    - name: GIROMON
+      ja: ギロモン
+      en_us: Giromon
+    - name: ETEMON
+      ja: エテモン
+      en_us: Etemon
+    - name: YURAMON
+      ja: ユラモン
+      en_us: Yuramon
+    - name: TANEMON
+      ja: タネモン
+      en_us: Tanemon
+    - name: BIYOMON
+      ja: ピヨモン
+      en_us: Biyomon
+    - name: PALMON
+      ja: パルモン
+      en_us: Palmon
+    - name: MONOCHROMON
+      ja: モノクロモン
+      en_us: Monochromon
+    - name: LEOMON
+      ja: レオモン
+      en_us: Leomon
+    - name: COELAMON
+      ja: シーラモン
+      en_us: Coelamon
+    - name: KOKATORIMON
+      ja: コカトリモン
+      en_us: Kokatorimon
+    - name: KUWAGAMON
+      ja: クワガーモン
+      en_us: Kuwagamon
+    - name: MOJYAMON
+      ja: モジャモン
+      en_us: Mojyamon
+    - name: NANIMON
+      ja: ナニモン
+      en_us: Nanimon
+    - name: MEGADRAMON
+      ja: メガドラモン
+      en_us: Megadramon
+    - name: PIXIMON
+      ja: ピッコロモン
+      en_us: Piximon
+    - name: DIGITAMAMON
+      ja: デジタマモン
+      en_us: Digitamamon
+    - name: PENGUINMON
+      ja: ペンモン
+      en_us: Penguinmon
+    - name: NINJAMON
+      ja: イガモン
+      en_us: Ninjamon
+    - name: PHOENIXMON
+      ja: ホウオウモン
+      en_us: Phoenixmon
+    - name: HERCULESKABUTERIMON
+      ja: Ｈカブテリモン
+      en_us: H-Kabuterimon
+      en_eu: HerculesKabuterimon
+    - name: MEGASEADRAMON
+      ja: メガシードラモン
+      en_us: MegaSeadramon
+    - name: WEREGARURUMON
+      ja: ウェアガルルモン
+      en_us: WereGarurumon
+      en_eu: Waregarurumon
+    - name: PANJYAMON
+      ja: パンジャモン
+      en_us: Panjyamon
+    - name: GIGADRAMON
+      ja: ギガドラモン
+      en_us: Gigadramon
+    - name: METALETEMON
+      ja: メタルエテモン
+      en_us: MetalEtemon
+    - name: MYOTISMON
+      ja: ヴァンデモン
+      en_us: Myotismon
+    - name: YANMAMON
+      ja: ヤンマモン
+      en_us: Yanmamon
+    - name: GOTSUMON
+      ja: ゴツモン
+      en_us: Gotsumon
+    - name: FLAREIZAMON
+      ja: フレアリザモン
+      en_us: Flarerizamon
+    - name: WARUMONZAEMON
+      ja: ワルモンザエモン
+      en_us: WaruMonzaemon
+    - name: SNOWAGUMON
+      ja: ユキアグモン
+      en_us: SnowAgumon
+    - name: HYOGAMON
+      ja: ヒョーガモン
+      en_us: Hyogamon
+    - name: PLATINUMSUKAMON
+      ja: プラチナスカモン
+      en_us: PlatinumSukamon
+    - name: DOKUNEMON
+      ja: ドクネモン
+      en_us: Dokunemon
+    - name: SHIMAUNIMON
+      ja: シマユニモン
+      en_us: ShimaUnimon
+    - name: TANKMON
+      ja: タンクモン
+      en_us: Tankmon
+    - name: REDVEGIMON
+      ja: レッドベジーモン
+      en_us: RedVegiemon
+    - name: JMOJYAMON
+      ja: Ｊモジャモン
+      en_us: J-Mojyamon
+    - name: NISEDRIMOGEMON
+      ja: ニセドリモゲモン
+      en_us: NiseDrimogemon
+    - name: GOBURIMON
+      ja: ゴブリモン
+      en_us: Goburimon
+    - name: MUDFRIGIMON
+      ja: ツチダルモン
+      en_us: MudFrigimon
+    - name: PSYCHEMON
+      ja: サイケモン
+      en_us: Psychemon
+    - name: MODOKIBETAMON
+      ja: モドキベタモン
+      en_us: ModokiBetamon
+    - name: TOYAGUMON
+      ja: トイアグモン
+      en_us: ToyAgumon
+    - name: PIDDOMON
+      ja: ピッドモン
+      en_us: Piddomon
+    - name: ARURAUMON
+      ja: アルラウモン
+      en_us: Aruraumon
+    - name: GEREMON
+      ja: ゲレモン
+      en_us: Geremon
+    - name: VERMILIMON
+      ja: ヴァーミリモン
+      en_us: Vermilimon
+    - name: FUGAMON
+      ja: フーガモン
+      en_us: Fugamon
+    - name: TEKKAMON
+      ja: テッカモン
+      en_us: Tekkamon
+    - name: MORISHELLMON
+      ja: モリシェルモン
+      en_us: MoriShellmon
+    - name: GUARDROMON
+      ja: ガードロモン
+      en_us: Guardromon
+    - name: MUCHOMON
+      ja: ムーチョモン
+      en_us: Muchomon
+    - name: ICEMON
+      ja: アイスモン
+      en_us: Icemon
+    - name: AKATORIMON
+      ja: アカトリモン
+      en_us: Akatorimon
+    - name: TSUKAIMON
+      ja: ツカイモン
+      en_us: Tsukaimon
+    - name: SHARMAMON
+      ja: シャーマモン
+      en_us: Sharmamon
+    - name: CLEARAGUMON
+      ja: クリアアグモン
+      en_us: ClearAgumon
+      en_eu: Clearagumon
+    - name: WEEDMON
+      ja: ザッソーモン
+      en_us: Weedmon
+    - name: ICEDEVIMON
+      ja: アイスデビモン
+      en_us: IceDevimon
+    - name: DARKRIZAMON
+      ja: ダークリザモン
+      en_us: Darkrizamon
+    - name: SANDYANMAMON
+      ja: サンドヤンマモン
+      en_us: SandYanmamon
+    - name: SNOWGOBURIMON
+      ja: スノーゴブリモン
+      en_us: SnowGoburimon
+      en_eu: Snowgoburimon
+    - name: BLUEMERAMON
+      ja: ブルーメラモン
+      en_us: BlueMeramon
+    - name: GURURUMON
+      ja: グルルモン
+      en_us: Gururumon
+    - name: SABERDRAMON
+      ja: セーバードラモン
+      en_us: Saberdramon
+    - name: SOULMON
+      ja: ソウルモン
+      en_us: Soulmon
+    - name: ROCKMON
+      ja: ゴーレモン
+      en_us: Rockmon
+    - name: OTAMAMON
+      ja: オタマモン
+      en_us: Otamamon
+    - name: GEKOMON
+      ja: ゲコモン
+      en_us: Gekomon
+    - name: TENTOMON
+      ja: テントモン
+      en_us: Tentomon
+    - name: WARUSEADRAMON
+      ja: ワルシードラモン
+      en_us: WaruSeadramon
+    - name: METEORMON
+      ja: インセキモン
+      en_us: Meteormon
+    - name: UNKNOWN
+      ja: デジモン
+      en_us: ""
+      en_eu: Digimon
+    - name: MACHINEDRAMON
+      ja: ムゲンドラモン
+      en_us: Machinedramon
+    - name: ANALOGMAN
+      ja: アナログマン
+      en_us: Analogman
+    - name: JIJIMON
+      ja: ジジモン
+      en_us: Jijimon
+    - name: MARKET_MANAGER
+      ja: マーケット店主
+      en_us: Market Manager
+    - name: SHOGUNGEKOMON
+      ja: トノサマゲコモン
+      en_us: ShogunGekomon
+    - name: KING_SUKAMON
+      ja: スカモン大王
+      en_us: King of Sukamon
+    - name: CHERRYMON
+      ja: ジュレイモン
+      en_us: Cherrymon
+    - name: HAGURUMON
+      ja: ハグルモン
+      en_us: Hagurumon
+    - name: TINMON
+      ja: ブリキ人形
+      en_us: Tinmon
+    - name: MASTER_TYRANNOMON
+      ja: ティラノ師匠
+      en_us: Master Tyrannomon
+    - name: NPC_GOBIROMON
+      ja: ゴブリモン
+      en_us: Goburimon
+    - name: BRACHIOMON
+      ja: ブラキモン
+      en_us: Brachiomon
+    - name: DEMIMERAMON
+      ja: プチメラモン
+      en_us: DemiMeramon
+    - name: NPC_BETAMON
+      ja: ベタモン
+      en_us: Betamon
+    - name: NPC_GREYMON
+      ja: グレイモン
+      en_us: Greymon
+    - name: NPC_DEVIMON
+      ja: デビモン
+      en_us: Devimon
+    - name: NPC_AIRDRAMON
+      ja: エアドラモン
+      en_us: Airdramon
+    - name: NPC_TYRANNOMON
+      ja: ティラノモン
+      en_us: Tyrannomon
+    - name: NPC_MERAMON
+      ja: メラモン
+      en_us: Meramon
+    - name: NPC_SEADRAMON
+      ja: シードラモン
+      en_us: Seadramon
+    - name: NPC_NUMEMON
+      ja: ヌメモン
+      en_us: Numemon
+    - name: NPC_METALGREYMON
+      ja: メタルグレイモン
+      en_us: MetalGreymon
+    - name: NPC_MAMEMON
+      ja: マメモン
+      en_us: Mamemon
+    - name: NPC_MONZAEMON
+      ja: もんざえモン
+      en_us: Monzaemon
+    - name: NPC_GABUMON
+      ja: ガブモン
+      en_us: Gabumon
+    - name: NPC_ELECMON
+      ja: エレキモン
+      en_us: Elecmon
+    - name: NPC_KABUTERIMON
+      ja: カブテリモン
+      en_us: Kabuterimon
+    - name: NPC_ANGEMON
+      ja: エンジェモン
+      en_us: Angemon
+    - name: NPC_BIRDRAMON
+      ja: バードラモン
+      en_us: Birdramon
+    - name: NPC_GARURUMON
+      ja: ガルルモン
+      en_us: Garurumon
+    - name: NPC_FRIGIMON
+      ja: ユキダルモン
+      en_us: Frigimon
+    - name: NPC_WHAMON
+      ja: ホエーモン
+      en_us: Whamon
+    - name: NPC_VEGIMON
+      ja: ベジーモン
+      en_us: Vegiemon
+    - name: NPC_SKULLGREYMON
+      ja: スカルグレイモン
+      en_us: SkullGreymon
+    - name: NPC_METALMAMEMON
+      ja: メタルマメモン
+      en_us: MetalGreymon
+      en_eu: MetalMamemon
+    - name: NPC_VADEMON
+      ja: ベーダモン
+      en_us: Vademon
+    - name: NPC_PATAMON
+      ja: パタモン
+      en_us: Patamon
+    - name: NPC_KUNEMON
+      ja: クネモン
+      en_us: Kunemon
+    - name: NPC_UNIMON
+      ja: ユニモン
+      en_us: Unimon
+    - name: NPC_OGREMON
+      ja: オーガモン
+      en_us: Ogremon
+    - name: NPC_SHELLMON
+      ja: シェルモン
+      en_us: Shellmon
+    - name: NPC_CENTARUMON
+      ja: ケンタルモン
+      en_us: Centarumon
+    - name: NPC_BAKEMON
+      ja: バケモン
+      en_us: Bakemon
+    - name: NPC_DRIMOGEMON
+      ja: ドリモゲモン
+      en_us: Drimogemon
+    - name: NPC_SUKAMON
+      ja: スカモン
+      en_us: Sukamon
+    - name: NPC_ANDROMON
+      ja: アンドロモン
+      en_us: Andromon
+    - name: NPC_GIROMON
+      ja: ギロモン
+      en_us: Giromon
+    - name: NPC_ETEMON
+      ja: エテモン
+      en_us: Etemon
+    - name: NPC_BIYOMON
+      ja: ピヨモン
+      en_us: Biyomon
+    - name: NPC_PALMON
+      ja: パルモン
+      en_us: Palmon
+    - name: NPC_MONOCHROMON
+      ja: モノクロモン
+      en_us: Monochromon
+    - name: NPC_LEOMON
+      ja: レオモン
+      en_us: Leomon
+    - name: NPC_COELAMON
+      ja: シーラモン
+      en_us: Coelamon
+    - name: NPC_KOKATORIMON
+      ja: コカトリモン
+      en_us: Kokatorimon
+    - name: NPC_KUWAGAMON
+      ja: クワガーモン
+      en_us: Kuwagamon
+    - name: NPC_MOJYAMON
+      ja: モジャモン
+      en_us: Mojyamon
+    - name: NPC_NANIMON
+      ja: ナニモン
+      en_us: Nanimon
+    - name: NPC_MEGADRAMON
+      ja: メガドラモン
+      en_us: Megadramon
+    - name: NPC_PIXIMON
+      ja: ピッコロモン
+      en_us: Piximon
+    - name: NPC_DIGITAMAMON
+      ja: デジタマモン
+      en_us: Digitamamon
+    - name: NPC_NINJAMON
+      ja: イガモン
+      en_us: Ninjamon
+    - name: NPC_PENGUINMON
+      ja: ペンモン
+      en_us: Penguinmon
+    - name: NPC_MYOTISMON
+      ja: ヴァンデモン
+      en_us: Myotismon
+    - name: NPC2_GREYMON
+      ja: グレイモン
+      en_us: Greymon
+    - name: NPC2_METALGREYMON
+      ja: メタルグレイモン
+      en_us: MetalGreymon

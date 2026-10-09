@@ -24,6 +24,7 @@
 #include <dw/vecmath.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
+#include <text/btl/battle_effect.h>
 
 #include "common.h"
 
@@ -569,31 +570,7 @@ static void *battle_effect_sbss_order[] = {
 };
 
 // clang-format off
-#if !VERSION_IS(US)
-char BTL_STR_LISTENS_TO[] = "C1の命令を聞くようになった！W";
-char BTL_STR_WHITE_WAIT[] = "C1を落としたW";
-char BTL_STR_WAS_INJURED[] = "C1はRケガをしてしまったW";
-char BTL_STR_SET_TECHNIQUE[] = "C7「そうびした技」R";
-char BTL_STR_PUT_UP_WITH_IT[] = "C7「ガマンだ！」R";
-char BTL_STR_MOVE_AWAY_CHANGE_TARGET[] = "C7「はなれろ！」R「ターゲット変更！」R";
-char BTL_STR_KEEP_IT_DOWN[] = "C7「ほどほど！」R";
-char BTL_STR_GO_ALL_THE_WAY[] = "C7「思いっきり！」R";
-char BTL_STR_MP_CONSUMPTION_BONUS[] = "C1かしこさによる「ＭＰ消費減R少ボーナス」を習得した！W技の消費ＭＰがR";
-char BTL_STR_MP_BONUS_PERCENT[] = "％だけ減るぞ！W";
-char BTL_STR_LEARNED[] = "RC1を覚えた！W";
-#else
-char BTL_STR_LISTENS_TO[32] = "Listens to #C1! #W";
-char BTL_STR_DROPPED[] = "#R#C1dropped #C7";
-char BTL_STR_WAS_INJURED[] = "#C1#R was injured #W";
-char BTL_STR_SET_TECHNIQUE[20] = "#C7set technique #R";
-char BTL_STR_PUT_UP_WITH_IT[] = "#C7Put up with it! #R";
-char BTL_STR_MOVE_AWAY_CHANGE_TARGET[32] = "#C7Move away!#RChange target!#R";
-char BTL_STR_KEEP_IT_DOWN[] = "#C7Keep it down!#R";
-char BTL_STR_GO_ALL_THE_WAY[] = "#C7Go all the way!#R";
-char BTL_STR_MP_CONSUMPTION_BONUS[] = "#C1MP Consumption Bonus!";
-char BTL_STR_REDUCED_BY[] = "reduced by";
-char BTL_STR_LEARNED[16] = "#R#C1learned!#W";
-#endif
+MESSAGES_TEXT
 
 MATRIX BTL_BATTLE_START_TEXT_MATRIX = {
 	{

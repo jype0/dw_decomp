@@ -243,7 +243,7 @@ segments:
       - [0xA46D8, .sdata, btl/battle_setup]
       - [0xA46E8, .sdata, btl/battle_main]
       - [0xA46FC, .sdata, btl/command_shout]
-      - [0xA4714, .sdata, btl/battle_hud]
+      - [0xA4728, .sdata, btl/battle_hud]
       - [0xA477C, .sdata, btl/battle_effect]
       - [0xA47FC, .sdata, std/std_setup]
       - [0xA4800, .sdata, std/std_main]

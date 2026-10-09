@@ -1,0 +1,489 @@
+BGM_TRACK_NAMES:
+  strings:
+    STR_BGM_TRACK_NON_BEWILDERING_FOREST_THEME:
+      ja: 迷わずの森のテーマ
+      en_us: Non Bewildering Forest Theme
+      en_eu: Native Forest
+    STR_BGM_TRACK_NON_BEWILDERING_FOREST_NIGHT_THEME:
+      ja: 迷わずの森・夜のテーマ
+      en_us: Non Bewildering Forest Night Theme
+      en_eu: Native Forest 2
+    STR_BGM_TRACK_TROPICAL_THEME:
+      ja: トロピカのテーマ
+      en_us: Tropical Theme
+      en_eu: Tropical
+    STR_BGM_TRACK_TROPICAL_NIGHT_THEME:
+      ja: トロピカ・夜のテーマ
+      en_us: Tropical Night Theme
+      en_eu: Tropical 2
+    STR_BGM_TRACK_MT_PANORAMA_THEME:
+      ja: ミハラシ山のテーマ
+      en_us: Mt. Panorama Theme
+      en_eu: Mt. Panorama
+    STR_BGM_TRACK_MT_PANORAMA_NIGHT_THEME:
+      ja: ミハラシ山・夜のテーマ
+      en_us: Mt. Panorama Night Theme
+      en_eu: Mt. Panorama 2
+    STR_BGM_TRACK_DRILL_TUNNEL_THEME:
+      ja: ドリルトンネルのテーマ
+      en_us: Drill Tunnel Theme
+      en_eu: Dill Tunnel
+    STR_BGM_TRACK_OGRE_FORTRESS_THEME:
+      ja: オーガモンのテーマ
+      en_us: Ogre Fortress Theme
+      en_eu: Ogremon
+    STR_BGM_TRACK_OVERDELL_CEMETARY_THEME:
+      ja: オーバーデル墓地のテーマ
+      en_us: Overdell Cemetary Theme
+      en_eu: Overdell Cemetery
+    STR_BGM_TRACK_CANYON_THEME:
+      ja: キャニオンのテーマ
+      en_us: Canyon Theme
+      en_eu: Canyon
+    STR_BGM_TRACK_OGREMON_THEME_NO_2:
+      ja: オーガモンのテーマ２
+      en_us: Ogremon Theme No. 2
+      en_eu: Ogremon 2
+    STR_BGM_TRACK_EVERYTHING_SHOP_THEME:
+      ja: よろず屋のテーマ
+      en_us: Everything Shop Theme
+      en_eu: Item Shop
+    STR_BGM_TRACK_OGREMON_THEMENO_3:
+      ja: オーガモンのテーマ３
+      en_us: Ogremon ThemeNo. 3
+      en_eu: Ogremon 3
+    STR_BGM_TRACK_LAVA_CAVE_THEME:
+      ja: 溶岩洞のテーマ
+      en_us: Lava Cave Theme
+      en_eu: Lava Cave
+    STR_BGM_TRACK_DARK_ARISTCRATS_MANSION_THEME:
+      ja: 闇貴族の館のテーマ
+      en_us: Dark Aristcrat's Mansion Theme
+      en_eu: Grey Load's
+    STR_BGM_TRACK_UNDERGROUND_LAB_THEME:
+      ja: 地下実験場のテーマ
+      en_us: Underground Lab Theme
+      en_eu: Underground Lab
+    STR_BGM_TRACK_GEAR_SAVANNA_THEME:
+      ja: ギアサバンナのテーマ
+      en_us: Gear Savanna Theme
+      en_eu: Gear Savanna
+    STR_BGM_TRACK_GEAR_SAVANNA_NIGHT_THEME:
+      ja: ギアサバンナ・夜のテーマ
+      en_us: Gear Savanna Night Theme
+      en_eu: Gear Savanna 2
+    STR_BGM_TRACK_LEOMON_THEME:
+      ja: レオモンのテーマ
+      en_us: Leomon Theme
+      en_eu: Leomon
+    STR_BGM_TRACK_AMIDA_FOREST_THEME:
+      ja: アミダ森のテーマ
+      en_us: Amida Forest Theme
+      en_eu: Amida Forest
+    STR_BGM_TRACK_AMIDA_FOREST_NIGHT_THEME:
+      ja: アミダ森・夜のテーマ
+      en_us: Amida Forest Night Theme
+      en_eu: Amida Forest 2
+    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_THEME:
+      ja: 古代境時急域のテーマ
+      en_us: The Ancient Region of Dino Speedy Time Zone Theme
+      en_eu: Speedy Time Zone
+    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_NIGHT_THEME:
+      ja: 古代境時急域・夜のテーマ
+      en_us: The Ancient Region of Dino Speedy Time Zone Night Theme
+      en_eu: Speedy Time Zone 2
+    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_THEME:
+      ja: 古代境時静域のテーマ
+      en_us: The Ancient Region of Dino Glacial Time Zone Theme
+      en_eu: Glacical Zone
+    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_NIGHT_THEME:
+      ja: 古代境時静域・夜のテーマ
+      en_us: The Ancient Region of Dino Glacial Time Zone Night Theme
+      en_eu: Glacical Zone 2
+    STR_BGM_TRACK_FREEZELAND_THEME:
+      ja: フリーズランドのテーマ
+      en_us: Freezeland Theme
+      en_eu: Freezeland
+    STR_BGM_TRACK_FREEZELAND_NIGHT_THEME:
+      ja: フリーズ・夜のテーマ
+      en_us: Freezeland Night Theme
+      en_eu: Freezeland 2
+    STR_BGM_TRACK_IGLOO_THEME:
+      ja: かまくらのテーマ
+      en_us: Igloo Theme
+      en_eu: Snow Cave
+    STR_BGM_TRACK_CURLING_THEME:
+      ja: カーリングのテーマ
+      en_us: Curling Theme
+      en_eu: Curlijng
+    STR_BGM_TRACK_SANCTUARY_THEME:
+      ja: サンクチュアリのテーマ
+      en_us: Sanctuary Theme
+      en_eu: Sanctuary
+    STR_BGM_TRACK_SANCTUARY_BELOW_THEME:
+      ja: サンクチュアリ下のテーマ
+      en_us: Sanctuary Below Theme
+      en_eu: Sanctuary 2
+    STR_BGM_TRACK_GECKO_SWAMP_THEME:
+      ja: ゲッコー湿地のテーマ
+      en_us: Gecko Swamp Theme
+      en_eu: Geko Swamp
+    STR_BGM_TRACK_GECKO_SWAMP_NIGHT_THEME:
+      ja: ゲッコー湿地・夜のテーマ
+      en_us: Gecko Swamp Night Theme
+      en_eu: Geko Swamp 2
+    STR_BGM_TRACK_MISTY_TREES_THEME:
+      ja: ミスティツリーズのテーマ
+      en_us: Misty Trees Theme
+      en_eu: Mysty Trees
+    STR_BGM_TRACK_MISTY_TREES_NIGHT_THEME:
+      ja: ミスティ・夜のテーマ
+      en_us: Misty Trees Night Theme
+      en_eu: Mysty Trees 2
+    STR_BGM_TRACK_WARUMONZAEMON_THEME:
+      ja: ワルモンザエモンのテーマ
+      en_us: WaruMonzaemon Theme
+      en_eu: Warumonzaemon
+    STR_BGM_TRACK_TOY_TOWN_THEME:
+      ja: おもちゃのまちのテーマ
+      en_us: Toy Town Theme
+      en_eu: Toy Town
+    STR_BGM_TRACK_THEME_OF_FACTORIAL:
+      ja: ファクトリアルのテーマ
+      en_us: Theme of Factorial
+      en_eu: Factorial
+    STR_BGM_TRACK_FACTORIAL_NIGHT_THEME:
+      ja: ファクトリー・夜のテーマ
+      en_us: Factorial Night Theme
+      en_eu: Factorial 2
+    STR_BGM_TRACK_SEWER_THEME:
+      ja: 下水道のテーマ
+      en_us: Sewer Theme
+      en_eu: Sewer
+    STR_BGM_TRACK_TRASH_MOUNTAIN_THEME:
+      ja: ゴミの山のテーマ
+      en_us: Trash Mountain Theme
+      en_eu: Trush Mountain
+    STR_BGM_TRACK_TRASH_MOUNTAIN_NIGHT_THEME:
+      ja: ゴミの山・夜のテーマ
+      en_us: Trash Mountain Night Theme
+      en_eu: Trush Mountain 2
+    STR_BGM_TRACK_BEATLAND_THEME:
+      ja: ビートランドのテーマ
+      en_us: Beatland Theme
+      en_eu: Beetle Land
+    STR_BGM_TRACK_BEATLAND_NIGHT_THEME:
+      ja: ビートランド・夜のテーマ
+      en_us: Beatland Night Theme
+      en_eu: Beetle Land 2
+    STR_BGM_TRACK_SECRET_BEACH_CAVE_THEME:
+      ja: ひみつの海岸洞のテーマ
+      en_us: Secret Beach Cave Theme
+      en_eu: Secret Beach Cave
+    STR_BGM_TRACK_MT_INFINITY_THEME:
+      ja: ムゲンマウンテンのテーマ
+      en_us: NULL
+      en_eu: Mt. Infinity
+    STR_BGM_TRACK_LAST_ROOM_THEME:
+      ja: ラストルームのテーマ
+      en_us: Last Room Theme
+      en_eu: Last Room
+    STR_BGM_TRACK_FILE_CITY_THEME:
+      ja: はじまりの街のテーマ
+      en_us: File City Theme
+      en_eu: File City
+    STR_BGM_TRACK_FILE_CITY_NIGHT_THEME:
+      ja: はじまりの街・夜のテーマ
+      en_us: File City Night Theme
+      en_eu: File City 2
+    STR_BGM_TRACK_TORNAMENT_OPENING_THEME:
+      ja: トーナメント開始のテーマ
+      en_us: Tornament Opening Theme
+      en_eu: Tournament
+    STR_BGM_TRACK_TORNAMENT_PROGRESS_THEME:
+      ja: トーナメント進行のテーマ
+      en_us: Tornament Progress Theme
+      en_eu: Tournament 2
+    STR_BGM_TRACK_TORNAMENT_CHAMPIONSHIP_THEME:
+      ja: トーナメント優勝のテーマ
+      en_us: Tornament Championship Theme
+      en_eu: Win the Tournament
+    STR_BGM_TRACK_PARTNERS_ENTRANCE_THEME:
+      ja: パートナー入場のテーマ
+      en_us: Partner's Entrance Theme
+      en_eu: Enter the Partoner
+    STR_BGM_TRACK_COMPETITION_BATTLE_OPPONENTS_ENTRANCE_THEME:
+      ja: 対戦相手入場のテーマ
+      en_us: Competition Battle Opponent's Entrance Theme
+      en_eu: Competitor
+    STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_1:
+      ja: 闘技場バトルのテーマ１
+      en_us: Arena Battle Theme No. 1
+      en_eu: Battel in Arena 1
+    STR_BGM_TRACK_PARTNERS_WIN_THEME:
+      ja: パートナー勝利のテーマ
+      en_us: Partner's Win Theme
+      en_eu: Pertoner Win
+    STR_BGM_TRACK_PARTNERS_LOSS_THEME:
+      ja: パートナー敗北のテーマ
+      en_us: Partner's Loss Theme
+      en_eu: Pertoner Lost
+    STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_2:
+      ja: 闘技場バトルのテーマ２
+      en_us: Arena Battle Theme No. 2
+      en_eu: Battel in Arena 2
+    STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_3:
+      ja: 闘技場バトルのテーマ３
+      en_us: Arena Battle Theme No. 3
+      en_eu: Battel in Arena 3
+    STR_BGM_TRACK_EVENT_BATTLE_THEME:
+      ja: イベントバトルのテーマ
+      en_us: Event Battle Theme
+      en_eu: Event Battle
+    STR_BGM_TRACK_NORMAL_BATTLE_THEME:
+      ja: ノーマルバトルのテーマ
+      en_us: Normal Battle Theme
+      en_eu: Normal Battle
+    STR_BGM_TRACK_NORMAL_BATTLE__THEME_NO2:
+      ja: ノーマルバトルのテーマ２
+      en_us: Normal Battle  Theme No.2
+      en_eu: Normal Battel 2
+    STR_BGM_TRACK_LAST_BATTLE_THEME:
+      ja: ラストバトルのテーマ
+      en_us: Last Battle Theme
+      en_eu: Last Battle
+
+TOURNAMENT_NAMES:
+  strings:
+    STR_TOURNAMENT_NAME_GRADE_D:
+      ja: グレードＤ
+      en_us: Grade D
+    STR_TOURNAMENT_NAME_GRADE_C:
+      ja: グレードＣ
+      en_us: Grade C
+    STR_TOURNAMENT_NAME_GRADE_B:
+      ja: グレードＢ
+      en_us: Grade B
+    STR_TOURNAMENT_NAME_GRADE_A:
+      ja: グレードＡ
+      en_us: Grade A
+    STR_TOURNAMENT_NAME_GRADE_S:
+      ja: グレードＳ
+      en_us: Grade S
+    STR_TOURNAMENT_NAME_GRADE_R:
+      ja: グレードＲ
+      en_us: Grade R
+      en_eu: グレードR
+    STR_TOURNAMENT_NAME_VERSION_1_CUP:
+      ja: バージョン１カップ
+      en_us: Version 1 Cup
+      en_eu: Verion 1 Cup
+    STR_TOURNAMENT_NAME_VERSION_2_CUP:
+      ja: バージョン２カップ
+      en_us: Version 2 Cup
+      en_eu: Verion 2 Cup
+    STR_TOURNAMENT_NAME_VERSION_3_CUP:
+      ja: バージョン３カップ
+      en_us: Version 3 Cup
+      en_eu: Verion 3 Cup
+    STR_TOURNAMENT_NAME_VERSION_4_CUP:
+      ja: バージョン４カップ
+      en_us: Version 4 Cup
+      en_eu: Verion 4 Cup
+    STR_TOURNAMENT_NAME_VERSION_0_CUP:
+      ja: バージョンＯカップ
+      en_us: Version 0 Cup
+      en_eu: Verion 0 (zero) Cup
+    STR_TOURNAMENT_NAME_FIRE_CUP:
+      ja: ファイアーカップ
+      en_us: Fire Cup
+    STR_TOURNAMENT_NAME_GRAPPLE_CUP:
+      ja: グラップルカップ
+      en_us: Grapple Cup
+      en_eu: Grappling Cup
+    STR_TOURNAMENT_NAME_THUNDER_WIND_CUP:
+      ja: サンダーウインドカップ
+      en_us: Thunder Wind Cup
+      en_eu: Thunderwind Cup
+    STR_TOURNAMENT_NAME_COOL_CUP:
+      ja: クールカップ
+      en_us: Cool Cup
+    STR_TOURNAMENT_NAME_NATURE_CUP:
+      ja: ネイチャーカップ
+      en_us: Nature Cup
+    STR_TOURNAMENT_NAME_METALIC_CUP:
+      ja: メタリックカップ
+      en_us: Metalic Cup
+      en_eu: Metaric Cup
+    STR_TOURNAMENT_NAME_FILTH_CUP:
+      ja: ダーティカップ
+      en_us: Filth Cup
+      en_eu: Dirty Cup
+    STR_TOURNAMENT_NAME_DINO_CUP:
+      ja: ダイノカップ
+      en_us: Dino Cup
+    STR_TOURNAMENT_NAME_WING_CUP:
+      ja: ウイングカップ
+      en_us: Wing Cup
+    STR_TOURNAMENT_NAME_ANIMAL_CUP:
+      ja: アニマルカップ
+      en_us: Animal Cup
+    STR_TOURNAMENT_NAME_HUMAN_CUP:
+      ja: ヒューマンカップ
+      en_us: Human Cup
+    STR_TOURNAMENT_NAME_BEETLE_CUP:
+      ja: ビートルカップ
+      en_us: Beetle Cup
+
+TOURNAMENT_GRADES:
+  strings:
+    STR_TOURNAMENT_GRADE_D:
+      ja: Ｄ
+      en_us: D
+    STR_TOURNAMENT_GRADE_C:
+      ja: Ｃ
+      en_us: C
+    STR_TOURNAMENT_GRADE_B:
+      ja: Ｂ
+      en_us: B
+    STR_TOURNAMENT_GRADE_A:
+      ja: Ａ
+      en_us: A
+    STR_TOURNAMENT_GRADE_S:
+      ja: Ｓ
+      en_us: S
+    STR_TOURNAMENT_GRADE_R:
+      ja: Ｒ
+      en_us: R
+    STR_TOURNAMENT_GRADE_H:
+      ja: NULL
+      en_us: H
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_I:
+      ja: NULL
+      en_us: I
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_J:
+      ja: NULL
+      en_us: J
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_K:
+      ja: NULL
+      en_us: K
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_L:
+      ja: NULL
+      en_us: L
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_F:
+      ja: NULL
+      en_us: F
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_G:
+      ja: NULL
+      en_us: G
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_W:
+      ja: NULL
+      en_us: W
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_O:
+      ja: NULL
+      en_us: O
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_N:
+      ja: NULL
+      en_us: N
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_M:
+      ja: NULL
+      en_us: M
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_T:
+      ja: NULL
+      en_us: T
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_Y:
+      ja: NULL
+      en_us: Y
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_Z:
+      ja: NULL
+      en_us: Z
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_X:
+      ja: NULL
+      en_us: X
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_Q:
+      ja: NULL
+      en_us: Q
+      en_eu: NULL
+    STR_TOURNAMENT_GRADE_V1:
+      ja: Ｖ１
+      en_us: NULL
+      en_eu: V1
+    STR_TOURNAMENT_GRADE_V2:
+      ja: Ｖ２
+      en_us: NULL
+      en_eu: V2
+    STR_TOURNAMENT_GRADE_V3:
+      ja: Ｖ３
+      en_us: NULL
+      en_eu: V3
+    STR_TOURNAMENT_GRADE_V4:
+      ja: Ｖ４
+      en_us: NULL
+      en_eu: V4
+    STR_TOURNAMENT_GRADE_VO:
+      ja: ＶＯ
+      en_us: NULL
+      en_eu: VO
+    STR_TOURNAMENT_GRADE_FR:
+      ja: ＦＲ
+      en_us: NULL
+      en_eu: FR
+    STR_TOURNAMENT_GRADE_GP:
+      ja: ＧＰ
+      en_us: NULL
+      en_eu: GP
+    STR_TOURNAMENT_GRADE_TW:
+      ja: ＴＷ
+      en_us: NULL
+      en_eu: TW
+    STR_TOURNAMENT_GRADE_CO:
+      ja: ＣＯ
+      en_us: NULL
+      en_eu: CO
+    STR_TOURNAMENT_GRADE_NT:
+      ja: ＮＴ
+      en_us: NULL
+      en_eu: NT
+    STR_TOURNAMENT_GRADE_MT:
+      ja: ＭＴ
+      en_us: NULL
+      en_eu: MT
+    STR_TOURNAMENT_GRADE_DT:
+      ja: ＤＴ
+      en_us: NULL
+      en_eu: DT
+    STR_TOURNAMENT_GRADE_DY:
+      ja: ＤＹ
+      en_us: NULL
+      en_eu: DY
+    STR_TOURNAMENT_GRADE_WI:
+      ja: ＷＩ
+      en_us: NULL
+      en_eu: WI
+    STR_TOURNAMENT_GRADE_AN:
+      ja: ＡＮ
+      en_us: NULL
+      en_eu: AN
+    STR_TOURNAMENT_GRADE_HU:
+      ja: ＨＵ
+      en_us: NULL
+      en_eu: HU
+    STR_TOURNAMENT_GRADE_BT:
+      ja: ＢＴ
+      en_us: NULL
+      en_eu: BT
