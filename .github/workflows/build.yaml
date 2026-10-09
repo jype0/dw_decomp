@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["jp", "jp_trial", "jp_bombom", "us", "jp_rev1"]
+        version: ["jp", "jp_trial", "jp_bombom", "us", "jp_rev1", "eu"]
     env:
       VERSION: ${{ matrix.version }}
     container:
