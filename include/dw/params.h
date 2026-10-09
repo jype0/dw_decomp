@@ -2,6 +2,7 @@
 #define DW_PARAMS_H
 
 #include <dw/types.h>
+#include <dw/version.h>
 
 #define NUM_DIGIMON		180
 #define NUM_PARTNER_DIGIMON	66
@@ -15,7 +16,9 @@
 #define CONDITION_SICK		(1 << 6)
 
 typedef struct {
+#if !VERSION_IS(EU)
 	char name[20];
+#endif
 	int32_t boneCount;
 	int16_t radius;
 	int16_t height;
@@ -97,6 +100,12 @@ typedef struct {
 } PartnerPara;
 
 extern DigimonPara DIGIMON_DATA[NUM_DIGIMON];
+#if VERSION_IS(EU)
+extern char *DIGIMON_NAMES[NUM_DIGIMON];
+#define DIGIMON_NAME(type) DIGIMON_NAMES[type]
+#else
+#define DIGIMON_NAME(type) DIGIMON_DATA[type].name
+#endif
 extern PartnerPara PARTNER_PARA;
 
 #endif

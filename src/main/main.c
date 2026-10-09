@@ -91,7 +91,7 @@ int32_t tickScript(void);
 void updateTournamentRegistration(void);
 void initializeNamingBuffer(uint8_t flags);
 void initializeTextbox(void);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void tickTextboxHandling(void);
 #else
 void tickTextboxHandling(int32_t flag);
@@ -206,7 +206,7 @@ void *main_order_anchor[] = {
 };
 
 // clang-format off
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 DVECTOR DRAW_OFFSET_0 = { 0x00a0, 0x0078 };
 
 DVECTOR DRAW_OFFSET_1 = { 0x00a0, 0x0168 };
@@ -244,7 +244,7 @@ char STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI[] = "このつづきは、製品�
 #endif
 
 DigimonPara DIGIMON_DATA[180] = {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	{
 		"しゅじんこう",
 		0x00000011,
@@ -1933,7 +1933,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x01, 0x04, 0xff },
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 		0x01,
 #else
 		0x00,
@@ -1953,7 +1953,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x04, 0x02, 0xff },
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 		0x08,
 #else
 		0x00,
@@ -1973,7 +1973,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x03,
 		0x04,
 		{ 0x02, 0x04, 0xff },
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 		0x05,
 #else
 		0x00,
@@ -2041,7 +2041,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x01,
 		0x03,
 		{ 0x03, 0xff, 0xff },
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 		0x16,
 		0x28,
 #else
@@ -2641,7 +2641,7 @@ DigimonPara DIGIMON_DATA[180] = {
 		0x17,
 		0x64,
 		{
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 			0x30, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
 #else
 			0x2c, 0x2e, 0x2f, 0x2a, 0x19, 0x50, 0xff, 0xff,
@@ -6183,7 +6183,7 @@ static void *main_bss_order[] = {
 	&GS_VIEWPOINT,
 	GS_WORK_BASES,
 	DR_OFFSETS,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	GS_OT_TAGS_1,
 	GS_OT_TAGS_0,
 	GS_ORDERING_TABLE,
@@ -6368,7 +6368,7 @@ void initializeHeap(void)
 
 void initializeFramebuffer(void)
 {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	RECT rect;
 	DVECTOR ofs0;
 	DVECTOR ofs1;
@@ -6571,7 +6571,7 @@ void newGameScene(void)
 		GsSetWorkBase(GS_WORK_BASES[ACTIVE_FRAMEBUFFER]);
 		GsClearOt(0, 0, ACTIVE_ORDERING_TABLE);
 		processInput();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		tickTextboxHandling();
 #else
 		tickTextboxHandling(1);
@@ -7174,7 +7174,7 @@ void handleBuffDisks(type)
 		BTL_buffStats(ENTITY_TABLE[1], 0, gain, &stats->speed, 0xb, 5);
 		break;
 	case 0x12:
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		if (offLimit < (stats->off + 20)) {
 			stats = stats;
 		} else {

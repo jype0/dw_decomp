@@ -43,7 +43,7 @@ typedef struct {
 
 typedef struct {
 	uint32_t usedRows;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	/*
 	 * BUG: the code loops over six boxes, so boxes 4 and 5 overrun into
 	 * DIALOGUE_SELECTION and the partner's ENTITY_TEXT_DATA slot.

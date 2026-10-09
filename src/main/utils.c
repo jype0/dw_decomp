@@ -12,7 +12,7 @@
 #include <dw/utils.h>
 #include <dw/version.h>
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 #define DIGIT_WIDTH 12
 #else
 #define DIGIT_WIDTH 8
@@ -21,7 +21,7 @@
 void damageTick(FighterData* fighter, Stats* stats);
 void sortItemsById(uint8_t *data, long count);
 void initStringFT4(POLY_FT4* poly);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void renderNumber(int32_t color, int16_t x, int16_t y, int16_t n,
 		  int32_t value, int32_t layer);
 #else
@@ -203,7 +203,7 @@ void initStringFT4(POLY_FT4* poly)
 	setClut(poly, 0xD0, 0x1E8);
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void renderNumber(int32_t color, int16_t x, int16_t y, int16_t n,
 		  int32_t value, int32_t layer)
 #else
@@ -232,7 +232,7 @@ void renderNumber(int32_t color, int16_t x, int16_t y, int32_t n,
 	GsSetWorkBase((PACKET *)prim);
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void convertValueToDigits(int32_t n, int32_t value, int32_t *outCount,
 			  int32_t *digits)
 {

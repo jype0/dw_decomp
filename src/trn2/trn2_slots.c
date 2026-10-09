@@ -138,7 +138,7 @@ void TRN2_tickSlotMachine(arg)
 					}
 				}
 			}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			if ((p->state - 1 == i) && ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & CONFIRM_BUTTON)) {
 				TRN2_chooseReelStop(p->state - 1, p);
 			}

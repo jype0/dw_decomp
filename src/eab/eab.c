@@ -96,7 +96,7 @@ static void *eab_functions[] = {
 	EAB_setEntitiesVisible,
 	EAB_renderFlash,
 	EAB_initializeParticles,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	EAB_renderSpawn,
 	EAB_tickSpawn,
 #else

@@ -247,7 +247,7 @@ static void *script_interp_sbss_order[] = {
 	&TEXTBOX_ORIGIN_Z,
 	&TEXTBOX_ORIGIN_Y,
 	&TEXTBOX_ORIGIN_X,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	&ACTIVE_MAP_SCRIPT,
 	&CURRENT_SCRIPT_ID,
 	&TOURNAMENTS_LOST,
@@ -279,13 +279,13 @@ static void *script_interp_sbss_order[] = {
 	&MAIN_D_80134F9C,
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 uint8_t MAPHEAD_SCRIPT_BUFFER[0x6000];
 #else
 uint8_t MAPHEAD_SCRIPT_BUFFER[0x61a8];
 #endif
 uint8_t SCRIPT_OFFSET_TABLE[0x2000];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 uint8_t MAP_SCRIPT_BUFFER[0x2000];
 #else
 uint8_t MAP_SCRIPT_BUFFER[0x4000];
@@ -320,7 +320,7 @@ int32_t tickScript(void)
 		return 1;
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	tickTextboxHandling();
 #else
 	tickTextboxHandling(0);

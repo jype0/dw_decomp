@@ -386,7 +386,7 @@ void partnerTickPraiseScold(int32_t partnerState)
 		break;
 	case 2:
 		if (TAMER_ENTITY.entity.anim.animId == 0) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			handlePraiseScold(partnerState);
 #else
 			handlePraiseScold();
@@ -1002,11 +1002,11 @@ void updateConditionAnimation(void)
 {
 	int32_t cond;
 	uint8_t anim;
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	int32_t v;
 #endif
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	cond = PARTNER_PARA.condition;
 	anim = PARTNER_ENTITY.digimonEntity.entity.anim.animId;
 	if (PARTNER_PARA.condition == 0) {

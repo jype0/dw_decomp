@@ -24,7 +24,7 @@ extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern StatsGains STATS_GAINS;
 extern char BTL_STR_LISTENS_TO[];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern char BTL_STR_WHITE_WAIT[];
 #else
 extern char BTL_STR_DROPPED[];
@@ -36,7 +36,7 @@ extern char BTL_STR_MOVE_AWAY_CHANGE_TARGET[];
 extern char BTL_STR_KEEP_IT_DOWN[];
 extern char BTL_STR_GO_ALL_THE_WAY[];
 extern char BTL_STR_MP_CONSUMPTION_BONUS[];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern char BTL_STR_MP_BONUS_PERCENT[];
 #else
 extern char BTL_STR_REDUCED_BY[];
@@ -117,7 +117,7 @@ static void *battle_hud_functions[] = {
 	BTL_drawHoveredCommandName,
 };
 
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 char BTL_STR_COMMAND_RUN[] = "Run";
 char BTL_STR_COMMAND_ATTACK[] = "Attack";
 char BTL_STR_COMMAND_CHANGE[] = "Change";
@@ -126,7 +126,7 @@ uint8_t BTL_COMMAND_LABEL_U[5] = { 0, 11, 25, 39, 50 };
 uint8_t BTL_COMMAND_LABEL_W[8] = { 11, 14, 14, 11, 11, 0, 0, 0 };
 uint8_t BTL_DEATH_COUNTDOWN_DIGIT_U[4] = { 0x50, 0x68, 0x58, 0x68 };
 uint8_t BTL_DEATH_COUNTDOWN_DIGIT_V[4] = { 0xa8, 0x90, 0x90, 0x80 };
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char BTL_STR_YELLOW[] = "C7";
 char BTL_STR_DROPPED[] = "C1はRC7";
 char BTL_STR_MP_BONUS_20[] = "２０";
@@ -182,7 +182,7 @@ static void *battle_hud_sbss_order[] = {
 	&BTL_STATUS_BARS_STEP,
 	&BTL_BATTLE_TEXT_FINISHED,
 	BTL_BATTLE_START_TEXT_TIMER,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	&BATTLE_END_WAIT_TIMER,
 	&BATTLE_END_WAIT_FRAMES,
 	&BATTLE_END_VISIBLE_ROWS,
@@ -212,7 +212,7 @@ static void *battle_hud_sbss_order[] = {
 };
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern char *BTL_COMMAND_NAMES[];
 #else
 char BTL_STR_COMMAND_YOUR_CALL[] = "Your Call";
@@ -548,10 +548,10 @@ void BTL_initializeBattleEndText(uint16_t arg0, int16_t arg1, RECT *arg2)
 void BTL_appendItemDroppedText(Entity *e)
 {
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_YELLOW);
-	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_DATA[e->type].name);
+	strcat(BTL_END_BOX_TEXTBUFFER, DIGIMON_NAME(e->type));
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_DROPPED);
 	strcat(BTL_END_BOX_TEXTBUFFER,
-	       ITEM_PARA[DIGIMON_DATA[e->type].dropItem].name);
+	       ITEM_NAME(DIGIMON_DATA[e->type].dropItem));
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_WHITE_WAIT);
 	BATTLE_END_BOX_LINE_COUNT += 2;
 }
@@ -644,7 +644,7 @@ void BTL_appendMPBonusText(void)
 	}
 
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_MP_CONSUMPTION_BONUS);
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	strcat(BTL_END_BOX_TEXTBUFFER, BTL_STR_REDUCED_BY);
 #endif
 	strcat(BTL_END_BOX_TEXTBUFFER, buf);
@@ -665,7 +665,7 @@ void BTL_appendMoveLearnedText(move)
 
 void BTL_drawBattleEndText(int32_t flag)
 {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 #ifdef __MWERKS__
 	extern void drawGlyph(uint16_t codepoint, int32_t x, int32_t y);
 #endif

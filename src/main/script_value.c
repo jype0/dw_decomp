@@ -30,7 +30,19 @@ static void *script_value_functions[] = {
 };
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char MAIN_D_801345CC[] = "Ｓｉｇｎ";
+
+char MAIN_D_801345D8[] = "Ｂｅｔａｍｏｎ";
+
+char MAIN_D_8013030C[] = "Ｃｏｅｌａｍｏｎ";
+
+char MAIN_D_801345E0[] = "Ｔａｎｅｍｏｎ";
+
+char MAIN_D_801345E8[] = "Ｐａｌｍｏｎ";
+
+char MAIN_D_801345D4[] = "Ｂｏｘ";
+#elif !VERSION_IS(US)
 char MAIN_D_801345CC[] = "かんばん";
 
 char MAIN_D_801345D4[] = "はこ";
@@ -112,9 +124,9 @@ int32_t getSpeakerName(speakerId, buf)
 	return strlen(SPECIAL_SPEAKERS[speakerId]);
 
 digimon:
-	strcpy((char *)buf, DIGIMON_DATA[speakerId].name);
+	strcpy((char *)buf, DIGIMON_NAME(speakerId));
 
-	return strlen(DIGIMON_DATA[speakerId].name);
+	return strlen(DIGIMON_NAME(speakerId));
 }
 
 uint8_t *intToStringSJIS(uint8_t *buf, int32_t value, uint8_t digits, int32_t flag)

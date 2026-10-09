@@ -66,7 +66,7 @@ StatsGains INITIAL_COMBAT_STATS[4];
 CombatData COMBAT_DATA;
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char STR_MOVE_NAME_BUG[] = "バグ";
 
 char STR_MOVE_NAME_PARTY_TIME[] = "ウンチ";
@@ -90,7 +90,7 @@ char STR_MOVE_NAME_COUNTER[8] = "Counter";
 char STR_MOVE_NAME_BUBBLE[] = "Bubble";
 #endif
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char STR_MOVE_NAME_FIRE_TOWER[] = "ファイアータワー";
 
 char STR_MOVE_NAME_PROMINENCE_BEAM[] = "プロミネンスビーム";
@@ -383,7 +383,7 @@ char STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL[] = "食べ物。かなりおなか�
 
 char STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL[] = "食べ物。すごくおなかがふくれる。";
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 char STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT[] = "食べ物。しばらくトレーニング効果アップ！";
 #else
 char STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT[] = "食べ物。しばらくトレーニング効果アップ。";
@@ -1024,7 +1024,7 @@ InventoryTable INITIAL_INVENTORY_TYPES = {
 	},
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char IS_SICK_SUFFIX[] = "は病気になってしまった！";
 #else
 char IS_SICK_SUFFIX[] = " is sick!";
@@ -1804,7 +1804,7 @@ Move MOVE_DATA[122] = {
 	},
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 Item ITEM_PARA[128] = {
 	{
 		"回復フロッピー",
@@ -4116,7 +4116,7 @@ Item ITEM_PARA[128] = {
 };
 #endif
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char *ITEM_DESC_PTR[128] = {
 	STR_ITEM_DESC_SMALL_RECOVERY_500_HP,
 	STR_ITEM_DESC_MEDIUM_RECOVERY_1500_HP,
@@ -4165,7 +4165,7 @@ char *ITEM_DESC_PTR[128] = {
 	STR_ITEM_DESC_MAKE_DIGIMON_A_BIT_FULL,
 	STR_ITEM_DESC_GREATLY_BOOSTS_DISCIPLINE,
 	STR_ITEM_DESC_BOOSTS_ALL_ABILITIES,
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 	STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT,
 #else
 	STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT_2,
@@ -4546,7 +4546,7 @@ ItemFunction ITEM_FUNCTIONS[128] = {
 
 int16_t HEALING_VALUES[4] = { 500, 1500, 5000, 9999 };
 uint8_t HEAL_EFFECT_VARIANT[4] = { 0, 0, 1, 1 };
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 char NAME_FORMAT[] = "%s";
 #endif
 
@@ -5509,7 +5509,7 @@ void handleItemSickness(int16_t chance)
 {
 	int32_t isSick;
 	int16_t r;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	int32_t halfLen;
 #else
 	char buf[0x18];
@@ -5528,7 +5528,7 @@ void handleItemSickness(int16_t chance)
 		tamerSetState(0x14);
 		clearTextArea();
 		setTextColor(0xa);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		drawString(PARTNER_ENTITY.name, 0, 0x78);
 		halfLen = strlen(PARTNER_ENTITY.name) / 2;
 		setTextColor(1);

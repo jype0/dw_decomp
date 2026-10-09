@@ -274,7 +274,7 @@ extern uint8_t NAMING_BOX_FLAG;
 extern int8_t DRAW_STRING2_IS_FIXED_WIDTH;
 uint8_t scriptIdToEntityId(int32_t scriptId);
 uint16_t showTextbox(uint8_t boxId, uint8_t speakerId);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y);
 #else
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag);
@@ -416,7 +416,7 @@ void initializeNamingBuffer(uint8_t flags);
 int32_t newGameStateMachine(void);
 int16_t *getStatsPointer(int32_t stat);
 uint8_t *getScript(uint16_t mapId);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void tickTextboxHandling(void);
 #else
 void tickTextboxHandling(int32_t flag);

@@ -29,7 +29,7 @@ extern uint8_t VS_COMMAND_MENU_LAYOUTS[][10];
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern char MAIN_D_801A8B98[];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern int16_t VS_DISCIPLINE[2];
 #endif
 
@@ -41,7 +41,7 @@ void VS_renderCommandMenu(uint8_t id);
 void VS_renderTargetCursor(uint8_t id);
 void VS_tickTargetCursor(uint8_t id);
 void VS_removeTargetCursor(uint8_t index);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void VS___tickVSInput(int32_t player);
 void VS__tickVSInput(int32_t instanceId);
 void VS__tickDigimonP1(int32_t instanceId);
@@ -103,7 +103,7 @@ static void *vs_hud_functions[] = {
 	VS_renderBattleStartText,
 	VS_initializeBattleStartText,
 	VS_shuffleBattleStartTextPieces,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	VS__tickDigimonP2,
 	VS__tickDigimonP1,
 	VS__tickVSInput,
@@ -621,7 +621,7 @@ void VS_removeTargetCursor(uint8_t index)
 	}
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void VS___tickVSInput(int32_t player)
 {
 	uint32_t input;

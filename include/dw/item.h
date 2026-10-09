@@ -5,10 +5,13 @@
 
 #include <dw/entity.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 typedef struct
 {
+#if !VERSION_IS(EU)
 	char name[20];
+#endif
 	int32_t value;
 	uint16_t meritValue;
 	int16_t sortingValue;
@@ -47,6 +50,12 @@ typedef struct {
 typedef void (*ItemFunction)(int16_t);
 
 extern Item ITEM_PARA[];
+#if VERSION_IS(EU)
+extern char *ITEM_NAMES[];
+#define ITEM_NAME(type) ITEM_NAMES[type]
+#else
+#define ITEM_NAME(type) ITEM_PARA[type].name
+#endif
 extern TamerItem TAMER_ITEM;
 extern Inventory INVENTORY;
 extern DroppedItem DROPPED_ITEMS[11];

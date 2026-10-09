@@ -72,7 +72,12 @@ void updateInventoryInputRepeatCounter();
 int32_t isInventoryButtonPressed(int32_t mask);
 void tickInventoryOptionSelector(uint8_t *cursor, int32_t unused, int16_t max);
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char SORT_LABEL_BATTLE[] = "Ｂａｔｔｌｅ";
+char SORT_LABEL_RAISE[] = "Ｒａｉｓｅ";
+char SORT_LABEL_BASIC[] = "Ｂａｓｉｃ";
+char CONFIRM_PROMPT[] = "Ａｒｅ　ｙｏｕ　ｓｕｒｅ？";
+#elif !VERSION_IS(US)
 char SORT_LABEL_BATTLE[] = "戦闘配置";
 char SORT_LABEL_RAISE[] = "育成配置";
 char SORT_LABEL_BASIC[] = "基本配置";
@@ -88,7 +93,11 @@ uint8_t ITEM_SORT_ORDER[3][6] = {
 	{ 0x02, 0x05, 0x00, 0x01, 0x04, 0x03 },
 	{ 0x02, 0x00, 0x01, 0x03, 0x05, 0x04 },
 };
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char *ITEM_MENU_LABELS[4] = { "Ｕｓｅ", "Ｍｏｖｅ", "Ｓｏｒｔ", "Ｄｒｏｐ" };
+char CONFIRM_LABEL_YES[] = "Ｙｅｓ";
+char CONFIRM_LABEL_NO[] = "Ｎｏ";
+#elif !VERSION_IS(US)
 char ITEM_MENU_LABELS[4][8] = { "使う", "移動", "せいり", "捨てる" };
 char CONFIRM_LABEL_YES[] = "はい";
 char CONFIRM_LABEL_NO[] = "いいえ";
@@ -268,7 +277,7 @@ void drawInventoryTextLine(int16_t startSlot)
 	for (i = 0; i < 2; i++) {
 		if (INVENTORY.types.array[startSlot + i] != 0xff) {
 			INVENTORY.names.array[startSlot + i] = startSlot + i;
-			drawString(ITEM_PARA[INVENTORY.types.array[startSlot + i]].name,
+			drawString(ITEM_NAME(INVENTORY.types.array[startSlot + i]),
 			           ((startSlot + i) & 1) * 0x60, ((startSlot + i) / 2) * 0xc);
 		}
 	}
@@ -449,7 +458,7 @@ int32_t createInventoryView(void)
 	}
 	box = &UI_BOX_DATA[0];
 	if (box->frame == 0) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		INVENTORY_UNUSED = 0;
 		INVENTORY_TYPE_OFFSET = 0;
 		INVENTORY_ROW_OFFSET = 0;
@@ -783,9 +792,16 @@ void updateItemDescription(void)
 {
 	RECT area;
 
+#if VERSION_IS(EU)
+	setRECT(&area, 0, 0xb4, 0xfc, 0x18);
+	clearTextSubArea(&area);
+	drawString(ITEM_DESC_PTR[INVENTORY.types.array[INVENTORY_POINTER] * 2], 0, 0xb4);
+	drawString(ITEM_DESC_PTR[INVENTORY.types.array[INVENTORY_POINTER] * 2 + 1], 0, 0xc0);
+#else
 	setRECT(&area, 0, 0xb4, 0xfc, 0xc);
 	clearTextSubArea(&area);
 	drawString(ITEM_DESC_PTR[INVENTORY.types.array[INVENTORY_POINTER]], 0, 0xb4);
+#endif
 	DrawSync(0);
 }
 

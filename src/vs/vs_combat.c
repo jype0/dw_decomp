@@ -139,7 +139,7 @@ void VS_runDemoCombat(void);
 #endif
 
 static void *vs_combat_functions[] = {
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	VS__tickDigimonP2,
 	VS__tickDigimonP1,
 	VS__tickVSInput,
@@ -293,7 +293,7 @@ void VS__combatInit(void)
 		COMBAT_DATA_PTR->player.remainingChargeupTime[i] = -1;
 	}
 
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	FLEE_DISABLED[1] = 0;
 #endif
 	FLEE_DISABLED[0] = 1;
@@ -301,7 +301,7 @@ void VS__combatInit(void)
 	BATTLE_FRAME_COUNT = 1;
 	VS_TIMER_ACTIVE = 0;
 	VS_DISABLE_HITTING = 0;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	FLEE_DISABLED[1] = 0;
 #endif
 	P2_AOE_TIMER = 0;
@@ -2575,7 +2575,7 @@ void VS__renderPlayerMarker(id)
 	GsSetWorkBase((PACKET *)prim);
 }
 
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 void VS__tickVSInput(void)
 {
 	if (GAME_STATE == 4) {

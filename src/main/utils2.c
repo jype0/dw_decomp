@@ -155,7 +155,7 @@ char *REL_BIN_FILES[16] = {
 	MAIN_D_8012BA80,
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char MAIN_D_80134430[] = "ポーズ";
 #else
 char MAIN_D_80134430[] = "Pause";
@@ -442,7 +442,7 @@ void createPauseBox(void)
 
 	if (MAIN_D_80134E7C != 1) {
 		drawString(MAIN_D_80134430, 0x78, 0xF0);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		setRECT(&pos, -0x1A, -0xE, 0x30, 0x18);
 #else
 		setRECT(&pos, -0x1A, -0xE, 0x38, 0x18);
@@ -464,7 +464,7 @@ void renderPauseBox(instanceId)
 	setRECT(&box, -0xA0, -0x78, 0x140, 0xF0);
 	GsSortBoxFill(&box, ACTIVE_ORDERING_TABLE, 7 - instanceId);
 	pos = &UI_BOX_DATA[5].finalPos;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderString(0, pos->x + 6, pos->y + 6, 0x24, 0xC, 0x78, 0xF0, 0, 1);
 #else
 	renderString(0, pos->x + 6, pos->y + 6, 0x2A, 0xC, 0x78, 0xF0, 0, 1);

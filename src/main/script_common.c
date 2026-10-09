@@ -228,7 +228,225 @@ static void *script_common_text_order[] = {
 };
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char STR_BGM_TRACK_NON_BEWILDERING_FOREST_THEME[] = "Ｎａｔｉｖｅ　Ｆｏｒｅｓｔ";
+
+char STR_BGM_TRACK_NON_BEWILDERING_FOREST_NIGHT_THEME[] = "Ｎａｔｉｖｅ　Ｆｏｒｅｓｔ　２";
+
+char STR_BGM_TRACK_TROPICAL_THEME[] = "Ｔｒｏｐｉｃａｌ";
+
+char STR_BGM_TRACK_TROPICAL_NIGHT_THEME[] = "Ｔｒｏｐｉｃａｌ　２";
+
+char STR_BGM_TRACK_MT_PANORAMA_THEME[] = "Ｍｔ．　Ｐａｎｏｒａｍａ";
+
+char STR_BGM_TRACK_MT_PANORAMA_NIGHT_THEME[] = "Ｍｔ．　Ｐａｎｏｒａｍａ　２";
+
+char STR_BGM_TRACK_DRILL_TUNNEL_THEME[] = "Ｄｉｌｌ　Ｔｕｎｎｅｌ";
+
+char STR_BGM_TRACK_OGRE_FORTRESS_THEME[] = "Ｏｇｒｅｍｏｎ";
+
+char STR_BGM_TRACK_OVERDELL_CEMETARY_THEME[] = "Ｏｖｅｒｄｅｌｌ　Ｃｅｍｅｔｅｒｙ";
+
+char STR_BGM_TRACK_CANYON_THEME[] = "Ｃａｎｙｏｎ";
+
+char STR_BGM_TRACK_OGREMON_THEME_NO_2[] = "Ｏｇｒｅｍｏｎ　２";
+
+char STR_BGM_TRACK_EVERYTHING_SHOP_THEME[] = "Ｉｔｅｍ　Ｓｈｏｐ";
+
+char STR_BGM_TRACK_OGREMON_THEMENO_3[] = "Ｏｇｒｅｍｏｎ　３";
+
+char STR_BGM_TRACK_LAVA_CAVE_THEME[] = "Ｌａｖａ　Ｃａｖｅ";
+
+char STR_BGM_TRACK_DARK_ARISTCRATS_MANSION_THEME[] = "Ｇｒｅｙ　Ｌｏａｄ’ｓ";
+
+char STR_BGM_TRACK_UNDERGROUND_LAB_THEME[] = "Ｕｎｄｅｒｇｒｏｕｎｄ　Ｌａｂ";
+
+char STR_BGM_TRACK_GEAR_SAVANNA_THEME[] = "Ｇｅａｒ　Ｓａｖａｎｎａ";
+
+char STR_BGM_TRACK_GEAR_SAVANNA_NIGHT_THEME[] = "Ｇｅａｒ　Ｓａｖａｎｎａ　２";
+
+char STR_BGM_TRACK_LEOMON_THEME[] = "Ｌｅｏｍｏｎ";
+
+char STR_BGM_TRACK_AMIDA_FOREST_THEME[] = "Ａｍｉｄａ　Ｆｏｒｅｓｔ";
+
+char STR_BGM_TRACK_AMIDA_FOREST_NIGHT_THEME[] = "Ａｍｉｄａ　Ｆｏｒｅｓｔ　２";
+
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_THEME[] = "Ｓｐｅｅｄｙ　Ｔｉｍｅ　Ｚｏｎｅ";
+
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_NIGHT_THEME[] = "Ｓｐｅｅｄｙ　Ｔｉｍｅ　Ｚｏｎｅ　２";
+
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_THEME[] = "Ｇｌａｃｉｃａｌ　Ｚｏｎｅ";
+
+char STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_NIGHT_THEME[] = "Ｇｌａｃｉｃａｌ　Ｚｏｎｅ　２";
+
+char STR_BGM_TRACK_FREEZELAND_THEME[] = "Ｆｒｅｅｚｅｌａｎｄ";
+
+char STR_BGM_TRACK_FREEZELAND_NIGHT_THEME[] = "Ｆｒｅｅｚｅｌａｎｄ　２";
+
+char STR_BGM_TRACK_IGLOO_THEME[] = "Ｓｎｏｗ　Ｃａｖｅ";
+
+char STR_BGM_TRACK_CURLING_THEME[] = "Ｃｕｒｌｉｊｎｇ";
+
+char STR_BGM_TRACK_SANCTUARY_THEME[] = "Ｓａｎｃｔｕａｒｙ";
+
+char STR_BGM_TRACK_SANCTUARY_BELOW_THEME[] = "Ｓａｎｃｔｕａｒｙ　２";
+
+char STR_BGM_TRACK_GECKO_SWAMP_THEME[] = "Ｇｅｋｏ　Ｓｗａｍｐ";
+
+char STR_BGM_TRACK_GECKO_SWAMP_NIGHT_THEME[] = "Ｇｅｋｏ　Ｓｗａｍｐ　２";
+
+char STR_BGM_TRACK_MISTY_TREES_THEME[] = "Ｍｙｓｔｙ　Ｔｒｅｅｓ";
+
+char STR_BGM_TRACK_MISTY_TREES_NIGHT_THEME[] = "Ｍｙｓｔｙ　Ｔｒｅｅｓ　２";
+
+char STR_BGM_TRACK_WARUMONZAEMON_THEME[] = "Ｗａｒｕｍｏｎｚａｅｍｏｎ";
+
+char STR_BGM_TRACK_TOY_TOWN_THEME[] = "Ｔｏｙ　Ｔｏｗｎ";
+
+char STR_BGM_TRACK_THEME_OF_FACTORIAL[] = "Ｆａｃｔｏｒｉａｌ";
+
+char STR_BGM_TRACK_FACTORIAL_NIGHT_THEME[] = "Ｆａｃｔｏｒｉａｌ　２";
+
+char STR_BGM_TRACK_SEWER_THEME[] = "Ｓｅｗｅｒ";
+
+char STR_BGM_TRACK_TRASH_MOUNTAIN_THEME[] = "Ｔｒｕｓｈ　Ｍｏｕｎｔａｉｎ";
+
+char STR_BGM_TRACK_TRASH_MOUNTAIN_NIGHT_THEME[] = "Ｔｒｕｓｈ　Ｍｏｕｎｔａｉｎ　２";
+
+char STR_BGM_TRACK_BEATLAND_THEME[] = "Ｂｅｅｔｌｅ　Ｌａｎｄ";
+
+char STR_BGM_TRACK_BEATLAND_NIGHT_THEME[] = "Ｂｅｅｔｌｅ　Ｌａｎｄ　２";
+
+char STR_BGM_TRACK_SECRET_BEACH_CAVE_THEME[] = "Ｓｅｃｒｅｔ　Ｂｅａｃｈ　Ｃａｖｅ";
+
+char STR_BGM_TRACK_MT_INFINITY_THEME[] = "Ｍｔ．　Ｉｎｆｉｎｉｔｙ";
+
+char STR_BGM_TRACK_LAST_ROOM_THEME[] = "Ｌａｓｔ　Ｒｏｏｍ";
+
+char STR_BGM_TRACK_FILE_CITY_THEME[] = "Ｆｉｌｅ　Ｃｉｔｙ";
+
+char STR_BGM_TRACK_FILE_CITY_NIGHT_THEME[] = "Ｆｉｌｅ　Ｃｉｔｙ　２";
+
+char STR_BGM_TRACK_TORNAMENT_OPENING_THEME[] = "Ｔｏｕｒｎａｍｅｎｔ";
+
+char STR_BGM_TRACK_TORNAMENT_PROGRESS_THEME[] = "Ｔｏｕｒｎａｍｅｎｔ　２";
+
+char STR_BGM_TRACK_TORNAMENT_CHAMPIONSHIP_THEME[] = "Ｗｉｎ　ｔｈｅ　Ｔｏｕｒｎａｍｅｎｔ";
+
+char STR_BGM_TRACK_PARTNERS_ENTRANCE_THEME[] = "Ｅｎｔｅｒ　ｔｈｅ　Ｐａｒｔｏｎｅｒ";
+
+char STR_BGM_TRACK_COMPETITION_BATTLE_OPPONENTS_ENTRANCE_THEME[] = "Ｃｏｍｐｅｔｉｔｏｒ";
+
+char STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_1[] = "Ｂａｔｔｅｌ　ｉｎ　Ａｒｅｎａ　１";
+
+char STR_BGM_TRACK_PARTNERS_WIN_THEME[] = "Ｐｅｒｔｏｎｅｒ　Ｗｉｎ";
+
+char STR_BGM_TRACK_PARTNERS_LOSS_THEME[] = "Ｐｅｒｔｏｎｅｒ　Ｌｏｓｔ";
+
+char STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_2[] = "Ｂａｔｔｅｌ　ｉｎ　Ａｒｅｎａ　２";
+
+char STR_BGM_TRACK_ARENA_BATTLE_THEME_NO_3[] = "Ｂａｔｔｅｌ　ｉｎ　Ａｒｅｎａ　３";
+
+char STR_BGM_TRACK_EVENT_BATTLE_THEME[] = "Ｅｖｅｎｔ　Ｂａｔｔｌｅ";
+
+char STR_BGM_TRACK_NORMAL_BATTLE_THEME[] = "Ｎｏｒｍａｌ　Ｂａｔｔｌｅ";
+
+char STR_BGM_TRACK_NORMAL_BATTLE__THEME_NO2[] = "Ｎｏｒｍａｌ　Ｂａｔｔｅｌ　２";
+
+char STR_BGM_TRACK_LAST_BATTLE_THEME[] = "Ｌａｓｔ　Ｂａｔｔｌｅ";
+
+char STR_TOURNAMENT_NAME_GRADE_D[] = "Ｇｒａｄｅ　Ｄ";
+
+char STR_TOURNAMENT_NAME_GRADE_C[] = "Ｇｒａｄｅ　Ｃ";
+
+char STR_TOURNAMENT_NAME_GRADE_B[] = "Ｇｒａｄｅ　Ｂ";
+
+char STR_TOURNAMENT_NAME_GRADE_A[] = "Ｇｒａｄｅ　Ａ";
+
+char STR_TOURNAMENT_NAME_GRADE_S[] = "Ｇｒａｄｅ　Ｓ";
+
+char STR_TOURNAMENT_NAME_GRADE_R[] = "グレードＲ";
+
+char STR_TOURNAMENT_NAME_VERSION_1_CUP[] = "Ｖｅｒｉｏｎ　１　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_VERSION_2_CUP[] = "Ｖｅｒｉｏｎ　２　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_VERSION_3_CUP[] = "Ｖｅｒｉｏｎ　３　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_VERSION_4_CUP[] = "Ｖｅｒｉｏｎ　４　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_VERSION_0_CUP[] = "Ｖｅｒｉｏｎ　０　（ｚｅｒｏ）　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_FIRE_CUP[] = "Ｆｉｒｅ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_GRAPPLE_CUP[] = "Ｇｒａｐｐｌｉｎｇ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_THUNDER_WIND_CUP[] = "Ｔｈｕｎｄｅｒｗｉｎｄ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_COOL_CUP[] = "Ｃｏｏｌ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_NATURE_CUP[] = "Ｎａｔｕｒｅ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_METALIC_CUP[] = "Ｍｅｔａｒｉｃ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_FILTH_CUP[] = "Ｄｉｒｔｙ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_DINO_CUP[] = "Ｄｉｎｏ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_WING_CUP[] = "Ｗｉｎｇ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_ANIMAL_CUP[] = "Ａｎｉｍａｌ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_HUMAN_CUP[] = "Ｈｕｍａｎ　Ｃｕｐ";
+
+char STR_TOURNAMENT_NAME_BEETLE_CUP[] = "Ｂｅｅｔｌｅ　Ｃｕｐ";
+
+char STR_TOURNAMENT_GRADE_D[] = "Ｄ";
+
+char STR_TOURNAMENT_GRADE_C[] = "Ｃ";
+
+char STR_TOURNAMENT_GRADE_B[] = "Ｂ";
+
+char STR_TOURNAMENT_GRADE_A[] = "Ａ";
+
+char STR_TOURNAMENT_GRADE_S[] = "Ｓ";
+
+char STR_TOURNAMENT_GRADE_R[] = "Ｒ";
+
+char STR_TOURNAMENT_GRADE_V1[] = "Ｖ１";
+
+char STR_TOURNAMENT_GRADE_V2[] = "Ｖ２";
+
+char STR_TOURNAMENT_GRADE_V3[] = "Ｖ３";
+
+char STR_TOURNAMENT_GRADE_V4[] = "Ｖ４";
+
+char STR_TOURNAMENT_GRADE_VO[] = "ＶＯ";
+
+char STR_TOURNAMENT_GRADE_FR[] = "ＦＲ";
+
+char STR_TOURNAMENT_GRADE_GP[] = "ＧＰ";
+
+char STR_TOURNAMENT_GRADE_TW[] = "ＴＷ";
+
+char STR_TOURNAMENT_GRADE_CO[] = "ＣＯ";
+
+char STR_TOURNAMENT_GRADE_NT[] = "ＮＴ";
+
+char STR_TOURNAMENT_GRADE_MT[] = "ＭＴ";
+
+char STR_TOURNAMENT_GRADE_DT[] = "ＤＴ";
+
+char STR_TOURNAMENT_GRADE_DY[] = "ＤＹ";
+
+char STR_TOURNAMENT_GRADE_WI[] = "ＷＩ";
+
+char STR_TOURNAMENT_GRADE_AN[] = "ＡＮ";
+
+char STR_TOURNAMENT_GRADE_HU[] = "ＨＵ";
+
+char STR_TOURNAMENT_GRADE_BT[] = "ＢＴ";
+#elif !VERSION_IS(US)
 char STR_BGM_TRACK_NON_BEWILDERING_FOREST_THEME[] = "迷わずの森のテーマ";
 
 char STR_BGM_TRACK_NON_BEWILDERING_FOREST_NIGHT_THEME[] = "迷わずの森・夜のテーマ";
@@ -705,7 +923,7 @@ GsSPRITE MONOCHROMON_BUBBLE_SPRITE = {
 
 AmountBoxLayout AMOUNT_BOX_LAYOUT = {
 	{
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		{ 0x001a, 0x0007, 0x0008 },
 		{ 0x0032, 0x001b, 0x0005 },
 		{ 0x0056, 0x002b, 0x0002 },
@@ -723,7 +941,7 @@ AmountBoxLayout AMOUNT_BOX_LAYOUT = {
 
 ConfirmBoxLayout CONFIRM_BOX_LAYOUT = {
 	{
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		{ 0x0000, 0x0000, 0x0004, 0x0002, 0x0060 },
 		{ 0x0000, 0x000c, 0x0010, 0x0012, 0x0018 },
 		{ 0x0018, 0x000c, 0x003a, 0x0012, 0x0024 },
@@ -814,7 +1032,7 @@ char *BGM_TRACK_NAMES[63] = {
 	STR_BGM_TRACK_BEATLAND_THEME,
 	STR_BGM_TRACK_BEATLAND_NIGHT_THEME,
 	STR_BGM_TRACK_SECRET_BEACH_CAVE_THEME,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	STR_BGM_TRACK_MT_INFINITY_THEME,
 #else
 	STR_BGM_TRACK_MT_PANORAMA_THEME,
@@ -939,7 +1157,7 @@ char *TOURNAMENT_NAMES[23] = {
 };
 
 char *TOURNAMENT_GRADES[23] = {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	STR_TOURNAMENT_GRADE_D,
 	STR_TOURNAMENT_GRADE_C,
 	STR_TOURNAMENT_GRADE_B,
@@ -1361,7 +1579,7 @@ void renderItemMenuAmountBox(void)
 		i++;
 		entry += 1;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderString(0, entry->x + x, entry->y + y, entry->chars * 12, 0xc, 0x90, 0x60, 3, 1);
 #endif
 }
@@ -1415,16 +1633,16 @@ void updateItemMenuAmountBoxString(void)
 	out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
 
 	if (ITEM_MENU_TYPE < 3) {
-		strcpy(out, ITEM_PARA[SHOP_ITEM_TYPE].name);
-		len = strlen(ITEM_PARA[SHOP_ITEM_TYPE].name);
+		strcpy(out, ITEM_NAME(SHOP_ITEM_TYPE));
+		len = strlen(ITEM_NAME(SHOP_ITEM_TYPE));
 	} else {
 		id = CARD_DATA[SHOP_ITEM_TYPE].digimonId;
-		strcpy(out, DIGIMON_DATA[id].name);
-		len = strlen(DIGIMON_DATA[id].name);
+		strcpy(out, DIGIMON_NAME(id));
+		len = strlen(DIGIMON_NAME(id));
 	}
 
 	out += len;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	*out++ = 0xc;
 	*out++ = 0;
 	out = intToStringSJIS(out, SHOP_ITEM_PRICE, 5, 0);
@@ -1957,7 +2175,7 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 
 	idx = ITEM_MENU_TYPE + ((ITEM_MENU_LEFT->topRow + 5) + row);
 	if (isTriggerSet(idx) != 0) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		*out++ = 0x82;
 		*out++ = 0x85;
 #else
@@ -1980,8 +2198,8 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	}
 
 	item &= 0x7f;
-	strcpy(out, ITEM_PARA[item].name);
-	len = strlen(ITEM_PARA[item].name);
+	strcpy(out, ITEM_NAME(item));
+	len = strlen(ITEM_NAME(item));
 	out += len;
 	out = padWithSpaces(out, 8, len);
 	*out++ = 0xf;
@@ -1990,8 +2208,8 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	*out++ = 1;
 
 	item = ITEM_MENU_RIGHT->buf[idx];
-	strcpy(out, ITEM_PARA[item].name);
-	len = strlen(ITEM_PARA[item].name);
+	strcpy(out, ITEM_NAME(item));
+	len = strlen(ITEM_NAME(item));
 	out += len;
 	terminateString(out, isLast);
 }
@@ -2558,10 +2776,27 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiB
 	boxY = UI_BOX_DATA[uiBoxId].finalPos.y;
 	origin->x += boxX;
 	origin->y += (boxY + box->cursor * 18);
+#if VERSION_IS(EU)
+	setRECT(&rect, -0x84, -0xb, 0x108, 0x22);
+	createTextbox(3, flags, &rect, origin, tickItemMenuDescriptionBox, renderItemMenuDescriptionBox);
+	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 2, 0, 0);
+	out = TEXTBOX_LINES_PTR + ITEM_MENU_SUB_TEXTBOX_LINE * 80;
+	strcpy(out, ITEM_DESC_PTR[item * 2]);
+	len = strlen(ITEM_DESC_PTR[item * 2]);
+	out += len;
+	*out++ = 0xd;
+	*out = 0;
+	out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE + 1U) * 80;
+	strcat((char *)out, ITEM_DESC_PTR[item * 2 + 1]);
+	len = strlen(ITEM_DESC_PTR[item * 2 + 1]);
+	out += len;
+	*out++ = 0;
+	*out = 0;
+#else
 	setRECT(&rect, -0x84, -0xb, 0x108, 0x16);
 	createTextbox(3, flags, &rect, origin, tickItemMenuDescriptionBox, renderItemMenuDescriptionBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
 	strcpy(out, ITEM_DESC_PTR[item]);
 #else
@@ -2571,6 +2806,7 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiB
 	out += len;
 	*out++ = 0;
 	*out = 0;
+#endif
 	TEXTBOX_DATA.box[3].pageReady = 1;
 	TEXTBOX_DATA.box[3].writeCount++;
 
@@ -2949,10 +3185,10 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			}
 		}
 
-		strcpy(out, ITEM_PARA[type].name);
-		len = strlen(ITEM_PARA[type].name);
+		strcpy(out, ITEM_NAME(type));
+		len = strlen(ITEM_NAME(type));
 		out += len;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		*out++ = 0xc;
 		*out++ = 0;
 #endif
@@ -2960,7 +3196,7 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		*out++ = 0;
 
 		if (ITEM_MENU_TYPE != 5) {
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 			*out++ = 0x16;
 			*out++ = 0;
 #endif
@@ -2988,7 +3224,7 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			*out++ = 0;
 		}
 amountPart:
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		if (ITEM_MENU_TYPE != 0 && ITEM_MENU_TYPE != 7) {
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
 		}
@@ -3040,10 +3276,10 @@ void calculateCardMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		}
 
 		id = CARD_DATA[type].digimonId;
-		strcpy(out, DIGIMON_DATA[id].name);
-		len = strlen(DIGIMON_DATA[id].name);
+		strcpy(out, DIGIMON_NAME(id));
+		len = strlen(DIGIMON_NAME(id));
 		out += len;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		*out++ = 0xc;
 #else
 		*out++ = 0x17;
@@ -3125,7 +3361,7 @@ void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast
 	out = padWithSpaces(out, 0xc, len);
 	*out++ = 0xf;
 	*out++ = 0;
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	*out++ = 0x1b;
 	*out++ = 0;
 #endif
@@ -3172,7 +3408,7 @@ void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 		p += 0x20;
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	drawString2(p, outX, row * 12);
 #else
 	drawString2(p, outX, row * 12, 1);
@@ -3456,7 +3692,7 @@ void renderShopBitsBox(void)
 	x = UI_BOX_DATA[2].finalPos.x + 6;
 	y = UI_BOX_DATA[2].finalPos.y + 4;
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderString(0, x, y, 0x48, 0xc, 0, rowPx, 4, 1);
 	renderString(0, x, y + 0xd, 0x48, 0xc, 0x48, rowPx, 4, 1);
 #else

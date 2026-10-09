@@ -2985,7 +2985,7 @@ int16_t z;
 	}
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void renderWireframed(GsDOBJ2 *obj, int32_t wireFrameShare)
 {
 	LINE_F4 *lf3;

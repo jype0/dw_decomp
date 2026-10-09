@@ -24,7 +24,7 @@
 
 #include "common.h"
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 #define YES_TEXT_W 0x18
 #define NO_TEXT_U 0xc
 #define NO_TEXT_W 0x24
@@ -47,7 +47,7 @@
 #endif
 
 /* MemCardSync command and result type */
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 typedef long MemCardSyncWord;
 #else
 typedef unsigned long MemCardSyncWord;
@@ -216,7 +216,7 @@ extern uint16_t PLAYTIME_MINUTES;
 extern int32_t CHANGED_INPUT;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern char *MAP_NAME_PTR[];
 #endif
 
@@ -276,7 +276,7 @@ void renderMainMenu();
 void registerBattleData();
 void renderMenuSelector(MenuHighlight *b);
 int32_t createByteSum(uint8_t *data, int32_t len);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void appendWideDigit(int32_t digit, char **dst, int32_t *started);
 #endif
 void openSaveMachine(void);
@@ -291,7 +291,7 @@ void *main_menu_order_anchor[] = {
 	awardMachinedramonData,
 	tickSaveMachine,
 	openSaveMachine,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	appendWideDigit,
 #endif
 	createByteSum,
@@ -346,7 +346,7 @@ void *main_menu_order_anchor[] = {
 };
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char STR_EMPTY[2] = "";
 
 char MAIN_D_80134674[] = "２";
@@ -438,7 +438,7 @@ struct DIRENTRY *MEMCARD_DIRENTRIES = (struct DIRENTRY *)(TEXTURE_BUFFER + 0x5c0
 
 RegisteredDigimon *VS__REGISTERED_DIGIMON_BUFFER = (RegisteredDigimon *)(TEXTURE_BUFFER + 0x4800);
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char MAIN_D_80131008[] = "あたらしく冒険を始める";
 
 char MAIN_D_80131014[] = "冒険の続きをする";
@@ -459,7 +459,7 @@ char MAIN_D_8013107C[] = "ゲーム中セーブ";
 
 char MAIN_D_80131090[] = "対戦デジモンの登録";
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 char MAIN_D_801310A4[] = "スペシャルアイテム記録";
 
 #endif
@@ -489,7 +489,7 @@ char MAIN_D_8013118C[] = "空きブロックがありません";
 
 char MAIN_D_8013119C[] = "対戦デジモンが登録されていません";
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 char MAIN_D_801311B4[] = "アイテムがいっぱいです";
 
 char MAIN_D_801311C0[] = "すでにアイテムがあります";
@@ -503,7 +503,7 @@ char MAIN_D_80131200[] = "番の冒険を消しますか？　　　　";
 
 char MAIN_D_80131218[] = "番の記録を読みこみますか？";
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 char MAIN_D_80131228[] = "番のデータにアイテムを追加？";
 
 char MAIN_D_80131234[] = "冒険を始める";
@@ -575,7 +575,7 @@ char MAIN_D_80131580[] = "幼年期のデジモンなので、メモリーカー
 
 char MAIN_D_801315A0[] = "対戦用に登録できません";
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 char MAIN_D_801315C0[] = "スロット１にゲームデータの";
 
 char MAIN_D_801315D0[] = "入ったメモリーカードを";
@@ -755,7 +755,11 @@ InventoryTable DEFAULT_INVENTORY_TYPES = {
 	},
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char MAIN_D_801346C4[] = "Ｐｌａｙｅｒ";
+
+char MAIN_D_8013468C[] = "Ｄｉｇｉｍｏｎ";
+#elif !VERSION_IS(US)
 char MAIN_D_801346C4[] = "しゅじんこう";
 
 char MAIN_D_8013468C[] = "デジモン";
@@ -770,7 +774,7 @@ CVECTOR MAIN_D_80131638[4] = {
 
 int8_t HEX_DIGITS[16] = "0123456789ABCDEF";
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char SAVEGAME_ID_LABEL[16][6] = {
 	"　０",
 	"　１",
@@ -790,7 +794,7 @@ char SAVEGAME_ID_LABEL[16][6] = {
 	"１５",
 };
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 MenuHighlight MENU_HIGHLIGHTS[22] = {
 #else
 MenuHighlight MENU_HIGHLIGHTS[19] = {
@@ -966,7 +970,7 @@ MenuHighlight MENU_HIGHLIGHTS[19] = {
 		0x0024,
 		0x000c,
 	},
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 	{
 		0xff,
 		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
@@ -1294,14 +1298,14 @@ char *SLOT_ACTION_QUESTIONS[] = {
 #endif
 };
 
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP) && !VERSION_IS(US)
 char *BATTLE_MODE_ITEMS[4] = {
 	MAIN_D_80131234,
 	MAIN_D_80131030,
 	MAIN_D_80131254,
 	MAIN_D_801310A4,
 };
-#elif !VERSION_REGION_IS(NTSCJ)
+#elif VERSION_IS(US)
 char *BATTLE_MODE_ITEMS[4] = {
 	MAIN_D_80131234,
 	MAIN_D_80131240,
@@ -1310,7 +1314,7 @@ char *BATTLE_MODE_ITEMS[4] = {
 };
 #endif
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char SAVE_FILE_NAME[32] = "BISLPS-01797DMR*";
 
 SaveFile SAVE_FILE;
@@ -1386,7 +1390,7 @@ uint8_t SAVE_ICON_FRAME_2[128] = {
 	0x00, 0x00, 0x00, 0x44, 0x44, 0x44, 0x00, 0x00,
 };
 
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 uint8_t SAVE_TITLE_RESERVED[28] = { 0 };
 #endif
 // clang-format on
@@ -1400,7 +1404,7 @@ void renderText(POLY_FT4 *prim, int32_t x, int32_t y, int32_t u, int32_t v,
 	prim->tpage = getTPage(0, 0, 704, 256);
 	prim->clut = GetClut(0xD0, 0x1E8);
 	setRGB0(prim, MAIN_D_80131638[textColor].r, MAIN_D_80131638[textColor].g, MAIN_D_80131638[textColor].b);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	setUVWH(prim, u, v, w, h);
 	setXYWH(prim, x, y, w, h);
 #else
@@ -1434,7 +1438,7 @@ void renderSelectNewGameCard(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if (CONNECTED_CARDS & 1) {
 		renderText(cur++, 0x58, 0x37, 0, 0, 0x90, 0xc, 0);
 	} else {
@@ -1470,7 +1474,7 @@ void renderSelectCardSlot(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if (CONNECTED_CARDS & 1) {
 		renderText(cur++, 0x58, 0x37, 0, 0, 0x90, 0xc, 0);
 	} else {
@@ -1514,13 +1518,13 @@ void renderConfirmNoCard(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x3a, 0x18, 0, 0, 0x90, 0xc, 0);
 #else
 	renderText(cur++, 0x3A, 0x18, 0, 0, 0xBE, 0xC, 0);
 #endif
 	GsSetWorkBase((PACKET *)cur);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderMenuBox(0x30, 0x13, 0xb0, 0x16);
 #else
 	renderMenuBox(0x30, 0x13, 0xBE, 0x16);
@@ -1553,7 +1557,7 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 	if (SAVEGAME_SLOT_INFO[slot].valid != 0) {
 		renderText(cur++, x + 0x28, y + 5, 0x18, v, 0x48, 0xC, hl);
 		renderText(cur++, x + 0x76, y + 5, 0x6C, v, 0x60, 0xC, hl);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		renderText(cur++, x + 0x28, y + 0x13, 0x18, v + 0xc, 0x6c, 0xc, hl);
 	} else {
 		renderText(cur++, x + 0x28, y + 5, 0x90, 0, 0x6c, 0xc, hl);
@@ -1573,7 +1577,7 @@ void renderSelectSlot(void)
 	int32_t i;
 
 	ft4 = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(ft4++, 0x3a, 0x18, 0, 0, 0x90, 0xc, 0);
 	GsSetWorkBase((PACKET *)ft4);
 	renderMenuBox(0x30, 0x13, 0xb0, 0x16);
@@ -1628,7 +1632,7 @@ void renderConfirmSlotSelection(void)
 	if (SAVEGAME_SLOT_INFO[MEMORY_CARD_SLOT].valid != 0) {
 		renderText(cur++, 0x58, 0x2E, 0x18, 0xC, 0x48, 0xC, 0);
 		renderText(cur++, 0xA6, 0x2E, 0x6C, 0xC, 0x60, 0xC, 0);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		renderText(cur++, 0x58, 0x3c, 0x18, 0x18, 0x6c, 0xc, 0);
 #else
 		renderText(cur++, 0x58, 0x3C, 0, 0x18, 0xE0, 0xC, 0);
@@ -1638,7 +1642,7 @@ void renderConfirmSlotSelection(void)
 	}
 	renderText(cur++, 0x3A, 0x52, 0, 0xF0, YES_TEXT_W, 0xC, 0);
 	renderText(cur++, 0x3A, 0x5E, NO_TEXT_U, 0xF0, NO_TEXT_W, 0xC, 0);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x3a, 0x74, 0, 0x30, 0xcc, 0xc, 0);
 #else
 	renderText(cur++, 0x3A, 0x74, 0x14, 0x30, 0xCC, 0xC, 0);
@@ -1698,7 +1702,7 @@ void renderConfirmOverwrite(void)
 	int32_t mask;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x40, 0x38, 0, 0, 0xc0, 0x18, 0);
 #else
 	renderText(cur++, 0x40, 0x38, 0, 0, 0xD4, 0x18, 0);
@@ -1719,7 +1723,7 @@ void renderConfirmOverwrite(void)
 	}
 	renderText(cur++, 0x40, 0x66, NO_TEXT_U, 0xF0, NO_TEXT_W, 0xC, 0);
 	GsSetWorkBase((PACKET *)cur);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderMenuBox(0x36, 0x33, 0xd4, 0x22);
 #else
 	renderMenuBox(0x36, 0x33, 0xE8, 0x22);
@@ -1740,7 +1744,7 @@ void renderConfirmVSSlot(void)
 	int32_t mask;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xb4, 0x24, 0);
 #else
@@ -1757,7 +1761,7 @@ void renderConfirmVSSlot(void)
 	} else {
 		hl = 1;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x65, 0, 0xf0, 0x18, 0xc, hl);
 	renderText(cur++, 0x46, 0x71, 0x18, 0xf0, 0x24, 0xc, 0);
 	GsSetWorkBase((PACKET *)cur);
@@ -1778,7 +1782,7 @@ void renderRegisterDigimon(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xa2, 0x6c, 0);
 	renderText(cur++, 0x46, 0xad, 0, 0x78, 0xa8, 0xc, 0);
@@ -1807,7 +1811,7 @@ void renderSelectRegisterSlot(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xe0, 0x78, 0);
 	renderText(cur++, 0x46, 0xb9, 0, 0x84, 0x90, 0xc, 0);
@@ -1831,7 +1835,7 @@ void renderConfirmRegister(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xc0, 0x18, 0);
 	renderText(cur++, 0x46, 0x59, 0xc0, 0x18, 0x18, 0xc, 0);
@@ -1861,7 +1865,7 @@ void renderCantRegister(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x22, 0x49, 0, 0, 0xfc, 0xc, 3);
 	renderText(cur++, 0x22, 0x59, 0, 0xc, 0xfc, 0xc, 3);
 	GsSetWorkBase((PACKET *)cur);
@@ -1944,7 +1948,7 @@ void renderInsertGameCardPrompt(void)
 
 void drawMainMenuStrings(int32_t menu)
 {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	int8_t view;
 	int32_t i;
 	char buf[0x2c];
@@ -1969,7 +1973,7 @@ void drawMainMenuStrings(int32_t menu)
 	SAVE_SLOT_SCROLL_TENTHS = 0;
 	NEW_CARDS = 0;
 	clearTextArea();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	switch (view) {
 	case 0:
 		drawString(TITLE_MENU_ITEMS[0], 0, 0);
@@ -2145,7 +2149,7 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(PARTNER_ENTITY.name, 0x2a, 0xc);
 		DrawSync(0);
 		drawString(MAIN_D_8013D814, 6, 0x18);
-		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x2a, 0x18);
+		drawString(DIGIMON_NAME(PARTNER_ENTITY.digimonEntity.entity.type), 0x2a, 0x18);
 		DrawSync(0);
 		drawString(MAIN_D_80134694, 6, 0x24);
 		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x2a, 0x24);
@@ -2207,7 +2211,7 @@ void drawMainMenuStrings(int32_t menu)
 	case 19:
 		strcpy(buf, PARTNER_ENTITY.name);
 		strcat(buf, MAIN_D_801346B4);
-		strcat(buf, DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name);
+		strcat(buf, DIGIMON_NAME(PARTNER_ENTITY.digimonEntity.entity.type));
 		strcat(buf, MAIN_D_801346B8);
 		drawString(buf, 0, 0);
 		DrawSync(0);
@@ -2215,7 +2219,7 @@ void drawMainMenuStrings(int32_t menu)
 		DrawSync(0);
 		drawString(MAIN_D_801315A0, 0, 0x18);
 		break;
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP)
 	case 20:
 		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
 		DrawSync(0);
@@ -2420,7 +2424,7 @@ void drawMainMenuStrings(int32_t menu)
 		drawString(PARTNER_ENTITY.name, 0x64, 0xC);
 		DrawSync(0);
 		drawString(MAIN_D_8013468C, 0, 0x18);
-		drawString(DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name, 0x64, 0x18);
+		drawString(DIGIMON_NAME(PARTNER_ENTITY.digimonEntity.entity.type), 0x64, 0x18);
 		DrawSync(0);
 		drawString(MAIN_D_80134694, 0, 0x24);
 		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x64, 0x24);
@@ -2491,7 +2495,7 @@ void drawMainMenuStrings(int32_t menu)
 	case 19:
 		strcpy(buf, PARTNER_ENTITY.name);
 		strcat(buf, MAIN_D_801346B4);
-		strcat(buf, DIGIMON_DATA[PARTNER_ENTITY.digimonEntity.entity.type].name);
+		strcat(buf, DIGIMON_NAME(PARTNER_ENTITY.digimonEntity.entity.type));
 		strcat(buf, MAIN_D_801346B8);
 		drawString(buf, 0, 0);
 		DrawSync(0);
@@ -2526,7 +2530,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 
 	if (slot >= 0 && slot < 0xF) {
 		row *= 0x18;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		setRECT(&area, 0, row + 0xc, 0xcc, 0x18);
 #else
 		setRECT(&area, 0, row + 0xC, 0xE0, 0x18);
@@ -2544,7 +2548,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 
 char *formatInteger(int32_t value, char *buf, int32_t digits)
 {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	int32_t started;
 	char *dst;
 
@@ -2600,10 +2604,10 @@ void drawRegisteredDigimonSlots(int32_t slot)
 		drawString(&SAVEGAME_ID_LABEL[(currentSlot + 1) % 10][2], 0xC, y);
 		if ((type = SAVE_FILE.saves[0].battleRegistrationData[currentSlot].digimonId) != 0) {
 			drawString(SAVE_FILE.saves[0].battleRegistrationData[currentSlot].name, 0x1e, y);
-			drawString(DIGIMON_DATA[type].name, 0x6C, y);
+			drawString(DIGIMON_NAME(type), 0x6C, y);
 		} else {
 			setTextColor(9);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			drawString(MAIN_D_8013A0EC, 0x1e, y);
 #else
 			drawString(MAIN_D_801346C0[0], 0x1E, y);
@@ -2677,7 +2681,7 @@ void tickMainMenu(void)
 
 	switch (CURRENT_MENU) {
 	case 0:
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		cursor = (MenuCursor *)MENU_HIGHLIGHTS;
 		input = tickMenuInput(cursor, 1);
 #else
@@ -2754,9 +2758,9 @@ void tickMainMenu(void)
 		break;
 
 	case 3:
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP) && !VERSION_IS(US)
 		if (MAIN_MENU_TICKS >= 3) {
-#elif !VERSION_REGION_IS(NTSCJ)
+#elif VERSION_IS(US)
 		if (((CHANGED_INPUT != CANCEL_BUTTON) && (CHANGED_INPUT != CONFIRM_BUTTON)) ||
 		    (MAIN_MENU_TICKS >= 3)) {
 #endif
@@ -2918,11 +2922,11 @@ void tickMainMenu(void)
 		memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAME_1, 0x80);
 		memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAME_2, 0x80);
 		initializeDefaultSavegame();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
 		_strncpy(SAVE_FILE.title + 8, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
 		_strncpy(SAVE_FILE.title + 0xe, SAVE_FILE.saves[0].playerName, 0xc);
-		_strncpy(SAVE_FILE.title + 0x1c, DIGIMON_DATA[SAVE_FILE.saves[0].partnerType].name, 0x10);
+		_strncpy(SAVE_FILE.title + 0x1c, DIGIMON_NAME(SAVE_FILE.saves[0].partnerType), 0x10);
 		_strncpy(SAVE_FILE.title + 0x2e,
 			 MAP_NAME_PTR[MAP_ENTRIES[SAVE_FILE.saves[0].currentScreen].loadingName], 0x12);
 #else
@@ -2933,7 +2937,7 @@ void tickMainMenu(void)
 		_strncpy(SAVE_FILE.title + 0xe,
 			 SAVE_FILE.saves[0].playerName, 0xD);
 		_strncpy(SAVE_FILE.title + 0x1c,
-			 DIGIMON_DATA[SAVE_FILE.saves[0].partnerType].name,
+			 DIGIMON_NAME(SAVE_FILE.saves[0].partnerType),
 			 0x11);
 		memcpy(SAVE_FILE.reserved, SAVE_TITLE_RESERVED, 0x1C);
 #endif
@@ -3284,11 +3288,11 @@ void tickMainMenu(void)
 			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAME_1, 0x80);
 			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAME_2, 0x80);
 			writeSavegame(&SAVE_FILE.saves[0]);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
 			_strncpy(SAVE_FILE.title + 8, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy(SAVE_FILE.title + 0xe, SAVE_FILE.saves[0].playerName, 0xc);
-			_strncpy(SAVE_FILE.title + 0x1c, DIGIMON_DATA[SAVE_FILE.saves[0].partnerType].name, 0x10);
+			_strncpy(SAVE_FILE.title + 0x1c, DIGIMON_NAME(SAVE_FILE.saves[0].partnerType), 0x10);
 			_strncpy(SAVE_FILE.title + 0x2e,
 				 MAP_NAME_PTR[MAP_ENTRIES[SAVE_FILE.saves[0].currentScreen].loadingName], 0x12);
 #else
@@ -3299,7 +3303,7 @@ void tickMainMenu(void)
 			_strncpy(SAVE_FILE.title + 0xe,
 				 SAVE_FILE.saves[0].playerName, 0xD);
 			_strncpy(SAVE_FILE.title + 0x1c,
-				 DIGIMON_DATA[SAVE_FILE.saves[0].partnerType].name,
+				 DIGIMON_NAME(SAVE_FILE.saves[0].partnerType),
 				 0x11);
 			memcpy(SAVE_FILE.reserved, SAVE_TITLE_RESERVED, 0x1C);
 #endif
@@ -3633,11 +3637,11 @@ void tickMainMenu(void)
 			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAME_1, 0x80);
 			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAME_2, 0x80);
 			writeSavegame(&SAVE_FILE.saves[0]);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
 			_strncpy(SAVE_FILE.title + 8, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy(SAVE_FILE.title + 0xe, SAVE_FILE.saves[0].playerName, 0xc);
-			_strncpy(SAVE_FILE.title + 0x1c, DIGIMON_DATA[SAVE_FILE.saves[0].partnerType].name, 0x10);
+			_strncpy(SAVE_FILE.title + 0x1c, DIGIMON_NAME(SAVE_FILE.saves[0].partnerType), 0x10);
 			_strncpy(SAVE_FILE.title + 0x2e,
 				 MAP_NAME_PTR[MAP_ENTRIES[SAVE_FILE.saves[0].currentScreen].loadingName], 0x12);
 #else
@@ -3648,7 +3652,7 @@ void tickMainMenu(void)
 			_strncpy(SAVE_FILE.title + 0xe,
 				 SAVE_FILE.saves[0].playerName, 0xD);
 			_strncpy(SAVE_FILE.title + 0x1c,
-				 DIGIMON_DATA[SAVE_FILE.saves[0].partnerType].name,
+				 DIGIMON_NAME(SAVE_FILE.saves[0].partnerType),
 				 0x11);
 			memcpy(SAVE_FILE.reserved, SAVE_TITLE_RESERVED, 0x1C);
 #endif
@@ -4129,7 +4133,7 @@ int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots
 		MemCardSync(0, &cmd, &result);
 		if (result == 0) {
 			slots[slot].valid = 1;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			strncpy(slots[slot].playerName, (char *)&data[0x12], 12);
 			slots[slot].playerName[12] = '\0';
 			strncpy(slots[slot].digimonName, (char *)&data[0x20], 16);
@@ -4277,7 +4281,7 @@ int32_t createByteSum(uint8_t *data, int32_t len)
 	return sum;
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void appendWideDigit(int32_t digit, char **dst, int32_t *started)
 {
 	digit %= 10;
@@ -4331,7 +4335,7 @@ void loadSavegame(SavegamePayload *savegame)
 	for (i = 0; i < 8; i++) {
 		SAVED_STATE.npcMaps[i] = savegame->npcMaps[i];
 	}
-	memcpy(DIGIMON_DATA[0].name, savegame->playerName, 0x14);
+	memcpy(DIGIMON_NAME(0), savegame->playerName, 0x14);
 	memcpy(WORLD_POOP, savegame->worldPoop, 0x190);
 	SAVED_STATE.partnerPara = savegame->partnerPara;
 	SAVED_STATE.lives = savegame->partnerLives;
@@ -4394,7 +4398,7 @@ void writeSavegame(SavegamePayload *savegame)
 	for (i = 0; i < 8; i++) {
 		savegame->npcMaps[i] = NPC_ENTITIES[i].digimonEntity.entity.isOnMap;
 	}
-	memcpy(savegame->playerName, DIGIMON_DATA[0].name, 0x14);
+	memcpy(savegame->playerName, DIGIMON_NAME(0), 0x14);
 	memcpy(savegame->worldPoop, WORLD_POOP, 0x190);
 	savegame->partnerPara = PARTNER_PARA;
 	savegame->currentScreen = CURRENT_SCREEN;
@@ -4634,7 +4638,7 @@ void renderInitialMenu(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderText(cur++, 0x5e, 0x37, 0, 0, 0x84, 0xc, 0);
 	if (CONNECTED_CARDS != 0) {
 		renderText(cur++, 0x5e, 0x43, 0, 0xc, 0x84, 0x18, 0);

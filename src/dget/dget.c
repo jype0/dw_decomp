@@ -140,7 +140,7 @@ void buildScheduleLabels(void)
 	RECT rect1;
 	RECT rect2;
 	uint8_t color;
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	int32_t dayOfMonth;
 #endif
 
@@ -159,7 +159,7 @@ void buildScheduleLabels(void)
 	*str++ = 0x01;
 	day = DAY;
 	for (i = 0; i < 5; ++i, ++day) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		str = (uint8_t *)intToStringSJIS(str, day % 30 + 1, 2, 0);
 		*str++ = 0x93;
 		*str++ = 0xfa;
@@ -235,7 +235,7 @@ void buildScheduleEntries(void)
 				*textPtr++ = '\x01';
 				*textPtr++ = '\x81';
 				*textPtr++ = '\x40';
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 				*textPtr++ = '\x81';
 				*textPtr++ = '\x40';
 #endif
@@ -431,7 +431,7 @@ void renderTournamentTextbox(void)
 	posX = UI_BOX_DATA[1].finalPos.x + 6;
 	posY = UI_BOX_DATA[1].finalPos.y + 3;
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderString(0, posX, posY, 0x60, 0xc, 0, uvY, 5, 1);
 #else
 	drawString("Tournament", 0, (uint32_t)uvY);
@@ -549,7 +549,7 @@ void renderTournamentSchedule(void)
 	sy = y + TOURNAMENT_SELECTED_ROW * 16 + 0x16;
 	renderSelectionCursor(sx, sy, 0x2a, 0xd, 4);
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	cellOff = 0;
 	textOff = 0x6c;
 	sx = x + 6;
@@ -569,13 +569,13 @@ void renderTournamentSchedule(void)
 #endif
 
 	textOff += 0xc;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	sy = y + 0x16;
 #else
 	sy = y + 0x18;
 #endif
 	for (row = 0; row < 6; row++, sy += 0x10, textOff += 0xc) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		sx = x + 0xc;
 		for (i = 0, cellOff = 0; i < 5; i++, sx += 0x33, cellOff += 0x18) {
 			renderString(0, sx, sy, 0x18, 0xc, cellOff, textOff, 4, 1);

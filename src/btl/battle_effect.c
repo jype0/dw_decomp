@@ -569,7 +569,7 @@ static void *battle_effect_sbss_order[] = {
 };
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char BTL_STR_LISTENS_TO[] = "C1の命令を聞くようになった！W";
 char BTL_STR_WHITE_WAIT[] = "C1を落としたW";
 char BTL_STR_WAS_INJURED[] = "C1はRケガをしてしまったW";
@@ -1228,7 +1228,7 @@ EfeAuraType BTL_AURA_PROJECTILE_TYPES[129] = {
 	{ 0xffff, 0xffff, 0x0000, 0x0000, 0x0000, 0x0000 },
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 VECTOR BTL_AURA_PROJECTILE_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 #endif
 
@@ -5878,7 +5878,7 @@ void BTL_tickAuraProjectile(int32_t id)
 void BTL_renderAuraProjectile(int32_t i)
 {
 	MATRIX m;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	VECTOR scale;
 #endif
 	SVECTOR a;
@@ -5890,7 +5890,7 @@ void BTL_renderAuraProjectile(int32_t i)
 
 	aura = &BTL_FLAT_BULLET_PTR[i];
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	scale = BTL_AURA_PROJECTILE_SCALE;
 #endif
 	RotMatrix(&aura->rotation, &m);

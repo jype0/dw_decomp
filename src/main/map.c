@@ -328,7 +328,143 @@ int16_t COLLISION_GRACE_ROTATION[8][4] = {
 	{ 0x0000, 0x0c00, 0x0400, 0x0800 },
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char STR_MAP_NAME_NATIVE_FOREST[] = "Ｎａｔｉｖｅ　Ｆｏｒｅｓｔ";
+
+char STR_MAP_NAME_COELA_POINT[] = "Ｃｏｅｌａ　Ｐｏｉｎｔ";
+
+char STR_MAP_NAME_DRAGON_EYE_LAKE[] = "Ｄｒａｇｏｎ　Ｅｙｅ　Ｌａｋｅ";
+
+char STR_MAP_NAME_DRILL_TUNNEL_ENTRANCE[] = "Ｄｒｉｌｌ　Ｔｕｎｎｅｌ　Ｅｎｔｒａｎｃｅ";
+
+char STR_MAP_NAME_DIGIMON_BRIDGE[] = "Ｄｉｇｉｍｏｎ　Ｂｒｉｄｇｅ　";
+
+char STR_MAP_NAME_TROPICAL_JUNGLE[] = "Ｔｒｏｐｉｃａｌ　Ｊｕｎｇｌｅ";
+
+char STR_MAP_NAME_MANGROVE_REGION[] = "Ｍａｎｇｒｏｖｅ　Ｒｅｇｉｏｎ";
+
+char STR_MAP_NAME_PATH_THRU_MT_PANORAMA[] = "Ｐａｔｈ　Ｔｈｒｕ　Ｍｔ．　Ｐａｎｏｒａｍａ";
+
+char STR_MAP_NAME_ENTRANCE_TO_FILE_CITY[] = "Ｆｉｌｅ　Ｃｉｔｙ";
+
+char STR_MAP_NAME_MT_PANORAMA_PLAINS[] = "Ｍｔ．　Ｐａｎｏｒａｍａ　Ｐｌａｉｎｓ";
+
+char STR_MAP_NAME_FOOT_OF_MT_PANORAMA[] = "Ｆｏｏｔ　ｏｆ　Ｍｔ．　Ｐａｎｏｒａｍａ";
+
+char STR_MAP_NAME_MT_PANORAMA_SPORE_AREA[] = "Ｍｔ．　Ｐａｎｏｒａｍａ　Ｓｐｏｒｅ　Ａｒｅａ";
+
+char STR_MAP_NAME_DRILL_TUNNEL[] = "Ｄｒｉｌｌ　Ｔｕｎｎｅｌ";
+
+char STR_MAP_NAME_DRILL_TUNNEL_2ND_FLOOR[] = "Ｄｒｉｌｌ　Ｔｕｎｎｅｌ　２ｎｄ　ｆｌｏｏｒ";
+
+char STR_MAP_NAME_DRILL_TUNNEL_3RD_FLOOR[] = "Ｄｒｉｌｌ　Ｔｕｎｎｅｌ　３ｒｄ　ｆｌｏｏｒ";
+
+char STR_MAP_NAME_RESIDENTIAL_AREA[] = "Ｒｅｓｉｄｅｎｔｉａｌ　Ａｒｅａ";
+
+char STR_MAP_NAME_UNDERGROUND_POND[] = "Ｕｎｄｅｒｇｒｏｕｎｄ　Ｐｏｎｄ　";
+
+char STR_MAP_NAME_LAVA_CAVE[] = "Ｌａｖａ　Ｃａｖｅ";
+
+char STR_MAP_NAME_OVERDELL[] = "Ｏｖｅｒｄｅｌｌ";
+
+char STR_MAP_NAME_OVERDELL_CEMETERY[] = "Ｏｖｅｒｄｅｌｌ　Ｃｅｍｅｔｅｒｙ";
+
+char STR_MAP_NAME_GREAT_CANYON_ENTRANCE[] = "Ｇｒｅａｔ　Ｃａｎｙｏｎ　Ｅｎｔｒａｎｃｅ";
+
+char STR_MAP_NAME_GREAT_CANYON_TOP_AREA[] = "Ｇ　Ｃａｎｙｏｎ　Ｔｏｐ　Ａｒｅａ";
+
+char STR_MAP_NAME_GREAT_CANYON_BRIDGE[] = "Ｇｒｅａｔ　Ｃａｎｙｏｎ　Ｂｒｉｄｇｅ";
+
+char STR_MAP_NAME_FORTRESS_ENTRANCE[] = "Ｆｏｒｔｒｅｓｓ　Ｅｎｔｒａｎｃｅ";
+
+char STR_MAP_NAME_GREAT_CANYON_BOT_AREA[] = "Ｇｒｅａｔ　Ｃａｎｙｏｎ　Ｂｏｔ．　Ａｒｅａ";
+
+char STR_MAP_NAME_OGRE_FORTRESS[] = "Ｏｇｒｅ　Ｆｏｒｔｒｅｓｓ";
+
+char STR_MAP_NAME_MONOCHROME_SHOP[] = "Ｍｏｎｏｃｈｒｏｍｅ　Ｓｈｏｐ";
+
+char STR_MAP_NAME_GREY_LORDS_MANSION[] = "Ｇｒｅｙ　Ｌｏｒｄ’ｓ　Ｍａｎｓｉｏｎ　";
+
+char STR_MAP_NAME_MANSION_BASEMENT[] = "Ｇｒｅｙ　Ｌｏｒｄ’ｓ　Ｍａｎｓｉｏｎ";
+
+char STR_MAP_NAME_UNDERGROUND_LAB[] = "Ｕｎｄｅｒｇｒｏｕｎｄ　Ｌａｂ";
+
+char STR_MAP_NAME_GEAR_SAVANNA[] = "Ｇｅａｒ　Ｓａｖａｎｎａ";
+
+char STR_MAP_NAME_ANCIENT_DINO_REGION[] = "Ａｎｃｉｅｎｔ　ＤｉｎｏＲｅｇｉｏｎ";
+
+char STR_MAP_NAME_ANCIENT_GLACIAL_REGION[] = "Ａｎｃｉｅｎｔ　Ｇｌａｃｉａｌ　Ｒｅｇｉｏｎ";
+
+char STR_MAP_NAME_ANCIENT_SPEEDY_REGION[] = "Ａｎｃｉｅｎｔ　Ｓｐｅｅｄｙ　Ｒｅｇｉｏｎ";
+
+char STR_MAP_NAME_FREEZELAND[] = "Ｆｒｅｅｚｅｌａｎｄ";
+
+char STR_MAP_NAME_ICE_SANCTUARY[] = "Ｉｃｅ　Ｓａｎｃｔｕａｒｙ";
+
+char STR_MAP_NAME_GREEN_GYM[] = "Ｇｒｅｅｎ　Ｇｙｍ";
+
+char STR_MAP_NAME_LEOMON_ANCESTORS_CAVE[] = "Ｌｅｏｍｏｎ’ｓ　ａｎｃｅｓｔｏｒ’ｓ　ｃａｖｅ";
+
+char STR_MAP_NAME_MISTY_TREES[] = "Ｍｉｓｔｙ　Ｔｒｅｅｓ";
+
+char STR_MAP_NAME_GREAT_CANYON[] = "Ｇｒｅａｔ　Ｃａｎｙｏｎ";
+
+char STR_MAP_NAME_GEKO_SWAMP[] = "Ｇｅｋｏ　Ｓｗａｍｐ";
+
+char STR_MAP_NAME_VOLUME_VILLA[] = "Ｖｏｌｕｍｅ　Ｖｉｌｌａ";
+
+char STR_MAP_NAME_ITEM_KEEPER[] = "Ｉｔｅｍ　Ｋｅｅｐｅｒ";
+
+char STR_MAP_NAME_CENTAR_CLINIC[] = "Ｃｅｎｔａｒ　Ｃｌｉｎｉｃ";
+
+char STR_MAP_NAME_RESTAURANT[] = "Ｒｅｓｔａｕｒａｎｔ";
+
+char STR_MAP_NAME_ITEM_SHOP[] = "Ｉｔｅｍ　Ｓｈｏｐ";
+
+char STR_MAP_NAME_JIJIMONS_HOUSE[] = "Ｊｉｊｉｍｏｎ’ｓ　ｈｏｕｓｅ";
+
+char STR_MAP_NAME_SECRET_ITEM_SHOP[] = "Ｓｅｃｒｅｔ　Ｉｔｅｍ　Ｓｈｏｐ";
+
+char STR_MAP_NAME_TOY_TOWN[] = "Ｔｏｙ　Ｔｏｗｎ";
+
+char STR_MAP_NAME_SECRET_BEACH_CAVE[] = "Ｓｅｃｒｅｔ　Ｂｅａｃｈ　Ｃａｖｅ";
+
+char STR_MAP_NAME_FACTORIAL_TOWN[] = "Ｆａｃｔｏｒｉａｌ　Ｔｏｗｎ";
+
+char STR_MAP_NAME_BIRDRA_TRANSPORT[] = "Ｂｉｒｄｒａ　Ｔｒａｎｓｐｏｒｔ";
+
+char STR_MAP_NAME_ARENA_LOBBY[] = "Ａｒｅｎａ　Ｌｏｂｂｙ";
+
+char STR_MAP_NAME_TREASURE_HUNT[] = "Ｔｒｅａｓｕｒｅ　Ｈｕｎｔ";
+
+char STR_MAP_NAME_TRASH_MOUNTAIN[] = "Ｔｒａｓｈ　Ｍｏｕｎｔａｉｎ";
+
+char STR_MAP_NAME_SEWER[] = "ｓｅｗｅｒ";
+
+char STR_MAP_NAME_BEETLE_LAND[] = "Ｂｅｅｔｌｅ　Ｌａｎｄ";
+
+char STR_MAP_NAME_MT_INFINITY[] = "Ｍｔ．　Ｉｎｆｉｎｉｔｙ";
+
+char STR_MAP_NAME_DIGIMON_CURLING[] = "Ｄｉｇｉｍｏｎ　Ｃｕｒｌｉｎｇ　";
+
+char STR_MAP_NAME_TOY_MANSION[] = "Ｔｏｙ　Ｍａｎｓｉｏｎ";
+
+char STR_MAP_NAME_COSTUME_HOUSE[] = "Ｃｏｓｔｕｍｅ　ｈｏｕｓｅ";
+
+char STR_MAP_NAME_ROBOT_HOUSE[] = "Ｒｏｂｏｔ　Ｈｏｕｓｅ";
+
+char STR_MAP_NAME_MANSION_DOT_BASEMENT[] = "Ｍａｎｓｉｏｎ　Ｂａｓｅｍｅｎｔ";
+
+char STR_MAP_NAME_BACK_DIMENSION[] = "Ｂａｃｋ　Ｄｉｍｅｎｓｉｏｎ";
+
+char STR_MAP_NAME_KUNEMONS_BED[] = "Ｋｕｎｅｍｏｎ’ｓ　Ｂｅｄ";
+
+char STR_MAP_NAME_AMIDA_FOREST[] = "Ａｍｉｄａ　Ｆｏｒｅｓｔ";
+
+#define STR_MAP_NAME_FILE_CITY STR_MAP_NAME_ENTRANCE_TO_FILE_CITY
+#define STR_MAP_NAME_MANSION_2ND_FLOOR STR_MAP_NAME_MANSION_BASEMENT
+#define STR_MAP_NAME_MANSION_ATTIC STR_MAP_NAME_MANSION_BASEMENT
+#elif !VERSION_IS(US)
 char STR_MAP_NAME_NATIVE_FOREST[] = "迷わずの森";
 
 char STR_MAP_NAME_COELA_POINT[] = "シーラ岬";
@@ -693,7 +829,7 @@ char *MAP_NAME_PTR[70] = {
 	STR_MAP_NAME_ROBOT_HOUSE,
 	STR_MAP_NAME_MANSION_2ND_FLOOR,
 	STR_MAP_NAME_MANSION_ATTIC,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	STR_MAP_NAME_MANSION_DOT_BASEMENT,
 #else
 	STR_MAP_NAME_MANSION_BASEMENT,
@@ -3263,7 +3399,7 @@ static void *map_sbss_order[] = {
 	&MERAMON_SHAKE_WIDTH,
 	&MERAMON_SHAKE_HEIGHT,
 	&MERAMON_SHAKE_BACKUP_OFFSET_Y,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	&MERAMON_SHAKE_DATA,
 	&MERAMON_SHAKE_FRAME_COUNT,
 #else
@@ -5830,7 +5966,7 @@ void renderMapName(mapId)
 	int32_t length;
 
 	length = strlen(MAP_NAME_PTR[MAP_ENTRIES[mapId].loadingName]);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	renderString(0, -12 - (length / 2) * 6, -6, (length / 2) * 12, 12, 0,
 		     0, 0, 0);
 #else
@@ -6408,7 +6544,7 @@ int32_t processSomeArenaArrays(int32_t count, int32_t t, int32_t *keys,
 		lo--;
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	dx = keys[lo + 1] - keys[lo];
 	dt = t - keys[lo];
 

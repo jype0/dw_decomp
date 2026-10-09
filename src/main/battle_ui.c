@@ -71,7 +71,7 @@ extern uint8_t GAME_STATE;
 extern uint8_t CURRENT_SCREEN;
 
 int8_t STAT_GAIN_ENEMY_FACTORS[4] = { 10, 12, 16, 0 };
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 /* Money obtained */
 char BITS_LABEL[] = "取得金";
 char STR_BRACES[] = "｛｝";
@@ -278,7 +278,7 @@ void createBitsBox(void)
 	createAnimatedUIBox(1, 0, 2, &finalPos, &startPos, tickBitBox, (RenderFunction)renderBitBox);
 
 	drawString(BITS_LABEL, 0, 72);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	drawString(STR_BRACES, 0x9c, 0xf0);
 #endif
 }
@@ -315,7 +315,7 @@ void handleBattleEndBox(void)
 		}
 
 		if (PARTNER_PARA.condition & 0x20) {
-			BTL_appendInjuredText(DIGIMON_DATA[ENTITY_TABLE[1]->type].name);
+			BTL_appendInjuredText(DIGIMON_NAME(ENTITY_TABLE[1]->type));
 		}
 	}
 
@@ -467,7 +467,7 @@ void renderFinalBalance(int32_t layer)
 	renderString(0,
 		     UI_BOX_DATA[2].finalPos.x + 10,
 		     UI_BOX_DATA[2].finalPos.y + 10,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		     36, 12, 0, 84, 6 - layer, 0);
 #else
 		     36, 12, 0, 72, 6 - layer, 0);
@@ -508,7 +508,7 @@ void createPostBattleStatsBox(void)
 		}
 
 		if (i == 3) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			drawString(STR_SHOJIKIN, 0, 84);
 #endif
 			drawString(MAIN_D_80124C54, 0, 240);

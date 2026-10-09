@@ -33,7 +33,7 @@ extern int8_t IMMORTAL_HOUR;
 extern int16_t EVOLUTION_TARGET;
 extern uint8_t HAS_USED_EVOITEM;
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char MAIN_D_801225A0[] = "は病気になってしまった！";
 #else
 char MAIN_D_801225A0[] = "is Sick!";
@@ -336,7 +336,7 @@ void handleWildPoop(void);
 void handleEatingPoop(void);
 void tickSicknessMechanics(void);
 void tickDeathCondition(void);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void skipHours(int16_t hours);
 #else
 void skipHours(int32_t hours);
@@ -1394,7 +1394,7 @@ void tickTirednessMechanics(void)
 	}
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 #define ITEM_EVOLUTION_TARGET(item) EVOLUTION_ITEM_TARGET[(item) - 0x47]
 #else
 #define ITEM_EVOLUTION_TARGET(item) (&ITEM_CLUT_DATA[0x39])[item]
@@ -1703,7 +1703,7 @@ void handleToilet(void)
 {
 	PARTNER_PARA.happiness += 2;
 	PARTNER_PARA.discipline += 2;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	PARTNER_PARA.poopLevel = RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopTimer;
 #else
 	PARTNER_PARA.poopLevel =
@@ -1732,7 +1732,7 @@ void handleWildPoop(void)
 	PARTNER_PARA.careMistakes += 1;
 	PARTNER_PARA.happiness -= 10;
 	PARTNER_PARA.discipline -= 5;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	PARTNER_PARA.poopLevel = RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].poopTimer;
 #else
 	PARTNER_PARA.poopLevel =
@@ -1915,7 +1915,7 @@ void tickDeathCondition(void)
 	callScriptSection(0, 0x4de, 0);
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void skipHours(int16_t hours)
 {
 	PARTNER_PARA.evoTimer += hours;

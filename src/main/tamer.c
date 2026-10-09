@@ -31,7 +31,7 @@
 #include <dw/utils.h>
 #include <dw/version.h>
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char MAIN_D_801341FC[] = "「あっ！だ！」";
 char MAIN_D_80122D68[] = "「でも、持ち物がいっぱいで持てないや。」";
 char MAIN_D_80122D80[] = "「ちぇっ！　カラッポだ」";
@@ -58,13 +58,13 @@ static void *tamer_data_order[] = {
 	MAIN_D_80122D94,
 	MAIN_D_80122D80,
 	MAIN_D_80122D68,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	MAIN_D_801341FC,
 #endif
 };
 
 RECT ITEM_PICKUP_TEXT_AREA = {0, 12, 256, 200};
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 char MAIN_D_801341FC[] = "Woah!";
 #endif
 RECT TAKE_CHEST_TEXT_AREA = {0, 12, 256, 200};
@@ -798,16 +798,16 @@ void checkPendingAwards(void)
 
 void renderItemPickupTextbox(int32_t instanceId)
 {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	int32_t halfLength;
 
 	renderString(0xf, -0x7d, 0x2d, 0x48, 0xc, 0, 0xc, 5, 0);
 #endif
 	if (TAKE_CHEST_STATE == 0) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		renderString(0, -0x7d, 0x39, 0x30, 0xc, 0, 0x24, 5, 0);
 		renderString(0xf, -0x4d, 0x39, 0x60, 0xc, 0, 0x18, 5, 0);
-		halfLength = strlen(ITEM_PARA[TAKE_CHEST_ITEM].name) / 2;
+		halfLength = strlen(ITEM_NAME(TAKE_CHEST_ITEM)) / 2;
 		renderString(0, halfLength * 12 - 0x4d, 0x39, 0x24, 0xc, 0x30, 0x24, 5, 0);
 #else
 		renderString(0, 0xffffff83, 0x39, 0x5a, 0xc, 0, 0x24, 5, 0);
@@ -1405,8 +1405,8 @@ void tamerTickPickupItem(void)
 		startAnimation(ENTITY_TABLE[0], 0xc);
 		unsetCameraFollowPlayer();
 		clearTextSubArea(&textRect);
-		drawString(DIGIMON_DATA[0].name, 0, 0xc);
-		drawString(ITEM_PARA[DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type].name,
+		drawString(DIGIMON_NAME(0), 0, 0xc);
+		drawString(ITEM_NAME(DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type),
 		           0, 0x18);
 		drawString(MAIN_D_801341FC, 0, 0x24);
 		TAKE_CHEST_STATE = 0;
@@ -1492,9 +1492,9 @@ void tamerTickTakeChest(void)
 		entityLookAtLocation(ENTITY_TABLE[0],
 				     &CHEST_ARRAY[INTERACTED_CHEST].location);
 		clearTextSubArea(&textRect);
-		drawString(DIGIMON_DATA[0].name, 0, 0xc);
+		drawString(DIGIMON_NAME(0), 0, 0xc);
 		if (CHEST_ARRAY[INTERACTED_CHEST].isTaken == 0) {
-			drawString(ITEM_PARA[CHEST_ARRAY[INTERACTED_CHEST].item].name,
+			drawString(ITEM_NAME(CHEST_ARRAY[INTERACTED_CHEST].item),
 			           0, 0x18);
 			drawString(MAIN_D_801341FC, 0, 0x24);
 			TAKE_CHEST_STATE = 0;

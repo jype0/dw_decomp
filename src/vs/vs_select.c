@@ -42,7 +42,7 @@ typedef struct {
 	uint8_t y;
 } VsUISprite;
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern VsSelectDigimonData VS__SELECT_DIGIMON_DATA[2];
 #else
 VsSelectDigimonData VS__SELECT_DIGIMON_DATA[2];
@@ -137,7 +137,11 @@ char VS__PATH_STDDAT_TAISEN_F_TIM[] = "\\STDDAT\\TAISEN_F.TIM";
 
 char VS__PATH_STDDAT_TIME_TIM[] = "\\STDDAT\\TIME.TIM";
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char VS__STR_PRESS_START[] = "Ｐｒｅｓｓ　ＳＴＡＲＴ";
+
+char VS__STR_TO_BEGIN[] = "ｔｏ　ｂｅｇｉｎ．";
+#elif !VERSION_IS(US)
 char VS__STR_PRESS_START[] = "スタートボタンで";
 
 char VS__STR_TO_BEGIN[] = "決定して下さい。";
@@ -783,7 +787,7 @@ void VS__renderSelectDigimonPlayer(id)
 			}
 			setUVDataPolyFT4(prim, (VS_FONT_GLYPHS[glyph] % 15) * 8, (VS_FONT_GLYPHS[glyph] / 15) * 8, 8, 8);
 			setPosDataPolyFT4(prim, (baseX + VS__NAME_POS_X[i]) + j * 8, y + VS__NAME_POS_Y[i], 8, 8);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 #endif
 		}
@@ -840,7 +844,7 @@ void VS__renderSelectDigimonPlayer(id)
 					                  (k < 5) ? ((baseX + panel->x) + 1) + k * 8
 					                          : ((baseX + panel->x) + 1) + (k - 5) * 8,
 					                  posY, 8, height);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 					AddPrim(ACTIVE_ORDERING_TABLE->org + 10, prim++);
 #endif
 				}

@@ -128,7 +128,10 @@ static void *vs_scene_functions[] = {
 	VS_resetMatchState,
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char VS_STR_LOSE[] = "ＬＯＳＥ";
+char VS_STR_WIN[] = "ＷＩＮ";
+#elif !VERSION_IS(US)
 char VS_STR_WIN[] = "ＷＩＮ";
 char VS_STR_LOSE[] = "ＬＯＳＥ";
 #else
@@ -1341,7 +1344,7 @@ void VS_renderFighterNamePlate(int16_t side)
 			} else {
 				setPosDataPolyFT4(prim, side * 0x9a - 0x5f + n * 8, i * 20 - 0x35, 8, 8);
 			}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			AddPrim(ACTIVE_ORDERING_TABLE->org + 0x1e, prim++);
 #endif
 		}

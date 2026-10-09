@@ -157,7 +157,7 @@ void getModelTile(VECTOR *pos, int16_t *outTileX, int16_t *outTileY)
 	}
 }
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void setImpassableSquare(x, y, radius)
 int16_t x;
 int16_t y;
@@ -166,14 +166,14 @@ int32_t radius;
 void setImpassableSquare(int32_t x, int32_t y, int32_t radius)
 #endif
 {
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	int32_t originalRadius;
 	int32_t originalY;
 #endif
 	int32_t tileX;
 	int32_t tileY;
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	for (tileY = y - radius; tileY < y + radius; tileY++) {
 		for (tileX = x - radius; tileX < x + radius; tileX++) {
 #else

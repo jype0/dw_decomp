@@ -235,7 +235,10 @@ KarSpawnX KAR_D_8005AB98 = { { 0x000002c1, 0x000000eb, 0xffffff15 } };
 
 char KAR_D_8005ABA4[20] = "\\ETCDAT\\KARRING.TMD";
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char KAR_STR_START_GAME[] = "Ｓｔａｒｔ　Ｇａｍｅ";
+char KAR_STR_EXPLAIN_GAME[] = "Ｅｘｐｌａｉｎ　ｇａｍｅ";
+#elif !VERSION_IS(US)
 char KAR_STR_START_GAME[] = "ゲームをはじめる";
 char KAR_STR_EXPLAIN_GAME[] = "説明を聞く？";
 #else
@@ -245,7 +248,7 @@ char KAR_D_8005ABB8[] = "Start GameExplain Game";
 KarWeightTbl MAIN_D_80134A08 = { { 30, 25, 35, 30 } };
 RECT MAIN_D_80134A10 = { -130, 42, 262, 59 };
 RECT MAIN_D_80134A18 = { 75, -5, 10, 10 };
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 KarStrPair MAIN_D_80134A20 = { { KAR_STR_START_GAME, KAR_STR_EXPLAIN_GAME } };
 #else
 KarStrPair MAIN_D_80134A20 = { { KAR_D_8005ABB8, NULL } };
@@ -253,7 +256,7 @@ KarStrPair MAIN_D_80134A20 = { { KAR_D_8005ABB8, NULL } };
 RECT MAIN_D_80134A28 = { -130, 42, 262, 59 };
 RECT MAIN_D_80134A30 = { 0, 0, 10, 10 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char KAR_STR_EMPTY[] = "";
 char KAR_STR_PENGUINMON[] = "ペンモン";
 char KAR_PENGUINMON_LINE_1[] = "「まず、カーリングダマのタイプを";
@@ -500,7 +503,7 @@ KarOffTbl KAR_D_8005B04C = {
 	},
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char KAR_STR_METALMAMEMON[] = "メタルマメモン";
 char KAR_METALMAMEMON_LINE_1[] = "「そうだな。まずはカーリングダマの";
 char KAR_METALMAMEMON_LINE_2[] = "　タイプを選ぶ。」";
@@ -1643,7 +1646,7 @@ void KAR_checkStonesStopped(void)
 
 void KAR_updateCollisions(void)
 {
-#if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if !VERSION_IS(JP) && !VERSION_IS(US)
 	int32_t a;
 	KarStone *stone;
 	int32_t i;
@@ -2350,7 +2353,7 @@ int8_t KAR_tickYesNoPrompt(void)
 				MAIN_D_80135250 = (MAIN_D_80135250 == 3) ? 4 : 3;
 				playSound(0, 2);
 			}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 			renderString(0, UI_BOX_DATA[0].finalPos.x + 6, UI_BOX_DATA[0].finalPos.y + 6, 0xfc, 0x1a, 0, 0xdc, 6, 1);
 			renderSelectionCursor(finalPos.x + 6, finalPos.y + 7 + ((MAIN_D_80135250 - 3) * 13), 0x80, 0xd, 6);
 #else
@@ -2729,13 +2732,13 @@ int32_t KAR_chooseOpponentShot(void)
 int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 {
 	KarStrTbl strs;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	KarStrPair highlights;
 #endif
 	KarOffTbl offs;
 
 	strs = KAR_D_8005AF58;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	highlights = KAR_PENGUINMON_HIGHLIGHTS;
 #endif
 	offs = KAR_D_8005B04C;
@@ -2746,7 +2749,7 @@ int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 	}
 
 	drawString(strs.text[offs.start[idx] + n], 0, (n * 13) + 1);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if ((idx == 1) && (n == 7)) {
 		setTextColor(10);
 		drawString(highlights.text[0], 0, (n * 13) + 1);
@@ -2763,13 +2766,13 @@ int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 int32_t KAR_drawHintPageMetalMamemon(int32_t idx, int8_t n)
 {
 	KarStrTbl strs;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	KarStrPair highlights;
 #endif
 	KarOffTbl offs;
 
 	strs = KAR_D_8005B318;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	highlights = KAR_METALMAMEMON_HIGHLIGHTS;
 #endif
 	offs = KAR_D_8005B40C;
@@ -2780,7 +2783,7 @@ int32_t KAR_drawHintPageMetalMamemon(int32_t idx, int8_t n)
 	}
 
 	drawString(strs.text[offs.start[idx] + n], 0, (n * 13) + 1);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if ((idx == 1) && (n == 7)) {
 		setTextColor(10);
 		drawString(highlights.text[0], 0, (n * 13) + 1);

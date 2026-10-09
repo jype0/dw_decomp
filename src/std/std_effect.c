@@ -1015,7 +1015,7 @@ EfeAuraType STD_AURA_PROJECTILE_TYPES[129] = {
 };
 // clang-format on
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 VECTOR STD_AURA_PROJECTILE_SCALE = { 0x00001000, 0x00001000, 0x00001000, 0x00000000 };
 #endif
 
@@ -6052,7 +6052,7 @@ void STD_tickAuraProjectile(int32_t id)
 void STD_renderAuraProjectile(int32_t i)
 {
 	MATRIX m;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	VECTOR scale;
 #endif
 	SVECTOR a;
@@ -6064,7 +6064,7 @@ void STD_renderAuraProjectile(int32_t i)
 
 	aura = &STD_FLAT_BULLET_PTR[i];
 	prim = (POLY_FT4 *)GsGetWorkBase();
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	scale = STD_AURA_PROJECTILE_SCALE;
 #endif
 	RotMatrix(&aura->rotation, &m);

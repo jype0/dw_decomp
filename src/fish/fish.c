@@ -77,7 +77,7 @@ extern char FISH_MSG_BE_CALM[];
 extern char FISH_MSG_HOOK_LOST[];
 extern char FISH_MSG_STUCK_LINE1[];
 extern char FISH_MSG_STUCK_LINE2[];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern char FISH_MSG_BAG_FULL[];
 #else
 extern char FISH_MSG_BAG_FULL_LINE1[];
@@ -350,7 +350,7 @@ uint8_t MAIN_D_801349B8[6] = { 34, 36, 34, 35, 37, 35 };
 SVECTOR MAIN_D_801349C0 = { 1024, 1024, 0, 0 };
 SVECTOR MAIN_D_801349C8 = { 1, 19, -48, 0 };
 SVECTOR MAIN_D_801349D0 = { 0 };
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 char MAIN_D_801349D8[] = "Hooked!";
 #endif
 int32_t FISHING_MAP_COUNT = 2;
@@ -509,7 +509,7 @@ SVECTOR FISH_D_8007A5BC[5] = {
 
 char FISH_PATH_ROD_MODEL[16] = "\\ETCDAT\\SAO.TMD";
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char FISH_MSG_TOOK_BAIT[] = "エサを取られてしまった…";
 
 char FISH_MSG_TOO_LATE[] = "残念、おそすぎた…";
@@ -1300,7 +1300,7 @@ void FISH_drawBaitMenuRow(int32_t row)
 				setRECT(&rect, i * 0x60, (row % menu->visibleRows) * 12, 0x60, 0xc);
 				area = rect;
 				clearTextSubArea(&area);
-				drawString(ITEM_PARA[item].name, rect.x, rect.y);
+				drawString(ITEM_NAME(item), rect.x, rect.y);
 				DrawSync(0);
 			}
 		}
@@ -3101,7 +3101,7 @@ Fish *FISH_findFishToBite(Fish *pool, VECTOR *loc, int32_t depth)
 	int32_t i;
 	int32_t chance;
 	int32_t dist;
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	int32_t rowOff;
 #endif
 
@@ -3109,7 +3109,7 @@ Fish *FISH_findFishToBite(Fish *pool, VECTOR *loc, int32_t depth)
 		return NULL;
 	}
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	for (i = 0; i < 0x21U; i++) {
 		f = &pool[i];
 #else
@@ -3140,7 +3140,7 @@ Fish *FISH_findFishToBite(Fish *pool, VECTOR *loc, int32_t depth)
 			}
 			chance = 0;
 			if ((depth >= 0x26) && (depth < 0x47)) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 				chance = (FISH_BITE_CHANCE + (depth - 0x26) * 6)[f->kind];
 #else
 				chance = (FISH_BITE_CHANCE + rowOff)[f->kind];
@@ -3765,7 +3765,7 @@ void FISH_tickRod(FishingRod *rod)
 	MATRIX m3;
 	int32_t newRecord;
 	uint8_t r;
-#if !VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(US)
 	int32_t metres;
 	int32_t centimetres;
 	int32_t t;
@@ -3992,7 +3992,7 @@ splash:
 	                      &FISH_SCRATCH->y) == 0) {
 		goto cast;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if (FISH_isScreenPointVisible(FISH_SCRATCH->x, FISH_SCRATCH->y) == 0) {
 		goto cast;
 	}
@@ -4071,7 +4071,7 @@ releasedPath:
 		startAnimation(&TAMER_ENTITY.entity, 0x1f);
 	}
 	if (rod->itemTaken == 0) {
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		f = FISH_findFishToBite(FISHING_DATA_PTR->fishPool.items,
 		                        &FISHING_DATA_PTR->swimmer.pos, rod->bait);
 #else
@@ -4123,7 +4123,7 @@ stateA:
 		                 &FISHING_DATA_PTR->swimmer.pos);
 		goto splash;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & CONFIRM_BUTTON) {
 #else
 	j = POLLED_INPUT_PREVIOUS;
@@ -4148,7 +4148,7 @@ stateA:
 		                 &FISHING_DATA_PTR->swimmer.pos);
 		goto beginTension;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & CANCEL_BUTTON) == 0) {
 #else
 	if ((p & CANCEL_BUTTON) == 0) {
@@ -4185,7 +4185,7 @@ stateB:
 		lv2.vx = 0;
 		lv2.vy = 0;
 		lv2.vz = (lv2.vz * 200) / 100;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 		lv2.vz -= FISH_remapClamped(FISHING_DATA_PTR->hooked.fish.size, 0x32, 0x12c, 1, 0xa);
 #else
 		w = FISHING_DATA_PTR->hooked.fish.size;
@@ -4217,7 +4217,7 @@ stateB:
 	    (FISHING_DATA_PTR->mapData->isWater(FISH_SCRATCH->x, FISH_SCRATCH->y) == 0)) {
 		goto landed;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if (FISH_isWithinCastRange(&FISHING_DATA_PTR->swimmer.pos, FISHING_DATA_PTR->hooked.fish.size)) {
 #else
 	t = FISHING_DATA_PTR->hooked.fish.size;
@@ -4278,14 +4278,14 @@ stateD:
 		goto tick;
 	}
 	newRecord = 0;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	FISH_showBaitSprite(NULL, rod->bait);
 #else
 	j = rod->bait;
 	FISH_showBaitSprite(NULL, j);
 #endif
 	FISH_moveBaitToRodTip(0);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if (FISHING_DATA_PTR->hooked.fish.size >= 0xc8) {
 		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_GREAT);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0x18],
@@ -4332,12 +4332,12 @@ stateD:
 	PARTNER_PARA.fishCaught++;
 	playSound(8, 8);
 	if (giveItem(rod->bait, 1) == 0) {
-		FISH_showTextBox(ITEM_PARA[rod->bait].name,
+		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISHING_DATA_PTR->messageBuffer,
 		                 FISH_MSG_GOT_ONE, FISH_MSG_LET_IT_GO,
 		                 &FISHING_DATA_PTR->item.pos);
 	} else {
-		FISH_showTextBox(ITEM_PARA[rod->bait].name,
+		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISHING_DATA_PTR->messageBuffer,
 		                 FISH_MSG_GOT_ONE, 0,
 		                 &FISHING_DATA_PTR->item.pos);
@@ -4412,17 +4412,17 @@ state44C:
 	FISH_moveBaitToRodTip(0);
 	playSound(8, 8);
 	if (giveItem(rod->bait, 1) == 0) {
-#if VERSION_REGION_IS(NTSCJ)
-		FISH_showTextBox(ITEM_PARA[rod->bait].name,
+#if !VERSION_IS(US)
+		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISH_MSG_IT_GOT_STUCK, FISH_MSG_BAG_FULL, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 #else
-		FISH_showTextBox(ITEM_PARA[rod->bait].name,
+		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISH_MSG_BAG_FULL_LINE1, FISH_MSG_BAG_FULL_LINE2, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 #endif
 	} else {
-		FISH_showTextBox(ITEM_PARA[rod->bait].name,
+		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISH_MSG_IT_GOT_STUCK, 0, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 	}

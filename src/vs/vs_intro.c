@@ -23,7 +23,7 @@
 extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern CameraChase VS_INTRO_CAMERA_CHASE;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 extern int16_t VS__INTRO_STATS_DATA[6];
 #else
 int16_t VS__INTRO_STATS_DATA[6];
@@ -218,7 +218,7 @@ void VS__addIntroText(entity, id)
 		break;
 	}
 
-	len = strlen(DIGIMON_DATA[entity->type].name) / 2;
+	len = strlen(DIGIMON_NAME(entity->type)) / 2;
 	if (entity->type == 0x4e || entity->type == 0x3c) {
 		len = 10;
 	}
@@ -290,7 +290,7 @@ void VS__renderIntroStatBar(int32_t stat, int32_t value)
 	       value * 100 / VS__STAT_BAR_LIMITS[stat] - 50, stat * 16 - 26,
 	       -50, stat * 16 - 18,
 	       value * 100 / VS__STAT_BAR_LIMITS[stat] - 50, stat * 16 - 18);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
 
@@ -324,7 +324,7 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 	}
 
 	setXYWH(prim, x, y, size, size);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
 
@@ -333,7 +333,7 @@ void VS__renderIntroNameChar(int16_t x, int16_t y, int16_t size,
 
 // clang-format off
 void VS__runIntro(stage)
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	int16_t stage;
 #else
 	int32_t stage;
@@ -518,7 +518,7 @@ void VS__tickIntroName(int32_t id)
 
 	++VS__INTRO_DATA_FRAME_COUNT;
 
-	len = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
+	len = strlen(DIGIMON_NAME(ENTITY_TABLE[id]->type)) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
 		len = 10;
 	}
@@ -549,7 +549,7 @@ void VS__renderIntroName(id)
 	int16_t size;
 	uint8_t character;
 
-	charCount = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
+	charCount = strlen(DIGIMON_NAME(ENTITY_TABLE[id]->type)) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
 		charCount = 10;
 	}

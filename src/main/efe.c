@@ -1026,7 +1026,7 @@ void renderParticleFlash(ParticleFlashData *params)
 	int32_t cellW;
 	int32_t cellH;
 	int32_t uStep;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	uint8_t w1;
 	uint8_t h1;
 #else

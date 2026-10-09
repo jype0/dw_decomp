@@ -563,7 +563,9 @@ uint8_t STD_BRAIN_TO_COMMAND_MAP[5] = { 2, 3, 4, 5, 6 };
 uint8_t STD_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t STD_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
 uint8_t STD_YOUR_CALL_WIDE_PRIO[4] = { 10, 5, 0, 0 };
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char STD_STR_COMMAND_RUN[] = "Ｒｕｎ";
+#elif !VERSION_IS(US)
 char STD_STR_COMMAND_RUN[] = "にげる";
 #else
 char STD_STR_COMMAND_RUN[] = "Run";
@@ -1288,7 +1290,14 @@ StdSrcA598 STD_BRACKET_PATHS[8] = {
 /* Damage */
 char STD_STR_DAMEEJI[] = "ダメージ";
 
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char STD_STR_COMMAND_ATTACK[] = "Ａｔｔａｃｋ";
+char STD_STR_COMMAND_AUTO[] = "Ａｕｔｏ";
+char STD_STR_COMMAND_MODERATE[] = "Ｍｏｄｅｒａｔｅ";
+char STD_STR_COMMAND_DISTANCE[] = "Ｄｉｓｔａｎｃｅ";
+char STD_STR_COMMAND_DEFENSIVE[] = "Ｄｅｆｅｎｓｉｖｅ";
+char STD_STR_COMMAND_CHANGE[] = "Ｃｈａｎｇｅ　ｔａｒｇｅｔ";
+#elif !VERSION_IS(US)
 char STD_STR_COMMAND_ATTACK[] = "おもいっきり";
 char STD_STR_COMMAND_AUTO[] = "おまかせ";
 char STD_STR_COMMAND_MODERATE[] = "ほどほど";
@@ -1465,7 +1474,7 @@ void STD_addIntroText(entity, id)
 		break;
 	}
 
-	len = strlen(DIGIMON_DATA[entity->type].name) / 2;
+	len = strlen(DIGIMON_NAME(entity->type)) / 2;
 	if (entity->type == 0x4e || entity->type == 0x3c) {
 		len = 10;
 	}
@@ -1671,7 +1680,7 @@ void STD_renderIntroNameChar(int16_t x, int16_t y, int16_t size, uint8_t charact
 	}
 
 	setXYWH(prim, x, y, size, size);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + 3, prim++);
 #endif
 
@@ -1681,7 +1690,7 @@ void STD_renderIntroNameChar(int16_t x, int16_t y, int16_t size, uint8_t charact
 void STD_runIntro(int16_t which)
 {
 	int32_t dist;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	int16_t id;
 #else
 	int32_t id;
@@ -1702,7 +1711,7 @@ void STD_runIntro(int16_t which)
 	STD_placePlayer2(which);
 	STD_drawStatLabelText();
 	STD_startCameraChase(ENTITY_TABLE[1], dist, 0);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	id = STD_getEntityIndex(ENTITY_TABLE[1]);
 #else
 	idn = STD_getEntityIndex(ENTITY_TABLE[1]);
@@ -1734,7 +1743,7 @@ void STD_runIntro(int16_t which)
 	STD_LOADING_VAB_ID = loadSB();
 
 	STD_startCameraChase(STD_OPPONENT_ENTITY, -dist, 1);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	id = STD_getEntityIndex(STD_OPPONENT_ENTITY);
 #else
 	idn = STD_getEntityIndex(STD_OPPONENT_ENTITY);
@@ -1862,7 +1871,7 @@ void STD_tickIntroName(int32_t id)
 
 	++STD_INTRO_DATA_FRAME_COUNT;
 
-	len = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
+	len = strlen(DIGIMON_NAME(ENTITY_TABLE[id]->type)) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
 		len = 10;
 	}
@@ -1893,7 +1902,7 @@ void STD_renderIntroName(id)
 	int16_t size;
 	uint8_t character;
 
-	charCount = strlen(DIGIMON_DATA[ENTITY_TABLE[id]->type].name) / 2;
+	charCount = strlen(DIGIMON_NAME(ENTITY_TABLE[id]->type)) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
 		charCount = 10;
 	}
@@ -2518,7 +2527,7 @@ void STD_tickCameraIntro(void)
 	int16_t *p;
 
 	p = &STD_D_8007B9BC[6];
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	if ((p[0] >= 0x1e) && (p[0] < 0x3c)) {
 #else
 	if ((STD_D_8007B9BC[6] >= 0x1e) && (p[0] < 0x3c)) {
@@ -2983,7 +2992,7 @@ void STD_drawBracket(void)
 	int16_t shift;
 
 	for (i = 0; i < 8; i++) {
-		len = strlen(DIGIMON_DATA[PARTICIPANT_TYPES[i]].name) / 2;
+		len = strlen(DIGIMON_NAME(PARTICIPANT_TYPES[i])) / 2;
 		if (PARTICIPANT_TYPES[i] == 0x4e || PARTICIPANT_TYPES[i] == 0x3c) {
 			len = 10;
 		}
@@ -3072,7 +3081,7 @@ void STD_renderBracketDigimon(int16_t id)
 	uint8_t tile;
 	uint8_t u;
 	uint8_t v;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	uint8_t w;
 	uint8_t h;
 #else
@@ -3100,7 +3109,7 @@ void STD_renderBracketDigimon(int16_t id)
 	if (v == 0xf0) {
 		h = 0xf;
 	}
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	setUVDataPolyFT4(prim, u, v, w, h);
 	setPosDataPolyFT4(prim, STD_BRACKET_SLOTS[id].unk0, STD_BRACKET_SLOTS[id].unk2, w, h);
 #else
@@ -3163,7 +3172,7 @@ void STD_renderBracketGlyph(int16_t x, int16_t y, uint8_t n, int32_t layer)
 	v = (n / 8) * 8;
 	setUVDataPolyFT4(prim, u, v, (u != 0xf8) ? 8 : 7, (v != 0xf8) ? 8 : 7);
 	setPosDataPolyFT4(prim, x, y, 8, 8);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	AddPrim(ACTIVE_ORDERING_TABLE->org + layer, prim++);
 #endif
 	GsSetWorkBase((PACKET *)prim);
@@ -3872,7 +3881,7 @@ void STD_initializeCombat(Entity *entity, Entity *other)
 	STD_FINISHER_AURA_ID = -1;
 	COMBAT_DATA_PTR->player.remainingChargeupTime[0] = -1;
 	STD_SAVED_CHARGE_MODE = PARTNER_ENTITY.digimonEntity.stats.current.chargeMode;
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	FINISHING_ENTITY = NULL;
 	STD_FINISHER_TIMER = 0;
 	FLEE_DISABLED[1] = 0;
@@ -4433,7 +4442,7 @@ void STD_addTimeoutWindow(void)
 	drawString(STD_STR_ATAETA, 6, 0);
 	drawString(STD_STR_DAMEEJI, 0, 12);
 	drawString(PARTNER_ENTITY.name, (120 - strlen(PARTNER_ENTITY.name) * 6) / 2, 24);
-	drawString(DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type].name, (120 - strlen(DIGIMON_DATA[ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type].name) * 6) / 2, 36);
+	drawString(DIGIMON_NAME(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type), (120 - strlen(DIGIMON_NAME(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type)) * 6) / 2, 36);
 	DrawSync(0);
 	removeObject(0x1a2, 0);
 	stats = &((DigimonEntity *)ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]])->stats;

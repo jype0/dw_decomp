@@ -55,7 +55,7 @@ void STD_initializeCamera(void);
 void STD_renderArena1(void);
 void STD_freeArenaModel(void);
 void STD_removeOverworldObjects(void);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void STD_addArenaRenderer(int32_t which);
 #else
 void STD_addArenaRenderer(int16_t which);
@@ -644,7 +644,7 @@ void STD_freeArenaModel(void)
 }
 
 // clang-format off
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void STD_addArenaRenderer(which)
 	uint8_t which;
 #else

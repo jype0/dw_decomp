@@ -160,7 +160,15 @@ uint8_t VS_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t VS_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
 uint8_t VS_YOUR_CALL_WIDE_PRIO[4] = { 10, 5, 0, 0 };
 int8_t MAIN_D_80134AC8[2] = { -1, -1 };
-#if VERSION_REGION_IS(NTSCJ)
+#if VERSION_IS(EU)
+char VS_STR_COMMAND_ATTACK[] = "Ａｔｔａｃｋ";
+char VS_STR_COMMAND_AUTO[] = "Ａｕｔｏ";
+char VS_STR_COMMAND_MODERATE[] = "Ｍｏｄｅｒａｔｅ";
+char VS_STR_COMMAND_DISTANCE[] = "Ｄｉｓｔａｎｃｅ";
+char VS_STR_COMMAND_DEFENSIVE[] = "Ｄｅｆｅｎｓｉｖｅ";
+char VS_STR_COMMAND_CHANGE[] = "Ｃｈａｎｇｅ　ｔａｒｇｅｔ";
+char VS_STR_COMMAND_RUN[] = "Ｒｕｎ";
+#elif !VERSION_IS(US)
 char VS_STR_COMMAND_RUN[] = "にげる";
 char VS_STR_COMMAND_ATTACK[] = "おもいっきり";
 char VS_STR_COMMAND_AUTO[] = "おまかせ";

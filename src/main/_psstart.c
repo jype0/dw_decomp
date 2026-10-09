@@ -56,7 +56,7 @@ asm void __start(void)
 	move	t8,t0
 	move	t9,t0
 	
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	move	s1,t0
 #else
 	move	s0,t0

@@ -128,7 +128,7 @@ static void *evl_functions[] = {
 	EVL_scaleBaseStats,
 	EVL_applyEvolution,
 	EVL_initEvoSequence,
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 	EVL_renderSparkStreak,
 	EVL_tickSpark,
 #else

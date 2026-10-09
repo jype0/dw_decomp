@@ -10,7 +10,7 @@ void initializeFontCLUT(void);
 void clearTextArea(void);
 void clearTextSubArea(RECT *rect);
 void setTextColor(int32_t color);
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 void drawGlyph(uint16_t codepoint, uint16_t x, uint16_t y);
 #else
 int32_t drawGlyph(/* uint16_t codepoint, uint16_t x, uint16_t y */);

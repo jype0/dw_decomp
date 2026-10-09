@@ -71,7 +71,7 @@ int8_t TRN_TRAINING_ANIM_IDS[67][2] = {
 	{ 0x2e, 0xa }, { 0x2e, 0xa }, { 0x2e, 0xa },
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char TRN_D_8008F0D8[] = "「思いっきり！」";
 
 char TRN_D_8008F0F0[] = "「ほどほど！」";
@@ -122,7 +122,7 @@ int8_t TRN_D_8008F184[8][3] = {
 	{ 0xa, 0x5, 0x0 },
 };
 
-#if VERSION_REGION_IS(NTSCJ)
+#if !VERSION_IS(US)
 char TRN_D_8008F19C[] = "をおぼえた。";
 #else
 char TRN_D_8008F19C[] = "was mastered!";
