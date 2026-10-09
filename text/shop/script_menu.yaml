@@ -4,15 +4,15 @@ NAMING:
       ja: おぬしの名前
       en_us: NULL
       en_eu: Your name
-    STR_DIGIMON_NAME:
+    STR_DIGIMONS_NAME:
       ja: デジモンの名前
       en_us: NULL
       en_eu: Digimon's name
-    STR_NAME_ENTRY:
+    STR_NAME:
       ja: 名前入力
       en_us: NULL
       en_eu: "Name  "
-    STR_HIRAGANA_KATAKANA_ALPHANUMERIC_BACK_DONE:
+    STR_BACK_OK:
       ja: かなカナ英数戻る終了
       en_us: NULL
       en_eu: "BackOK  "

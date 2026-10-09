@@ -48,7 +48,7 @@ BGM_TRACK_NAMES:
       ja: よろず屋のテーマ
       en_us: Everything Shop Theme
       en_eu: Item Shop
-    STR_BGM_TRACK_OGREMON_THEMENO_3:
+    STR_BGM_TRACK_OGREMON_THEME_NO_3:
       ja: オーガモンのテーマ３
       en_us: Ogremon ThemeNo. 3
       en_eu: Ogremon 3
@@ -88,7 +88,7 @@ BGM_TRACK_NAMES:
       ja: 古代境時急域のテーマ
       en_us: The Ancient Region of Dino Speedy Time Zone Theme
       en_eu: Speedy Time Zone
-    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_NIGHT_THEME:
+    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_SPEEDY_TIME_ZONE_NIGHT:
       ja: 古代境時急域・夜のテーマ
       en_us: The Ancient Region of Dino Speedy Time Zone Night Theme
       en_eu: Speedy Time Zone 2
@@ -96,7 +96,7 @@ BGM_TRACK_NAMES:
       ja: 古代境時静域のテーマ
       en_us: The Ancient Region of Dino Glacial Time Zone Theme
       en_eu: Glacical Zone
-    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_NIGHT_THEME:
+    STR_BGM_TRACK_THE_ANCIENT_REGION_OF_DINO_GLACIAL_TIME_ZONE_NIGHT:
       ja: 古代境時静域・夜のテーマ
       en_us: The Ancient Region of Dino Glacial Time Zone Night Theme
       en_eu: Glacical Zone 2
@@ -180,7 +180,7 @@ BGM_TRACK_NAMES:
       ja: ひみつの海岸洞のテーマ
       en_us: Secret Beach Cave Theme
       en_eu: Secret Beach Cave
-    STR_BGM_TRACK_MT_INFINITY_THEME:
+    STR_BGM_TRACK_MT_INFINITY:
       ja: ムゲンマウンテンのテーマ
       en_us: NULL
       en_eu: Mt. Infinity
@@ -244,7 +244,7 @@ BGM_TRACK_NAMES:
       ja: ノーマルバトルのテーマ
       en_us: Normal Battle Theme
       en_eu: Normal Battle
-    STR_BGM_TRACK_NORMAL_BATTLE__THEME_NO2:
+    STR_BGM_TRACK_NORMAL_BATTLE_THEME_NO_2:
       ja: ノーマルバトルのテーマ２
       en_us: Normal Battle  Theme No.2
       en_eu: Normal Battel 2

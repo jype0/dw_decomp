@@ -1,11 +1,11 @@
 TRIAL_END:
   strings:
-    STR_KONKAI_HA_KOKOMADE_DESU:
+    STR_THATS_ALL_FOR_THIS_TIME:
       ja: NULL
       ja@jp_bombom: 今回はここまでです。
       ja@jp_trial: 今回はここまでです。
       en_us: NULL
-    STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI:
+    STR_PLEASE_ENJOY_THE_REST_IN_THE:
       ja: NULL
       ja@jp_bombom: このつづきは、製品でお楽しみ下さい。
       ja@jp_trial: このつづきは、製品でお楽しみ下さい。

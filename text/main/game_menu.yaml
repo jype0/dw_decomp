@@ -135,7 +135,7 @@ MENU_LABELS:
     STR_MEDAL_DESCRIPTION_WIN_IN_ALL:
       ja: 全てで優勝
       en_us: Win in all
-    STR_MEDAL_DESCRIPTION_WIN_IN_ALL_VER_1_2_3_4_0:
+    STR_MEDAL_DESCRIPTION_WIN_IN_ALL_VER_1_2:
       ja: ＶＥＲ　１、２、３、４、０、全てで優勝
       en_us: Win in all VER 1 2 3 4 0
     STR_MEDAL_DESCRIPTION_FIRE_GRAPPLE_THUNDER_WIND:
@@ -144,7 +144,7 @@ MENU_LABELS:
     STR_MEDAL_DESCRIPTION_NATURE_COOL_METALLIC_FILTH_CUP:
       ja: ネイチャー、クール、メタリック、ダーティ杯
       en_us: Nature Cool Metallic Filth Cup
-    STR_MEDAL_DESCRIPTION_WIN_IN_ALL_2:
+    STR_MEDAL_DESCRIPTION_TYPE_CUP_WIN_IN_ALL:
       ja: の全てで優勝
       en_us: NULL
     STR_MEDAL_DESCRIPTION_DINO_WING_ANIMAL_HUMAN_CUP:

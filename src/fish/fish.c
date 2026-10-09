@@ -62,29 +62,29 @@ extern int32_t FISH_D_8007A554[];
 extern int16_t FISH_RECORD_SIZE[];
 extern char MAIN_D_80124C54[];
 extern VECTOR FISH_REEL_TARGET;
-extern char FISH_MSG_TOOK_BAIT[];
-extern char FISH_MSG_TOO_LATE[];
-extern char FISH_MSG_GOT_BAIT[];
-extern char FISH_MSG_TOO_FAST[];
-extern char FISH_MSG_STILL_HAVE_BAIT[];
-extern char FISH_MSG_LENGTH_GREAT[];
-extern char FISH_MSG_LENGTH_M_CM[];
-extern char FISH_MSG_LENGTH_CM[];
-extern char FISH_MSG_GOT_ONE[];
-extern char FISH_MSG_LET_IT_GO[];
-extern char FISH_MSG_LINE_CUT[];
-extern char FISH_MSG_WATCH_TENSION[];
-extern char FISH_MSG_BE_CALM[];
-extern char FISH_MSG_HOOK_LOST[];
-extern char FISH_MSG_STUCK_LINE1[];
-extern char FISH_MSG_STUCK_LINE2[];
+extern char FISH_STR_THEY_TOOK_MY_BAIT[];
+extern char FISH_STR_TOO_LATE[];
+extern char FISH_STR_THEY_GOT_MY_BAIT[];
+extern char FISH_STR_TOO_FAST[];
+extern char FISH_STR_BUT_I_STILL_GOT_MY_BAIT[];
+extern char FISH_FMT_GREAT_TOTAL_LENGTH_M_CM[];
+extern char FISH_FMT_TOTAL_LENGTH_M_CM[];
+extern char FISH_FMT_TOTAL_LENGTH_CM[];
+extern char FISH_STR_I_GOT_ONE[];
+extern char FISH_STR_IT_LOOKS_SAD_LET_IT_GO[];
+extern char FISH_STR_MY_LINE_GOT_CUT[];
+extern char FISH_STR_PAY_ATTENTION_TO_TENSION_GAUGE[];
+extern char FISH_STR_AND_BE_MORE_CALM[];
+extern char FISH_STR_MY_HOOK_GOT_LOST[];
+extern char FISH_STR_HUH_I_WONDER_IF_SOMETHING[];
+extern char FISH_STR_GOT_STUCK_IT_GOT_STUCK[];
 #if !VERSION_IS(US)
-extern char FISH_MSG_BAG_FULL[];
+extern char FISH_STR_BUT_MY_BAG_WAS_FULL_AND[];
 #else
-extern char FISH_MSG_BAG_FULL_LINE1[];
-extern char FISH_MSG_BAG_FULL_LINE2[];
+extern char FISH_STR_MY_BAG_WAS_SO_FULL_I[];
+extern char FISH_STR_NOT_CARRY_IT[];
 #endif
-extern char FISH_MSG_IT_GOT_STUCK[];
+extern char FISH_STR_IT_GOT_STUCK[];
 extern int16_t DRAW_OFFSET_LIMIT_Y_MIN;
 extern int16_t DRAW_OFFSET_LIMIT_Y_MAX;
 extern int16_t DRAW_OFFSET_LIMIT_X_MIN;
@@ -4042,7 +4042,7 @@ stateA:
 	FISH_panCameraTo(0x10, &FISHING_DATA_PTR->swimmer.pos, 0x28, 0x1e);
 	if ((FISHING_DATA_PTR->hooked.escaped != 0) ||
 	    (FISHING_DATA_PTR->hooked.fish.active == 0)) {
-		FISH_showTextBox(FISH_MSG_TOOK_BAIT, 0, 0, 0,
+		FISH_showTextBox(FISH_STR_THEY_TOOK_MY_BAIT, 0, 0, 0,
 		                 &FISHING_DATA_PTR->swimmer.pos);
 		goto splash;
 	}
@@ -4057,13 +4057,13 @@ stateA:
 #endif
 		if (FISH_tryStrike() == 0) {
 			if (rod->itemTaken != 0) {
-				FISH_showTextBox(FISH_MSG_TOO_LATE,
-				                 FISH_MSG_GOT_BAIT, 0, 0,
+				FISH_showTextBox(FISH_STR_TOO_LATE,
+				                 FISH_STR_THEY_GOT_MY_BAIT, 0, 0,
 				                 &FISHING_DATA_PTR->swimmer.pos);
 				goto splash;
 			}
-			FISH_showTextBox(FISH_MSG_TOO_FAST,
-			                 FISH_MSG_STILL_HAVE_BAIT, 0, 0,
+			FISH_showTextBox(FISH_STR_TOO_FAST,
+			                 FISH_STR_BUT_I_STILL_GOT_MY_BAIT, 0, 0,
 			                 &FISHING_DATA_PTR->swimmer.pos);
 			goto splash;
 		}
@@ -4210,7 +4210,7 @@ stateD:
 	FISH_moveBaitToRodTip(0);
 #if !VERSION_IS(US)
 	if (FISHING_DATA_PTR->hooked.fish.size >= 0xc8) {
-		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_GREAT);
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_GREAT_TOTAL_LENGTH_M_CM);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0x18],
 		       &MAIN_D_80124C54[(FISHING_DATA_PTR->hooked.fish.size % 10) * 2], 2);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0x16],
@@ -4218,7 +4218,7 @@ stateD:
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0xc],
 		       &MAIN_D_80124C54[((FISHING_DATA_PTR->hooked.fish.size / 100) % 10) * 2], 2);
 	} else if (FISHING_DATA_PTR->hooked.fish.size >= 0x64) {
-		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_M_CM);
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_TOTAL_LENGTH_M_CM);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0x10],
 		       &MAIN_D_80124C54[(FISHING_DATA_PTR->hooked.fish.size % 10) * 2], 2);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0xe],
@@ -4226,7 +4226,7 @@ stateD:
 		memcpy(&FISHING_DATA_PTR->messageBuffer[4],
 		       &MAIN_D_80124C54[((FISHING_DATA_PTR->hooked.fish.size / 100) % 10) * 2], 2);
 	} else {
-		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_CM);
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_TOTAL_LENGTH_CM);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[8],
 		       &MAIN_D_80124C54[(FISHING_DATA_PTR->hooked.fish.size % 10) * 2], 2);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[6],
@@ -4236,16 +4236,16 @@ stateD:
 	if (FISHING_DATA_PTR->hooked.fish.size >= 0xc8) {
 		metres = FISHING_DATA_PTR->hooked.fish.size / 200;
 		centimetres = FISHING_DATA_PTR->hooked.fish.size % 200;
-		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_GREAT, metres,
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_GREAT_TOTAL_LENGTH_M_CM, metres,
 		        centimetres);
 	} else if (FISHING_DATA_PTR->hooked.fish.size >= 0x64) {
 		metres = FISHING_DATA_PTR->hooked.fish.size / 100;
 		centimetres = FISHING_DATA_PTR->hooked.fish.size % 100;
-		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_M_CM, metres,
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_TOTAL_LENGTH_M_CM, metres,
 		        centimetres);
 	} else {
 		centimetres = FISHING_DATA_PTR->hooked.fish.size % 100;
-		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_MSG_LENGTH_CM, centimetres);
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_TOTAL_LENGTH_CM, centimetres);
 	}
 #endif
 	if (FISHING_DATA_PTR->hooked.fish.size > FISH_RECORD_SIZE[FISHING_DATA_PTR->hooked.fish.kind]) {
@@ -4257,12 +4257,12 @@ stateD:
 	if (giveItem(rod->bait, 1) == 0) {
 		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISHING_DATA_PTR->messageBuffer,
-		                 FISH_MSG_GOT_ONE, FISH_MSG_LET_IT_GO,
+		                 FISH_STR_I_GOT_ONE, FISH_STR_IT_LOOKS_SAD_LET_IT_GO,
 		                 &FISHING_DATA_PTR->item.pos);
 	} else {
 		FISH_showTextBox(ITEM_NAME(rod->bait),
 		                 FISHING_DATA_PTR->messageBuffer,
-		                 FISH_MSG_GOT_ONE, 0,
+		                 FISH_STR_I_GOT_ONE, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 	}
 
@@ -4301,8 +4301,8 @@ state4B0:
 		goto tick;
 	}
 	playSound(8, 0xa);
-	FISH_showTextBox(FISH_MSG_LINE_CUT, FISH_MSG_WATCH_TENSION,
-	                 FISH_MSG_BE_CALM, 0, &FISHING_DATA_PTR->swimmer.pos);
+	FISH_showTextBox(FISH_STR_MY_LINE_GOT_CUT, FISH_STR_PAY_ATTENTION_TO_TENSION_GAUGE,
+	                 FISH_STR_AND_BE_MORE_CALM, 0, &FISHING_DATA_PTR->swimmer.pos);
 	goto toStateE;
 
 fishEscaped:
@@ -4318,13 +4318,13 @@ state4B1:
 		goto tick;
 	}
 	playSound(8, 0xa);
-	FISH_showTextBox(FISH_MSG_HOOK_LOST, FISH_MSG_WATCH_TENSION,
-	                 FISH_MSG_BE_CALM, 0, &FISHING_DATA_PTR->swimmer.pos);
+	FISH_showTextBox(FISH_STR_MY_HOOK_GOT_LOST, FISH_STR_PAY_ATTENTION_TO_TENSION_GAUGE,
+	                 FISH_STR_AND_BE_MORE_CALM, 0, &FISHING_DATA_PTR->swimmer.pos);
 	goto splash;
 
 stolen:
 	playSound(8, 9);
-	FISH_showTextBox(FISH_MSG_STUCK_LINE1, FISH_MSG_STUCK_LINE2, 0, 0,
+	FISH_showTextBox(FISH_STR_HUH_I_WONDER_IF_SOMETHING, FISH_STR_GOT_STUCK_IT_GOT_STUCK, 0, 0,
 	                 &FISHING_DATA_PTR->swimmer.pos);
 	rod->fishingState = 0x44c;
 	rod->framesOnState = -1;
@@ -4337,16 +4337,16 @@ state44C:
 	if (giveItem(rod->bait, 1) == 0) {
 #if !VERSION_IS(US)
 		FISH_showTextBox(ITEM_NAME(rod->bait),
-		                 FISH_MSG_IT_GOT_STUCK, FISH_MSG_BAG_FULL, 0,
+		                 FISH_STR_IT_GOT_STUCK, FISH_STR_BUT_MY_BAG_WAS_FULL_AND, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 #else
 		FISH_showTextBox(ITEM_NAME(rod->bait),
-		                 FISH_MSG_BAG_FULL_LINE1, FISH_MSG_BAG_FULL_LINE2, 0,
+		                 FISH_STR_MY_BAG_WAS_SO_FULL_I, FISH_STR_NOT_CARRY_IT, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 #endif
 	} else {
 		FISH_showTextBox(ITEM_NAME(rod->bait),
-		                 FISH_MSG_IT_GOT_STUCK, 0, 0,
+		                 FISH_STR_IT_GOT_STUCK, 0, 0,
 		                 &FISHING_DATA_PTR->item.pos);
 	}
 	goto finish;

@@ -271,7 +271,7 @@ void createBitsBox(void)
 	setRECT(&startPos, screenPos.vx - 5, screenPos.vy - 5, 10, 10);
 	createAnimatedUIBox(1, 0, 2, &finalPos, &startPos, tickBitBox, (RenderFunction)renderBitBox);
 
-	drawString(BITS_LABEL, 0, 72);
+	drawString(STR_BITS, 0, 72);
 #if !VERSION_IS(US)
 	drawString(STR_BRACES, 0x9c, 0xf0);
 #endif
@@ -503,7 +503,7 @@ void createPostBattleStatsBox(void)
 
 		if (i == 3) {
 #if !VERSION_IS(US)
-			drawString(STR_SHOJIKIN, 0, 84);
+			drawString(STR_MONEY_HELD, 0, 84);
 #endif
 			drawString(MAIN_D_80124C54, 0, 240);
 		}

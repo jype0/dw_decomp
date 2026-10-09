@@ -19,7 +19,7 @@ extern int32_t POLLED_INPUT;
 extern int32_t POLLED_INPUT_PREVIOUS;
 extern int8_t GAME_STATE;
 extern TamerEntity TAMER_ENTITY;
-extern char *ITEM_DESC_PTR[];
+extern char *ITEM_DESCS[];
 
 void addGameMenu(void);
 void closeTriangleMenu(void);
@@ -654,9 +654,9 @@ void createSortOption(void)
 	int16_t y;
 
 	if ((UI_BOX_DATA[2].state == 1) && (UI_BOX_DATA[3].state == 0)) {
-		drawString(SORT_LABEL_BATTLE, 0xc0, 0x30);
-		drawString(SORT_LABEL_RAISE, 0xc0, 0x3c);
-		drawString(SORT_LABEL_BASIC, 0xc0, 0x48);
+		drawString(STR_BATTLE, 0xc0, 0x30);
+		drawString(STR_RAISE, 0xc0, 0x3c);
+		drawString(STR_BASIC, 0xc0, 0x48);
 		SORT_SELECTED = 0;
 		setRECT(&r1, UI_BOX_DATA[2].finalPos.x + UI_BOX_DATA[2].finalPos.w, UI_BOX_DATA[2].finalPos.y, 0x48, 0x42);
 		x = UI_BOX_DATA[2].finalPos.x + 9;
@@ -725,9 +725,9 @@ void createDropItemConfirmBox(void)
 	int16_t y;
 
 	if ((UI_BOX_DATA[2].state == 1) && (UI_BOX_DATA[3].state == 0)) {
-		drawString(CONFIRM_LABEL_YES, 0xc5, 0x54);
-		drawString(CONFIRM_LABEL_NO, 0xc0, 0x60);
-		drawString(CONFIRM_PROMPT, 0, 0xc0);
+		drawString(STR_YES, 0xc5, 0x54);
+		drawString(STR_NO, 0xc0, 0x60);
+		drawString(STR_ARE_YOU_SURE, 0, 0xc0);
 		DROP_ITEM_SELECTED_OPTION = 1;
 		setRECT(&r1, -0x40, -0x26, 0x80, 0x35);
 		x = UI_BOX_DATA[2].finalPos.x + 9;
@@ -784,12 +784,12 @@ void updateItemDescription(void)
 #if VERSION_IS(EU)
 	setRECT(&area, 0, 0xb4, 0xfc, 0x18);
 	clearTextSubArea(&area);
-	drawString(ITEM_DESC_PTR[INVENTORY.types.array[INVENTORY_POINTER] * 2], 0, 0xb4);
-	drawString(ITEM_DESC_PTR[INVENTORY.types.array[INVENTORY_POINTER] * 2 + 1], 0, 0xc0);
+	drawString(ITEM_DESCS[INVENTORY.types.array[INVENTORY_POINTER] * 2], 0, 0xb4);
+	drawString(ITEM_DESCS[INVENTORY.types.array[INVENTORY_POINTER] * 2 + 1], 0, 0xc0);
 #else
 	setRECT(&area, 0, 0xb4, 0xfc, 0xc);
 	clearTextSubArea(&area);
-	drawString(ITEM_DESC_PTR[INVENTORY.types.array[INVENTORY_POINTER]], 0, 0xb4);
+	drawString(ITEM_DESCS[INVENTORY.types.array[INVENTORY_POINTER]], 0, 0xb4);
 #endif
 	DrawSync(0);
 }

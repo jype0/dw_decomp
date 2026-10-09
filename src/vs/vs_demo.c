@@ -97,9 +97,9 @@ char VS_PATH_DEMO_STDDAT_16TAISEN_TIM[] = "\\STDDAT\\16TAISEN.TIM";
 
 char VS_PATH_DEMO_STDDAT_TAISEN_F_TIM[] = "\\STDDAT\\TAISEN_F.TIM";
 
-char VS_STR_DEJIMON_1[] = "デジモン１";
+char VS_STR_DIGIMON_1[] = "デジモン１";
 
-char VS_STR_DEJIMON_2[] = "デジモン２";
+char VS_STR_DIGIMON_2[] = "デジモン２";
 
 uint8_t VS_DEMO_MUSIC[3] = { 0x1e, 0x20, 0x1f };
 // clang-format on
@@ -362,8 +362,8 @@ void VS_setupTrialBattle(void)
 	VS_BATTLE_SETUP.battleCount = 3;
 	for (i = 0; i < VS_BATTLE_SETUP.battleCount; i++) {
 		VS_BATTLE_SETUP.fighters[0][i] = VS_BATTLE_SETUP.fighters[1][i] = i;
-		strcpy(VS_DIGIMON_P1_PTR[i].name, VS_STR_DEJIMON_1);
-		strcpy(VS_DIGIMON_P2_PTR[i].name, VS_STR_DEJIMON_2);
+		strcpy(VS_DIGIMON_P1_PTR[i].name, VS_STR_DIGIMON_1);
+		strcpy(VS_DIGIMON_P2_PTR[i].name, VS_STR_DIGIMON_2);
 	}
 	VS_BATTLE_SETUP.stage = randomLimit(3);
 	VS_randomizeTrialDigimonList(VS_DIGIMON_P1_PTR, 3);

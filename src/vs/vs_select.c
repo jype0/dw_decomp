@@ -162,7 +162,7 @@ uint8_t STAT_OFFSETS[12] = {
 };
 
 /* Not equipped */
-char STR_SOUBINASHI[] = "ソウビナシ";
+char STR_NOT_EQUIPPED[] = "ソウビナシ";
 
 VsListPanel MAIN_D_8012F590[12] = {
 	{ 0x0000, 0x01e8, 0x00, 0x00, 0x96, 0xd7, 0x06, 0x00, 0x00 },
@@ -785,7 +785,7 @@ void VS__renderSelectDigimonPlayer(id)
 		fighter = &fighters[st->slotIds[baseIdx + i]];
 		for (j = 0; j < 3; j++) {
 			if (fighter->moves[j] == 0xff) {
-				strcpy(buf, STR_SOUBINASHI);
+				strcpy(buf, STR_NOT_EQUIPPED);
 				text = (uint16_t *)buf;
 			} else {
 				moveId = DIGIMON_DATA[fighter->digimonId].moves[fighter->moves[j] - 0x2e];

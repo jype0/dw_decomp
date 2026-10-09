@@ -1,11 +1,11 @@
 BITS_LABELS:
   strings:
-    BITS_LABEL:
+    STR_BITS:
       ja: 取得金
       en_us: Bits
     STR_BRACES:
       ja: ｛｝
       en_us: NULL
-    STR_SHOJIKIN:
+    STR_MONEY_HELD:
       ja: 所持金
       en_us: NULL

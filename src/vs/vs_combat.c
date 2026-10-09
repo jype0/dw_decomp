@@ -225,14 +225,14 @@ int16_t DIRECTIONS[4] = {
 	0x0000, 0x0400, 0x0800, 0x0c00,
 };
 
-char VS__STR_ATAETA[] = "与えた";
+char VS__STR_DEALT[] = "与えた";
 
 uint8_t VS__COMMANDS[8] = {
 	0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x00,
 };
 
 /* Damage */
-char STR_DAMEEJI[] = "ダメージ";
+char STR_DAMAGE[] = "ダメージ";
 
 #if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int32_t VS_DEMO_SKIPPED;
@@ -1501,8 +1501,8 @@ void VS__addTimeoutWindow(void)
 	fighter2 = &VS_DIGIMON_P2_PTR[VS_BATTLE_SETUP.fighters[1][VS_CURRENT_BATTLE]];
 
 	clearTextArea();
-	drawString(VS__STR_ATAETA, 6, 0);
-	drawString(STR_DAMEEJI, 0, 12);
+	drawString(VS__STR_DEALT, 6, 0);
+	drawString(STR_DAMAGE, 0, 12);
 	drawString(fighter1->name, (120 - (strlen(fighter1->name) * 6)) / 2, 24);
 	drawString(fighter2->name, (120 - (strlen(fighter2->name) * 6)) / 2, 36);
 	DrawSync(0);

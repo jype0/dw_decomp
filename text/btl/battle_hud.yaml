@@ -9,16 +9,16 @@ MESSAGES:
     BTL_STR_DROPPED:
       ja: C1はRC7
       en_us: NULL
-    BTL_STR_MP_BONUS_20:
+    BTL_STR_20:
       ja: ２０
       en_us: 20
-    BTL_STR_MP_BONUS_15:
+    BTL_STR_15:
       ja: １５
       en_us: 15
-    BTL_STR_MP_BONUS_10:
+    BTL_STR_10:
       ja: １０
       en_us: 10
-    BTL_STR_MP_BONUS_5:
+    BTL_STR_5:
       ja: ５
       en_us: 5
     BTL_STR_MP_BONUS_PERCENT:

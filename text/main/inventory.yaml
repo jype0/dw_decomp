@@ -1,24 +1,24 @@
 SORT_LABELS:
   strings:
-    SORT_LABEL_BATTLE:
+    STR_BATTLE:
       ja: 戦闘配置
       en_us: Battle
-    SORT_LABEL_RAISE:
+    STR_RAISE:
       ja: 育成配置
       en_us: Raise
-    SORT_LABEL_BASIC:
+    STR_BASIC:
       ja: 基本配置
       en_us: Basic
 
 CONFIRM_LABELS:
   strings:
-    CONFIRM_PROMPT:
+    STR_ARE_YOU_SURE:
       ja: 本当に捨てますか？
       en_us: Are you sure?
-    CONFIRM_LABEL_YES:
+    STR_YES:
       ja: はい
       en_us: "Yes"
-    CONFIRM_LABEL_NO:
+    STR_NO:
       ja: いいえ
       en_us: "No"
 

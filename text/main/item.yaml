@@ -388,7 +388,7 @@ MOVE_NAMES:
       en_us: Bubble
     - NULL
 
-IS_SICK_SUFFIX:
+STR_IS_SICK:
   ja: は病気になってしまった！
   en_us: " is sick!"
 
@@ -847,7 +847,7 @@ ITEM_NAMES:
       en_us: Metalbanana
       en_eu: Metal Banana
 
-ITEM_DESC_PTR:
+ITEM_DESCS:
   storage: {eu: literal}
   lines: {eu: 2}
   empty: STR_ITEM_DESC_EMPTY
@@ -1031,7 +1031,7 @@ ITEM_DESC_PTR:
       ja: 食べ物。全能力アップ！
       en_us: Boosts all abilities
       en_eu: Increases all abilities
-    - name: STR_ITEM_DESC_BOOSTS_TRAINING_EFFECT_2
+    - name: STR_ITEM_DESC_DIGIPINE_BOOSTS_TRAINING_EFFECT
       ja: 食べ物。しばらくトレーニング効果アップ！
       en_us: Boosts training effect
       en_eu: Boosts Training for a while.
@@ -1045,7 +1045,7 @@ ITEM_DESC_PTR:
       en_eu:
         - Reduces fatigue, increases
         - discipline and happiness!
-    - name: STR_ITEM_DESC_CAN_BE_SOLD_FOR_A_HIGH_PRICE
+    - name: STR_ITEM_DESC_CAN_BE_SOLD_FOR_A_HIGH
       ja: 食べ物。高く売れるぞ！
       en_us: Can be sold for a high price
       en_eu: Can be sold for high price.
@@ -1094,11 +1094,11 @@ ITEM_DESC_PTR:
       ja: 食べ物。ＭＰが２００アップ！
       en_us: Boost MP by +200!
       en_eu: Increases MP by 200!
-    - name: STR_ITEM_DESC_MAKES_DIGIMON_A_BIT_FULL_2
+    - name: STR_ITEM_DESC_DIGIANCHOVY_MAKES_DIGIMON_A_BIT_FULL
       ja: 食べ物。少しおなかがふくれる。
       en_us: Makes Digimon a bit full.
       en_eu: Makes Digimon a bit full
-    - name: STR_ITEM_DESC_MAKES_DIGIMON_QUITE_FULL_2
+    - name: STR_ITEM_DESC_DIGISNAPPER_MAKES_DIGIMON_QUITE_FULL
       ja: 食べ物。そこそこおなかがふくれる。
       en_us: Makes Digimon quite full.
       en_eu: Makes Digimon quite full
@@ -1107,7 +1107,7 @@ ITEM_DESC_PTR:
       en_eu: Makes Digimon very full
     - ja: 食べ物。全能力アップ！
       en_us: Boosts all abilities
-    - name: STR_ITEM_DESC_MAKES_DIGIMON_VERY_FULL_2
+    - name: STR_ITEM_DESC_DIGICATFISH_MAKES_DIGIMON_VERY_FULL
       ja: 食べ物。すごくおなかがふくれる。
       en_us: Makes Digimon very full
     - name: STR_ITEM_DESC_FULL_HP_AND_MP_LIFE_SPAN

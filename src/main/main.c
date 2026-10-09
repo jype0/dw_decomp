@@ -3924,12 +3924,12 @@ int32_t tickTrialEnd(void)
 				HAS_BUTTERFLY = -1;
 			}
 			clearTextArea();
-			drawString(STR_KONKAI_HA_KOKOMADE_DESU, 0, 0xc);
+			drawString(STR_THATS_ALL_FOR_THIS_TIME, 0, 0xc);
 			TRIAL_END_STATE = 1;
 		}
 		break;
 	case 1:
-		drawString(STR_KONO_TSUZUKI_HA_SEIHIN_DE_OTANOSHIMI, 0, 0x18);
+		drawString(STR_PLEASE_ENJOY_THE_REST_IN_THE, 0, 0x18);
 		fadeFromBlack(0x28);
 		TRIAL_END_STATE = 2;
 		break;

@@ -559,7 +559,7 @@ SVECTOR STD_INTRO_CAMERA_STAGE2_ROT = { -227, 1479, 0, 0 };
 SVECTOR MAIN_D_80134868 = { 0 };
 int16_t STD_CARDINAL_ROTATIONS[4] = { 0, 1024, 2048, 3072 };
 /* Dealt */
-char STD_STR_ATAETA[] = "与えた";
+char STD_STR_DEALT[] = "与えた";
 uint8_t STD_BRAIN_TO_COMMAND_MAP[5] = { 2, 3, 4, 5, 6 };
 uint8_t STD_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t STD_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
@@ -1277,7 +1277,7 @@ StdSrcA598 STD_BRACKET_PATHS[8] = {
 };
 
 /* Damage */
-char STD_STR_DAMEEJI[] = "ダメージ";
+char STD_STR_DAMAGE[] = "ダメージ";
 
 COMMANDS_TEXT
 
@@ -4411,8 +4411,8 @@ void STD_addTimeoutWindow(void)
 	Stats *stats;
 
 	clearTextArea();
-	drawString(STD_STR_ATAETA, 6, 0);
-	drawString(STD_STR_DAMEEJI, 0, 12);
+	drawString(STD_STR_DEALT, 6, 0);
+	drawString(STD_STR_DAMAGE, 0, 12);
 	drawString(PARTNER_ENTITY.name, (120 - strlen(PARTNER_ENTITY.name) * 6) / 2, 24);
 	drawString(DIGIMON_NAME(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type), (120 - strlen(DIGIMON_NAME(ENTITY_TABLE[COMBAT_DATA_PTR->player.entityIds[1]]->type)) * 6) / 2, 36);
 	DrawSync(0);

@@ -587,19 +587,19 @@ void BTL_appendMPBonusText(void)
 	old = INITIAL_COMBAT_STATS[0].brains;
 	if (total >= 0x3e7) {
 		if (old < 0x3e7) {
-			strcpy(buf, BTL_STR_MP_BONUS_20);
+			strcpy(buf, BTL_STR_20);
 		}
 	} else if (total >= 0x384) {
 		if (old < 0x384) {
-			strcpy(buf, BTL_STR_MP_BONUS_15);
+			strcpy(buf, BTL_STR_15);
 		}
 	} else if (total >= 0x320) {
 		if (old < 0x320) {
-			strcpy(buf, BTL_STR_MP_BONUS_10);
+			strcpy(buf, BTL_STR_10);
 		}
 	} else {
 		if (old < 0x2bc) {
-			strcpy(buf, BTL_STR_MP_BONUS_5);
+			strcpy(buf, BTL_STR_5);
 		}
 	}
 

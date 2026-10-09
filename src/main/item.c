@@ -68,7 +68,7 @@ CombatData COMBAT_DATA;
 
 // clang-format off
 MOVE_NAMES_STRINGS
-ITEM_DESC_PTR_STRINGS
+ITEM_DESCS_STRINGS
 
 InventoryTable INITIAL_INVENTORY_AMOUNTS = {
 	{
@@ -88,7 +88,7 @@ InventoryTable INITIAL_INVENTORY_TYPES = {
 	},
 };
 
-IS_SICK_SUFFIX_TEXT
+STR_IS_SICK_TEXT
 
 uint8_t TYPE_FACTORS[7][7] = {
 	{ 0x0a, 0x0f, 0x05, 0x14, 0x14, 0x0f, 0x14 },
@@ -1898,7 +1898,7 @@ Item ITEM_PARA[128] = {
 
 ITEM_NAMES_TEXT
 
-ITEM_DESC_PTR_TEXT
+ITEM_DESCS_TEXT
 
 uint8_t ITEM_CLUT_DATA[128] = {
 	0x00, 0x01, 0x12, 0x03, 0x04, 0x08, 0x06, 0x00,
@@ -3048,10 +3048,10 @@ void handleItemSickness(int16_t chance)
 		drawString(PARTNER_ENTITY.name, 0, 0x78);
 		halfLen = strlen(PARTNER_ENTITY.name) / 2;
 		setTextColor(1);
-		drawString(IS_SICK_SUFFIX, halfLen * 12, 0x78);
+		drawString(STR_IS_SICK, halfLen * 12, 0x78);
 #else
 		sprintf(buf, NAME_FORMAT, PARTNER_ENTITY.name);
-		strcat(buf, IS_SICK_SUFFIX);
+		strcat(buf, STR_IS_SICK);
 		drawString(buf, 0, 0x78);
 #endif
 	}
