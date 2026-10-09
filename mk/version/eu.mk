@@ -16,6 +16,7 @@ MAIN_SBSS := \
 MAIN_GEN_SRC := $(MAIN_SBSS)
 
 MAIN_C_SRC := \
+	src/main/aabb.c \
 	src/main/door_mapdata.c \
 	src/main/fade.c \
 	src/main/file.c \

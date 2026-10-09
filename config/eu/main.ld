@@ -23,7 +23,8 @@ SECTIONS
         BUILD_DIR/src/main/math.c.o(.text .text.*);
         KEEP(BUILD_DIR/asm/main/137C4.s.o(.text .text.*));
         BUILD_DIR/src/main/fade.c.o(.text .text.*);
-        KEEP(BUILD_DIR/asm/main/1F518.s.o(.text .text.*));
+        BUILD_DIR/src/main/aabb.c.o(.text .text.*);
+        KEEP(BUILD_DIR/asm/main/1FA64.s.o(.text .text.*));
         BUILD_DIR/src/main/line.c.o(.text .text.*);
         BUILD_DIR/src/main/vecmath.c.o(.text .text.*);
         BUILD_DIR/src/main/rng.c.o(.text .text.*);
@@ -41,6 +42,7 @@ SECTIONS
         KEEP(BUILD_DIR/asm/main/data/main.rodata.s.o(.rodata .rodata.*));
         BUILD_DIR/src/main/vecmath.c.o(.rodata .rodata.*);
         KEEP(BUILD_DIR/asm/main/data/8B5B4.rodata.s.o(.rodata .rodata.*));
+        BUILD_DIR/src/main/aabb.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/door_mapdata.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/fade.c.o(.rodata .rodata.*);
         BUILD_DIR/src/main/file.c.o(.rodata .rodata.*);
