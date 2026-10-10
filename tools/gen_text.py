@@ -20,8 +20,14 @@ __FALLBACKS = {'en_eu': 'en_us'}
 
 def __full_width(text):
     out = ''
+    code = False
     for c in text:
-        if c == ' ':
+        if code or c in '{}':
+            if c in '{}':
+                code = c == '{'
+            else:
+                out += c
+        elif c == ' ':
             out += '　'
         elif c == "'":
             out += '’'
@@ -137,12 +143,22 @@ def __generate(release, blocks, source):
             __fail(where, 'expected a mapping')
 
         if 'strings' in body:
-            __check_keys(body, {'strings'}, where)
+            __check_keys(body, {'strings', 'storage'}, where)
+            storage = __per_release(body.get('storage'), release, 'named',
+                                    where)
+            if storage not in ('named', 'literal'):
+                __fail(where, 'unknown storage {}'.format(storage))
             lines = []
             for symbol, entry in body['strings'].items():
                 where = '{}: {}'.format(source, symbol)
                 __check_keys(entry, (), where)
-                lines += define(symbol, entry, where)
+                if storage == 'named':
+                    lines += define(symbol, entry, where)
+                    continue
+                text = __string(entry, release, where)
+                if text is not None:
+                    header.append('#define {} {}'.format(
+                        symbol, __c_string(text, where)))
             macros[block + '_TEXT'] = lines
             continue
 

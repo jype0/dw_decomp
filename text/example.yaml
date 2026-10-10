@@ -45,6 +45,12 @@ HELP:
       ja: もどる
       en_us: Back
       en_eu: [Go back, NULL]
+MESSAGES:                       # eu: #define READY "..." for code to use
+  storage: {eu: literal}        # as a literal; others: char READY[]
+  strings:
+    READY:
+      ja: じゅんび
+      en_us: Ready
 TITLES:
   storage: {default: embedded, eu: literal}
   macro: TITLE                  # TITLE(FIRST) gives "First", where
