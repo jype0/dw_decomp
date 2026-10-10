@@ -11,6 +11,10 @@ rom:0x0003E198 reloc:MIPS_NONE symbol:NONE
 rom:0x00071FE4 reloc:MIPS_NONE symbol:NONE
 rom:0x00072000 reloc:MIPS_NONE symbol:NONE
 rom:0x000720B4 reloc:MIPS_NONE symbol:NONE
+rom:0x00081A74 reloc:MIPS_NONE symbol:NONE
+rom:0x00081A78 reloc:MIPS_NONE symbol:NONE
+rom:0x00081A88 reloc:MIPS_NONE symbol:NONE
+rom:0x00081A8C reloc:MIPS_NONE symbol:NONE
 rom:0x000A57B4 reloc:MIPS_32 symbol:btl_START
 rom:0x000A57B8 reloc:MIPS_32 symbol:std_START
 rom:0x000A57BC reloc:MIPS_32 symbol:fish_START

@@ -209,7 +209,3 @@ VS_C_SRC := \
 	src/vs/vs_select.c
 
 $(eval $(call overlay,VS,vs))
-
-UNDEFINED_SYMS := $(foreach u,main $(shell echo $(OVERLAY) | tr A-Z a-z), \
-	$(GEN_DIR)/undefined_funcs_auto_$(u).ld \
-	$(GEN_DIR)/undefined_syms_auto_$(u).ld)
