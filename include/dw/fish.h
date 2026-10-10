@@ -7,11 +7,16 @@
 
 #include <dw/model.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 typedef struct {
 	uint8_t item;
 	uint8_t threshold;
 } FishBaitChance;
+
+typedef struct {
+	char *digit[10];
+} FishDigitTable;
 
 typedef struct {
 	uint16_t tpage;
@@ -240,7 +245,11 @@ typedef struct {
 	FishingTension tension;
 	FishingItem item;
 	FishingSwimmer swimmer;
+#if VERSION_IS(EU)
+	char messageBuffer[64];
+#else
 	char messageBuffer[32];
+#endif
 	TMDFileLoadingData rodModel;
 	TMDFileLoadingData seadramonModel;
 	int32_t fishingDisabled;

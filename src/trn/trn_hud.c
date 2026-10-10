@@ -18,7 +18,6 @@ extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
 extern int16_t STATS_GAINS[6];
 extern GsOT *ACTIVE_ORDERING_TABLE;
-extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 
 void renderString(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e, int32_t f, int32_t g, int32_t h, int32_t i);
@@ -33,18 +32,31 @@ int32_t TRN_getTrainingSpotScreenPos(int32_t key, int32_t sub, SVECTOR *out);
 
 static void *trn_hud_functions[] = {
 	TRN_getTrainingSpotScreenPos,
+#if VERSION_IS(EU)
+	TRN_tickSlotSession,
+	TRN_renderSlotSession,
+	TRN_closeUIBox,
+	TRN_createPostTrainingStatsBox,
+	TRN_tickPostTrainingStatsBox,
+	TRN_renderPostTrainingStatsBox,
+#else
 	TRN_renderSlotSession,
 	TRN_tickSlotSession,
 	TRN_closeUIBox,
 	TRN_renderPostTrainingStatsBox,
 	TRN_tickPostTrainingStatsBox,
 	TRN_createPostTrainingStatsBox,
+#endif
 	TRN_applyBaseStats,
 	TRN_saveBaseStats,
 };
 
+#if VERSION_IS(EU)
+static char MAIN_D_80134BC0[] = "Ｂｉｔｓ";
+#else
 /* "所持金" (money held) */
 static char MAIN_D_80134BC0[] = "\x8f\x8a\x8e\x9d\x8b\xe0";
+#endif
 
 int32_t MAIN_D_80135394;
 int8_t MAIN_D_80135398[6];
@@ -53,9 +65,15 @@ int16_t MAIN_D_801353A0[4];
 
 static void *trn_hud_sbss_order[] = {
 	&MAIN_D_801353A0,
+#if VERSION_IS(EU)
+	&MAIN_D_80135394,
+	&MAIN_D_80135398,
+	&MAIN_D_8013539E,
+#else
 	&MAIN_D_8013539E,
 	&MAIN_D_80135398,
 	&MAIN_D_80135394,
+#endif
 };
 
 // clang-format off
@@ -161,8 +179,8 @@ void TRN_createPostTrainingStatsBox(void)
 
 	for (i = 0; i < 4; i++) {
 		if (i < 3) {
-			drawString(&MAIN_D_80124C0C[(i * 2) * 12], 0, (i * 12) * 2);
-			drawString(&MAIN_D_80124C0C[((i * 2) + 1) * 12], 0, ((i * 2) + 1) * 12);
+			drawString(MAIN_D_80124C0C[i * 2], 0, (i * 12) * 2);
+			drawString(MAIN_D_80124C0C[(i * 2) + 1], 0, ((i * 2) + 1) * 12);
 		}
 		if (i == 3) {
 			drawString(MAIN_D_80134BC0, 0, 84);

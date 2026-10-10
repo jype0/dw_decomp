@@ -1,6 +1,7 @@
 #include <libgs.h>
 
 #include <dw/model.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 void tickBuffModel(int32_t instanceId);
@@ -25,8 +26,13 @@ static void *buff_model_functions[] = {
 	initializeBuffModelObject,
 	initializeBuffModel,
 	morphBuffModel,
+#if VERSION_IS(EU)
+	tickBuffModel,
+	renderBuffModel,
+#else
 	renderBuffModel,
 	tickBuffModel,
+#endif
 };
 
 void tickBuffModel(int32_t instanceId)

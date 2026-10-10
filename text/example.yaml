@@ -36,7 +36,7 @@ NAMES:                          # NAMES_TEXT: char *NAMES[] = {...};
 HELP:
   storage: {eu: literal}
   lines: {eu: 2}                # strings per entry; the rest are ""
-  empty: HELP_EMPTY             # "" in literal storage points here
+  empty: HELP_EMPTY             # "" points here
   entries:
     - name: HELP_0
       ja: たすけて
@@ -45,7 +45,14 @@ HELP:
       ja: もどる
       en_us: Back
       en_eu: [Go back, NULL]
-MESSAGES:                       # eu: #define READY "..." for code to use
+TIPS:
+  lines: {eu: 2}
+  entries:
+    - name: [TIP_REST, TIP_OFTEN]  # one name per line
+      ja: やすめ
+      en_us: Rest
+      en_eu: [Rest, often]
+MESSAGES:                      # eu: #define READY "..." for code to use
   storage: {eu: literal}        # as a literal; others: char READY[]
   strings:
     READY:

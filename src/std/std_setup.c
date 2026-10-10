@@ -106,9 +106,15 @@ uint32_t lookupFileSize(char *path);
 
 static void *std_setup_functions[] = {
 	STD_removeArenaRenderer,
+#if VERSION_IS(EU)
+	STD_addArenaRenderer,
+	STD_renderArena0,
+	STD_renderArena1,
+#else
 	STD_renderArena1,
 	STD_renderArena0,
 	STD_addArenaRenderer,
+#endif
 	STD_freeArenaModel,
 	STD_loadArenaAssets,
 	STD_loadArenaTIMToVRAM,
@@ -134,10 +140,17 @@ uint8_t STD_MUSIC;
 
 static void *std_setup_sbss_order[] = {
 	&STD_MUSIC,
+#if VERSION_IS(EU)
+	&STD_OPPONENT_ENTITY,
+	&STD_CAMERA_STATE,
+	&MAIN_D_801350F0,
+	&STD_CHAMPION_SCENE_DONE,
+#else
 	&STD_CHAMPION_SCENE_DONE,
 	&MAIN_D_801350F0,
 	&STD_CAMERA_STATE,
 	&STD_OPPONENT_ENTITY,
+#endif
 	&STD_MATCH_RESULT,
 };
 
@@ -277,7 +290,11 @@ void STD_initializeOpponent(int16_t type, int16_t slot, uint8_t tier)
 	int16_t base;
 
 	base = STD_OPPONENT_BASE_STATS[tier];
+#if VERSION_IS(EU)
+	scriptLoadModel((uint8_t)type);
+#else
 	scriptLoadModel(type);
+#endif
 	ENTITY_TABLE[slot + 2] = (Entity *)&NPC_ENTITIES[slot];
 	initializeDigimonObject(type, slot + 2, STD_tickNPCTournament);
 	switch (DIGIMON_DATA[ENTITY_TABLE[slot + 2]->type].level) {

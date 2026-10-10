@@ -9,6 +9,7 @@
 #include <dw/params.h>
 #include <dw/sound.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 typedef struct {
 	int16_t spawnX[10];
@@ -246,7 +247,11 @@ void tamerTickBattle(instanceId)
 			partner = ENTITY_TABLE[1];
 
 			if (IS_TAMERLESS_BATTLE == 0) {
-				if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & 0x10) != 0) {
+#if VERSION_IS(US)
+				if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & CANCEL_BUTTON) != 0) {
+#else
+				if (((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS) & ALT_BUTTON) != 0) {
+#endif
 					addInventoryUI();
 				}
 			}

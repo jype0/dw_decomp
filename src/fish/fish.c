@@ -70,6 +70,12 @@ extern char FISH_STR_BUT_I_STILL_GOT_MY_BAIT[];
 extern char FISH_FMT_GREAT_TOTAL_LENGTH_M_CM[];
 extern char FISH_FMT_TOTAL_LENGTH_M_CM[];
 extern char FISH_FMT_TOTAL_LENGTH_CM[];
+#if VERSION_IS(EU)
+extern char FISH_STR_METRES[];
+extern char FISH_STR_CM_EXCLAMATION[];
+extern char FISH_STR_M_TOTAL_LENGTH[];
+extern char FISH_STR_CENTIMETRES[];
+#endif
 extern char FISH_STR_I_GOT_ONE[];
 extern char FISH_STR_IT_LOOKS_SAD_LET_IT_GO[];
 extern char FISH_STR_MY_LINE_GOT_CUT[];
@@ -505,6 +511,15 @@ SVECTOR FISH_D_8007A5BC[5] = {
 };
 
 char FISH_PATH_ROD_MODEL[16] = "\\ETCDAT\\SAO.TMD";
+
+#if VERSION_IS(EU)
+DIGITS_TEXT
+
+FishDigitTable FISH_DIGIT_STRINGS = {{
+	FISH_STR_DIGIT_0, FISH_STR_DIGIT_1, FISH_STR_DIGIT_2, FISH_STR_DIGIT_3, FISH_STR_DIGIT_4,
+	FISH_STR_DIGIT_5, FISH_STR_DIGIT_6, FISH_STR_DIGIT_7, FISH_STR_DIGIT_8, FISH_STR_DIGIT_9,
+}};
+#endif
 
 MESSAGES_TEXT
 
@@ -3688,6 +3703,9 @@ void FISH_tickRod(FishingRod *rod)
 	MATRIX m3;
 	int32_t newRecord;
 	uint8_t r;
+#if VERSION_IS(EU)
+	FishDigitTable digits;
+#endif
 #if VERSION_IS(US)
 	int32_t metres;
 	int32_t centimetres;
@@ -4201,6 +4219,9 @@ stateD:
 		goto tick;
 	}
 	newRecord = 0;
+#if VERSION_IS(EU)
+	digits = FISH_DIGIT_STRINGS;
+#endif
 #if !VERSION_IS(US)
 	FISH_showBaitSprite(NULL, rod->bait);
 #else
@@ -4208,7 +4229,28 @@ stateD:
 	FISH_showBaitSprite(NULL, j);
 #endif
 	FISH_moveBaitToRodTip(0);
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	if (FISHING_DATA_PTR->hooked.fish.size >= 0xc8) {
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_GREAT_TOTAL_LENGTH_M_CM);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[(FISHING_DATA_PTR->hooked.fish.size / 100) % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, FISH_STR_METRES);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[(FISHING_DATA_PTR->hooked.fish.size / 10) % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[FISHING_DATA_PTR->hooked.fish.size % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, FISH_STR_CM_EXCLAMATION);
+	} else if (FISHING_DATA_PTR->hooked.fish.size >= 0x64) {
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_TOTAL_LENGTH_M_CM);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[(FISHING_DATA_PTR->hooked.fish.size / 100) % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, FISH_STR_M_TOTAL_LENGTH);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[(FISHING_DATA_PTR->hooked.fish.size / 10) % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[FISHING_DATA_PTR->hooked.fish.size % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, FISH_STR_CENTIMETRES);
+	} else {
+		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_TOTAL_LENGTH_CM);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[(FISHING_DATA_PTR->hooked.fish.size / 10) % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, digits.digit[FISHING_DATA_PTR->hooked.fish.size % 10]);
+		strcat(FISHING_DATA_PTR->messageBuffer, FISH_STR_CENTIMETRES);
+	}
+#elif !VERSION_IS(US)
 	if (FISHING_DATA_PTR->hooked.fish.size >= 0xc8) {
 		sprintf(FISHING_DATA_PTR->messageBuffer, FISH_FMT_GREAT_TOTAL_LENGTH_M_CM);
 		memcpy(&FISHING_DATA_PTR->messageBuffer[0x18],

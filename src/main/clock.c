@@ -4,6 +4,7 @@
 #include <dw/params.h>
 #include <dw/pstat.h>
 #include <dw/script.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 void renderRectPolyFT4(int32_t posX, int32_t posY,
@@ -50,8 +51,13 @@ int16_t CLOCK_OFFSET_X;
 int8_t IS_GAMETIME_RUNNING;
 
 static void *clock_sbss_order[] = {
+#if VERSION_IS(EU)
+	&CLOCK_OFFSET_X,
+	&IS_GAMETIME_RUNNING,
+#else
 	&IS_GAMETIME_RUNNING,
 	&CLOCK_OFFSET_X,
+#endif
 	&SUBFRAME_COUNT,
 };
 
@@ -62,10 +68,17 @@ static void *clock_text_order[] = {
 	stopGameTime,
 	updateMinuteHand,
 	advanceToTime,
+#if VERSION_IS(EU)
+	addClock,
+	tickGameClock,
+	renderGameClock,
+	tickPlaytime,
+#else
 	tickPlaytime,
 	renderGameClock,
 	tickGameClock,
 	addClock,
+#endif
 	initializeClockData
 };
 

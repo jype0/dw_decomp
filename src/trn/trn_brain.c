@@ -11,6 +11,7 @@
 #include <dw/trn.h>
 #include <dw/types.h>
 #include <dw/ui.h>
+#include <dw/version.h>
 
 extern uint32_t POLLED_INPUT;
 extern int32_t TRAINING_COMPLETE;
@@ -22,8 +23,13 @@ int32_t tickEntityWalkTo();
 void TRN_tickBrainsTraining(int32_t instanceId);
 
 static void *trn_brain_functions[] = {
+#if VERSION_IS(EU)
+	TRN_setupBrainsTraining,
+	TRN_tickBrainsTraining,
+#else
 	TRN_tickBrainsTraining,
 	TRN_setupBrainsTraining,
+#endif
 };
 
 GARBAGE_ARRAY(TRN_setupBrainsTraining, TRN_D_8008F368, 8, 16);

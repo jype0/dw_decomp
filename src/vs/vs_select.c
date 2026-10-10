@@ -77,6 +77,17 @@ int32_t VS__tickSelectMap(void);
 void VS__renderSelectMapBox(int32_t id);
 
 static void *vs_select_functions[] = {
+#if VERSION_IS(EU)
+	VS__tickSelectMap,
+	VS__renderSelectMapBox,
+	VS__tickSelectMode,
+	VS__tickSelectBox,
+	VS__renderSelectModeBox,
+	VS__isKeyPressedByAnyPlayer,
+	VS__renderPressStartToBeginBox,
+	VS__tickSelectDigimonPlayer,
+	VS__renderSelectDigimonPlayer,
+#else
 	VS__renderSelectMapBox,
 	VS__tickSelectMap,
 	VS__renderSelectModeBox,
@@ -86,6 +97,7 @@ static void *vs_select_functions[] = {
 	VS__renderPressStartToBeginBox,
 	VS__renderSelectDigimonPlayer,
 	VS__tickSelectDigimonPlayer,
+#endif
 	VS__initialize,
 	VS__setPolyFT4White,
 	VS__removePressStartToBeginBox,
@@ -122,11 +134,19 @@ uint8_t VS__BATTLE_COUNTS[4] = {
 	0x01, 0x03, 0x05, 0x00,
 };
 
+#if VERSION_IS(EU)
+char VS__PATH_ETCDAT_ETCTIM_BIN[] = "\\ETCDAT\\ETCTIM_E.BIN";
+#else
 char VS__PATH_ETCDAT_ETCTIM_BIN[] = "\\ETCDAT\\ETCTIM.BIN";
+#endif
 
 char VS__PATH_ETCNA_TITLE2_TIM[] = "\\ETCNA\\TITLE2.TIM";
 
+#if VERSION_IS(EU)
+char VS__PATH_ETCDAT_SYSTEM_W_TIM[] = "\\ETCDAT\\SYSTEM_E.TIM";
+#else
 char VS__PATH_ETCDAT_SYSTEM_W_TIM[] = "\\ETCDAT\\SYSTEM_W.TIM";
+#endif
 
 char VS__PATH_STDDAT_TAISEN1_TIM[20] = "\\STDDAT\\TAISEN1.TIM";
 
@@ -161,8 +181,12 @@ uint8_t STAT_OFFSETS[12] = {
 	0x62, 0x6c, 0x7a, 0x84,
 };
 
+#if VERSION_IS(EU)
+char STR_NOT_EQUIPPED[] = "Ｎｏ　Ｅｑｕｉｐｍｅｎｔ";
+#else
 /* Not equipped */
 char STR_NOT_EQUIPPED[] = "ソウビナシ";
+#endif
 
 VsListPanel MAIN_D_8012F590[12] = {
 	{ 0x0000, 0x01e8, 0x00, 0x00, 0x96, 0xd7, 0x06, 0x00, 0x00 },
@@ -210,7 +234,12 @@ VsUISprite MAP_SELECT_SPRITES[8] = {
 // clang-format on
 
 int16_t VS__MODE_STATE;
+#if VERSION_IS(EU)
+/* EU has two unused bytes */
+int8_t VS__PRESS_START_BOX_CREATED[4];
+#else
 int8_t VS__PRESS_START_BOX_CREATED[2];
+#endif
 int32_t VS__BOTH_SELECTED;
 uint8_t VS__SELECT_BOX_DATA_SELECTION_COUNT;
 uint8_t VS__SELECT_BOX_DATA_SELECTION;
@@ -219,6 +248,15 @@ uint8_t VS__SELECT_BOX_DATA_HAS_SELECTED;
 uint8_t VS__SELECT_BOX_DATA_TIMER;
 
 static void *vs_select_sbss_order[] = {
+#if VERSION_IS(EU)
+	&VS__SELECT_BOX_DATA_SELECTION_COUNT,
+	&VS__SELECT_BOX_DATA_ANIM_FRAME,
+	&VS__SELECT_BOX_DATA_TIMER,
+	&VS__SELECT_BOX_DATA_SELECTION,
+	&VS__SELECT_BOX_DATA_HAS_SELECTED,
+	VS__PRESS_START_BOX_CREATED,
+	&VS__BOTH_SELECTED,
+#else
 	&VS__SELECT_BOX_DATA_TIMER,
 	&VS__SELECT_BOX_DATA_HAS_SELECTED,
 	&VS__SELECT_BOX_DATA_ANIM_FRAME,
@@ -226,6 +264,7 @@ static void *vs_select_sbss_order[] = {
 	&VS__SELECT_BOX_DATA_SELECTION_COUNT,
 	&VS__BOTH_SELECTED,
 	VS__PRESS_START_BOX_CREATED,
+#endif
 	&VS__MODE_STATE,
 };
 
@@ -375,7 +414,11 @@ void VS__createPressStartToBeginBox(int16_t id)
 		drawString(VS__STR_PRESS_START, 0, 0);
 		drawString(VS__STR_TO_BEGIN, 0, 12);
 
+#if VERSION_IS(EU)
+		setRECT(&rect, (id == 0) ? -136 : 18, 32, 116, 36);
+#else
 		setRECT(&rect, (id == 0) ? -132 : 22, 32, 108, 36);
+#endif
 		createStaticUIBox(id, 0, 2, &rect, 0, VS__renderPressStartToBeginBox);
 
 		VS__PRESS_START_BOX_CREATED[id] = 1;
@@ -571,8 +614,13 @@ void VS__tickSelectDigimonPlayer(id)
 			++state->selectionState;
 			state->unk9 = 1;
 			VS__removePressStartToBeginBox(id);
+#if VERSION_IS(EU)
+		} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) || (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x80) ||
+		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x20) || (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x10) ||
+#else
 		} else if ((POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x20) || (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x80) ||
 		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x10) || (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x40) ||
+#endif
 		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x8000) ||
 		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x2000) ||
 		           (POLLED_INPUT & ~POLLED_INPUT_PREVIOUS & 0x1000) ||
@@ -768,6 +816,11 @@ void VS__renderSelectDigimonPlayer(id)
 			prim->clut = GetClut(0x30, 0x1e8);
 			ch = *text++;
 			ch = ((ch & 0xff) << 8) + ((ch & 0xff00) >> 8);
+#if VERSION_IS(EU)
+			if (ch >= 0x8281) {
+				ch -= 0x21;
+			}
+#endif
 			for (k = 0; k < 216; k++) {
 				if (ch == VS_FONT_CHARS[k]) {
 					glyph = k;
@@ -804,6 +857,11 @@ void VS__renderSelectDigimonPlayer(id)
 					prim->tpage = 7;
 					prim->clut = GetClut(0x30, 0x1e8);
 					ch = ((ch & 0xff) << 8) + ((ch & 0xff00) >> 8);
+#if VERSION_IS(EU)
+					if (ch >= 0x8281) {
+						ch -= 0x21;
+					}
+#endif
 					glyph = 0;
 					for (l = 0; l < 216; l++) {
 						if (ch == VS_FONT_CHARS[l]) {
@@ -894,7 +952,11 @@ void VS__renderPressStartToBeginBox(int32_t id)
 	renderString(0,
 	             UI_BOX_DATA[id].finalPos.x + 6,
 	             UI_BOX_DATA[id].finalPos.y + 6,
+#if VERSION_IS(EU)
+	             104, 24, 0, 0, 6 - id, 1);
+#else
 	             96, 24, 0, 0, 6 - id, 1);
+#endif
 }
 
 int32_t VS__isKeyPressedByAnyPlayer(uint32_t buttons)

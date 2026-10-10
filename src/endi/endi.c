@@ -40,8 +40,13 @@ RGB8 ENDI_PARTICLE_COLOR = { 0x80, 0x80, 0x80 };
 
 static void *const endi_functions[] = {
 	ENDI_tickEnding,
+#if VERSION_IS(EU)
+	ENDI_tickEndingParticles,
+	ENDI_renderParticles,
+#else
 	ENDI_renderParticles,
 	ENDI_tickEndingParticles,
+#endif
 	ENDI_clearParticles,
 	ENDI_stopParticles,
 	ENDI_setParticleBase,
@@ -50,11 +55,17 @@ static void *const endi_functions[] = {
 	ENDI_spawnParticle,
 	ENDI_fadeClut,
 	ENDI_startParticles,
+#if !VERSION_IS(EU)
 	ENDI_renderEndingObject,
 	ENDI_updateEnding,
+#endif
 	ENDI_setModelSemiTrans,
 	ENDI_setClutStp,
 	ENDI_downloadClut,
+#if VERSION_IS(EU)
+	ENDI_updateEnding,
+	ENDI_renderEndingObject,
+#endif
 };
 
 static void ENDI_setClutStp(u_long clut)

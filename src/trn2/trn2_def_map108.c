@@ -2,11 +2,13 @@
 #include <dw/entity.h>
 #include <dw/garbage.h>
 #include <dw/input.h>
+#include <dw/params.h>
 #include <dw/partner.h>
 #include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/trn2.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern int32_t TRAINING_COMPLETE;
@@ -23,9 +25,62 @@ void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn2_def_map108_functions[] = {
-	TRN2_setupSpeedTraining,
+#if VERSION_IS(EU)
+	TRN2_setupDefenseTraining,
 	TRN2_tickDefenseTrainingMap108,
+#else
+	TRN2_tickDefenseTrainingMap108,
+	TRN2_setupDefenseTraining,
+#endif
 };
+
+GARBAGE(TRN2_setupDefenseTraining, 36);
+
+void TRN2_setupDefenseTraining(arg)
+int16_t arg;
+{
+	switch (arg) {
+	case 0x6c:
+		TRN2_D_8008DC1C.vx = -0x3c6;
+		TRN2_D_8008DC1C.vy = 0;
+		TRN2_D_8008DC1C.vz = 0x3f8;
+		TRN2_D_8008DC3C[0].vx = -0x3c6;
+		TRN2_D_8008DC3C[0].vy = -DIGIMON_DATA[ENTITY_TABLE[1]->type].height;
+		TRN2_D_8008DC3C[0].vz = 0x3f8;
+		TRN2_D_8008DC3C[1].vx = -0x3b6;
+		TRN2_D_8008DC3C[1].vy = -DIGIMON_DATA[ENTITY_TABLE[1]->type].height;
+		TRN2_D_8008DC3C[1].vz = 0x3e8;
+		TRN2_D_8008DC3C[2].vx = -0x3a2;
+		TRN2_D_8008DC3C[2].vy = -DIGIMON_DATA[ENTITY_TABLE[1]->type].height;
+		TRN2_D_8008DC3C[2].vz = 0x3d4;
+		MAIN_D_801353B8 = 4;
+		MAIN_D_801353BA = 3;
+		MAIN_D_801353BE = 7;
+		MAIN_D_801353C0 = 0x31;
+		addObject(0xfae, 1, (TickFunction)TRN2_tickDefenseTrainingMap108, NULL);
+		break;
+	case 0x63:
+		TRN2_D_8008DC1C.vx = 0x63e;
+		TRN2_D_8008DC1C.vy = 0;
+		TRN2_D_8008DC1C.vz = -0x3bf;
+		TRN2_D_8008DC3C[0].vx = 0x63e;
+		TRN2_D_8008DC3C[0].vy = -DIGIMON_DATA[ENTITY_TABLE[1]->type].height;
+		TRN2_D_8008DC3C[0].vz = -0x3bf;
+		MAIN_D_801353B4 = 0xe;
+		MAIN_D_801353B6 = 1;
+		MAIN_D_801353B8 = 0xe;
+		MAIN_D_801353BA = 1;
+		MAIN_D_801353BE = 0x21;
+		MAIN_D_801353C0 = 1;
+		addObject(0xfae, 3, (TickFunction)TRN2_tickDefenseTrainingMap99, NULL);
+		break;
+	}
+
+	TRAINING_COMPLETE = 0;
+	MAIN_D_801353BC = readPStat(0xf6);
+	TRN2_saveTrainingStartTime();
+	MAIN_D_801353BD = 0;
+}
 
 void TRN2_tickDefenseTrainingMap108(int32_t instanceId)
 {
@@ -121,27 +176,4 @@ void TRN2_tickDefenseTrainingMap108(int32_t instanceId)
 		}
 		break;
 	}
-}
-
-GARBAGE(TRN2_setupSpeedTraining, 10);
-
-void TRN2_setupSpeedTraining(arg)
-int16_t arg;
-{
-	if (arg == 0x6c) {
-		TRN2_D_8008DC2C.vx = 0xf7;
-		TRN2_D_8008DC2C.vy = 0;
-		TRN2_D_8008DC2C.vz = 0x226;
-		TRN2_D_8008DC1C.vx = 0x372;
-		TRN2_D_8008DC1C.vy = 0;
-		TRN2_D_8008DC1C.vz = 0x3c5;
-		MAIN_D_801353B8 = 0x38;
-		MAIN_D_801353BA = 3;
-		addObject(0xfad, 1, (TickFunction)TRN2_tickSpeedTraining, NULL);
-	}
-
-	MAIN_D_801353BC = readPStat(0xf6);
-	TRAINING_COMPLETE = 0;
-	TRN2_saveTrainingStartTime();
-	MAIN_D_801353BD = 0;
 }

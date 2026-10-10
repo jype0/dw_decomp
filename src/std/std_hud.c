@@ -96,6 +96,36 @@ static void *std_hud_functions[] = {
 	STD_loadWinLoseModel,
 	STD_removeVersusModelScene,
 	STD_isVersusModelSceneFinished,
+#if VERSION_IS(EU)
+	STD_addVersusModelScene,
+	STD_tickVersusModelScene,
+	STD_renderVersusModelScene,
+	STD_loadVersusSceneModel,
+	STD_offsetTMDObjectUVs,
+	STD_removeFighterStatusBars,
+	STD_addFighterStatusBars,
+	STD_renderFighterStatusBars,
+	STD_renderHPBarDigits,
+	STD_renderFinisherReadyIcon,
+	STD_renderFighterHPBar,
+	STD_renderNumber,
+	STD_isBattleStartTextFinished,
+	STD_removeBattleStartTextBurst,
+	STD_initializeBattleStartTextBurst,
+	STD_renderBattleStartTextBurst,
+	STD_removeBattleStartText,
+	STD_initializeBattleStartText,
+	STD_renderBattleStartText,
+	STD_shuffleBattleStartTextPieces,
+	STD_tickNPCTournament,
+	STD_tickPartnerTournament,
+	STD_tickTamerTournament,
+	STD_handleCommands,
+	STD_removeFinisherChargeup,
+	STD_initializeFinisherChargeup,
+	STD_tickFinisherChargeup,
+	STD_renderFinisherChargeup,
+#else
 	STD_renderVersusModelScene,
 	STD_tickVersusModelScene,
 	STD_addVersusModelScene,
@@ -124,10 +154,11 @@ static void *std_hud_functions[] = {
 	STD_renderFinisherChargeup,
 	STD_tickFinisherChargeup,
 	STD_initializeFinisherChargeup,
+#endif
 };
 
 int16_t STD_FINISHER_CHARGEUP_POS[2];
-uint8_t STD_BATTLE_START_TEXT_TIMER;
+uint8_t STD_BATTLE_START_TEXT_TIMER[4];
 int32_t STD_BATTLE_TEXT_FINISHED;
 uint8_t MAIN_D_80135198[2];
 uint8_t STD_FINISHER_FULL_FRAMES[2];
@@ -143,6 +174,20 @@ uint8_t STD_CHAMPION_SCENE_STATE;
 
 static void *std_hud_sbss_order[] = {
 	&STD_CHAMPION_SCENE_STATE,
+#if VERSION_IS(EU)
+	&MAIN_D_801351AC,
+	&STD_DAI_TMD,
+	&STD_WIN_LOSS_DRAW_TIMER,
+	&STD_DRAW_TMD,
+	&MAIN_D_80135198,
+	&STD_FINISHER_FULL_FRAMES,
+	&STD_FINISHER_PULSE_FRAME,
+	&STD_FINISHER_BRIGHTNESS,
+	&STD_FINISHER_SEGMENTS,
+	&STD_FINISHER_READY,
+	STD_BATTLE_START_TEXT_TIMER,
+	&STD_BATTLE_TEXT_FINISHED,
+#else
 	&STD_DAI_TMD,
 	&MAIN_D_801351AC,
 	&STD_DRAW_TMD,
@@ -154,7 +199,8 @@ static void *std_hud_sbss_order[] = {
 	&STD_FINISHER_FULL_FRAMES,
 	&MAIN_D_80135198,
 	&STD_BATTLE_TEXT_FINISHED,
-	&STD_BATTLE_START_TEXT_TIMER,
+	STD_BATTLE_START_TEXT_TIMER,
+#endif
 	&STD_FINISHER_CHARGEUP_POS,
 };
 
@@ -535,7 +581,7 @@ void STD_initializeBattleStartText(void)
 	int32_t i;
 	long r;
 
-	STD_BATTLE_START_TEXT_TIMER = 0;
+	STD_BATTLE_START_TEXT_TIMER[0] = 0;
 	STD_BATTLE_TEXT_FINISHED = 0;
 	p = STD_BATTLE_START_TEXT_PIECES;
 	for (i = 0; i < 0x9b; i++, p++) {
@@ -605,7 +651,7 @@ void STD_renderBattleStartText(void)
 	}
 
 	if (n == 0x9b) {
-		clut = GetClut(256, (STD_BATTLE_START_TEXT_TIMER++ % 6 / 2) + 488);
+		clut = GetClut(256, (STD_BATTLE_START_TEXT_TIMER[0]++ % 6 / 2) + 488);
 		STD_BATTLE_TEXT_FINISHED = 1;
 	} else {
 		clut = GetClut(256, 488);

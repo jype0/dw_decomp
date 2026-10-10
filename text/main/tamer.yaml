@@ -3,24 +3,30 @@ MESSAGES:
     MAIN_D_801341FC:
       ja: 「あっ！だ！」
       en_us: Woah!
+      en_eu: Waou!
     MAIN_D_80122D68:
       ja: 「でも、持ち物がいっぱいで持てないや。」
       en_us: I can't hold anymore.
+      en_eu: But I cannot carry any more.
     MAIN_D_80122D80:
       ja: 「ちぇっ！　カラッポだ」
       en_us: Hey! It's empty!
     MAIN_D_80122D94:
       ja: テイマーレベルが上がった！！！
       en_us: Tamer level went up!!!
+      en_eu: Tamer Level up!!!
     MAIN_D_80122DAC:
       ja: テイマーレベルが下がった！！！
       en_us: Tamer level went down!!!
+      en_eu: Tamer Level down!!!
     MAIN_D_80122DC8:
       ja: おめでとうございます！
       en_us: Congratulations!
     MAIN_D_80122DDC:
       ja: あなたのすばらしい功績に対して
       en_us: To recognize your great
+      en_eu: For your achievements,
     MAIN_D_80122DF4:
       ja: メダルがおくられました！
       en_us: recors, they sent a Medal!
+      en_eu: here is a medal!

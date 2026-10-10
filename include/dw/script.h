@@ -220,6 +220,11 @@ extern uint16_t DELAY_FRAMES;
 extern uint8_t AUTOCLOSE_FRAMES;
 extern ScriptState *SCRIPT_STATE_PTR;
 extern uint8_t ACTIVE_BGM_FONT;
+#if VERSION_IS(EU)
+#define TEXTBOX_LINE_SIZE 80
+#else
+#define TEXTBOX_LINE_SIZE 64
+#endif
 extern uint8_t *TEXTBOX_LINES_PTR;
 extern uint8_t *SCRIPT_POINTER;
 extern uint8_t *MAPHEAD_SCRIPT_PTR;

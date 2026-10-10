@@ -2,6 +2,7 @@
 #include <dw/params.h>
 #include <dw/world_object.h>
 #include <dw/math.h>
+#include <dw/version.h>
 
 #define NUM_CONDITION_BUBBLES	3
 
@@ -418,6 +419,16 @@ ConditionIcon *CONDITION_BUBBLE_TYPES[8] = {
 };
 
 ConditionBubble CONDITION_BUBBLES[3];
+
+#if VERSION_IS(EU)
+static void *bubble_functions[] = {
+	removeConditionBubble,
+	addConditionBubble,
+	tickConditionBubble,
+	renderConditionBubble,
+	initializeConditionBubbles,
+};
+#endif
 
 void initializeConditionBubbles(void)
 {

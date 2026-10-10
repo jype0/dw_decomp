@@ -60,8 +60,13 @@ static void *model_functions[] = {
 	setEntityPosition,
 	setupEntityMatrix,
 	removeEntity,
+#if VERSION_IS(EU)
+	initializeDigimonObject,
+	renderDigimon,
+#else
 	renderDigimon,
 	initializeDigimonObject,
+#endif
 	thunkUnloadModel,
 	thunkLoadMMD,
 	renderFlatDigimon,
@@ -2698,12 +2703,21 @@ ModelComponent UNKNOWN_MODEL[16];
 int32_t UNKNOWN_MODEL_TAKEN[16];
 
 static void *model_bss_order[] = {
+#if VERSION_IS(EU)
+	UNKNOWN_MODEL,
+	UNKNOWN_MODEL_TAKEN,
+	&TAMER_MODEL,
+	&PARTNER_MODEL,
+	NPC_MODELS,
+	NPC_MODEL_TAKEN,
+#else
 	UNKNOWN_MODEL_TAKEN,
 	UNKNOWN_MODEL,
 	&PARTNER_MODEL,
 	&TAMER_MODEL,
 	NPC_MODEL_TAKEN,
 	NPC_MODELS,
+#endif
 };
 
 static inline int8_t *model_s8ptr(uint8_t *arg0)

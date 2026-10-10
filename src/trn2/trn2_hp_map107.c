@@ -8,6 +8,7 @@
 #include <dw/sound.h>
 #include <dw/trn2.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern int32_t TRAINING_COMPLETE;
@@ -23,10 +24,51 @@ int32_t tickEntityWalkTo();
 void TRN2_func_8008AA84(int8_t arg);
 
 static void *trn2_hp_map107_functions[] = {
-	TRN2_setupMpTraining,
 	TRN2_saveTrainingStartTime,
+#if VERSION_IS(EU)
+	TRN2_setupHpTraining,
 	TRN2_tickHpTrainingMap107,
+#else
+	TRN2_tickHpTrainingMap107,
+	TRN2_setupHpTraining,
+#endif
 };
+
+GARBAGE(TRN2_setupHpTraining, 8);
+
+void TRN2_setupHpTraining(arg)
+int16_t arg;
+{
+	switch (arg) {
+	case 0x6b:
+		TRN2_D_8008DC1C.vx = 0x168;
+		TRN2_D_8008DC1C.vy = 0;
+		TRN2_D_8008DC1C.vz = 0x2e1;
+		MAIN_D_801353B4 = 0xa;
+		MAIN_D_801353B6 = 2;
+		addObject(0xfab, 1, (TickFunction)TRN2_tickHpTrainingMap107, NULL);
+		break;
+	case 0x63:
+		TRN2_D_8008DC1C.vx = 0;
+		TRN2_D_8008DC1C.vy = 0;
+#if VERSION_EQUAL_OR_OLDER(JP_BOMBOM)
+		TRN2_D_8008DC1C.vz = -0x78;
+#else
+		TRN2_D_8008DC1C.vz = -0x96;
+#endif
+		MAIN_D_801353B4 = 0;
+		MAIN_D_801353B6 = 2;
+		MAIN_D_801353B8 = 0xf;
+		MAIN_D_801353BA = 0x11;
+		addObject(0xfab, 3, (TickFunction)TRN2_tickHpTrainingMap99, NULL);
+		break;
+	}
+
+	TRAINING_COMPLETE = 0;
+	MAIN_D_801353BC = readPStat(0xf6);
+	TRN2_saveTrainingStartTime();
+	MAIN_D_801353BD = 0;
+}
 
 void TRN2_tickHpTrainingMap107(instanceId)
 int16_t instanceId;
@@ -127,25 +169,4 @@ void TRN2_saveTrainingStartTime(void)
 	MAIN_D_801353CE = CURRENT_FRAME;
 	MAIN_D_801353D0 = HOUR;
 	MAIN_D_801353D2 = MINUTE;
-}
-
-GARBAGE(TRN2_setupMpTraining, 8);
-
-void TRN2_setupMpTraining(arg)
-int16_t arg;
-{
-	if (arg == 0xa5) {
-		TRN2_D_8008DC2C.vx = 0x3e5;
-		TRN2_D_8008DC2C.vy = 0;
-		TRN2_D_8008DC2C.vz = 0x76;
-		TRN2_D_8008DC1C.vx = 0x6f8;
-		TRN2_D_8008DC1C.vy = 0;
-		TRN2_D_8008DC1C.vz = 0x1d2;
-		addObject(0xfaf, 8, (TickFunction)TRN2_tickMpTraining, NULL);
-	}
-
-	TRAINING_COMPLETE = 0;
-	MAIN_D_801353BC = readPStat(0xf6);
-	TRN2_saveTrainingStartTime();
-	MAIN_D_801353BD = 0;
 }

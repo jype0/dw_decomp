@@ -4,6 +4,7 @@
 #include <libgs.h>
 
 #include <dw/btl.h>
+#include <dw/font.h>
 #include <dw/script.h>
 #include <dw/version.h>
 #include <dw/world_object.h>
@@ -42,6 +43,14 @@ char *BTL_COMMAND_NAMES[8] = {
 
 BTL_STR_SHOUT_EXCLAMATION_TEXT
 
+#if VERSION_IS(EU)
+static void *command_shout_functions[] = {
+	BTL_removeCommandShout,
+	BTL_drawCommandShout,
+	BTL_renderCommandShout,
+};
+#endif
+
 void BTL_drawCommandShout(uint32_t command)
 {
 	RECT rect;
@@ -68,9 +77,9 @@ void BTL_drawCommandShout(uint32_t command)
 	}
 
 #if !VERSION_IS(US)
-	drawString(BTL_STR_SHOUT_EXCLAMATION, (length / 2) * 12, 204);
+	drawString(BTL_STR_SHOUT_EXCLAMATION, (length / 2) * GLYPH_WIDTH, 204);
 	length += 2;
-	BTL_COMMAND_SHOUT.width = (length / 2) * 12;
+	BTL_COMMAND_SHOUT.width = (length / 2) * GLYPH_WIDTH;
 #else
 	BTL_COMMAND_SHOUT.width = length * 12;
 #endif

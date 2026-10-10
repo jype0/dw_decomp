@@ -77,6 +77,7 @@ SECTIONS
         BUILD_DIR/asm/main/psyq/libsnd.s.o(.text .text.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/map.c.o(.text.*);
+        BUILD_DIR/src/main/effect_common.c.o(.text.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/inventory.c.o(.text.*);
         . = ALIGN(., 4);
@@ -452,6 +453,7 @@ SECTIONS
         BUILD_DIR/asm/main/data/psyq/libsnd.data.s.o(.data .data.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/map.c.o(.data.*);
+        BUILD_DIR/src/main/effect_common.c.o(.data.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/inventory.c.o(.data.*);
         . = ALIGN(., 4);
@@ -635,6 +637,7 @@ SECTIONS
         . = ALIGN(., 4);
         BUILD_DIR/src/btl/command_shout.c.o(.sdata.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/btl/command_menu.c.o(.sdata.*);
         BUILD_DIR/src/btl/battle_hud.c.o(.sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/btl/battle_effect.c.o(.sdata.*);
@@ -713,6 +716,8 @@ SECTIONS
         BUILD_DIR/src/main/sound.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/map.c.o(.sbss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/effect_common.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/inventory.c.o(.sbss.*);
         . = ALIGN(., 4);

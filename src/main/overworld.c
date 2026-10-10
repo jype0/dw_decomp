@@ -200,6 +200,25 @@ static void *overworld_functions[] = {
 	clearMapDigimon,
 	unloadDigimonModel,
 	scriptUnloadEntity,
+#if VERSION_IS(EU)
+	scriptSetDigimon,
+	NPCEntityTick,
+	loadNPCModel,
+	loadMapDigimon,
+	tickRemoveMist,
+	resetMapObjectAnimation,
+	spawnSpriteAtEntity,
+	spawnSpriteAtLocation,
+	getDrawPosition,
+	setMapObjectsFlag,
+	moveMapObjects,
+	tickMoveObjectTo,
+	moveMapObjectsWithLimit,
+	loadMapObjectPosition,
+	storeMapObjectPosition,
+	createNinjamonEffect,
+	renderNinjamonEffect,
+#else
 	NPCEntityTick,
 	scriptSetDigimon,
 	loadNPCModel,
@@ -217,6 +236,7 @@ static void *overworld_functions[] = {
 	renderNinjamonEffect,
 	storeMapObjectPosition,
 	createNinjamonEffect,
+#endif
 	buildMapOverlayPrim,
 	buildSnowflakePrim,
 	renderMist,
@@ -269,12 +289,21 @@ static void *overworld_bss_order[] = {
 	NPC_COLLISION_STATE,
 	NPC_IS_WALKING_TOWARDS,
 	MAP_DIGIMON_TABLE,
+#if VERSION_IS(EU)
+	MOVE_OBJECT_DELTA_X,
+	MOVE_OBJECT_DELTA_Y,
+	NINJAMON_EFFECT_X,
+	NINJAMON_EFFECT_Y,
+	NINJAMON_EFFECT_X_OFFSET,
+	NINJAMON_EFFECT_Y_OFFSET,
+#else
 	MOVE_OBJECT_DELTA_Y,
 	MOVE_OBJECT_DELTA_X,
 	NINJAMON_EFFECT_Y_OFFSET,
 	NINJAMON_EFFECT_X_OFFSET,
 	NINJAMON_EFFECT_Y,
 	NINJAMON_EFFECT_X,
+#endif
 	LOCAL_MAP_OBJECTS,
 	MAP_OBJECT_MOVE_TO_DATA,
 };
@@ -382,6 +411,9 @@ void loadMapImage2(u_long *tim, int8_t id)
 		setRECT(&rect, i * 16, 486, 16, 1);
 		LoadImage(&rect, caddr);
 		caddr += 8;
+#if VERSION_IS(EU)
+		DrawSync(0);
+#endif
 	}
 }
 

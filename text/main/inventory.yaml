@@ -23,18 +23,18 @@ CONFIRM_LABELS:
       en_us: "No"
 
 ITEM_MENU_LABELS:
-  storage: {default: embedded}
+  storage: {default: embedded, eu: named}
   macro: ITEM_MENU_LABEL
   entries:
-    - name: USE
+    - name: STR_ITEM_MENU_LABEL_USE
       ja: 使う
       en_us: Use
-    - name: MOVE
+    - name: STR_ITEM_MENU_LABEL_MOVE
       ja: 移動
       en_us: Move
-    - name: SORT
+    - name: STR_ITEM_MENU_LABEL_SORT
       ja: せいり
       en_us: Sort
-    - name: DROP
+    - name: STR_ITEM_MENU_LABEL_DROP
       ja: 捨てる
       en_us: Drop

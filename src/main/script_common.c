@@ -212,6 +212,20 @@ static void *script_common_text_order[] = {
 	renderMonochromonMoodBubble,
 	resolveMapHeadEntry,
 	getShopkeeperLine,
+#if VERSION_IS(EU)
+	tickShopBitsBox,
+	renderShopBitsBox,
+	tickSingleCardShop,
+	renderSingleCardShop,
+	updateItemMenuAmountBoxString,
+	tickItemMenuAmountBox,
+	renderItemMenuAmountBox,
+	tickItemMenuDescriptionBox,
+	renderItemMenuDescriptionBox,
+	readSelectedItemMerit,
+	tickItemMenu,
+	renderItemMenu,
+#else
 	renderShopBitsBox,
 	tickShopBitsBox,
 	renderSingleCardShop,
@@ -224,6 +238,7 @@ static void *script_common_text_order[] = {
 	readSelectedItemMerit,
 	renderItemMenu,
 	tickItemMenu,
+#endif
 	shopFillSellItemList,
 	shopFillBuyItemList,
 };
@@ -276,7 +291,13 @@ GsSPRITE MONOCHROMON_BUBBLE_SPRITE = {
 
 AmountBoxLayout AMOUNT_BOX_LAYOUT = {
 	{
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		{ 0x001a, 0x0007, 0x000d },
+		{ 0x0046, 0x001b, 0x0005 },
+		{ 0x005e, 0x002b, 0x0002 },
+		{ 0x003e, 0x0041, 0x0006 },
+		{ 0x001a, 0x002b, 0x0001 },
+#elif !VERSION_IS(US)
 		{ 0x001a, 0x0007, 0x0008 },
 		{ 0x0032, 0x001b, 0x0005 },
 		{ 0x0056, 0x002b, 0x0002 },
@@ -642,6 +663,19 @@ static void *script_common_sbss_order[] = {
 	&NAMING_SELECTOR,
 	&BIT_BOX_SHOW_BITS,
 	&UPDATE_SHOP_BIT_BOX,
+#if VERSION_IS(EU)
+	&SHOP_ITEM_PRICE,
+	&MAX_SHOP_AMOUNT,
+	&SHOP_AMOUNT,
+	&NAMING_CURRENT_LETTER,
+	&SHOP_ITEM_TYPE,
+	&SHOP_ACTION_SELECTED,
+	&MAIN_D_80134F74,
+	&ITEM_MENU_RIGHT,
+	&ITEM_MENU_LEFT,
+	&MONOCHROMON_BUBBLE_TIMER,
+	&ARRAY_SECTION_OFFSET,
+#else
 	&NAMING_CURRENT_LETTER,
 	&SHOP_AMOUNT,
 	&MAX_SHOP_AMOUNT,
@@ -653,6 +687,7 @@ static void *script_common_sbss_order[] = {
 	&ITEM_MENU_LEFT,
 	&ARRAY_SECTION_OFFSET,
 	&MONOCHROMON_BUBBLE_TIMER,
+#endif
 };
 
 char NAMING_BUFFER[20];
@@ -892,7 +927,11 @@ void renderItemMenuDescriptionBox(void)
 	rowPx = TEXTBOX_DATA.box[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x + 6;
 	y = UI_BOX_DATA[3].finalPos.y + 5;
+#if VERSION_IS(EU)
+	renderString(0, x, y, 0xfc, 0x18, 0, rowPx, 3, 1);
+#else
 	renderString(0, x, y, 0xfc, 0xc, 0, rowPx, 3, 1);
+#endif
 }
 
 void renderItemMenuAmountBox(void)
@@ -911,8 +950,13 @@ void renderItemMenuAmountBox(void)
 	rowPx = TEXTBOX_DATA.box[3].vramRow * 12;
 	x = UI_BOX_DATA[3].finalPos.x;
 	y = UI_BOX_DATA[3].finalPos.y;
+#if VERSION_IS(EU)
+	renderHorizontalLine(3, 4, 0x17, 0x82);
+	renderHorizontalLine(3, 0xc, 0x3c, 0x72);
+#else
 	renderHorizontalLine(3, 4, 0x17, 0x7a);
 	renderHorizontalLine(3, 0xc, 0x3c, 0x6a);
+#endif
 	renderInsetWithoutBox(3, 0x55, 0x2a, 0x1a, 0xe);
 	sx = x + 8;
 	sy = y + 5;
@@ -927,13 +971,13 @@ void renderItemMenuAmountBox(void)
 	i = 0;
 	srcCol = 0;
 	while (i < 4) {
-		renderString(0, entry->x + x, entry->y + y, entry->chars * 12, 0xc, srcCol * 12, rowPx, 3, 1);
+		renderString(0, entry->x + x, entry->y + y, entry->chars * GLYPH_WIDTH, 0xc, srcCol * GLYPH_WIDTH, rowPx, 3, 1);
 		srcCol += entry->chars;
 		i++;
 		entry += 1;
 	}
 #if !VERSION_IS(US)
-	renderString(0, entry->x + x, entry->y + y, entry->chars * 12, 0xc, 0x90, 0x60, 3, 1);
+	renderString(0, entry->x + x, entry->y + y, entry->chars * GLYPH_WIDTH, 0xc, 12 * GLYPH_WIDTH, 0x60, 3, 1);
 #endif
 }
 
@@ -983,7 +1027,7 @@ void updateItemMenuAmountBoxString(void)
 	uint8_t id;
 	uint32_t len;
 
-	out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
+	out = TEXTBOX_LINES_PTR + ITEM_MENU_SUB_TEXTBOX_LINE * TEXTBOX_LINE_SIZE;
 
 	if (ITEM_MENU_TYPE < 3) {
 		strcpy(out, ITEM_NAME(SHOP_ITEM_TYPE));
@@ -1554,7 +1598,11 @@ void calculateItemListStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	strcpy(out, ITEM_NAME(item));
 	len = strlen(ITEM_NAME(item));
 	out += len;
+#if VERSION_IS(EU)
+	out = padWithSpaces(out, 13, len);
+#else
 	out = padWithSpaces(out, 8, len);
+#endif
 	*out++ = 0xf;
 	*out++ = 0;
 	*out++ = 1;
@@ -1887,13 +1935,13 @@ void updateItemMenuStrings(ItemMenuBox *box, int32_t startRow, int32_t style)
 			}
 		}
 	} else {
-		p = TEXTBOX_LINES_PTR + (startRow << 6);
+		p = TEXTBOX_LINES_PTR + startRow * TEXTBOX_LINE_SIZE;
 		if (entry->vramMode == 2) {
-			p += 0x20;
+			p += TEXTBOX_LINE_SIZE / 2;
 		}
 
 		if (entry->doubleBuffered == 1) {
-			p = (uint8_t *)(p + (((entry->backPage ^ 1) * entry->vramRows) << 6));
+			p = (uint8_t *)(p + ((entry->backPage ^ 1) * entry->vramRows) * TEXTBOX_LINE_SIZE);
 		}
 
 		*p++ = 0;
@@ -1979,7 +2027,11 @@ int32_t createItemMenuAmountBox(RECT *origin)
 	boxY = UI_BOX_DATA[1].finalPos.y;
 	origin->x += boxX;
 	origin->y += (boxY + box->cursor * 18);
+#if VERSION_IS(EU)
+	setRECT(&rect, -0x41, -0x2a, 0x8a, 0x53);
+#else
 	setRECT(&rect, -0x41, -0x2a, 0x82, 0x53);
+#endif
 	createTextbox(3, flags, &rect, origin, tickItemMenuAmountBox, renderItemMenuAmountBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
 	updateItemMenuAmountBoxString();
@@ -2150,10 +2202,10 @@ int32_t createItemMenuDescriptionBox(ItemMenuBox *box, RECT *origin, uint8_t uiB
 	createTextbox(3, flags, &rect, origin, tickItemMenuDescriptionBox, renderItemMenuDescriptionBox);
 	registerTextbox(3, ITEM_MENU_SUB_TEXTBOX_LINE, 1, 0, 0);
 #if !VERSION_IS(US)
-	out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6);
+	out = TEXTBOX_LINES_PTR + ITEM_MENU_SUB_TEXTBOX_LINE * TEXTBOX_LINE_SIZE;
 	strcpy(out, ITEM_DESCS[item]);
 #else
-	strcpy((out = TEXTBOX_LINES_PTR + (ITEM_MENU_SUB_TEXTBOX_LINE << 6), out), ITEM_DESCS[item]);
+	strcpy((out = TEXTBOX_LINES_PTR + ITEM_MENU_SUB_TEXTBOX_LINE * TEXTBOX_LINE_SIZE, out), ITEM_DESCS[item]);
 #endif
 	len = strlen(ITEM_DESCS[item]);
 	out += len;
@@ -2545,10 +2597,16 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 		*out++ = 0xc;
 		*out++ = 0;
 #endif
+#if !VERSION_IS(EU)
 		*out++ = 0xf;
 		*out++ = 0;
+#endif
 
 		if (ITEM_MENU_TYPE != 5) {
+#if VERSION_IS(EU)
+			*out++ = 0xf;
+			*out++ = 0;
+#endif
 #if VERSION_IS(US)
 			*out++ = 0x16;
 			*out++ = 0;
@@ -2575,11 +2633,19 @@ void calculateItemMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 			out = intToStringSJIS(out, value, 4, 0);
 			*out++ = 0xf;
 			*out++ = 0;
+#if VERSION_IS(EU)
+			*out++ = 0xf;
+			*out++ = 0;
+#endif
 		}
 amountPart:
 #if !VERSION_IS(US)
 		if (ITEM_MENU_TYPE != 0 && ITEM_MENU_TYPE != 7) {
 			out = intToStringSJIS(out, amount & 0x7f, 2, 0);
+#if VERSION_IS(EU)
+			*out++ = 0xf;
+			*out++ = 0;
+#endif
 		}
 #else
 		if (ITEM_MENU_TYPE == 1) {
@@ -2682,7 +2748,11 @@ void calculateMusicMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast)
 	strcpy(out, BGM_TRACK_NAMES[type]);
 	len = strlen(BGM_TRACK_NAMES[type]);
 	out += len;
+#if VERSION_IS(EU)
+	out = padWithSpaces(out, 0x12, len);
+#else
 	out = padWithSpaces(out, 0xc, len);
+#endif
 	terminateString(out, isLast);
 }
 
@@ -2711,7 +2781,11 @@ void calculateBirdramonMenuStrings(ItemMenuBox *box, uint8_t row, int32_t isLast
 	strcpy(out, MAP_NAME_PTR[nameId]);
 	len = strlen(MAP_NAME_PTR[nameId]);
 	out += len;
+#if VERSION_IS(EU)
+	out = padWithSpaces(out, 0x12, len);
+#else
 	out = padWithSpaces(out, 0xc, len);
+#endif
 	*out++ = 0xf;
 	*out++ = 0;
 #if VERSION_IS(US)
@@ -2756,9 +2830,9 @@ void updateItemMenuLine(ItemMenuBox *box, int32_t style)
 
 	getVRAMModeCoords(entry->vramMode, &outX, &outClut);
 
-	p = TEXTBOX_LINES_PTR + (row << 6);
+	p = TEXTBOX_LINES_PTR + row * TEXTBOX_LINE_SIZE;
 	if (outX != 0) {
-		p += 0x20;
+		p += TEXTBOX_LINE_SIZE / 2;
 	}
 
 #if !VERSION_IS(US)
@@ -2815,14 +2889,14 @@ uint8_t *getTextboxLine(ItemMenuBox *box, uint8_t index)
 	uint8_t *row;
 
 	entry = &TEXTBOX_DATA.box[box->boxId];
-	row = TEXTBOX_LINES_PTR + box->itemRow[index] * 0x40;
+	row = TEXTBOX_LINES_PTR + box->itemRow[index] * TEXTBOX_LINE_SIZE;
 
 	if (entry->vramMode == 2) {
-		row += 0x20;
+		row += TEXTBOX_LINE_SIZE / 2;
 	}
 
 	if (entry->doubleBuffered == 1) {
-		row = (uint8_t *)(row + (((entry->backPage ^ 1) * entry->vramRows) << 6));
+		row = (uint8_t *)(row + ((entry->backPage ^ 1) * entry->vramRows) * TEXTBOX_LINE_SIZE);
 	}
 
 	return row;
@@ -2845,10 +2919,21 @@ void terminateString(uint8_t *str, int32_t flag)
 uint8_t *padWithSpaces(uint8_t *str, int32_t width, int32_t used)
 {
 	used = width - (used >> 1);
+#if VERSION_IS(EU)
+	if (used < 0) {
+		str -= used * 2;
+	} else {
+		while (used != 0) {
+			*str++ = 0x81;
+			*str++ = 0x40;
+			used--;
+		}
+#else
 	while (used != 0) {
 		*str++ = 0x81;
 		*str++ = 0x40;
 		used--;
+#endif
 	}
 
 	return str;
@@ -2911,7 +2996,7 @@ void showMapheadSelection(int32_t idx, uint8_t owner, uint16_t x, int32_t *outSe
 	}
 
 	DIALOGUE_SELECTION.cursorWidth = showTextboxReady(0, CURRENT_DIALOGUE_OWNER);
-	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * 12 + 2;
+	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * GLYPH_WIDTH + 2;
 
 	if (owner != 0xff) {
 		DIALOGUE_SELECTION.cursorOffsetY = 0xd;

@@ -3,12 +3,15 @@ MESSAGES:
     BTL_STR_YELLOW:
       ja: C7
       en_us: "#C7"
+      en_eu: "{C7}"
     BTL_STR_WHITE_WAIT:
       ja: NULL
       en_us: "#C1#W"
+      en_eu: NULL
     BTL_STR_DROPPED:
       ja: C1はRC7
       en_us: NULL
+      en_eu: NULL
     BTL_STR_20:
       ja: ２０
       en_us: 20
@@ -24,3 +27,4 @@ MESSAGES:
     BTL_STR_MP_BONUS_PERCENT:
       ja: NULL
       en_us: "%!#W"
+      en_eu: "%.{W}"

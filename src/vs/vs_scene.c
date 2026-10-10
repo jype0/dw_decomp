@@ -97,6 +97,36 @@ void fadeToBlack(int16_t frames);
 void VS_setVersusModelSceneTimer(int16_t value);
 
 static void *vs_scene_functions[] = {
+#if VERSION_IS(EU)
+	VS_removeArenaRenderers,
+	VS_addArenaRenderers,
+	VS_renderArenaViewLeft,
+	VS_renderArenaViewRight,
+	VS_renderArenaViewFull,
+	VS_unloadArenaAssets,
+	VS_loadArenaAssets,
+	VS_loadArenaTIMToVRAM,
+	VS_tickVersusIntro,
+	VS_renderVersusIntro,
+	VS_tickPlaytime,
+	VS_playVersusIntroSequence,
+	VS_initializeVS,
+	VS_getFirstSpecialMove,
+	VS_loadTIMToVRAM,
+	VS_initializeLighting,
+	VS_initializeCamera,
+	VS_renderVersusText,
+	VS_renderVersusBanner,
+	VS_renderRoundScores,
+	VS_renderRoundPips,
+	VS_renderFighterNamePlate,
+	VS_renderVersusFlash,
+	VS_unloadFighterEntities,
+	VS_loadFighterEntities,
+	VS_addInputObjects,
+	VS_loadVSAssets,
+	VS_resetMatchState,
+#else
 	VS_removeArenaRenderers,
 	VS_renderArenaViewFull,
 	VS_renderArenaViewRight,
@@ -127,6 +157,7 @@ static void *vs_scene_functions[] = {
 	VS_addInputObjects,
 	VS_loadVSAssets,
 	VS_resetMatchState,
+#endif
 };
 
 RESULTS_TEXT
@@ -171,6 +202,19 @@ static void *vs_scene_sbss_order[] = {
 	&VS_STARTING_HP,
 	&VS_DISCIPLINE,
 	&VS_MUSIC,
+#if VERSION_IS(EU)
+	&VS_DIGIMON_P1_PTR,
+	&VS_DIGIMON_P2_PTR,
+	&VS_CAMERA_STATE,
+	&VS_CURRENT_BATTLE,
+	&VS_STATE_DONE,
+	&VS_STATE_TIMER,
+	&VS_STATE_OFFSET,
+	&VS_STATE_STATE,
+	&VS_STATE_ROUND,
+	&VS_STATE_WINS,
+	&VS_STATE_LOSSES,
+#else
 	&VS_DIGIMON_P2_PTR,
 	&VS_DIGIMON_P1_PTR,
 	&VS_CAMERA_STATE,
@@ -182,6 +226,7 @@ static void *vs_scene_sbss_order[] = {
 	&VS_STATE_TIMER,
 	&VS_STATE_LOSSES,
 	&VS_STATE_WINS,
+#endif
 };
 
 // clang-format off
@@ -516,6 +561,7 @@ int16_t VS_FONT_GLYPHS[216] = {
 	0x00a1, 0x00a2, 0x00a3, 0x00af, 0x00b0, 0x00b1, 0x00b2, 0x0056,
 };
 
+#if !VERSION_IS(EU)
 uint8_t VS__INTRO_DIGIMON_NAMES[116][14] = {
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -982,6 +1028,7 @@ uint8_t VS__INTRO_DIGIMON_NAMES[116][14] = {
 		0x15, 0x00, 0x00, 0x00, 0x00, 0x00,
 	},
 };
+#endif
 
 char VS_PATH_ARENA_MODEL_STDDAT_T_TOGI_TMD[] = "\\STDDAT\\T_TOGI.TMD";
 
@@ -1325,6 +1372,11 @@ void VS_renderFighterNamePlate(int16_t side)
 			prim->clut = GetClut(0x30, 0x1e8);
 			c = *name++;
 			c = ((c & 0xff) << 8) + ((c & 0xff00) >> 8);
+#if VERSION_IS(EU)
+			if (c >= 0x8281) {
+				c -= 0x21;
+			}
+#endif
 			for (m = 0; m < 0xd8; m++) {
 				if (c == VS_FONT_CHARS[m]) {
 					g = m;

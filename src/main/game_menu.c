@@ -27,7 +27,10 @@
 #include <text/main/game_menu.h>
 
 /* Colors of the two button glyphs in the medal and card view footers */
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+#define FOOTER_GLYPH1_COLOR 0xf
+#define FOOTER_GLYPH2_COLOR 0x11
+#elif !VERSION_IS(US)
 #define FOOTER_GLYPH1_COLOR 0xe
 #define FOOTER_GLYPH2_COLOR 0xf
 #else
@@ -164,7 +167,6 @@ extern GsOT_TAG *FRAMEBUFFER1_ORIGIN;
 extern GsOT *FRAMEBUFFER_OT[2];
 extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
-extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern char *MOVE_NAMES[];
 
@@ -295,6 +297,35 @@ static void *game_menu_functions[] = {
 	renderMenuTab,
 	renderDigimonMovesView,
 	renderDigimonStatsView,
+#if VERSION_IS(EU)
+	loadCardImage,
+	renderEvoChartDetail,
+	renderCardImage,
+	renderCardCount,
+	equipMove,
+	getEquippedSlot,
+	renderFeedingItem,
+	removeOneSelectedItem,
+	startFeedingItem,
+	setSleepDisabled,
+	handleGameMenuSelection,
+	isUIBoxAvailable,
+	createMenuBox,
+	tickGameMenu,
+	tickDigimonMenu,
+	renderDigimonMenu,
+	tickPlayerMenu,
+	renderPlayerMenu,
+	renderRectPolyFT4,
+	renderTriangleCursor,
+	renderDateDigits,
+	renderSeparatorLines,
+	renderGameMenu,
+	closeUIBoxIfOpen,
+	closeTriangleMenu,
+	addGameMenu,
+	tickTriangleMenu,
+#else
 	renderCardCount,
 	renderCardImage,
 	loadCardImage,
@@ -322,6 +353,7 @@ static void *game_menu_functions[] = {
 	closeTriangleMenu,
 	tickTriangleMenu,
 	addGameMenu,
+#endif
 };
 
 // clang-format off
@@ -370,7 +402,11 @@ TriangleCursorOffsetData SELECTION_CURSOR_WIDTH = { { 0x04, 0x04, 0x04, 0x04, 0x
 
 TriangleCursorOffsetData SELECTION_CURSOR_HEIGHT = { { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x16, 0x16 } };
 
+#if VERSION_IS(EU)
+RECT MENU_TEXT_AREA = { 0, 232, 64, 12 };
+#else
 RECT MENU_TEXT_AREA = { 0, 232, 24, 12 };
+#endif
 
 YEAR_DAY_TEXT
 
@@ -443,7 +479,11 @@ GameMenuLabel GAME_MENU_TEXT_SPRITES[8] = {
 	{ 0x0015, 0x0088, 0x14, 0x07, 0x6c, 0x14 },
 	{ 0x0039, 0x0088, 0x14, 0x07, 0x6c, 0x1b },
 	{ 0x0060, 0x0088, 0x14, 0x07, 0x6c, 0x22 },
+#if VERSION_IS(EU)
+	{ 0x0017, 0x0038, 0x11, 0x07, 0x50, 0x29 },
+#else
 	{ 0x0017, 0x0038, 0x10, 0x07, 0x50, 0x29 },
+#endif
 };
 
 Line GAME_MENU_LINES[3] = {
@@ -500,6 +540,20 @@ IconRect MOVES_VIEW_HELP_CORNERS[4] = {
 };
 
 Line DIGIMON_MOVE_INFO_LINES_LEFT[18] = {
+#if VERSION_IS(EU)
+	{ 0xff9a, 0x0001, 0x0017, 0x0001, 0x00, 0x00 },
+	{ 0xff9a, 0x0002, 0x0017, 0x0002, 0x01, 0x00 },
+	{ 0xff9a, 0x0003, 0x0017, 0x0003, 0x00, 0x00 },
+	{ 0xff6f, 0x0005, 0xff6f, 0x005c, 0x00, 0x00 },
+	{ 0xff70, 0x0005, 0xff70, 0x005c, 0x01, 0x00 },
+	{ 0xff71, 0x0005, 0xff71, 0x005c, 0x00, 0x00 },
+	{ 0x0019, 0x0005, 0x0019, 0x0015, 0x00, 0x00 },
+	{ 0x001a, 0x0005, 0x001a, 0x0015, 0x01, 0x00 },
+	{ 0x001b, 0x0005, 0x001b, 0x0015, 0x00, 0x00 },
+	{ 0xff72, 0x0016, 0x0018, 0x0016, 0x00, 0x00 },
+	{ 0xff71, 0x0017, 0x0018, 0x0017, 0x01, 0x00 },
+	{ 0xff72, 0x0018, 0x0018, 0x0018, 0x00, 0x00 },
+#else
 	{ 0xff9a, 0x0001, 0xffef, 0x0001, 0x00, 0x00 },
 	{ 0xff9a, 0x0002, 0xffef, 0x0002, 0x01, 0x00 },
 	{ 0xff9a, 0x0003, 0xffef, 0x0003, 0x00, 0x00 },
@@ -512,6 +566,7 @@ Line DIGIMON_MOVE_INFO_LINES_LEFT[18] = {
 	{ 0xff72, 0x0016, 0xfff0, 0x0016, 0x00, 0x00 },
 	{ 0xff71, 0x0017, 0xfff0, 0x0017, 0x01, 0x00 },
 	{ 0xff72, 0x0018, 0xfff0, 0x0018, 0x00, 0x00 },
+#endif
 	{ 0xffc3, 0x0019, 0xffc3, 0x005c, 0x00, 0x00 },
 	{ 0xffc4, 0x0018, 0xffc4, 0x005c, 0x01, 0x00 },
 	{ 0xffc5, 0x0019, 0xffc5, 0x005c, 0x00, 0x00 },
@@ -521,6 +576,20 @@ Line DIGIMON_MOVE_INFO_LINES_LEFT[18] = {
 };
 
 Line DIGIMON_MOVE_INFO_LINES_RIGHT[18] = {
+#if VERSION_IS(EU)
+	{ 0x000f, 0x0001, 0x008d, 0x0001, 0x00, 0x00 },
+	{ 0x000f, 0x0002, 0x008d, 0x0002, 0x01, 0x00 },
+	{ 0x000f, 0x0003, 0x008d, 0x0003, 0x00, 0x00 },
+	{ 0xffe4, 0x0005, 0xffe4, 0x0015, 0x00, 0x00 },
+	{ 0xffe5, 0x0005, 0xffe5, 0x0015, 0x01, 0x00 },
+	{ 0xffe6, 0x0005, 0xffe6, 0x0015, 0x00, 0x00 },
+	{ 0x008e, 0x0005, 0x008e, 0x005c, 0x00, 0x00 },
+	{ 0x008f, 0x0005, 0x008f, 0x005c, 0x01, 0x00 },
+	{ 0x0090, 0x0005, 0x0090, 0x005c, 0x00, 0x00 },
+	{ 0xffe8, 0x0016, 0x008e, 0x0016, 0x00, 0x00 },
+	{ 0xffe7, 0x0017, 0x008e, 0x0017, 0x01, 0x00 },
+	{ 0xffe8, 0x0018, 0x008e, 0x0018, 0x00, 0x00 },
+#else
 	{ 0x0037, 0x0001, 0x008d, 0x0001, 0x00, 0x00 },
 	{ 0x0037, 0x0002, 0x008d, 0x0002, 0x01, 0x00 },
 	{ 0x0037, 0x0003, 0x008d, 0x0003, 0x00, 0x00 },
@@ -533,6 +602,7 @@ Line DIGIMON_MOVE_INFO_LINES_RIGHT[18] = {
 	{ 0x0010, 0x0016, 0x008e, 0x0016, 0x00, 0x00 },
 	{ 0x000f, 0x0017, 0x008e, 0x0017, 0x01, 0x00 },
 	{ 0x0010, 0x0018, 0x008e, 0x0018, 0x00, 0x00 },
+#endif
 	{ 0x003a, 0x0019, 0x003a, 0x005c, 0x00, 0x00 },
 	{ 0x003b, 0x0018, 0x003b, 0x005c, 0x01, 0x00 },
 	{ 0x003c, 0x0019, 0x003c, 0x005c, 0x00, 0x00 },
@@ -542,10 +612,18 @@ Line DIGIMON_MOVE_INFO_LINES_RIGHT[18] = {
 };
 
 IconRect MOVES_VIEW_TECHSET_TEXT[13] = {
+#if VERSION_IS(EU)
+	{ 0x001e, 0xffb4, 0x17, 0x07, 0x5c, 0x22 },
+#else
 	{ 0x0016, 0xffb4, 0x17, 0x07, 0x5c, 0x22 },
+#endif
 	{ 0x0062, 0xffb4, 0x13, 0x07, 0x4c, 0x29 },
 	{ 0x007a, 0xffb4, 0x10, 0x07, 0x00, 0x30 },
+#if VERSION_IS(EU)
+	{ 0x004c, 0xffb4, 0x0b, 0x07, 0x74, 0x22 },
+#else
 	{ 0x0044, 0xffb4, 0x0b, 0x07, 0x74, 0x22 },
+#endif
 	{ 0x0035, 0xffc1, 0x04, 0x04, 0x78, 0x0c },
 	{ 0x0035, 0xffd0, 0x04, 0x04, 0x78, 0x0c },
 	{ 0x0035, 0xffe0, 0x04, 0x04, 0x78, 0x0c },
@@ -557,7 +635,32 @@ IconRect MOVES_VIEW_TECHSET_TEXT[13] = {
 	{ 0x0075, 0xffe0, 0x04, 0x04, 0x78, 0x0c },
 };
 
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+StringRect MOVES_VIEW_STRING_SPRITES[12] = {
+	{ 0xff8e, 0xffbf, 0x009c, 0x00, 0x18 },
+	{ 0x0042, 0xffbf, 0x0030, 0xa8, 0x18 },
+	{ 0xff8e, 0xffcd, 0x0048, 0x84, 0x30 },
+	{ 0xff8e, 0xffde, 0x0054, 0x00, 0x24 },
+	{ 0xfffa, 0xffde, 0x0084, 0x54, 0x24 },
+	{ 0xffa6, 0xffec, 0x0078, 0x54, 0x30 },
+	{ 0xff82, 0x0002, 0x00f8, 0x00, 0x3c },
+	{ 0xff82, 0x0012, 0x00f8, 0x00, 0x48 },
+	{ 0xff82, 0x0022, 0x00f8, 0x00, 0x54 },
+	{ 0xff82, 0x0032, 0x00f8, 0x00, 0x60 },
+	{ 0xff82, 0x0042, 0x00f8, 0x00, 0x60 },
+	{ 0xff82, 0x0052, 0x00f8, 0x00, 0x6c },
+};
+
+IconRect MOVES_VIEW_SPRITES[7] = {
+	{ 0xfff4, 0xffbf, 0x0c, 0x0c, 0x24, 0x00 },
+	{ 0x004a, 0xffde, 0x0c, 0x0c, 0x54, 0x00 },
+	{ 0xff94, 0xffec, 0x0c, 0x0c, 0x24, 0x00 },
+	{ 0xff70, 0x0002, 0x0c, 0x0c, 0x54, 0x00 },
+	{ 0xff70, 0x0012, 0x0c, 0x0c, 0x24, 0x00 },
+	{ 0xff70, 0x0032, 0x0c, 0x0c, 0x6c, 0x00 },
+	{ 0xff70, 0x0052, 0x0c, 0x0c, 0xb4, 0x00 },
+};
+#elif !VERSION_IS(US)
 StringRect MOVES_VIEW_STRING_SPRITES[12] = {
 	{ 0xff8e, 0xffbf, 0x009c, 0x00, 0x18 },
 	{ 0x0042, 0xffbf, 0x0030, 0xa8, 0x18 },
@@ -611,7 +714,11 @@ IconRect MOVES_VIEW_SPRITES[7] = {
 
 RECT STATS_VIEW_INSETS[13] = {
 	{ 50, 52, 98, 14 },
+#if VERSION_IS(EU)
+	{ 50, 68, 254, 14 },
+#else
 	{ 50, 68, 244, 14 },
+#endif
 	{ 50, 84, 26, 14 },
 	{ 122, 84, 26, 14 },
 	{ 75, 171, 50, 8 },
@@ -625,19 +732,7 @@ RECT STATS_VIEW_INSETS[13] = {
 	{ 194, 205, 54, 5 },
 };
 
-#if !VERSION_IS(US)
-StringRect STATS_VIEW_TEXT[9] = {
-	{ 0xff76, 0x0022, 0x0030, 0x48, 0x30 },
-	{ 0xff82, 0x0040, 0x0024, 0x18, 0x30 },
-	{ 0xff82, 0x004f, 0x0024, 0x78, 0x30 },
-	{ 0xfffc, 0x0004, 0x0018, 0x9c, 0x30 },
-	{ 0xfffc, 0x0013, 0x0018, 0xb4, 0x30 },
-	{ 0xfffc, 0x0022, 0x0024, 0x00, 0x24 },
-	{ 0xfffc, 0x0031, 0x0024, 0x24, 0x24 },
-	{ 0xffaf, 0xffdd, 0x000c, 0x00, 0x30 },
-	{ 0xfff6, 0xffdd, 0x000c, 0x0c, 0x30 },
-};
-#else
+#if VERSION_IS(US)
 StringRect STATS_VIEW_TEXT[9] = {
 	{ 0xff76, 0x0022, 0x0030, 0x48, 0x30 },
 	{ 0xff82, 0x0040, 0x0024, 0x18, 0x30 },
@@ -649,6 +744,18 @@ StringRect STATS_VIEW_TEXT[9] = {
 	{ 0xffaf, 0xffdd, 0x0000, 0x00, 0x30 },
 	{ 0xfff6, 0xffdd, 0x0000, 0x00, 0x30 },
 };
+#elif !VERSION_IS(EU)
+StringRect STATS_VIEW_TEXT[9] = {
+	{ 0xff76, 0x0022, 0x0030, 0x48, 0x30 },
+	{ 0xff82, 0x0040, 0x0024, 0x18, 0x30 },
+	{ 0xff82, 0x004f, 0x0024, 0x78, 0x30 },
+	{ 0xfffc, 0x0004, 0x0018, 0x9c, 0x30 },
+	{ 0xfffc, 0x0013, 0x0018, 0xb4, 0x30 },
+	{ 0xfffc, 0x0022, 0x0024, 0x00, 0x24 },
+	{ 0xfffc, 0x0031, 0x0024, 0x24, 0x24 },
+	{ 0xffaf, 0xffdd, 0x000c, 0x00, 0x30 },
+	{ 0xfff6, 0xffdd, 0x000c, 0x0c, 0x30 },
+};
 #endif
 
 IconRect STATS_VIEW_ELEMENTS[21] = {
@@ -659,9 +766,15 @@ IconRect STATS_VIEW_ELEMENTS[21] = {
 	{ 0xff76, 0xffce, 0x1a, 0x0a, 0x9a, 0x30 },
 	{ 0xffbd, 0xffde, 0x1c, 0x0a, 0xb4, 0x30 },
 	{ 0xff7b, 0xffde, 0x13, 0x0a, 0x80, 0x3a },
+#if VERSION_IS(EU)
+	{ 0x004c, 0xffc2, 0x19, 0x08, 0x00, 0x38 },
+	{ 0x0029, 0xffc2, 0x19, 0x08, 0x19, 0x38 },
+	{ 0x0061, 0xffc2, 0x19, 0x08, 0x32, 0x38 },
+#else
 	{ 0x0034, 0xffc2, 0x19, 0x08, 0x00, 0x38 },
 	{ 0x0009, 0xffc2, 0x19, 0x08, 0x19, 0x38 },
 	{ 0x0055, 0xffc2, 0x19, 0x08, 0x32, 0x38 },
+#endif
 	{ 0xff77, 0x004f, 0x09, 0x0b, 0xf0, 0x25 },
 	{ 0xffef, 0x0004, 0x0b, 0x0b, 0x93, 0x3a },
 	{ 0xffef, 0x0013, 0x0b, 0x0b, 0x9e, 0x3a },
@@ -669,7 +782,11 @@ IconRect STATS_VIEW_ELEMENTS[21] = {
 	{ 0xffef, 0x0031, 0x0b, 0x0b, 0xb4, 0x3a },
 	{ 0xffef, 0x0040, 0x0b, 0x0b, 0xbf, 0x3a },
 	{ 0xffef, 0x004f, 0x0a, 0x0b, 0xca, 0x3a },
+#if VERSION_IS(EU)
+	{ 0xff82, 0x0031, 0x24, 0x0c, 0xd5, 0x3a },
+#else
 	{ 0xff82, 0x0031, 0x24, 0x0c, 0xd4, 0x3a },
+#endif
 	{ 0xfffc, 0x0040, 0x24, 0x0c, 0xd4, 0x46 },
 	{ 0xfffc, 0x004f, 0x24, 0x0c, 0xd4, 0x52 },
 	{ 0xff76, 0x004f, 0x09, 0x0b, 0x2c, 0x74 },
@@ -703,9 +820,9 @@ RECT TAMER_WINDOW_BOXES[11] = {
 	{ 271, 174, 18, 18 },
 };
 
-#if !VERSION_IS(US)
+#if VERSION_IS(US)
 StringRect TAMER_WINDOW_NAME_STRING[11] = {
-	{ 0xff88, 0xffaf, 0x0018, 0x00, 0x0c },
+	{ 0xff84, 0xffaf, 0x0024, 0x00, 0x0c },
 	{ 0xffdb, 0xffca, 0x0054, 0x24, 0x0c },
 	{ 0xffdb, 0xffef, 0x0054, 0x78, 0x0c },
 	{ 0xffdb, 0x0002, 0x0048, 0x00, 0x18 },
@@ -717,9 +834,9 @@ StringRect TAMER_WINDOW_NAME_STRING[11] = {
 	{ 0x004d, 0x0016, 0x000c, 0xa8, 0x18 },
 	{ 0x0050, 0x004d, 0x000c, 0x9c, 0x24 },
 };
-#else
+#elif !VERSION_IS(EU)
 StringRect TAMER_WINDOW_NAME_STRING[11] = {
-	{ 0xff84, 0xffaf, 0x0024, 0x00, 0x0c },
+	{ 0xff88, 0xffaf, 0x0018, 0x00, 0x0c },
 	{ 0xffdb, 0xffca, 0x0054, 0x24, 0x0c },
 	{ 0xffdb, 0xffef, 0x0054, 0x78, 0x0c },
 	{ 0xffdb, 0x0002, 0x0048, 0x00, 0x18 },
@@ -814,6 +931,20 @@ Line MAIN_D_8012472C[14] = {
 	{ 0xff6d, 0x0051, 0x0091, 0x0051, 0x00, 0x00 },
 };
 
+#if VERSION_IS(EU)
+StringRect STATS_VIEW_TEXT[9] = {
+	{ 0xff76, 0x0022, 0x0028, 0x58, 0x30 },
+	{ 0xff82, 0x0040, 0x0020, 0x30, 0x30 },
+	{ 0xff82, 0x004f, 0x0020, 0x80, 0x30 },
+	{ 0xfffc, 0x0004, 0x0010, 0xa0, 0x30 },
+	{ 0xfffc, 0x0013, 0x0010, 0xb0, 0x30 },
+	{ 0xfffc, 0x0022, 0x0028, 0x00, 0x24 },
+	{ 0xfffc, 0x0031, 0x0028, 0x28, 0x24 },
+	{ 0xffaf, 0xffdd, 0x000c, 0x00, 0x30 },
+	{ 0xfff6, 0xffdd, 0x000c, 0x0c, 0x30 },
+};
+#endif
+
 char *STATUS_VIEW_LABELS[8] = {
 	MAIN_D_801238A0,
 	MAIN_D_801238B0,
@@ -838,6 +969,21 @@ char *TECH_VIEW_LABELS[10] = {
 	MAIN_D_801239F4,
 };
 
+#if VERSION_IS(EU)
+StringRect TAMER_WINDOW_NAME_STRING[10] = {
+	{ 0xff88, 0xffaf, 0x0020, 0x00, 0x0c },
+	{ 0xffdb, 0xffca, 0x0058, 0x38, 0x0c },
+	{ 0xffdb, 0xffef, 0x0050, 0x90, 0x0c },
+	{ 0xffdb, 0x0002, 0x0048, 0x00, 0x18 },
+	{ 0xffdb, 0x0016, 0x0048, 0x60, 0x18 },
+	{ 0xffdb, 0x0039, 0x0050, 0x00, 0x24 },
+	{ 0xffdb, 0x004d, 0x0050, 0x50, 0x24 },
+	{ 0x0050, 0xffef, 0x0018, 0xe0, 0x0c },
+	{ 0x0074, 0x0002, 0x0018, 0x48, 0x18 },
+	{ 0x004d, 0x0016, 0x0008, 0xa8, 0x18 },
+};
+#endif
+
 char *PLAYER_VIEW_LABELS[5] = {
 	MAIN_D_80123A18,
 	MAIN_D_80123A3C,
@@ -846,12 +992,20 @@ char *PLAYER_VIEW_LABELS[5] = {
 	MAIN_D_80123A98,
 };
 
+#if VERSION_IS(EU)
+char *CARD_CHART_LABELS[7] = {
+#else
 char *CARD_CHART_LABELS[5] = {
+#endif
 	MAIN_D_80123AB0,
 	MAIN_D_80123AD0,
 	MAIN_D_80123AE4,
 	MAIN_D_80123B10,
 	MAIN_D_80123B20,
+#if VERSION_IS(EU)
+	STR_CARD_LIST_SELECT_CANCEL,
+	STR_CHAMPION_ULTIMATE,
+#endif
 };
 
 char *MEDAL_NAMES[15] = {
@@ -1103,6 +1257,25 @@ int8_t MAIN_D_80134D46;
 int16_t MAIN_D_80134D48;
 
 static void *game_menu_sbss_order[] = {
+#if VERSION_IS(EU)
+	&CHART_SELECTED_DIGIMON,
+	&MAIN_D_80134D46,
+	&CHART_SELECTED_COLUMN,
+	&CHART_SELECTED_ROW,
+	&MEDAL_SELECTOR_INDEX,
+	&SELECTED_MEDAL,
+	&SELECTED_CARD,
+	&MAIN_D_80134D48,
+	&MOVE_SELECT_BOX_X,
+	&MOVE_SELECT_BOX_Y,
+	&DIGIMON_MENU_STATE,
+	&MENU_STATE,
+	&MENU_SUB_STATE,
+	&PLAYER_MENU_STATE,
+	&MENU_OPTION_COUNT,
+	&HAS_FISHING_ROD,
+	&TRIANGLE_MENU_STATE,
+#else
 	&MAIN_D_80134D48,
 	&MAIN_D_80134D46,
 	&CHART_SELECTED_ROW,
@@ -1125,6 +1298,7 @@ static void *game_menu_sbss_order[] = {
 	&TRIANGLE_MENU_STATE,
 	&HAS_FISHING_ROD,
 	&MENU_OPTION_COUNT,
+#endif
 };
 
 GARBAGE(addGameMenu, 14);
@@ -1290,7 +1464,10 @@ void renderGameMenu(void)
 		                  GAME_MENU_TEXT_SPRITES[i].texY + 0xbf, 0x1e, 0x7f50, 6,
 		                  disabled);
 	}
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderString(3, -0x21, -0x49, 0x20, 0xc, 0, 0xe8, 6, 1);
+	renderString(3, 0x18, -0x49, 0x20, 0xc, 0x20, 0xe8, 6, 1);
+#elif !VERSION_IS(US)
 	renderString(3, 7, -0x49, 0xc, 0xc, 0, 0xe8, 6, 1);
 	renderString(3, 0x2c, -0x49, 0xc, 0xc, 0xc, 0xe8, 6, 1);
 #else
@@ -1320,8 +1497,18 @@ void renderDateDigits(void)
 		} else {
 			texX = (digits[i] - 5) * 8 + 0x50;
 		}
+#if VERSION_IS(EU)
+		if (digits[i] == 1) {
+			renderRectPolyFT4((2 - i) * 9 - 5, -0x4a, 7, 0xc, texX + 1,
+			                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+		} else {
+			renderRectPolyFT4((2 - i) * 9 - 5, -0x4a, 8, 0xc, texX,
+			                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+		}
+#else
 		renderRectPolyFT4((2 - i) * 9 + 0xf, -0x4a, 8, 0xc, texX,
 		                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+#endif
 	}
 
 	convertValueToDigits(3, YEAR + 1, &digitCount, digits);
@@ -1335,8 +1522,18 @@ void renderDateDigits(void)
 		} else {
 			texX = (digits[i] - 5) * 8 + 0x50;
 		}
+#if VERSION_IS(EU)
+		if (digits[i] == 1) {
+			renderRectPolyFT4((2 - i) * 9 - 0x3e, -0x4a, 7, 0xc, texX + 1,
+			                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+		} else {
+			renderRectPolyFT4((2 - i) * 9 - 0x3e, -0x4a, 8, 0xc, texX,
+			                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+		}
+#else
 		renderRectPolyFT4((2 - i) * 9 - 0x16, -0x4a, 8, 0xc, texX,
 		                  texY + 0xc0, 0x1e, 0x7f10, 5, 0);
+#endif
 	}
 }
 #else
@@ -1636,8 +1833,13 @@ void renderDigimonMenu(void)
 		break;
 	}
 	tabs.tab[DIGIMON_MENU_STATE] = 0;
+#if VERSION_IS(EU)
+	renderString(tabs.tab[0], -0x8a, -0x65, 0x38, 0xc, 0, 0, 5, 1);
+	renderString(tabs.tab[1], -0x3f, -0x65, 0x30, 0xc, 0x38, 0, 5, 1);
+#else
 	renderString(tabs.tab[0], -0x8a, -0x65, 0x3c, 0xc, 0, 0, 5, 1);
 	renderString(tabs.tab[1], -0x3f, -0x65, 0x30, 0xc, 0x3c, 0, 5, 1);
+#endif
 	renderMenuTab(-0x91, 0x4c, tabs.tab[0]);
 	renderMenuTab(-0x46, 0x40, tabs.tab[1]);
 }
@@ -1946,10 +2148,17 @@ void renderPlayerMenu(void)
 		break;
 	}
 	tabs.tab[PLAYER_MENU_STATE] = 0;
+#if VERSION_IS(EU)
+	renderString(tabs.tab[0], -0x89, -0x65, 0x38, 0xc, 0, 0, 5, 1);
+	renderString(tabs.tab[1], -0x3e, -0x65, 0x38, 0xc, 0x38, 0, 5, 1);
+	renderString(tabs.tab[2], 0xd, -0x65, 0x20, 0xc, 0x70, 0, 5, 1);
+	renderString(tabs.tab[3], 0x40, -0x65, 0x20, 0xc, 0x90, 0, 5, 1);
+#else
 	renderString(tabs.tab[0], -0x89, -0x65, 0x3c, 0xc, 0, 0, 5, 1);
 	renderString(tabs.tab[1], -0x3e, -0x65, 0x3c, 0xc, 0x3c, 0, 5, 1);
 	renderString(tabs.tab[2], 0xd, -0x65, 0x24, 0xc, 0x78, 0, 5, 1);
 	renderString(tabs.tab[3], 0x40, -0x65, 0x24, 0xc, 0x9c, 0, 5, 1);
+#endif
 	renderMenuTab(-0x91, 0x4c, tabs.tab[0]);
 	renderMenuTab(-0x46, 0x4c, tabs.tab[1]);
 	renderMenuTab(5, 0x34, tabs.tab[2]);
@@ -2182,8 +2391,12 @@ void renderCardImage(void)
 
 void renderCardCount(void)
 {
+#if VERSION_IS(EU)
+	renderNumber(0, 0x63, 0x4b, 1, getCardAmount(SELECTED_CARD), 3);
+#else
 	renderNumber(0, 0x59, 0x4b, 1, getCardAmount(SELECTED_CARD), 3);
 	renderString(0, 0x6b, 0x4c, 0xc, 0xc, 0xd8, 0xc, 0);
+#endif
 }
 
 void renderDigimonStatsView(void)
@@ -2209,7 +2422,11 @@ void renderDigimonStatsView(void)
 		break;
 	case 1:
 		renderSeparatorLines(STATS_VIEW_LINES, 6, 5);
+#if VERSION_IS(EU)
+		for (j = 0; j < 7; j++) {
+#else
 		for (j = 0; j < 9; j++) {
+#endif
 			sr = &STATS_VIEW_TEXT[j];
 			renderString(3, sr->posX, sr->posY + 1, sr->uvWidth, 0xc, sr->uvX, sr->uvY, 5, 1);
 		}
@@ -2220,7 +2437,9 @@ void renderDigimonStatsView(void)
 		}
 		renderString(0, -0x6d, -0x42, 0x48, 0xc, 0, 0x3c, 5, 0);
 		w = strlen(DIGIMON_NAME(ENTITY_TABLE[1]->type));
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		renderString(0, -0x6d, -0x33, (w / 2) * 8, 0xc, 0, 0x48, 5, 0);
+#elif !VERSION_IS(US)
 		renderString(0, -0x6d, -0x33, (w / 2) * 12, 0xc, 0x9c, 0x24, 5, 0);
 #else
 		w = w * 10;
@@ -2229,6 +2448,20 @@ void renderDigimonStatsView(void)
 		}
 		renderString(0, -0x6c, -0x32, w, 0xc, 0, 0x48, 5, 0);
 #endif
+#if VERSION_IS(EU)
+		renderNumber(0, -0x69, -0x22, 2, PARTNER_PARA.age, 5);
+		renderNumber(0, -0x22, -0x22, 2, PARTNER_PARA.weight, 5);
+		renderNumber(0, 0x2b, 3, 4, PARTNER_ENTITY.digimonEntity.stats.current.currentHP, 5);
+		renderString(0, 0x53, 4, 8, 0xc, 0x50, 0x30, 5, 0);
+		renderNumber(0, 0x67, 3, 4, PARTNER_ENTITY.digimonEntity.stats.base.hp, 5);
+		renderNumber(0, 0x2b, 0x12, 4, PARTNER_ENTITY.digimonEntity.stats.current.currentMP, 5);
+		renderString(0, 0x53, 0x13, 8, 0xc, 0x50, 0x30, 5, 0);
+		renderNumber(0, 0x67, 0x12, 4, PARTNER_ENTITY.digimonEntity.stats.base.mp, 5);
+		renderNumber(0, 0x27, 0x20, 4, PARTNER_ENTITY.digimonEntity.stats.base.off, 5);
+		renderNumber(0, 0x27, 0x30, 4, PARTNER_ENTITY.digimonEntity.stats.base.def, 5);
+		renderNumber(0, 0x27, 0x3f, 4, PARTNER_ENTITY.digimonEntity.stats.base.speed, 5);
+		renderNumber(0, 0x27, 0x4e, 4, PARTNER_ENTITY.digimonEntity.stats.base.brain, 5);
+#else
 		renderNumber(0, -0x6d, -0x22, 2, PARTNER_PARA.age, 5);
 #if !VERSION_IS(US)
 		renderNumber(0, -0x26, -0x22, 2, PARTNER_PARA.weight, 5);
@@ -2253,6 +2486,7 @@ void renderDigimonStatsView(void)
 		renderNumber(0, 0x23, 0x3d, 4, PARTNER_ENTITY.digimonEntity.stats.base.speed, 5);
 		renderNumber(0, 0x23, 0x4c, 4, PARTNER_ENTITY.digimonEntity.stats.base.brain, 5);
 #endif
+#endif
 		renderDigimonStatsBar(PARTNER_ENTITY.digimonEntity.stats.base.hp, 0x270f, 0x64, 0x24, 0xc);
 		renderDigimonStatsBar(PARTNER_ENTITY.digimonEntity.stats.base.mp, 0x270f, 0x64, 0x24, 0x1b);
 		renderDigimonStatsBar(PARTNER_ENTITY.digimonEntity.stats.base.off, 0x3e7, 0x32, 0x24, 0x2a);
@@ -2273,11 +2507,24 @@ void renderDigimonStatsView(void)
 				} else {
 					frame = 0xc;
 				}
+#if VERSION_IS(EU)
+				renderRectPolyFT4(k + 0x29, -0x33, 0xc, 0xc, frame + (special * 0x18 + 0x24), 0x80, 5, clut, 5, 0);
+#else
 				renderRectPolyFT4(k + 9, -0x33, 0xc, 0xc, frame + (special * 0x18 + 0x24), 0x80, 5, clut, 5, 0);
+#endif
 				k += 0xc;
 			}
 		}
 		if (DIGIMON_DATA[ENTITY_TABLE[1]->type].type != 0) {
+#if VERSION_IS(EU)
+			renderRectPolyFT4(0x53, -0x33, 0xc, 0xc, (DIGIMON_DATA[ENTITY_TABLE[1]->type].type - 1) * 0xc, 0x80, 5, 0x7a06, 5, 0);
+		}
+		if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].sleepCycle == 5) {
+			renderString(0, 0x61, -0x33, 0x30, 0xc, 0xc8, 0x30, 5, 0);
+		}
+		if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].sleepCycle < 5) {
+			renderString(0, 0x61, -0x33, 0x30, 0xc, RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].sleepCycle * 0x30, 0x18, 5, 0);
+#else
 			renderRectPolyFT4(0x3b, -0x33, 0xc, 0xc, (DIGIMON_DATA[ENTITY_TABLE[1]->type].type - 1) * 0xc, 0x80, 5, 0x7a06, 5, 0);
 		}
 		if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].sleepCycle == 5) {
@@ -2285,6 +2532,7 @@ void renderDigimonStatsView(void)
 		}
 		if (RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].sleepCycle < 5) {
 			renderString(0, 0x55, -0x33, 0x30, 0xc, RAISE_DATA[PARTNER_ENTITY.digimonEntity.entity.type].sleepCycle * 0x30, 0x18, 5, 0);
+#endif
 		}
 		for (i = 0; i < 3; i++) {
 			if (i < PARTNER_ENTITY.lives) {
@@ -2325,6 +2573,182 @@ void renderDigimonStatsView(void)
 	}
 }
 
+#if VERSION_IS(EU)
+void renderDigimonMovesView(void)
+{
+	Move *mv;
+	StringRect *sr;
+	int32_t row;
+	IconRect *icon;
+	int32_t i;
+	int32_t j;
+	if (MENU_STATE > 0 && MENU_STATE < 7) {
+		for (i = 0; i < 0xd; i++) {
+			icon = &MOVES_VIEW_TECHSET_TEXT[i];
+			renderRectPolyFT4(icon->posX,
+			                  icon->posY,
+			                  icon->width,
+			                  icon->height,
+			                  icon->texX,
+			                  icon->texY + 0x80, 5, 0x7b06, 5, 0);
+		}
+		renderString(3, -0x8e, -0x57, 0x38, 0xc, 0, 0x48, 5, 1);
+		j = 0;
+		while (j < 3) {
+			if (EQUIPPED_MOVES[j] != 0xff) {
+				mv = &MOVE_DATA[EQUIPPED_MOVES[j]];
+				renderString(0, -0x8e, j * 0xf - 0x42, 0xa0, 0xc, 0, j * 0xc + 0x18, 5, 1);
+				renderNumber(0, 0x1c, j * 0xf - 0x43, 3, mv->power, 5);
+				renderNumber(0, 0x45, j * 0xf - 0x43, 3, mv->mpCost * 3, 5);
+				if (mv->range != 0) {
+					renderString(0, 0x63, j * 0xf - 0x42, 0x10, 0xc,
+					             (mv->range - 1) * 0x10 + 0x2c, 0x6c, 5, 1);
+				}
+				if (mv->status != 0) {
+					renderRectPolyFT4(0x7d, j * 0xf - 0x43, 0xc, 0xc,
+					                  (mv->status - 1) * 0xc, 0x8c, 5, 0x7a06, 5, 0);
+				}
+			}
+			j++;
+		}
+		renderSeparatorLines(MOVES_TECHSET_LINES, 3, 3);
+	}
+	switch (MENU_STATE) {
+	case 0:
+		if (drawDigimonMovesText() == 1) {
+			MENU_STATE = 1;
+		}
+		break;
+	case 1:
+		renderString(3, -0x8e, -0xf, 0x30, 0xc, 0x38, 0x48, 5, 1);
+		for (i = 0; i < 3; i++) {
+			icon = &MOVES_VIEW_TECHSET_TEXT[i];
+			renderRectPolyFT4(icon->posX, -9,
+			                  icon->width,
+			                  icon->height,
+			                  icon->texX,
+			                  icon->texY + 0x80, 5, 0x7b06, 5, 0);
+		}
+		renderRectPolyFT4(0x75, 4, 4, 4, 0x78, 0x8c, 5, 0x7b06, 5, 0);
+		renderSeparatorLines(&MOVES_TECHSET_LINES[3], 3, 5);
+		if (EQUIPPED_MOVES[3] != 0xff) {
+			renderString(3, -0x8e, -0xf, 0x30, 0xc, 0x38, 0x48, 5, 1);
+			renderString(0, -0x8e, 1, 0xa0, 0xc, 0, 0x3c, 5, 1);
+			renderNumber(0, 0x1c, 0, 3, MOVE_DATA[EQUIPPED_MOVES[3]].power, 5);
+			renderString(0, 0x63, 1, 0x10, 0xc,
+			             (MOVE_DATA[EQUIPPED_MOVES[3]].range - 1) * 0x10 + 0x2c, 0x6c, 5, 1);
+			if (MOVE_DATA[EQUIPPED_MOVES[3]].status != 0) {
+				renderRectPolyFT4(0x7d, 0, 0xc, 0xc,
+				                  (MOVE_DATA[EQUIPPED_MOVES[3]].status - 1) * 0xc, 0x8c, 5,
+				                  0x7a06, 5, 0);
+			}
+		}
+		renderString(0xf, -0x82, 0x19, 0xc, 0xc, 0, 0x54, 5, 1);
+		renderString(0, -0x76, 0x19, 0xa8, 0xc, 0xc, 0x54, 5, 1);
+		renderString(0x11, -0x82, 0x27, 0xc, 0xc, 0, 0x60, 5, 1);
+		renderString(0, -0x76, 0x27, 0x84, 0xc, 0xc, 0x60, 5, 1);
+		break;
+	case 2:
+	case 4:
+		UI_BOX_DATA[1].finalPos.h -= 0x27;
+		if (UI_BOX_DATA[1].finalPos.h < 0x4a) {
+			++MENU_STATE;
+		}
+		break;
+	case 3:
+	case 5:
+		UI_BOX_DATA[1].finalPos.h += 0x27;
+		if (0xbd < UI_BOX_DATA[1].finalPos.h) {
+			MENU_STATE = (MENU_STATE == 3) ? 6 : 1;
+		}
+		break;
+	case 6:
+		renderString(3, -0x8e, -0xf, 0x38, 0xc, 0x68, 0x48, 5, 1);
+		renderSeparatorLines(MOVES_VIEW_HELP_LINES, 0xc, 5);
+		for (i = 0; i < 4; i++) {
+			icon = &MOVES_VIEW_HELP_CORNERS[i];
+			renderRectPolyFT4(icon->posX,
+			                  icon->posY,
+			                  icon->width,
+			                  icon->height,
+			                  icon->texX,
+			                  icon->texY + 0x80, 5, 0x7b06, 5, 0);
+		}
+		renderString(0, -0x87, 0x20, 0x30, 0xc, 0x38, 0, 5, 1);
+		renderString(0, -0x81, 0x2e, 0x20, 0xc, 0, 0x6c, 5, 1);
+		renderString(0x10, -0x76, 0x4c, 0xc, 0xc, 0x20, 0x6c, 5, 1);
+		renderRectPolyFT4(-0x74, 0x3c, 10, 10, 0x80, 0x8c, 5, 0x7b06, 5, 0);
+		j = 0;
+		while (j < 7) {
+			renderRectPolyFT4(-0x43, j * 0xf - 8, 0x14, 10, j * 0x14, 0x98, 5, 0x7b06, 5, 0);
+			renderRectPolyFT4(100, j * 0xf - 8, 0x14, 10, j * 0x14, 0x98, 5, 0x7b06, 5, 0);
+			j++;
+		}
+		j = 0;
+		while (j < 8) {
+			renderRectPolyFT4(j * 0x12 - 0x26, -0xf, 4, 5, j * 4 + 0x94, 0x8c, 5, 0x7b06, 5, 0);
+			j++;
+		}
+		renderRectPolyFT4(MOVE_SELECT_BOX_X - 0xa0,
+		                  MOVE_SELECT_BOX_Y - 0x78, 0x12, 0x10, 0xc0, 0x8c, 5, 0x7b06, 5, 0);
+		for (row = 0; row < 7; row++) {
+			for (j = 0; j < 8; j++) {
+				renderBox(j * 0x12 - 0x2a, row * 0xf - 7, 0xc, 0xc,
+				          0x4e, 0x60, 0x6e, 0x80, 5);
+			}
+		}
+		if (0xa8 < MOVE_SELECT_BOX_X) {
+			renderDigimonMovesSelected(0);
+		} else {
+			renderDigimonMovesSelected(1);
+		}
+		renderDigimonMoveBox();
+		break;
+	case 7:
+		if (drawMoveViewHelpStrings() == 1) {
+			MENU_STATE = 8;
+		}
+		break;
+	case 8:
+		drawLine2P(0x20202, -0x92, -4, 0x92, -4, 5, 0);
+		drawLine2P(0xfad990, -0x93, -3, 0x93, -3, 5, 0);
+		drawLine2P(0x20202, -0x92, -2, 0x92, -2, 5, 0);
+		renderString(3, -0x8e, -0x52, 0xe0, 0xc, 0, 0x30, 5, 1);
+		for (i = 6; i < 0xc; i++) {
+			sr = &MOVES_VIEW_STRING_SPRITES[i];
+			renderString(0, sr->posX,
+			             sr->posY + 1,
+			             sr->uvWidth, 0xc,
+			             sr->uvX,
+			             sr->uvY, 5, 1);
+		}
+		renderRectPolyFT4(-0x90, -0x41, 0xc, 0xc, 0xb4, 0x8c, 5, 0x7b06, 5, 0);
+		renderRectPolyFT4(-0x90, -0x22, 0xc, 0xc, 0xb4, 0x8c, 5, 0x7b06, 5, 0);
+		renderString(0, -0x7e, -0x41, 0xf8, 0xc, 0, 0x18, 5, 1);
+		renderString(0, -0x7e, -0x22, 0x38, 0xc, 0, 0x24, 5, 1);
+		renderString(0xf, -0x46, -0x22, 0xc, 0xc, 0x38, 0x24, 5, 1);
+		renderString(0, -0x3a, -0x22, 0x78, 0xc, 0x44, 0x24, 5, 1);
+		for (i = 0; i < 7; i++) {
+			if (i != 2) {
+				icon = &MOVES_VIEW_SPRITES[i];
+				renderRectPolyFT4(icon->posX, icon->posY, icon->width, icon->height,
+				                  icon->texX, icon->texY + 0x80, 5,
+				                  (i == 5) ? getClut(96, 489) : getClut(96, 488), 5, 0x80);
+			}
+		}
+		renderBox(0x4a, -0x22, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
+		renderBox(-0x90, 2, 0xc, 0xc, 200, 0, 0x28, 0x81, 4);
+		renderBox(-0x90, 0x22, 0xc, 0xc, 0x4e, 0x60, 0x6e, 0x80, 4);
+		renderBox(-0x90, 0x32, 0xc, 0xc, 0x68, 0x68, 0x68, 0x83, 4);
+		renderBox(-0x90, 0x42, 0xc, 0xc, 0x68, 0x68, 0x68, 0x83, 4);
+		break;
+	case 9:
+		if (drawDigimonMovesText() == 1) {
+			MENU_STATE = 6;
+		}
+	}
+}
+#else
 void renderDigimonMovesView(void)
 {
 	Move *mv;
@@ -2531,6 +2955,7 @@ void renderDigimonMovesView(void)
 		}
 	}
 }
+#endif
 
 void renderMenuTab(int16_t x, int8_t w, int8_t layer)
 {
@@ -2567,7 +2992,11 @@ void renderPlayerInfoView(void)
 	case 1:
 		renderSeparatorLines(TAMER_VIEW_PLAYER_LINES, 0xb, 5);
 
+#if VERSION_IS(EU)
+		for (i = 0; i < 0xa; i++) {
+#else
 		for (i = 0; i < 0xb; i++) {
+#endif
 			e = &TAMER_WINDOW_NAME_STRING[i];
 			renderString(3 - ((i / 7) * 3), e->posX, e->posY + 1, e->uvWidth, 0xc, e->uvX,
 			             e->uvY, 5, 1);
@@ -2575,6 +3004,10 @@ void renderPlayerInfoView(void)
 
 		renderString(0, -0x54, -0x50, 0x48, 0xc, 0, 0x30, 5, 1);
 		renderNumber(0, 0x35, -0x36, 2, TAMER_ENTITY.tamerLevel, 5);
+#if VERSION_IS(EU)
+		n = strlen(TAMER_LEVEL_TITLES[TAMER_ENTITY.tamerLevel]) / 2;
+		renderString(0, 0x28, -0x25, n * 8, 0xc, 0, (TAMER_ENTITY.tamerLevel * 12) + 0x40, 5, 1);
+#else
 #if !VERSION_IS(US)
 		renderString(0, 0x28, -0x25, 0x30, 0xc, 0, (TAMER_ENTITY.tamerLevel * 12) + 0x40, 5, 1);
 #else
@@ -2582,6 +3015,7 @@ void renderPlayerInfoView(void)
 #endif
 		n = strlen(TAMER_LEVEL_TITLES[TAMER_ENTITY.tamerLevel]) / 2;
 		renderString(0, (n * 12) + 0x28, -0x25, 0x30, 0xc, 0xb4, 0x18, 5, 1);
+#endif
 		renderNumber(0, 0x35, -0x11, 2, TAMER_ENTITY.raisedCount, 5);
 		renderNumber(0, 0x29, 2, 6, MONEY, 5);
 #if !VERSION_IS(US)
@@ -2641,6 +3075,20 @@ void renderDigimonMovesSelected(int16_t panel)
 		renderSeparatorLines(DIGIMON_MOVE_INFO_LINES_RIGHT, 0x12, 4);
 	}
 
+#if VERSION_IS(EU)
+	renderRectPolyFT4((panel * 0x75) - 0x91, 1, 4, 4, 0x78, 0x90, 5, 0x7b06, 4, 0);
+	renderRectPolyFT4((panel * 0x75) + 0x18, 1, 4, 4, 0x7c, 0x90, 5, 0x7b06, 4, 0);
+	renderRectPolyFT4((panel * 0xcb) - 0x91, 0x5c, 4, 4, 0x78, 0x94, 5, 0x7b06, 4, 0);
+	renderRectPolyFT4((panel * 0xcb) - 0x3e, 0x5c, 4, 4, 0x7c, 0x94, 5, 0x7b06, 4, 0);
+	if (panel == 0) {
+		renderRectPolyFT4(0x18, 0x15, 4, 4, 0x7c, 0x94, 5, 0x7b06, 4, 0);
+	} else {
+		renderRectPolyFT4(-0x1c, 0x15, 4, 4, 0x78, 0x94, 5, 0x7b06, 4, 0);
+	}
+	renderBox((panel * 0x75) - 0x8f, 3, 0xa8, 0x13, 0x32, 0x32, 0x80, 0, 4);
+	renderBox((panel * 0xcb) - 0x8f, 0x18, 0x57, 0x45, 0x32, 0x32, 0x80, 0, 4);
+	renderRectPolyFT4((panel * 0x75) - 0x8c, -2, 0x25, 7, 0x11, 0xb0, 5, 0x7b06, 3, 0);
+#else
 	renderRectPolyFT4((panel * 0x9d) - 0x91, 1, 4, 4, 0x78, 0x90, 5, 0x7b06, 4, 0);
 	renderRectPolyFT4((panel * 0x9d) - 0x10, 1, 4, 4, 0x7c, 0x90, 5, 0x7b06, 4, 0);
 	renderRectPolyFT4((panel * 0xcb) - 0x91, 0x5c, 4, 4, 0x78, 0x94, 5, 0x7b06, 4, 0);
@@ -2653,6 +3101,7 @@ void renderDigimonMovesSelected(int16_t panel)
 	renderBox((panel * 0x9d) - 0x8f, 3, 0x80, 0x13, 0x32, 0x32, 0x80, 0, 4);
 	renderBox((panel * 0xcb) - 0x8f, 0x18, 0x57, 0x45, 0x32, 0x32, 0x80, 0, 4);
 	renderRectPolyFT4((panel * 0x9d) - 0x8c, -2, 0x25, 7, 0x11, 0xb0, 5, 0x7b06, 3, 0);
+#endif
 	renderRectPolyFT4((panel * 0xcb) - 0x8c, 0x1d, 0x17, 7, 0x5c, 0xa2, 5, 0x7b06, 3, 0);
 	renderRectPolyFT4((panel * 0xcb) - 0x8c, 0x2e, 0xb, 7, 0x74, 0xa2, 5, 0x7b06, 3, 0);
 	renderRectPolyFT4((panel * 0xcb) - 0x8c, 0x3f, 0x13, 7, 0x4c, 0xa9, 5, 0x7b06, 3, 0);
@@ -2682,6 +3131,19 @@ void renderDigimonMovesSelected(int16_t panel)
 
 	if (hasMove(moveId)) {
 		move = &MOVE_DATA[moveId];
+#if VERSION_IS(EU)
+		setRECT(&rect, 0, 0x84, 0xa0, 0xc);
+		clearTextSubArea(&rect);
+		drawString(MOVE_NAMES[moveId], 0, 0x84);
+		renderString(0, (panel * 0x75) - 0x8a, 9, 0xa0, 0xc, 0, 0x84, 3, 1);
+		renderNumber(0, (panel * 0xcb) - 0x64, 0x1b, 3, move->power, 3);
+		renderNumber(0, (panel * 0xcb) - 0x64, 0x2c, 3, move->mpCost * 3, 3);
+		renderString(0, (panel * 0xcb) - 0x64, 0x3e, 0x20, 0xc, (move->range - 1) * 0x20, 0x78, 3, 1);
+		status = move->status;
+		if (status != 0) {
+			renderString(0, (panel * 0xcb) - 0x64, 0x4f, 0x20, 0xc, (status - 1) * 0x20 + 0x70, 0x6c, 3, 1);
+		}
+#else
 		setRECT(&rect, 0, 0x84, 0x78, 0xc);
 		clearTextSubArea(&rect);
 		drawString(MOVE_NAMES[moveId], 0, 0x84);
@@ -2713,6 +3175,7 @@ void renderDigimonMovesSelected(int16_t panel)
 			renderString(0, (panel * 0xcb) - 0x64, 0x4f, 0x1e, 0xc, 0xdb, 0x6c, 3, 1);
 			break;
 		}
+#endif
 #endif
 	}
 }
@@ -2960,6 +3423,12 @@ void renderEvoChartView(void)
 		                0, 0x87, 0x41, 5);
 		renderBorderBox(0xf1, 0x27, 0x38, 0x9f, 0x6996d2, 0x1e4178,
 		                0xaf, 0x64, 0x2d, 5);
+#if VERSION_IS(EU)
+		renderString(0xf, -0x1a, 0x54, 0xc, 0xc, 0, 0xc, 5, 1);
+		renderString(0, -0xe, 0x54, 0x60, 0xc, 0xc, 0xc, 5, 1);
+		renderString(0x11, 0x3a, 0x54, 0xc, 0xc, 0x6c, 0xc, 5, 1);
+		renderString(0, 0x46, 0x54, 0x60, 0xc, 0x78, 0xc, 5, 1);
+#else
 #if !VERSION_IS(US)
 		renderString(0xe, -0x1a, 0x54, 0xc, 0xc, 0, 0xc, 5, 1);
 #else
@@ -2972,6 +3441,7 @@ void renderEvoChartView(void)
 		renderString(7, 0x3a, 0x54, 0xc, 0xc, 0x48, 0xc, 5, 1);
 #endif
 		renderString(0, 0x46, 0x54, 0x3c, 0xc, 0x54, 0xc, 5, 1);
+#endif
 	}
 }
 
@@ -3145,7 +3615,16 @@ void renderEvoChartDetail(void)
 		toSprites++;
 	}
 
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderString(3, -0x19, -0x4f, 0x30, 0xc, 0, 0x18, 4);
+	if (DIGIMON_DATA[CHART_SELECTED_DIGIMON].level < 4) {
+		renderString(0, -0x5c, 0x3a, 0x30, 0xc,
+		             ((DIGIMON_DATA[CHART_SELECTED_DIGIMON].level - 1) * 48) + 0x30, 0x18, 4);
+	} else {
+		renderString(0, -0x5c, 0x3a, 0x30, 0xc, (DIGIMON_DATA[CHART_SELECTED_DIGIMON].level - 4) * 48,
+		             0x48, 4);
+	}
+#elif !VERSION_IS(US)
 	renderString(3, -0x19, -0x4f, 0x30, 0xc, 0, 0x18, 4);
 	renderString(0, -0x56, 0x3a, 0x24, 0xc,
 	             ((DIGIMON_DATA[CHART_SELECTED_DIGIMON].level - 1) * 36) + 0x30, 0x18,
@@ -3170,7 +3649,11 @@ void renderEvoChartDetail(void)
 	}
 #endif
 	len = strlen(DIGIMON_NAME(CHART_SELECTED_DIGIMON)) / 2;
+#if VERSION_IS(EU)
+	renderString(0, -0x80, 0x4d, 0xa0, 0xc, 0, 0x30, 4);
+#else
 	renderString(0, -0x5c - ((len - 4) * 6), 0x4d, 0x78, 0xc, 0, 0x30, 4);
+#endif
 	for (i = 0; i < 6; i++) {
 		renderInsetBox(MAIN_D_80124B48[i].posX, MAIN_D_80124B48[i].posY,
 		               MAIN_D_80124B48[i].width,
@@ -3199,13 +3682,19 @@ void renderMedalView(void)
 		                  0x18, 0x7dc7, 1, 0);
 	case 1:
 		renderSeparatorLines(MAIN_D_8012472C, 0xe, 5);
+#if VERSION_IS(EU)
+		renderString(3, -0x36, -0x51, 0x68, 0xc, 0, 0xc, 5, 1);
+#else
 		renderString(3, -0x36, -0x51, 0x6c, 0xc, 0, 0xc, 5, 1);
+#endif
 
 		for (i = 0; i < 0xf; i++) {
 			if (hasMedal(i) != 0) {
 				if (MEDAL_SELECTOR_INDEX == i) {
 					if (MENU_STATE != 3) {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+						renderString(0, -0x7e, 0x17, 0xfc, 0xc, 0, 0x18, 5, 1);
+#elif !VERSION_IS(US)
 						renderString(0, -0x42, 0x17, 0x84, 0xc, 0, 0x18, 5, 1);
 #else
 						renderString(0, -0x5d, 0x17, 0xac, 0xc, 0, 0x18, 5, 1);
@@ -3218,7 +3707,7 @@ void renderMedalView(void)
 					renderDigiviceMedals();
 				}
 			} else {
-#if !VERSION_IS(US)
+#if !VERSION_IS(US) && !VERSION_IS(EU)
 				if (MEDAL_SELECTOR_INDEX == i) {
 					renderString(0, -0x42, 0x17, 0xc, 0xc, 0xe4, 0xc, 5, 1);
 					renderString(0, -0x7e, 0x27, 0xc, 0xc, 0xe4, 0xc, 5, 1);
@@ -3232,6 +3721,13 @@ void renderMedalView(void)
 			                  0xf0, 0xb0, 0x18, 0x7dc7, 5, 0);
 		}
 
+#if VERSION_IS(EU)
+		renderInsetBox(0x20, 0x8d, 0x100, 0xe, 5);
+		renderString(FOOTER_GLYPH1_COLOR, -0x1a, 0x55, 0xc, 0xc, 0, 0x48, 5, 1);
+		renderString(0, -0xe, 0x55, 0x48, 0xc, 0x18, 0x48, 5, 1);
+		renderString(FOOTER_GLYPH2_COLOR, 0x3a, 0x55, 0xc, 0xc, 0xc, 0x48, 5, 1);
+		renderString(0, 0x46, 0x55, 0x40, 0xc, 0x60, 0x48, 5, 1);
+#else
 #if !VERSION_IS(US)
 		renderInsetBox(0x5c, 0x8d, 0x88, 0xe, 5);
 #else
@@ -3246,6 +3742,7 @@ void renderMedalView(void)
 		renderString(0, 0x4f, 0x55, 0x24, 0xc, 0xc0, 0xc, 5, 1);
 #else
 		renderString(0, 0x37, 0x55, 0x30, 0xc, 0xc0, 0xc, 5, 1);
+#endif
 #endif
 	}
 }
@@ -3287,10 +3784,17 @@ void renderCardsView(void)
 		}
 
 		renderString(3, -0x24, -0x50, 0x48, 0xc, 0, 0xc, 5, 1);
+#if VERSION_IS(EU)
+		renderString(FOOTER_GLYPH1_COLOR, -0x1a, 0x53, 0xc, 0xc, 0, 0x48, 5, 1);
+		renderString(0, -0xe, 0x53, 0x48, 0xc, 0x18, 0x48, 5, 1);
+		renderString(FOOTER_GLYPH2_COLOR, 0x3a, 0x53, 0xc, 0xc, 0xc, 0x48, 5, 1);
+		renderString(0, 0x46, 0x53, 0x40, 0xc, 0x60, 0x48, 5, 1);
+#else
 		renderString(FOOTER_GLYPH1_COLOR, -0x23, 0x53, 0xc, 0xc, 0x48, 0xc, 5, 1);
 		renderString(0, -0x17, 0x53, 0x3c, 0xc, 0x54, 0xc, 5, 1);
 		renderString(FOOTER_GLYPH2_COLOR, 0x2b, 0x53, 0xc, 0xc, 0x90, 0xc, 5, 1);
 		renderString(0, 0x37, 0x53, 0x3c, 0xc, 0x9c, 0xc, 5, 1);
+#endif
 	}
 }
 
@@ -3363,11 +3867,15 @@ int32_t drawDigimonStatsStrings(void)
 		clearTextSubArea(&rect);
 		drawString(MAIN_D_80124C54, 0, 0xf0);
 		drawString(MAIN_D_80124C0C[2], 0, 0x24);
+#if VERSION_IS(EU)
+		drawString(MAIN_D_80124C0C[3], 0x28, 0x24);
+#else
 		drawString(MAIN_D_80124C0C[3], 0x24, 0x24);
+#endif
 		MENU_SUB_STATE = 1;
 		break;
 	case 1:
-#if !VERSION_IS(US)
+#if !VERSION_IS(US) && !VERSION_IS(EU)
 		drawString(DIGIMON_NAME(ENTITY_TABLE[1]->type), 0x9c, 0x24);
 #else
 		drawString(DIGIMON_NAME(ENTITY_TABLE[1]->type), 0, 0x48);
@@ -3570,7 +4078,11 @@ int32_t drawDigimonMovesText(void)
 #endif
 		break;
 	case 2:
+#if VERSION_IS(EU)
+		drawString(STATUS_VIEW_LABELS[6], 0x70, 0x6c);
+#else
 		drawString(STATUS_VIEW_LABELS[6], 0x84, 0x6c);
+#endif
 		if (PARTNER_ENTITY.digimonEntity.stats.base.moves[2] != 0xff) {
 			EQUIPPED_MOVES[2] = entityGetTechFromAnim(ENTITY_TABLE[1],
 			                                          PARTNER_ENTITY.digimonEntity.stats.base.moves[2]);
@@ -3638,7 +4150,7 @@ int32_t drawPlayerInfoStrings(void)
 		MENU_SUB_STATE++;
 		break;
 	case 4:
-		drawString((char *)DIGIMON_DATA, 0, 0x30);
+		drawString(DIGIMON_NAME(0), 0, 0x30);
 		for (i = 0; i < 4; i++) {
 			drawString(TAMER_LEVEL_TITLES[i], 0, i * 0xc + 0x40);
 		}
@@ -3673,11 +4185,13 @@ int32_t drawEvoChartStrings(int8_t arg)
 #if VERSION_IS(US)
 		drawString(CARD_CHART_LABELS[3], 0, 0x24);
 		drawString(CARD_CHART_LABELS[4], 0, 0x3c);
+#elif VERSION_IS(EU)
+		drawString(CARD_CHART_LABELS[6], 0, 0x48);
 #endif
 		return 1;
 	case 2:
 		clearTextSubArea(&rect2);
-		drawString((char *)(DIGIMON_DATA + arg), 0, 0x30);
+		drawString(DIGIMON_NAME(arg), 0, 0x30);
 	}
 	return 0;
 }
@@ -3697,6 +4211,9 @@ int32_t drawMedalViewStrings(void)
 		break;
 	case 1:
 		drawString(PLAYER_VIEW_LABELS[1], 0, 0xc);
+#if VERSION_IS(EU)
+		drawString(CARD_CHART_LABELS[5], 0, 0x48);
+#endif
 		MENU_SUB_STATE = 2;
 		break;
 	case 2:
@@ -3733,6 +4250,9 @@ int32_t drawCardViewStrings(void)
 		break;
 	case 1:
 		drawString(CARD_CHART_LABELS[0], 0, 0xC);
+#if VERSION_IS(EU)
+		drawString(CARD_CHART_LABELS[5], 0, 0x48);
+#endif
 		SELECTED_CARD = 0;
 		return 1;
 	}

@@ -26,6 +26,8 @@ options:
   symbol_addrs_path:
     - config/eu/symbols.txt
     - config/eu/symbols_vs.txt
+  reloc_addrs_path:
+    - config/eu/relocs_vs.txt
 
   undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_vs.txt
   undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_vs.txt
@@ -94,7 +96,27 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x41C8, asm, vs]
-      - [0x30188, data, vs]
+      - [0x41C8, c, vs_select]
+      - [0x7DD0, c, vs_scene]
+      - [0xAB10, c, vs_intro]
+      - [0xC364, c, vs_camera]
+      - [0xED2C, c, vs_combat]
+      - [0x14A50, c, vs_main]
+      - [0x1A338, c, vs_hud]
+      - [0x1F7BC, c, vs_effect]
+      - [0x30188, .rodata, vs_scene]
+      - [0x301A0, .rodata, vs_intro]
+      - [0x301BC, .rodata, vs_camera]
+      - [0x301E8, .rodata, vs_combat]
+      - [0x30208, .rodata, vs_hud]
+      - [0x30230, .data, vs_select]
+      - [0x304C4, .data, vs_scene]
+      - [0x30A8C, .data, vs_intro]
+      - [0x30AB8, .data, vs_camera]
+      - [0x30B9C, .data, vs_combat]
+      - [0x30BB8, .data, vs_main]
+      - [0x30CBC, .data, vs_hud]
+      - [0x3102C, .data, vs_effect]
+      - [0x31B88, .data, vs_bss_eu]
 
   - [0x33808]

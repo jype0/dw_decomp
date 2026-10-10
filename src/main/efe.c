@@ -184,29 +184,51 @@ static void *efe_functions[] = {
 	downloadSomeImage,
 #endif
 	setEFEFlashOffset,
+#if VERSION_IS(EU)
+	EFECreateFlash,
+	tickEFEFlash,
+	renderEFEFlash,
+#else
 	renderEFEFlash,
 	tickEFEFlash,
 	EFECreateFlash,
+#endif
 #if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	removeEFEFlash,
 #endif
 	initializeFlashData,
 	EFERotateVector,
+#if VERSION_IS(EU)
+	createCloudFX,
+	tickCloudFX,
+	renderCloudFX,
+#else
 	renderCloudFX,
 	tickCloudFX,
 	createCloudFX,
+#endif
 	removeAllCloudFX,
 	initializeCloudFXData,
 	removeEntityParticleFX,
+#if VERSION_IS(EU)
+	tickEntityParticleFX,
+	renderEntityParticleFX,
+#else
 	renderEntityParticleFX,
 	tickEntityParticleFX,
+#endif
 	initializeEntityParticleFX,
 	addEntityParticleFX,
 #if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 	removeAllParticleFX,
 #endif
+#if VERSION_IS(EU)
+	tickParticleFX,
+	renderParticleFX,
+#else
 	renderParticleFX,
 	tickParticleFX,
+#endif
 	createParticleFX,
 	initializeParticleFX,
 };
@@ -293,6 +315,20 @@ GsRVIEW2 EFE_FIXED_VIEW;
 int32_t EFE_CALL_STACK_BUFFER[16];
 
 static void *efe_bss_order[] = {
+#if VERSION_IS(EU)
+	EFE_CALL_STACK_BUFFER,
+	&EFE_FIXED_VIEW,
+	&EFE_LOAD_REQUEST,
+	EFE_SOUND_DATA,
+	UNUSED_EFE_ARRAY,
+	EFE_LOADED_MOVE_DATA,
+	EFE_SCRIPT_MEM1_DATA,
+	SOME_IMAGE_DATA,
+	CLOUD_FX_DATA,
+	ENTITY_PARTICLE_FX_DATA,
+	PARTICLE_FX_DATA,
+	FX_PARTICLE_DATA,
+#else
 	EFE_CALL_STACK_BUFFER,
 	&EFE_FIXED_VIEW,
 	&EFE_LOAD_REQUEST,
@@ -307,6 +343,7 @@ static void *efe_bss_order[] = {
 	ENTITY_PARTICLE_FX_DATA,
 	FX_PARTICLE_DATA,
 	PARTICLE_FX_DATA,
+#endif
 };
 
 GARBAGE(initializeParticleFX, 8);
@@ -609,7 +646,11 @@ void tickEntityParticleFX(int32_t id)
 		return;
 	}
 	if ((fx->timer % 4) == 0) {
+#if VERSION_IS(EU)
+		fx->boneId = ((int32_t)(int32_t)rand() % (DIGIMON_DATA[fx->owner->type].boneCount - 1)) + 1;
+#else
 		fx->boneId = (rand() % (DIGIMON_DATA[fx->owner->type].boneCount - 1)) + 1;
+#endif
 		fx->unk8 = rand() % 9;
 	}
 	fx->timer--;

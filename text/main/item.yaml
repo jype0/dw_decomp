@@ -1,5 +1,4 @@
 MOVE_NAMES:
-  storage: {eu: literal}
   entries:
     - name: STR_MOVE_NAME_FIRE_TOWER
       ja: ファイアータワー
@@ -345,10 +344,12 @@ MOVE_NAMES:
     - name: STR_MOVE_NAME_INFINITY_CANNON
       ja: 無限キャノン
       en_us: Infinity Cannon
-    - ja: ウンチ
+    - name: STR_MOVE_NAME_NANIMON_PARTY_TIME
+      ja: ウンチ
       en_us: Party time
       en_eu: Feces For Nanimon
-    - ja: ウンチ
+    - name: STR_MOVE_NAME_NUMEMON_PARTY_TIME
+      ja: ウンチ
       en_us: Party time
       en_eu: Feces For Numemon
     - name: STR_MOVE_NAME_CRIMSON_FLARE
@@ -369,16 +370,20 @@ MOVE_NAMES:
       ja: あわ
       en_us: Bubble
       en_eu: Sm Bubble  Botamon
-    - ja: あわ
+    - name: STR_MOVE_NAME_PUNIMON_BUBBLE
+      ja: あわ
       en_us: Bubble
       en_eu: Sm Bubble  Punimon
-    - ja: あわ
+    - name: STR_MOVE_NAME_POYOMON_BUBBLE
+      ja: あわ
       en_us: Bubble
       en_eu: Sm Bubble  Poyomon
-    - ja: あわ
+    - name: STR_MOVE_NAME_YURAMON_BUBBLE
+      ja: あわ
       en_us: Bubble
       en_eu: Sm Bubble  Yuramon
-    - ja: あわ
+    - name: STR_MOVE_NAME_KOROMON_BUBBLE
+      ja: あわ
       en_us: Bubble
     - ja: あわ
       en_us: Bubble
@@ -393,462 +398,461 @@ STR_IS_SICK:
   en_us: " is sick!"
 
 ITEM_NAMES:
-  storage: {default: embedded, eu: literal}
+  storage: {default: embedded, eu: named}
   macro: ITEM_PARA_NAME
   entries:
-    - name: SMALL_RECOVERY
+    - name: STR_ITEM_NAME_SM_RECOVERY
       ja: 回復フロッピー
       en_us: sm.recovery
       en_eu: sm recovery
-    - name: MEDIUM_RECOVERY
+    - name: STR_ITEM_NAME_MED_RECOVERY
       ja: 中回復フロッピー
       en_us: med.recovery
       en_eu: med recovery
-    - name: LARGE_RECOVERY
+    - name: STR_ITEM_NAME_LRG_RECOVERY
       ja: 大回復フロッピー
       en_us: lrg.recovery
       en_eu: lrg recovery
-    - name: SUPER_RECOVERY
+    - name: STR_ITEM_NAME_SUP_RECOVERY
       ja: 超回復フロッピー
       en_us: sup.recovery
       en_eu: sup recovery
-    - name: MP_FLOPPY
+    - name: STR_ITEM_NAME_MP_FLOPPY
       ja: ＭＰフロッピー
       en_us: MP Floppy
-    - name: MEDIUM_MP
+    - name: STR_ITEM_NAME_MEDIUM_MP
       ja: 中ＭＰフロッピー
       en_us: Medium MP
-    - name: LARGE_MP
+    - name: STR_ITEM_NAME_LARGE_MP
       ja: 大ＭＰフロッピー
       en_us: Large MP
-    - name: DOUBLE_FLOPPY
+    - name: STR_ITEM_NAME_DOUBLE_FLOP
       ja: ダブルフロッピー
       en_us: Double flop
-    - name: VARIOUS
+    - name: STR_ITEM_NAME_VARIOUS
       ja: 色々フロッピー
       en_us: Various
-    - name: OMNIPOTENT
+    - name: STR_ITEM_NAME_OMNIPOTENT
       ja: 万能フロッピー
       en_us: Omnipotent
       en_eu: Omni Floppy
-    - name: PROTECTION
+    - name: STR_ITEM_NAME_PROTECTION
       ja: 対変化フロッピー
       en_us: Protection
       en_eu: Prot. Floppy
-    - name: RESTORE
+    - name: STR_ITEM_NAME_RESTORE
       ja: 再生フロッピー
       en_us: Restore
-    - name: SUPER_RESTORE
+    - name: STR_ITEM_NAME_SUP_RESTORE
       ja: 超再生フロッピー
       en_us: Sup.restore
       en_eu: Sup Restore
-    - name: BANDAGE
+    - name: STR_ITEM_NAME_BANDAGE
       ja: ばんそうこう
       en_us: Bandage
-    - name: MEDICINE
+    - name: STR_ITEM_NAME_MEDICINE
       ja: 薬
       en_us: Medicine
-    - name: OFFENSE_DISK
+    - name: STR_ITEM_NAME_OFF_DISK
       ja: 攻撃プラグイン
       en_us: Off. Disk
-    - name: DEFENSE_DISK
+    - name: STR_ITEM_NAME_DEF_DISK
       ja: 防御プラグイン
       en_us: Def. Disk
-    - name: SPEED_DISK
+    - name: STR_ITEM_NAME_HISPEED_DSK
       ja: 高速プラグイン
       en_us: Hispeed dsk
-    - name: OMNI_DISK
+    - name: STR_ITEM_NAME_OMNI_DISK
       ja: 万能プラグイン
       en_us: Omni Disk
-    - name: SUPER_OFFENSE_DISK
+    - name: STR_ITEM_NAME_S_OFF_DISK
       ja: 攻撃プラグインＳ
       en_us: S.Off.disk
       en_eu: S. Off. disk
-    - name: SUPER_DEFENSE_DISK
+    - name: STR_ITEM_NAME_S_DEF_DISK
       ja: 防御プラグインＳ
       en_us: S.Def.disk
       en_eu: S Def. disk
-    - name: SUPER_SPEED_DISK
+    - name: STR_ITEM_NAME_S_SPEED_DISK
       ja: 高速プラグインＳ
       en_us: S.speed.disk
       en_eu: S.speed disk
-    - name: AUTOPILOT
+    - name: STR_ITEM_NAME_AUTO_PILOT
       ja: オートパイロット
       en_us: Auto Pilot
-    - name: OFFENSE_CHIP
+    - name: STR_ITEM_NAME_OFF_CHIP
       ja: 攻撃チップ
       en_us: Off. Chip
-    - name: DEFENSE_CHIP
+    - name: STR_ITEM_NAME_DEF_CHIP
       ja: 防御チップ
       en_us: Def. Chip
-    - name: BRAIN_CHIP
+    - name: STR_ITEM_NAME_BRAIN_CHIP
       ja: かしこさチップ
       en_us: Brain Chip
-    - name: SPEED_CHIP
+    - name: STR_ITEM_NAME_QUICK_CHIP
       ja: すばやさチップ
       en_us: Quick Chip
-    - name: HP_CHIP
+    - name: STR_ITEM_NAME_HP_CHIP
       ja: ＨＰチップ
       en_us: HP Chip
-    - name: MP_CHIP
+    - name: STR_ITEM_NAME_MP_CHIP
       ja: ＭＰチップ
       en_us: MP Chip
-    - name: DV_CHIP_A
+    - name: STR_ITEM_NAME_DV_CHIP_A
       ja: デビルチップＡ
       en_us: DV Chip A
       en_eu: Devil Chip A
-    - name: DV_CHIP_D
+    - name: STR_ITEM_NAME_DV_CHIP_D
       ja: デビルチップＤ
       en_us: DV Chip D
       en_eu: Devil Chip D
-    - name: DV_CHIP_E
+    - name: STR_ITEM_NAME_DV_CHIP_E
       ja: デビルチップＥ
       en_us: DV Chip E
       en_eu: Devil Chip E
-    - name: PORTA_POTTY
+    - name: STR_ITEM_NAME_PORT_POTTY
       ja: けいたいトイレ
       en_us: Port. potty
       en_eu: Port. Potty
-    - name: TRAINING_MANUAL
+    - name: STR_ITEM_NAME_TRN_MANUAL
       ja: トレーマニュアル
       en_us: Trn. manual
       en_eu: Manual
-    - name: REST_PILLOW
+    - name: STR_ITEM_NAME_REST_PILLOW
       ja: 安眠まくら
       en_us: Rest pillow
-    - name: ENEMY_REPEL
+    - name: STR_ITEM_NAME_ENEMY_REPEL
       ja: 敵よけお守り
       en_us: Enemy repel
       en_eu: Enemy Repel
-    - name: ENEMY_BELL
+    - name: STR_ITEM_NAME_ENEMY_BELL
       ja: 敵よせシグナル
       en_us: Enemy bell
-    - name: HEALTH_SHOE
+    - name: STR_ITEM_NAME_HEALTH_SHOE
       ja: 健康サンダル
       en_us: Health shoe
-    - name: MEAT
+    - name: STR_ITEM_NAME_MEAT
       ja: 肉
       en_us: Meat
-    - name: GIANT_MEAT
+    - name: STR_ITEM_NAME_GIANT_MEAT
       ja: 巨大肉
       en_us: Giant Meat
-    - name: SIRLOIN
+    - name: STR_ITEM_NAME_SIRLOIN
       ja: 極上肉
       en_us: Sirloin
-    - name: SUPERCARROT
+    - name: STR_ITEM_NAME_SUPERCARROT
       ja: 挑戦ニンジン
       en_us: Supercarrot
-    - name: HAWK_RADISH
+    - name: STR_ITEM_NAME_HAWK_RADISH
       ja: サクラ鳥大根
       en_us: Hawk radish
-    - name: SPINY_GREEN
+    - name: STR_ITEM_NAME_SPINY_GREEN
       ja: ペンペンペン草
       en_us: Spiny green
       en_eu: Spiny Green
-    - name: DIGIMUSHROOM
+    - name: STR_ITEM_NAME_DIGIMUSHRM
       ja: デジタケ
       en_us: Digimushrm
-    - name: ICE_MUSHROOM
+    - name: STR_ITEM_NAME_ICE_MUSHRM
       ja: 雪割りキノコ
       en_us: Ice mushrm
       en_eu: Ice Mushrm
-    - name: DELUXE_MUSHROOM
+    - name: STR_ITEM_NAME_DELUXMUSHRM
       ja: デラックスキノコ
       en_us: Deluxmushrm
       en_eu: DeluxeMushrm
-    - name: DIGIPINE
+    - name: STR_ITEM_NAME_DIGIPINE
       ja: デジぼっくり
       en_us: Digipine
       en_eu: Digi-Pine
-    - name: BLUE_APPLE
+    - name: STR_ITEM_NAME_BLUE_APPLE
       ja: ブルーリンゴ
       en_us: Blue apple
-    - name: RED_BERRY
+    - name: STR_ITEM_NAME_RED_BERRY
       ja: アセラロ
       en_us: Red Berry
       en_eu: Vitamin-C
-    - name: GOLD_ACORN
+    - name: STR_ITEM_NAME_GOLD_ACORN
       ja: 黄金ドングリ
       en_us: Gold Acorn
       en_eu: Golden Acorn
-    - name: BIG_BERRY
+    - name: STR_ITEM_NAME_BIG_BERRY
       ja: ヘビーいちご
       en_us: Big Berry
       en_eu: Big berry
-    - name: SWEET_NUT
+    - name: STR_ITEM_NAME_SWEET_NUT
       ja: 天然あまぐり
       en_us: Sweet Nut
       en_eu: Sweet nut
-    - name: SUPER_VEGGY
+    - name: STR_ITEM_NAME_SUPER_VEGGY
       ja: モンドレイク
       en_us: Super veggy
       en_eu: Power Fruit
-    - name: PRICKLYPEAR
+    - name: STR_ITEM_NAME_PRICKLYPEAR
       ja: 食用サボテン
       en_us: Pricklypear
-    - name: ORANGE_BANANA
+    - name: STR_ITEM_NAME_ORANGE_BANA
       ja: オレンジバナナ
       en_us: Orange bana
       en_eu: Or. Banana
-    - name: POWER_FRUIT
+    - name: STR_ITEM_NAME_POWER_FRUIT
       ja: ごうりき草の実
       en_us: Power fruit
       en_eu: Hercules'Fru
-    - name: POWER_ICE
+    - name: STR_ITEM_NAME_POWER_ICE
       ja: じょうぶ草の実
       en_us: Power Ice
       en_eu: Streng Berry
-    - name: SPEED_LEAF
+    - name: STR_ITEM_NAME_SPEED_LEAF
       ja: はやあし草の実
       en_us: Speed Leaf
       en_eu: Speed leaf
-    - name: SAGE_FRUIT
+    - name: STR_ITEM_NAME_SAGE_FRUIT
       ja: ものしり草の実
       en_us: Sage Fruit
-    - name: MUSCLE_YAM
+    - name: STR_ITEM_NAME_MUSCLE_YAM
       ja: もりもり草の実
       en_us: Muscle Yam
       en_eu: Muscle yam
-    - name: CALM_BERRY
+    - name: STR_ITEM_NAME_CALM_BERRY
       ja: やすらぎ草の実
       en_us: Calm berry
       en_eu: Calm Berry
-    - name: DIGIANCHOVY
+    - name: STR_ITEM_NAME_DIGIANCHOVY
       ja: デジジャコ
       en_us: Digianchovy
-    - name: DIGISNAPPER
+    - name: STR_ITEM_NAME_DIGISNAPPER
       ja: デジブナ
       en_us: Digisnapper
-    - name: DIGITROUT
+    - name: STR_ITEM_NAME_DIGI_TROUT
       ja: デジマス
       en_us: DigiTrout
-    - name: BLACK_TROUT
+    - name: STR_ITEM_NAME_BLACK_TROUT
       ja: ブラックデジマス
       en_us: Black trout
-    - name: DIGICATFISH
+    - name: STR_ITEM_NAME_DIGICATFISH
       ja: デジナマズ
       en_us: Digicatfish
       en_eu: DigiCatfish
-    - name: DIGISEABASS
+    - name: STR_ITEM_NAME_DIGISEABASS
       ja: デジカムル
       en_us: Digiseabass
       en_eu: DigiSeaBass
-    - name: MOLDY_MEAT
+    - name: STR_ITEM_NAME_MOLDY_MEAT
       ja: くさった肉
       en_us: Moldy Meat
-    - name: HAPPYMUSHROOM
+    - name: STR_ITEM_NAME_HAPPYMUSHRM
       ja: 運だめしキノコ
       en_us: Happymushrm
-    - name: CHAIN_MELON
+    - name: STR_ITEM_NAME_CHAIN_MELON
       ja: クサリカケメロン
       en_us: Chain melon
       en_eu: Chain Melon
-    - name: GREY_CLAWS
+    - name: STR_ITEM_NAME_GREY_CLAWS
       ja: 灰色の爪
       en_us: Grey Claws
-    - name: FIREBALL
+    - name: STR_ITEM_NAME_FIREBALL
       ja: 炎のかけら
       en_us: Fireball
-    - name: FLAMEWING
+    - name: STR_ITEM_NAME_FLAMINGWING
       ja: 燃える羽
       en_us: Flamingwing
       en_eu: Flaming Wing
-    - name: IRON_HOOF
+    - name: STR_ITEM_NAME_IRON_HOOF
       ja: 鉄のヒヅメ
       en_us: Iron Hoof
-    - name: MONO_STONE
+    - name: STR_ITEM_NAME_MONO_STONE
       ja: モノクロストーン
       en_us: Mono Stone
-    - name: STEEL_DRILL
+    - name: STR_ITEM_NAME_STEEL_DRILL
       ja: 鋼のドリル
       en_us: Steel drill
       en_eu: Steel Drill
-    - name: WHITE_FANG
+    - name: STR_ITEM_NAME_WHITE_FANG
       ja: 牙の化石
       en_us: White Fang
       en_eu: White Fossil
-    - name: BLACK_WING
+    - name: STR_ITEM_NAME_BLACK_WING
       ja: 黒い羽
       en_us: Black Wing
       en_eu: Black Wings
-    - name: SPIKE_CLUB
+    - name: STR_ITEM_NAME_SPIKE_CLUB
       ja: トゲこん棒
       en_us: Spike Club
       en_eu: Spike club
-    - name: FLAMINGMANE
+    - name: STR_ITEM_NAME_FLAMINGMANE
       ja: 輝くたてがみ
       en_us: Flamingmane
       en_eu: Flaming Mane
-    - name: WHITE_WING
+    - name: STR_ITEM_NAME_WHITE_WING
       ja: 白い羽
       en_us: White Wing
       en_eu: White Wings
-    - name: TORN_TATTER
+    - name: STR_ITEM_NAME_TORN_TATTER
       ja: ボロ布
       en_us: Torn tatter
       en_eu: Old Cloth
-    - name: ELECTRO_RING
+    - name: STR_ITEM_NAME_ELECTO_RING
       ja: 電気リング
       en_us: Electo ring
       en_eu: Elec Ring
-    - name: RAINBOWHORN
+    - name: STR_ITEM_NAME_RAINBOWHORN
       ja: 虹色の笛
       en_us: Rainbowhorn
-    - name: ROOSTER
+    - name: STR_ITEM_NAME_ROOSTER
       ja: 風見鶏
       en_us: Rooster
-    - name: UNIHORN
+    - name: STR_ITEM_NAME_UNIHORN
       ja: 聖なる角
       en_us: Unihorn
-    - name: HORN_HELMET
+    - name: STR_ITEM_NAME_HORN_HELMET
       ja: 重い兜
       en_us: Horn helmet
       en_eu: Horn Helmet
-    - name: SCISSOR_JAW
+    - name: STR_ITEM_NAME_SCISSOR_JAW
       ja: ギザギザはさみ
       en_us: Scissor jaw
       en_eu: Scissor Jaws
-    - name: FERTILIZER
+    - name: STR_ITEM_NAME_FERTILIZER
       ja: 有機肥料
       en_us: Fertilizer
-    - name: KOGA_LAWS
+    - name: STR_ITEM_NAME_KOGA_LAWS
       ja: イガ流の秘伝書
       en_us: Koga laws
       en_eu: Koga's Laws
-    - name: WATERBOTTLE
+    - name: STR_ITEM_NAME_WATERBOTTLE
       ja: お供え酒
       en_us: Waterbottle
       en_eu: Water Bottle
-    - name: NORTH_STAR
+    - name: STR_ITEM_NAME_NORTH_STAR
       ja: 北極星の印
       en_us: North Star
       en_eu: North star
-    - name: RED_SHELL
+    - name: STR_ITEM_NAME_RED_SHELL
       ja: 赤い貝がら
       en_us: Red Shell
-    - name: HARD_SCALE
+    - name: STR_ITEM_NAME_HARD_SCALE
       ja: 硬いウロコ
       en_us: Hard Scale
-    - name: BLUECRYSTAL
+    - name: STR_ITEM_NAME_BLUECRYSTAL
       ja: ミスリル
       en_us: Bluecrystal
       en_eu: Blue crystal
-    - name: ICE_CRYSTAL
+    - name: STR_ITEM_NAME_ICE_CRYSTAL
       ja: 氷水晶
       en_us: Ice crystal
       en_eu: Ice Crystal
-    - name: HAIR_GROWER
+    - name: STR_ITEM_NAME_HAIR_GROWER
       ja: けはえ薬
       en_us: Hair grower
       en_eu: Hair Grower
-    - name: SUNGLASSES
+    - name: STR_ITEM_NAME_SUNGLASSES
       ja: サングラス
       en_us: Sunglasses
-    - name: METAL_PART
+    - name: STR_ITEM_NAME_METAL_PART
       ja: メタルパーツ
       en_us: Metal part
       en_eu: Metal Parts
-    - name: FATAL_BONE
+    - name: STR_ITEM_NAME_FATAL_BONE
       ja: 死を呼ぶ骨
       en_us: Fatal Bone
-    - name: CYBER_PART
+    - name: STR_ITEM_NAME_CYBER_PART
       ja: サイバーパーツ
       en_us: Cyber part
       en_eu: Cyber Parts
-    - name: MEGA_HAND
+    - name: STR_ITEM_NAME_MEGA_HAND
       ja: メガハンド
       en_us: Mega Hand
-    - name: SILVER_BALL
+    - name: STR_ITEM_NAME_SILVER_BALL
       ja: 銀玉
       en_us: Silver ball
       en_eu: Silver Ball
-    - name: METAL_ARMOR
+    - name: STR_ITEM_NAME_METAL_ARMOR
       ja: メタルアーマー
       en_us: Metal armor
       en_eu: Metal Armor
-    - name: CHAINSAW
+    - name: STR_ITEM_NAME_CHAINSAW
       ja: チェンソー
       en_us: Chainsaw
-    - name: SMALL_SPEAR
+    - name: STR_ITEM_NAME_SMALL_SPEAR
       ja: 小さな槍
       en_us: Small spear
       en_eu: Small Spear
-    - name: X_BANDAGE
+    - name: STR_ITEM_NAME_X_BANDAGE
       ja: 愛のばんそうこう
       en_us: X Bandage
-    - name: RAY_GUN
+    - name: STR_ITEM_NAME_RAY_GUN
       ja: ビームガン
       en_us: Ray Gun
-    - name: GOLD_BANANA
+    - name: STR_ITEM_NAME_GOLD_BANANA
       ja: 金のバナナ
       en_us: Gold banana
       en_eu: Gold Banana
-    - name: MYSTY_EGG
+    - name: STR_ITEM_NAME_MYSTY_EGG
       ja: 謎のタマゴ
       en_us: Mysty Egg
-    - name: RED_RUBY
+    - name: STR_ITEM_NAME_RED_RUBY
       ja: 奇跡のルビー
       en_us: Red Ruby
-    - name: BEETLEPEARL
+    - name: STR_ITEM_NAME_BEETLEPEARL
       ja: ビートルダイヤ
       en_us: Beetlepearl
-    - name: CORAL_CHARM
+    - name: STR_ITEM_NAME_CORAL_CHARM
       ja: サンゴのお守り
       en_us: Coral charm
-    - name: MOON_MIRROR
+    - name: STR_ITEM_NAME_MOON_MIRROR
       ja: 月光の鏡
       en_us: Moon mirror
       en_eu: Moon Mirror
-    - name: BLUE_FLUTE
+    - name: STR_ITEM_NAME_BLUE_FLUTE
       ja: 湖のぬしの笛
       en_us: Blue Flute
-    - name: OLD_ROD
+    - name: STR_ITEM_NAME_OLD_FISHROD
       ja: ぼろい釣ざお
       en_us: old fishrod
       en_eu: Old Rod
-    - name: AMAZING_ROD
+    - name: STR_ITEM_NAME_AMAZING_ROD
       ja: すごい釣ざお
       en_us: Amazing rod
       en_eu: Amazing Rod
-    - name: LEOMONSTONE
+    - name: STR_ITEM_NAME_LEOMONSTONE
       ja: レオモン族の石板
       en_us: Leomonstone
       en_eu: Leomon Stone
-    - name: MANSION_KEY
+    - name: STR_ITEM_NAME_MANSION_KEY
       ja: 館のカギ
       en_us: Mansion key
       en_eu: Mansion Key
-    - name: GEAR
+    - name: STR_ITEM_NAME_GEAR
       ja: はぐるま
       en_us: Gear
-    - name: RAIN_PLANT
+    - name: STR_ITEM_NAME_RAIN_PLANT
       ja: 雨ふり草の実
       en_us: Rain Plant
-    - name: STEAK
+    - name: STR_ITEM_NAME_STEAK
       ja: 血のしたたる肉
       en_us: Steak
       en_eu: Sirloin
-    - name: FRIDGE_KEY
+    - name: STR_ITEM_NAME_FRIG_KEY
       ja: れいぞうこのカギ
       en_us: Frig Key
       en_eu: Refrig Key
-    - name: AS_DECODER
+    - name: STR_ITEM_NAME_AS_DECODER
       ja: 古代文字解読機
       en_us: AS Decoder
       en_eu: S Decoder
-    - name: GIGA_HAND
+    - name: STR_ITEM_NAME_GIGA_HAND
       ja: ギガハンド
       en_us: Giga Hand
-    - name: NOBLE_MANE
+    - name: STR_ITEM_NAME_NOBLE_MANE
       ja: 高貴なたてがみ
       en_us: Noble Mane
-    - name: METAL_BANANA
+    - name: STR_ITEM_NAME_METALBANANA
       ja: メタルバナナ
       en_us: Metalbanana
       en_eu: Metal Banana
 
 ITEM_DESCS:
-  storage: {eu: literal}
   lines: {eu: 2}
   empty: STR_ITEM_DESC_EMPTY
   entries:
@@ -887,7 +891,9 @@ ITEM_DESCS:
       ja: 状態異常を治し、ＨＰ、ＭＰも回復するぞ！
       en_us: Cures errors + rec. HP+MP
       en_eu: Cures status + rec HP + MP
-    - name: STR_ITEM_DESC_PROTECTS_YR_COND_IN_BATTLE
+    - name:
+        - STR_ITEM_DESC_PROTECTS_YR_COND_IN_BATTLE
+        - STR_ITEM_DESC_STATUS
       ja: 戦闘中の全ての状態変化を防ぐぞ！
       en_us: Protects yr cond. in battle
       en_eu:
@@ -931,7 +937,9 @@ ITEM_DESCS:
     - name: STR_ITEM_DESC_SUPER_BOOST_SPEED_IN_BATTLE
       ja: 使った戦闘中、すばやさが大きくアップする。
       en_us: Super boost Speed in battle
-    - name: STR_ITEM_DESC_CAN_RETURN_TO_CITY_QUICKLY
+    - name:
+        - STR_ITEM_DESC_CAN_RETURN_TO_CITY_QUICKLY
+        - STR_ITEM_DESC_QUICKLY
       ja: 街に一瞬で戻ることができるぞ！
       en_us: Can return to city quickly
       en_eu:
@@ -961,13 +969,17 @@ ITEM_DESCS:
       ja: ＭＰ上限を永久に＋５００するぞ！
       en_us: Boost max MP level +500
       en_eu: Boosts max MP level +500
-    - name: STR_ITEM_DESC_BOOST_OFF_PWR_BRAINS_100
+    - name:
+        - STR_ITEM_DESC_BOOST_OFF_PWR_BRAINS_100
+        - STR_ITEM_DESC_BUT
       ja: 攻撃力、かしこさを永久に＋１００。しかし…
       en_us: Boost Off. Pwr+Brains +100
       en_eu:
         - Boosts Off.and Brain by 100.
         - But…
-    - name: STR_ITEM_DESC_BOOST_DEF_PWR_SPEED_100
+    - name:
+        - STR_ITEM_DESC_BOOST_DEF_PWR_SPEED_100
+        - STR_ITEM_DESC_BUT
       ja: 防御力、すばやさを永久に＋１００。しかし…
       en_us: Boost Def. Pwr+Speed +100
       en_eu:
@@ -1039,7 +1051,9 @@ ITEM_DESCS:
       ja: 食べ物。ごきげんが大幅アップ！
       en_us: Makes Digimon happy
       en_eu: Makes Digimon happy.
-    - name: STR_ITEM_DESC_GIVES_REST_BOOST_DISC_HAP
+    - name:
+        - STR_ITEM_DESC_GIVES_REST_BOOST_DISC_HAP
+        - STR_ITEM_DESC_DISCIPLINE_AND_HAPPINESS
       ja: 食べ物。疲れ回復、しつけとごきげんアップ！
       en_us: Gives rest, boost disc.+hap
       en_eu:
@@ -1049,7 +1063,9 @@ ITEM_DESCS:
       ja: 食べ物。高く売れるぞ！
       en_us: Can be sold for a high price
       en_eu: Can be sold for high price.
-    - name: STR_ITEM_DESC_MAKES_FULL_BOOSTS_WEIGHT
+    - name:
+        - STR_ITEM_DESC_MAKES_FULL_BOOSTS_WEIGHT
+        - STR_ITEM_DESC_GAINED
       ja: 食べ物。満腹になるが体重が大きくアップ！
       en_us: Makes full + boosts Weight!
       en_eu:
@@ -1105,7 +1121,8 @@ ITEM_DESCS:
     - ja: 食べ物。かなりおなかがふくれる。
       en_us: Makes Digimon very full.
       en_eu: Makes Digimon very full
-    - ja: 食べ物。全能力アップ！
+    - name: STR_ITEM_DESC_BLACK_TROUT_BOOSTS_ALL_ABILITIES
+      ja: 食べ物。全能力アップ！
       en_us: Boosts all abilities
     - name: STR_ITEM_DESC_DIGICATFISH_MAKES_DIGIMON_VERY_FULL
       ja: 食べ物。すごくおなかがふくれる。
@@ -1253,7 +1270,9 @@ ITEM_DESCS:
     - name: STR_ITEM_DESC_DIGIVOLVE_TO_PHOENIXMON
       ja: ホウオウモンに進化するぞ！
       en_us: Digivolve to Phoenixmon!
-    - name: STR_ITEM_DESC_BECOME_HERCULESKABUTERIMON
+    - name:
+        - STR_ITEM_DESC_BECOME_HERCULESKABUTERIMON
+        - STR_ITEM_DESC_HERCULES_KABUTERIMON
       ja: ヘラクルカブテリモンに進化するぞ！
       en_us: Become HerculesKabuterimon!
       en_eu:
@@ -1265,7 +1284,9 @@ ITEM_DESCS:
     - name: STR_ITEM_DESC_DIGIVOLVE_TO_WEREGARURUMON
       ja: ウェアガルルモンに進化するぞ！
       en_us: Digivolve to WereGarurumon!
-    - name: STR_ITEM_DESC_SEADRAMON_FRIENDSHIP_PROOF
+    - name:
+        - STR_ITEM_DESC_SEADRAMON_FRIENDSHIP_PROOF
+        - STR_ITEM_DESC_FRIENDSHIP
       ja: シードラモンとの友情のあかし。
       en_us: Seadramon friendship proof
       en_eu:
@@ -1275,13 +1296,17 @@ ITEM_DESCS:
       ja: 湖で釣りができるぞ！
       en_us: Enables you to fish at lake
       en_eu: Enables you to fish at a lake!
-    - name: STR_ITEM_DESC_GIVES_GOOD_FISHING_AT_LAKE
+    - name:
+        - STR_ITEM_DESC_GIVES_GOOD_FISHING_AT_LAKE
+        - STR_ITEM_DESC_AT_A_LAKE
       ja: 湖で釣りができ、よく釣れるぞ！
       en_us: Gives good fishing at lake
       en_eu:
         - Enable you to fish very well
         - at a lake!
-    - name: STR_ITEM_DESC_STONE_TABLET_OF_LEOMON
+    - name:
+        - STR_ITEM_DESC_STONE_TABLET_OF_LEOMON
+        - STR_ITEM_DESC_ANCESTORS
       ja: レオモンの先祖がのこした石板。
       en_us: Stone Tablet of Leomon
       en_eu:
@@ -1300,14 +1325,17 @@ ITEM_DESCS:
       ja: ＭＰが１０００回復。他にも使い道が…
       en_us: Recover 1000 MP +other uses
       en_eu: Recover 1000MP, and other use…
-    - ja: 食べ物。かなりおなかがふくれる。
+    - name: STR_ITEM_DESC_STEAK_MAKES_DIGIMON_VERY_FULL
+      ja: 食べ物。かなりおなかがふくれる。
       en_us: Makes Digimon very full
       en_eu: Makes Digimon very full.
     - name: STR_ITEM_DESC_KEY_TO_OPEN_REFRIGERATOR
       ja: れいぞうこをあけるカギ。
       en_us: Key to open Refrigerator
       en_eu: A key to open refrigerator
-    - name: STR_ITEM_DESC_YOU_CAN_READ_ANCIENT_SCRIPT
+    - name:
+        - STR_ITEM_DESC_YOU_CAN_READ_ANCIENT_SCRIPT
+        - STR_ITEM_DESC_SCRIPT
       ja: 古代文字が読めるようになるぞ！
       en_us: You can read Ancient Script
       en_eu:

@@ -31,6 +31,7 @@ MAIN_C_SRC := \
 	src/main/drop_shadow.c \
 	src/main/efe.c \
 	src/main/efe_table.c \
+	src/main/effect_common.c \
 	src/main/entity_text.c \
 	src/main/evl.c \
 	src/main/evolution.c \

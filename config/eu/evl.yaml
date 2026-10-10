@@ -59,7 +59,9 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, evl]
-      - [0x5450, data, evl]
+      - [0x40, c, evl]
+      - [0x5450, .rodata, evl]
+      - [0x5464, .data, evl]
+      - [0x54A4, .data, evl_bss_eu]
 
   - [0xA56C]

@@ -13,13 +13,22 @@ SECTIONS
 			btl_HEADER = .;
 			KEEP(BUILD_DIR/asm/btl/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/btl/battle_setup.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/btl/5498.s.o(.text .text.*));
+			BUILD_DIR/src/btl/battle_main.c.o(.text .text.*);
+			BUILD_DIR/src/btl/command_shout.c.o(.text .text.*);
 			BUILD_DIR/src/btl/command_menu.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/btl/122F0.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/btl/data/btl.data.s.o(.data .data.*));
+			BUILD_DIR/src/btl/battle_hud.c.o(.text .text.*);
+			BUILD_DIR/src/btl/battle_effect.c.o(.text .text.*);
+			BUILD_DIR/src/btl/battle_effect.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/btl/battle_hud.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/btl/command_shout.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/btl/battle_main.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/btl/battle_setup.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/btl/command_menu.c.o(.rodata .rodata.*);
-			KEEP(BUILD_DIR/asm/btl/data/288D8.data.s.o(.data .data.*));
+			BUILD_DIR/src/btl/command_shout.c.o(.data .data.*);
+			BUILD_DIR/src/btl/command_menu.c.o(.data .data.*);
+			BUILD_DIR/src/btl/battle_effect.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/btl/btl_bss_eu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -31,8 +40,8 @@ SECTIONS
 
 			dget_HEADER = .;
 			KEEP(BUILD_DIR/asm/dget/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/dget/dget.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/dget/data/dget.data.s.o(.data .data.*));
+			BUILD_DIR/src/dget/dget.c.o(.text .text.*);
+			BUILD_DIR/src/dget/dget.c.o(.rodata .rodata.*);
 			LONG(0);
 		}
 	}
@@ -47,8 +56,7 @@ SECTIONS
 			BUILD_DIR/src/doo2/doo2.c.o(.text .text.*);
 			BUILD_DIR/src/doo2/doo2.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/doo2/doo2.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/doo2/data/27EC.data.s.o(.data .data.*));
-			LONG(0);
+			BUILD_DIR/src/doo2/doo2_bss_eu.c.o(.data .data.*);
 		}
 	}
 
@@ -59,8 +67,10 @@ SECTIONS
 
 			dooa_HEADER = .;
 			KEEP(BUILD_DIR/asm/dooa/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/dooa/dooa.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/dooa/data/dooa.data.s.o(.data .data.*));
+			BUILD_DIR/src/dooa/dooa.c.o(.text .text.*);
+			BUILD_DIR/src/dooa/dooa.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/dooa/dooa.c.o(.data .data.*);
+			BUILD_DIR/src/dooa/dooa_bss_eu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -75,7 +85,7 @@ SECTIONS
 			BUILD_DIR/src/eab/eab.c.o(.text .text.*);
 			BUILD_DIR/src/eab/eab.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/eab/eab.c.o(.data .data.*);
-			KEEP(BUILD_DIR/asm/eab/data/1E70.data.s.o(.data .data.*));
+			BUILD_DIR/src/eab/eab_bss_eu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -87,9 +97,9 @@ SECTIONS
 
 			endi_HEADER = .;
 			KEEP(BUILD_DIR/asm/endi/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/endi/endi.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/endi/data/endi.data.s.o(.data .data.*));
-			LONG(0);
+			BUILD_DIR/src/endi/endi.c.o(.text .text.*);
+			BUILD_DIR/src/endi/endi.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/endi/endi_bss_eu.c.o(.data .data.*);
 		}
 	}
 
@@ -100,8 +110,11 @@ SECTIONS
 
 			evl_HEADER = .;
 			KEEP(BUILD_DIR/asm/evl/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/evl/evl.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/evl/data/evl.data.s.o(.data .data.*));
+			BUILD_DIR/src/evl/evl.c.o(.text .text.*);
+			BUILD_DIR/src/evl/evl.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/evl/evl.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/evl/evl_bss_eu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -113,10 +126,12 @@ SECTIONS
 
 			fish_HEADER = .;
 			KEEP(BUILD_DIR/asm/fish/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/fish/fish.s.o(.text .text.*));
+			BUILD_DIR/src/fish/fish.c.o(.text .text.*);
 			BUILD_DIR/src/fish/fish_model.c.o(.text .text.*);
 			BUILD_DIR/src/fish/fish_model.c.o(.rodata .rodata.*);
-			KEEP(BUILD_DIR/asm/fish/data/fish.data.s.o(.data .data.*));
+			BUILD_DIR/src/fish/fish.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/fish/fish.c.o(.data .data.*);
+			BUILD_DIR/src/fish/fish_bss_eu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -128,8 +143,10 @@ SECTIONS
 
 			kar_HEADER = .;
 			KEEP(BUILD_DIR/asm/kar/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/kar/kar.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/kar/data/kar.data.s.o(.data .data.*));
+			BUILD_DIR/src/kar/kar.c.o(.text .text.*);
+			BUILD_DIR/src/kar/kar.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/kar/kar.c.o(.data .data.*);
+			BUILD_DIR/src/kar/kar_bss_eu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -141,9 +158,10 @@ SECTIONS
 
 			mov_HEADER = .;
 			KEEP(BUILD_DIR/asm/mov/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/mov/mov.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/mov/data/mov.data.s.o(.data .data.*));
-			LONG(0);
+			BUILD_DIR/src/mov/mov.c.o(.text .text.*);
+			BUILD_DIR/src/mov/mov.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/mov/mov.c.o(.data .data.*);
+			BUILD_DIR/src/mov/mov_bss_eu.c.o(.data .data.*);
 		}
 	}
 
@@ -154,9 +172,10 @@ SECTIONS
 
 			murd_HEADER = .;
 			KEEP(BUILD_DIR/asm/murd/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/murd/murd.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/murd/data/murd.data.s.o(.data .data.*));
-			LONG(0);
+			BUILD_DIR/src/murd/murd.c.o(.text .text.*);
+			BUILD_DIR/src/murd/murd.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/murd/murd.c.o(.data .data.*);
+			BUILD_DIR/src/murd/murd_bss_eu.c.o(.data .data.*);
 		}
 	}
 
@@ -167,8 +186,9 @@ SECTIONS
 
 			shop_HEADER = .;
 			KEEP(BUILD_DIR/asm/shop/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/shop/shop.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/shop/data/shop.data.s.o(.data .data.*));
+			BUILD_DIR/src/shop/script_menu.c.o(.text .text.*);
+			BUILD_DIR/src/shop/script_menu.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/shop/script_menu.c.o(.data .data.*);
 			LONG(0);
 		}
 	}
@@ -185,8 +205,21 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/std/data/model_3.rodata.s.o(.rodata .rodata.*));
 			std_HEADER = .;
 			KEEP(BUILD_DIR/asm/std/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/std/std.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/std/data/std.data.s.o(.data .data.*));
+			BUILD_DIR/src/std/std_setup.c.o(.text .text.*);
+			BUILD_DIR/src/std/std_main.c.o(.text .text.*);
+			BUILD_DIR/src/std/std_hud.c.o(.text .text.*);
+			BUILD_DIR/src/std/std_effect.c.o(.text .text.*);
+			BUILD_DIR/src/std/std_effect.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/std/std_hud.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/std/std_setup.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/std/std_main.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/std/std_setup.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/std/std_main.c.o(.data .data.*);
+			BUILD_DIR/src/std/std_hud.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/std/std_effect.c.o(.data .data.*);
+			KEEP(BUILD_DIR/src/std/std_bss_eu.c.o(.data .data.*));
 			LONG(0);
 		}
 	}
@@ -199,14 +232,28 @@ SECTIONS
 			trn2_HEADER = .;
 			KEEP(BUILD_DIR/asm/trn2/data/header.rodata.s.o(.rodata .rodata.*));
 			BUILD_DIR/src/trn2/trn2_hp_map99.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/trn2/560.s.o(.text .text.*));
+			BUILD_DIR/src/trn2/trn2_def_map99.c.o(.text .text.*);
+			BUILD_DIR/src/trn2/trn2_hp_map107.c.o(.text .text.*);
 			BUILD_DIR/src/trn2/trn2_mp.c.o(.text .text.*);
-			KEEP(BUILD_DIR/asm/trn2/1488.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/trn2/data/trn2.data.s.o(.data .data.*));
+			BUILD_DIR/src/trn2/trn2_off.c.o(.text .text.*);
+			BUILD_DIR/src/trn2/trn2_def_map108.c.o(.text .text.*);
+			BUILD_DIR/src/trn2/trn2_reward.c.o(.text .text.*);
+			BUILD_DIR/src/trn2/trn2_hud.c.o(.text .text.*);
+			BUILD_DIR/src/trn2/trn2_slots.c.o(.text .text.*);
+			BUILD_DIR/src/trn2/trn2_hp_map107.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/trn2/trn2_hp_map99.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/trn2/trn2_mp.c.o(.rodata .rodata.*);
-			KEEP(BUILD_DIR/asm/trn2/data/5F20.data.s.o(.data .data.*));
-			LONG(0);
+			BUILD_DIR/src/trn2/trn2_off.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_reward.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_def_map108.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_def_map99.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_hud.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_slots.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn2/trn2_off.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/trn2/trn2_hud.c.o(.data .data.*);
+			BUILD_DIR/src/trn2/trn2_slots.c.o(.data .data.*);
+			BUILD_DIR/src/trn2/trn2_bss_eu.c.o(.data .data.*);
 		}
 	}
 
@@ -217,9 +264,29 @@ SECTIONS
 
 			trn_HEADER = .;
 			KEEP(BUILD_DIR/asm/trn/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/trn/trn.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/trn/data/trn.data.s.o(.data .data.*));
-			LONG(0);
+			BUILD_DIR/src/trn/trn_reward.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_hp.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_mp.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_off.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_def.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_speed.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_brain.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_hud.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_slots.c.o(.text .text.*);
+			BUILD_DIR/src/trn/trn_hud.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_hp.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_off.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_speed.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_def.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_mp.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_brain.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_reward.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_slots.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/trn/trn_reward.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/trn/trn_hud.c.o(.data .data.*);
+			BUILD_DIR/src/trn/trn_slots.c.o(.data .data.*);
+			BUILD_DIR/src/trn/trn_bss_eu.c.o(.data .data.*);
 		}
 	}
 
@@ -235,8 +302,33 @@ SECTIONS
 			KEEP(BUILD_DIR/asm/vs/data/model_3.rodata.s.o(.rodata .rodata.*));
 			vs_HEADER = .;
 			KEEP(BUILD_DIR/asm/vs/data/header.rodata.s.o(.rodata .rodata.*));
-			KEEP(BUILD_DIR/asm/vs/vs.s.o(.text .text.*));
-			KEEP(BUILD_DIR/asm/vs/data/vs.data.s.o(.data .data.*));
+			BUILD_DIR/src/vs/vs_select.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_scene.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_intro.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_camera.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_combat.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_main.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_hud.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_effect.c.o(.text .text.*);
+			BUILD_DIR/src/vs/vs_effect.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_main.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_select.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_scene.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_intro.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_camera.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_combat.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_hud.c.o(.rodata .rodata.*);
+			BUILD_DIR/src/vs/vs_select.c.o(.data .data.*);
+			BUILD_DIR/src/vs/vs_scene.c.o(.data .data.*);
+			BUILD_DIR/src/vs/vs_intro.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/vs/vs_camera.c.o(.data .data.*);
+			BUILD_DIR/src/vs/vs_combat.c.o(.data .data.*);
+			. = ALIGN(., 4);
+			BUILD_DIR/src/vs/vs_main.c.o(.data .data.*);
+			BUILD_DIR/src/vs/vs_hud.c.o(.data .data.*);
+			BUILD_DIR/src/vs/vs_effect.c.o(.data .data.*);
+			KEEP(BUILD_DIR/src/vs/vs_bss_eu.c.o(.data .data.*));
 			LONG(0);
 		}
 	}

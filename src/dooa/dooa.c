@@ -27,6 +27,7 @@
 #include <dw/types.h>
 #include <dw/utils.h>
 #include <dw/vecmath.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #define DOOA_MMD_BUFFER		0x80020000
@@ -150,6 +151,33 @@ static void *dooa_functions[] = {
 	DOOA_getSequenceState,
 	DOOA_tick,
 	DOOA_spawnBoneShards,
+#if VERSION_IS(EU)
+	DOOA_updateShards,
+	DOOA_renderShards,
+	DOOA_getOrbitPosition,
+	DOOA_fadeShardClut,
+	DOOA_fadeModelClut,
+	DOOA_showPlayerAndPartner,
+	DOOA_removeShardEffect,
+	DOOA_setShardState,
+	DOOA_tickRebirth,
+	DOOA_renderRebirth,
+	DOOA_renderIrisWindow,
+	DOOA_renderDigimonModel,
+	DOOA_toggleShardFlicker,
+	DOOA_spawnShardWave,
+	DOOA_updateCutsceneCamera,
+	DOOA_hideAllButPartner,
+	DOOA_setOtherEntitiesVisible,
+	DOOA_saveShardClut,
+	DOOA_saveModelClut,
+	DOOA_saveEntityClut,
+	DOOA_initShardEffect,
+	DOOA_hasIrisClosed,
+	DOOA_initOrderingTable,
+	DOOA_tickDissolve,
+	DOOA_renderDissolve,
+#else
 	DOOA_renderShards,
 	DOOA_updateShards,
 	DOOA_getOrbitPosition,
@@ -175,6 +203,7 @@ static void *dooa_functions[] = {
 	DOOA_initOrderingTable,
 	DOOA_renderDissolve,
 	DOOA_tickDissolve,
+#endif
 };
 
 int16_t REINCARNATE_BABY_TYPE[4] = { 1, 15, 29, 43 };
@@ -199,6 +228,20 @@ int8_t MAIN_D_80135364[8];
 
 static void *dooa_sbss_order[] = {
 	&MAIN_D_80135364,
+#if VERSION_IS(EU)
+	&MAIN_D_80135350,
+	&MAIN_D_80135354,
+	&MAIN_D_80135358,
+	&MAIN_D_8013535C,
+	&DOO2_LOADING_COMPLETE,
+	&MAIN_D_80135348,
+	&MAIN_D_8013534C,
+	&MAIN_D_8013532C,
+	&MAIN_D_80135330,
+	&MAIN_D_80135334,
+	&MAIN_D_80135338,
+	&DEATH_MAP_TARGET,
+#else
 	&MAIN_D_8013535C,
 	&MAIN_D_80135358,
 	&MAIN_D_80135354,
@@ -211,6 +254,7 @@ static void *dooa_sbss_order[] = {
 	&MAIN_D_80135334,
 	&MAIN_D_80135330,
 	&MAIN_D_8013532C,
+#endif
 	&MAIN_D_80135328,
 	&MAIN_D_80135324,
 };

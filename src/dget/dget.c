@@ -60,10 +60,17 @@ void renderSelectionCursor(int32_t x, int32_t y, int16_t w, int16_t h, int32_t l
 
 static void *dget_functions[] = {
 	initTournamentSchedule,
+#if VERSION_IS(EU)
+	tickTournamentInfo,
+	renderTournamentInfo,
+	tickTournamentSchedule,
+	renderTournamentSchedule,
+#else
 	renderTournamentInfo,
 	tickTournamentInfo,
 	renderTournamentSchedule,
 	tickTournamentSchedule,
+#endif
 	renderTournamentTextbox,
 	tournamentCheckEligible,
 	isTournamentEnabled,
@@ -82,8 +89,13 @@ int32_t MAIN_D_801353B0;
 static void *dget_sbss_order[] = {
 	&MAIN_D_801353B0,
 	&TOURNAMENT_SELECTED_ROW,
+#if VERSION_IS(EU)
+	&DGET_BUFFER,
+	&TOURNAMENT_SELECTED_COLUMN,
+#else
 	&TOURNAMENT_SELECTED_COLUMN,
 	&DGET_BUFFER,
+#endif
 };
 
 void fillEnabledTournamentTable(void)
@@ -147,19 +159,29 @@ void buildScheduleLabels(void)
 	color = 0xe1;
 	setupBoxOrigin(readPStat(PSTAT_254), &rect2);
 
+#if VERSION_IS(EU)
+	setRECT(&rect1, -94, -98, 188, 20);
+#else
 	setRECT(&rect1, -54, -98, 108, 20);
+#endif
 	createTextbox(1, color, &rect1, &rect2, 0, renderTournamentTextbox);
 	registerTextbox(1, 8, 2, 0, 0);
 	showMapHeadTextbox(1, 0xff, 1, 0x4d8);
 
+#if VERSION_IS(EU)
+	TEXTBOX_LINES_PTR[0x2ac] = 0xd;
+#else
 	TEXTBOX_LINES_PTR[0x210] = 0xd;
+#endif
 
-	str = (uint8_t *)TEXTBOX_LINES_PTR + 0x240;
+	str = (uint8_t *)TEXTBOX_LINES_PTR + 9 * TEXTBOX_LINE_SIZE;
 	*str++ = 0x01;
 	*str++ = 0x01;
 	day = DAY;
 	for (i = 0; i < 5; ++i, ++day) {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		str = (uint8_t *)intToStringSJIS(str, day % 30 + 1, 2, 0);
+#elif !VERSION_IS(US)
 		str = (uint8_t *)intToStringSJIS(str, day % 30 + 1, 2, 0);
 		*str++ = 0x93;
 		*str++ = 0xfa;
@@ -202,7 +224,7 @@ void buildScheduleEntries(void)
 		      renderTournamentSchedule);
 	registerTextbox(2, 10, 6, 0, 1);
 
-	textPtr = (uint8_t *)TEXTBOX_LINES_PTR + 0x280;
+	textPtr = (uint8_t *)TEXTBOX_LINES_PTR + 10 * TEXTBOX_LINE_SIZE;
 	for (i = 0; i < 6; ++i) {
 		textStart = textPtr;
 		entryPtr = (uint8_t *)(DGET_BUFFER + i);
@@ -221,8 +243,10 @@ void buildScheduleEntries(void)
 				grade = TOURNAMENT_GRADES[entry];
 				gradeLen = strlen(grade);
 				if (gradeLen == 2) {
+#if !VERSION_IS(EU)
 					*textPtr++ = '\x0f';
 					*textPtr++ = '\0';
+#endif
 					strcpy((char *)textPtr, grade);
 					textPtr += gradeLen;
 					*textPtr++ = '\x0f';
@@ -246,7 +270,7 @@ void buildScheduleEntries(void)
 		} else {
 			terminateString((char *)textPtr, 1);
 		}
-		textPtr = textStart + 0x40;
+		textPtr = textStart + TEXTBOX_LINE_SIZE;
 	}
 
 	textBox = &TEXTBOX_DATA.box[2];
@@ -431,7 +455,9 @@ void renderTournamentTextbox(void)
 	posX = UI_BOX_DATA[1].finalPos.x + 6;
 	posY = UI_BOX_DATA[1].finalPos.y + 3;
 
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderString(0, posX, posY, 0xb0, 0xc, 0, uvY, 5, 1);
+#elif !VERSION_IS(US)
 	renderString(0, posX, posY, 0x60, 0xc, 0, uvY, 5, 1);
 #else
 	drawString("Tournament", 0, (uint32_t)uvY);
@@ -549,7 +575,15 @@ void renderTournamentSchedule(void)
 	sy = y + TOURNAMENT_SELECTED_ROW * 16 + 0x16;
 	renderSelectionCursor(sx, sy, 0x2a, 0xd, 4);
 
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	cellOff = 0;
+	textOff = 0x6c;
+	sx = x + 0x10;
+	sy = y + 2;
+	for (i = 0; i < 5; i++, sx += 0x33, cellOff += 0x10) {
+		renderString(0, sx, sy, 0x10, 0xc, cellOff, textOff, 4, 1);
+	}
+#elif !VERSION_IS(US)
 	cellOff = 0;
 	textOff = 0x6c;
 	sx = x + 6;
@@ -575,7 +609,12 @@ void renderTournamentSchedule(void)
 	sy = y + 0x18;
 #endif
 	for (row = 0; row < 6; row++, sy += 0x10, textOff += 0xc) {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		sx = x + 0x10;
+		for (i = 0, cellOff = 0; i < 5; i++, sx += 0x33, cellOff += 0x10) {
+			renderString(0, sx, sy, 0x10, 0xc, cellOff, textOff, 4, 1);
+		}
+#elif !VERSION_IS(US)
 		sx = x + 0xc;
 		for (i = 0, cellOff = 0; i < 5; i++, sx += 0x33, cellOff += 0x18) {
 			renderString(0, sx, sy, 0x18, 0xc, cellOff, textOff, 4, 1);

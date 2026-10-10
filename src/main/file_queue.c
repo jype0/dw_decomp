@@ -4,6 +4,7 @@
 
 #include <dw/file.h>
 #include <dw/file_queue.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #define FILE_QUEUE_SIZE		32
@@ -34,6 +35,29 @@ static FileRequest *FILE_READ_QUEUE_TAIL;
 void initFileReadQueueTable(void);
 void _tickFileReadQueue(int32_t instanceId);
 void _renderFileReadQueue(int32_t instanceId);
+
+#if VERSION_IS(EU)
+static void *file_queue_functions[] = {
+	addFileReadRequestLookup,
+	addFileReadRequestSection,
+	addFileReadRequest,
+	addFileReadRequestPath,
+	setFileReadCallback2,
+	tickFileReadQueue,
+	initializeFileReadQueue,
+	_tickFileReadQueue,
+	_renderFileReadQueue,
+	initFileReadQueueTable,
+};
+
+static void *file_queue_sbss_order[] = {
+	&FILE_READ_QUEUE_TAIL,
+	&FILE_READ_QUEUE_HEAD,
+	&FILE_REQUEST_CALLBACK2,
+	&FILE_QUEUE_CALLBACK,
+	&FILE_QUEUE_CALLBACK_PARAM,
+};
+#endif
 
 static void file_queue__garbage__(void)
 {

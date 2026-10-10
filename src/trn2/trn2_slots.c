@@ -33,8 +33,13 @@ static void *trn2_slots_functions[] = {
 	TRN2_getSlotSessionResult,
 	TRN2_startSlotSession,
 	TRN2_chooseReelStop,
+#if VERSION_IS(EU)
+	TRN2_tickSlotMachine,
+	TRN2_renderSlotMachine,
+#else
 	TRN2_renderSlotMachine,
 	TRN2_tickSlotMachine,
+#endif
 };
 
 RECT MAIN_D_80134BE8 = { -82, -87, 164, 90 };

@@ -129,7 +129,7 @@ void checkFishingMap(uint32_t mapId)
 
 		FISHING_DATA_PTR = &FISHING_DATA;
 		if (FISHING_DATA_PTR != NULL) {
-			bzero((uint8_t *)FISHING_DATA_PTR, 0x2D10);
+			bzero((uint8_t *)FISHING_DATA_PTR, sizeof(FishingData));
 			FISHING_DATA_PTR->header = 0x55DDDD55;
 			FISHING_DATA_PTR->trailer = 0x55DDDD55;
 			FISHING_DATA_PTR->mapId = mapId;

@@ -164,9 +164,15 @@ static void *kar_functions[] = {
 	KAR_tickMatchState,
 	KAR_tick,
 	KAR_finishMatch,
+#if VERSION_IS(EU)
+	KAR_start,
+	KAR_tickStones,
+	KAR_renderScene,
+#else
 	KAR_renderScene,
 	KAR_tickStones,
 	KAR_start,
+#endif
 	KAR_setupMatch,
 	KAR_initializeOrderingTables,
 };
@@ -194,6 +200,29 @@ int8_t MAIN_D_80135256;
 uint8_t MAIN_D_80135257;
 
 static void *kar_sbss_order[] = {
+#if VERSION_IS(EU)
+	&MAIN_D_80135250,
+	&MAIN_D_8013524C,
+	&MAIN_D_80135248,
+	&MAIN_D_80135240,
+	&MAIN_D_80135257,
+	&MAIN_D_8013523E,
+	&MAIN_D_80135254,
+	&MAIN_D_80135256,
+	&MAIN_D_80135252,
+	&MAIN_D_8013523C,
+	&MAIN_D_8013523A,
+	&MAIN_D_80135244,
+	&MAIN_D_80135238,
+	&MAIN_D_8013522D,
+	&MAIN_D_80135234,
+	&MAIN_D_80135230,
+	&MAIN_D_8013522E,
+	&MAIN_D_8013522C,
+	&MAIN_D_80135220,
+	&MAIN_D_80135228,
+	&MAIN_D_80135224,
+#else
 	&MAIN_D_80135257,
 	&MAIN_D_80135256,
 	&MAIN_D_80135254,
@@ -215,6 +244,7 @@ static void *kar_sbss_order[] = {
 	&MAIN_D_80135228,
 	&MAIN_D_80135224,
 	&MAIN_D_80135220,
+#endif
 };
 
 // clang-format off
@@ -388,7 +418,11 @@ KarStrTbl KAR_D_8005B318 = {{
 	KAR_METALMAMEMON_LINE_57,
 	KAR_METALMAMEMON_LINE_58,
 	KAR_METALMAMEMON_LINE_59,
+#if VERSION_IS(EU)
+	NULL,
+#else
 	KAR_METALMAMEMON_LINE_60,
+#endif
 }};
 
 METALMAMEMON_HIGHLIGHT_MARKS_TEXT
@@ -743,7 +777,7 @@ void KAR_setupMatch(int32_t mode)
 
 void KAR_start(void)
 {
-#ifdef __MWERKS__
+#if defined(__MWERKS__) && !VERSION_IS(EU)
 	extern int32_t readPStat(int32_t index);
 #endif
 
@@ -2410,6 +2444,16 @@ int32_t KAR_chooseOpponentShot(void)
 	}
 }
 
+#if VERSION_IS(EU)
+#define HINT_HIGHLIGHT_ROW_1 6
+#define HINT_HIGHLIGHT_ROW_2 1
+#define HINT_HIGHLIGHT_COLOR 6
+#else
+#define HINT_HIGHLIGHT_ROW_1 7
+#define HINT_HIGHLIGHT_ROW_2 3
+#define HINT_HIGHLIGHT_COLOR 10
+#endif
+
 int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 {
 	KarStrTbl strs;
@@ -2431,12 +2475,12 @@ int32_t KAR_drawHintPagePenguinmon(int32_t idx, int8_t n)
 
 	drawString(strs.text[offs.start[idx] + n], 0, (n * 13) + 1);
 #if !VERSION_IS(US)
-	if ((idx == 1) && (n == 7)) {
-		setTextColor(10);
+	if ((idx == 1) && (n == HINT_HIGHLIGHT_ROW_1)) {
+		setTextColor(HINT_HIGHLIGHT_COLOR);
 		drawString(highlights.text[0], 0, (n * 13) + 1);
 	}
-	if ((idx == 2) && (n == 3)) {
-		setTextColor(10);
+	if ((idx == 2) && (n == HINT_HIGHLIGHT_ROW_2)) {
+		setTextColor(HINT_HIGHLIGHT_COLOR);
 		drawString(highlights.text[1], 0, (n * 13) + 1);
 	}
 #endif
@@ -2465,12 +2509,12 @@ int32_t KAR_drawHintPageMetalMamemon(int32_t idx, int8_t n)
 
 	drawString(strs.text[offs.start[idx] + n], 0, (n * 13) + 1);
 #if !VERSION_IS(US)
-	if ((idx == 1) && (n == 7)) {
-		setTextColor(10);
+	if ((idx == 1) && (n == HINT_HIGHLIGHT_ROW_1)) {
+		setTextColor(HINT_HIGHLIGHT_COLOR);
 		drawString(highlights.text[0], 0, (n * 13) + 1);
 	}
-	if ((idx == 2) && (n == 3)) {
-		setTextColor(10);
+	if ((idx == 2) && (n == HINT_HIGHLIGHT_ROW_2)) {
+		setTextColor(HINT_HIGHLIGHT_COLOR);
 		drawString(highlights.text[1], 0, (n * 13) + 1);
 	}
 #endif

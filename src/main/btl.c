@@ -73,8 +73,13 @@ static void *btl_functions[] = {
 	startBattleIdleAnimation,
 	handleBattleStart,
 	removeFleeBubble,
+#if VERSION_IS(EU)
+	setFleeBubble,
+	renderFleeBubble,
+#else
 	renderFleeBubble,
 	setFleeBubble,
+#endif
 	handleBattleIdle,
 	loadBattleDataTick,
 	loadBattleData,
@@ -112,6 +117,13 @@ uint8_t IS_PREDEFINED_BATTLE;
 int8_t LOAD_EFE_STATE;
 
 FleeBubbleState FLEE_BUBBLE_DATA[8];
+
+#if VERSION_IS(EU)
+static void *btl_sbss_order[] = {
+	&IS_PREDEFINED_BATTLE,
+	&LOAD_EFE_STATE,
+};
+#endif
 
 int32_t isScreenConcave(void)
 {

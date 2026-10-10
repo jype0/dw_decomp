@@ -156,6 +156,31 @@ static void *map_object_text_order[] = {
 	unloadMapParts,
 	emptyChests,
 	spawnChest,
+#if VERSION_IS(EU)
+	initializeTrainingPoop,
+	renderTrainingPoop,
+	spawnAngemonPedestal,
+	renderAngemonPedestal,
+	spawnGearbox,
+	renderGearbox,
+	spawnToyTownBoxes,
+	renderToyTownBoxes,
+	initializeMedalModel,
+	projectPosition,
+	spawnBoulder,
+	renderBoulder,
+	addWarpCrystal,
+	loadWarpCrystals,
+	renderWarpCrystals,
+	initializeChest,
+	renderChest,
+	loadDirtPileModel,
+	renderDirtPile,
+	loadDirtCartModel,
+	renderDirtCartModel,
+	loadDoors,
+	renderDoors,
+#else
 	renderTrainingPoop,
 	initializeTrainingPoop,
 	renderAngemonPedestal,
@@ -179,11 +204,23 @@ static void *map_object_text_order[] = {
 	loadDirtCartModel,
 	renderDoors,
 	loadDoors,
+#endif
 	loadStaticTMD,
 	clearChests,
 };
 
 static void *map_object_sbss_order[] = {
+#if VERSION_IS(EU)
+	&ANGEMON_PEDESTAL_PROGRESS_X,
+	&ANGEMON_PEDESTAL_PROGRESS_Z,
+	&UNUSED_GEARBOX_VALUE,
+	&BOX_LID_PROGRESS,
+	&map_object_unused_e42,
+	&TOY_TOWN_SELECTED_BOX,
+	&ACTIVE_DIRT_CART_MODEL,
+	LOADED_DOOR_MODELS,
+	&MAP_OBJ_ROTATE_TIMER,
+#else
 	&ANGEMON_PEDESTAL_PROGRESS_Z,
 	&ANGEMON_PEDESTAL_PROGRESS_X,
 	&UNUSED_GEARBOX_VALUE,
@@ -193,10 +230,31 @@ static void *map_object_sbss_order[] = {
 	&ACTIVE_DIRT_CART_MODEL,
 	&MAP_OBJ_ROTATE_TIMER,
 	LOADED_DOOR_MODELS,
+#endif
 	&IS_DOORS_DISABLED,
 };
 
 static void *map_object_bss_order[] = {
+#if VERSION_IS(EU)
+	MEDAL_MESH,
+	&MEDAL_OBJECT,
+	&MEDAL_COORDINATES,
+	&WARP_CRYSTAL_COORDS,
+	WARP_CRYSTAL_OBJECTS,
+	WARP_CRYSTAL_DATA,
+	CHEST_MESH_BUFFER,
+	CHEST_COORDS,
+	CHEST_OBJECTS,
+	&GENERAL_OBJECT3,
+	&GENERAL_COORDS3,
+	GENERAL_OBJECTS,
+	GENERAL_COORDS,
+	GENERAL_MESH_BUFFER,
+	DOOR_OBJECTS,
+	DOOR_COORDS,
+	MAP_3D_OBJ,
+	CHEST_ARRAY,
+#else
 	&MEDAL_COORDINATES,
 	&MEDAL_OBJECT,
 	MEDAL_MESH,
@@ -221,6 +279,7 @@ static void *map_object_bss_order[] = {
 	DOOR_COORDS,
 #endif
 	CHEST_ARRAY,
+#endif
 };
 
 void clearChests(void)

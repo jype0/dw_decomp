@@ -8,6 +8,7 @@
 #include <dw/sound.h>
 #include <dw/trn.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern uint32_t POLLED_INPUT;
@@ -24,8 +25,13 @@ void TRN_func_800888A0(int8_t arg);
 void TRN_tickHpTraining(int32_t instanceId);
 
 static void *trn_hp_functions[] = {
+#if VERSION_IS(EU)
+	TRN_setupHpTraining,
+	TRN_tickHpTraining,
+#else
 	TRN_tickHpTraining,
 	TRN_setupHpTraining,
+#endif
 };
 
 int16_t MAIN_D_8013536C;
@@ -34,10 +40,17 @@ int8_t MAIN_D_80135370;
 int8_t TRAINING_STATE;
 
 static void *trn_hp_sbss_order[] = {
+#if VERSION_IS(EU)
+	&MAIN_D_8013536C,
+	&MAIN_D_8013536E,
+	&MAIN_D_80135370,
+	&TRAINING_STATE,
+#else
 	&TRAINING_STATE,
 	&MAIN_D_80135370,
 	&MAIN_D_8013536E,
 	&MAIN_D_8013536C,
+#endif
 };
 
 GARBAGE_ARRAY(TRN_setupHpTraining, TRN_D_8008F368, 8, 16);

@@ -60,6 +60,28 @@ void initializeSomeArenaArrays(int32_t count, int32_t arg1, int32_t arg2, int32_
 
 static void *vs_camera_functions[] = {
 	VS_removeFighterCounter,
+#if VERSION_IS(EU)
+	VS_addFighterCounter,
+	VS_tickFighterCounter,
+	VS_renderFighterCounter,
+	VS_renderCounterDigits,
+	VS_applyEntityViewpoint,
+	VS_removeCameraIntro,
+	VS_startCameraIntro,
+	VS_tickCameraIntro,
+	VS_startCameraChase,
+	VS_tickCameraChase,
+	VS_interpolateClamped2,
+	VS_isPositionNearEntity,
+	VS_updateCameraLerp,
+	VS_setViewpointFromBone,
+	VS_getFighterDistance,
+	VS_setRandomViewpoint,
+	VS_selectRandomCamera,
+	VS_removeVSPhase,
+	VS_setVSPhase,
+	VS_tickVSPhase,
+#else
 	VS_renderFighterCounter,
 	VS_tickFighterCounter,
 	VS_addFighterCounter,
@@ -80,6 +102,7 @@ static void *vs_camera_functions[] = {
 	VS_removeVSPhase,
 	VS_tickVSPhase,
 	VS_setVSPhase,
+#endif
 	VS_setCameraParams,
 	VS_setCameraSimple,
 	VS_applyViewpoint,

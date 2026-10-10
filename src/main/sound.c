@@ -8,6 +8,7 @@
 #include <dw/params.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 #define VAB_MAX_PROGRAMS	128
 #define VAB_TONES_PER_PROGRAM	16
@@ -371,8 +372,13 @@ static void *sound_bss[] = {
 	SEQ_BUFFER,
 	SEQ_TABLE,
 	&CURRENT_SEQ_TRACK,
+#if VERSION_IS(EU)
+	&SEQ_ACCESS_NUM,
+	&CURRENT_SEQ_FONT,
+#else
 	&CURRENT_SEQ_FONT,
 	&SEQ_ACCESS_NUM,
+#endif
 	&FREE_CHANNEL_INDEX,
 };
 

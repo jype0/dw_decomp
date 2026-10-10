@@ -33,8 +33,13 @@ static void *trn_slots_functions[] = {
 	TRN_getSlotSessionResult,
 	TRN_startSlotSession,
 	TRN_chooseReelStop,
+#if VERSION_IS(EU)
+	TRN_tickSlotMachine,
+	TRN_renderSlotMachine,
+#else
 	TRN_renderSlotMachine,
 	TRN_tickSlotMachine,
+#endif
 };
 
 RECT SLOTS_UI_START = { -82, -87, 164, 90 };

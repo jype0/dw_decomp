@@ -5,6 +5,7 @@
 
 #include <dw/mov.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 typedef struct {
 	char path[0x20];
@@ -29,8 +30,13 @@ static void *mov_functions[] = {
 	MOV_decodeFrame,
 	MOV_startRead,
 	MOV_startStream,
+#if VERSION_IS(EU)
+	MOV_initEnvironment,
+	MOV_onSliceDecoded,
+#else
 	MOV_onSliceDecoded,
 	MOV_initEnvironment,
+#endif
 };
 
 int32_t MOVIE_HEIGHT;
@@ -38,11 +44,24 @@ int32_t MOVIE_WIDTH;
 int32_t MOVIE_COMPLETED;
 
 MovieEntry MOV_MOVIES[4] = {
+#if VERSION_IS(EU)
+	{ "\\MOVIE\\OP1.STR;1", 1, 3610 },
+	{ "\\MOVIE\\OP2.STR;1", 1, 3260 },
+#else
 	{ "\\MOVIE\\OP1.STR;1", 1, 3637 },
 	{ "\\MOVIE\\OP2.STR;1", 1, 3266 },
+#endif
 	{ "\\MOVIE\\ED2.STR;1", 1, 2654 },
 	{ "\\MOVIE\\EDR.STR;1", 1, 3447 },
 };
+
+#if VERSION_IS(EU)
+static void *mov_sbss_order[] = {
+	&MOVIE_COMPLETED,
+	&MOVIE_HEIGHT,
+	&MOVIE_WIDTH,
+};
+#endif
 
 void MOV_initEnvironment(MovieEnv *env, int32_t x0, int32_t y0, int32_t x1, int32_t y1)
 {
@@ -197,11 +216,18 @@ int32_t MOV_playMovie(int32_t movieId)
 
 	movie = &MOV_MOVIES[movieId];
 
+#if VERSION_IS(EU)
+	while (CdSearchFile(&file, movie->path) == NULL) {
+	}
+
+	MOV_initEnvironment(&MOV_ENV, 0, 56, 0, 296);
+#else
 	if (CdSearchFile(&file, movie->path) == NULL) {
 		return 0;
 	}
 
 	MOV_initEnvironment(&MOV_ENV, 0, 32, 0, 272);
+#endif
 	MOV_startStream(&file, MOV_onSliceDecoded, movie);
 	DecDCTvlcBuild(MOV_VLC_TABLE);
 

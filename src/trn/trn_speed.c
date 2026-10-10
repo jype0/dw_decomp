@@ -8,6 +8,7 @@
 #include <dw/sound.h>
 #include <dw/trn.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern uint32_t POLLED_INPUT;
@@ -22,8 +23,13 @@ void TRN_func_800888A0(int8_t arg);
 void TRN_tickSpeedTraining(int32_t instanceId);
 
 static void *trn_speed_functions[] = {
+#if VERSION_IS(EU)
+	TRN_setupSpeedTraining,
+	TRN_tickSpeedTraining,
+#else
 	TRN_tickSpeedTraining,
 	TRN_setupSpeedTraining,
+#endif
 };
 
 void TRN_setupSpeedTraining(arg)

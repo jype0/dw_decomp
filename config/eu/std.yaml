@@ -26,6 +26,8 @@ options:
   symbol_addrs_path:
     - config/eu/symbols.txt
     - config/eu/symbols_std.txt
+  reloc_addrs_path:
+    - config/eu/relocs_std.txt
 
   undefined_funcs_auto_path: build/eu/psx/generated/undefined_funcs_auto_std.txt
   undefined_syms_auto_path: build/eu/psx/generated/undefined_syms_auto_std.txt
@@ -94,7 +96,15 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x41C8, asm, std]
-      - [0x30CA4, data, std]
+      - [0x41C8, c, std_setup]
+      - [0x5E48, c, std_main]
+      - [0x1AD70, c, std_hud]
+      - [0x1ED20, c, std_effect]
+      - [0x30CA4, .rodata, std_main]
+      - [0x30D6C, .data, std_setup]
+      - [0x31074, .data, std_main]
+      - [0x31510, .data, std_hud]
+      - [0x31910, .data, std_effect]
+      - [0x3246C, .data, std_bss_eu]
 
   - [0x36CCC]

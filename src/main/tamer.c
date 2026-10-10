@@ -33,10 +33,16 @@
 #include <text/main/tamer.h>
 
 RECT ITEM_PICKUP_TEXT_AREA = {0, 12, 256, 200};
+#if VERSION_IS(EU)
+RECT ITEM_PICKUP_SECOND_LINE = {0, 24, 256, 12};
+#endif
 
 MESSAGES_TEXT
 
 RECT TAKE_CHEST_TEXT_AREA = {0, 12, 256, 200};
+#if VERSION_IS(EU)
+RECT TAKE_CHEST_SECOND_LINE = {0, 24, 256, 12};
+#endif
 RECT AWARD_SOMETHING_TEXT_AREA = {0, 12, 256, 200};
 
 int8_t HAS_ROTATION_DATA[8];
@@ -64,6 +70,23 @@ static void *tamer_sbss_order[] = {
 	&IMMORTAL_HOUR,
 	&TRAINING_COMPLETE,
 	&TALKED_TO_ENTITY,
+#if VERSION_IS(EU)
+	&MOVE_TO_DELTA_X,
+	&MOVE_TO_DELTA_Z,
+	&INTERACTED_CHEST,
+	&TAKE_CHEST_ITEM,
+	&TAMER_SUB_STATE,
+	&TAKE_CHEST_STATE,
+	&PICKED_UP_DROP_ID,
+	&TAKE_ITEM_FRAME_COUNTER,
+	&TAMER_STATE,
+	HAS_ROTATION_DATA,
+	&PREVIOUS_CAMERA_POS_INITIALIZED,
+	&HAS_PICKED_UP_ITEM,
+	&TAMER_LEVEL_AWARD_PENDING,
+	&MEDAL_AWARD_PENDING,
+	&TAMER_LEVELS_AWARDED,
+#else
 	&MOVE_TO_DELTA_Z,
 	&MOVE_TO_DELTA_X,
 	&INTERACTED_CHEST,
@@ -79,6 +102,7 @@ static void *tamer_sbss_order[] = {
 	&HAS_PICKED_UP_ITEM,
 	&PREVIOUS_CAMERA_POS_INITIALIZED,
 	HAS_ROTATION_DATA,
+#endif
 };
 
 extern int8_t GAME_STATE;
@@ -300,8 +324,13 @@ static void *tamer_functions[] = {
 	tamerTickOverworld,
 	setupTamerOnWarp,
 	loadMapEntities,
+#if VERSION_IS(EU)
+	initializeTamer,
+	tamerTick,
+#else
 	tamerTick,
 	initializeTamer,
+#endif
 };
 
 void initializeTamer(int32_t type, int32_t posX, int32_t posY, int32_t posZ,
@@ -485,7 +514,11 @@ void tamerTickWalkingState(void)
 
 	tickTamerWaypoints();
 
+#if VERSION_IS(EU)
+	if ((isKeyDown(0x20) != 0) &&
+#else
 	if ((isKeyDown(0x10) != 0) &&
+#endif
 	    (IS_SCRIPT_PAUSED == 1) &&
 #if VERSION_EQUAL_OR_NEWER(US)
 	    (FADE_PROTECTION == 0) &&
@@ -773,7 +806,11 @@ void renderItemPickupTextbox(int32_t instanceId)
 	renderString(0xf, -0x7d, 0x2d, 0x48, 0xc, 0, 0xc, 5, 0);
 #endif
 	if (TAKE_CHEST_STATE == 0) {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		renderString(0, -0x7d, 0x39, 0x30, 0xc, 0, 0x24, 5, 0);
+		renderString(0xf, -0x7d, 0x45, 0x60, 0xc, 0, 0x18, 5, 0);
+		halfLength = strlen(ITEM_NAME(TAKE_CHEST_ITEM)) / 2;
+#elif !VERSION_IS(US)
 		renderString(0, -0x7d, 0x39, 0x30, 0xc, 0, 0x24, 5, 0);
 		renderString(0xf, -0x4d, 0x39, 0x60, 0xc, 0, 0x18, 5, 0);
 		halfLength = strlen(ITEM_NAME(TAKE_CHEST_ITEM)) / 2;
@@ -1363,11 +1400,17 @@ void tamerTickChangeMap(void)
 void tamerTickPickupItem(void)
 {
 	RECT textRect;
+#if VERSION_IS(EU)
+	RECT lineRect;
+#endif
 	RECT targetRect;
 	RECT sourceRect;
 	DVECTOR screenPos;
 
 	textRect = ITEM_PICKUP_TEXT_AREA;
+#if VERSION_IS(EU)
+	lineRect = ITEM_PICKUP_SECOND_LINE;
+#endif
 
 	switch (TAMER_SUB_STATE) {
 	case 0:
@@ -1404,6 +1447,9 @@ void tamerTickPickupItem(void)
 				playSound(0, 3);
 			}
 			if (giveItem(DROPPED_ITEMS[PICKED_UP_DROP_ID].worldItem.type, 0) == 0) {
+#if VERSION_IS(EU)
+				clearTextSubArea(&lineRect);
+#endif
 				drawString(MAIN_D_80122D68, 0, 0x18);
 				TAKE_ITEM_FRAME_COUNTER = 0;
 				TAKE_CHEST_STATE = 1;
@@ -1447,11 +1493,17 @@ void tamerTickPickupItem(void)
 void tamerTickTakeChest(void)
 {
 	RECT textRect;
+#if VERSION_IS(EU)
+	RECT lineRect;
+#endif
 	RECT targetRect;
 	RECT sourceRect;
 	DVECTOR screenPos;
 
 	textRect = TAKE_CHEST_TEXT_AREA;
+#if VERSION_IS(EU)
+	lineRect = TAKE_CHEST_SECOND_LINE;
+#endif
 
 	switch (TAMER_SUB_STATE) {
 	case 0:
@@ -1503,6 +1555,9 @@ void tamerTickTakeChest(void)
 		    (5 < TAKE_ITEM_FRAME_COUNTER)) {
 			TAKE_ITEM_FRAME_COUNTER = 0;
 			if (giveItem(TAKE_CHEST_ITEM, 0) == 0) {
+#if VERSION_IS(EU)
+				clearTextSubArea(&lineRect);
+#endif
 				drawString(MAIN_D_80122D68, 0, 0x18);
 				TAKE_CHEST_STATE = 1;
 				TAMER_SUB_STATE = 3;

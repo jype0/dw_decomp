@@ -176,8 +176,6 @@ def __generate(release, blocks, source):
         macro = body.get('macro')
         if storage == 'embedded' and not macro:
             __fail(where, 'embedded storage needs a macro')
-        if storage == 'named' and count > 1:
-            __fail(where, 'named storage has one line per entry')
 
         if macro:
             if storage == 'embedded':
@@ -206,13 +204,15 @@ def __generate(release, blocks, source):
                 continue
 
             named_here = release in entry.get('named', ())
+            names = name if isinstance(name, list) else [name] * count
             refs = []
-            for line in __lines(entry, release, count, where):
+            for line, line_name in zip(__lines(entry, release, count, where),
+                                       names + [None] * count):
                 if line is None:
                     refs.append('NULL')
                     continue
                 literal = __c_string(line, where)
-                if storage == 'literal' and line == '' and body.get('empty'):
+                if line == '' and body.get('empty'):
                     symbol = body['empty']
                 elif storage == 'literal' and not named_here:
                     refs.append(literal)
@@ -220,11 +220,11 @@ def __generate(release, blocks, source):
                 elif literal in named:
                     refs.append(named[literal])
                     continue
-                elif not name:
+                elif not line_name:
                     __fail(where,
                            'a new {} text needs a name'.format(release))
                 else:
-                    symbol = name
+                    symbol = line_name
                 if literal not in named:
                     named[literal] = symbol
                     strings.append('char {}[] = {};'.format(symbol, literal))

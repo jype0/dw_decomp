@@ -31,16 +31,27 @@ static void *ui_functions[] = {
 	renderUIBoxAnim,
 	renderUIBoxBorder,
 	removeAnimatedUIBox,
+#if VERSION_IS(EU)
+	createAnimatedUIBox,
+	renderUIBoxAnimated,
+	removeStaticUIBox,
+	createStaticUIBox,
+	tickUIBox,
+	renderUIBoxStatic,
+#else
 	renderUIBoxAnimated,
 	createAnimatedUIBox,
 	removeStaticUIBox,
 	renderUIBoxStatic,
 	tickUIBox,
 	createStaticUIBox,
+#endif
 	initializeUIBoxData,
 };
 
 // clang-format off
+STAT_LABELS_STRINGS
+
 uint8_t BOX_BORDER_CORNERS_U[4] = {
 	0x78, 0x7c, 0x78, 0x7c,
 };
@@ -59,16 +70,23 @@ RGB8 UI_BOX_COLORS[5] = {
 
 #if VERSION_IS(EU)
 char *MAIN_D_80124C0C[6] = {
+	STR_STAT_LABEL_HP,
+	STR_STAT_LABEL_MP,
+	STR_STAT_LABEL_OFFENSE,
+	STR_STAT_LABEL_DEFENSE,
+	STR_STAT_LABEL_SPEED,
+	STR_STAT_LABEL_BRAINS,
+};
 #else
 char MAIN_D_80124C0C[6][12] = {
-#endif
-	STAT_LABEL(HP)
-	STAT_LABEL(MP)
-	STAT_LABEL(OFFENSE)
-	STAT_LABEL(DEFENSE)
-	STAT_LABEL(SPEED)
-	STAT_LABEL(BRAINS)
+	STAT_LABEL(STR_STAT_LABEL_HP)
+	STAT_LABEL(STR_STAT_LABEL_MP)
+	STAT_LABEL(STR_STAT_LABEL_OFFENSE)
+	STAT_LABEL(STR_STAT_LABEL_DEFENSE)
+	STAT_LABEL(STR_STAT_LABEL_SPEED)
+	STAT_LABEL(STR_STAT_LABEL_BRAINS)
 };
+#endif
 
 char MAIN_D_80124C54[] = {
 	0x82, 0x4f, 0x82, 0x50, 0x82, 0x51, 0x82, 0x52,

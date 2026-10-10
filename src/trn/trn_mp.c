@@ -9,6 +9,7 @@
 #include <dw/training.h>
 #include <dw/trn.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern uint32_t POLLED_INPUT;
@@ -24,8 +25,13 @@ void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn_mp_functions[] = {
+#if VERSION_IS(EU)
+	TRN_setupMpTraining,
+	TRN_tickMpTraining,
+#else
 	TRN_tickMpTraining,
 	TRN_setupMpTraining,
+#endif
 };
 
 int16_t MAIN_D_80135372;
@@ -38,10 +44,17 @@ int16_t MAIN_D_8013537C;
 static void *trn_mp_sbss_order[] = {
 	&MAIN_D_8013537C,
 	&MAIN_D_8013537A,
+#if VERSION_IS(EU)
+	&MAIN_D_80135372,
+	&MAIN_D_80135374,
+	&MAIN_D_80135376,
+	&MAIN_D_80135378,
+#else
 	&MAIN_D_80135378,
 	&MAIN_D_80135376,
 	&MAIN_D_80135374,
 	&MAIN_D_80135372,
+#endif
 };
 
 void TRN_tickMpTraining(instanceId)

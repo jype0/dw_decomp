@@ -1,0 +1,37 @@
+rom:0x0000932C reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1000
+rom:0x00009334 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1000
+rom:0x00009390 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x800
+rom:0x00009398 reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x800
+rom:0x000093B4 reloc:MIPS_HI16 symbol:rsin_tbl addend:-0x1800
+rom:0x000093BC reloc:MIPS_LO16 symbol:rsin_tbl addend:-0x1800
+rom:0x0003E12C reloc:MIPS_NONE symbol:NONE
+rom:0x0003E180 reloc:MIPS_NONE symbol:NONE
+rom:0x0003E194 reloc:MIPS_NONE symbol:NONE
+rom:0x0003E198 reloc:MIPS_NONE symbol:NONE
+rom:0x00071FE4 reloc:MIPS_NONE symbol:NONE
+rom:0x00072000 reloc:MIPS_NONE symbol:NONE
+rom:0x000720B4 reloc:MIPS_NONE symbol:NONE
+rom:0x000A57B4 reloc:MIPS_32 symbol:btl_START
+rom:0x000A57B8 reloc:MIPS_32 symbol:std_START
+rom:0x000A57BC reloc:MIPS_32 symbol:fish_START
+rom:0x000A57C0 reloc:MIPS_32 symbol:evl_START
+rom:0x000A57C4 reloc:MIPS_32 symbol:kar_START
+rom:0x000A57C8 reloc:MIPS_32 symbol:vs_START
+rom:0x000A57CC reloc:MIPS_32 symbol:mov_START
+rom:0x000A57D0 reloc:MIPS_32 symbol:doo2_START
+rom:0x000A57D4 reloc:MIPS_32 symbol:dooa_START
+rom:0x000A57D8 reloc:MIPS_32 symbol:trn_START
+rom:0x000A57E0 reloc:MIPS_32 symbol:dget_START
+rom:0x000A57E4 reloc:MIPS_32 symbol:trn2_START
+rom:0x000A57E8 reloc:MIPS_32 symbol:murd_START
+rom:0x000A57EC reloc:MIPS_32 symbol:endi_START
+rom:0x000A57F0 reloc:MIPS_32 symbol:eab_START
+rom:0x000AB74C reloc:MIPS_32 symbol:BTL_STR_LISTENS_TO
+rom:0x000AB8D0 reloc:MIPS_32 symbol:STD_PATH_STDDAT_DRAW_TMD
+rom:0x000ABA48 reloc:MIPS_32 symbol:KAR_STR_START_GAME
+rom:0x000ABA4C reloc:MIPS_32 symbol:KAR_STR_EXPLAIN_GAME
+rom:0x000ABA64 reloc:MIPS_32 symbol:KAR_STR_BUTTON_MARK_COL11
+rom:0x000ABA68 reloc:MIPS_32 symbol:KAR_STR_BUTTON_MARK_COL1
+rom:0x000ABA6C reloc:MIPS_32 symbol:KAR_STR_BUTTON_MARK_COL11
+rom:0x000ABA70 reloc:MIPS_32 symbol:KAR_STR_BUTTON_MARK_COL1
+rom:0x000ABB7C reloc:MIPS_32 symbol:VS_PATH_STDDAT_DRAW_TMD

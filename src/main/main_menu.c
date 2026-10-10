@@ -25,7 +25,11 @@
 
 #include "common.h"
 
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+#define YES_TEXT_W 0x18
+#define NO_TEXT_U 0x18
+#define NO_TEXT_W 0x20
+#elif !VERSION_IS(US)
 #define YES_TEXT_W 0x18
 #define NO_TEXT_U 0xc
 #define NO_TEXT_W 0x24
@@ -154,7 +158,9 @@ int32_t MEMORY_CARD_ID;
 int32_t MAIN_MENU_TICKS;
 int32_t CURRENT_MENU;
 int32_t NEW_CARDS;
+#if !VERSION_IS(EU)
 int32_t MAIN_D_80135054;
+#endif
 int32_t MEMORY_CARD_OPERATION;
 int32_t VS_PLAYER_INDEX;
 int32_t BATTLE_REGISTRATION_SLOT;
@@ -165,6 +171,19 @@ int32_t MEMORY_CARD_USED_BLOCKS;
 long SAVE_RETRY_RETURN_MENU;
 
 static void *main_menu_sbss_order[] = {
+#if VERSION_IS(EU)
+	&MEMORY_CARD_USED_BLOCKS,
+	&MEMORY_CARD_RETURN_MENU,
+	&SAVE_RETRY_RETURN_MENU,
+	&TARGET_MENU,
+	&CHECKED_MEMORY_CARD,
+	&MAIN_MENU_TICKS,
+	&CURRENT_MENU,
+	&NEW_CARDS,
+	&MEMORY_CARD_OPERATION,
+	&VS_PLAYER_INDEX,
+	&BATTLE_REGISTRATION_SLOT,
+#else
 	&SAVE_RETRY_RETURN_MENU,
 	&MEMORY_CARD_USED_BLOCKS,
 	&MEMORY_CARD_RETURN_MENU,
@@ -177,6 +196,7 @@ static void *main_menu_sbss_order[] = {
 	&NEW_CARDS,
 	&CURRENT_MENU,
 	&MAIN_MENU_TICKS,
+#endif
 	&MEMORY_CARD_ID,
 	&MEMORY_CARD_ERROR,
 	&MEMORY_CARD_SLOT,
@@ -298,7 +318,9 @@ void *main_menu_order_anchor[] = {
 	createByteSum,
 	renderMenuSelector,
 	registerBattleData,
+#if !VERSION_IS(EU)
 	renderMainMenu,
+#endif
 	countRegisteredDigimon,
 	writeSavegame,
 	loadSavegame,
@@ -312,6 +334,9 @@ void *main_menu_order_anchor[] = {
 	setMemoryCardReadError,
 	getMenuOnCardChange,
 	tickMenuInput,
+#if VERSION_IS(EU)
+	renderMainMenu,
+#endif
 	tickMainMenu,
 	updateMemoryCardState,
 	drawRegisteredDigimonSlots,
@@ -346,15 +371,272 @@ void *main_menu_order_anchor[] = {
 	renderInitialMenu,
 };
 
+#if VERSION_IS(EU)
+extern char MAIN_D_80131008[];
+extern char MAIN_D_80131014[];
+extern char MAIN_D_80131024[];
+extern char MAIN_D_80131030[];
+extern char MAIN_D_8013103C[];
+extern char MAIN_D_8013106C[];
+extern char MAIN_D_8013107C[];
+extern char MAIN_D_80131090[];
+extern char MAIN_D_801310A4[];
+extern char MAIN_D_801310B4[];
+extern char MAIN_D_801310CC[];
+extern char MAIN_D_801310E0[];
+extern char MAIN_D_801310F4[];
+extern char MAIN_D_80131108[];
+extern char MAIN_D_8013111C[];
+extern char MAIN_D_80131134[];
+extern char STR_PLEASE_REPLACE_THE_MEMORY_CARD[];
+extern char MAIN_D_80131144[];
+extern char MAIN_D_80131150[];
+extern char STR_A_MEMORY_CARD[];
+extern char MAIN_D_80131168[];
+extern char STR_SLOT_1_IS_UNFORMATTED[];
+extern char MAIN_D_80131178[];
+extern char STR_IN_MEMORY_CARD_SLOT_1[];
+extern char STR_SLOT_1_HAS_INSUFFICIENT_SPACE[];
+extern char MAIN_D_8013119C[];
+extern char MAIN_D_801311B4[];
+extern char MAIN_D_801311C0[];
+extern char STR_SLOT_2_IS_UNFORMATTED[];
+extern char STR_IN_MEMORY_CARD_SLOT_2[];
+extern char STR_SLOT_2_HAS_INSUFFICIENT_SPACE[];
+extern char MAIN_D_801311D4[];
+extern char MAIN_D_801311EC[];
+extern char MAIN_D_80131200[];
+extern char MAIN_D_80131218[];
+extern char MAIN_D_80131228[];
+extern char MAIN_D_80131254[];
+extern char MAIN_D_80131278[];
+extern char MAIN_D_80131290[];
+extern char MAIN_D_801312A0[];
+extern char MAIN_D_801312B8[];
+extern char MAIN_D_801312D0[];
+extern char MAIN_D_801312E4[];
+extern char MAIN_D_80139DF4[];
+extern char STR_CARD_IS_INSERTED_DURING_PLAY[];
+extern char STR_TURNING_OFF_OR_RESETTING_THE[];
+extern char STR_UNIT_WILL_ERASE_CONTENTS_OF[];
+extern char STR_ADVENTURE[];
+extern char MAIN_D_80139E14[];
+extern char STR_IN_USE[];
+extern char MAIN_D_801312FC[];
+extern char STR_CARD_SLOT_1_NOT[];
+extern char STR_CARD_SLOT_2_NOT[];
+extern char MAIN_D_80131318[];
+extern char MAIN_D_80131328[];
+extern char MAIN_D_80131340[];
+extern char MAIN_D_8013136C[];
+extern char MAIN_D_80131378[];
+extern char MAIN_D_80131390[];
+extern char STR_OVERWRITTEN[];
+extern char MAIN_D_801313B0[];
+extern char MAIN_D_801313E4[];
+extern char MAIN_D_80131400[];
+extern char MAIN_D_8013141C[];
+extern char STR_PLAYER_2_IN_MEMORY[];
+extern char STR_CARD_SLOT_2[];
+extern char STR_PLAYER_1_IN_MEMORY[];
+extern char STR_CARD_SLOT_1[];
+extern char MAIN_D_80134684[];
+extern char MAIN_D_80131460[];
+extern char MAIN_D_8013147C[];
+extern char STR_SAVE_TO_BLOCK_QUESTION[];
+extern char MAIN_D_80139FCC[];
+extern char MAIN_D_801314B0[];
+extern char MAIN_D_801314C8[];
+extern char MAIN_D_801314E4[];
+extern char STR_PROCESS[];
+extern char MAIN_D_80131500[];
+extern char MAIN_D_8013151C[];
+extern char MAIN_D_80131538[];
+extern char MAIN_D_8013154C[];
+extern char MAIN_D_80131568[];
+extern char STR_YES_NO_PADDED[];
+extern char MAIN_D_80131580[];
+extern char MAIN_D_801315A0[];
+extern char STR_YOU_CANNOT_SAVE_IT[];
+extern char STR_IN_MEMORY_CARD_FOR[];
+extern char STR_MAIN_MENU_BATTLE[];
+extern char MAIN_D_801315C0[];
+extern char MAIN_D_801315EC[];
+extern char STR_FOR_PLAYER_1_IN_MEMORY[];
+extern char MAIN_D_8013A0EC[];
+extern char STR_EMPTY[];
+extern char STR_NUMBER_0[];
+extern char STR_NUMBER_1[];
+extern char MAIN_D_80134674[];
+extern char STR_NUMBER_3[];
+extern char STR_NUMBER_4[];
+extern char STR_NUMBER_5[];
+extern char STR_NUMBER_6[];
+extern char STR_NUMBER_7[];
+extern char STR_NUMBER_8[];
+extern char STR_NUMBER_9[];
+extern char STR_NUMBER_10[];
+extern char STR_NUMBER_11[];
+extern char STR_NUMBER_12[];
+extern char STR_NUMBER_13[];
+extern char STR_NUMBER_14[];
+extern char STR_NUMBER_15[];
+extern char STR_SPACE[];
+extern char STR_SPACE_QUESTION[];
+extern char MAIN_D_8013D814[];
+extern char MAIN_D_80134694[];
+extern char MAIN_D_80134698[];
+extern char MAIN_D_8013469C[];
+extern char MAIN_D_801346A4[];
+extern char MAIN_D_8013143C[];
+extern char MAIN_D_80131448[];
+extern char MAIN_D_80131454[];
+extern char MAIN_D_801346B4[];
+extern char MAIN_D_801346B8[];
+extern char PATH_WILDCARD[];
+
+typedef struct {
+	char *strings[16];
+} NumberStrings;
+
+extern NumberStrings NUMBERS;
+
+static void *main_menu_data_order[] = {
+	PATH_WILDCARD,
+	MAIN_D_801346B8,
+	MAIN_D_801346B4,
+	MAIN_D_80131454,
+	MAIN_D_80131448,
+	MAIN_D_8013143C,
+	MAIN_D_801346A4,
+	MAIN_D_8013469C,
+	MAIN_D_80134698,
+	MAIN_D_80134694,
+	MAIN_D_8013D814,
+	STR_SPACE_QUESTION,
+	STR_SPACE,
+	STR_NUMBER_15,
+	STR_NUMBER_14,
+	STR_NUMBER_13,
+	STR_NUMBER_12,
+	STR_NUMBER_11,
+	STR_NUMBER_10,
+	STR_NUMBER_9,
+	STR_NUMBER_8,
+	STR_NUMBER_7,
+	STR_NUMBER_6,
+	STR_NUMBER_5,
+	STR_NUMBER_4,
+	STR_NUMBER_3,
+	MAIN_D_80134674,
+	STR_NUMBER_1,
+	STR_NUMBER_0,
+	STR_EMPTY,
+	MAIN_D_8013A0EC,
+	STR_FOR_PLAYER_1_IN_MEMORY,
+	MAIN_D_801315EC,
+	MAIN_D_801315C0,
+	STR_MAIN_MENU_BATTLE,
+	STR_IN_MEMORY_CARD_FOR,
+	STR_YOU_CANNOT_SAVE_IT,
+	MAIN_D_801315A0,
+	MAIN_D_80131580,
+	STR_YES_NO_PADDED,
+	MAIN_D_80131568,
+	MAIN_D_8013154C,
+	MAIN_D_80131538,
+	MAIN_D_8013151C,
+	MAIN_D_80131500,
+	STR_PROCESS,
+	MAIN_D_801314E4,
+	MAIN_D_801314C8,
+	MAIN_D_801314B0,
+	MAIN_D_80139FCC,
+	STR_SAVE_TO_BLOCK_QUESTION,
+	MAIN_D_8013147C,
+	MAIN_D_80131460,
+	MAIN_D_80134684,
+	STR_CARD_SLOT_1,
+	STR_PLAYER_1_IN_MEMORY,
+	STR_CARD_SLOT_2,
+	STR_PLAYER_2_IN_MEMORY,
+	MAIN_D_8013141C,
+	MAIN_D_80131400,
+	MAIN_D_801313E4,
+	MAIN_D_801313B0,
+	STR_OVERWRITTEN,
+	MAIN_D_80131390,
+	MAIN_D_80131378,
+	MAIN_D_8013136C,
+	MAIN_D_80131340,
+	MAIN_D_80131328,
+	MAIN_D_80131318,
+	STR_CARD_SLOT_2_NOT,
+	STR_CARD_SLOT_1_NOT,
+	MAIN_D_801312FC,
+	STR_IN_USE,
+	MAIN_D_80139E14,
+	STR_ADVENTURE,
+	STR_UNIT_WILL_ERASE_CONTENTS_OF,
+	STR_TURNING_OFF_OR_RESETTING_THE,
+	STR_CARD_IS_INSERTED_DURING_PLAY,
+	MAIN_D_80139DF4,
+	MAIN_D_801312E4,
+	MAIN_D_801312D0,
+	MAIN_D_801312B8,
+	MAIN_D_801312A0,
+	MAIN_D_80131290,
+	MAIN_D_80131278,
+	&NUMBERS,
+	MAIN_D_80131254,
+	MAIN_D_80131228,
+	MAIN_D_80131218,
+	MAIN_D_80131200,
+	MAIN_D_801311EC,
+	MAIN_D_801311D4,
+	STR_SLOT_2_HAS_INSUFFICIENT_SPACE,
+	STR_IN_MEMORY_CARD_SLOT_2,
+	STR_SLOT_2_IS_UNFORMATTED,
+	MAIN_D_801311C0,
+	MAIN_D_801311B4,
+	MAIN_D_8013119C,
+	STR_SLOT_1_HAS_INSUFFICIENT_SPACE,
+	STR_IN_MEMORY_CARD_SLOT_1,
+	MAIN_D_80131178,
+	STR_SLOT_1_IS_UNFORMATTED,
+	MAIN_D_80131168,
+	STR_A_MEMORY_CARD,
+	MAIN_D_80131150,
+	MAIN_D_80131144,
+	STR_PLEASE_REPLACE_THE_MEMORY_CARD,
+	MAIN_D_80131134,
+	MAIN_D_8013111C,
+	MAIN_D_80131108,
+	MAIN_D_801310F4,
+	MAIN_D_801310E0,
+	MAIN_D_801310CC,
+	MAIN_D_801310B4,
+	MAIN_D_801310A4,
+	MAIN_D_80131090,
+	MAIN_D_8013107C,
+	MAIN_D_8013106C,
+	MAIN_D_8013103C,
+	MAIN_D_80131030,
+	MAIN_D_80131024,
+	MAIN_D_80131014,
+	MAIN_D_80131008,
+};
+#endif
+
 // clang-format off
 SAVE_LABELS_TEXT
 
-#if !VERSION_IS(US)
-char MAIN_D_801346B8[4] = "）は";
-char MAIN_D_801346C0[2][2] = { "", "*" };
-#else
+#if VERSION_IS(US)
 char MAIN_D_801346B8[] = " is in";
 char MAIN_D_801346C0[2][2] = { ".", "*" };
+#elif !VERSION_IS(EU)
+char MAIN_D_801346B8[4] = "）は";
+char MAIN_D_801346C0[2][2] = { "", "*" };
 #endif
 
 SAVE_PLAYER_LABEL_TEXT
@@ -369,6 +651,17 @@ RegisteredDigimon *VS__REGISTERED_DIGIMON_BUFFER = (RegisteredDigimon *)(TEXTURE
 
 MEMCARD_MESSAGES_TEXT
 SAVE_MESSAGES_TEXT
+
+#if VERSION_IS(EU)
+char PATH_WILDCARD[] = "*";
+
+NumberStrings NUMBERS = { {
+	STR_NUMBER_0,  STR_NUMBER_1,  STR_NUMBER_2,  STR_NUMBER_3,
+	STR_NUMBER_4,  STR_NUMBER_5,  STR_NUMBER_6,  STR_NUMBER_7,
+	STR_NUMBER_8,  STR_NUMBER_9,  STR_NUMBER_10, STR_NUMBER_11,
+	STR_NUMBER_12, STR_NUMBER_13, STR_NUMBER_14, STR_NUMBER_15,
+} };
+#endif
 
 InventoryTable DEFAULT_INVENTORY_AMOUNTS = {
 	{
@@ -419,6 +712,208 @@ char SAVEGAME_ID_LABEL[16][6] = {
 	"１５",
 };
 
+#if VERSION_IS(EU)
+MenuHighlight MENU_HIGHLIGHTS[22] = {
+	{
+		0x00,
+		{ 0x04, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x005e,
+		0x0037,
+		0x0084,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x03, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0040,
+		0x0037,
+		0x00c0,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0040,
+		0x0037,
+		0x00c0,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0058,
+		0x0037,
+		0x0090,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0040,
+		0x0037,
+		0x00c0,
+		0x000c,
+	},
+	{
+		0xff,
+		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x006e,
+		0x0037,
+		0x0024,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x05, 0x00, 0x00, 0x00, 0x00 },
+		0x0024,
+		0x0036,
+		0x002e,
+		0x00d4,
+		0x001b,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x003a,
+		0x0052,
+		0x0024,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x01, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x004c,
+		0x007d,
+		0x0024,
+		0x000c,
+	},
+	{
+		0xff,
+		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x0010,
+		0x0060,
+		0x006a,
+		0x0084,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x01, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0040,
+		0x0072,
+		0x0024,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0046,
+		0x007d,
+		0x0024,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0046,
+		0x00c3,
+		0x0024,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x0a, 0x00, 0x00, 0x1d, 0x00 },
+		0x000c,
+		0x0034,
+		0x0037,
+		0x00f0,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0046,
+		0x0059,
+		0x0024,
+		0x000c,
+	},
+	{
+		0xff,
+		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0046,
+		0x0057,
+		0x0024,
+		0x000c,
+	},
+	{
+		0xff,
+		{ 0x00, 0x00, 0x00, 0x00, 0x00 },
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+		0x0000,
+	},
+	{
+		0x00,
+		{ 0x03, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x005e,
+		0x0037,
+		0x0084,
+		0x000c,
+	},
+	{
+		0x00,
+		{ 0x02, 0x00, 0x00, 0x00, 0x00 },
+		0x000c,
+		0x0046,
+		0x0065,
+		0x0024,
+		0x000c,
+	},
+};
+#else
 #if !VERSION_IS(JP)
 MenuHighlight MENU_HIGHLIGHTS[22] = {
 #else
@@ -625,6 +1120,7 @@ MenuHighlight MENU_HIGHLIGHTS[19] = {
 	},
 #endif
 };
+#endif
 
 #else
 char SAVEGAME_ID_LABEL[16][6] = {
@@ -894,6 +1390,35 @@ char *MEMORY_CARD_OPERATION_MESSAGES[6] = {
 	MAIN_D_8013111C,
 };
 
+#if VERSION_IS(EU)
+char *MEMORY_CARD_ERROR_MESSAGES[33] = {
+	STR_EMPTY, STR_EMPTY, STR_EMPTY,
+	MAIN_D_80131134, STR_PLEASE_REPLACE_THE_MEMORY_CARD, STR_EMPTY,
+	MAIN_D_80131144, STR_EMPTY, STR_EMPTY,
+	MAIN_D_80131150, STR_A_MEMORY_CARD, STR_EMPTY,
+	MAIN_D_80131168, STR_SLOT_1_IS_UNFORMATTED, STR_EMPTY,
+	MAIN_D_80131178, STR_IN_MEMORY_CARD_SLOT_1, STR_EMPTY,
+	STR_EMPTY, STR_EMPTY, STR_EMPTY,
+	MAIN_D_8013118C, STR_SLOT_1_HAS_INSUFFICIENT_SPACE, STR_EMPTY,
+	MAIN_D_8013119C, STR_EMPTY, STR_EMPTY,
+	MAIN_D_801311B4, STR_EMPTY, STR_EMPTY,
+	MAIN_D_801311C0, STR_EMPTY,
+};
+
+char *MEMORY_CARD_2_ERROR_MESSAGES[33] = {
+	STR_EMPTY, STR_EMPTY, STR_EMPTY,
+	MAIN_D_80131134, STR_EMPTY, STR_EMPTY,
+	MAIN_D_80131144, STR_EMPTY, STR_EMPTY,
+	MAIN_D_80131150, STR_A_MEMORY_CARD, STR_EMPTY,
+	MAIN_D_80131168, STR_SLOT_2_IS_UNFORMATTED, STR_EMPTY,
+	MAIN_D_80131178, STR_IN_MEMORY_CARD_SLOT_2, STR_EMPTY,
+	STR_EMPTY, STR_EMPTY, STR_EMPTY,
+	MAIN_D_8013118C, STR_SLOT_2_HAS_INSUFFICIENT_SPACE, STR_EMPTY,
+	MAIN_D_8013119C, STR_EMPTY, STR_EMPTY,
+	MAIN_D_801311B4, STR_EMPTY, STR_EMPTY,
+	MAIN_D_801311C0, STR_EMPTY,
+};
+#else
 char *MEMORY_CARD_ERROR_MESSAGES[] = {
 	STR_EMPTY,
 	MAIN_D_80131134,
@@ -909,6 +1434,7 @@ char *MEMORY_CARD_ERROR_MESSAGES[] = {
 	MAIN_D_801311C0,
 #endif
 };
+#endif
 
 char *SLOT_ACTION_QUESTIONS[] = {
 	MAIN_D_801311D4,
@@ -939,7 +1465,13 @@ char *BATTLE_MODE_ITEMS[4] = {
 };
 #endif
 
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+char SAVE_FILE_NAME[32] = "BESLES-02914DMR*";
+
+SaveFile SAVE_FILE;
+
+char MAIN_D_8013392C[68] = "Ｄ　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　";
+#elif !VERSION_IS(US)
 char SAVE_FILE_NAME[32] = "BISLPS-01797DMR*";
 
 SaveFile SAVE_FILE;
@@ -958,61 +1490,61 @@ uint16_t SAVE_ICON_CLUT[16] = {
 	0x8df0, 0xc631, 0x7ff7, 0x5294, 0x39ce, 0x2d6b, 0x1ce7, 0x8842,
 };
 
-uint8_t SAVE_ICON_FRAME_0[128] = {
-	0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x0f, 0x00,
-	0x00, 0x00, 0xff, 0xdc, 0xdd, 0xdd, 0xfd, 0x00,
-	0x00, 0xf0, 0xdc, 0xed, 0xdd, 0xde, 0xee, 0x0f,
-	0x00, 0xcf, 0xec, 0xde, 0xed, 0xdd, 0xde, 0x0f,
-	0xf0, 0xff, 0xbe, 0xbb, 0xfb, 0xfe, 0xff, 0xfe,
-	0xdf, 0xcf, 0xbd, 0xbd, 0xeb, 0xec, 0xfe, 0xff,
-	0xcf, 0xce, 0xbd, 0xbb, 0xeb, 0xec, 0xec, 0xfe,
-	0xdf, 0xee, 0xee, 0xff, 0xef, 0xee, 0xed, 0xfd,
-	0xff, 0xff, 0x3f, 0xff, 0xf3, 0xff, 0xfe, 0xfe,
-	0xff, 0x2f, 0x3f, 0x34, 0xf2, 0x3f, 0xff, 0xff,
-	0xf0, 0x43, 0xf1, 0x1f, 0xa4, 0xff, 0xf3, 0x4f,
-	0x00, 0x3f, 0x44, 0x13, 0x23, 0x4f, 0xf4, 0x42,
-	0x00, 0x34, 0x32, 0x11, 0x21, 0x21, 0x43, 0x43,
-	0x00, 0x24, 0x31, 0x32, 0x34, 0x32, 0x44, 0x04,
-	0x00, 0x40, 0x24, 0x12, 0x21, 0x43, 0x04, 0x00,
-	0x00, 0x00, 0x40, 0x44, 0x44, 0x04, 0x00, 0x00,
-};
-
-uint8_t SAVE_ICON_FRAME_1[128] = {
-	0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x0f, 0x00,
-	0x00, 0x00, 0xff, 0xdc, 0xdd, 0xdd, 0xff, 0x00,
-	0x00, 0xf0, 0xdc, 0xdd, 0xdd, 0xde, 0xfe, 0x0f,
-	0x00, 0xcf, 0xed, 0xde, 0xed, 0xde, 0xee, 0x0f,
-	0xf0, 0xff, 0xbc, 0xbb, 0xfc, 0xfd, 0xff, 0xfe,
-	0xff, 0xde, 0xc9, 0xcd, 0xec, 0xec, 0xfd, 0xff,
-	0xdf, 0xde, 0xb9, 0xbb, 0xec, 0xec, 0xed, 0xfd,
-	0xdf, 0xee, 0xff, 0xff, 0xef, 0xee, 0xed, 0xfd,
-	0xef, 0xff, 0x4f, 0xff, 0xf3, 0xf4, 0xfe, 0xfe,
-	0xf0, 0x3f, 0x3f, 0x34, 0x42, 0x41, 0xf2, 0xff,
-	0xf0, 0x44, 0xfa, 0x13, 0x21, 0x11, 0xff, 0x4f,
-	0x00, 0x3f, 0x43, 0x12, 0x32, 0xf4, 0xf2, 0x42,
-	0x00, 0x34, 0x32, 0x11, 0x21, 0x21, 0xf3, 0x43,
-	0x00, 0x24, 0x31, 0x55, 0x45, 0x32, 0x44, 0x04,
-	0x00, 0x40, 0x24, 0x52, 0x25, 0x43, 0x04, 0x00,
-	0x00, 0x00, 0x40, 0x44, 0x44, 0x04, 0x00, 0x00,
-};
-
-uint8_t SAVE_ICON_FRAME_2[128] = {
-	0x00, 0x00, 0xf0, 0xff, 0xff, 0xff, 0x0f, 0x00,
-	0x00, 0xf0, 0xcf, 0xdd, 0xdd, 0xdd, 0x0f, 0x00,
-	0x00, 0xcf, 0xdc, 0xed, 0xed, 0xde, 0xfe, 0x00,
-	0x00, 0xdf, 0xbd, 0xba, 0xfc, 0xfe, 0xff, 0x0f,
-	0xf0, 0xce, 0xdb, 0xbb, 0xec, 0xec, 0xfe, 0xff,
-	0xf0, 0xcc, 0xbb, 0xcb, 0xec, 0xec, 0xed, 0xfe,
-	0xef, 0xce, 0xfe, 0xff, 0xef, 0xed, 0xed, 0xfe,
-	0xdf, 0xfe, 0xff, 0x4f, 0xf3, 0xff, 0xee, 0xfd,
-	0xef, 0xff, 0x3f, 0x3f, 0xf2, 0xf1, 0xf3, 0xfe,
-	0xff, 0x3f, 0x3f, 0x12, 0x21, 0x21, 0xff, 0xff,
-	0xf0, 0x34, 0xfa, 0x12, 0x32, 0xf4, 0xf2, 0x42,
-	0x00, 0x4f, 0x43, 0x11, 0x21, 0x21, 0xf3, 0x43,
-	0x00, 0x34, 0x32, 0x55, 0x45, 0x22, 0x43, 0x04,
-	0x00, 0x34, 0x21, 0x52, 0x55, 0x32, 0x44, 0x00,
-	0x00, 0x40, 0x44, 0x52, 0x35, 0x43, 0x04, 0x00,
-	0x00, 0x00, 0x00, 0x44, 0x44, 0x44, 0x00, 0x00,
+uint8_t SAVE_ICON_FRAMES[3][128] = {
+	{
+		0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x0f, 0x00,
+		0x00, 0x00, 0xff, 0xdc, 0xdd, 0xdd, 0xfd, 0x00,
+		0x00, 0xf0, 0xdc, 0xed, 0xdd, 0xde, 0xee, 0x0f,
+		0x00, 0xcf, 0xec, 0xde, 0xed, 0xdd, 0xde, 0x0f,
+		0xf0, 0xff, 0xbe, 0xbb, 0xfb, 0xfe, 0xff, 0xfe,
+		0xdf, 0xcf, 0xbd, 0xbd, 0xeb, 0xec, 0xfe, 0xff,
+		0xcf, 0xce, 0xbd, 0xbb, 0xeb, 0xec, 0xec, 0xfe,
+		0xdf, 0xee, 0xee, 0xff, 0xef, 0xee, 0xed, 0xfd,
+		0xff, 0xff, 0x3f, 0xff, 0xf3, 0xff, 0xfe, 0xfe,
+		0xff, 0x2f, 0x3f, 0x34, 0xf2, 0x3f, 0xff, 0xff,
+		0xf0, 0x43, 0xf1, 0x1f, 0xa4, 0xff, 0xf3, 0x4f,
+		0x00, 0x3f, 0x44, 0x13, 0x23, 0x4f, 0xf4, 0x42,
+		0x00, 0x34, 0x32, 0x11, 0x21, 0x21, 0x43, 0x43,
+		0x00, 0x24, 0x31, 0x32, 0x34, 0x32, 0x44, 0x04,
+		0x00, 0x40, 0x24, 0x12, 0x21, 0x43, 0x04, 0x00,
+		0x00, 0x00, 0x40, 0x44, 0x44, 0x04, 0x00, 0x00,
+	},
+	{
+		0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x0f, 0x00,
+		0x00, 0x00, 0xff, 0xdc, 0xdd, 0xdd, 0xff, 0x00,
+		0x00, 0xf0, 0xdc, 0xdd, 0xdd, 0xde, 0xfe, 0x0f,
+		0x00, 0xcf, 0xed, 0xde, 0xed, 0xde, 0xee, 0x0f,
+		0xf0, 0xff, 0xbc, 0xbb, 0xfc, 0xfd, 0xff, 0xfe,
+		0xff, 0xde, 0xc9, 0xcd, 0xec, 0xec, 0xfd, 0xff,
+		0xdf, 0xde, 0xb9, 0xbb, 0xec, 0xec, 0xed, 0xfd,
+		0xdf, 0xee, 0xff, 0xff, 0xef, 0xee, 0xed, 0xfd,
+		0xef, 0xff, 0x4f, 0xff, 0xf3, 0xf4, 0xfe, 0xfe,
+		0xf0, 0x3f, 0x3f, 0x34, 0x42, 0x41, 0xf2, 0xff,
+		0xf0, 0x44, 0xfa, 0x13, 0x21, 0x11, 0xff, 0x4f,
+		0x00, 0x3f, 0x43, 0x12, 0x32, 0xf4, 0xf2, 0x42,
+		0x00, 0x34, 0x32, 0x11, 0x21, 0x21, 0xf3, 0x43,
+		0x00, 0x24, 0x31, 0x55, 0x45, 0x32, 0x44, 0x04,
+		0x00, 0x40, 0x24, 0x52, 0x25, 0x43, 0x04, 0x00,
+		0x00, 0x00, 0x40, 0x44, 0x44, 0x04, 0x00, 0x00,
+	},
+	{
+		0x00, 0x00, 0xf0, 0xff, 0xff, 0xff, 0x0f, 0x00,
+		0x00, 0xf0, 0xcf, 0xdd, 0xdd, 0xdd, 0x0f, 0x00,
+		0x00, 0xcf, 0xdc, 0xed, 0xed, 0xde, 0xfe, 0x00,
+		0x00, 0xdf, 0xbd, 0xba, 0xfc, 0xfe, 0xff, 0x0f,
+		0xf0, 0xce, 0xdb, 0xbb, 0xec, 0xec, 0xfe, 0xff,
+		0xf0, 0xcc, 0xbb, 0xcb, 0xec, 0xec, 0xed, 0xfe,
+		0xef, 0xce, 0xfe, 0xff, 0xef, 0xed, 0xed, 0xfe,
+		0xdf, 0xfe, 0xff, 0x4f, 0xf3, 0xff, 0xee, 0xfd,
+		0xef, 0xff, 0x3f, 0x3f, 0xf2, 0xf1, 0xf3, 0xfe,
+		0xff, 0x3f, 0x3f, 0x12, 0x21, 0x21, 0xff, 0xff,
+		0xf0, 0x34, 0xfa, 0x12, 0x32, 0xf4, 0xf2, 0x42,
+		0x00, 0x4f, 0x43, 0x11, 0x21, 0x21, 0xf3, 0x43,
+		0x00, 0x34, 0x32, 0x55, 0x45, 0x22, 0x43, 0x04,
+		0x00, 0x34, 0x21, 0x52, 0x55, 0x32, 0x44, 0x00,
+		0x00, 0x40, 0x44, 0x52, 0x35, 0x43, 0x04, 0x00,
+		0x00, 0x00, 0x00, 0x44, 0x44, 0x44, 0x00, 0x00,
+	},
 };
 
 #if VERSION_IS(US)
@@ -1063,7 +1595,21 @@ void renderSelectNewGameCard(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	if (CONNECTED_CARDS & 1) {
+		renderText(cur++, 0x40, 0x37, 0, 0, 0xc0, 0xc, 0);
+	} else {
+		renderText(cur++, 0x40, 0x37, 0, 0, 0xc0, 0xc, 1);
+	}
+	if (CONNECTED_CARDS & 0x10) {
+		renderText(cur++, 0x40, 0x43, 0, 0xc, 0xc0, 0xc, 0);
+	} else {
+		renderText(cur++, 0x40, 0x43, 0, 0xc, 0xc0, 0xc, 1);
+	}
+	renderText(cur++, 0x40, 0x4f, 0, 0x18, 0x90, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x36, 0x32, 0xd4, 0x2e);
+#elif !VERSION_IS(US)
 	if (CONNECTED_CARDS & 1) {
 		renderText(cur++, 0x58, 0x37, 0, 0, 0x90, 0xc, 0);
 	} else {
@@ -1099,7 +1645,20 @@ void renderSelectCardSlot(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	if (CONNECTED_CARDS & 1) {
+		renderText(cur++, 0x40, 0x37, 0, 0, 0xc0, 0xc, 0);
+	} else {
+		renderText(cur++, 0x40, 0x37, 0, 0, 0xc0, 0xc, 1);
+	}
+	if (CONNECTED_CARDS & 0x10) {
+		renderText(cur++, 0x40, 0x43, 0, 0xc, 0xc0, 0xc, 0);
+	} else {
+		renderText(cur++, 0x40, 0x43, 0, 0xc, 0xc0, 0xc, 1);
+	}
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x36, 0x32, 0xd4, 0x22);
+#elif !VERSION_IS(US)
 	if (CONNECTED_CARDS & 1) {
 		renderText(cur++, 0x58, 0x37, 0, 0, 0x90, 0xc, 0);
 	} else {
@@ -1133,9 +1692,15 @@ void renderCheckingCard(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x40, 0x37, 0, 0, 0xc0, 0x30, 2);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x36, 0x32, 0xd4, 0x3a);
+#else
 	renderText(cur++, 0x40, 0x37, 0, 0, 0xC0, 0x24, 2);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x36, 0x32, 0xD4, 0x2E);
+#endif
 }
 
 void renderConfirmNoCard(void)
@@ -1155,9 +1720,15 @@ void renderConfirmNoCard(void)
 	renderMenuBox(0x30, 0x13, 0xBE, 0x16);
 #endif
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x22, 0x5a, 0, 0xc, 0xfc, 0x78, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x18, 0x55, 0x110, 0x82);
+#else
 	renderText(cur++, 0x22, 0x5A, 0, 0xC, 0xFC, 0x3C, 0);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x18, 0x55, 0x110, 0x46);
+#endif
 	cur = (POLY_FT4 *)GsGetWorkBase();
 	renderText(cur++, 0x6E, 0x37, 0, 0xF0, YES_TEXT_W, 0xC, 0);
 	renderText(cur++, 0x6E, 0x43, NO_TEXT_U, 0xF0, NO_TEXT_W, 0xC, 0);
@@ -1170,7 +1741,11 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 	POLY_FT4 *cur;
 	int32_t hl;
 	int32_t v;
+#if VERSION_IS(EU)
+	v = ((slot % 7) * 0x18) + 0x18;
+#else
 	v = ((slot % 7) * 0x18) + 0xC;
+#endif
 	cur = (POLY_FT4 *)GsGetWorkBase();
 	if (((SAVEGAME_SLOT_INFO[slot].valid != 0) && (MAIN_MENU_ACTION != 0)) ||
 	    ((SAVEGAME_SLOT_INFO[slot].valid == 0) && (MAIN_MENU_ACTION == 0))) {
@@ -1179,6 +1754,14 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 		hl = 1;
 	}
 	renderText(cur++, x + 0xA, y + 5, 0, v, 0x18, 0xC, hl);
+#if VERSION_IS(EU)
+	if (SAVEGAME_SLOT_INFO[slot].valid != 0) {
+		renderText(cur++, x + 0x28, y + 5, 0x18, v, 0x30, 0xc, hl);
+		renderText(cur++, x + 0x28, y + 0x13, 0x18, v + 0xc, 0xa0, 0xc, hl);
+	} else {
+		renderText(cur++, x + 0x28, y + 5, 0, 0xc, 0x78, 0xc, hl);
+	}
+#else
 	if (SAVEGAME_SLOT_INFO[slot].valid != 0) {
 		renderText(cur++, x + 0x28, y + 5, 0x18, v, 0x48, 0xC, hl);
 		renderText(cur++, x + 0x76, y + 5, 0x6C, v, 0x60, 0xC, hl);
@@ -1190,6 +1773,7 @@ void renderSaveSlotBox(int32_t slot, int32_t x, int32_t y)
 		renderText(cur++, x + 0x28, y + 0x13, 0x18, v + 0xC, 0xE0, 0xC, hl);
 #endif
 	}
+#endif
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(x, y, 0xE0, 0x24);
 }
@@ -1202,7 +1786,11 @@ void renderSelectSlot(void)
 	int32_t i;
 
 	ft4 = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(ft4++, 0x3a, 0x18, 0, 0, 0xc0, 0xc, 0);
+	GsSetWorkBase((PACKET *)ft4);
+	renderMenuBox(0x30, 0x13, 0xd4, 0x16);
+#elif !VERSION_IS(US)
 	renderText(ft4++, 0x3a, 0x18, 0, 0, 0x90, 0xc, 0);
 	GsSetWorkBase((PACKET *)ft4);
 	renderMenuBox(0x30, 0x13, 0xb0, 0x16);
@@ -1252,6 +1840,24 @@ void renderConfirmSlotSelection(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x3a, 0x18, 0, 0, 0xc0, 0xc, 0);
+	renderText(cur++, 0x3a, 0x2e, 0, 0x18, 0x18, 0xc, 0);
+	if (SAVEGAME_SLOT_INFO[MEMORY_CARD_SLOT].valid != 0) {
+		renderText(cur++, 0x58, 0x2e, 0x18, 0x18, 0x30, 0xc, 0);
+		renderText(cur++, 0x58, 0x3c, 0x18, 0x24, 0xa0, 0xc, 0);
+	} else {
+		renderText(cur++, 0x58, 0x2e, 0, 0xc, 0x84, 0xc, 0);
+	}
+	renderText(cur++, 0x3a, 0x52, 0, 0xf0, YES_TEXT_W, 0xc, 0);
+	renderText(cur++, 0x3a, 0x5e, NO_TEXT_U, 0xf0, NO_TEXT_W, 0xc, 0);
+	renderText(cur++, 0x32, 0x74, 0, 0x30, 0xdc, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x30, 0x13, 0xd4, 0x16);
+	renderMenuBox(0x30, 0x29, 0xe0, 0x24);
+	renderMenuBox(0x30, 0x4d, 0x38, 0x22);
+	renderMenuBox(0x28, 0x6f, 0xf0, 0x16);
+#else
 	renderText(cur++, 0x3A, 0x18, 0, 0, 0x90, 0xC, 0);
 	renderText(cur++, 0x3A, 0x2E, 0, 0xC, 0x18, 0xC, 0);
 	if (SAVEGAME_SLOT_INFO[MEMORY_CARD_SLOT].valid != 0) {
@@ -1277,6 +1883,7 @@ void renderConfirmSlotSelection(void)
 	renderMenuBox(0x30, 0x29, 0xE0, 0x24);
 	renderMenuBox(0x30, 0x4D, 0x38, 0x22);
 	renderMenuBox(0x30, 0x6F, 0xE0, 0x16);
+#endif
 }
 
 void renderFormatMemoryCard(void)
@@ -1284,12 +1891,21 @@ void renderFormatMemoryCard(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x4c, 0x37, 0, 0, 0xa8, 0x3c, 2);
+	renderText(cur++, 0x4c, 0x7d, 0, 0xf0, YES_TEXT_W, 0xc, 0);
+	renderText(cur++, 0x4c, 0x89, NO_TEXT_U, 0xf0, NO_TEXT_W, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x42, 0x32, 0xbc, 0x46);
+	renderMenuBox(0x42, 0x78, 0x38, 0x22);
+#else
 	renderText(cur++, 0x4C, 0x37, 0, 0, 0xA8, 0x24, 2);
 	renderText(cur++, 0x4C, 0x65, 0, 0xF0, YES_TEXT_W, 0xC, 0);
 	renderText(cur++, 0x4C, 0x71, NO_TEXT_U, 0xF0, NO_TEXT_W, 0xC, 0);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x42, 0x32, 0xBC, 0x2E);
 	renderMenuBox(0x42, 0x60, 0x38, 0x22);
+#endif
 }
 
 void renderMemoryCardReadError(void)
@@ -1299,9 +1915,15 @@ void renderMemoryCardReadError(void)
 	if ((MEMORY_CARD_ERROR == 1) || (MEMORY_CARD_ERROR == 3) || (MEMORY_CARD_ERROR == 4) ||
 	    (MEMORY_CARD_ERROR == 5) || (MEMORY_CARD_ERROR == 7)) {
 		cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+		renderText(cur++, 0x24, 0x37, 0, 0, 0xf8, 0x24, 3);
+		GsSetWorkBase((PACKET *)cur);
+		renderMenuBox(0x1a, 0x32, 0x10c, 0x2e);
+#else
 		renderText(cur++, 0x4C, 0x37, 0, 0, 0xA8, 0x18, 3);
 		GsSetWorkBase((PACKET *)cur);
 		renderMenuBox(0x42, 0x32, 0xBC, 0x22);
+#endif
 		return;
 	}
 	cur = (POLY_FT4 *)GsGetWorkBase();
@@ -1315,10 +1937,17 @@ void renderSleepMenu(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x60, 0x6a, 0, 0, 0x84, 0xc, 0);
+	renderText(cur++, 0x60, 0x7a, 0, 0xc, 0x84, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x56, 0x65, 0x94, 0x26);
+#else
 	renderText(cur++, 0x76, 0x6A, 0, 0, 0x54, 0xC, 0);
 	renderText(cur++, 0x76, 0x7A, 0, 0xC, 0x54, 0xC, 0);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x6C, 0x65, 0x68, 0x26);
+#endif
 }
 
 void renderConfirmOverwrite(void)
@@ -1327,6 +1956,33 @@ void renderConfirmOverwrite(void)
 	int32_t mask;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x40, 0x38, 0, 0, 0xc0, 0x30, 0);
+	if (MEMORY_CARD_ID == 0) {
+		mask = 1;
+	} else {
+		mask = 0x10;
+	}
+	if (!(CONNECTED_CARDS & mask)) {
+		MEMORY_CARD_ERROR = 1;
+		renderText(cur++, 0x40, 0x72, 0, 0xf0, YES_TEXT_W, 0xc, 1);
+	} else {
+		if (MEMORY_CARD_ERROR == 1) {
+			MEMORY_CARD_ERROR = -1;
+		}
+		renderText(cur++, 0x40, 0x72, 0, 0xf0, YES_TEXT_W, 0xc, 0);
+	}
+	renderText(cur++, 0x40, 0x7e, NO_TEXT_U, 0xf0, NO_TEXT_W, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x36, 0x33, 0xd4, 0x3a);
+	renderMenuBox(0x36, 0x6d, 0x38, 0x22);
+	if (MEMORY_CARD_ERROR != -1) {
+		cur = (POLY_FT4 *)GsGetWorkBase();
+		renderText(cur++, 0x24, 0x9a, 0, 0x3c, 0xf8, 0x24, 2);
+		GsSetWorkBase((PACKET *)cur);
+		renderMenuBox(0x1a, 0x95, 0x10c, 0x2e);
+	}
+#else
 #if !VERSION_IS(US)
 	renderText(cur++, 0x40, 0x38, 0, 0, 0xc0, 0x18, 0);
 #else
@@ -1360,6 +2016,7 @@ void renderConfirmOverwrite(void)
 		GsSetWorkBase((PACKET *)cur);
 		renderMenuBox(0x42, 0x7D, 0xBC, 0x22);
 	}
+#endif
 }
 
 void renderConfirmVSSlot(void)
@@ -1369,7 +2026,10 @@ void renderConfirmVSSlot(void)
 	int32_t mask;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(cur++, 0x46, 0x21, 0, 0, 0x88, 0xc, 0);
+	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xb8, 0x3c, 0);
+#elif !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xb4, 0x24, 0);
 #else
@@ -1386,20 +2046,28 @@ void renderConfirmVSSlot(void)
 	} else {
 		hl = 1;
 	}
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(cur++, 0x46, 0x7d, 0, 0xf0, YES_TEXT_W, 0xc, hl);
+	renderText(cur++, 0x46, 0x89, NO_TEXT_U, 0xf0, NO_TEXT_W, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x3c, 0x1c, 0x9c, 0x16);
+	renderMenuBox(0x3c, 0x32, 0xc8, 0x46);
+	renderMenuBox(0x3c, 0x78, 0x38, 0x22);
+#elif !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x65, 0, 0xf0, 0x18, 0xc, hl);
 	renderText(cur++, 0x46, 0x71, 0x18, 0xf0, 0x24, 0xc, 0);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x3c, 0x1c, 0x80, 0x16);
 	renderMenuBox(0x3c, 0x32, 0xc8, 0x2e);
+	renderMenuBox(0x3C, 0x60, 0x38, 0x22);
 #else
 	renderText(cur++, 0x46, 0x65, 0, 0xF0, YES_TEXT_W, 0xC, hl);
 	renderText(cur++, 0x46, 0x71, NO_TEXT_U, 0xF0, NO_TEXT_W, 0xC, 0);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x3C, 0x1C, 0xE0, 0x16);
 	renderMenuBox(0x3C, 0x32, 0xE6, 0x2E);
-#endif
 	renderMenuBox(0x3C, 0x60, 0x38, 0x22);
+#endif
 }
 
 void renderRegisterDigimon(void)
@@ -1407,7 +2075,17 @@ void renderRegisterDigimon(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
+	renderText(cur++, 0x33, 0x37, 0, 0xc, 0xc8, 0x6c, 0);
+	renderText(cur++, 0x46, 0xad, 0, 0x78, 0xb8, 0xc, 0);
+	renderText(cur++, 0x46, 0xc3, 0xb8, 0x78, YES_TEXT_W, 0xc, 0);
+	renderText(cur++, 0x46, 0xcf, 0xd0, 0x78, NO_TEXT_W, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x3c, 0x1c, 0x80, 0x16);
+	renderMenuBox(0x29, 0x32, 0xdc, 0x76);
+	renderMenuBox(0x3c, 0xa8, 0xbc, 0x16);
+#elif !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xa2, 0x6c, 0);
 	renderText(cur++, 0x46, 0xad, 0, 0x78, 0xa8, 0xc, 0);
@@ -1436,7 +2114,15 @@ void renderSelectRegisterSlot(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
+	renderText(cur++, 0x34, 0x37, 0, 0xc, 0xe0, 0x78, 0);
+	renderText(cur++, 0x46, 0xb9, 0, 0x84, 0x90, 0xc, 0);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x3c, 0x1c, 0x80, 0x16);
+	renderMenuBox(0x2e, 0x32, 0x100, 0x82);
+	renderMenuBox(0x3c, 0xb4, 0xa4, 0x16);
+#elif !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xe0, 0x78, 0);
 	renderText(cur++, 0x46, 0xb9, 0, 0x84, 0x90, 0xc, 0);
@@ -1460,7 +2146,18 @@ void renderConfirmRegister(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
+	renderText(cur++, 0x46, 0x37, 0, 0x18, 0x70, 0xc, 0);
+	renderText(cur++, 0x46, 0x59, 0x70, 0x18, 0x18, 0xc, 0);
+	renderText(cur++, 0x46, 0x65, 0x88, 0x18, 0x24, 0xc, 0);
+	renderText(cur++, 0x46, 0x7d, 0, 0x24, 0xc0, 0x30, 2);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x3c, 0x1c, 0x80, 0x16);
+	renderMenuBox(0x3c, 0x32, 0xd4, 0x22);
+	renderMenuBox(0x3c, 0x54, 0x38, 0x22);
+	renderMenuBox(0x3c, 0x78, 0xd4, 0x3a);
+#elif !VERSION_IS(US)
 	renderText(cur++, 0x46, 0x21, 0, 0, 0x6c, 0xc, 0);
 	renderText(cur++, 0x46, 0x37, 0, 0xc, 0xc0, 0x18, 0);
 	renderText(cur++, 0x46, 0x59, 0xc0, 0x18, 0x18, 0xc, 0);
@@ -1490,7 +2187,11 @@ void renderCantRegister(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderText(cur++, 0x22, 0x49, 0, 0, 0xfc, 0x3c, 3);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x18, 0x40, 0x110, 0x46);
+#elif !VERSION_IS(US)
 	renderText(cur++, 0x22, 0x49, 0, 0, 0xfc, 0xc, 3);
 	renderText(cur++, 0x22, 0x59, 0, 0xc, 0xfc, 0xc, 3);
 	GsSetWorkBase((PACKET *)cur);
@@ -1507,7 +2208,11 @@ void renderDoYouWantToSave(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x46, 0x3c, 0, 0, 0x88, 0xc, 0);
+#else
 	renderText(cur++, 0x46, 0x3C, 0, 0, 0xA8, 0xC, 0);
+#endif
 	renderText(cur++, 0x46, 0x57, 0, 0xC, YES_TEXT_W, 0xC, 0);
 	renderText(cur++, 0x46, 0x63, NO_TEXT_U, 0xC, NO_TEXT_W, 0xC, 0);
 	GsSetWorkBase((PACKET *)cur);
@@ -1520,9 +2225,15 @@ void renderCantRegisterBaby(void)
 	POLY_FT4 *cur;
 
 	cur = (POLY_FT4 *)GsGetWorkBase();
+#if VERSION_IS(EU)
+	renderText(cur++, 0x2e, 0x45, 0, 0, 0xe4, 0x48, 3);
+	GsSetWorkBase((PACKET *)cur);
+	renderMenuBox(0x24, 0x40, 0xf8, 0x52);
+#else
 	renderText(cur++, 0x2E, 0x45, 0, 0, 0xE4, 0x24, 3);
 	GsSetWorkBase((PACKET *)cur);
 	renderMenuBox(0x24, 0x40, 0xF8, 0x2E);
+#endif
 }
 
 #if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
@@ -1573,7 +2284,12 @@ void renderInsertGameCardPrompt(void)
 
 void drawMainMenuStrings(int32_t menu)
 {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	int8_t view;
+	int32_t i;
+	char buf[0x2c];
+	char question[0x44];
+#elif !VERSION_IS(US)
 	int8_t view;
 	int32_t i;
 	char buf[0x2c];
@@ -1598,7 +2314,311 @@ void drawMainMenuStrings(int32_t menu)
 	SAVE_SLOT_SCROLL_TENTHS = 0;
 	NEW_CARDS = 0;
 	clearTextArea();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	switch (view) {
+	case 0:
+		drawString(TITLE_MENU_ITEMS[0], 0, 0);
+		drawString(TITLE_MENU_ITEMS[1], 0, 0xc);
+		DrawSync(0);
+		drawString(TITLE_MENU_ITEMS[2], 0, 0x18);
+		drawString(TITLE_MENU_ITEMS[3], 0, 0x24);
+		break;
+	case 1:
+		drawString(SLOT_ACTION_TITLES[0], 0, 0);
+		DrawSync(0);
+		drawString(SLOT_ACTION_TITLES[0], 0, 0xc);
+		drawString(MAIN_D_80134674, 0x88, 0xc);
+		DrawSync(0);
+		drawString(SLOT_ACTION_TITLES[3], 0, 0x18);
+		break;
+	case 2:
+		drawString(SLOT_ACTION_TITLES[1], 0, 0);
+		DrawSync(0);
+		drawString(SLOT_ACTION_TITLES[1], 0, 0xc);
+		drawString(MAIN_D_80134674, 0x88, 0xc);
+		DrawSync(0);
+		break;
+	case 3:
+		break;
+	case 4:
+		drawString(SLOT_ACTION_TITLES[2], 0, 0);
+		DrawSync(0);
+		drawString(SLOT_ACTION_TITLES[2], 0, 0xc);
+		drawString(MAIN_D_80134674, 0x88, 0xc);
+		DrawSync(0);
+		break;
+	case 5:
+		drawString(MEMORY_CARD_OPERATION_MESSAGES[MEMORY_CARD_OPERATION], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131278, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_80131290, 0, 0x18);
+		break;
+	case 6:
+		drawString(SLOT_ACTION_TITLES[3], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801312A0, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_801312B8, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_801312D0, 0, 0x24);
+		DrawSync(0);
+		drawString(MAIN_D_801312E4, 0, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_80139DF4, 0, 0x3c);
+		DrawSync(0);
+		drawString(STR_CARD_IS_INSERTED_DURING_PLAY, 0, 0x48);
+		DrawSync(0);
+		drawString(STR_TURNING_OFF_OR_RESETTING_THE, 0, 0x54);
+		DrawSync(0);
+		drawString(STR_UNIT_WILL_ERASE_CONTENTS_OF, 0, 0x60);
+		DrawSync(0);
+		drawString(STR_ADVENTURE, 0, 0x6c);
+		DrawSync(0);
+		drawString(MAIN_D_80139E14, 0, 0xf0);
+		break;
+	case 7:
+		drawString(SLOT_ACTION_TITLES[MAIN_MENU_ACTION], 0, 0);
+		DrawSync(0);
+		if (MEMORY_CARD_ID != 0) {
+			switch (MAIN_MENU_ACTION) {
+			case 0:
+			case 1:
+			case 2:
+				drawString(MAIN_D_80134674, 0x88, 0);
+			}
+			DrawSync(0);
+		}
+		drawString(STR_IN_USE, 0, 0xc);
+		for (i = 0; i < 6; i++) {
+			drawSaveSlotText(i, i);
+		}
+		break;
+	case 9:
+		drawString(MAIN_D_801312FC, 0, 0);
+		DrawSync(0);
+		if (MEMORY_CARD_ID == 0) {
+			drawString(STR_CARD_SLOT_1_NOT, 0, 0xc);
+		} else {
+			drawString(STR_CARD_SLOT_2_NOT, 0, 0xc);
+		}
+		DrawSync(0);
+		drawString(MAIN_D_80131318, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_80131328, 0, 0x24);
+		DrawSync(0);
+		drawString(MAIN_D_80139E14, 0, 0xf0);
+		break;
+	case 8:
+		drawString(SLOT_ACTION_TITLES[MAIN_MENU_ACTION], 0, 0);
+		if (MEMORY_CARD_ID != 0) {
+			switch (MAIN_MENU_ACTION) {
+			case 0:
+			case 1:
+			case 2:
+				drawString(MAIN_D_80134674, 0x88, 0);
+			}
+			DrawSync(0);
+		}
+		drawString(MAIN_D_80131340, 0, 0xc);
+		DrawSync(0);
+		drawString(SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 0, 0x18);
+		DrawSync(0);
+		drawString(SAVEGAME_SLOT_INFO[MEMORY_CARD_SLOT].playerName, 0x18, 0x18);
+		DrawSync(0);
+		drawString(SAVEGAME_SLOT_INFO[MEMORY_CARD_SLOT].digimonName, 0x18, 0x24);
+		DrawSync(0);
+		{
+			NumberStrings numbers = NUMBERS;
+
+			strcpy(question, SLOT_ACTION_QUESTIONS[MAIN_MENU_ACTION]);
+			strcat(question, STR_SPACE);
+			strcat(question, numbers.strings[MEMORY_CARD_SLOT + 1]);
+			strcat(question, STR_SPACE_QUESTION);
+		}
+		drawString(question, 0, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_80139E14, 0, 0xf0);
+		if (MAIN_MENU_ACTION == 2) {
+			MENU_HIGHLIGHTS[view].pos = 1;
+		}
+		break;
+	case 10:
+		if (MEMORY_CARD_ID == 0) {
+			drawString(MEMORY_CARD_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3], 0, 0);
+			DrawSync(0);
+			drawString(MEMORY_CARD_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 1], 0, 0xc);
+			DrawSync(0);
+			drawString(MEMORY_CARD_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 2], 0, 0x18);
+		} else {
+			drawString(MEMORY_CARD_2_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3], 0, 0);
+			DrawSync(0);
+			drawString(MEMORY_CARD_2_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 1], 0, 0xc);
+			DrawSync(0);
+			drawString(MEMORY_CARD_2_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 2], 0, 0x18);
+		}
+		break;
+	case 11:
+		drawString(MAIN_D_8013136C, 0, 0);
+		drawString(MAIN_D_80131378, 0, 0xc);
+		break;
+	case 12:
+		drawString(MAIN_D_80131390, 0, 0);
+		DrawSync(0);
+		drawString(STR_OVERWRITTEN, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_801313B0, 0, 0x18);
+		DrawSync(0);
+		if (MEMORY_CARD_ERROR != -1) {
+			if (MEMORY_CARD_ID == 0) {
+				drawString(MEMORY_CARD_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3], 0, 0x3c);
+				DrawSync(0);
+				drawString(MEMORY_CARD_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 1], 0, 0x48);
+				DrawSync(0);
+				drawString(MEMORY_CARD_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 2], 0, 0x54);
+			} else {
+				drawString(MEMORY_CARD_2_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3], 0, 0x3c);
+				DrawSync(0);
+				drawString(MEMORY_CARD_2_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 1], 0, 0x48);
+				DrawSync(0);
+				drawString(MEMORY_CARD_2_ERROR_MESSAGES[MEMORY_CARD_ERROR * 3 + 2], 0, 0x54);
+			}
+		}
+		drawString(MAIN_D_80139E14, 0, 0xf0);
+		break;
+	case 13:
+		drawString(SLOT_ACTION_TITLES[5], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801313E4, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_80131400, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_8013141C, 0, 0x24);
+		DrawSync(0);
+		if (VS_PLAYER_INDEX == 1) {
+			drawString(STR_PLAYER_2_IN_MEMORY, 0, 0x30);
+			DrawSync(0);
+			drawString(STR_CARD_SLOT_2, 0, 0x3c);
+		} else {
+			drawString(STR_PLAYER_1_IN_MEMORY, 0, 0x30);
+			DrawSync(0);
+			drawString(STR_CARD_SLOT_1, 0, 0x3c);
+		}
+		DrawSync(0);
+		drawString(MAIN_D_80139F6C, 0, 0xf0);
+		break;
+	case 14:
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80134684, 0, 0xc);
+		drawString(PARTNER_ENTITY.name, 0x2a, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_8013D814, 0, 0x18);
+		drawString(DIGIMON_NAME(PARTNER_ENTITY.digimonEntity.entity.type), 0x2a, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_80134694, 0, 0x24);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.hp, buf, 4), 0x2a, 0x24);
+		DrawSync(0);
+		drawString(MAIN_D_80134698, 0, 0x30);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.mp, buf, 4), 0x2a, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_8013469C, 0, 0x3c);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.off, buf, 3), 0x32, 0x3c);
+		DrawSync(0);
+		drawString(MAIN_D_801346A4, 0, 0x48);
+		drawString(formatInteger(PARTNER_ENTITY.digimonEntity.stats.base.def, buf, 3), 0x32, 0x48);
+		DrawSync(0);
+		drawString(MAIN_D_8013143C, 0, 0x54);
+		drawMoveName(PARTNER_ENTITY.digimonEntity.entity.type, PARTNER_ENTITY.digimonEntity.stats.base.moves[0], 0x2a, 0x54);
+		DrawSync(0);
+		drawString(MAIN_D_80131448, 0, 0x60);
+		drawMoveName(PARTNER_ENTITY.digimonEntity.entity.type, PARTNER_ENTITY.digimonEntity.stats.base.moves[1], 0x2a, 0x60);
+		DrawSync(0);
+		drawString(MAIN_D_80131454, 0, 0x6c);
+		drawMoveName(PARTNER_ENTITY.digimonEntity.entity.type, PARTNER_ENTITY.digimonEntity.stats.base.moves[2], 0x2a, 0x6c);
+		DrawSync(0);
+		drawString(MAIN_D_80131460, 0, 0x78);
+		break;
+	case 15:
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
+		DrawSync(0);
+		drawRegisteredDigimonSlots(0);
+		drawString(MAIN_D_8013147C, 0, 0x84);
+		break;
+	case 16:
+		drawString(SLOT_ACTION_TITLES[6], 0, 0);
+		DrawSync(0);
+		strcpy(buf, &SAVEGAME_ID_LABEL[(BATTLE_REGISTRATION_SLOT + 1) / 10][2]);
+		strcpy(buf, &SAVEGAME_ID_LABEL[(BATTLE_REGISTRATION_SLOT + 1) % 10][2]);
+		strcat(buf, STR_SPACE);
+		strcat(buf, PARTNER_ENTITY.name);
+		strcat(buf, STR_SAVE_TO_BLOCK_QUESTION);
+		drawString(buf, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_80139FCC, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_801314B0, 0, 0x24);
+		DrawSync(0);
+		drawString(MAIN_D_801314C8, 0, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_801314E4, 0, 0x3c);
+		DrawSync(0);
+		drawString(STR_PROCESS, 0, 0x48);
+		break;
+	case 17:
+		drawString(MAIN_D_80131500, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_8013151C, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_80131538, 0, 0x18);
+		DrawSync(0);
+		drawString(MAIN_D_8013154C, 0, 0x24);
+		break;
+	case 18:
+		drawString(MAIN_D_80131568, 0, 0);
+		DrawSync(0);
+		drawString(STR_YES_NO_PADDED, 0, 0xc);
+		break;
+	case 19:
+		strcpy(buf, PARTNER_ENTITY.name);
+		strcat(buf, MAIN_D_801346B4);
+		strcat(buf, DIGIMON_NAME(PARTNER_ENTITY.digimonEntity.entity.type));
+		strcat(buf, MAIN_D_801346B8);
+		drawString(buf, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_80131580, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_801315A0, 0, 0x18);
+		DrawSync(0);
+		drawString(STR_YOU_CANNOT_SAVE_IT, 0, 0x24);
+		DrawSync(0);
+		drawString(STR_IN_MEMORY_CARD_FOR, 0, 0x30);
+		DrawSync(0);
+		drawString(STR_MAIN_MENU_BATTLE, 0, 0x3c);
+		break;
+	case 20:
+		drawString(BATTLE_MODE_ITEMS[0], 0, 0);
+		DrawSync(0);
+		drawString(BATTLE_MODE_ITEMS[1], 0, 0xc);
+		DrawSync(0);
+		drawString(BATTLE_MODE_ITEMS[2], 0, 0x18);
+		drawString(BATTLE_MODE_ITEMS[3], 0, 0x24);
+		break;
+	case 21:
+		drawString(MAIN_D_801315C0, 0, 0);
+		DrawSync(0);
+		drawString(MAIN_D_801315D0, 0, 0xc);
+		DrawSync(0);
+		drawString(MAIN_D_801315EC, 0, 0x18);
+		DrawSync(0);
+		drawString(STR_FOR_PLAYER_1_IN_MEMORY, 0, 0x24);
+		DrawSync(0);
+		drawString(STR_CARD_SLOT_1, 0, 0x30);
+		DrawSync(0);
+		drawString(MAIN_D_80139E14, 0, 0xf0);
+		break;
+	}
+#elif !VERSION_IS(US)
 	switch (view) {
 	case 0:
 		drawString(TITLE_MENU_ITEMS[0], 0, 0);
@@ -2155,6 +3175,15 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 
 	if (slot >= 0 && slot < 0xF) {
 		row *= 0x18;
+#if VERSION_IS(EU)
+		setRECT(&area, 0, row + 0x18, 0xcc, 0x18);
+		clearTextSubArea(&area);
+		drawString(SAVEGAME_ID_LABEL[slot + 1], 0, row + 0x18);
+		drawString(SAVEGAME_SLOT_INFO[slot].playerName, 0x18, row + 0x18);
+		DrawSync(0);
+		drawString(SAVEGAME_SLOT_INFO[slot].digimonName, 0x18, row + 0x24);
+		DrawSync(0);
+#else
 #if !VERSION_IS(US)
 		setRECT(&area, 0, row + 0xc, 0xcc, 0x18);
 #else
@@ -2168,6 +3197,7 @@ void drawSaveSlotText(int32_t slot, int32_t row)
 		DrawSync(0);
 		drawString(SAVEGAME_SLOT_INFO[slot].location, 0x18, row + 0x18);
 		DrawSync(0);
+#endif
 	}
 }
 
@@ -2220,19 +3250,30 @@ void drawRegisteredDigimonSlots(int32_t slot)
 	int32_t y;
 	int32_t currentSlot;
 
+#if VERSION_IS(EU)
+	setRECT(&area, 0, 0xc, 0xf0, 0x78);
+#else
 	setRECT(&area, 0, 0xC, 0xCC, 0x78);
+#endif
 	clearTextSubArea(&area);
 	for (i = 0; i < 10; i++) {
 		currentSlot = slot + i;
 		y = i * 0xc + 0xc;
 		drawString(&SAVEGAME_ID_LABEL[(currentSlot + 1) / 10][2], 0, y);
-		drawString(&SAVEGAME_ID_LABEL[(currentSlot + 1) % 10][2], 0xC, y);
+		drawString(&SAVEGAME_ID_LABEL[(currentSlot + 1) % 10][2], GLYPH_WIDTH, y);
 		if ((type = SAVE_FILE.saves[0].battleRegistrationData[currentSlot].digimonId) != 0) {
+#if VERSION_IS(EU)
+			drawString(SAVE_FILE.saves[0].battleRegistrationData[currentSlot].name, 0x18, y);
+			drawString(DIGIMON_NAME(type), 0x50, y);
+#else
 			drawString(SAVE_FILE.saves[0].battleRegistrationData[currentSlot].name, 0x1e, y);
 			drawString(DIGIMON_NAME(type), 0x6C, y);
+#endif
 		} else {
 			setTextColor(9);
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+			drawString(MAIN_D_8013A0EC, 0x18, y);
+#elif !VERSION_IS(US)
 			drawString(MAIN_D_8013A0EC, 0x1e, y);
 #else
 			drawString(MAIN_D_801346C0[0], 0x1E, y);
@@ -2543,11 +3584,21 @@ void tickMainMenu(void)
 		SAVE_FILE.iconDisplayFlag = 0x13;
 		SAVE_FILE.blockNumber = 1;
 		memcpy(SAVE_FILE.iconClut, SAVE_ICON_CLUT, 0x20);
-		memcpy(SAVE_FILE.iconFrames[0], SAVE_ICON_FRAME_0, 0x80);
-		memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAME_1, 0x80);
-		memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAME_2, 0x80);
+		memcpy(SAVE_FILE.iconFrames[0], SAVE_ICON_FRAMES[0], 0x80);
+#if VERSION_IS(EU)
+		memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAMES[0], 0x80);
+		memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAMES[0], 0x80);
+#else
+		memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAMES[1], 0x80);
+		memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAMES[2], 0x80);
+#endif
 		initializeDefaultSavegame();
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
+		_strncpy(SAVE_FILE.title + 2, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
+		_strncpy(SAVE_FILE.title + 8, SAVE_FILE.saves[0].playerName, 0xc);
+		_strncpy(SAVE_FILE.title + 0x16, DIGIMON_NAME(SAVE_FILE.saves[0].partnerType), 0x2a);
+#elif !VERSION_IS(US)
 		strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
 		_strncpy(SAVE_FILE.title + 8, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
 		_strncpy(SAVE_FILE.title + 0xe, SAVE_FILE.saves[0].playerName, 0xc);
@@ -2909,11 +3960,21 @@ void tickMainMenu(void)
 			SAVE_FILE.iconDisplayFlag = 0x13;
 			SAVE_FILE.blockNumber = 1;
 			memcpy(SAVE_FILE.iconClut, SAVE_ICON_CLUT, 0x20);
-			memcpy(SAVE_FILE.iconFrames[0], SAVE_ICON_FRAME_0, 0x80);
-			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAME_1, 0x80);
-			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAME_2, 0x80);
+			memcpy(SAVE_FILE.iconFrames[0], SAVE_ICON_FRAMES[0], 0x80);
+#if VERSION_IS(EU)
+			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAMES[0], 0x80);
+			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAMES[0], 0x80);
+#else
+			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAMES[1], 0x80);
+			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAMES[2], 0x80);
+#endif
 			writeSavegame(&SAVE_FILE.saves[0]);
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+			strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
+			_strncpy(SAVE_FILE.title + 2, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
+			_strncpy(SAVE_FILE.title + 8, SAVE_FILE.saves[0].playerName, 0xc);
+			_strncpy(SAVE_FILE.title + 0x16, DIGIMON_NAME(SAVE_FILE.saves[0].partnerType), 0x2a);
+#elif !VERSION_IS(US)
 			strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
 			_strncpy(SAVE_FILE.title + 8, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy(SAVE_FILE.title + 0xe, SAVE_FILE.saves[0].playerName, 0xc);
@@ -3258,11 +4319,21 @@ void tickMainMenu(void)
 			SAVE_FILE.iconDisplayFlag = 0x13;
 			SAVE_FILE.blockNumber = 1;
 			memcpy(SAVE_FILE.iconClut, SAVE_ICON_CLUT, 0x20);
-			memcpy(SAVE_FILE.iconFrames[0], SAVE_ICON_FRAME_0, 0x80);
-			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAME_1, 0x80);
-			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAME_2, 0x80);
+			memcpy(SAVE_FILE.iconFrames[0], SAVE_ICON_FRAMES[0], 0x80);
+#if VERSION_IS(EU)
+			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAMES[0], 0x80);
+			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAMES[0], 0x80);
+#else
+			memcpy(SAVE_FILE.iconFrames[1], SAVE_ICON_FRAMES[1], 0x80);
+			memcpy(SAVE_FILE.iconFrames[2], SAVE_ICON_FRAMES[2], 0x80);
+#endif
 			writeSavegame(&SAVE_FILE.saves[0]);
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+			strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
+			_strncpy(SAVE_FILE.title + 2, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
+			_strncpy(SAVE_FILE.title + 8, SAVE_FILE.saves[0].playerName, 0xc);
+			_strncpy(SAVE_FILE.title + 0x16, DIGIMON_NAME(SAVE_FILE.saves[0].partnerType), 0x2a);
+#elif !VERSION_IS(US)
 			strncpy(SAVE_FILE.title, MAIN_D_8013392C, 0x40);
 			_strncpy(SAVE_FILE.title + 8, SAVEGAME_ID_LABEL[MEMORY_CARD_SLOT + 1], 4);
 			_strncpy(SAVE_FILE.title + 0xe, SAVE_FILE.saves[0].playerName, 0xc);
@@ -3693,8 +4764,12 @@ int32_t getCardUsedBlockCount(int32_t channel, int32_t returnMenu)
 	int32_t status;
 
 	MemCardSync(0, &cmd, &result);
+#if VERSION_IS(EU)
+	status = MemCardGetDirentry(channel, PATH_WILDCARD, MEMCARD_DIRENTRIES, &fileCount, 0, 15);
+#else
 	status = MemCardGetDirentry(channel, MAIN_D_801346C0[1], MEMCARD_DIRENTRIES,
 			&fileCount, 0, 15);
+#endif
 	switch (status) {
 	case 0:
 	case 3:
@@ -3758,7 +4833,13 @@ int32_t loadSaveSlotData(int32_t channel, char *filename, SaveSlotPreview *slots
 		MemCardSync(0, &cmd, &result);
 		if (result == 0) {
 			slots[slot].valid = 1;
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+			strncpy(slots[slot].playerName, (char *)&data[0xc], 12);
+			slots[slot].playerName[12] = '\0';
+			strncpy(slots[slot].digimonName, (char *)&data[0x1a], 42);
+			slots[slot].location[22] = '\0';
+			slots[slot].location[0] = '\0';
+#elif !VERSION_IS(US)
 			strncpy(slots[slot].playerName, (char *)&data[0x12], 12);
 			slots[slot].playerName[12] = '\0';
 			strncpy(slots[slot].digimonName, (char *)&data[0x20], 16);

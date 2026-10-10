@@ -59,7 +59,8 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, mov]
-      - [0xB64, data, mov]
+      - [0x40, c, mov]
+      - [0xB64, .data, mov]
+      - [0xC04, .data, mov_bss_eu]
 
-  - [0x7363C]
+  - [0x73640]

@@ -6,6 +6,7 @@ BITS_LABELS:
     STR_BRACES:
       ja: ｛｝
       en_us: NULL
+      en_eu: ｛｝
     STR_MONEY_HELD:
       ja: 所持金
       en_us: NULL

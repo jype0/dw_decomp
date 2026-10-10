@@ -1,11 +1,14 @@
 #include <dw/anim.h>
 #include <dw/entity.h>
+#include <dw/garbage.h>
 #include <dw/input.h>
 #include <dw/partner.h>
+#include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/training.h>
 #include <dw/trn2.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern int32_t TRAINING_COMPLETE;
@@ -16,8 +19,35 @@ void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn2_mp_functions[] = {
+#if VERSION_IS(EU)
+	TRN2_setupMpTraining,
 	TRN2_tickMpTraining,
+#else
+	TRN2_tickMpTraining,
+	TRN2_setupMpTraining,
+#endif
 };
+
+GARBAGE(TRN2_setupMpTraining, 8);
+
+void TRN2_setupMpTraining(arg)
+int16_t arg;
+{
+	if (arg == 0xa5) {
+		TRN2_D_8008DC2C.vx = 0x3e5;
+		TRN2_D_8008DC2C.vy = 0;
+		TRN2_D_8008DC2C.vz = 0x76;
+		TRN2_D_8008DC1C.vx = 0x6f8;
+		TRN2_D_8008DC1C.vy = 0;
+		TRN2_D_8008DC1C.vz = 0x1d2;
+		addObject(0xfaf, 8, (TickFunction)TRN2_tickMpTraining, NULL);
+	}
+
+	TRAINING_COMPLETE = 0;
+	MAIN_D_801353BC = readPStat(0xf6);
+	TRN2_saveTrainingStartTime();
+	MAIN_D_801353BD = 0;
+}
 
 void TRN2_tickMpTraining(instanceId)
 int16_t instanceId;

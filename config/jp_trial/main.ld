@@ -49,6 +49,7 @@ SECTIONS
         BUILD_DIR/asm/main/psyq/libspu.s.o(.text .text.*);
         BUILD_DIR/asm/main/psyq/libsnd.s.o(.text .text.*);
         BUILD_DIR/src/main/map.c.o(.text .text.*);
+        BUILD_DIR/src/main/effect_common.c.o(.text .text.*);
         BUILD_DIR/src/main/inventory.c.o(.text .text.*);
         BUILD_DIR/src/main/clock.c.o(.text .text.*);
         BUILD_DIR/src/main/partner.c.o(.text .text.*);
@@ -249,6 +250,7 @@ SECTIONS
         BUILD_DIR/asm/main/data/psyq/libspu.data.s.o(.data .data.*);
         BUILD_DIR/asm/main/data/psyq/libsnd.data.s.o(.data .data.*);
         BUILD_DIR/src/main/map.c.o(.data .data.*);
+        BUILD_DIR/src/main/effect_common.c.o(.data .data.*);
         BUILD_DIR/src/main/inventory.c.o(.data .data.*);
         BUILD_DIR/src/main/clock.c.o(.data .data.*);
         BUILD_DIR/src/main/script_interp.c.o(.data .data.*);
@@ -327,6 +329,7 @@ SECTIONS
         BUILD_DIR/src/btl/battle_main.c.o(.sdata .sdata.*);
         BUILD_DIR/src/btl/command_shout.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
+        BUILD_DIR/src/btl/command_menu.c.o(.sdata .sdata.*);
         BUILD_DIR/src/btl/battle_hud.c.o(.sdata .sdata.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/btl/battle_effect.c.o(.sdata .sdata.*);
@@ -406,6 +409,8 @@ SECTIONS
         BUILD_DIR/src/main/sound.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/map.c.o(.sbss.*);
+        . = ALIGN(., 4);
+        BUILD_DIR/src/main/effect_common.c.o(.sbss.*);
         . = ALIGN(., 4);
         BUILD_DIR/src/main/inventory.c.o(.sbss.*);
         . = ALIGN(., 4);

@@ -167,10 +167,17 @@ int32_t MAIN_D_80134E7C;
 
 static void *utils2_sbss_order[] = {
 	&MAIN_D_80134E7C,
+#if VERSION_IS(EU)
+	&PAUSE_BOX_VISIBLE,
+	&PAUSE_STATE,
+	&PAUSE_INPUT,
+	&PAUSE_INPUT_PREVIOUS,
+#else
 	&PAUSE_STATE,
 	&PAUSE_BOX_VISIBLE,
 	&PAUSE_INPUT_PREVIOUS,
 	&PAUSE_INPUT,
+#endif
 };
 
 void drawEntityText(int32_t color, int16_t n, int16_t x, int16_t y,
@@ -439,7 +446,9 @@ void createPauseBox(void)
 
 	if (MAIN_D_80134E7C != 1) {
 		drawString(MAIN_D_80134430, 0x78, 0xF0);
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		setRECT(&pos, -0x1A, -0xE, 0x34, 0x18);
+#elif !VERSION_IS(US)
 		setRECT(&pos, -0x1A, -0xE, 0x30, 0x18);
 #else
 		setRECT(&pos, -0x1A, -0xE, 0x38, 0x18);
@@ -461,7 +470,9 @@ void renderPauseBox(instanceId)
 	setRECT(&box, -0xA0, -0x78, 0x140, 0xF0);
 	GsSortBoxFill(&box, ACTIVE_ORDERING_TABLE, 7 - instanceId);
 	pos = &UI_BOX_DATA[5].finalPos;
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderString(0, pos->x + 6, pos->y + 6, 0x28, 0xC, 0x78, 0xF0, 0, 1);
+#elif !VERSION_IS(US)
 	renderString(0, pos->x + 6, pos->y + 6, 0x24, 0xC, 0x78, 0xF0, 0, 1);
 #else
 	renderString(0, pos->x + 6, pos->y + 6, 0x2A, 0xC, 0x78, 0xF0, 0, 1);

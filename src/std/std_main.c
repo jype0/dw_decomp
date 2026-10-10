@@ -73,7 +73,6 @@ extern GsRVIEW2 GS_VIEWPOINT;
 extern int32_t VIEWPORT_DISTANCE;
 extern Entity *STD_OPPONENT_ENTITY;
 extern uint8_t CURRENT_SCREEN;
-extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern int32_t COMBAT_AREA_X;
 extern int32_t COMBAT_AREA_Y;
@@ -357,6 +356,177 @@ int32_t STD_startEFE(int32_t i);
 
 static void *std_main_functions[] = {
 	STD_removeCommandMenu,
+#if VERSION_IS(EU)
+	STD_tickCommandMenu,
+	STD_renderCommandMenu,
+	STD_addCommandMenu,
+	STD_setCommandIconUV,
+	STD_renderMoveName,
+	STD_getNearestEnemy,
+	STD_selectPartnerMove,
+	STD_selectEnemyMove,
+	STD_isFighterDefeated,
+	STD_selectMoveByMpCost,
+	STD_selectMoveByPower,
+	STD_getRemainingEnemies,
+	STD_selectConfusedMove,
+	STD_calculateScoreRanks,
+	STD_countLivingEnemies,
+	STD_calculateElementBonus,
+	STD_sortScoresAscending,
+	STD_sortScoresDescending,
+	STD_getNpcEntityIndex,
+	STD_getLowestScoredMove,
+	STD_getHighestScoredMove,
+	STD_getCheapestMove,
+	STD_getMostEffectiveMove,
+	STD_getStrongestMove,
+	STD_getRandomUsableMove,
+	STD_setFighterCooldown,
+	STD_getUsableMoves,
+	STD_removeStatusEffects,
+	STD_addStunStatusVisual,
+	STD_addConfusionStatusVisual,
+	STD_addPoisonStatusVisual,
+	STD_resetFighterAction,
+	STD_applyMoveResult,
+	STD_removeStatusEffectVisual,
+	STD_applySquashScale,
+	STD_applyStretchScale,
+	STD_addStatusEffectVisual,
+	STD_applyFlattenScale,
+	STD_clearStun,
+	STD_updateFighterStatusVisuals,
+	STD_addFinisherProgress,
+	STD_removeMoveEffect,
+	STD_setupMoveExecution,
+	STD_selectMoveTarget,
+	STD_startQueuedMove,
+	STD_applyChargeRequirement,
+	STD_setupQueuedMove,
+	STD_getDistanceSquared,
+	STD_isMoveUsable,
+	STD_battleTickFrame,
+	STD_tickFrames,
+	STD_tickAttackHits,
+	STD_startHitAnimation,
+	STD_buffStats,
+	STD_addBlockedAttack,
+	STD_getFighterSlot,
+	STD_applyMoveStatus,
+	STD_handleHitReaction,
+	STD_calculateDamage,
+	STD_applyPartnerStatsToFighter,
+	STD_applyBuffMove,
+	STD_getAttackTech,
+	STD_renderPlayerMarker,
+	STD_startWalkingAnimation2,
+	STD_renderTimeoutWindow,
+	STD_renderTimeoutText,
+	STD_combatMain,
+	STD_findUnblockedRotation,
+	STD_clearBlockedAttacks,
+	STD_getEntityIndex2,
+	STD_initializePlayerMarker,
+	STD_startWalkingAnimation,
+	STD_hasAffordableMoves,
+	STD_increaseSpeedBuffer,
+	STD_getContactRangeSquared,
+	STD_maintainDistanceRange,
+	STD_maintainTargetDistance,
+	STD_confusedRotate,
+	STD_tickFighterAction,
+	STD_moveTowardLocation,
+	STD_backAwayFromTarget,
+	STD_setWalking,
+	STD_getMoveWithHighestDistance,
+	STD_tickDigimonAttackRanged,
+	STD_tickMeleeAttack,
+	STD_handlePartnerMoveCommand,
+	STD_tickQueuedMove,
+	STD_tickCooldownState,
+	STD_tickChargeState,
+	STD_tickDigimonSenile,
+	STD_tickConfusedState,
+	STD_tickStunState,
+	STD_tickFlatState,
+	STD_tickHitState,
+	STD_tickAttackState,
+	STD_getDigitCount,
+	STD_faintDigimon,
+	STD_addTimeoutWindow,
+	STD_tickBattleResultScreen,
+	STD_areAllEnemyDigimonDead,
+	STD_resetFlatten,
+	STD_removePlayerMarker,
+	STD_removeCombatObjects,
+	STD_deinitializeCombat,
+	STD_tickBattle,
+	STD_tickEnemyAI,
+	STD_tickPartnerAI,
+	STD_checkEndCondition,
+	STD_combatSetup,
+	STD_initializeCombat,
+	STD_removeBracketIntro,
+	STD_addBracketIntro,
+	STD_tickBracketIntro,
+	STD_renderBracketIntro,
+	STD_renderBracketProjectile,
+	STD_tickBracketProjectile,
+	STD_tickBracketHitFlash,
+	STD_isBracketFinished,
+	STD_removeBracket,
+	STD_addBracket,
+	STD_tickBracket,
+	STD_renderBracket,
+	STD_setupParticipants,
+	STD_initializeBracket,
+	STD_renderBracketGlyph,
+	STD_setFlippedUV,
+	STD_removeBracketProjectile,
+	STD_removeBracketHitFlash,
+	STD_renderBracketDigimon,
+	STD_addBracketHitFlash,
+	STD_addBracketProjectile,
+	STD_drawBracket,
+	STD_updateBracket,
+	STD_removeFighterCounter,
+	STD_addFighterCounter,
+	STD_tickFighterCounter,
+	STD_renderFighterCounter,
+	STD_renderCounterDigits,
+	STD_applyEntityViewpoint,
+	STD_removeCameraIntro,
+	STD_startCameraIntro,
+	STD_tickCameraIntro,
+	STD_startCameraChase,
+	STD_tickCameraChase,
+	STD_interpolateClamped2,
+	STD_isPositionNearEntity,
+	STD_updateCameraLerp,
+	STD_setViewpointFromBone,
+	STD_getFighterDistance,
+	STD_setChampionCamera,
+	STD_setRandomViewpoint,
+	STD_selectRandomCamera,
+	STD_removeVSPhase,
+	STD_setVSPhase,
+	STD_tickVSPhase,
+	STD_setCameraParams,
+	STD_applyRotatingCamera,
+	STD_applyViewpoint,
+	STD_setCameraLookAtEntity,
+	STD_setViewpointRotationFromEntity,
+	STD_setCameraToEntity,
+	STD_setCameraYXZ,
+	STD_setCameraOrbit,
+	STD_applyManualCamera,
+	STD_tickIntroName,
+	STD_renderIntroName,
+	STD_renderIntroStatNumber,
+	STD_tickIntroStats,
+	STD_renderIntroStats,
+#else
 	STD_renderCommandMenu,
 	STD_tickCommandMenu,
 	STD_addCommandMenu,
@@ -526,6 +696,7 @@ static void *std_main_functions[] = {
 	STD_renderIntroStatNumber,
 	STD_renderIntroStats,
 	STD_tickIntroStats,
+#endif
 	STD_runIntro,
 	STD_renderIntroNameChar,
 	STD_renderIntroStatBar,
@@ -558,8 +729,10 @@ SVECTOR STD_INTRO_CAMERA_STAGE2_POS = { 0 };
 SVECTOR STD_INTRO_CAMERA_STAGE2_ROT = { -227, 1479, 0, 0 };
 SVECTOR MAIN_D_80134868 = { 0 };
 int16_t STD_CARDINAL_ROTATIONS[4] = { 0, 1024, 2048, 3072 };
+#if !VERSION_IS(EU)
 /* Dealt */
 char STD_STR_DEALT[] = "与えた";
+#endif
 uint8_t STD_BRAIN_TO_COMMAND_MAP[5] = { 2, 3, 4, 5, 6 };
 uint8_t STD_YOUR_CALL_POWER_PRIO[4] = { 50, 20, 5, 0 };
 uint8_t STD_YOUR_CALL_MP_PRIO[4] = { 50, 20, 10, 0 };
@@ -612,6 +785,38 @@ uint8_t STD_COMMAND_MENU_LAYOUT[2];
 int8_t MAIN_D_8013518A[2];
 
 static void *std_main_sbss_order[] = {
+#if VERSION_IS(EU)
+	&STD_COMMAND_MENU_TOP,
+	&STD_COMMAND_MENU_BOTTOM,
+	&STD_COMMAND_MENU_BLINK,
+	&STD_COMMAND_MENU_TIMER,
+	&STD_COMMAND_MENU_LAYOUT,
+	&MAIN_D_8013518A,
+	&STD_FINISHER_AURA_ID,
+	&STD_FINISHER_TIMER,
+	&STD_BATTLE_RESULT_TIMER,
+	&STD_SAVED_CHARGE_MODE,
+	&STD_IS_DRAW,
+	&STD_VICTORY_FRAMES,
+	&MAIN_D_80135165,
+	&MAIN_D_80135166,
+	&STD_BRACKET_INTRO_TIMER,
+	&STD_BRACKET_FINISHED,
+	&STD_BRACKET_FADE,
+	&STD_PLAYER_SLOT,
+	&STD_ROUND1_WINNERS,
+	STD_ROUND2_WINNERS,
+	&PARTICIPANT_TYPES,
+	&STD_BRACKET_MATCH,
+	&STD_IS_TIMER_INITIALIZED,
+	&STD_INTRO_CAMERA_CHASE,
+	&STD_INTRO_DATA_ANIM_FRAME,
+	&STD_INTRO_DATA_FRAME_COUNT,
+	&STD_INTRO_DATA_RENDERED_CHARACTERS,
+	&STD_INTRO_DATA_COLOR,
+	&STD_INTRO_DATA_POS_X,
+	&STD_INTRO_DATA_POS_Y,
+#else
 	&MAIN_D_8013518A,
 	&STD_COMMAND_MENU_LAYOUT,
 	&STD_COMMAND_MENU_TIMER,
@@ -642,6 +847,7 @@ static void *std_main_sbss_order[] = {
 	&STD_INTRO_DATA_COLOR,
 	&STD_INTRO_DATA_RENDERED_CHARACTERS,
 	&STD_INTRO_DATA_FRAME_COUNT,
+#endif
 	&STD_INTRO_STATS_ACTIVE,
 	&STD_ARENA_MODEL,
 	&STD_CAMERA_TIMER,
@@ -660,6 +866,7 @@ static void *std_main_sbss_order[] = {
 };
 
 // clang-format off
+#if !VERSION_IS(EU)
 uint8_t STD_INTRO_DIGIMON_NAMES[112][14] = {
 	{
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1110,6 +1317,7 @@ uint8_t STD_INTRO_DIGIMON_NAMES[112][14] = {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	},
 };
+#endif
 
 char STD_PATH_ARENA_MODEL_STDDAT_T_TOGI_TMD[] = "\\STDDAT\\T_TOGI.TMD";
 
@@ -1276,8 +1484,14 @@ StdSrcA598 STD_BRACKET_PATHS[8] = {
 	},
 };
 
+#if VERSION_IS(EU)
+char STD_STR_DEALT[] = "Ｇａｖｅ";
+
+char STD_STR_DAMAGE[] = "Ｄａｍａｇｅ";
+#else
 /* Damage */
 char STD_STR_DAMAGE[] = "ダメージ";
+#endif
 
 COMMANDS_TEXT
 
@@ -1450,9 +1664,18 @@ void STD_addIntroText(entity, id)
 	if (entity->type == 0x4e || entity->type == 0x3c) {
 		len = 10;
 	}
+#if VERSION_IS(EU)
+	if (len > 10) {
+		len = 10;
+	}
+#endif
 
 	STD_INTRO_DATA_POS_X = -(len * 16);
+#if VERSION_IS(EU)
+	STD_INTRO_DATA_POS_Y = 36;
+#else
 	STD_INTRO_DATA_POS_Y = 68;
+#endif
 	addObject(0x1ab, id, STD_tickIntroName, STD_renderIntroName);
 }
 
@@ -1495,12 +1718,12 @@ void STD_addIntroStats(entity, id)
 {
 	if (STD_INTRO_STATS_ACTIVE != 1) {
 		STD_INTRO_STATS_ACTIVE = 1;
-		STD_D_8007B9BC[0] = -100;
-		STD_D_8007B9BC[1] = -100;
-		STD_D_8007B9BC[2] = -10;
-		STD_D_8007B9BC[3] = -10;
-		STD_D_8007B9BC[4] = -10;
-		STD_D_8007B9BC[5] = -10;
+		STD_INTRO_STATS_DATA[0] = -100;
+		STD_INTRO_STATS_DATA[1] = -100;
+		STD_INTRO_STATS_DATA[2] = -10;
+		STD_INTRO_STATS_DATA[3] = -10;
+		STD_INTRO_STATS_DATA[4] = -10;
+		STD_INTRO_STATS_DATA[5] = -10;
 		addObject(0x1a9, id, STD_tickIntroStats, STD_renderIntroStats);
 	}
 }
@@ -1750,36 +1973,36 @@ void STD_tickIntroStats(id)
 {
 	Stats *stats;
 
-	STD_D_8007B9BC[0] += 200;
-	STD_D_8007B9BC[1] += 200;
-	STD_D_8007B9BC[2] += 20;
-	STD_D_8007B9BC[3] += 20;
-	STD_D_8007B9BC[4] += 20;
-	STD_D_8007B9BC[5] += 20;
+	STD_INTRO_STATS_DATA[0] += 200;
+	STD_INTRO_STATS_DATA[1] += 200;
+	STD_INTRO_STATS_DATA[2] += 20;
+	STD_INTRO_STATS_DATA[3] += 20;
+	STD_INTRO_STATS_DATA[4] += 20;
+	STD_INTRO_STATS_DATA[5] += 20;
 
 	stats = &((DigimonEntity *)ENTITY_TABLE[id])->stats;
-	if (stats->current.currentHP < STD_D_8007B9BC[0]) {
-		STD_D_8007B9BC[0] = stats->current.currentHP;
+	if (stats->current.currentHP < STD_INTRO_STATS_DATA[0]) {
+		STD_INTRO_STATS_DATA[0] = stats->current.currentHP;
 	}
 
-	if (stats->current.currentMP < STD_D_8007B9BC[1]) {
-		STD_D_8007B9BC[1] = stats->current.currentMP;
+	if (stats->current.currentMP < STD_INTRO_STATS_DATA[1]) {
+		STD_INTRO_STATS_DATA[1] = stats->current.currentMP;
 	}
 
-	if (stats->base.off < STD_D_8007B9BC[2]) {
-		STD_D_8007B9BC[2] = stats->base.off;
+	if (stats->base.off < STD_INTRO_STATS_DATA[2]) {
+		STD_INTRO_STATS_DATA[2] = stats->base.off;
 	}
 
-	if (stats->base.def < STD_D_8007B9BC[3]) {
-		STD_D_8007B9BC[3] = stats->base.def;
+	if (stats->base.def < STD_INTRO_STATS_DATA[3]) {
+		STD_INTRO_STATS_DATA[3] = stats->base.def;
 	}
 
-	if (stats->base.speed < STD_D_8007B9BC[4]) {
-		STD_D_8007B9BC[4] = stats->base.speed;
+	if (stats->base.speed < STD_INTRO_STATS_DATA[4]) {
+		STD_INTRO_STATS_DATA[4] = stats->base.speed;
 	}
 
-	if (stats->base.brain < STD_D_8007B9BC[5]) {
-		STD_D_8007B9BC[5] = stats->base.brain;
+	if (stats->base.brain < STD_INTRO_STATS_DATA[5]) {
+		STD_INTRO_STATS_DATA[5] = stats->base.brain;
 	}
 }
 
@@ -1793,15 +2016,15 @@ void STD_renderIntroStats(id)
 
 	for (i = 0; i < 6; ++i) {
 		renderString(0, -100, i * 16 - 28, 48, 12, 0, i * 12, 0, 1);
-		STD_renderIntroStatBar((int16_t)i, STD_D_8007B9BC[i]);
+		STD_renderIntroStatBar((int16_t)i, STD_INTRO_STATS_DATA[i]);
 	}
 
 	stats = &((DigimonEntity *)ENTITY_TABLE[id])->stats;
-	if (STD_D_8007B9BC[0] != stats->current.currentHP || STD_D_8007B9BC[1] != stats->current.currentMP || STD_D_8007B9BC[2] != stats->base.off || STD_D_8007B9BC[3] != stats->base.def || STD_D_8007B9BC[4] != stats->base.speed || STD_D_8007B9BC[5] != stats->base.brain) {
+	if (STD_INTRO_STATS_DATA[0] != stats->current.currentHP || STD_INTRO_STATS_DATA[1] != stats->current.currentMP || STD_INTRO_STATS_DATA[2] != stats->base.off || STD_INTRO_STATS_DATA[3] != stats->base.def || STD_INTRO_STATS_DATA[4] != stats->base.speed || STD_INTRO_STATS_DATA[5] != stats->base.brain) {
 		playSound(0, 0x16);
 	} else {
 		for (i = 0; i < 6; ++i) {
-			STD_renderIntroStatNumber(52, (int16_t)(i * 16 - 28), 4, STD_D_8007B9BC[i], 3);
+			STD_renderIntroStatNumber(52, (int16_t)(i * 16 - 28), 4, STD_INTRO_STATS_DATA[i], 3);
 		}
 	}
 }
@@ -1854,7 +2077,11 @@ void STD_tickIntroName(int32_t id)
 			STD_INTRO_CAMERA_CHASE.timer = 20;
 		}
 
+#if VERSION_IS(EU)
+		if (STD_INTRO_DATA_POS_Y >= -103) {
+#else
 		if (STD_INTRO_DATA_POS_Y >= -71) {
+#endif
 			STD_INTRO_DATA_POS_Y -= 28;
 		} else {
 			STD_addIntroStats(ENTITY_TABLE[id], id);
@@ -1870,9 +2097,16 @@ void STD_renderIntroName(id)
 	int32_t charCount;
 	int32_t i;
 	int32_t charIndex;
+#if VERSION_IS(EU)
+	uint16_t *glyph;
+	uint16_t code;
+#endif
 	int16_t y;
 	int16_t size;
 	uint8_t character;
+#if VERSION_IS(EU)
+	int8_t secondRow;
+#endif
 
 	charCount = strlen(DIGIMON_NAME(ENTITY_TABLE[id]->type)) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
@@ -1889,10 +2123,27 @@ void STD_renderIntroName(id)
 	}
 
 	charIndex = 0;
+#if VERSION_IS(EU)
+	secondRow = 0;
+#endif
 	for (i = 0; i < STD_INTRO_DATA_RENDERED_CHARACTERS; ++i) {
+#if VERSION_IS(EU)
+		glyph = &((uint16_t *)DIGIMON_NAME(ENTITY_TABLE[id]->type))[charIndex++];
+		code = *glyph;
+		code = (code << 8) | (code >> 8);
+		if (code >= 0x8281) {
+			character = code - 0x8281;
+		} else {
+			character = code - 0x8260;
+		}
+
+		if (charIndex == 11) {
+			secondRow = 1;
+#else
 		character = STD_INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 		if (character == 0x3d) {
 			character = STD_INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
+#endif
 		}
 
 		if (i == STD_INTRO_DATA_RENDERED_CHARACTERS - 1) {
@@ -1903,11 +2154,18 @@ void STD_renderIntroName(id)
 			size = 32;
 		}
 
+#if VERSION_IS(EU)
+		if (secondRow == 0) {
+			STD_renderIntroNameChar((int16_t)STD_INTRO_DATA_POS_X + i * 32, y, size, character);
+		} else {
+			STD_renderIntroNameChar((int16_t)STD_INTRO_DATA_POS_X + i * 32 - 320, y + 32, size, character);
+#else
 		STD_renderIntroNameChar((int16_t)STD_INTRO_DATA_POS_X + i * 32, y, size, character);
 
 		if (character == 0x1f || character == 0x25) {
 			character = STD_INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 			STD_renderIntroNameChar((int16_t)STD_INTRO_DATA_POS_X + i * 32, y, size, character);
+#endif
 		}
 	}
 }
@@ -2960,6 +3218,10 @@ void STD_drawBracket(void)
 	int32_t p;
 	int32_t len;
 	int32_t small;
+#if VERSION_IS(EU)
+	uint16_t *glyph;
+	uint16_t code;
+#endif
 	uint8_t c;
 	int16_t shift;
 
@@ -2972,6 +3234,34 @@ void STD_drawBracket(void)
 		shift = 0;
 		small = 0;
 		for (j = 0; j < len; j++) {
+#if VERSION_IS(EU)
+			if (len < 11) {
+				glyph = &((uint16_t *)DIGIMON_NAME(PARTICIPANT_TYPES[i]))[p++];
+				code = *glyph;
+				code = (code << 8) | (code >> 8);
+				if (code >= 0x8281) {
+					c = code - 0x8281;
+				} else {
+					c = code - 0x8260;
+				}
+				STD_renderBracketGlyph((int16_t)(STD_BRACKET_PATHS[i].unk0[0] + 4),
+				                       (int16_t)(STD_BRACKET_ROW_Y[0] + 0x12 + j * 8), c, 5);
+			} else {
+				glyph = &((uint16_t *)DIGIMON_NAME(PARTICIPANT_TYPES[i]))[p++];
+				code = *glyph;
+				code = (code << 8) | (code >> 8);
+				if (code >= 0x8281) {
+					c = code - 0x8281;
+				} else {
+					c = code - 0x8260;
+				}
+				if (p == 11) {
+					small = 1;
+					shift = -(j * 8);
+				}
+				STD_renderBracketGlyph((int16_t)((small == 0) ? STD_BRACKET_PATHS[i].unk0[0] + 8 : STD_BRACKET_PATHS[i].unk0[0]),
+				                       (int16_t)(shift + (STD_BRACKET_ROW_Y[0] + 0x12 + j * 8)), c, 5);
+#else
 			if (len < 8) {
 				c = STD_INTRO_DIGIMON_NAMES[PARTICIPANT_TYPES[i]][p++];
 				STD_renderBracketGlyph((int16_t)(STD_BRACKET_PATHS[i].unk0[0] + 4),
@@ -2995,6 +3285,7 @@ void STD_drawBracket(void)
 					STD_renderBracketGlyph((int16_t)((small == 0) ? STD_BRACKET_PATHS[i].unk0[0] + 8 : STD_BRACKET_PATHS[i].unk0[0]),
 					                       (int16_t)(shift + (STD_BRACKET_ROW_Y[0] + 0x12 + j * 8)), c, 5);
 				}
+#endif
 			}
 		}
 	}

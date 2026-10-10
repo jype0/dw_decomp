@@ -225,14 +225,22 @@ int16_t DIRECTIONS[4] = {
 	0x0000, 0x0400, 0x0800, 0x0c00,
 };
 
+#if VERSION_IS(EU)
+char VS__STR_DEALT[] = "Ｇａｖｅ";
+#else
 char VS__STR_DEALT[] = "与えた";
+#endif
 
 uint8_t VS__COMMANDS[8] = {
 	0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x00,
 };
 
+#if VERSION_IS(EU)
+char STR_DAMAGE[] = "Ｄａｍａｇｅ";
+#else
 /* Damage */
 char STR_DAMAGE[] = "ダメージ";
+#endif
 
 #if VERSION_IS(JP_TRIAL) || VERSION_IS(JP_BOMBOM)
 int32_t VS_DEMO_SKIPPED;
@@ -240,7 +248,7 @@ int32_t VS_DEMO_SKIPPED;
 uint8_t VS__PAUSING_PLAYER;
 uint32_t VS__CURRENT_INPUT;
 uint32_t VS__PREVIOUS_INPUT;
-uint8_t VS__CHARGE_MODES[4];
+uint8_t VS__CHARGE_MODES[2];
 int32_t VS__IS_DRAW;
 uint8_t VS__BATTLE_RESULT_TIMER;
 int32_t VS_FINISHER_TIMER;
@@ -250,8 +258,13 @@ static void *vs_combat_sbss_order[] = {
 	&VS_ACTIVE_FINISHER_AURA_ID,
 	&VS_FINISHER_TIMER,
 	&VS__BATTLE_RESULT_TIMER,
+#if VERSION_IS(EU)
+	VS__CHARGE_MODES,
+	&VS__IS_DRAW,
+#else
 	&VS__IS_DRAW,
 	VS__CHARGE_MODES,
+#endif
 	&VS__PREVIOUS_INPUT,
 	&VS__CURRENT_INPUT,
 	&VS__PAUSING_PLAYER,

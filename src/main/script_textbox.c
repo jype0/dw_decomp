@@ -62,6 +62,26 @@ static void *script_textbox_functions[] = {
 	showTextbox,
 	scriptShowSelection,
 	renderUIBox,
+#if VERSION_IS(EU)
+	setupBoxOrigin,
+	setupDialogueBox,
+	tickScriptDialogueBox,
+	renderScriptDialogueBox,
+	advanceTextbox,
+	flipIdleTextboxPage,
+	drawString2,
+	registerTextbox,
+	triggerBoxCloseFlag,
+	createTextbox,
+	closeBox,
+	closeAllTextboxes,
+	closeTextbox,
+	getVRAMModeCoords,
+	tickTextboxHandling,
+	initializeTextbox,
+	tickCustomSizedTextbox,
+	renderCustomSizedTextbox,
+#else
 	renderScriptDialogueBox,
 	tickScriptDialogueBox,
 	setupBoxOrigin,
@@ -80,6 +100,7 @@ static void *script_textbox_functions[] = {
 	initializeTextbox,
 	renderCustomSizedTextbox,
 	tickCustomSizedTextbox,
+#endif
 	renderDialogueSelectionCursor,
 	tickBackgroundDialogue,
 	tickConfirmDialogue,
@@ -149,9 +170,9 @@ int32_t drawTextboxStrings(boxId, flag)
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	px = x;
 	row = box->vramRow + box->writeRow;
-	buf = TEXTBOX_LINES_PTR + (row << 6);
+	buf = TEXTBOX_LINES_PTR + row * TEXTBOX_LINE_SIZE;
 	if (x != 0) {
-		buf += 0x20;
+		buf += TEXTBOX_LINE_SIZE / 2;
 	}
 	row = row * 12;
 	if (box->vramMode == 0) {
@@ -175,7 +196,7 @@ int32_t drawTextboxStrings(boxId, flag)
 			break;
 		}
 		row += 12;
-		buf += 0x40;
+		buf += TEXTBOX_LINE_SIZE;
 		x--;
 	}
 
@@ -625,7 +646,11 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y)
 int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 #endif
 {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+#ifdef __MWERKS__
+	extern int32_t drawGlyph();
+#endif
+#elif !VERSION_IS(US)
 #ifdef __MWERKS__
 	extern void drawGlyph();
 #endif
@@ -659,9 +684,15 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 			break;
 		case 0xc:
 			str++;
+#if VERSION_IS(EU)
+			rem = pos / 8 % 13;
+			if (rem != 0) {
+				rem = (13 - rem) * 8;
+#else
 			rem = pos / 12 % 8;
 			if (rem != 0) {
 				rem = (8 - rem) * 12;
+#endif
 				setRECT(&rect, x + pos, y, rem, 0xc);
 				clearTextSubArea(&rect);
 				pos = pos + rem;
@@ -723,9 +754,15 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 			break;
 		case 0xf:
 			str++;
+#if VERSION_IS(EU)
+			setRECT(&rect, x + pos, y, 8, 0xc);
+			clearTextSubArea(&rect);
+			pos += 8;
+#else
 			setRECT(&rect, x + pos, y, 6, 0xc);
 			clearTextSubArea(&rect);
 			pos += 6;
+#endif
 			break;
 		case 0xd:
 			return 0;
@@ -741,10 +778,18 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 #endif
 
 			if (glyph == 0x4081) {
+#if VERSION_IS(EU)
+				setRECT(&rect, x + pos, y, 8, 0xc);
+				clearTextSubArea(&rect);
+				pos += 8;
+#else
 				setRECT(&rect, x + pos, y, 0xc, 0xc);
 				clearTextSubArea(&rect);
+#endif
 			} else {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+				pos += (int16_t)drawGlyph(glyph, x + pos, y);
+#elif !VERSION_IS(US)
 				drawGlyph(glyph, x + pos, y);
 #else
 				y2 = y;
@@ -755,10 +800,10 @@ int32_t drawString2(uint8_t *str, int16_t x, int16_t y, int32_t flag)
 #endif
 			}
 
-#if !VERSION_IS(US)
-			pos += 0xc;
-#else
+#if VERSION_IS(US)
 			pos += adv;
+#elif !VERSION_IS(EU)
+			pos += 0xc;
 #endif
 			break;
 		}
@@ -983,7 +1028,7 @@ void scriptShowSelection(void)
 	DIALOGUE_SELECTION.pointer = SCRIPT_POINTER;
 	SCRIPT_POINTER = SCRIPT_POINTER + (optionCount + 1) * 2;
 	DIALOGUE_SELECTION.cursorWidth = showTextbox(0, CURRENT_DIALOGUE_OWNER);
-	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * 12 + 2;
+	DIALOGUE_SELECTION.cursorWidth = DIALOGUE_SELECTION.cursorWidth * GLYPH_WIDTH + 2;
 #if VERSION_IS(US)
 	height = DIALOGUE_SELECTION.cursorWidth;
 
@@ -1018,12 +1063,12 @@ uint16_t showTextbox(uint8_t boxId, uint8_t speakerId)
 	uint8_t ctrl;
 
 	entry = &TEXTBOX_DATA.box[boxId];
-	base = TEXTBOX_LINES_PTR + (entry->vramRow << 6);
+	base = TEXTBOX_LINES_PTR + entry->vramRow * TEXTBOX_LINE_SIZE;
 	if (entry->vramMode == 2) {
-		base += 0x20;
+		base += TEXTBOX_LINE_SIZE / 2;
 	}
 	if (entry->doubleBuffered == 1) {
-		base = (uint8_t *)(base + (((entry->backPage ^ 1) * entry->vramRows) << 6));
+		base = (uint8_t *)(base + ((entry->backPage ^ 1) * entry->vramRows) * TEXTBOX_LINE_SIZE);
 	}
 	out = base;
 	col = maxCol = 0;
@@ -1046,7 +1091,7 @@ uint16_t showTextbox(uint8_t boxId, uint8_t speakerId)
 		*out++ = 0xd;
 		*out = 0;
 		row++;
-		out = base + (row << 6);
+		out = base + row * TEXTBOX_LINE_SIZE;
 	}
 top: {
 	ctrl = *SCRIPT_POINTER++;
@@ -1079,10 +1124,8 @@ top: {
 			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
-				strcpy(out,
-				       (const char *)&DIGIMON_DATA[ctrl]);
-				lines = strlen(
-					(const char *)&DIGIMON_DATA[ctrl]);
+				strcpy(out, DIGIMON_NAME(ctrl));
+				lines = strlen(DIGIMON_NAME(ctrl));
 				out += lines;
 				col += (uint16_t)(lines >> 1);
 			}
@@ -1101,10 +1144,8 @@ top: {
 			ctrl = *SCRIPT_POINTER++;
 			{
 				ctrl = readPStat(ctrl);
-				strcpy(out,
-				       (const char *)&ITEM_PARA[ctrl]);
-				lines = strlen(
-					(const char *)&ITEM_PARA[ctrl]);
+				strcpy(out, ITEM_NAME(ctrl));
+				lines = strlen(ITEM_NAME(ctrl));
 				out += lines;
 				col += (uint16_t)(lines >> 1);
 			}
@@ -1181,7 +1222,7 @@ top: {
 				goto done;
 			}
 			row++;
-			out = base + (row << 6);
+			out = base + row * TEXTBOX_LINE_SIZE;
 			goto top;
 		case 1:
 		case 2:

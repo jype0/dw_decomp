@@ -8,6 +8,7 @@
 #include <dw/entity.h>
 #include <dw/graphics.h>
 #include <dw/types.h>
+#include <dw/version.h>
 
 typedef struct {
 	uint8_t modelCount[2];
@@ -71,10 +72,15 @@ extern GsOT_TAG STD_MODEL_SCENE_OT_TAGS_1[];
 extern GsCOORDINATE2Raw STD_ARENA_COORDS[];
 extern GsDOBJ2 STD_ARENA_OBJECTS[];
 extern int16_t STD_D_8007B9BC[];
+#if VERSION_IS(EU)
+extern int16_t STD_INTRO_STATS_DATA[6];
+#else
+#define STD_INTRO_STATS_DATA STD_D_8007B9BC
+#endif
 extern StdUnkB9D0 STD_D_8007B9D0;
 extern int32_t STD_D_8007B9EC[4];
 extern int32_t STD_D_8007B9FC[];
-extern int32_t STD_D_8007BA44[22];
+extern int32_t STD_D_8007BA44[];
 extern int32_t STD_D_8007BA9C[4];
 extern int32_t STD_D_8007BAAC[];
 extern StdUnkBAF4 STD_BRACKET_SLOTS[8];
@@ -118,7 +124,7 @@ extern SVECTOR STD_INTRO_CAMERA_STAGE2_POS;
 extern SVECTOR STD_INTRO_CAMERA_STAGE2_ROT;
 extern SVECTOR MAIN_D_80134868;
 extern int16_t STD_CARDINAL_ROTATIONS[4];
-extern char STD_STR_DEALT[7];
+extern char STD_STR_DEALT[];
 extern uint8_t STD_BRAIN_TO_COMMAND_MAP[5];
 extern uint8_t STD_YOUR_CALL_POWER_PRIO[4];
 extern uint8_t STD_YOUR_CALL_MP_PRIO[4];

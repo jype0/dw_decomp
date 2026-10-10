@@ -59,7 +59,7 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, endi]
-      - [0x12BC, data, endi]
+      - [0x40, c, endi]
+      - [0x12BC, .data, endi_bss_eu]
 
-  - [0x1A54]
+  - [0x1A58]

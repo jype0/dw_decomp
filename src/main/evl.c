@@ -6,6 +6,7 @@
 #include <dw/graphics.h>
 #include <dw/main.h>
 #include <dw/utils.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -23,8 +24,13 @@ EvoSequenceData EVO_SEQUENCE_DATA;
 void* evl_functions[] = {
 	evoSequenceAlwaysTrue,
 	getEvoSequenceState,
+#if VERSION_IS(EU)
+	tickEvoSequenceLoading,
+	renderEvoSequenceLoading
+#else
 	renderEvoSequenceLoading,
 	tickEvoSequenceLoading
+#endif
 };
 void tickEvoSequenceLoading(int32_t instanceId)
 {

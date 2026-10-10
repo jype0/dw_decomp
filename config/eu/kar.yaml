@@ -59,7 +59,9 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, kar]
-      - [0x9818, data, kar]
+      - [0x40, c, kar]
+      - [0x9818, .rodata, kar]
+      - [0x9888, .data, kar]
+      - [0xA3C0, .data, kar_bss_eu]
 
   - [0x12808]

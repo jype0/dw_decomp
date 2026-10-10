@@ -7,6 +7,7 @@
 #include <dw/sound.h>
 #include <dw/trn.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern uint32_t POLLED_INPUT;
@@ -28,8 +29,13 @@ int32_t tickEntityWalkTo();
 void TRN_tickOffenseTraining(int32_t instanceId);
 
 static void *trn_off_functions[] = {
+#if VERSION_IS(EU)
+	TRN_setupOffenseTraining,
+	TRN_tickOffenseTraining,
+#else
 	TRN_tickOffenseTraining,
 	TRN_setupOffenseTraining,
+#endif
 };
 
 int16_t MAIN_D_8013537E;

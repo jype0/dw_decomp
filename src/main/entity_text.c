@@ -4,6 +4,7 @@
 #include <dw/garbage.h>
 #include <dw/params.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #include "common.h"
@@ -55,9 +56,15 @@ void removeEntityText(int32_t id);
 
 void *entity_text_order_anchor[] = {
 	removeEntityText,
+#if VERSION_IS(EU)
+	setCombatTextPosition,
+	addEntityText,
+	renderEntityText,
+#else
 	renderEntityText,
 	setCombatTextPosition,
 	addEntityText,
+#endif
 	initializeEntityText,
 };
 

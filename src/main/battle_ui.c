@@ -66,7 +66,6 @@ extern GsOT *ACTIVE_ORDERING_TABLE;
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern int16_t STATS_GAINS[6];
 extern int8_t BTL_END_BOX_TEXTBUFFER[];
-extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 extern uint8_t GAME_STATE;
 extern uint8_t CURRENT_SCREEN;
@@ -74,6 +73,9 @@ extern uint8_t CURRENT_SCREEN;
 int8_t STAT_GAIN_ENEMY_FACTORS[4] = { 10, 12, 16, 0 };
 
 BITS_LABELS_TEXT
+#if VERSION_IS(EU)
+char STR_MONEY_HELD[] = "Ｂｉｔｓ";
+#endif
 
 uint16_t BITS_TO_GAIN;
 int8_t STAT_BOX_HAS_GAIN[6];
@@ -81,8 +83,13 @@ int32_t SHOULD_SKIP_BIT_COUNTING;
 int16_t POST_BATTLE_STATS_TIMER;
 
 static void *battle_ui_sbss_order[] = {
+#if VERSION_IS(EU)
+	&SHOULD_SKIP_BIT_COUNTING,
+	&POST_BATTLE_STATS_TIMER,
+#else
 	&POST_BATTLE_STATS_TIMER,
 	&SHOULD_SKIP_BIT_COUNTING,
+#endif
 	STAT_BOX_HAS_GAIN,
 	&BITS_TO_GAIN,
 };
@@ -91,6 +98,15 @@ POLY_FT4 BIT_TEXT;
 
 static void *battle_ui_functions[] = {
 	removeBattleEndBox,
+#if VERSION_IS(EU)
+	createPostBattleStatsBox,
+	tickPostBattleStatsBox,
+	renderPostBattleStatsBox,
+	resetStatsAfterCombat,
+	renderFinalBalance,
+	tickBitBox,
+	renderBitBox,
+#else
 	renderPostBattleStatsBox,
 	tickPostBattleStatsBox,
 	createPostBattleStatsBox,
@@ -98,6 +114,7 @@ static void *battle_ui_functions[] = {
 	renderFinalBalance,
 	renderBitBox,
 	tickBitBox,
+#endif
 	handleBattleEndBox,
 	createFinalBalanceBox,
 	createBitsBox,
@@ -497,8 +514,8 @@ void createPostBattleStatsBox(void)
 	}
 	for (i = 0; i < 4; i++) {
 		if (i < 3) {
-			drawString(&MAIN_D_80124C0C[i * 2 * 12], 0, i * 12 * 2);
-			drawString(&MAIN_D_80124C0C[(i * 2 + 1) * 12], 0, (i * 2 + 1) * 12);
+			drawString(MAIN_D_80124C0C[i * 2], 0, i * 12 * 2);
+			drawString(MAIN_D_80124C0C[i * 2 + 1], 0, (i * 2 + 1) * 12);
 		}
 
 		if (i == 3) {

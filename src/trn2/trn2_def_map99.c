@@ -1,6 +1,5 @@
 #include <dw/anim.h>
 #include <dw/entity.h>
-#include <dw/garbage.h>
 #include <dw/input.h>
 #include <dw/partner.h>
 #include <dw/script.h>
@@ -26,7 +25,6 @@ void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn2_def_map99_functions[] = {
-	TRN2_setupHpTraining,
 	TRN2_tickDefenseTrainingMap99,
 };
 
@@ -38,8 +36,13 @@ int16_t MAIN_D_801353C4;
 static void *trn2_def_map99_sbss_order[] = {
 	&MAIN_D_801353C4,
 	&MAIN_D_801353C2,
+#if VERSION_IS(EU)
+	&MAIN_D_801353BE,
+	&MAIN_D_801353C0,
+#else
 	&MAIN_D_801353C0,
 	&MAIN_D_801353BE,
+#endif
 };
 
 void TRN2_tickDefenseTrainingMap99(instanceId)
@@ -142,40 +145,4 @@ int16_t instanceId;
 		}
 		break;
 	}
-}
-
-GARBAGE(TRN2_setupHpTraining, 8);
-
-void TRN2_setupHpTraining(arg)
-int16_t arg;
-{
-	switch (arg) {
-	case 0x6b:
-		TRN2_D_8008DC1C.vx = 0x168;
-		TRN2_D_8008DC1C.vy = 0;
-		TRN2_D_8008DC1C.vz = 0x2e1;
-		MAIN_D_801353B4 = 0xa;
-		MAIN_D_801353B6 = 2;
-		addObject(0xfab, 1, (TickFunction)TRN2_tickHpTrainingMap107, NULL);
-		break;
-	case 0x63:
-		TRN2_D_8008DC1C.vx = 0;
-		TRN2_D_8008DC1C.vy = 0;
-#if VERSION_EQUAL_OR_OLDER(JP_BOMBOM)
-		TRN2_D_8008DC1C.vz = -0x78;
-#else
-		TRN2_D_8008DC1C.vz = -0x96;
-#endif
-		MAIN_D_801353B4 = 0;
-		MAIN_D_801353B6 = 2;
-		MAIN_D_801353B8 = 0xf;
-		MAIN_D_801353BA = 0x11;
-		addObject(0xfab, 3, (TickFunction)TRN2_tickHpTrainingMap99, NULL);
-		break;
-	}
-
-	TRAINING_COMPLETE = 0;
-	MAIN_D_801353BC = readPStat(0xf6);
-	TRN2_saveTrainingStartTime();
-	MAIN_D_801353BD = 0;
 }

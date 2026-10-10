@@ -56,6 +56,11 @@ typedef struct {
 
 extern RGB8 UI_BOX_COLORS[];
 extern UIBoxData UI_BOX_DATA[6];
+#if VERSION_IS(EU)
+extern char *MAIN_D_80124C0C[6];
+#else
+extern char MAIN_D_80124C0C[6][12];
+#endif
 extern TextBoxTable TEXTBOX_DATA;
 
 void initializeUIBoxData(void);

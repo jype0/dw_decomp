@@ -3,3 +3,4 @@ IS_SICK:
     MAIN_D_801225A0:
       ja: は病気になってしまった！
       en_us: is Sick!
+      en_eu: " is sick!"

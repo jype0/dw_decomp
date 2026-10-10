@@ -95,12 +95,17 @@ segments:
     subalign: 4
     subsegments:
       - [0x41C8, c, battle_setup]
-      - [0x5498, asm]
+      - [0x5498, c, battle_main]
+      - [0x10EDC, c, command_shout]
       - [0x11474, c, command_menu]
-      - [0x122F0, asm]
-      - [0x2888C, data, btl]
+      - [0x13088, c, battle_hud]
+      - [0x15CDC, c, battle_effect]
+      - [0x2888C, .rodata, battle_main]
       - [0x288A0, .rodata, battle_setup]
       - [0x288BC, .rodata, command_menu]
-      - [0x288D8, data]
+      - [0x288D8, .data, command_shout]
+      - [0x28994, .data, command_menu]
+      - [0x28A38, .data, battle_effect]
+      - [0x29A8C, .data, btl_bss_eu]
 
   - [0x2BBB0]

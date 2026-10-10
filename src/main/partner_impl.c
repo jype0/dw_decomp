@@ -228,6 +228,22 @@ int32_t CONDITION_BUBBLE_ID;
 int32_t CONDITION_BUBBLE_TIMER;
 
 static void *partner_impl_sbss_order[] = {
+#if VERSION_IS(EU)
+	&CONDITION_BUBBLE_ID,
+	&CONDITION_BUBBLE_TIMER,
+	&CONDITION_BUBBLE_TYPE,
+	&POOP_TO_EAT,
+	&NANIMON_TRIGGER,
+	&BUTTERFLY_ID,
+	&PARTNER_STATE,
+	&PARTNER_SUB_STATE,
+	&STOP_DISTANCE_TIMER,
+	&HAS_BUTTERFLY,
+	&CURRENT_POOP_ID,
+	&ITEM_SCOLD_FLAG,
+	&IS_NATURAL_DEATH,
+	&STATUS_UI_OFFSET_X,
+#else
 #if VERSION_IS(JP)
 	&POOP_TO_EAT,
 	&NANIMON_TRIGGER,
@@ -257,6 +273,7 @@ static void *partner_impl_sbss_order[] = {
 #endif
 	&STATUS_UI_OFFSET_X,
 	&IS_NATURAL_DEATH,
+#endif
 };
 
 uint8_t POOP_MODEL_BUFFER[2048];
@@ -270,9 +287,15 @@ static void *partner_impl_bss_order[] = {
 	WORLD_POOP,
 	&DEATH_STATS,
 	&PARTNER_PARA,
+#if VERSION_IS(EU)
+	POOP_MODEL_BUFFER,
+	&POOP_POSITION,
+	&POOP_OBJECT,
+#else
 	&POOP_POSITION,
 	&POOP_OBJECT,
 	POOP_MODEL_BUFFER,
+#endif
 };
 
 extern uint16_t CURRENT_FRAME;
@@ -375,10 +398,17 @@ static void *partner_impl_functions[] = {
 	initializeReincarnatedPartner,
 	resetPartnerPara,
 	initializeEvolvedPartner,
+#if VERSION_IS(EU)
+	setFoodTimer,
+	setSleepTimes,
+	initializePartner,
+	renderPoop,
+#else
 	renderPoop,
 	setFoodTimer,
 	setSleepTimes,
 	initializePartner,
+#endif
 	initializePoop,
 	initializeStatusObjects,
 };
@@ -1871,7 +1901,7 @@ void tickSicknessMechanics(void)
 		drawString(PARTNER_ENTITY.name, 0, 120);
 		nameLength = strlen(PARTNER_ENTITY.name) / 2;
 		setTextColor(1);
-		drawString(MAIN_D_801225A0, nameLength * 12, 120);
+		drawString(MAIN_D_801225A0, nameLength * GLYPH_WIDTH, 120);
 	}
 
 	if ((PARTNER_PARA.sicknessTimer >= 12) && (PARTNER_STATE != 8) &&

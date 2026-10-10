@@ -20,7 +20,6 @@ extern int16_t STATS_GAINS[6];
 extern int16_t INITIAL_COMBAT_STATS[][6];
 extern uint32_t POLLED_INPUT;
 extern uint32_t POLLED_INPUT_PREVIOUS;
-extern char MAIN_D_80124C0C[];
 extern char MAIN_D_80124C54[];
 extern GsOT *ACTIVE_ORDERING_TABLE;
 
@@ -38,20 +37,33 @@ int32_t TRN2_getTrainingSpotScreenPos(int32_t key, int32_t sub, SVECTOR *out);
 
 static void *trn2_hud_functions[] = {
 	TRN2_getTrainingSpotScreenPos,
+#if VERSION_IS(EU)
+	TRN2_tickSlotSession,
+	TRN2_renderSlotSession,
+	TRN2_closeUIBox,
+	TRN2_createPostTrainingStatsBox,
+	TRN2_tickPostTrainingStatsBox,
+	TRN2_renderPostTrainingStatsBox,
+#else
 	TRN2_renderSlotSession,
 	TRN2_tickSlotSession,
 	TRN2_closeUIBox,
 	TRN2_renderPostTrainingStatsBox,
 	TRN2_tickPostTrainingStatsBox,
 	TRN2_createPostTrainingStatsBox,
+#endif
 	TRN2_applyBaseStats,
 	TRN2_saveBaseStats,
 	TRN2_advanceTrainingTime,
 	TRN2_calculateTrainingMultiplier,
 };
 
+#if VERSION_IS(EU)
+static char MAIN_D_80134BE0[] = "Ｂｉｔｓ";
+#else
 /* "所持金" (money held) */
 static char MAIN_D_80134BE0[] = "\x8f\x8a\x8e\x9d\x8b\xe0";
+#endif
 
 uint16_t MAIN_D_801353CE;
 int16_t MAIN_D_801353D0;
@@ -63,12 +75,21 @@ int16_t MAIN_D_801353E0[4];
 
 static void *trn2_hud_sbss_order[] = {
 	&MAIN_D_801353E0,
+#if VERSION_IS(EU)
+	&MAIN_D_801353D4,
+	&MAIN_D_801353D8,
+	&MAIN_D_801353DE,
+	&MAIN_D_801353D2,
+	&MAIN_D_801353CE,
+	&MAIN_D_801353D0,
+#else
 	&MAIN_D_801353DE,
 	&MAIN_D_801353D8,
 	&MAIN_D_801353D4,
 	&MAIN_D_801353D2,
 	&MAIN_D_801353D0,
 	&MAIN_D_801353CE,
+#endif
 };
 
 // clang-format off
@@ -235,7 +256,7 @@ int16_t TRN2_calculateTrainingMultiplier(type, mode)
 	if (0) {
 		t = 0;
 	}
-#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1)
+#if VERSION_IS(JP_BOMBOM) || VERSION_IS(JP_REV1) || VERSION_IS(EU)
 	(void)t;
 #else
 	result += t / 60;
@@ -361,8 +382,8 @@ void TRN2_createPostTrainingStatsBox(void)
 
 	for (i = 0; i < 4; i++) {
 		if (i < 3) {
-			drawString(&MAIN_D_80124C0C[(i * 2) * 12], 0, (i * 12) * 2);
-			drawString(&MAIN_D_80124C0C[((i * 2) + 1) * 12], 0, ((i * 2) + 1) * 12);
+			drawString(MAIN_D_80124C0C[i * 2], 0, (i * 12) * 2);
+			drawString(MAIN_D_80124C0C[(i * 2) + 1], 0, ((i * 2) + 1) * 12);
 		}
 		if (i == 3) {
 			drawString(MAIN_D_80134BE0, 0, 84);

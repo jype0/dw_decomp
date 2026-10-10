@@ -12,7 +12,7 @@
 #include <dw/utils.h>
 #include <dw/version.h>
 
-#if !VERSION_IS(US)
+#if VERSION_REGION_IS(NTSCJ)
 #define DIGIT_WIDTH 12
 #else
 #define DIGIT_WIDTH 8
@@ -41,7 +41,11 @@ extern PACKET GS_WORK_BASES[2][0x14000];
 extern DR_OFFSET DR_OFFSETS[2];
 
 // clang-format off
+#if VERSION_IS(EU)
+RGB8 TEXT_COLORS[18] = {
+#else
 RGB8 TEXT_COLORS[17] = {
+#endif
 	{ 0x80, 0x80, 0x80 },
 	{ 0x19, 0x55, 0x80 },
 	{ 0x69, 0xc2, 0xff },
@@ -59,6 +63,9 @@ RGB8 TEXT_COLORS[17] = {
 	{ 0x70, 0x44, 0x2c },
 	{ 0x48, 0x54, 0x7c },
 	{ 0x7c, 0x4c, 0x68 },
+#if VERSION_IS(EU)
+	{ 0x2c, 0x7c, 0x54 },
+#endif
 };
 
 /* six 5-byte formats: "%01d" to "%06d" */

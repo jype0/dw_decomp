@@ -1,11 +1,14 @@
 #include <dw/anim.h>
 #include <dw/entity.h>
+#include <dw/garbage.h>
 #include <dw/input.h>
 #include <dw/params.h>
 #include <dw/partner.h>
+#include <dw/script.h>
 #include <dw/sound.h>
 #include <dw/trn2.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern int32_t TRAINING_COMPLETE;
@@ -30,11 +33,40 @@ static void *trn2_reward_functions[] = {
 	TRN2_awardHpTrainingGains,
 	TRN2_func_8008AA84,
 	TRN2_startSlotSessionIfEnabled,
+#if VERSION_IS(EU)
+	TRN2_setupSpeedTraining,
 	TRN2_tickSpeedTraining,
+#else
+	TRN2_tickSpeedTraining,
+	TRN2_setupSpeedTraining,
+#endif
 };
 
 uint32_t MAIN_D_801353C8;
 int16_t MAIN_D_801353CC;
+
+GARBAGE(TRN2_setupSpeedTraining, 10);
+
+void TRN2_setupSpeedTraining(arg)
+int16_t arg;
+{
+	if (arg == 0x6c) {
+		TRN2_D_8008DC2C.vx = 0xf7;
+		TRN2_D_8008DC2C.vy = 0;
+		TRN2_D_8008DC2C.vz = 0x226;
+		TRN2_D_8008DC1C.vx = 0x372;
+		TRN2_D_8008DC1C.vy = 0;
+		TRN2_D_8008DC1C.vz = 0x3c5;
+		MAIN_D_801353B8 = 0x38;
+		MAIN_D_801353BA = 3;
+		addObject(0xfad, 1, (TickFunction)TRN2_tickSpeedTraining, NULL);
+	}
+
+	MAIN_D_801353BC = readPStat(0xf6);
+	TRAINING_COMPLETE = 0;
+	TRN2_saveTrainingStartTime();
+	MAIN_D_801353BD = 0;
+}
 
 void TRN2_tickSpeedTraining(int32_t instanceId)
 {

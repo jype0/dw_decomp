@@ -59,7 +59,7 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x40, asm, dget]
-      - [0x1984, data, dget]
+      - [0x40, c, dget]
+      - [0x1984, .rodata, dget]
 
   - [0x19A0]

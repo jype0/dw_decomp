@@ -75,6 +75,48 @@ void VS_setCommandIconUV(DigimonEntity *digimon, POLY_FT4 *prim, uint8_t index);
 void damageTick(FighterData *fighter, Stats *stats);
 
 static void *vs_hud_functions[] = {
+#if VERSION_IS(EU)
+	VS_setVersusModelSceneTimer,
+	VS_removeResultModelScene,
+	VS_addResultModelScene,
+	VS_tickResultModelScene,
+	VS_renderResultModelScene,
+	VS_loadStageModels,
+	VS_isVersusModelSceneFinished,
+	VS_removeVersusModelScene,
+	VS_addVersusModelScene,
+	VS_tickVersusModelScene,
+	VS_renderVersusModelScene,
+	VS_loadVersusSceneModel,
+	VS_removeFighterStatusBars,
+	VS_addFighterStatusBars,
+	VS_tickFighterStatusBars,
+	VS_renderFighterStatusBars,
+	VS_renderHPBarDigits,
+	VS_renderHPBarFill,
+	VS_renderFighterHPBar,
+	VS_renderNumber,
+	VS_isBattleStartTextFinished,
+	VS_removeBattleStartTextBurst,
+	VS_initializeBattleStartTextBurst,
+	VS_renderBattleStartTextBurst,
+	VS_removeBattleStartText,
+	VS_initializeBattleStartText,
+	VS_renderBattleStartText,
+	VS_shuffleBattleStartTextPieces,
+	VS__tickDigimonP2,
+	VS__tickDigimonP1,
+	VS__tickVSInput,
+	VS___tickVSInput,
+	VS_removeTargetCursor,
+	VS_addTargetCursor,
+	VS_tickTargetCursor,
+	VS_renderTargetCursor,
+	VS_removeCommandMenu,
+	VS_tickCommandMenu,
+	VS_renderCommandMenu,
+	VS_addCommandMenu,
+#else
 	VS_setVersusModelSceneTimer,
 	VS_removeResultModelScene,
 	VS_renderResultModelScene,
@@ -121,6 +163,7 @@ static void *vs_hud_functions[] = {
 	VS_renderCommandMenu,
 	VS_tickCommandMenu,
 	VS_addCommandMenu,
+#endif
 };
 
 int16_t VS_COMMAND_MENU_TOP[2];
@@ -130,7 +173,7 @@ uint8_t VS_COMMAND_MENU_TIMER[2];
 uint8_t VS_COMMAND_MENU_LAYOUT[2];
 int16_t VS_FINISHER_BAR_X[2];
 int16_t VS_FINISHER_BAR_Y[2];
-uint8_t VS_BATTLE_START_TEXT_TIMER;
+uint8_t VS_BATTLE_START_TEXT_TIMER[4];
 int32_t VS_BATTLE_TEXT_FINISHED;
 uint8_t MAIN_D_801352CC[2];
 uint8_t VS_FINISHER_FULL_FRAMES[2];
@@ -148,6 +191,25 @@ static void *vs_hud_sbss_order[] = {
 	&VS_WINNER_ID,
 	&VS_WIN_LOSS_DRAW_TIMER,
 	&VS_DRAW_MODEL_BUFFER,
+#if VERSION_IS(EU)
+	&MAIN_D_801352CC,
+	&VS_FINISHER_FULL_FRAMES,
+	&VS_FINISHER_PULSE_FRAME,
+	&VS_FINISHER_BRIGHTNESS,
+	&VS_FINISHER_SEGMENTS,
+	&VS_FINISHER_READY,
+	&MAIN_D_801352D8,
+	&MAIN_D_801352DA,
+	VS_BATTLE_START_TEXT_TIMER,
+	&VS_BATTLE_TEXT_FINISHED,
+	&VS_FINISHER_BAR_X,
+	&VS_FINISHER_BAR_Y,
+	&VS_COMMAND_MENU_TOP,
+	&VS_COMMAND_MENU_BOTTOM,
+	&VS_COMMAND_MENU_BLINK,
+	&VS_COMMAND_MENU_TIMER,
+	&VS_COMMAND_MENU_LAYOUT,
+#else
 	&MAIN_D_801352DA,
 	&MAIN_D_801352D8,
 	&VS_FINISHER_READY,
@@ -157,7 +219,7 @@ static void *vs_hud_sbss_order[] = {
 	&VS_FINISHER_FULL_FRAMES,
 	&MAIN_D_801352CC,
 	&VS_BATTLE_TEXT_FINISHED,
-	&VS_BATTLE_START_TEXT_TIMER,
+	VS_BATTLE_START_TEXT_TIMER,
 	&VS_FINISHER_BAR_Y,
 	&VS_FINISHER_BAR_X,
 	&VS_COMMAND_MENU_LAYOUT,
@@ -165,6 +227,7 @@ static void *vs_hud_sbss_order[] = {
 	&VS_COMMAND_MENU_BLINK,
 	&VS_COMMAND_MENU_BOTTOM,
 	&VS_COMMAND_MENU_TOP,
+#endif
 };
 
 // clang-format off
@@ -714,7 +777,7 @@ void VS_initializeBattleStartText(void)
 	int32_t i;
 	long r;
 
-	VS_BATTLE_START_TEXT_TIMER = 0;
+	VS_BATTLE_START_TEXT_TIMER[0] = 0;
 	VS_BATTLE_TEXT_FINISHED = 0;
 	p = VS_BATTLE_START_TEXT_PIECES;
 	for (i = 0; i < 0x9b; i++, p++) {
@@ -788,7 +851,7 @@ void VS_renderBattleStartText(void)
 	}
 
 	if (n == 0x9b) {
-		clut = GetClut(256, (VS_BATTLE_START_TEXT_TIMER++ % 6 / 2) + 488);
+		clut = GetClut(256, (VS_BATTLE_START_TEXT_TIMER[0]++ % 6 / 2) + 488);
 		VS_BATTLE_TEXT_FINISHED = 1;
 	} else {
 		clut = GetClut(256, 488);

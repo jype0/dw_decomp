@@ -23,16 +23,9 @@
 #include <dw/ui.h>
 #include <dw/utils.h>
 #include <dw/vecmath.h>
+#include <dw/version.h>
 
 #define MURD_ORDERING_TABLE_0	((GsOT_TAG *)0x8008c000)
-
-typedef struct {
-	int16_t timer;
-	int16_t phase;
-	Entity *entity;
-	int16_t lives;
-	int16_t pad;
-} MurdScene;
 
 extern int32_t ACTIVE_FRAMEBUFFER;
 extern int32_t VIEWPORT_DISTANCE;
@@ -66,6 +59,22 @@ void MURD_renderLivesBox(int32_t layer);
 
 static void *murd_functions[] = {
 	MURD_tick,
+#if VERSION_IS(EU)
+	MURD_tickLivesBox,
+	MURD_renderLivesBox,
+	MURD_renderIris,
+	MURD_renderDigimon,
+	MURD_removeLivesBox,
+	MURD_renderFullscreenFade,
+	MURD_animateLivesBoxOut,
+	MURD_createLivesBox,
+	MURD_setOtherEntitiesVisible,
+	MURD_isDigimonLargerThanIris,
+	MURD_storeDigimonTexture,
+	MURD_initializeOrderingTables,
+	MURD_tickScene,
+	MURD_renderScene,
+#else
 	MURD_renderLivesBox,
 	MURD_tickLivesBox,
 	MURD_renderIris,
@@ -80,6 +89,7 @@ static void *murd_functions[] = {
 	MURD_initializeOrderingTables,
 	MURD_renderScene,
 	MURD_tickScene,
+#endif
 };
 
 int8_t MURD_LOADING_COMPLETE = 1;
@@ -162,6 +172,7 @@ GsSPRITE MURD_LIFE_EMPTY = {
 	0,				/* rotate */
 };
 
+#if !VERSION_IS(EU)
 MurdScene MURD_SCENE = {
 	0,	/* timer */
 	0,	/* phase */
@@ -169,6 +180,7 @@ MurdScene MURD_SCENE = {
 	0,	/* lives */
 	0,	/* pad */
 };
+#endif
 // clang-format on
 
 GARBAGE(MURD_tickScene, 9);

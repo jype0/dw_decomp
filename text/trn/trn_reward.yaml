@@ -3,27 +3,35 @@ MESSAGES:
     TRN_D_8008F0D8:
       ja: 「思いっきり！」
       en_us: Give it all you got!
+      en_eu: Attack
     TRN_D_8008F0F0:
       ja: 「ほどほど！」
       en_us: Take it easy!
+      en_eu: Moderate
     TRN_D_8008F100:
       ja: 「はなれろ！」
       en_us: Get back!
+      en_eu: Distance
     TRN_D_8008F10C:
       ja: 「ターゲット変更！」
       en_us: Change target!
+      en_eu: Change target
     TRN_D_8008F11C:
       ja: 「ガマンだ！」
       en_us: Hang in there!
+      en_eu: Distance
     TRN_D_8008F12C:
       ja: 「そうびした技」
       en_us: Technique mastered.
+      en_eu: Enabled Tech
     TRN_D_8008F140:
       ja: の命令を聞くようになった！
       en_us: New orders!
+      en_eu: Digimon now listens command!
 
 MASTERED:
   strings:
     TRN_D_8008F19C:
       ja: をおぼえた。
       en_us: was mastered!
+      en_eu: Digimon learned.

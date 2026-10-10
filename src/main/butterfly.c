@@ -4,6 +4,7 @@
 #include <dw/butterfly.h>
 #include <dw/garbage.h>
 #include <dw/math.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 #define NUM_BUTTERFLIES		2
@@ -45,6 +46,16 @@ GsSPRITE BUTTERFLY_SPRITE = { // NOLINT used in not-implemented function
 	0x0,		/* scaley */
 	0x0,		/* rotate */
 };
+
+#if VERSION_IS(EU)
+static void *butterfly_functions[] = {
+	unsetButterfly,
+	setButterfly,
+	tickButterfly,
+	renderButterfly,
+	initializeButterfly,
+};
+#endif
 
 void initializeButterfly(void)
 {

@@ -132,6 +132,35 @@ static void *script_menu_text_order[] = {
 	namingDeleteLast,
 	updateNamingPreview,
 	fillNamingMenuStrings,
+#if VERSION_IS(EU)
+	tickNamingBox,
+	renderNamingBox,
+	setupNameDisplayBox,
+	setupNameSelectorBox,
+	showNewGameSelection,
+	showNewGameDialogue,
+	setupNewGameDialogueBox,
+	updateMojyaTradeStrings,
+	tickMojyaTradeMenu,
+	renderMojyaTradeMenu,
+	tickBirdraTransportMenu,
+	renderBirdraTransportMenu,
+	tickJukeboxMenu,
+	renderJukeboxMenu,
+	renderKeeperBox,
+	keeperScrollRightToItem,
+	keeperScrollLeftToItem,
+	keeperMoveStack,
+	keeperMoveTen,
+	keeperMoveOne,
+	updateKeeperTextbox,
+	tickItemKeeperWindow,
+	renderKeeperBoxLeft,
+	renderKeeperBoxRight,
+	createMeritCardTradeDialogue,
+	tickCardMenu,
+	renderCardMenu,
+#else
 	renderNamingBox,
 	tickNamingBox,
 	setupNameDisplayBox,
@@ -159,6 +188,7 @@ static void *script_menu_text_order[] = {
 	createMeritCardTradeDialogue,
 	renderCardMenu,
 	tickCardMenu,
+#endif
 	setMojyaItemTradedTrigger,
 	createMojyaTradeMenu,
 	mojyaTradeFillItemList,
@@ -359,6 +389,16 @@ char MAIN_D_80130744[] = "５６７８９";
 
 #if !VERSION_IS(US)
 char *CHAR_PAGE1_RIGHT[9] = {
+#if VERSION_IS(EU)
+	MAIN_D_801306F0,
+	MAIN_D_801306FC,
+	MAIN_D_80130708,
+	MAIN_D_80130714,
+	MAIN_D_80130720,
+	MAIN_D_8013072C,
+	MAIN_D_80130738,
+	MAIN_D_80130744,
+#else
 	MAIN_D_80130738,
 	MAIN_D_80130744,
 	MAIN_D_80130540,
@@ -367,6 +407,7 @@ char *CHAR_PAGE1_RIGHT[9] = {
 	MAIN_D_80130540,
 	MAIN_D_80130540,
 	MAIN_D_80130540,
+#endif
 	MAIN_D_80130540,
 };
 
@@ -380,6 +421,15 @@ char **NAMING_CHAR_PAGES[6] = {
 };
 
 int16_t NAMING_CTRL_BOXES[18] = {
+#if VERSION_IS(EU)
+	0x000e, 0x0006, 0x0030, 0x001a, 0x0022, 0x0000, 0x001a, 0x0030,
+	0x0000, 0x001a, 0x003e, 0x0000, 0x001a, 0x005a, 0x0020, 0x001a,
+	0x0076, 0x0020,
+};
+
+uint16_t NAMING_ROLLOVER_CHARS[10] = {
+	0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8003, 0x8004,
+#else
 	0x000e, 0x0006, 0x0030, 0x001a, 0x0022, 0x0018, 0x001a, 0x0030,
 	0x0018, 0x001a, 0x003e, 0x0018, 0x001a, 0x005a, 0x0018, 0x001a,
 	0x0076, 0x0018,
@@ -387,6 +437,7 @@ int16_t NAMING_CTRL_BOXES[18] = {
 
 uint16_t NAMING_ROLLOVER_CHARS[10] = {
 	0x8000, 0x8000, 0x8000, 0x8001, 0x8002, 0x8003, 0x8003, 0x8004,
+#endif
 	0x8004, 0x0000,
 };
 
@@ -473,7 +524,9 @@ SelectionBoxOffsetData NAMING_HEIGHT = { {
 } };
 
 SelectionBoxOffsetData NAMING_CHAR_X = { {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	0x00, 0x23, 0x00, 0x23, 0x04, 0x04, 0x00, 0x24,
+#elif !VERSION_IS(US)
 	0x00, 0x1b, 0x00, 0x1b, 0x04, 0x04, 0x00, 0x1c,
 #else
 	0x00, 0x2d, 0x00, 0x2d, 0x04, 0x04, 0x00, 0x2e,
@@ -481,7 +534,9 @@ SelectionBoxOffsetData NAMING_CHAR_X = { {
 } };
 
 SelectionBoxOffsetData NAMING_CHAR_WIDTH = { {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	0x04, 0x04, 0x04, 0x04, 0x23, 0x23, 0x04, 0x04,
+#elif !VERSION_IS(US)
 	0x04, 0x04, 0x04, 0x04, 0x1b, 0x1b, 0x04, 0x04,
 #else
 	0x04, 0x04, 0x04, 0x04, 0x2e, 0x2e, 0x04, 0x04,
@@ -493,6 +548,13 @@ SelectionBoxOffsetData NAMING_CHAR_WIDTH = { {
 #define NAMING_DELETE 3
 #define NAMING_OK 4
 #define NAMING_LABELS 5
+#if VERSION_IS(EU)
+#define NAMING_FIRST_BUTTON NAMING_DELETE
+#define NAMING_START_PAGE 2
+#else
+#define NAMING_FIRST_BUTTON 0
+#define NAMING_START_PAGE 0
+#endif
 #define NAMING_PROMPT_TAMER STR_YOUR_NAME
 #define NAMING_PROMPT_DIGIMON STR_DIGIMONS_NAME
 #define NAMING_TITLE STR_NAME
@@ -501,10 +563,22 @@ SelectionBoxOffsetData NAMING_CHAR_WIDTH = { {
 #define NAMING_DELETE 0
 #define NAMING_OK 1
 #define NAMING_LABELS 3
+#define NAMING_FIRST_BUTTON 0
+#define NAMING_START_PAGE 0
 #define NAMING_PROMPT_TAMER MAIN_D_801345F4
 #define NAMING_PROMPT_DIGIMON (MAIN_D_801345F4 + 1)
 #define NAMING_TITLE MAIN_D_801345F8
 #define NAMING_BUTTONS MAIN_D_80134600
+#endif
+
+#if VERSION_IS(EU)
+#define KEEPER_LABEL_END 30
+#define MOJYA_LABEL_END 52
+#define NAMING_GRID_X 0x50
+#else
+#define KEEPER_LABEL_END 6
+#define MOJYA_LABEL_END 20
+#define NAMING_GRID_X 0x4e
 #endif
 
 void openRecycleShop(void)
@@ -1963,14 +2037,14 @@ void updateKeeperTextbox(int32_t boxIndex)
 	if (boxIndex == 0) {
 		showMapHeadTextbox(4, 0xff, 1, 0x4d5);
 		TEXTBOX_DATA.box[1].writeCount--;
-		TEXTBOX_LINES_PTR[0x246] = 0xd;
-		TEXTBOX_LINES_PTR[0x3c6] = 0xd;
+		TEXTBOX_LINES_PTR[9 * TEXTBOX_LINE_SIZE + KEEPER_LABEL_END] = 0xd;
+		TEXTBOX_LINES_PTR[15 * TEXTBOX_LINE_SIZE + KEEPER_LABEL_END] = 0xd;
 		updateItemMenuStrings(ITEM_MENU_LEFT, 0xa, 0);
 	} else {
 		showMapHeadTextbox(5, 0xff, 2, 0x4d5);
 		TEXTBOX_DATA.box[2].writeCount--;
-		TEXTBOX_LINES_PTR[0x266] = 0xd;
-		TEXTBOX_LINES_PTR[0x3e6] = 0xd;
+		TEXTBOX_LINES_PTR[9 * TEXTBOX_LINE_SIZE + TEXTBOX_LINE_SIZE / 2 + KEEPER_LABEL_END] = 0xd;
+		TEXTBOX_LINES_PTR[15 * TEXTBOX_LINE_SIZE + TEXTBOX_LINE_SIZE / 2 + KEEPER_LABEL_END] = 0xd;
 		updateItemMenuStrings(ITEM_MENU_RIGHT, 0xa, 0);
 	}
 }
@@ -2290,7 +2364,9 @@ draw:
 	getVRAMModeCoords(tbox->vramMode, &x, &clut);
 	y = 0x6c;
 	y += tbox->backPage * tbox->vramRows * 12;
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderString(0, bx + 4, by + 5, 0x78, 0xc, x, y, 6 - boxId, 1);
+#elif !VERSION_IS(US)
 	renderString(0, bx + 0x38, by + 5, 0x24, 0xc, x, y, 6 - boxId, 1);
 #else
 	if (flag != 0) {
@@ -2545,7 +2621,10 @@ void renderMojyaTradeMenu(void)
 	getVRAMModeCoords(box->vramMode, (int32_t *)&x, &clut);
 	y = 0x6c;
 	y += box->backPage * box->vramRows * 12;
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+	renderString(0, bx + 8, by + 5, 0x68, 0xc, x, y, 5, 1);
+	renderString(0, bx + 0x74, by + 5, 0x68, 0xc, x + 0x68, y, 5, 1);
+#elif !VERSION_IS(US)
 	renderString(0, bx + 0x14, by + 5, 0x3c, 0xc, x, y, 5, 1);
 	renderString(0, bx + 0x7a, by + 5, 0x3c, 0xc, x + 0x3c, y, 5, 1);
 #else
@@ -2556,7 +2635,11 @@ void renderMojyaTradeMenu(void)
 	y = by + ITEM_MENU_LEFT->cursor * 0x12 + 0x19;
 draw:
 	renderSelectionCursor(bx + 5, y, 0xd4, 0x12, 5);
+#if VERSION_IS(EU)
+	x2 = bx;
+#else
 	x2 = bx + 8;
+#endif
 	y = by + 0x1b;
 	renderItemMenuItemList(ITEM_MENU_LEFT, x2, y, 0, 0, 2);
 }
@@ -2566,8 +2649,8 @@ void updateMojyaTradeStrings(void)
 	showMapHeadTextbox(0xf, 0xff, 1, 0x4d6);
 
 	--TEXTBOX_DATA.box[1].writeCount;
-	TEXTBOX_LINES_PTR[0x254] = 0xd;
-	TEXTBOX_LINES_PTR[0x354] = 0xd;
+	TEXTBOX_LINES_PTR[9 * TEXTBOX_LINE_SIZE + MOJYA_LABEL_END] = 0xd;
+	TEXTBOX_LINES_PTR[13 * TEXTBOX_LINE_SIZE + MOJYA_LABEL_END] = 0xd;
 
 	updateItemMenuStrings(ITEM_MENU_LEFT, 0xa, 4);
 }
@@ -2644,7 +2727,7 @@ void setupNameSelectorBox(void)
 	createTextbox(1, flags, &rect2, &rect1, tickNamingBox, renderNamingBox);
 	registerTextbox(1, 1, 7, 1, 0);
 
-	SHOP_AMOUNT = 0;
+	SHOP_AMOUNT = NAMING_START_PAGE;
 	NAMING_SELECTOR = 0;
 	fillNamingMenuStrings();
 }
@@ -2746,7 +2829,12 @@ void tickNamingBox(void)
 			return;
 		}
 		switch (special) {
-#if !VERSION_IS(US)
+#if VERSION_IS(EU)
+		case 0:
+		case 1:
+		case 2:
+			break;
+#elif !VERSION_IS(US)
 		case 0:
 		case 1:
 		case 2:
@@ -2769,7 +2857,7 @@ void tickNamingBox(void)
 			break;
 		}
 	} else if (isKeyDown(ALT_BUTTON)) {
-		NAMING_SELECTOR = 0x8000;
+		NAMING_SELECTOR = 0x8000 | NAMING_FIRST_BUTTON;
 		playSound(0, 2);
 	} else if (isKeyDown(CANCEL_BUTTON)) {
 		namingDeleteLast();
@@ -2827,9 +2915,9 @@ void renderNamingBox(void)
 	for (i = 0; i < 3; i++, ty += 12) {
 		texX = 0;
 		for (j = 0; j < 3; j++, y += 14) {
-			x = bx + 0x4e;
-			for (k = 0; k < 5; k++, x += 18, texX += 12) {
-				renderString(0, x, y, 12, 12, texX, ty, 5, 1);
+			x = bx + NAMING_GRID_X;
+			for (k = 0; k < 5; k++, x += 18, texX += GLYPH_WIDTH) {
+				renderString(0, x, y, GLYPH_WIDTH, 12, texX, ty, 5, 1);
 			}
 		}
 	}
@@ -2837,9 +2925,9 @@ void renderNamingBox(void)
 	for (i = 0; i < 3; i++, ty += 12) {
 		texX = 0;
 		for (j = 0; j < 3; j++, y += 14) {
-			x = bx + 0xbe;
-			for (k = 0; k < 5; k++, x += 18, texX += 12) {
-				renderString(0, x, y, 12, 12, texX, ty, 5, 1);
+			x = bx + NAMING_GRID_X + 0x70;
+			for (k = 0; k < 5; k++, x += 18, texX += GLYPH_WIDTH) {
+				renderString(0, x, y, GLYPH_WIDTH, 12, texX, ty, 5, 1);
 			}
 		}
 	}
@@ -2857,8 +2945,8 @@ void fillNamingMenuStrings(void)
 	uint8_t *line;
 
 	box = &TEXTBOX_DATA.box[1];
-	buf = TEXTBOX_LINES_PTR + box->vramRow * 64;
-	buf = (uint8_t *)((uint32_t)buf + (box->backPage ^ 1) * box->vramRows * 64);
+	buf = TEXTBOX_LINES_PTR + box->vramRow * TEXTBOX_LINE_SIZE;
+	buf = (uint8_t *)((uint32_t)buf + (box->backPage ^ 1) * box->vramRows * TEXTBOX_LINE_SIZE);
 	line = buf;
 	*buf++ = 1;
 	*buf++ = 7;
@@ -2872,12 +2960,12 @@ void fillNamingMenuStrings(void)
 	buf += len;
 	*buf++ = 0xd;
 	*buf++ = 0;
-	line += 0x40;
+	line += TEXTBOX_LINE_SIZE;
 	page = SHOP_AMOUNT * 2;
 	for (row = 0; row < 2; row++) {
 		table = NAMING_CHAR_PAGES[page + row];
 		for (j = 0; j < 9; j += 3) {
-			buf = line + row * 0xc0 + (j / 3) * 64;
+			buf = line + row * (3 * TEXTBOX_LINE_SIZE) + (j / 3) * TEXTBOX_LINE_SIZE;
 			strcpy(buf, table[j]);
 			len = strlen(table[j]);
 			buf += len;
@@ -3045,7 +3133,7 @@ void namingSelectionUp(int16_t column, int16_t row)
 		}
 
 		NAMING_SELECTOR = column + row * 5;
-	} else if (NAMING_SELECTOR == 0x8000) {
+	} else if (NAMING_SELECTOR == (0x8000 | NAMING_FIRST_BUTTON)) {
 		NAMING_SELECTOR = 0x8000 | NAMING_OK;
 	} else {
 		--NAMING_SELECTOR;
@@ -3071,7 +3159,7 @@ void namingSelectionDown(int16_t column, int16_t row)
 
 		NAMING_SELECTOR = column + row * 5;
 	} else if (NAMING_SELECTOR == (0x8000 | NAMING_OK)) {
-		NAMING_SELECTOR = 0x8000;
+		NAMING_SELECTOR = 0x8000 | NAMING_FIRST_BUTTON;
 	} else {
 		++NAMING_SELECTOR;
 	}
@@ -3165,8 +3253,13 @@ void renderNameDisplayBox(void)
 {
 	int16_t x;
 	int16_t y;
+#if VERSION_IS(EU)
+	int16_t v;
+	int16_t sx;
+#else
 	int16_t sx;
 	int16_t v;
+#endif
 	int16_t i;
 	int16_t y6;
 
@@ -3177,13 +3270,21 @@ void renderNameDisplayBox(void)
 	if ((NAMING_BOX_FLAG & 1) == 0) {
 		v = 0x48;
 	} else {
+#if VERSION_IS(EU)
+		v = 0x70;
+#else
 		v = 0x54;
+#endif
 	}
 	renderString(0, sx, y6, v, 0xc, 0, 0, 4, 1);
+#if VERSION_IS(EU)
+	sx = x + 0x3c;
+#else
 	sx = x + 0x3a;
+#endif
 	y6 = y + 0x14;
-	for (i = 0; i < 6; i++, sx += 0xe, v += 0xc) {
-		renderString(0, sx, y6, 0xc, 0xc, v, 0, 4, 1);
+	for (i = 0; i < 6; i++, sx += 0xe, v += GLYPH_WIDTH) {
+		renderString(0, sx, y6, GLYPH_WIDTH, 0xc, v, 0, 4, 1);
 	}
 #if !VERSION_IS(US)
 	renderNamingUnderscore(2, NAMING_CURRENT_LETTER * 0xe + 0x3b, 0x22, 0xc);

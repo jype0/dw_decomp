@@ -1,8 +1,52 @@
+DIGITS:
+  strings:
+    FISH_STR_DIGIT_0:
+      ja: NULL
+      en_us: NULL
+      en_eu: "0"
+    FISH_STR_DIGIT_1:
+      ja: NULL
+      en_us: NULL
+      en_eu: "1"
+    FISH_STR_DIGIT_2:
+      ja: NULL
+      en_us: NULL
+      en_eu: "2"
+    FISH_STR_DIGIT_3:
+      ja: NULL
+      en_us: NULL
+      en_eu: "3"
+    FISH_STR_DIGIT_4:
+      ja: NULL
+      en_us: NULL
+      en_eu: "4"
+    FISH_STR_DIGIT_5:
+      ja: NULL
+      en_us: NULL
+      en_eu: "5"
+    FISH_STR_DIGIT_6:
+      ja: NULL
+      en_us: NULL
+      en_eu: "6"
+    FISH_STR_DIGIT_7:
+      ja: NULL
+      en_us: NULL
+      en_eu: "7"
+    FISH_STR_DIGIT_8:
+      ja: NULL
+      en_us: NULL
+      en_eu: "8"
+    FISH_STR_DIGIT_9:
+      ja: NULL
+      en_us: NULL
+      en_eu: "9"
+
 MESSAGES:
   strings:
     FISH_STR_THEY_TOOK_MY_BAIT:
       ja: エサを取られてしまった…
       en_us: They took my bait!
+      en_eu: Hooked!
     FISH_STR_TOO_LATE:
       ja: 残念、おそすぎた…
       en_us: Too late!
@@ -18,21 +62,42 @@ MESSAGES:
     MAIN_D_801349D8:
       ja: かかった！
       en_us: Hooked!
+      en_eu: Got it!
     FISH_FMT_GREAT_TOTAL_LENGTH_M_CM:
       ja: すごい！全長　メートル　　センチ！
       en_us: Great! Total length %d m %d cm
+      en_eu: "Great, it is "
+    FISH_STR_METRES:
+      ja: NULL
+      en_us: NULL
+      en_eu: " M "
+    FISH_STR_CM_EXCLAMATION:
+      ja: NULL
+      en_us: NULL
+      en_eu: " CM!"
+    FISH_STR_M_TOTAL_LENGTH:
+      ja: NULL
+      en_us: NULL
+      en_eu: " M Total length "
     FISH_FMT_TOTAL_LENGTH_M_CM:
       ja: 全長　メートル　　センチ
       en_us: Total length %d m %d cm
+      en_eu: ""
+    FISH_STR_CENTIMETRES:
+      ja: NULL
+      en_us: NULL
+      en_eu: " CM"
     FISH_FMT_TOTAL_LENGTH_CM:
       ja: 全長　　　センチメートル
       en_us: Total length %d cm
+      en_eu: "Total length "
     FISH_STR_I_GOT_ONE:
       ja: をつりあげた！
       en_us: I got one!
     FISH_STR_IT_LOOKS_SAD_LET_IT_GO:
       ja: でもかわいそうだから逃がしてあげよう。
       en_us: It looks sad. Let it go.
+      en_eu: But I shall release it.
     FISH_STR_MY_LINE_GOT_CUT:
       ja: イトが切れてしまった！
       en_us: My line got cut!
@@ -48,18 +113,24 @@ MESSAGES:
     FISH_STR_HUH_I_WONDER_IF_SOMETHING:
       ja: んっ！？
       en_us: Huh?! I wonder if something
+      en_eu: Well??
     FISH_STR_GOT_STUCK_IT_GOT_STUCK:
       ja: 何かひっかかったかな？
       en_us: got stuck? It got stuck!
+      en_eu: Something hit?
     FISH_STR_MY_BAG_WAS_SO_FULL_I:
       ja: NULL
       en_us: My bag was so full, I could
+      en_eu: NULL
     FISH_STR_NOT_CARRY_IT:
       ja: NULL
       en_us: not carry it.
+      en_eu: NULL
     FISH_STR_IT_GOT_STUCK:
       ja: が引っかかった！
       en_us: It got stuck!
+      en_eu: is on hook!
     FISH_STR_BUT_MY_BAG_WAS_FULL_AND:
       ja: …しかし、かばんがいっぱいで持てなかった。
       en_us: NULL
+      en_eu: But I cannot carry any more.

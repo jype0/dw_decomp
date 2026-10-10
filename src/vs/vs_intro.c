@@ -16,11 +16,11 @@
 #include <dw/params.h>
 #include <dw/sound.h>
 #include <dw/types.h>
+#include <dw/ui.h>
 #include <dw/version.h>
 #include <dw/vs.h>
 #include <dw/world_object.h>
 
-extern char MAIN_D_80124C0C[][12];
 extern char MAIN_D_80124C54[];
 extern CameraChase VS_INTRO_CAMERA_CHASE;
 #if !VERSION_IS(US)
@@ -60,11 +60,19 @@ void VS__tickIntroName(int32_t id);
 void VS__renderIntroName(int32_t id);
 
 static void *vs_intro_functions[] = {
+#if VERSION_IS(EU)
+	VS__tickIntroName,
+	VS__renderIntroName,
+	VS__renderIntroStatNumber,
+	VS__tickIntroStats,
+	VS__renderIntroStats,
+#else
 	VS__renderIntroName,
 	VS__tickIntroName,
 	VS__renderIntroStatNumber,
 	VS__renderIntroStats,
 	VS__tickIntroStats,
+#endif
 	VS__runIntro,
 	VS__renderIntroNameChar,
 	VS__renderIntroStatBar,
@@ -120,11 +128,19 @@ uint8_t VS__INTRO_DATA_ANIM_FRAME;
 
 static void *vs_intro_sbss_order[] = {
 	&VS__INTRO_DATA_ANIM_FRAME,
+#if VERSION_IS(EU)
+	&VS__INTRO_DATA_FRAME_COUNT,
+	&VS__INTRO_DATA_RENDERED_CHARACTERS,
+	&VS__INTRO_DATA_COLOR,
+	&VS__INTRO_DATA_POS_X,
+	&VS__INTRO_DATA_POS_Y,
+#else
 	&VS__INTRO_DATA_POS_Y,
 	&VS__INTRO_DATA_POS_X,
 	&VS__INTRO_DATA_COLOR,
 	&VS__INTRO_DATA_RENDERED_CHARACTERS,
 	&VS__INTRO_DATA_FRAME_COUNT,
+#endif
 	&VS__INTRO_STATS_ACTIVE,
 };
 
@@ -222,9 +238,18 @@ void VS__addIntroText(entity, id)
 	if (entity->type == 0x4e || entity->type == 0x3c) {
 		len = 10;
 	}
+#if VERSION_IS(EU)
+	if (len > 10) {
+		len = 10;
+	}
+#endif
 
 	VS__INTRO_DATA_POS_X = -(len * 16);
+#if VERSION_IS(EU)
+	VS__INTRO_DATA_POS_Y = 36;
+#else
 	VS__INTRO_DATA_POS_Y = 68;
+#endif
 	addObject(0x1ab, id, VS__tickIntroName, VS__renderIntroName);
 }
 
@@ -529,7 +554,11 @@ void VS__tickIntroName(int32_t id)
 			VS_INTRO_CAMERA_CHASE.timer = 20;
 		}
 
+#if VERSION_IS(EU)
+		if (VS__INTRO_DATA_POS_Y >= -103) {
+#else
 		if (VS__INTRO_DATA_POS_Y >= -71) {
+#endif
 			VS__INTRO_DATA_POS_Y -= 28;
 		} else {
 			VS__addIntroStats(ENTITY_TABLE[id], id);
@@ -545,9 +574,16 @@ void VS__renderIntroName(id)
 	int32_t charCount;
 	int32_t i;
 	int32_t charIndex;
+#if VERSION_IS(EU)
+	uint16_t *glyph;
+	uint16_t code;
+#endif
 	int16_t y;
 	int16_t size;
 	uint8_t character;
+#if VERSION_IS(EU)
+	int8_t secondRow;
+#endif
 
 	charCount = strlen(DIGIMON_NAME(ENTITY_TABLE[id]->type)) / 2;
 	if (ENTITY_TABLE[id]->type == 0x4e || ENTITY_TABLE[id]->type == 0x3c) {
@@ -564,10 +600,27 @@ void VS__renderIntroName(id)
 	}
 
 	charIndex = 0;
+#if VERSION_IS(EU)
+	secondRow = 0;
+#endif
 	for (i = 0; i < VS__INTRO_DATA_RENDERED_CHARACTERS; ++i) {
+#if VERSION_IS(EU)
+		glyph = &((uint16_t *)DIGIMON_NAME(ENTITY_TABLE[id]->type))[charIndex++];
+		code = *glyph;
+		code = (code << 8) | (code >> 8);
+		if (code >= 0x8281) {
+			character = code - 0x8281;
+		} else {
+			character = code - 0x8260;
+		}
+
+		if (charIndex == 11) {
+			secondRow = 1;
+#else
 		character = VS__INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 		if (character == 0x3d) {
 			character = VS__INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
+#endif
 		}
 
 		if (i == VS__INTRO_DATA_RENDERED_CHARACTERS - 1) {
@@ -578,11 +631,18 @@ void VS__renderIntroName(id)
 			size = 32;
 		}
 
+#if VERSION_IS(EU)
+		if (secondRow == 0) {
+			VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
+		} else {
+			VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32 - 320, y + 32, size, character);
+#else
 		VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
 
 		if (character == 0x1f || character == 0x25) {
 			character = VS__INTRO_DIGIMON_NAMES[ENTITY_TABLE[id]->type][charIndex++];
 			VS__renderIntroNameChar((int16_t)VS__INTRO_DATA_POS_X + i * 32, y, size, character);
+#endif
 		}
 	}
 }

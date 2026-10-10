@@ -124,6 +124,39 @@ void EVL_clampBaseStats(void);
 void EVL_renderEvoSequence(void);
 
 static void *evl_functions[] = {
+#if VERSION_IS(EU)
+	EVL_clampBaseStats,
+	EVL_scaleBaseStats,
+	EVL_applyEvolution,
+	EVL_initEvoSequence,
+	EVL_tickSpark,
+	EVL_renderSparkStreak,
+	EVL_tickParticle,
+	EVL_renderParticle,
+	EVL_renderQuadShard,
+	EVL_renderTriShard,
+	EVL_tickShardSet,
+	EVL_renderShardSet,
+	EVL_releaseAllParticles,
+	EVL_calculateCameraVectors,
+	EVL_spawnSpark,
+	EVL_buildShardSet,
+	EVL_brightenDigimonClut,
+	EVL_spawnParticle,
+	EVL_updateEvoCamera,
+	EVL_setOtherEntitiesVisible,
+	EVL_fadeClutBank1,
+	EVL_fadeClutBank0,
+	EVL_resetSparks,
+	EVL_resetParticles,
+	EVL_setScratchTop,
+	EVL_initShardSets,
+	EVL_storeClutBank1,
+	EVL_storeClutBank0,
+	EVL_storeDigimonClut,
+	EVL_tickEvoSequence,
+	EVL_renderEvoSequence,
+#else
 	EVL_clampBaseStats,
 	EVL_scaleBaseStats,
 	EVL_applyEvolution,
@@ -160,6 +193,7 @@ static void *evl_functions[] = {
 	EVL_storeClutBank1,
 	EVL_storeClutBank0,
 	EVL_storeDigimonClut,
+#endif
 };
 
 int32_t MAIN_D_801349E4 = EVL_MMD_BUFFER;
@@ -184,6 +218,21 @@ EvlModelVertex *MAIN_D_80135214;
 int16_t MAIN_D_80135218[3];
 
 static void *evl_sbss_order[] = {
+#if VERSION_IS(EU)
+	&MAIN_D_80135214,
+	&MAIN_D_80135218,
+	&MAIN_D_80135210,
+	&MAIN_D_8013520C,
+	&MAIN_D_80135208,
+	&MAIN_D_801351F0,
+	&MAIN_D_801351F8,
+	&MAIN_D_801351FC,
+	&MAIN_D_80135200,
+	&MAIN_D_80135204,
+	&MAIN_D_801351E4,
+	&MAIN_D_801351E8,
+	&MAIN_D_801351EC,
+#else
 	&MAIN_D_80135218,
 	&MAIN_D_80135214,
 	&MAIN_D_80135210,
@@ -197,6 +246,7 @@ static void *evl_sbss_order[] = {
 	&MAIN_D_801351EC,
 	&MAIN_D_801351E8,
 	&MAIN_D_801351E4,
+#endif
 };
 
 // clang-format off

@@ -8,6 +8,7 @@
 #include <dw/sound.h>
 #include <dw/trn.h>
 #include <dw/types.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 extern uint32_t POLLED_INPUT;
@@ -26,8 +27,13 @@ void tamerSetState(int8_t state);
 int32_t tickEntityWalkTo();
 
 static void *trn_def_functions[] = {
+#if VERSION_IS(EU)
+	TRN_setupDefenseTraining,
+	TRN_tickDefenseTraining,
+#else
 	TRN_tickDefenseTraining,
 	TRN_setupDefenseTraining,
+#endif
 };
 
 int16_t MAIN_D_80135380;
@@ -41,11 +47,19 @@ uint8_t MAIN_D_80135392;
 static void *trn_def_sbss_order[] = {
 	&MAIN_D_80135392,
 	&TRN_CURRENT_MINUTE,
+#if VERSION_IS(EU)
+	&TRN_CURRENT_FRAME,
+	&TRN_CURRENT_HOUR,
+	&MAIN_D_80135388,
+	&MAIN_D_80135380,
+	&MAIN_D_80135384,
+#else
 	&TRN_CURRENT_HOUR,
 	&TRN_CURRENT_FRAME,
 	&MAIN_D_80135388,
 	&MAIN_D_80135384,
 	&MAIN_D_80135380,
+#endif
 };
 
 GARBAGE_ARRAY(TRN_setupDefenseTraining, TRN_D_8008F368, 8, 16);

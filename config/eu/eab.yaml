@@ -61,6 +61,6 @@ segments:
     subsegments:
       - [0x40, c, eab]
       - [0x1D7C, .data, eab]
-      - [0x1E70, data]
+      - [0x1E70, .data, eab_bss_eu]
 
   - [0x26F0]

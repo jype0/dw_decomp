@@ -3,6 +3,7 @@
 #include <dw/entity.h>
 #include <dw/params.h>
 #include <dw/particle.h>
+#include <dw/version.h>
 #include <dw/world_object.h>
 
 
@@ -68,6 +69,15 @@ RGB8 PARTICLE_COLOR1[18] = {
 // clang-format on
 
 HealingParticle HEALING_PARTICLES[NUM_HEALING_INSTANCES];
+
+#if VERSION_IS(EU)
+static void *particle_functions[] = {
+	addHealingParticleEffect,
+	initializeHealingParticles,
+	tickHealingParticles,
+	renderHealingParticles,
+};
+#endif
 
 void tickHealingParticles(int32_t instance) {
     int32_t i;

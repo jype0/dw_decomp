@@ -73,6 +73,7 @@ void updateInventoryInputRepeatCounter();
 int32_t isInventoryButtonPressed(int32_t mask);
 void tickInventoryOptionSelector(uint8_t *cursor, int32_t unused, int16_t max);
 
+ITEM_MENU_LABELS_STRINGS
 SORT_LABELS_TEXT
 
 CONFIRM_LABELS_TEXT
@@ -85,18 +86,17 @@ uint8_t ITEM_SORT_ORDER[3][6] = {
 
 // clang-format off
 #if VERSION_IS(EU)
-char *ITEM_MENU_LABELS[4] = {
+ITEM_MENU_LABELS_TEXT
 #else
 char ITEM_MENU_LABELS[4][8] = {
-#endif
-	ITEM_MENU_LABEL(USE)
-	ITEM_MENU_LABEL(MOVE)
-	ITEM_MENU_LABEL(SORT)
-	ITEM_MENU_LABEL(DROP)
+	ITEM_MENU_LABEL(STR_ITEM_MENU_LABEL_USE)
+	ITEM_MENU_LABEL(STR_ITEM_MENU_LABEL_MOVE)
+	ITEM_MENU_LABEL(STR_ITEM_MENU_LABEL_SORT)
+	ITEM_MENU_LABEL(STR_ITEM_MENU_LABEL_DROP)
 };
+#endif
 // clang-format on
 
-int16_t DOOA_STORED_DIGIMON_Y;
 int32_t INVENTORY_UNUSED;
 int32_t INVENTORY_ACTION;
 int32_t IS_INVENTORY_INITIALIZED;
@@ -104,13 +104,33 @@ int16_t INVENTORY_TYPE_OFFSET;
 int16_t INVENTORY_ROW_OFFSET;
 uint8_t INVENTORY_POINTER;
 uint8_t ITEM_MOVE_SOURCE;
+#if VERSION_IS(EU)
+/* EU has three unused bytes */
+uint8_t ITEM_MOVE_TARGET[4];
+#define ITEM_MOVE_TARGET ITEM_MOVE_TARGET[0]
+#else
 uint8_t ITEM_MOVE_TARGET;
+#endif
 uint8_t ITEM_MENU_SELECTED;
 uint8_t SORT_SELECTED;
 uint8_t DROP_ITEM_SELECTED_OPTION;
 int32_t INVENTORY_INPUT_REPEAT_COUNTER;
 
 static void *inventory_sbss_order[] = {
+#if VERSION_IS(EU)
+	&INVENTORY_INPUT_REPEAT_COUNTER,
+	&DROP_ITEM_SELECTED_OPTION,
+	&SORT_SELECTED,
+	&ITEM_MENU_SELECTED,
+	&ITEM_MOVE_SOURCE,
+	&INVENTORY_POINTER,
+	&INVENTORY_ROW_OFFSET,
+	&INVENTORY_TYPE_OFFSET,
+	&ITEM_MOVE_TARGET,
+	&INVENTORY_ACTION,
+	&IS_INVENTORY_INITIALIZED,
+	&INVENTORY_UNUSED,
+#else
 	&INVENTORY_INPUT_REPEAT_COUNTER,
 	&DROP_ITEM_SELECTED_OPTION,
 	&SORT_SELECTED,
@@ -123,7 +143,7 @@ static void *inventory_sbss_order[] = {
 	&IS_INVENTORY_INITIALIZED,
 	&INVENTORY_ACTION,
 	&INVENTORY_UNUSED,
-	&DOOA_STORED_DIGIMON_Y,
+#endif
 };
 
 void *inventory_text_order[] = {
@@ -139,6 +159,27 @@ void *inventory_text_order[] = {
 	moveItem,
 	updateItemDescription,
 	thunkRemoveUIBox3,
+#if VERSION_IS(EU)
+	createDropItemConfirmBox,
+	tickDropItemConfirmBox,
+	renderDropItemConfirmBox,
+	removeUIBox3,
+	createSortOption,
+	tickSortOption,
+	renderSortOption,
+	removeUIBox2,
+	createItemOption,
+	tickItemOption,
+	renderItemOption,
+	closeInventoryBoxes2,
+	createInventoryView,
+	tickInventoryTop,
+	renderInventoryTop,
+	renderInventoryBottom,
+	closeInventoryBoxes,
+	addInventoryUI,
+	tickInventoryUI,
+#else
 	renderDropItemConfirmBox,
 	tickDropItemConfirmBox,
 	createDropItemConfirmBox,
@@ -158,6 +199,7 @@ void *inventory_text_order[] = {
 	closeInventoryBoxes,
 	tickInventoryUI,
 	addInventoryUI,
+#endif
 	initializeInventoryUI,
 	drawInventoryTextLine,
 	drawInventoryText,
@@ -477,7 +519,11 @@ int32_t createInventoryView(void)
 	if (UI_BOX_DATA[1].frame == 0) {
 		UI_BOX_DATA[1].features = 2;
 		ITEM_MOVE_TARGET = 0xff;
+#if VERSION_IS(EU)
+		setRECT(&finalPos, -0x98, 0x41, 0x130, 0x28);
+#else
 		setRECT(&finalPos, -0x98, 0x4d, 0x130, 0x1c);
+#endif
 		setRECT(&startPos, box->finalPos.x + 8, box->finalPos.y + 0xe, 0x10, 0x10);
 		createAnimatedUIBox(1, 0, 2, &finalPos, &startPos,
 		                    NULL, (RenderFunction)renderInventoryBottom);
@@ -593,7 +639,11 @@ void renderInventoryBottom(int16_t boxId)
 		}
 		ITEM_MOVE_TARGET = INVENTORY_POINTER;
 		renderString(9, UI_BOX_DATA[1].finalPos.x + 0x1a,
+#if VERSION_IS(EU)
+		             UI_BOX_DATA[1].finalPos.y + 8, 0xfc, 0x18, 0, 0xb4,
+#else
 		             UI_BOX_DATA[1].finalPos.y + 8, 0xfc, 0xc, 0, 0xb4,
+#endif
 		             6 - boxId, 1);
 	}
 }

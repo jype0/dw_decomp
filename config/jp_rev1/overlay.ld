@@ -25,6 +25,7 @@ SECTIONS
 			BUILD_DIR/src/btl/battle_hud.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/btl/battle_effect.c.o(.rodata .rodata.*);
 			BUILD_DIR/src/btl/command_shout.c.o(.data .data.*);
+			BUILD_DIR/src/btl/command_menu.c.o(.data .data.*);
 			BUILD_DIR/src/btl/battle_hud.c.o(.data .data.*);
 			BUILD_DIR/src/btl/battle_effect.c.o(.data .data.*);
 			BUILD_DIR/src/btl/btl_bss_jp_rev1.c.o(.data .data.*);
