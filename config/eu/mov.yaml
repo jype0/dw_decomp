@@ -41,6 +41,9 @@ options:
 
   use_gp_rel_macro: True
 
+  asm_data_macro: dlabel_section
+  asm_data_end_label: enddlabel_section
+
   symbol_name_format: $VRAM_mov
   symbol_name_format_no_rom: $VRAM_mov
 
