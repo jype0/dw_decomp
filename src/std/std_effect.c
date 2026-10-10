@@ -283,7 +283,6 @@ void STD_applyHomingMovement(void);
 void STD_renderScrollingBackground(void);
 void STD_spawnEFESubEffect(void);
 int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning, void *callback, void *callbackParam, CdlLOC *loc, int32_t size);
-CdlLOC *getEFEDATEntry(int32_t id);
 void STD_addChampionScene(void);
 void STD_removeChampionScene(void);
 void STD_removeAllAuraProjectiles(void);

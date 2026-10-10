@@ -166,7 +166,6 @@ void modifySomeImage(long dim);
 #endif
 void findEFEDATFile(void);
 void initializeEFE();
-void getEFEDATEntry();
 void renderParticleFlash();
 
 extern GsOT *ACTIVE_ORDERING_TABLE;
@@ -1041,14 +1040,16 @@ void initializeEFE(void)
 	findEFEDATFile();
 }
 
-void getEFEDATEntry(int32_t id)
+CdlLOC *getEFEDATEntry(int32_t id)
 {
 	int32_t sector;
 	CdlLOC loc;
 
-	id -= 0x100;
-	sector = EFEDAT_CD_LOCATION[0] + (id * 0xA);
-	CdIntToPos(sector, &loc);
+	id -= 256;
+	sector = EFEDAT_CD_LOCATION[0] + (id * 10);
+
+	/* BUG: returns a pointer to a stack variable */
+	return CdIntToPos(sector, &loc);
 }
 
 void renderParticleFlash(ParticleFlashData *params)

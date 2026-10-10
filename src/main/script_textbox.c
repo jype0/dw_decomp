@@ -17,7 +17,7 @@
 extern uint8_t TEXTBOX_OPEN_TIMER;
 extern GsOT *ACTIVE_ORDERING_TABLE;
 extern char *MOVE_NAMES[];
-extern int32_t ACTIVE_SCRIPT;
+extern uint8_t *ACTIVE_SCRIPT;
 extern char *BGM_TRACK_NAMES[];
 extern char *TOURNAMENT_NAMES[];
 

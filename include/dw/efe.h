@@ -1,6 +1,7 @@
 #ifndef DW_EFE_H
 #define DW_EFE_H
 
+#include <libcd.h>
 #include <libgs.h>
 #include <libgte.h>
 
@@ -329,6 +330,7 @@ void removeAllCloudFX(void);
 void removeAllParticleFX(void);
 void removeEFEFlash(int32_t id);
 #endif
+CdlLOC *getEFEDATEntry(int32_t id);
 extern int32_t *EFE_DATA_STACK;
 extern int32_t EFE_SCRIPT_MEM1_DATA[];
 extern int16_t EFE_LOADED_MOVE_DATA[];

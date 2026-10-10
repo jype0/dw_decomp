@@ -42,7 +42,6 @@ int32_t doSomethingWithSomePoints(int16_t *rect, DVECTOR *line);
 void downloadSomeImage();
 void modifySomeImage(long dim);
 int32_t addFileReadRequest(char *path, uint8_t *buffer, uint8_t *isRunning, void *callback, void *callbackParam, CdlLOC *loc, int32_t size);
-CdlLOC *getEFEDATEntry(int32_t id);
 char *VS_initializeParticleEmitters(char *base);
 void VS_tickEFEEngine(void);
 void VS_renderEFEEngine(void);
