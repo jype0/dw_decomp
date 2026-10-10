@@ -1723,7 +1723,7 @@ void VS_renderArenaViewLeft(void)
 	GsSetLightMatrix(&m);
 	GsGetLs(&VS_ARENA_COORDS[1].coord, &m);
 	GsSetLsMatrix(&m);
-	GsSortObject4(&VS_ARENA_OBJECTS[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4J(&VS_ARENA_OBJECTS[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	VS_ARENA_OBJECTS[0].attribute |= 0x200;
 	GsClearOt(0, 0xfff, &VS_D_800716D4[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &VS_D_800716FC[ACTIVE_FRAMEBUFFER]);
@@ -1734,10 +1734,10 @@ void VS_renderArenaViewLeft(void)
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 2:
-			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -1754,7 +1754,7 @@ void VS_renderArenaViewRight(void)
 	GsSetLightMatrix(&m);
 	GsGetLs(&VS_ARENA_COORDS[3].coord, &m);
 	GsSetLsMatrix(&m);
-	GsSortObject4(&VS_ARENA_OBJECTS[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4J(&VS_ARENA_OBJECTS[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	VS_ARENA_OBJECTS[0].attribute |= 0x200;
 	GsClearOt(0, 0xfff, &VS_D_800716D4[ACTIVE_FRAMEBUFFER]);
 	GsClearOt(0, 0xffe, &VS_D_800716FC[ACTIVE_FRAMEBUFFER]);
@@ -1765,11 +1765,11 @@ void VS_renderArenaViewRight(void)
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 1:
 		case 2:
-			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -1792,10 +1792,10 @@ void VS_renderArenaViewFull(void)
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&VS_ARENA_OBJECTS[i], &VS_D_800716FC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 1:
-			GsSortObject4(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&VS_ARENA_OBJECTS[i], &VS_D_800716D4[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}

@@ -1363,7 +1363,7 @@ void STD_renderChampionScene(void)
 		GsGetLws(STD_VERSUS_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_VERSUS_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4J(&STD_VERSUS_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -1391,7 +1391,7 @@ void STD_renderPodium(void)
 	GsGetLws(STD_RESULT_MODEL_OBJECTS[0].data.obj.coord2, &lw, &ls);
 	GsSetLightMatrix(&lw);
 	GsSetLsMatrix(&ls);
-	GsSortObject4(&STD_RESULT_MODEL_OBJECTS[0].data.obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4J(&STD_RESULT_MODEL_OBJECTS[0].data.obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 }
 
 void STD_removePodiumRenderer(void)
@@ -1501,7 +1501,7 @@ void STD_renderLoseScene(void)
 		GsGetLws(STD_RESULT_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_RESULT_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4J(&STD_RESULT_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -1587,7 +1587,7 @@ void STD_renderWinScene(void)
 		GsGetLws(STD_RESULT_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_RESULT_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4J(&STD_RESULT_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
@@ -2897,7 +2897,7 @@ void STD_drawTMDScreenSpace(void)
 	GsLinkObject4((unsigned long)EFE_DATA_ITERATOR->model->modelPtr->obj, &EFE_SCRATCH->obj, EFE_SCRATCH->id);
 	EFE_SCRATCH->obj.coord2 = NULL;
 	EFE_SCRATCH->obj.attribute = 0;
-	GsSortObject4(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
+	GsSortObject4J(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
 }
 
 void STD_loadClutColors(void)
@@ -2956,7 +2956,7 @@ void STD_drawTMDYXZ(void)
 	GsLinkObject4((unsigned long)EFE_DATA_ITERATOR->model->modelPtr->obj, &EFE_SCRATCH->obj, EFE_SCRATCH->id);
 	EFE_SCRATCH->obj.coord2 = NULL;
 	EFE_SCRATCH->obj.attribute = 0;
-	GsSortObject4(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
+	GsSortObject4J(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
 }
 
 void STD_getCameraRotation(void)
@@ -4794,7 +4794,7 @@ void STD_drawTMD(void)
 	GsLinkObject4((unsigned long)EFE_DATA_ITERATOR->model->modelPtr->obj, &EFE_SCRATCH->obj, EFE_SCRATCH->id);
 	EFE_SCRATCH->obj.coord2 = NULL;
 	EFE_SCRATCH->obj.attribute = 0;
-	GsSortObject4(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
+	GsSortObject4J(&EFE_SCRATCH->obj, ACTIVE_ORDERING_TABLE, 2, EFE_SORT_WORKSPACE);
 }
 
 void STD_initializeSubEffectInstructions(void)

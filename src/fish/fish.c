@@ -2600,7 +2600,7 @@ void FISH_drawSeadramon(VECTOR *start, SVECTOR *rot)
 
 		GsSetLsMatrix(&FISH_SCRATCH->m[0]);
 		GsSetLightMatrix(&FISH_SCRATCH->m[1]);
-		GsSortObject4(obj, ACTIVE_ORDERING_TABLE, 2, FISH_SCRATCH->ot);
+		GsSortObject4J(obj, ACTIVE_ORDERING_TABLE, 2, FISH_SCRATCH->ot);
 
 		RotMatrixYXZ(&FISH_SEADRAMON_HISTORY[i], &FISH_SCRATCH->m[1]);
 
@@ -3556,7 +3556,7 @@ void FISH_drawRodSegments(FishingRod *rod)
 				ScaleMatrix(&FISH_SCRATCH->m[0], &FISH_SCRATCH->v0);
 				GsSetLsMatrix(&FISH_SCRATCH->m[0]);
 				GsSetLightMatrix(&FISH_ROD_SEGMENT_MATRIX[i]);
-				GsSortObject4(obj, ACTIVE_ORDERING_TABLE, 2, FISH_SCRATCH->ot);
+				GsSortObject4J(obj, ACTIVE_ORDERING_TABLE, 2, FISH_SCRATCH->ot);
 			}
 			FISH_SCRATCH->cur.vx = (FISH_SCRATCH->m[0].t[0] * VIEWPORT_DISTANCE) /
 			                       FISH_SCRATCH->m[0].t[2];

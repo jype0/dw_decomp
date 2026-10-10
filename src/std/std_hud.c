@@ -1202,7 +1202,7 @@ void STD_renderVersusModelScene(void)
 		GsGetLws(STD_VERSUS_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&STD_VERSUS_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4J(&STD_VERSUS_MODEL_OBJECTS[i].data.obj, &STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 
 	GsSortOt(&STD_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);

@@ -524,7 +524,7 @@ void MURD_renderDigimon(Entity *entity, int32_t depth)
 			GsSetLightMatrix(&m);
 			GsGetLs(pos->obj.coord2, &m);
 			GsSetLsMatrix(&m);
-			GsSortObject4(&pos->obj, &MURD_ORDERING_TABLES[ACTIVE_FRAMEBUFFER], 3, getScratchAddr(0));
+			GsSortObject4J(&pos->obj, &MURD_ORDERING_TABLES[ACTIVE_FRAMEBUFFER], 3, getScratchAddr(0));
 		}
 	}
 

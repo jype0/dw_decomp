@@ -924,12 +924,12 @@ void KAR_renderScene(int32_t instanceId)
 				if (stone->state < -0x64) {
 					goto next;
 				}
-				GsSortObject4(&stone->obj, &KAR_D_800638CC[ACTIVE_FRAMEBUFFER], 5, getScratchAddr(0));
+				GsSortObject4J(&stone->obj, &KAR_D_800638CC[ACTIVE_FRAMEBUFFER], 5, getScratchAddr(0));
 			} else {
 				if (stone->state >= 0x65) {
 					goto next;
 				}
-				GsSortObject4(&stone->obj, &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 2, getScratchAddr(0));
+				GsSortObject4J(&stone->obj, &GS_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 2, getScratchAddr(0));
 			}
 next:
 			i++;

@@ -688,7 +688,7 @@ void STD_renderArena0(void)
 	GsSetLightMatrix(&m);
 	GsGetLs(&STD_ARENA_COORDS[1].coord, &m);
 	GsSetLsMatrix(&m);
-	GsSortObject4(&STD_ARENA_OBJECTS[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4J(&STD_ARENA_OBJECTS[1], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	if (STD_isBracketFinished() == 1) {
 		STD_ARENA_OBJECTS[0].attribute |= 0x200;
 	} else {
@@ -706,10 +706,10 @@ void STD_renderArena0(void)
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&STD_ARENA_OBJECTS[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 2:
-			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&STD_ARENA_OBJECTS[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}
@@ -727,7 +727,7 @@ void STD_renderArena1(void)
 		GsSetLightMatrix(&m);
 		GsGetLs(&STD_ARENA_COORDS[3].coord, &m);
 		GsSetLsMatrix(&m);
-		GsSortObject4(&STD_ARENA_OBJECTS[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+		GsSortObject4J(&STD_ARENA_OBJECTS[3], ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	}
 	if (STD_isBracketFinished() == 1) {
 		STD_ARENA_OBJECTS[0].attribute |= 0x200;
@@ -743,11 +743,11 @@ void STD_renderArena1(void)
 		GsSetLsMatrix(&m);
 		switch (i) {
 		case 0:
-			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&STD_ARENA_OBJECTS[i], &STD_D_8007B6AC[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		case 1:
 		case 2:
-			GsSortObject4(&STD_ARENA_OBJECTS[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
+			GsSortObject4J(&STD_ARENA_OBJECTS[i], &STD_D_8007B684[ACTIVE_FRAMEBUFFER], 0xc, getScratchAddr(0));
 			break;
 		}
 	}

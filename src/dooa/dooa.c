@@ -849,7 +849,7 @@ void DOOA_renderDigimonModel(Entity *entity, uint32_t otPoint)
 			GsSetLightMatrix(&lightMatrix);
 			GsGetLs(posData->obj.coord2, &lightMatrix);
 			GsSetLsMatrix(&lightMatrix);
-			GsSortObject4(&posData->obj, &DOOA_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 3, getScratchAddr(0));
+			GsSortObject4J(&posData->obj, &DOOA_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 3, getScratchAddr(0));
 		}
 		posData++;
 	}

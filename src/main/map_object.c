@@ -1077,7 +1077,7 @@ void drawObject(GsDOBJ2 *obj, GsOT *ot, int32_t flag)
 	GsGetLs(obj->coord2, &m);
 	GsSetLsMatrix(&m);
 
-	GsSortObject4(obj, ot, flag, getScratchAddr(0));
+	GsSortObject4J(obj, ot, flag, getScratchAddr(0));
 }
 
 int32_t tickOpenChestTray(int32_t chestId)

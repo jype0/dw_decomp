@@ -1384,7 +1384,7 @@ void VS_renderVersusModelScene(void)
 		GsGetLws(VS_VERSUS_MODEL_OBJECTS[i].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&VS_VERSUS_MODEL_OBJECTS[i].data.obj, &VS_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9,
+		GsSortObject4J(&VS_VERSUS_MODEL_OBJECTS[i].data.obj, &VS_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9,
 		              getScratchAddr(0));
 	}
 
@@ -1534,7 +1534,7 @@ void VS_renderResultModelScene(void)
 		GsGetLws(VS_RESULT_MODEL_OBJECTS[VS_RESULT_MODEL_INDICES[VS_WINNER_ID][i]].data.obj.coord2, &lw, &ls);
 		GsSetLightMatrix(&lw);
 		GsSetLsMatrix(&ls);
-		GsSortObject4(&VS_RESULT_MODEL_OBJECTS[VS_RESULT_MODEL_INDICES[VS_WINNER_ID][i]].data.obj, &VS_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
+		GsSortObject4J(&VS_RESULT_MODEL_OBJECTS[VS_RESULT_MODEL_INDICES[VS_WINNER_ID][i]].data.obj, &VS_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], 9, getScratchAddr(0));
 	}
 	GsSortOt(&VS_MODEL_SCENE_ORDERING_TABLE[ACTIVE_FRAMEBUFFER], ACTIVE_ORDERING_TABLE);
 	GsSetProjection(VIEWPORT_DISTANCE);

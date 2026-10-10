@@ -4001,7 +4001,7 @@ int8_t entityId;
 			GsSetLightMatrix(&m);
 			GsGetLs(pos->obj.coord2, &m);
 			GsSetLsMatrix(&m);
-			GsSortObject4(&pos->obj, FRAMEBUFFER_OT[ACTIVE_FRAMEBUFFER], 5,
+			GsSortObject4J(&pos->obj, FRAMEBUFFER_OT[ACTIVE_FRAMEBUFFER], 5,
 			              getScratchAddr(0));
 		}
 	}

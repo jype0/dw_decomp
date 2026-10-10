@@ -2916,7 +2916,7 @@ void renderDigimon(instanceId)
 				renderWireframed(&pos->obj, PARTNER_WIREFRAME_SUB[i]);
 				continue;
 			}
-			GsSortObject4(&pos->obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+			GsSortObject4J(&pos->obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 			continue;
 		}
 		if (instanceId == 2) {
@@ -2924,10 +2924,10 @@ void renderDigimon(instanceId)
 				renderWireframed(&pos->obj, ENTITY1_WIREFRAME_TOTAL);
 				continue;
 			}
-			GsSortObject4(&pos->obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+			GsSortObject4J(&pos->obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 			continue;
 		}
-		GsSortObject4(&pos->obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+		GsSortObject4J(&pos->obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 	}
 	if (ENTITY_TABLE[instanceId]->flatSprite != -1) {
 		renderFlatDigimon(ENTITY_TABLE[instanceId]);

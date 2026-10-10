@@ -606,7 +606,7 @@ void renderTMDModel(buffer, id, coord, super, trans, rot, scale)
 	GsGetLs(obj.coord2, &m);
 	GsSetLsMatrix(&m);
 
-	GsSortObject4(&obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
+	GsSortObject4J(&obj, ACTIVE_ORDERING_TABLE, 2, getScratchAddr(0));
 }
 
 void initializeSomeArenaArrays(int32_t count, int32_t arg1, int32_t arg2,
