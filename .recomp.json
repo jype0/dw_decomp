@@ -1,0 +1,41 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Digimon World",
+  "wikidata": "Q2320677",
+  "system": "PS1",
+  "type": "decomp",
+  "original": [
+    {
+      "region": "USA",
+      "serial": "SLUS-01032",
+      "sha1": "31ec666b987d5b007dec40eecc4092d27ed9085b"
+    },
+    {
+      "region": "Europe",
+      "serial": "SLES-02914",
+      "sha1": "a805aad8bb6b2a12b145bd2172697aff7a28d25e"
+    },
+    {
+      "region": "Japan",
+      "serial": "SLPS-01797",
+      "sha1": "d11336b31aeceec48267062676e9c3f0833ec13f"
+    }
+  ],
+  "project": "Digimon World decompilation",
+  "status": "in-progress",
+  "targets": ["PS1"],
+  "toolchain": "Splat",
+  "approach": "Matching decompilation with CodeWarrior and splat",
+  "maintainers": [
+    { "name": "jype0", "link": "https://github.com/jype0" }
+  ],
+  "links": [
+    { "label": "decomp.dev", "url": "https://decomp.dev/jype0/dw_decomp" }
+  ],
+  "help": [
+    "Naming functions and data",
+    "Matching the other versions"
+  ],
+  "tags": ["matching", "codewarrior", "psyq"],
+  "notes": "The USA version is fully decompiled and matches byte for byte. Work now goes into naming and cleaning up the C, and into matching the other releases."
+}
